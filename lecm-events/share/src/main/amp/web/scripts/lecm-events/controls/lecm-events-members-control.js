@@ -1074,6 +1074,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 			if (!onlyHeader) {
 				var keysLen = Object.keys(this.selectedItems).length;
+				var cellBounds = this._calculateCell();
 				for (var i = 1; i <= keysLen; i++) {
 					var leftCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + startIndex);
 					leftCell.style.borderLeft = "none";
@@ -1081,7 +1082,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					if (endIndex <= this.maxIndex) {
 						var rightCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + endIndex);
 						rightCell.style.borderRight = "none";
-						rightCell.style.width = (parseInt(rightCell.style.width) + this.selectorBorderWidth) + "px";
+						rightCell.style.width = cellBounds.cellWidth + "px";
 					}
 
 					if (i == keysLen) {
@@ -1091,7 +1092,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 							}
 							var cell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + j);
 							cell.style.borderBottom = "none";
-							cell.style.height = (Dom.getRegion(cell).height + this.selectorBorderWidth) + "px";
+							cell.style.height = cellBounds.height + "px";
 						}
 
 					}
@@ -1136,6 +1137,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				cell.style.backgroundColor = color;
 			}
 
+			var cellBounds = this._calculateCell();
 			var keysLen = Object.keys(this.selectedItems).length;
 			for (var i = 1; i <= keysLen; i++) {
 				var leftCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + startIndex);
@@ -1144,7 +1146,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				if (endIndex <= this.maxIndex) {
 					var rightCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + endIndex);
 					rightCell.style.borderRight = this.selectorBorderWidth + "px solid " + color;
-					rightCell.style.width = (parseInt(rightCell.style.width) - this.selectorBorderWidth) + "px";
+					rightCell.style.width = (cellBounds.cellWidth - this.selectorBorderWidth) + "px";
 				}
 				if (i == keysLen) {
 					for (var j = startIndex; j <= endIndex; j++) {
@@ -1152,7 +1154,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 							break;
 						}
 						var cell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + j);
-						cell.style.height = (Dom.getRegion(cell).height - this.selectorBorderWidth) + "px";
+						cell.style.height = (cellBounds.height - this.selectorBorderWidth) + "px";
 						cell.style.borderBottom = this.selectorBorderWidth + "px solid " + color;
 					}
 
@@ -1239,7 +1241,11 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				var cellByHour = Math.round(60 / this.timeStep);
 				var cellWidth = Math.floor(width / cellByHour);
 				width = cellWidth * cellByHour;
+
+				//member-control-diagram-empty-cell
+				var style = this._getStyle(".member-control-diagram-empty-cell");
 				this.cellBounds = {
+					height: parseInt(style.style.height),
 					width: width,
 					cellByHour: cellByHour,
 					cellWidth: cellWidth,
