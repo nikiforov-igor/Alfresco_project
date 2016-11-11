@@ -22,6 +22,7 @@ import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 
 /**
@@ -34,7 +35,7 @@ import ru.it.lecm.wcalendar.absence.IAbsence;
  *
  * @author vlevin
  */
-public class AbsenceProlongationSchedule extends AbstractScheduledAction {
+public class AbsenceProlongationSchedule extends BaseTransactionalSchedule {
 
 	private String jobName = "absence-prolongation";
 	private String jobGroup = "absence";
@@ -66,37 +67,11 @@ public class AbsenceProlongationSchedule extends AbstractScheduledAction {
 	}
 
 	@Override
-	public List<NodeRef> getNodes() {
+	public List<NodeRef> getNodesInTx() {
 		
 		List<NodeRef> nodes = new ArrayList<NodeRef>();
 		Date now = new Date();
-		NodeRef parentContainer = null;
-		
-		UserTransaction userTransaction = getTransactionService().getUserTransaction();
-        try
-        {
-            userTransaction.begin();
-            
-            parentContainer = absenceService.getContainer();
-            
-			userTransaction.commit();
-        }
-        catch(Throwable e)
-        {
-            // rollback the transaction
-            try
-            { 
-                if (userTransaction != null) 
-                {
-                    userTransaction.rollback();
-                }
-            }
-            catch (Exception ex)
-            {
-                // NOOP 
-            }
-            throw new AlfrescoRuntimeException("Service folders [notifications-dashlet] bootstrap failed", e);
-        }
+		NodeRef parentContainer = absenceService.getContainer();
 
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);

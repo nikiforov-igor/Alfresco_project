@@ -23,6 +23,7 @@ import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 import ru.it.lecm.nd.api.NDModel;
 import ru.it.lecm.statemachine.StatemachineModel;
 
@@ -30,7 +31,7 @@ import ru.it.lecm.statemachine.StatemachineModel;
  *
  * @author ikhalikov
  */
-public class OutOfDateScheduler extends AbstractScheduledAction {
+public class OutOfDateScheduler extends BaseTransactionalSchedule {
 
 	private String jobName = "switch-nd-status";
 	private String jobGroup = "nd";
@@ -75,7 +76,7 @@ public class OutOfDateScheduler extends AbstractScheduledAction {
 	}
 
 	@Override
-	public List<NodeRef> getNodes() {
+	public List<NodeRef> getNodesInTx() {
 		List<NodeRef> nodes = new ArrayList<NodeRef>();
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);

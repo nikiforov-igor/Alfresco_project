@@ -19,11 +19,12 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 
 /**
  * Created by dkuchurkin on 11.05.2016.
  */
-public class ReviewNotificationSchedule extends AbstractScheduledAction {
+public class ReviewNotificationSchedule extends BaseTransactionalSchedule {
 
     private static final String DATE_FORMAT_ISO8601 = "yyyy-MM-dd'T'HH:mm:ss";
 
@@ -82,7 +83,7 @@ public class ReviewNotificationSchedule extends AbstractScheduledAction {
     }
 
     @Override
-    public List<NodeRef> getNodes() {
+    public List<NodeRef> getNodesInTx() {
 
         if (onServerStart) {
             CronTrigger trigger = (CronTrigger) getTrigger();

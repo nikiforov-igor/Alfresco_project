@@ -39,7 +39,7 @@
 	/>
 
 	<bean id="routes.delete.temp.schedule"
-	  class="ru.it.lecm.workflow.routes.schedule.DeleteTempRoutesSchedule"
+	  class="ru.it.lecm.workflow.routes.schedule.DeleteTempRoutesSchedule" parent="baseTransactionalSchedule"
 	  depends-on="routes.model.bootstrap"
 	  p:transactionMode="ISOLATED_TRANSACTIONS"
 	  p:compensatingActionMode="IGNORE"

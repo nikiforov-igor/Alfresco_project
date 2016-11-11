@@ -320,7 +320,7 @@
     <property name="publicAction" value="false" />
     </bean>
 
-    <bean id="errandsEveryDayStatusSchedule" class="ru.it.lecm.errands.shedule.EveryDayStatusShedule">
+    <bean id="errandsEveryDayStatusSchedule" class="ru.it.lecm.errands.shedule.EveryDayStatusShedule" parent="baseTransactionalSchedule">
         <property name="transactionMode">
             <value>ISOLATED_TRANSACTIONS</value>
         </property>
@@ -374,7 +374,7 @@
     <property name="publicAction" value="false" />
     </bean>
 
-    <bean id="errandsEveryDayNotificationSchedule" class="ru.it.lecm.errands.shedule.EveryDayNotificationShedule">
+    <bean id="errandsEveryDayNotificationSchedule" class="ru.it.lecm.errands.shedule.EveryDayNotificationShedule" parent="baseTransactionalSchedule">
         <property name="transactionMode">
             <value>ISOLATED_TRANSACTIONS</value>
         </property>

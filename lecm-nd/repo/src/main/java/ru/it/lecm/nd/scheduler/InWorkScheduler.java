@@ -17,6 +17,7 @@ import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 import ru.it.lecm.nd.api.NDModel;
 import ru.it.lecm.statemachine.StatemachineModel;
 
@@ -29,7 +30,7 @@ import ru.it.lecm.statemachine.StatemachineModel;
  *
  * @author ikhalikov
  */
-public class InWorkScheduler extends AbstractScheduledAction {
+public class InWorkScheduler extends BaseTransactionalSchedule {
 
 	private String jobName = "switch-nd-status";
 	private String jobGroup = "nd";
@@ -74,7 +75,7 @@ public class InWorkScheduler extends AbstractScheduledAction {
 	}
 
 	@Override
-	public List<NodeRef> getNodes() {
+	public List<NodeRef> getNodesInTx() {
 
 		List<NodeRef> nodes = new ArrayList<NodeRef>();
 		SearchParameters sp = new SearchParameters();

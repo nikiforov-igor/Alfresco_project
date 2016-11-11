@@ -275,7 +275,7 @@
     </bean>
 
     <bean id="contractsInitiatorNotificationSchedule"
-          class="ru.it.lecm.contracts.schedule.InititatorEveryDayNotificationSchedule">
+          class="ru.it.lecm.contracts.schedule.InititatorEveryDayNotificationSchedule" parent="baseTransactionalSchedule">
         <property name="transactionMode">
             <value>ISOLATED_TRANSACTIONS</value>
         </property>
@@ -333,7 +333,7 @@
     </bean>
 
     <bean id="contractsStageDateNotificationSchedule"
-          class="ru.it.lecm.contracts.schedule.ContractStageDateNotificationSchedule">
+          class="ru.it.lecm.contracts.schedule.ContractStageDateNotificationSchedule" parent="baseTransactionalSchedule">
         <property name="transactionMode">
             <value>ISOLATED_TRANSACTIONS</value>
         </property>
@@ -567,7 +567,7 @@
     </bean>
 
     <bean id="contractStageEndDateNotificationSchedule"
-          class="ru.it.lecm.contracts.schedule.ContractStageEndDateNotificationSchedule">
+          class="ru.it.lecm.contracts.schedule.ContractStageEndDateNotificationSchedule" parent="baseTransactionalSchedule">
         <property name="transactionMode" value="ISOLATED_TRANSACTIONS"/>
         <property name="compensatingActionMode" value="IGNORE"/>
         <property name="cronExpression" value="0 45 3 * * ?"/>

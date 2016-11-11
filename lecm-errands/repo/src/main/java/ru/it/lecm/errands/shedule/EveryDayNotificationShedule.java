@@ -18,13 +18,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 
 /**
  * User: mshafeev
  * Date: 26.07.13
  * Time: 10:51
  */
-public class EveryDayNotificationShedule extends AbstractScheduledAction {
+public class EveryDayNotificationShedule extends BaseTransactionalSchedule {
 
     private String cronExpression = "0 0 3 */1 * ?"; // каждый день в 3 часа ночи
                                                      // "0 59 * * * ? *" - каждый час в xx:59
@@ -139,7 +140,7 @@ public class EveryDayNotificationShedule extends AbstractScheduledAction {
     }
 
     @Override
-    public List<NodeRef> getNodes() {
+    public List<NodeRef> getNodesInTx() {
         if (onServerStart) { // если был запуск на старте - подменяем триггер на основной
             CronTrigger trigger = (CronTrigger) getTrigger();
             try {

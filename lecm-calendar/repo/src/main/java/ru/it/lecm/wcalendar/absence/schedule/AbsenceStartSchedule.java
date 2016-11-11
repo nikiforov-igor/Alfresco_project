@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
 import org.alfresco.repo.action.scheduled.InvalidCronExpression;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -20,6 +19,7 @@ import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 
 /**
@@ -32,7 +32,7 @@ import ru.it.lecm.wcalendar.absence.IAbsence;
  *
  * @author vlevin
  */
-public class AbsenceStartSchedule extends AbstractScheduledAction {
+public class AbsenceStartSchedule extends BaseTransactionalSchedule {
 
 	private String jobName = "absence-start";
 	private String jobGroup = "absence";
@@ -64,7 +64,7 @@ public class AbsenceStartSchedule extends AbstractScheduledAction {
 	}
 
 	@Override
-	public List<NodeRef> getNodes() {
+	public List<NodeRef> getNodesInTx() {
 		List<NodeRef> nodes = new ArrayList<NodeRef>();
 		Date now = new Date();
 		NodeRef parentContainer = absenceService.getContainer();

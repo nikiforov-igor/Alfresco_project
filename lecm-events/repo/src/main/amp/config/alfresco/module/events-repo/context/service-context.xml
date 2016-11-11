@@ -228,7 +228,7 @@
 		<property name="defaultFromEmail" value="${mail.from.default}"/>
 	</bean>
 
-	<bean id="events.eventsNotificationSchedule" class="ru.it.lecm.events.schedule.EventNotificationSchedule">
+	<bean id="events.eventsNotificationSchedule" class="ru.it.lecm.events.schedule.EventNotificationSchedule" parent="baseTransactionalSchedule">
 		<property name="transactionMode">
 			<value>ISOLATED_TRANSACTIONS</value>
 		</property>

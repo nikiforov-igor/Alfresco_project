@@ -18,13 +18,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 
 /**
  * User: AZinovin
  * Date: 12.05.16
  * Time: 10:51
  */
-public class ContractStageEndDateNotificationSchedule extends AbstractScheduledAction {
+public class ContractStageEndDateNotificationSchedule extends BaseTransactionalSchedule {
 
     public static final QName TYPE_CONTRACT_STAGE = QName.createQName("http://www.it.ru/logicECM/contract/table-structure/1.0", "stage");
     private String cronExpression = "";
@@ -129,7 +130,7 @@ public class ContractStageEndDateNotificationSchedule extends AbstractScheduledA
     }
 
     @Override
-    public List<NodeRef> getNodes() {
+    public List<NodeRef> getNodesInTx() {
         Date now = new Date();
 
         Calendar calendar = Calendar.getInstance();

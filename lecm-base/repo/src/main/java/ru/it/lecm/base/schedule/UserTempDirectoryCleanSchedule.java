@@ -1,7 +1,6 @@
 package ru.it.lecm.base.schedule;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
 import org.alfresco.repo.action.scheduled.InvalidCronExpression;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -18,13 +17,14 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.text.ParseException;
 import java.util.*;
+import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 
 /**
  * User: AIvkin
  * Date: 19.09.13
  * Time: 11:59
  */
-public class UserTempDirectoryCleanSchedule extends AbstractScheduledAction {
+public class UserTempDirectoryCleanSchedule extends BaseTransactionalSchedule {
 	private OrgstructureBean orgstructureService;
 	private RepositoryStructureHelper repositoryStructureHelper;
 	private NodeService nodeService;
@@ -140,7 +140,7 @@ public class UserTempDirectoryCleanSchedule extends AbstractScheduledAction {
 	* @see org.alfresco.repo.action.scheduled.AbstractScheduledAction#getNodes()
 	*/
 	@Override
-	public List<NodeRef> getNodes() {
+	public List<NodeRef> getNodesInTx() {
 		List<NodeRef> collectedNodes = new ArrayList<>();
 
 	    Calendar cal = Calendar.getInstance();

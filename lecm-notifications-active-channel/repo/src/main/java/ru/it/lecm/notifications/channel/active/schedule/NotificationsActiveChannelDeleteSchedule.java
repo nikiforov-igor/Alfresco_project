@@ -26,13 +26,14 @@ import ru.it.lecm.notifications.channel.active.beans.NotificationsActiveChannel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 
 /**
  * User: AIvkin
  * Date: 24.01.13
  * Time: 15:01
  */
-public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledAction {
+public class NotificationsActiveChannelDeleteSchedule extends BaseTransactionalSchedule {
 	private final static Logger logger = LoggerFactory.getLogger(NotificationsActiveChannelDeleteSchedule.class);
 
 	private static final int MAX_COUNT_RECORDS = 50;
@@ -181,7 +182,7 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 	 * @return список ссылок на элементы для удаления
 	 */
 	@Override
-	public List<NodeRef> getNodes() {
+	public List<NodeRef> getNodesInTx() {
 		if (onServerStart) { // если был запуск на старте - подменяем триггер на основной
 			CronTrigger trigger = (CronTrigger) getTrigger();
 			try {

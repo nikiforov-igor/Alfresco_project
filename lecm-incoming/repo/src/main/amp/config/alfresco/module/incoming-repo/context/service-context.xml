@@ -148,7 +148,7 @@
         <property name="publicAction" value="false" />
     </bean>
 
-    <bean id="incoming.executionNotificationSchedule" class="ru.it.lecm.incoming.schedule.ExecutionNotificationSchedule">
+    <bean id="incoming.executionNotificationSchedule" class="ru.it.lecm.incoming.schedule.ExecutionNotificationSchedule" parent="baseTransactionalSchedule">
         <property name="transactionMode">
             <value>ISOLATED_TRANSACTIONS</value>
         </property>

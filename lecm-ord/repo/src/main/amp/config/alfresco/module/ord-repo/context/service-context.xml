@@ -135,7 +135,7 @@
 		  p:notificationsService-ref="notificationsService"/>
 
 	<!--notification scheduler-->
-	<bean id="ord.notification.schedule" class="ru.it.lecm.ord.scheduler.ORDNotificationScheduler"
+	<bean id="ord.notification.schedule" class="ru.it.lecm.ord.scheduler.ORDNotificationScheduler" parent="baseTransactionalSchedule"
           p:transactionMode="ISOLATED_TRANSACTIONS"
           p:compensatingActionMode="IGNORE"
           p:jobName="ord-notification"

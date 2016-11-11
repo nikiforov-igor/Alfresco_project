@@ -126,7 +126,7 @@
 		  p:reviewService-ref="reviewService"
 	/>
 
-	<bean id="reviewNotificationSchedule" class="ru.it.lecm.workflow.review.schedule.ReviewNotificationSchedule"
+	<bean id="reviewNotificationSchedule" class="ru.it.lecm.workflow.review.schedule.ReviewNotificationSchedule" parent="baseTransactionalSchedule"
 		  p:transactionMode="ISOLATED_TRANSACTIONS"
 		  p:compensatingActionMode="IGNORE"
           p:cronExpression="0 0 5 */1 * ?"

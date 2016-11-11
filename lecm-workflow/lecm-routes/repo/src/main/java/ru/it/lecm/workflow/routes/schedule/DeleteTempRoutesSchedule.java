@@ -17,13 +17,14 @@ import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 import ru.it.lecm.workflow.routes.api.RoutesModel;
 
 /**
  *
  * @author vlevin
  */
-public class DeleteTempRoutesSchedule extends AbstractScheduledAction {
+public class DeleteTempRoutesSchedule extends BaseTransactionalSchedule {
 
 	private Scheduler scheduler;
 	private SearchService searchService;
@@ -41,7 +42,7 @@ public class DeleteTempRoutesSchedule extends AbstractScheduledAction {
 	}
 
 	@Override
-	public List<NodeRef> getNodes() {
+	public List<NodeRef> getNodesInTx() {
 		List<NodeRef> nodes = new ArrayList<>();
 
 		SearchParameters sp = new SearchParameters();

@@ -275,7 +275,7 @@
 		</property>
 	</bean>
 
-	<bean id="userTempDirectoryCleanSchedule" class="ru.it.lecm.base.schedule.UserTempDirectoryCleanSchedule">
+	<bean id="userTempDirectoryCleanSchedule" class="ru.it.lecm.base.schedule.UserTempDirectoryCleanSchedule" parent="baseTransactionalSchedule">
 		<property name="repositoryStructureHelper">
 			<ref bean="repositoryStructureHelper" />
 		</property>
@@ -529,5 +529,16 @@
 		<property name="extensionName" value="lecmMessages"/>
 		<property name="lecmMessageService" ref="lecmMessageService"/>
 	</bean>
+	
+	<bean id="baseTransactionalSchedule" class="ru.it.lecm.base.beans.BaseTransactionalSchedule" abstract="true"
+		p:transactionMode="ISOLATED_TRANSACTIONS"
+		p:compensatingActionMode="IGNORE"
+		p:cronExpression="0 0 0/1 1/1 * ? *"
+		p:scheduler-ref="schedulerFactory"
+		p:actionService-ref="ActionService"
+		p:transactionService-ref="TransactionService"
+		p:lecmTransactionHelper-ref="lecmTransactionHelper"
+		p:runAsUser="System"
+	/>
 
 </beans>

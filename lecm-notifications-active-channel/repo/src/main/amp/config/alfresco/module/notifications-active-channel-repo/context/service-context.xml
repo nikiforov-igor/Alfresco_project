@@ -50,7 +50,7 @@
 		</property>
 	</bean>
 
-	<bean id="notificationsActiveChannelDeleteSchedule" class="ru.it.lecm.notifications.channel.active.schedule.NotificationsActiveChannelDeleteSchedule">
+	<bean id="notificationsActiveChannelDeleteSchedule" class="ru.it.lecm.notifications.channel.active.schedule.NotificationsActiveChannelDeleteSchedule" parent="baseTransactionalSchedule">
 		<property name="transactionMode">
 			<value>ISOLATED_TRANSACTIONS</value>
 		</property>

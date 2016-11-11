@@ -58,7 +58,7 @@
         </property>
     </bean>
 
-	<bean id="notificationsDashletDeleteSchedule" class="ru.it.lecm.notifications.dashlet.schedule.NotificationsDashletDeleteSchedule">
+	<bean id="notificationsDashletDeleteSchedule" class="ru.it.lecm.notifications.dashlet.schedule.NotificationsDashletDeleteSchedule" parent="baseTransactionalSchedule">
 		<property name="transactionMode">
 			<value>ISOLATED_TRANSACTIONS</value>
 		</property>

@@ -28,13 +28,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.transaction.UserTransaction;
+import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 
 /**
  * User: AIvkin
  * Date: 25.01.13
  * Time: 9:22
  */
-public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction {
+public class NotificationsDashletDeleteSchedule extends BaseTransactionalSchedule {
 	private final static Logger logger = LoggerFactory.getLogger(NotificationsDashletDeleteSchedule.class);
 
 	private static final int MAX_COUNT_RECORDS = 500;
@@ -177,7 +178,7 @@ public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction 
 	 * @return список ссылок на элементы для удаления
 	 */
 	@Override
-	public List<NodeRef> getNodes() {
+	public List<NodeRef> getNodesInTx() {
 		if (onServerStart) { // если был запуск на старте - подменяем триггер на основной
 			CronTrigger trigger = (CronTrigger) getTrigger();
 			try {

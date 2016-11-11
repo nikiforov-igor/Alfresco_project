@@ -20,13 +20,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 
 /**
  * User: PMelnikov
  * Date: 20.11.13
  * Time: 9:28
  */
-public class ContractStageDateNotificationSchedule extends AbstractScheduledAction {
+public class ContractStageDateNotificationSchedule extends BaseTransactionalSchedule {
 
     private String cronExpression = "";
     private String firstStartExpression = "";
@@ -140,7 +141,7 @@ public class ContractStageDateNotificationSchedule extends AbstractScheduledActi
     }
 
     @Override
-    public List<NodeRef> getNodes() {
+    public List<NodeRef> getNodesInTx() {
         if (onServerStart) { // если был запуск на старте - подменяем триггер на основной
             CronTrigger trigger = (CronTrigger) getTrigger();
             try {

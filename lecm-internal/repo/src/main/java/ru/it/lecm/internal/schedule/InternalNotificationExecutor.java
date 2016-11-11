@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 
 /**
  * User: dbashmakov
@@ -52,9 +53,10 @@ public class InternalNotificationExecutor implements Job {
         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
             public Object doWork() {
 //				TODO: Скорее всего выполняется в транзакции шедулера
-//                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-//                    @Override
-//                    public NodeRef execute() throws Throwable {
+//				TODO: Вот и не правда, транзакции нету у шедулера
+                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                    @Override
+                    public NodeRef execute() throws Throwable {
                         List<NodeRef> internals = getInternal(documentService, notificationsService, calendarBean);
 
                         List<NodeRef> connectedDocs = new ArrayList<>();
@@ -101,8 +103,8 @@ public class InternalNotificationExecutor implements Job {
                             }
                         }
                         return null;
-//                    }
-//                });
+                    }
+                });
             }
         });
     }

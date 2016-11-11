@@ -20,6 +20,7 @@ import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 import ru.it.lecm.ord.api.ORDModel;
 import ru.it.lecm.statemachine.StatemachineModel;
 
@@ -27,7 +28,7 @@ import ru.it.lecm.statemachine.StatemachineModel;
  *
  * @author dbayandin
  */
-public class ORDNotificationScheduler extends AbstractScheduledAction {
+public class ORDNotificationScheduler extends BaseTransactionalSchedule {
 
 	private String jobName = "ord-notification";
 	private String jobGroup = "ord";
@@ -77,7 +78,7 @@ public class ORDNotificationScheduler extends AbstractScheduledAction {
 	}
 
 	@Override
-	public List<NodeRef> getNodes() {
+	public List<NodeRef> getNodesInTx() {
 		List<NodeRef> nodes = new ArrayList<NodeRef>();
 
 		SearchParameters sp = new SearchParameters();
