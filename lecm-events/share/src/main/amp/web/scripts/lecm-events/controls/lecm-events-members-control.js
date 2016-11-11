@@ -402,9 +402,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			if (this.startDate && this.endDate && this.startDate <= this.endDate) {
 				this.drawDiagramHeader();
 				this.drawDiagram();
+				this.drawSelector();
 				this.drawCurrentState();
 				this.fillBusyTime();
-				this.drawSelector();
 			}
 		},
 
@@ -846,8 +846,11 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						var me = this;
 						var requestDate = new Date(item.memberFromDate);
 						var requestIndex = this.keyIndex[item.nodeRef];
-						icon.addEventListener("click", function() {
-							me.selectByDate(requestDate, requestIndex);
+						YAHOO.util.Event.on(icon, "click", function(ev, obj) {
+							me.selectByDate(obj.requestDate, obj.requestIndex);
+						}, {
+							requestDate: requestDate,
+							requestIndex: requestIndex
 						});
 					}
 
