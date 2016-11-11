@@ -3642,7 +3642,7 @@
                                                             </property>
                                                             <property>
                                                                 <name>workflowLabel</name>
-                                                                <value><![CDATA[Направить адресату (ам)]]></value>
+                                                                <value><![CDATA[Направить адресатам]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
