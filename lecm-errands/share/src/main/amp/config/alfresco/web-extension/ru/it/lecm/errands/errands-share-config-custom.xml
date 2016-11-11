@@ -1720,6 +1720,7 @@
                         <control template="/ru/it/lecm/eds/controls/multi-form-control.ftl">
                             <control-param name="documentType">lecm-errands:document</control-param>
                             <control-param name="documentFromId">primary-routing</control-param>
+                            <control-param name="fixSimpleDialogId">workflow-form</control-param>
                         </control>
                     </field>
                     <field id="change-errand-type-script">
@@ -1744,6 +1745,7 @@
                             <control-param name="availableRemoveDefault">false</control-param>
                             <control-param name="documentType">lecm-errands:document</control-param>
                             <control-param name="documentFromId">primary-routing</control-param>
+                            <control-param name="fixSimpleDialogId">workflow-form</control-param>
                             <control-param name="defaultValueFromId">incoming-default-primary-routing</control-param>
                             <control-param name="defaultValueDataSource">lecm/incoming/primaryRouting/defaultErrands/datasource</control-param>
                         </control>

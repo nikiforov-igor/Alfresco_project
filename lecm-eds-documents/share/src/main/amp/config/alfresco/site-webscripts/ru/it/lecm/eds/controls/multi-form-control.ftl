@@ -31,6 +31,9 @@
         <#if params.defaultValueDataSource??>
             defaultValueDataSource: "${params.defaultValueDataSource}",
         </#if>
+        <#if params.fixSimpleDialogId??>
+            fixSimpleDialogId: "${params.fixSimpleDialogId}",
+        </#if>
 
             args: {
             <#list form.arguments?keys as key>

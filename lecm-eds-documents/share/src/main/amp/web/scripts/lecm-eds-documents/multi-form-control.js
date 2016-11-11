@@ -36,6 +36,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 documentType: null,
                 defaultValueDataSource: null,
                 availableRemoveDefault: true,
+                fixSimpleDialogId: null,
                 args: null
             },
             currentLine: 0,
@@ -62,14 +63,19 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 }
             },
 
+            //SimpleDialog после открытия начинает ловить абсолютно все формы, и старается запихать их себе внутрь.
+            // Если после его открытия попытаться загрузить ещё одну форму, он начинает падать.
+            // Пришлось сделать такой костыль.
             fixSimpleDialog: function () {
-                var simpleDialogComponents = Alfresco.util.ComponentManager.find({
-                    name: "Alfresco.module.SimpleDialog",
-                    id: "workflow-form"
-                });
-                if (simpleDialogComponents && simpleDialogComponents.length) {
-                    var simpleDialog = simpleDialogComponents[0];
-                    YAHOO.Bubbling.unsubscribe("beforeFormRuntimeInit", simpleDialog.onBeforeFormRuntimeInit)
+                if (this.options.fixSimpleDialogId) {
+                    var simpleDialogComponents = Alfresco.util.ComponentManager.find({
+                        name: "Alfresco.module.SimpleDialog",
+                        id: this.options.fixSimpleDialogId
+                    });
+                    if (simpleDialogComponents && simpleDialogComponents.length) {
+                        var simpleDialog = simpleDialogComponents[0];
+                        YAHOO.Bubbling.unsubscribe("beforeFormRuntimeInit", simpleDialog.onBeforeFormRuntimeInit)
+                    }
                 }
             },
 
