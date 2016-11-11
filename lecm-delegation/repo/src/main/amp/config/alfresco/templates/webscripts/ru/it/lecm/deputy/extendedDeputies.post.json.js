@@ -36,7 +36,7 @@
 			var chiefDeputyAssocs = chiefAssoc.assocs['lecm-deputy:deputy-assoc'];
 
 			for each(var chiefDep in chiefDeputyAssocs) {
-				deputyAssocs.push(chiefDep);
+				allDeputies.push(chiefDep);
 			}
 		}
 	}
