@@ -17,6 +17,9 @@ import ru.it.lecm.notifications.beans.NotificationsService;
 
 import java.io.Serializable;
 import java.util.*;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * User: AIvkin Date: 17.01.13 Time: 15:19
@@ -272,5 +275,21 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 				nodeService.setProperties(notificationRef, properties);
 			}
 		}
+	}
+	
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+			@Override
+			public Void execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+					@Override
+					public Void doWork() throws Exception {
+						getServiceRootFolder();
+						return null;
+					}
+				});
+			}
+		});
 	}
 }
