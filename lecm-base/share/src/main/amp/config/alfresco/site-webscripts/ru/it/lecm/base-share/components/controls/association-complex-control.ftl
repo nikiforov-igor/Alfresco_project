@@ -120,6 +120,7 @@
 
 		LogicECM.module.Base.Util.loadResources([
 			'scripts/lecm-base/components/controls/association-control.js',
+			'scripts/lecm-base/components/controls/association-control.ext-search.lib.js',
 			'scripts/lecm-base/components/controls/association-control.lib.js',
 			'scripts/lecm-base/components/controls/association-control.picker.js',
 			'scripts/lecm-base/components/controls/association-control.item.js'

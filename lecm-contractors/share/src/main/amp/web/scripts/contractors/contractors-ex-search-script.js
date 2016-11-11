@@ -7,36 +7,46 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexControl || {};
 
 (function () {
-    LogicECM.module.AssociationComplexControl.getExSearchQuery = function (scope) {
-        var exSearchFilter = '';
-        if (scope.widgets.exSearch && scope.currentState.exSearchFormId) {
-            var currentForm = Dom.get(scope.currentState.exSearchFormId);
-            if (currentForm) {
-                var nameValue, innValue, kppValue;
+    var ExtSearchUtils = LogicECM.module.AssociationComplexControl.ExtSearch;
 
-                nameValue = scope._getInputValue(currentForm, "prop_lecm-contractor_fullname");
-                if (nameValue) {
-                    exSearchFilter += '(@lecm\\-contractor\\:fullname:' + scope._applySearchSettingsToTerm(nameValue, 'CONTAINS')
-                        + ' OR @lecm\\-contractor\\:shortname:' + scope._applySearchSettingsToTerm(nameValue, 'CONTAINS') + ')';
-                }
+    if (ExtSearchUtils) {
+        ExtSearchUtils.registerQueryFunction('contractor', function (currentForm) {
+            var exSearchFilter = '';
+            var nameValue, innValue, kppValue;
 
-                innValue = scope._getInputValue(currentForm, "prop_lecm-contractor_INN");
-                if (innValue) {
-                    if (exSearchFilter) {
-                        exSearchFilter += " AND ";
-                    }
-                    exSearchFilter += '=@lecm\\-contractor\\:INN:' + scope._applySearchSettingsToTerm(innValue, 'MATCHES');
-                }
-
-                kppValue = scope._getInputValue(currentForm, "prop_lecm-contractor_KPP");
-                if (kppValue) {
-                    if (exSearchFilter) {
-                        exSearchFilter += " AND ";
-                    }
-                    exSearchFilter += '=@lecm\\-contractor\\:KPP:' + scope._applySearchSettingsToTerm(kppValue, 'MATCHES');
-                }
+            nameValue = ExtSearchUtils.getInputValue(currentForm, "prop_lecm-contractor_fullname");
+            if (nameValue) {
+                exSearchFilter += '(@lecm\\-contractor\\:fullname:' + ExtSearchUtils.applySearchSettingsToTerm(nameValue, 'CONTAINS')
+                    + ' OR @lecm\\-contractor\\:shortname:' + ExtSearchUtils.applySearchSettingsToTerm(nameValue, 'CONTAINS') + ')';
             }
-        }
-        return exSearchFilter;
-    };
+
+            innValue = ExtSearchUtils.getInputValue(currentForm, "prop_lecm-contractor_INN");
+            if (innValue) {
+                if (exSearchFilter) {
+                    exSearchFilter += " AND ";
+                }
+                exSearchFilter += '=@lecm\\-contractor\\:INN:' + ExtSearchUtils.applySearchSettingsToTerm(innValue, 'MATCHES');
+            }
+
+            kppValue = ExtSearchUtils.getInputValue(currentForm, "prop_lecm-contractor_KPP");
+            if (kppValue) {
+                if (exSearchFilter) {
+                    exSearchFilter += " AND ";
+                }
+                exSearchFilter += '=@lecm\\-contractor\\:KPP:' + ExtSearchUtils.applySearchSettingsToTerm(kppValue, 'MATCHES');
+            }
+            return exSearchFilter;
+        });
+
+        ExtSearchUtils.registerArgsFunction('contractor', function (args, currentForm) {
+            var nameValue = ExtSearchUtils.getInputValue(currentForm, "prop_lecm-contractor_fullname");
+            if (nameValue) {
+                args["prop_lecm-contractor_shortname"] = nameValue;
+            }
+            return args;
+        });
+
+        ExtSearchUtils.registerQueryFunction('organization', ExtSearchUtils.extendQueryFunctions['contractor']);
+        ExtSearchUtils.registerArgsFunction('organization', ExtSearchUtils.extendArgsFunctions['contractor']);
+    }
 })();

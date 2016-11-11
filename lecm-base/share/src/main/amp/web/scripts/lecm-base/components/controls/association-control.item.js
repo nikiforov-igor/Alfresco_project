@@ -10,6 +10,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 (function () {
 	var ACUtils = LogicECM.module.AssociationComplexControl.Utils,
+		ExtSearchUtils = LogicECM.module.AssociationComplexControl.ExtSearch,
 		BaseUtil = LogicECM.module.Base.Util,
 		Bubbling = YAHOO.Bubbling,
 		Dom = YAHOO.util.Dom,
@@ -456,10 +457,15 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			}
 
 			var exSearchFilter = '';
-			if (YAHOO.lang.isFunction(LogicECM.module.AssociationComplexControl.getExSearchQuery)) {
-				exSearchFilter = LogicECM.module.AssociationComplexControl.getExSearchQuery(this);
-			} else {
-				exSearchFilter = this._getExSearchQuery();
+			if (this.widgets.exSearch && this.currentState.exSearchFormId) {
+				var currentForm = Dom.get(this.currentState.exSearchFormId);
+				if (currentForm) {
+					if (ExtSearchUtils && ExtSearchUtils.extendQueryFunctions && YAHOO.lang.isFunction(ExtSearchUtils.extendQueryFunctions[this.key])) {
+						exSearchFilter = ExtSearchUtils.extendQueryFunctions[this.key](currentForm);
+					} else {
+						exSearchFilter = ExtSearchUtils.getExtSearchQuery(currentForm);
+					}
+				}
 			}
 
 			if (exSearchFilter) {
@@ -473,117 +479,6 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (event) {
 				Event.stopEvent(event);
 			}
-		},
-
-		_getExSearchQuery: function () {
-			var exSearchFilter = '',
-				propNamePrefix = '@',
-				first = true;
-
-			if (this.widgets.exSearch && this.currentState.exSearchFormId) {
-				var currentForm = Dom.get(this.currentState.exSearchFormId);
-				if (currentForm) {
-					for (var i = 0; i < currentForm.elements.length; i++) {
-						var element = currentForm.elements[i],
-							propName = element.name,
-							propValue = YAHOO.lang.trim(element.value);
-
-						if (propName && propValue && propValue.length) {
-							if (propName.indexOf("prop_") === 0) {
-								propName = propName.substr(5);
-								if (propName.indexOf("_") !== -1) {
-									propName = propName.replace("_", ":");
-									if (propName.match("-range$") == "-range") {
-										var from, to, sepindex = propValue.indexOf("|");
-										if (propName.match("-date-range$") == "-date-range") {
-											propName = propName.substr(0, propName.length - "-date-range".length);
-											from = (sepindex === 0 ? "MIN" : propValue.substr(0, 10));
-											to = (sepindex === propValue.length - 1 ? "MAX" : propValue.substr(sepindex + 1, 10));
-										} else {
-											propName = propName.substr(0, propName.length - "-number-range".length);
-											from = (sepindex === 0 ? "MIN" : propValue.substr(0, sepindex));
-											to = (sepindex === propValue.length - 1 ? "MAX" : propValue.substr(sepindex + 1));
-										}
-										exSearchFilter += (first ? '' : ' AND ') + propNamePrefix + this._escape(propName) + ':"' + from + '".."' + to + '"';
-										first = false;
-									} else {
-										exSearchFilter += (first ? '' : ' AND ') + propNamePrefix + this._escape(propName) + ':' + this._applySearchSettingsToTerm(propValue, 'MATCHES');
-										first = false;
-									}
-								}
-							} else if (propName.indexOf("assoc_") == 0) {
-								var assocName = propName.substring(6);
-								if (assocName.indexOf("_") !== -1) {
-									assocName = assocName.replace("_", ":") + "-ref";
-									exSearchFilter += (first ? '(' : ' AND (');
-									var assocValues = propValue.split(",");
-									var firstAssoc = true;
-									for (var k = 0; k < assocValues.length; k++) {
-										var assocValue = assocValues[k];
-										if (!firstAssoc) {
-											exSearchFilter += " OR ";
-										}
-										exSearchFilter += this._escape(assocName) + ':"' + this._applySearchSettingsToTerm(assocValue, 'CONTAINS') + '"';
-										firstAssoc = false;
-									}
-									exSearchFilter += ") ";
-									first = false;
-								}
-							}
-						}
-					}
-				}
-			}
-			return exSearchFilter;
-		},
-
-		_escape: function (value) {
-			var result = "";
-
-			for (var i = 0, c; i < value.length; i++) {
-				c = value.charAt(i);
-				if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= 'а' && c <= 'я') || (c >= 'А' && c <= 'Я') || (c >= '0' && c <= '9') || c == '_')) {
-					result += '\\';
-				}
-
-				result += c;
-			}
-			return result;
-		},
-
-		_applySearchSettingsToTerm: function (searchTerm, searchSettings) {
-			var decoratedTerm;
-
-			searchTerm = this._escape(searchTerm);
-
-			switch (searchSettings) {
-				case 'BEGINS':
-					decoratedTerm = searchTerm + '*';
-					break;
-				case 'ENDS':
-					decoratedTerm = '*' + searchTerm;
-					break;
-				case 'CONTAINS':
-					decoratedTerm = '*' + searchTerm + '*';
-					break;
-				case 'MATCHES':
-					decoratedTerm = searchTerm;
-					break;
-				default:
-					decoratedTerm = '*' + searchTerm + '*';
-					break;
-			}
-
-			return decoratedTerm;
-		},
-		_getInputValue: function (form, propName) {
-			var value = null;
-			var inputName = form[propName];
-			if (inputName != null) {
-				value = inputName.value;
-				value = YAHOO.lang.trim(value);
-			}
-			return value;
 		},
 
 		onExSearchClear: function() {
@@ -939,16 +834,10 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				if (this.widgets.exSearch && this.currentState.exSearchFormId) {
 					var currentForm = Dom.get(this.currentState.exSearchFormId);
 					if (currentForm) {
-						for (var i = 0; i < currentForm.elements.length; i++) {
-							var element = currentForm.elements[i],
-								propName = element.name,
-								propValue = YAHOO.lang.trim(element.value);
+						args = ExtSearchUtils.getArgsFromForm(currentForm);
 
-							if (propName && (propName.indexOf("prop_") == 0 || propName.indexOf("assoc_") == 0)) {
-								if (propValue && propValue.length) {
-									args[propName] = propValue;
-								}
-							}
+						if (ExtSearchUtils && ExtSearchUtils.extendArgsFunctions && YAHOO.lang.isFunction(ExtSearchUtils.extendArgsFunctions[this.key])) {
+							args = ExtSearchUtils.extendArgsFunctions[this.key](args, currentForm);
 						}
 					}
 				}
