@@ -787,7 +787,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                         String field = key.replaceAll("prop_", "").replaceAll("assoc_", "").replaceAll("_", ":");
                                         String value = (String) json.get(key);
 
-                                        if (!value.isEmpty()) {
+                                        if (value != null && !value.isEmpty()) {
                                             if (key.startsWith("prop_")) {
                                                 properties.put(field, value);
                                             } else if (key.startsWith("assoc_")) {
