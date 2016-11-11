@@ -14,7 +14,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
             if (currentForm) {
                 var nameValue, innValue, numberValue, addressValue, regionValue;
 
-                nameValue = scope._getInputValue(currentForm, "prop_lecm-contractor_fullname");
+                nameValue = scope._getInputValue(currentForm, "prop_lecm-contractor_lastName");
                 if (nameValue) {
                     exSearchFilter += '(@lecm\\-contractor\\:lastName:' + scope._applySearchSettingsToTerm(nameValue, 'CONTAINS')
                         + ' OR @lecm\\-contractor\\:firstName:' + scope._applySearchSettingsToTerm(nameValue, 'CONTAINS')

@@ -86,7 +86,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			showCreateNewLink: false,
 			hasAspects: null,
 			hasNoAspects: null,
-			showExSearch: false
+			showExSearch: false,
+			fillFormFromSearch: false
 		},
 
 		widgets: {
@@ -933,6 +934,25 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		},
 
 		_generateCreateNewParams: function (nodeRef, itemType) {
+			var args = {};
+			if (this.options.fillFormFromSearch) {
+				if (this.widgets.exSearch && this.currentState.exSearchFormId) {
+					var currentForm = Dom.get(this.currentState.exSearchFormId);
+					if (currentForm) {
+						for (var i = 0; i < currentForm.elements.length; i++) {
+							var element = currentForm.elements[i],
+								propName = element.name,
+								propValue = YAHOO.lang.trim(element.value);
+
+							if (propName && (propName.indexOf("prop_") == 0 || propName.indexOf("assoc_") == 0)) {
+								if (propValue && propValue.length) {
+									args[propName] = propValue;
+								}
+							}
+						}
+					}
+				}
+			}
 			return {
 				itemKind: "type",
 				itemId: itemType,
@@ -940,7 +960,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				mode: "create",
 				submitType: "json",
 				formId: "association-create-new-node-form",
-				showCancelButton: true
+				showCancelButton: true,
+				args: JSON.stringify(args)
 			};
 		},
 
