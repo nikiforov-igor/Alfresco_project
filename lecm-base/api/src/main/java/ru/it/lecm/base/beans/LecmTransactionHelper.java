@@ -47,7 +47,10 @@ public interface LecmTransactionHelper {
      * @throws                  RuntimeException  all checked exceptions are converted
      */
     public <R> R doInRWTransaction(RetryingTransactionHelper.RetryingTransactionCallback<R> cb);
-
-
+	
+	/**
+	 * 
+	 */
+	public <R> R doInNotGuaranteedTransaction(RetryingTransactionHelper.RetryingTransactionCallback<R> cb, boolean readonly);
 
 }

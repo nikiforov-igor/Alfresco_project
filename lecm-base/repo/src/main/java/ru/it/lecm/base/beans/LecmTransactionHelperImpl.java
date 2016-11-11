@@ -4,14 +4,23 @@ import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport.TxnReadState;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.transaction.TransactionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author vkuprin
  */
 public class LecmTransactionHelperImpl implements LecmTransactionHelper {
+	
+	private final static Logger logger = LoggerFactory.getLogger(LecmTransactionHelperImpl.class);
 
     private TransactionService transactionService;
+	private boolean createTxIfNeeded = false;
+
+	public void setCreateTxIfNeeded(boolean createTxIfNeeded) {
+		this.createTxIfNeeded = createTxIfNeeded;
+	}
 
     public TransactionService getTransactionService() {
         return transactionService;
@@ -73,25 +82,50 @@ public class LecmTransactionHelperImpl implements LecmTransactionHelper {
      */
     @Override
     public <R> R doInTransaction(RetryingTransactionHelper.RetryingTransactionCallback<R> cb, boolean readOnly) {
-//        try {
-//            checkTransaction(readOnly);
-//        } catch (WriteTransactionNeededException ex) {
-//            return transactionService.getRetryingTransactionHelper().doInTransaction(cb, false, true);
-//        } catch (TransactionNeededException ex1) {
-            return transactionService.getRetryingTransactionHelper().doInTransaction(cb, readOnly);
-//        }
-//        try {
-//            return cb.execute();
-//        } catch (Throwable ex) {
-//            throw new RuntimeException(ex);
-//        }
-    }
-
+        try {
+            checkTransaction(readOnly);
+        } catch (WriteTransactionNeededException ex) {
+            return transactionService.getRetryingTransactionHelper().doInTransaction(cb, false, true);
+        } catch (TransactionNeededException ex1) {
+	            return transactionService.getRetryingTransactionHelper().doInTransaction(cb, readOnly);
+        }
+        try {
+            return cb.execute();
+        } catch (Throwable ex) {
+            throw new RuntimeException(ex);
+        }
+	}
+		
     @Override
     public <R> R doInRWTransaction(RetryingTransactionHelper.RetryingTransactionCallback<R> cb) {
         return doInTransaction(cb, false);
     }
 
-    
+	@Override
+	public <R> R doInNotGuaranteedTransaction(RetryingTransactionHelper.RetryingTransactionCallback<R> cb, boolean readonly) {
+		try {
+            checkTransaction(readonly);
+        } catch (WriteTransactionNeededException ex) {
+            if (createTxIfNeeded) {
+				logger.warn("Write transaction needed - creating new one");
+				return transactionService.getRetryingTransactionHelper().doInTransaction(cb, false, true);				
+			}
+			logger.error("Write transaction needed and createTxIfNeeded is disabled", ex);
+			return null;
+        } catch (TransactionNeededException ex1) {
+			if (createTxIfNeeded) {
+				logger.warn("Transaction needed - creating new one");
+	            return transactionService.getRetryingTransactionHelper().doInTransaction(cb, readonly);
+			}
+			logger.error("Transaction needed and createTxIfNeeded is disabled", ex1);
+			return null;
+        }
+		
+        try {
+            return cb.execute();
+        } catch (Throwable ex) {
+            throw new RuntimeException(ex);
+        }
+	}
 
 }
