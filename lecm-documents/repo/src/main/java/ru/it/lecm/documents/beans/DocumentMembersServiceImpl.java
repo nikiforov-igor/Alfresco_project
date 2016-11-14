@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * User: dbashmakov
@@ -311,5 +313,20 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
 			pgGranting = lecmPermissionService.findPermissionGroup(DEFAULT_ACCESS);
 		}
 		return pgGranting;
+	}
+
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+			@Override
+			public NodeRef execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+					@Override
+					public NodeRef doWork() throws Exception {
+						return getServiceRootFolder();
+					}
+				});
+			}
+		});
 	}
 }

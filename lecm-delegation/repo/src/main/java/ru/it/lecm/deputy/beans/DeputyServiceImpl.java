@@ -40,6 +40,7 @@ public class DeputyServiceImpl extends BaseBean implements DeputyService {
 	private OrgstructureBean orgstructureService;
 	private DictionaryBean lecmDictionaryService;
 	private String defultSubjectDictionaryName;
+	private NodeRef deputySettingsNode;
 
 	public void setDefultSubjectDictionaryName(String defultSubjectDictionaryName) {
 		this.defultSubjectDictionaryName = defultSubjectDictionaryName;
@@ -61,27 +62,6 @@ public class DeputyServiceImpl extends BaseBean implements DeputyService {
 	@Override
 	public NodeRef getDeputyFolder() {
 		return getFolder(DEPUTY_FOLDER);
-	}
-
-	@Override
-	public void init() {
-//		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-//
-//			@Override
-//			public Void doWork() throws Exception {
-//				return lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-//
-//					@Override
-//					public Void execute() throws Throwable {
-//						if (getDeputySettingsNode() == null) {
-//							createDeputySettingsNode();
-//						}
-//						return null;
-//					}
-//				});
-//
-//			}
-//		});
 	}
 	
 	@Override
@@ -136,16 +116,19 @@ public class DeputyServiceImpl extends BaseBean implements DeputyService {
 
 	@Override
 	public NodeRef getDeputySettingsNode() {
-		NodeRef settingsFolder = getDeputySettingsFolder();
-		List<ChildAssociationRef> settingsNodeAssocs = null;
-		if(settingsFolder!=null)
-			settingsNodeAssocs = nodeService.getChildAssocs(settingsFolder);
+		if (deputySettingsNode == null) {
+			NodeRef settingsFolder = getDeputySettingsFolder();
+			List<ChildAssociationRef> settingsNodeAssocs = null;
+			if(settingsFolder!=null)
+				settingsNodeAssocs = nodeService.getChildAssocs(settingsFolder);
 
-		if (settingsNodeAssocs != null && !settingsNodeAssocs.isEmpty()) {
-			return settingsNodeAssocs.get(0).getChildRef();
+			if (settingsNodeAssocs != null && !settingsNodeAssocs.isEmpty()) {
+//				return settingsNodeAssocs.get(0).getChildRef();
+				deputySettingsNode = settingsNodeAssocs.get(0).getChildRef();
+			}
+			
 		}
-
-		return null;
+		return deputySettingsNode;
 	}
 
 	@Override
@@ -316,7 +299,4 @@ public class DeputyServiceImpl extends BaseBean implements DeputyService {
 			}
 		}
 	}
-
-
-
 }

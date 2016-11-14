@@ -507,11 +507,6 @@
 		<property name="repoMessagesLocation" ref="customMessagesRepositoryLocation"/>
 		<property name="searchService" ref="searchService"/>
 		<property name="locales" value="${lecm.mlLocales}"/>
-		<property name="folders">
-			<map>
-				<entry key="#{LECM_MESSAGE_FOLDER_ID}" value="Сервис Сообщения"/>
-			</map>
-		</property>
 	</bean>
 
 	<bean id="lecmMessagesLoader"

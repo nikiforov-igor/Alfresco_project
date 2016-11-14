@@ -27,6 +27,8 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.*;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * User: AIvkin
@@ -164,7 +166,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
     @Override
 	public NodeRef getServiceRootFolder() {
-            return getFolder(ARM_ROOT_ID);
+		return getFolder(ARM_ROOT_ID);
 	}
 
 	@Override
@@ -769,6 +771,21 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     }
     public void setSecretaryService(SecretaryService secretaryService) {
         this.secretaryService = secretaryService;
-}
+	}
 
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		// TODO: Потенциально не нужно, т.к папка создаться при первом бутсрапе справочника
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+			@Override
+			public NodeRef execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+					@Override
+					public NodeRef doWork() throws Exception {
+						return getServiceRootFolder();
+					}
+				});
+			}
+		});
+	}
 }

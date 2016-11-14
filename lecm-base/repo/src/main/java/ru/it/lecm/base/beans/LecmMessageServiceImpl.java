@@ -42,13 +42,7 @@ public class LecmMessageServiceImpl extends BaseBean implements LecmMessageServi
 
 	@Override
 	public NodeRef getServiceRootFolder() {
-		return getFolder(LECM_MESSAGE_FOLDER_ID);
-	}
-
-	@Override
-	public NodeRef getDocumentMessageFolder() {
-//		TODO: Похоже, что нигде не используется. Нужно ли?
-		return getServiceRootFolder();
+		return null;
 	}
 
 	public void setMessageService(MessageService messageService) {

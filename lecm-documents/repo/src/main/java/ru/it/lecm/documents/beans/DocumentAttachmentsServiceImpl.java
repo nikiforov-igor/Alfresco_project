@@ -119,18 +119,16 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 			}
 		}
 		//Создаём всё, чего не хватает
-//                lecmTransactionHelper.doInRWTransaction( new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-//			@Override
-//			public Void execute() throws Throwable {
+		lecmTransactionHelper.doInRWTransaction( new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+			@Override
+			public Void execute() throws Throwable {
 				NodeRef rootRef = (null == attachmentRootRef ? createRootFolder(documentRef) : attachmentRootRef);
 				for (String folder : toCreate) {
 					result.add(createCategoryFolder(folder, rootRef, type));
 				}
-//				return null;
-//			}
-//		}
-//
-//		);
+				return null;
+			}
+		});
 		return result;
 	}
 

@@ -23,6 +23,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 public class ReportEditorDAOImpl extends BaseBean implements ReportEditorDAO {
 
@@ -469,4 +472,21 @@ public class ReportEditorDAOImpl extends BaseBean implements ReportEditorDAO {
         }
         return (subReports.isEmpty()) ? null : new ArrayList<ReportDescriptor>(subReports);
     }
+	
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+			@Override
+			public Void execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+					@Override
+					public Void doWork() throws Exception {
+						getServiceRootFolder();
+						getReportsRootFolder();
+						return null;
+					}
+				});
+			}
+		});
+	}
 }

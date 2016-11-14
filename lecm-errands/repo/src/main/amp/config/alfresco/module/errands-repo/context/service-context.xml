@@ -95,7 +95,7 @@
 	<util:constant id="ERRANDS_ROOT_NAME" static-field="ru.it.lecm.errands.ErrandsService.ERRANDS_ROOT_NAME"/>
 
 	<bean id="errandsService" class="ru.it.lecm.errands.beans.ErrandsServiceImpl" parent="baseBean"
-	      depends-on="nodeService, documentService, errands.LogicEcmModelsBootstrap" init-method="init">
+	      depends-on="nodeService, documentService, errands.LogicEcmModelsBootstrap">
 		<property name="documentService" ref="documentService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
         <!-- TODO: Разобраться с машиной состояний-->

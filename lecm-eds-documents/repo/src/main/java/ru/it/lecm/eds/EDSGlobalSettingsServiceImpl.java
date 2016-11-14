@@ -31,6 +31,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	private OrgstructureBean orgstructureService;
     private NamespaceService namespaceService;
 	private DictionaryBean dictionaryService;
+	private NodeRef settingsNode;
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -204,8 +205,12 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	@Override
 	public NodeRef getSettingsNode() {
 //		TODO: Метод разделён, создание вынесено в createSettingsNode
-            return nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, EDS_GLOBAL_SETTINGS_NODE_NAME);
-        }
+		if (settingsNode == null) {
+			settingsNode = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, EDS_GLOBAL_SETTINGS_NODE_NAME);
+		}
+		return settingsNode;
+//		return nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, EDS_GLOBAL_SETTINGS_NODE_NAME);
+	}
 
         /**
          * создание ноды с настройками. создаётся при инициализации бина

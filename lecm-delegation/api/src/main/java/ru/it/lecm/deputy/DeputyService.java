@@ -32,11 +32,7 @@ public interface DeputyService {
 	public final static QName PROP_DEPUTY_EMPLOYEE_REF = QName.createQName(DEPUTY_NAMESPACE, "employee-assoc-ref");
 	public final static QName PROP_DEPUTY_EMPLOYEE_TEXT_CONTENT = QName.createQName(DEPUTY_NAMESPACE, "employee-assoc-text-content");
 	public final static QName PROP_CHIEF_REF = QName.createQName(DEPUTY_NAMESPACE, "chief-assoc-ref");
-	public final static QName PROP_CHIEF_TEXT_CONTENT = QName.createQName(DEPUTY_NAMESPACE, "chief-assoc-text-content");
-
-
-
-	public void init();
+	public final static QName PROP_CHIEF_TEXT_CONTENT = QName.createQName(DEPUTY_NAMESPACE, "chief-assoc-text-content");	
 
 	public NodeRef getDeputyFolder();
 

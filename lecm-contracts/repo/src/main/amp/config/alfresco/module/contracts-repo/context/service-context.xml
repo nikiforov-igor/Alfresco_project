@@ -82,8 +82,7 @@
                    static-field="ru.it.lecm.contracts.beans.ContractsBeanImpl.CONTRACTS_ROOT_NAME"/>
 
     <bean id="contractService" class="ru.it.lecm.contracts.beans.ContractsBeanImpl" parent="baseBean"
-          depends-on="nodeService, documentService, documentConnectionService,documentMembersService,regNumbersService, notificationsService"
-          init-method="init">
+          depends-on="nodeService, documentService, documentConnectionService,documentMembersService,regNumbersService, notificationsService">
         <property name="searchService" ref="searchService"/>
         <property name="documentService" ref="documentService"/>
         <property name="authService" ref="authenticationService"/>
