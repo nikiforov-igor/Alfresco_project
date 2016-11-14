@@ -259,7 +259,7 @@
                 ${msg("message.eddand.onBasis")} <a href="${siteURL("document?nodeRef=" + additionalDoc.nodeRef)}">${additionalDoc.name}</a>
             </#if>
         </div>
-        <#if props["lecm-errands:content"]?? && props["lecm-errands:content"] != "">
+        <#if props["lecm-errands:content"]?has_content>
             <div class="errand-content">${props["lecm-errands:content"]}</div>
         </#if>
         <div class="times">
