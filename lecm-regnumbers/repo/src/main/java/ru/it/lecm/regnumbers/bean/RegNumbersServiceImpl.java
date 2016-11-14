@@ -15,7 +15,6 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
@@ -36,7 +35,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.extensions.surf.util.AbstractLifecycleBean;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 /**
  *
  * @author vlevin
@@ -75,11 +75,23 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	}
 	
 	@Override
-	protected void onBootstrap(ApplicationEvent event)
+	protected void onBootstrap(final ApplicationEvent event)
 	{
-		logger.info("!!!!!!!!!!!!!!!!!! onBootstrap: "+event);
-		templateDictionaryNode = dictionaryService.getDictionaryByName(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME);
-		logger.info("!!!!!!!!!!!!!!!!!! onBootstrap: "+templateDictionaryNode);
+		
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+			@Override
+			public Void execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+					@Override
+					public Void doWork() throws Exception {
+						logger.info("!!!!!!!!!!!!!!!!!! onBootstrap: "+event);
+						templateDictionaryNode = dictionaryService.getDictionaryByName(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME);
+						logger.info("!!!!!!!!!!!!!!!!!! onBootstrap: "+templateDictionaryNode);
+						return null;
+					}
+				});
+			}
+		});
 	}
 	
 	@Override
