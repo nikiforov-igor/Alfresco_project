@@ -651,7 +651,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			Dom.get(this.id + "-date-cntrl-cal-cell").style.width = cellBounds.firstColumnWidth + "px";
 			var delta = cellBounds.firstColumnWidth - this.firstColumnWidth - 6;
 
-			Dom.get(this.id + "-date-cntrl-date").setAttribute("style", "width: " + (delta + this.columnCalendarWidth) + "px !important;");
+			Dom.get(this.id + "-date-cntrl-date").style.width = (delta + this.columnCalendarWidth) + "px";
 			this.headerIsReady = true;
 			Dom.get(this.options.controlId + "-diagram-container").style.width = width + "px";
 		},
