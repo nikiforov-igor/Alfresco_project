@@ -53,27 +53,29 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	@Override
 	protected void onBootstrap(ApplicationEvent event)
 	{
-		if (null == getSettingsNode()) {
-			//TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
-			lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-				@Override
-				public NodeRef execute() throws Throwable {
-					return createSettingsNode();
+		//TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+			@Override
+			public Void execute() throws Throwable {
+				if (null == getSettingsNode()) {
+					settingsNode = createSettingsNode();
 				}
-			});
-
-		}
-		this.potentialRolesMap = new HashMap<String, Map<String, NodeRef>>();
-
-		NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(POTENTIAL_ROLES_DICTIONARY_NAME);
-		List<NodeRef> potentialRolesRefs = dictionaryService.getChildren(potentialRolesDictionary);
-		for (NodeRef potentialRoleRef : potentialRolesRefs) {
-			Serializable businessRole = nodeService.getProperty(potentialRoleRef, PROP_POTENTIAL_ROLE_BUSINESS_ROLE_REF);
-			Serializable organizationElement = nodeService.getProperty(potentialRoleRef, PROP_POTENTIAL_ROLE_ORG_ELEMENT_REF);
-			if (businessRole != null && organizationElement != null) {
-				updatePotentialRolesMap(businessRole.toString(), organizationElement.toString(), potentialRoleRef);
+				
+				potentialRolesMap = new HashMap<String, Map<String, NodeRef>>();
+				
+				NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(POTENTIAL_ROLES_DICTIONARY_NAME);
+				List<NodeRef> potentialRolesRefs = dictionaryService.getChildren(potentialRolesDictionary);
+				for (NodeRef potentialRoleRef : potentialRolesRefs) {
+					Serializable businessRole = nodeService.getProperty(potentialRoleRef, PROP_POTENTIAL_ROLE_BUSINESS_ROLE_REF);
+					Serializable organizationElement = nodeService.getProperty(potentialRoleRef, PROP_POTENTIAL_ROLE_ORG_ELEMENT_REF);
+					if (businessRole != null && organizationElement != null) {
+						updatePotentialRolesMap(businessRole.toString(), organizationElement.toString(), potentialRoleRef);
+					}
+				}
+				
+				return null;
 			}
-		}
+		});
 	}
 
 	private void updatePotentialRolesMap(String businessRoleId, String organizationElementStrRef, NodeRef potentialRoleRef) {
