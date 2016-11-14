@@ -402,9 +402,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			if (this.startDate && this.endDate && this.startDate <= this.endDate) {
 				this.drawDiagramHeader();
 				this.drawDiagram();
+				this.drawSelector();
 				this.drawCurrentState();
 				this.fillBusyTime();
-				this.drawSelector();
 			}
 		},
 
@@ -587,7 +587,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.keyIndex = [];
 			var cellBounds = this._calculateCell();
 			var delta = cellBounds.firstColumnWidth - this.firstColumnWidth;
-			for (var key in this.selectedItems) {
+			var items = this.getSelectedItems(!!this.options.sortSelected);
+			items.forEach(function(key){
 				var item = this.selectedItems[key];
 				var row = document.createElement("div");
 				row.className = "member-control-diagram-row";
@@ -615,7 +616,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				this._drawHourCells(row, itemNum, false);
 				this.keyIndex[key] = itemNum;
 				itemNum++;
-			}
+			}, this);
 			this.contentIsReady = true;
 		},
 
@@ -836,30 +837,35 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				}
 				if (startIndex < fillIndex) {
 					var iconItem = this.getMemberStatusHTML(item);
-					var icon = document.createElement("div");
-					icon.id = id;
-					icon.innerHTML = iconItem;
-					icon.className = "member-control-diagram-member-status";
+					if (iconItem) {
+						var icon = document.createElement("div");
+						icon.id = id;
+						icon.innerHTML = iconItem;
+						icon.className = "member-control-diagram-member-status";
 
-					if (item.memberStatus == "REQUEST_NEW_TIME") {
-						icon.style.cursor = "pointer";
-						var me = this;
-						var requestDate = new Date(item.memberFromDate);
-						var requestIndex = this.keyIndex[item.nodeRef];
-						icon.addEventListener("click", function() {
-							me.selectByDate(requestDate, requestIndex);
-						});
+						if (item.memberStatus == "REQUEST_NEW_TIME") {
+							icon.style.cursor = "pointer";
+							var me = this;
+							var requestDate = new Date(item.memberFromDate);
+							var requestIndex = this.keyIndex[item.nodeRef];
+							YAHOO.util.Event.on(icon, "click", function(ev, obj) {
+								me.selectByDate(obj.requestDate, obj.requestIndex);
+							}, {
+								requestDate: requestDate,
+								requestIndex: requestIndex
+							});
+						}
+
+						var firstCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + startIndex);
+						var firstCellRegion = Dom.getRegion(firstCell);
+						var lastCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + fillIndex);
+						var lastCellRegion = Dom.getRegion(lastCell);
+						var left = firstCellRegion.left + (Math.round((lastCellRegion.left + cellSettings.cellWidth - firstCellRegion.left) / 2) - 10);
+
+						icon.style.left = (left - diagramBounds.left) + "px";
+						icon.style.top = (firstCellRegion.top - diagramBounds.top + 2) + "px";
+						diagram.appendChild(icon);
 					}
-
-					var firstCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + startIndex);
-					var firstCellRegion = Dom.getRegion(firstCell);
-					var lastCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + fillIndex);
-					var lastCellRegion = Dom.getRegion(lastCell);
-					var left = firstCellRegion.left + (Math.round((lastCellRegion.left + cellSettings.cellWidth - firstCellRegion.left) / 2) - 10);
-
-					icon.style.left = (left - diagramBounds.left) + "px";
-					icon.style.top = (firstCellRegion.top - diagramBounds.top + 2) + "px";
-					diagram.appendChild(icon);
 				}
 			}
 		},
@@ -966,7 +972,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				}
 
 				var img = "alf_clock_green_16.jpg";
-				var title = this.msg("label.events.participation.another_time") + ": " + Alfresco.util.formatDate(new Date(item.memberFromDate), this.msg("lecm.date-format.datetime"));
+				var title = this.msg("label.events.participation.another_time_suggested");
 				var iconItem = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-events/' + img + '" class="members-status" title="' + title + '"/>';
 
 				var icon = document.createElement("div");
@@ -1074,6 +1080,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 			if (!onlyHeader) {
 				var keysLen = Object.keys(this.selectedItems).length;
+				var cellBounds = this._calculateCell();
 				for (var i = 1; i <= keysLen; i++) {
 					var leftCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + startIndex);
 					leftCell.style.borderLeft = "none";
@@ -1081,7 +1088,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					if (endIndex <= this.maxIndex) {
 						var rightCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + endIndex);
 						rightCell.style.borderRight = "none";
-						rightCell.style.width = (parseInt(rightCell.style.width) + this.selectorBorderWidth) + "px";
+						rightCell.style.width = cellBounds.cellWidth + "px";
 					}
 
 					if (i == keysLen) {
@@ -1091,7 +1098,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 							}
 							var cell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + j);
 							cell.style.borderBottom = "none";
-							cell.style.height = (Dom.getRegion(cell).height + this.selectorBorderWidth) + "px";
+							cell.style.height = cellBounds.height + "px";
 						}
 
 					}
@@ -1136,6 +1143,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				cell.style.backgroundColor = color;
 			}
 
+			var cellBounds = this._calculateCell();
 			var keysLen = Object.keys(this.selectedItems).length;
 			for (var i = 1; i <= keysLen; i++) {
 				var leftCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + startIndex);
@@ -1144,7 +1152,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				if (endIndex <= this.maxIndex) {
 					var rightCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + endIndex);
 					rightCell.style.borderRight = this.selectorBorderWidth + "px solid " + color;
-					rightCell.style.width = (parseInt(rightCell.style.width) - this.selectorBorderWidth) + "px";
+					rightCell.style.width = (cellBounds.cellWidth - this.selectorBorderWidth) + "px";
 				}
 				if (i == keysLen) {
 					for (var j = startIndex; j <= endIndex; j++) {
@@ -1152,7 +1160,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 							break;
 						}
 						var cell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + j);
-						cell.style.height = (Dom.getRegion(cell).height - this.selectorBorderWidth) + "px";
+						cell.style.height = (cellBounds.height - this.selectorBorderWidth) + "px";
 						cell.style.borderBottom = this.selectorBorderWidth + "px solid " + color;
 					}
 
@@ -1239,7 +1247,11 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				var cellByHour = Math.round(60 / this.timeStep);
 				var cellWidth = Math.floor(width / cellByHour);
 				width = cellWidth * cellByHour;
+
+				//member-control-diagram-empty-cell
+				var style = this._getStyle(".member-control-diagram-empty-cell");
 				this.cellBounds = {
+					height: parseInt(style.style.height),
 					width: width,
 					cellByHour: cellByHour,
 					cellWidth: cellWidth,
