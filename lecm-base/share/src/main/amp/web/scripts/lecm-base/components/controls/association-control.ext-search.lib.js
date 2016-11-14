@@ -9,9 +9,6 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 (function () {
 
 	LogicECM.module.AssociationComplexControl.ExtSearch = {
-		extendQueryFunctions: [],
-		extendArgsFunctions: [],
-
 		FORM_ID: "ex-control-search",
 
 		getExtSearchQuery: function (currentForm) {
@@ -135,14 +132,6 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}
 			}
 			return args;
-		},
-
-		registerQueryFunction: function (key, fn) {
-			this.extendQueryFunctions[key] = fn;
-		},
-
-		registerArgsFunction: function (key, fn) {
-			this.extendArgsFunctions[key] = fn;
 		}
 	};
 })();

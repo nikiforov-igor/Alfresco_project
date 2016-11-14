@@ -111,10 +111,10 @@
                             <control-param name="showAutocomplete">true</control-param>
                             <control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
                             <control-param name="cssClasses">with-ex-search</control-param>
+                            <control-param name="extendScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <!-- lecm-contractor:contractor-type -->
                             <control-param name="contractor_label">Внешний контрагент</control-param>
                             <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
-                            <!--<control-param name="contractor_endpointMany">false</control-param>-->
                             <control-param name="contractor_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
                             <control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
                             <control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
@@ -130,10 +130,11 @@
                             <control-param name="contractor_showAssocViewForm">true</control-param>
                             <control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
                             <control-param name="contractor_hasNoAspects">lecm-orgstr-aspects:is-organization-aspect</control-param>
+                            <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:contractor-type -->
                             <control-param name="organisation_label">Внутренний контрагент</control-param>
                             <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
-                            <!-- <control-param name="organisation_endpointMany">false</control-param>-->
                             <control-param name="organisation_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
                             <control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
                             <control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
@@ -147,10 +148,11 @@
                             <control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
                             <control-param name="organisation_showAssocViewForm">true</control-param>
                             <control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:physical-person-type -->
                             <control-param name="person_label">Физическое лицо</control-param>
                             <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
-                            <!-- <control-param name="person_endpointMany">false</control-param>-->
                             <control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
                             <control-param name="person_nameSubstituteString">{lecm-contractor:lastName} {lecm-contractor:firstName} {lecm-contractor:middleName}</control-param>
                             <control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
@@ -161,6 +163,8 @@
                             <control-param name="person_showExSearch">true</control-param>
                             <control-param name="person_showAssocViewForm">true</control-param>
                             <control-param name="person_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="person_getExtSearchQuery">LogicECM.getExtQueryForPerson</control-param>
+                            <control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
                         </control>
                     </field>
                     <field id="lecm-contract:representative-assoc" set="counterparty-info" label-id="label.representative">
@@ -394,6 +398,7 @@
                             <control-param name="showAutocomplete">true</control-param>
                             <control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
                             <control-param name="cssClasses">with-ex-search</control-param>
+                            <control-param name="extendScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <!-- lecm-contractor:contractor-type -->
                             <control-param name="contractor_label">Внешний контрагент</control-param>
                             <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
@@ -412,6 +417,8 @@
                             <control-param name="contractor_showAssocViewForm">true</control-param>
                             <control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
                             <control-param name="contractor_hasNoAspects">lecm-orgstr-aspects:is-organization-aspect</control-param>
+                            <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:contractor-type -->
                             <control-param name="organisation_label">Внутренний контрагент</control-param>
                             <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
@@ -428,6 +435,8 @@
                             <control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
                             <control-param name="organisation_showAssocViewForm">true</control-param>
                             <control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:physical-person-type -->
                             <control-param name="person_label">Физическое лицо</control-param>
                             <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
@@ -441,6 +450,8 @@
                             <control-param name="person_showExSearch">true</control-param>
                             <control-param name="person_showAssocViewForm">true</control-param>
                             <control-param name="person_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="person_getExtSearchQuery">LogicECM.getExtQueryForPerson</control-param>
+                            <control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
                         </control>
                     </field>
                     <field id="lecm-contract:representative-assoc" label-id="label.representative" set="afterPrice">
@@ -552,6 +563,7 @@
                             <control-param name="showAutocomplete">true</control-param>
                             <control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
                             <control-param name="cssClasses">with-ex-search</control-param>
+                            <control-param name="extendScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <!-- lecm-contractor:contractor-type -->
                             <control-param name="contractor_label">Внешний контрагент</control-param>
                             <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
@@ -570,6 +582,8 @@
                             <control-param name="contractor_showAssocViewForm">true</control-param>
                             <control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
                             <control-param name="contractor_hasNoAspects">lecm-orgstr-aspects:is-organization-aspect</control-param>
+                            <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:contractor-type -->
                             <control-param name="organisation_label">Внутренний контрагент</control-param>
                             <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
@@ -586,6 +600,8 @@
                             <control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
                             <control-param name="organisation_showAssocViewForm">true</control-param>
                             <control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:physical-person-type -->
                             <control-param name="person_label">Физическое лицо</control-param>
                             <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
@@ -599,6 +615,8 @@
                             <control-param name="person_showExSearch">true</control-param>
                             <control-param name="person_showAssocViewForm">true</control-param>
                             <control-param name="person_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="person_getExtSearchQuery">LogicECM.getExtQueryForPerson</control-param>
+                            <control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
                         </control>
                     </field>
                     <field id="lecm-contract:summaryContent">
@@ -660,6 +678,7 @@
                             <control-param name="showAutocomplete">true</control-param>
                             <control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
                             <control-param name="cssClasses">with-ex-search</control-param>
+                            <control-param name="extendScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <!-- lecm-contractor:contractor-type -->
                             <control-param name="contractor_label">Внешний контрагент</control-param>
                             <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
@@ -678,6 +697,8 @@
                             <control-param name="contractor_showAssocViewForm">true</control-param>
                             <control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
                             <control-param name="contractor_hasNoAspects">lecm-orgstr-aspects:is-organization-aspect</control-param>
+                            <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:contractor-type -->
                             <control-param name="organisation_label">Внутренний контрагент</control-param>
                             <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
@@ -694,6 +715,8 @@
                             <control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
                             <control-param name="organisation_showAssocViewForm">true</control-param>
                             <control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:physical-person-type -->
                             <control-param name="person_label">Физическое лицо</control-param>
                             <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
@@ -707,6 +730,8 @@
                             <control-param name="person_showExSearch">true</control-param>
                             <control-param name="person_showAssocViewForm">true</control-param>
                             <control-param name="person_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="person_getExtSearchQuery">LogicECM.getExtQueryForPerson</control-param>
+                            <control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
 						</control>
 					</field>
                 </appearance>
@@ -1164,6 +1189,7 @@
                             <control-param name="showAutocomplete">true</control-param>
                             <control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
                             <control-param name="cssClasses">with-ex-search</control-param>
+                            <control-param name="extendScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <!-- lecm-contractor:contractor-type -->
                             <control-param name="contractor_label">Внешний контрагент</control-param>
                             <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
@@ -1182,6 +1208,8 @@
                             <control-param name="contractor_showAssocViewForm">true</control-param>
                             <control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
                             <control-param name="contractor_hasNoAspects">lecm-orgstr-aspects:is-organization-aspect</control-param>
+                            <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:contractor-type -->
                             <control-param name="organisation_label">Внутренний контрагент</control-param>
                             <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
@@ -1198,6 +1226,8 @@
                             <control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
                             <control-param name="organisation_showAssocViewForm">true</control-param>
                             <control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                            <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
                             <!-- lecm-contractor:physical-person-type -->
                             <control-param name="person_label">Физическое лицо</control-param>
                             <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
@@ -1211,6 +1241,8 @@
                             <control-param name="person_showExSearch">true</control-param>
                             <control-param name="person_showAssocViewForm">true</control-param>
                             <control-param name="person_sortProp">lecm-contractor:shortname</control-param>
+                            <control-param name="person_getExtSearchQuery">LogicECM.getExtQueryForPerson</control-param>
+                            <control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />

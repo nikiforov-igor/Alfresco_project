@@ -460,11 +460,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (this.widgets.exSearch && this.currentState.exSearchFormId) {
 				var currentForm = Dom.get(this.currentState.exSearchFormId);
 				if (currentForm) {
-					if (ExtSearchUtils && ExtSearchUtils.extendQueryFunctions && YAHOO.lang.isFunction(ExtSearchUtils.extendQueryFunctions[this.key])) {
-						exSearchFilter = ExtSearchUtils.extendQueryFunctions[this.key](currentForm);
-					} else {
-						exSearchFilter = ExtSearchUtils.getExtSearchQuery(currentForm);
-					}
+					exSearchFilter = this._fnGetExtSearchQuery(currentForm);
 				}
 			}
 
@@ -801,7 +797,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				var formUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "/components/form?itemKind=type&itemId={itemId}&formId={formId}&mode=edit&showSubmitButton=false&showCancelButton=false",
 					{
 						itemId: this.options.itemType,
-						formId: "ex-control-search"
+						formId: ExtSearchUtils.FORM_ID
 					});
 
 				//var timeStamp = new Date().getTime();
@@ -834,11 +830,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				if (this.widgets.exSearch && this.currentState.exSearchFormId) {
 					var currentForm = Dom.get(this.currentState.exSearchFormId);
 					if (currentForm) {
-						args = ExtSearchUtils.getArgsFromForm(currentForm);
-
-						if (ExtSearchUtils && ExtSearchUtils.extendArgsFunctions && YAHOO.lang.isFunction(ExtSearchUtils.extendArgsFunctions[this.key])) {
-							args = ExtSearchUtils.extendArgsFunctions[this.key](args, currentForm);
-						}
+						args = this._fnGetArgumentsFromForm(currentForm);
 					}
 				}
 			}
@@ -884,6 +876,11 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 							Dom.addClass(p_dialog.id + "-form-container", this.options.createDialogClass);
 						}
 						this.stateParams.doubleClickLock = false;
+
+						//подменяем submit
+						var submitElement = p_form.submitElements[0];
+						var originalSubmitFunction = submitElement.submitForm;
+						submitElement.submitForm = this._fnCreateNewItemSubmit.bind(this, originalSubmitFunction, submitElement);
 					},
 					scope: this
 				},
@@ -933,6 +930,18 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}
 			}).show();
 			return true;
+		},
+
+		_fnCreateNewItemSubmit: function (fn, scope) {
+			fn.call(scope);
+		},
+
+		_fnGetExtSearchQuery: function (form) {
+			return ExtSearchUtils.getExtSearchQuery(form);
+		},
+
+		_fnGetArgumentsFromForm: function (form) {
+			return ExtSearchUtils.getArgsFromForm(form);
 		}
 
 	}, true);

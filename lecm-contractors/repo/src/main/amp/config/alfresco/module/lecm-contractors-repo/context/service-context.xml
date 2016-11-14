@@ -214,4 +214,11 @@
 			</list>
 		</property>
 	</bean>
+
+    <bean id="contractorsUpdateSearchPropsPolicy" class="ru.it.lecm.contractors.policies.ContractorUpdateSearchPropsPolicy" init-method="init" depends-on="${groupId}.${artifactId}.contractors-model-bootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="dictionaryService" ref="serviceDictionary" />
+    </bean>
+
 </beans>

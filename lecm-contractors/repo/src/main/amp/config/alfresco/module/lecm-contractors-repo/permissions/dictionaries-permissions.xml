@@ -6,5 +6,6 @@
 		<Permission object="Контрагенты Специализации" permissionGroup="LECM_BASIC_PG_Owner"/>
 		<Permission object="Контрагенты Организационно-правовые формы" permissionGroup="LECM_BASIC_PG_Owner"/>
 		<Permission object="Физические лица" permissionGroup="LECM_BASIC_PG_Owner"/>
+		<Permission object="Регионы" permissionGroup="LECM_BASIC_PG_Owner"/>
 	</BusinessRole>
 </ReposioryPermissions>

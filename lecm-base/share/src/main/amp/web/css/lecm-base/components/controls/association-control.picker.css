@@ -104,16 +104,12 @@
 	float: right;
 }
 
-.association-picker .bd .control-ex-search .control .label-div {
-	width: 100px;
-	text-align: right;
-}
-
 .association-picker .control .label-div {
 	display: none;
 }
 
-.association-picker .with-ex-search .control .label-div {
+.association-picker .with-ex-search .control .label-div,
+.association-picker .bd .control-ex-search .control .label-div{
 	display: block;
 	width: 100px;
 	text-align: right;
