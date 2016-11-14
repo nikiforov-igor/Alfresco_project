@@ -130,6 +130,7 @@
         <module>lecm-search-editor</module>
         <module>lecm-documents-templates</module>
         <module>lecm-reporting</module>
+        <module>eds-errands</module>
         <!--<module>lecm-mobile</module>-->
     </modules>
     <scm>
