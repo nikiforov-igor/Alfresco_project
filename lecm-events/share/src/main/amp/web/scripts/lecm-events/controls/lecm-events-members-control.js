@@ -971,7 +971,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				}
 
 				var img = "alf_clock_green_16.jpg";
-				var title = this.msg("label.events.participation.another_time") + ": " + Alfresco.util.formatDate(new Date(item.memberFromDate), this.msg("lecm.date-format.datetime"));
+				var title = this.msg("label.events.participation.another_time_suggested");
 				var iconItem = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-events/' + img + '" class="members-status" title="' + title + '"/>';
 
 				var icon = document.createElement("div");
