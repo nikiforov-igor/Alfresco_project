@@ -587,7 +587,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.keyIndex = [];
 			var cellBounds = this._calculateCell();
 			var delta = cellBounds.firstColumnWidth - this.firstColumnWidth;
-			for (var key in this.selectedItems) {
+			var items = this.getSelectedItems(!!this.options.sortSelected);
+			items.forEach(function(key){
 				var item = this.selectedItems[key];
 				var row = document.createElement("div");
 				row.className = "member-control-diagram-row";
@@ -615,7 +616,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				this._drawHourCells(row, itemNum, false);
 				this.keyIndex[key] = itemNum;
 				itemNum++;
-			}
+			}, this);
 			this.contentIsReady = true;
 		},
 
