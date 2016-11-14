@@ -625,6 +625,16 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 * @param params
 		 */
 		removeDiagramItem: function removeDiagramItem_function(ev, params) {
+			var diagram = Dom.get(this.options.controlId + "-diagram");
+			for (var key in this.selectedItems) {
+				var item = this.selectedItems[key];
+				var rowIndex = this.keyIndex[item.nodeRef];
+				var id = this.options.controlId + "-diagram-member-status-" + rowIndex;
+				var prevIcon = Dom.get(id);
+				if (prevIcon) {
+					diagram.removeChild(prevIcon);
+				}
+			}
 			this._reset();
 			this.removeNode(ev, params);
 		},
