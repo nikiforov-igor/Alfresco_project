@@ -106,7 +106,6 @@
         });
     }
 
-    YAHOO.util.Event.onContentReady("${fieldHtmlId}", init);
-
+    YAHOO.util.Event.onDOMReady(init);
 })();
 </script>
