@@ -34,6 +34,7 @@
 			<div id="${el}-refreshSignatures" class="widget-button-grey text-cropped" href="javascript:void(0);">${msg("label.refresh.signature")}</div>
 			<div id="${el}-uploadSignature" class="widget-button-grey text-cropped" href="javascript:void(0);">${msg("label.upload.signature")}</div>
             <div id="${el}-exportSignature" class="widget-button-grey text-cropped" href="javascript:void(0);">${msg("label.export.signature")}</div>
+            <input type="file" id="${el}-localSign" style="display:none">
 		</div>
     </div>
 </div>
@@ -79,6 +80,7 @@
 		YAHOO.util.Event.on("${el}-signDocument", "click", signingComponent.onSignDocument, signingComponent, true);
 		YAHOO.util.Event.on("${el}-refreshSignatures", "click", signingComponent.onRefreshSignatures, signingComponent, true);
 		YAHOO.util.Event.on("${el}-uploadSignature", "click", signingComponent.onUploadSignature, signingComponent, true);
+        YAHOO.util.Event.on("${el}-localSign", "change", signingComponent.handleClientLocalSign, signingComponent, true);
 		YAHOO.util.Event.on("${el}-refreshSentDocuments", "click", signingComponent.onRefreshSentDocuments, signingComponent, true);
 		YAHOO.util.Event.on("${el}-sendDocument", "click", signingComponent.onSendDocument, signingComponent, true);
 		YAHOO.util.Event.on("${el}-signaturesReceived", "click", signingComponent.onSignaturesReceived, signingComponent, true);

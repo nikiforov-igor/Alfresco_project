@@ -140,8 +140,27 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onUploadSignature: function(event) {
-			CryptoApplet.loadSignAction(this.options.nodeRef, {successCallback: {fn: this.checkSigned, scope: this}});
+            var localSign = document.getElementById(this.id+"-localSign"); 
+            localSign.click();
 		},
+        
+        handleClientLocalSign: function(evt) {
+            var oFile = document.getElementById(this.id+"-localSign").files[0];
+            var oFReader = new FileReader();
+            if (typeof(oFReader.readAsDataURL)!="function") {
+                alert("Method readAsDataURL() is not supported in FileReader.");
+            }
+            oFReader.readAsText(oFile);
+            oFReader.onload = this.oFileReaderOnLoad();
+        },
+        
+        oFileReaderOnLoad: function() { 
+            var thisContext=this;
+	        return function(oFREvent){
+                var sFileData = oFREvent.target.result;
+                CryptoApplet.loadSignAction(thisContext.options.nodeRef, sFileData, {successCallback: {fn: thisContext.checkSigned, scope: thisContext}});
+            }
+	    },
         
         onExportSignature: function(event) {
 			CryptoApplet.exportSignAction(this.options.nodeRef);
