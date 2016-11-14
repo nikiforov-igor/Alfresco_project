@@ -588,33 +588,35 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var cellBounds = this._calculateCell();
 			var delta = cellBounds.firstColumnWidth - this.firstColumnWidth;
 			for (var key in this.selectedItems) {
-				var item = this.selectedItems[key];
-				var row = document.createElement("div");
-				row.className = "member-control-diagram-row";
-				content.appendChild(row);
-				var firstColumn = document.createElement("div");
-				firstColumn.className = "member-control-diagram-first-cell";
-				firstColumn.style.width = cellBounds.firstColumnWidth + "px";
-				row.appendChild(firstColumn);
-				var textCell = document.createElement("div");
-				textCell.className = "member-control-diagram-first-cell-text";
-				textCell.innerHTML = item.selectedName;
-				textCell.title = item.selectedName;
-				firstColumn.appendChild(textCell);
-				var textBounds = Dom.getRegion(textCell);
-				textCell.setAttribute("style", "width: " + (delta + textBounds.width) + "px !important;");
+				if (this.selectedItems.hasOwnProperty(key)) {
+					var item = this.selectedItems[key];
+					var row = document.createElement("div");
+					row.className = "member-control-diagram-row";
+					content.appendChild(row);
+					var firstColumn = document.createElement("div");
+					firstColumn.className = "member-control-diagram-first-cell";
+					firstColumn.style.width = cellBounds.firstColumnWidth + "px";
+					row.appendChild(firstColumn);
+					var textCell = document.createElement("div");
+					textCell.className = "member-control-diagram-first-cell-text";
+					textCell.innerHTML = item.selectedName;
+					textCell.title = item.selectedName;
+					firstColumn.appendChild(textCell);
+					var textBounds = Dom.getRegion(textCell);
+					textCell.setAttribute("style", "width: " + (delta + textBounds.width) + "px !important;");
 
-				var removeButton = document.createElement("div");
-				removeButton.className = "member-control-diagram-first-cell-remove";
-				firstColumn.appendChild(removeButton);
-				YAHOO.util.Event.on(removeButton, 'click', this.removeDiagramItem, {
-					node: item,
-					updateForms: true
-				}, this);
+					var removeButton = document.createElement("div");
+					removeButton.className = "member-control-diagram-first-cell-remove";
+					firstColumn.appendChild(removeButton);
+					YAHOO.util.Event.on(removeButton, 'click', this.removeDiagramItem, {
+						node: item,
+						updateForms: true
+					}, this);
 
-				this._drawHourCells(row, itemNum, false);
-				this.keyIndex[key] = itemNum;
-				itemNum++;
+					this._drawHourCells(row, itemNum, false);
+					this.keyIndex[key] = itemNum;
+					itemNum++;
+				}
 			}
 			this.contentIsReady = true;
 		},
@@ -627,12 +629,14 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		removeDiagramItem: function removeDiagramItem_function(ev, params) {
 			var diagram = Dom.get(this.options.controlId + "-diagram");
 			for (var key in this.selectedItems) {
-				var item = this.selectedItems[key];
-				var rowIndex = this.keyIndex[item.nodeRef];
-				var id = this.options.controlId + "-diagram-member-status-" + rowIndex;
-				var prevIcon = Dom.get(id);
-				if (prevIcon) {
-					diagram.removeChild(prevIcon);
+				if (this.selectedItems.hasOwnProperty(key)) {
+					var item = this.selectedItems[key];
+					var rowIndex = this.keyIndex[item.nodeRef];
+					var id = this.options.controlId + "-diagram-member-status-" + rowIndex;
+					var prevIcon = Dom.get(id);
+					if (prevIcon) {
+						diagram.removeChild(prevIcon);
+					}
 				}
 			}
 			this._reset();
@@ -788,12 +792,14 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 				var diagram = Dom.get(this.options.controlId + "-diagram");
 				for (var key in this.selectedItems) {
-					var item = this.selectedItems[key];
-					var rowIndex = this.keyIndex[item.nodeRef];
-					var id = this.options.controlId + "-diagram-member-status-" + rowIndex;
-					var prevIcon = Dom.get(id);
-					if (prevIcon) {
-						diagram.removeChild(prevIcon);
+					if (this.selectedItems.hasOwnProperty(key)) {
+						var item = this.selectedItems[key];
+						var rowIndex = this.keyIndex[item.nodeRef];
+						var id = this.options.controlId + "-diagram-member-status-" + rowIndex;
+						var prevIcon = Dom.get(id);
+						if (prevIcon) {
+							diagram.removeChild(prevIcon);
+						}
 					}
 				}
 				return;
@@ -832,48 +838,50 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var diagram = Dom.get(this.options.controlId + "-diagram");
 			var diagramBounds = Dom.getRegion(diagram);
 			for (var key in this.selectedItems) {
-				var item = this.selectedItems[key];
-				var rowIndex = this.keyIndex[item.nodeRef];
-				for (var i = startIndex; i <= fillIndex; i++) {
-					var cell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + i);
-					Dom.addClass(cell, "member-control-diagram-current");
-				}
-				//Добавляем иконку
-				var id = this.options.controlId + "-diagram-member-status-" + rowIndex;
-				var prevIcon = Dom.get(id);
-				if (prevIcon) {
-					diagram.removeChild(prevIcon);
-				}
-				if (startIndex < fillIndex) {
-					var iconItem = this.getMemberStatusHTML(item);
-					if (iconItem) {
-						var icon = document.createElement("div");
-						icon.id = id;
-						icon.innerHTML = iconItem;
-						icon.className = "member-control-diagram-member-status";
+				if (this.selectedItems.hasOwnProperty(key)) {
+					var item = this.selectedItems[key];
+					var rowIndex = this.keyIndex[item.nodeRef];
+					for (var i = startIndex; i <= fillIndex; i++) {
+						var cell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + i);
+						Dom.addClass(cell, "member-control-diagram-current");
+					}
+					//Добавляем иконку
+					var id = this.options.controlId + "-diagram-member-status-" + rowIndex;
+					var prevIcon = Dom.get(id);
+					if (prevIcon) {
+						diagram.removeChild(prevIcon);
+					}
+					if (startIndex < fillIndex) {
+						var iconItem = this.getMemberStatusHTML(item);
+						if (iconItem) {
+							var icon = document.createElement("div");
+							icon.id = id;
+							icon.innerHTML = iconItem;
+							icon.className = "member-control-diagram-member-status";
 
-						if (item.memberStatus == "REQUEST_NEW_TIME") {
-							icon.style.cursor = "pointer";
-							var me = this;
-							var requestDate = new Date(item.memberFromDate);
-							var requestIndex = this.keyIndex[item.nodeRef];
-							YAHOO.util.Event.on(icon, "click", function(ev, obj) {
-								me.selectByDate(obj.requestDate, obj.requestIndex);
-							}, {
-								requestDate: requestDate,
-								requestIndex: requestIndex
-							});
+							if (item.memberStatus == "REQUEST_NEW_TIME") {
+								icon.style.cursor = "pointer";
+								var me = this;
+								var requestDate = new Date(item.memberFromDate);
+								var requestIndex = this.keyIndex[item.nodeRef];
+								YAHOO.util.Event.on(icon, "click", function (ev, obj) {
+									me.selectByDate(obj.requestDate, obj.requestIndex);
+								}, {
+									requestDate: requestDate,
+									requestIndex: requestIndex
+								});
+							}
+
+							var firstCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + startIndex);
+							var firstCellRegion = Dom.getRegion(firstCell);
+							var lastCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + fillIndex);
+							var lastCellRegion = Dom.getRegion(lastCell);
+							var left = firstCellRegion.left + (Math.round((lastCellRegion.left + cellSettings.cellWidth - firstCellRegion.left) / 2) - 10);
+
+							icon.style.left = (left - diagramBounds.left) + "px";
+							icon.style.top = (firstCellRegion.top - diagramBounds.top + 2) + "px";
+							diagram.appendChild(icon);
 						}
-
-						var firstCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + startIndex);
-						var firstCellRegion = Dom.getRegion(firstCell);
-						var lastCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + fillIndex);
-						var lastCellRegion = Dom.getRegion(lastCell);
-						var left = firstCellRegion.left + (Math.round((lastCellRegion.left + cellSettings.cellWidth - firstCellRegion.left) / 2) - 10);
-
-						icon.style.left = (left - diagramBounds.left) + "px";
-						icon.style.top = (firstCellRegion.top - diagramBounds.top + 2) + "px";
-						diagram.appendChild(icon);
 					}
 				}
 			}
@@ -968,9 +976,11 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				var cellSettings = this._calculateCell();
 				var item;
 				for (var key in this.selectedItems) {
-					var item = this.selectedItems[key];
-					if (requestIndex == this.keyIndex[item.nodeRef]) {
-						break;
+					if (this.selectedItems.hasOwnProperty(key)) {
+						var item = this.selectedItems[key];
+						if (requestIndex == this.keyIndex[item.nodeRef]) {
+							break;
+						}
 					}
 				}
 				//Добавляем иконку
