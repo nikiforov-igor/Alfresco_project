@@ -770,8 +770,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
     public void createErrands(Scriptable json) {
         final String user = AuthenticationUtil.getFullyAuthenticatedUser();
-        ValueConverter converter = new ValueConverter();
-        final Map<String, String> fields = (Map<String, String>) converter.convertValueForJava(json);
+        final Map<String, String> fields = (Map<String, String>) getValueConverter().convertValueForJava(json);
 
         Runnable runnable = new Runnable() {
             public void run() {
