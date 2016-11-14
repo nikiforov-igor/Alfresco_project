@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Get values from dictionary errands types</shortname>
+	<description>Get values from dictionary errands types</description>
+	<url>/lecm/errands/api/getTypes</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+</webscript>

@@ -2,6 +2,7 @@ package ru.it.lecm.errands.scripts;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.jscript.ValueConverter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -754,6 +755,53 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                     }
 
                                     nodeService.createAssociation(errand, parentErrand, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
+                                    return null;
+                                }
+                            }, false, true);
+                        }
+                    }, user);
+                } catch (Exception e) {
+                    logger.error("Error while create errand", e);
+                }
+            }
+        };
+        threadPoolExecutor.execute(runnable);
+    }
+
+    public void createErrands(Scriptable json) {
+        final String user = AuthenticationUtil.getFullyAuthenticatedUser();
+        final Map<String, String> fields = (Map<String, String>) getValueConverter().convertValueForJava(json);
+
+        Runnable runnable = new Runnable() {
+            public void run() {
+                try {
+                    AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
+                        @Override
+                        public Void doWork() throws Exception {
+                            return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                                @Override
+                                public Void execute() throws Throwable {
+                                    Map<String, String> properties = new HashMap<>();
+                                    Map<String, String> associations = new HashMap<>();
+
+                                    for (Object entryObj : fields.entrySet()) {
+                                        //Не знаю почему, но если для json.entrySet() сразу указать Map.Entry, то компилятор ругается
+                                        Map.Entry entry = (Map.Entry) entryObj;
+
+                                        String key = (String) entry.getKey();
+                                        String field = key.replaceAll("prop_", "").replaceAll("assoc_", "").replaceAll("_", ":");
+                                        String value = (String) entry.getValue();
+
+                                        if (value != null && !value.isEmpty()) {
+                                            if (key.startsWith("prop_")) {
+                                                properties.put(field, value);
+                                            } else if (key.startsWith("assoc_")) {
+                                                associations.put(field, value);
+                                            }
+                                        }
+                                    }
+
+                                    documentService.createDocument(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService), properties, associations);
                                     return null;
                                 }
                             }, false, true);

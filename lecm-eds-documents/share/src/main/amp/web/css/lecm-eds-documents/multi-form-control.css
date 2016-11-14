@@ -1,0 +1,109 @@
+.control.primary-routing {
+    position: static;
+    float: none;
+}
+
+.control.primary-routing fieldset.fieldset {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.control.primary-routing div.primary-routing-documents-item {
+    border-bottom: 1px solid #ccc;
+    margin: 0 10px;
+    clear: both;
+}
+
+.control.primary-routing li.primary-routing-documents-item div.primary-routing-documents-item-container {
+    display: flex;
+}
+
+.control.primary-routing li div.actions {
+    float: right;
+    text-align: right;
+    border-left: 1px solid #ccc;
+    margin-left: 20px;
+    margin-top: -2px;
+}
+
+.control.primary-routing ul.primary-routing-documents-list li.primary-routing-documents-item {
+    padding-top: 16px;
+    border-bottom: 1px solid #ccc;
+    margin: 0 10px;
+    clear: both;
+}
+
+.control.primary-routing ul.primary-routing-documents-list li.primary-routing-documents-item:first-of-type {
+    padding-top: 0;
+}
+
+.control.primary-routing ul.primary-routing-documents-list li.primary-routing-documents-item:last-of-type {
+    border-bottom: none;
+}
+
+.control.primary-routing li div.actions a.remove-item {
+    background: url(../../../images/lecm-events/alf_remove_grey_16.png) no-repeat center center;
+    padding-left: 20px;
+    height: 190px;
+}
+
+.create-documents-form .control .label-div {
+    width: auto;
+    line-height: 28px;
+    padding: 2px 10px 2px 0;
+}
+
+.yui-panel-container.yui-dialog .create-documents-form .control .label-div {
+    text-align: left;
+}
+
+.create-documents-form .control .label-div ~ .container {
+    width: 240px;
+    min-width: 180px;
+    overflow: hidden;
+    margin-right: 10px;
+}
+
+.create-documents-form .clear {
+    display: none;
+}
+
+.create-documents-form .control {
+    float: none;
+    width: auto;
+}
+
+.documents-remove-button-container {
+    float: left;
+    margin-top: 44px;
+    margin-right: 10px;
+}
+
+.control.primary-routing .primary-routing-documents-item-container fieldset {
+    border: none;
+    padding: 0;
+}
+.control.primary-routing .primary-routing-documents-item-container .label-div {
+    width: 120px;
+}
+.control.primary-routing .primary-routing-documents-item-container .yui-u.first .label-div {
+    width: 100px;
+}
+.control.primary-routing .primary-routing-documents-item-container legend {
+    width: 120px;
+    float: left;
+    line-height: 28px;
+    padding: 2px 10px 2px 0;
+    font-size: 100%;
+    text-align: right;
+}
+.control.primary-routing .primary-routing-documents-item-container .form-container {
+    width: 100%;
+}
+.control.primary-routing .primary-routing-documents-item-container .yui-u.first {
+    width: 45%;
+}
+.control.primary-routing .primary-routing-documents-item-container .yui-u {
+    width: 55%;
+}

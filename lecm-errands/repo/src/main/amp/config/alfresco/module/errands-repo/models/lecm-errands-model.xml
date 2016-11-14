@@ -12,6 +12,7 @@
         <import uri="http://www.it.ru/logicECM/links/1.0" prefix="lecm-links"/>
         <import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
 		<import uri="http://www.it.ru/logicECM/errands/table-structure/1.0" prefix="lecm-errands-ts"/>
+		<import uri="http://www.it.ru/logicECM/errands/dictionaries/1.0" prefix="lecm-errands-dic"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/errands/1.0" prefix="lecm-errands"/>
@@ -56,6 +57,24 @@
 			    <value>arm?code=SED</value>
 		    </parameter>
 	    </constraint>
+
+        <constraint name="lecm-errands:limitation-date-type-const" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>WORK</value>
+                    <value>CALENDAR</value>
+                </list>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-errands:limitation-date-radio-const" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>LIMITLESS</value>
+                    <value>DAYS</value>
+                    <value>DATE</value>
+                </list>
+            </parameter>
+        </constraint>
     </constraints>
 
     <types>
@@ -95,8 +114,27 @@
 				<!-- Срок поручения-->
 				<property name="lecm-errands:limitation-date">
 					<type>d:date</type>
-					<mandatory>true</mandatory>
+					<mandatory>false</mandatory>
 				</property>
+                <property name="lecm-errands:limitation-date-radio">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <constraints>
+                        <constraint ref="lecm-errands:limitation-date-radio-const"/>
+                    </constraints>
+                </property>
+                <property name="lecm-errands:limitation-date-days">
+                    <type>d:int</type>
+                    <mandatory>false</mandatory>
+                    <default>1</default>
+                </property>
+                <property name="lecm-errands:limitation-date-type">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <constraints>
+                        <constraint ref="lecm-errands:limitation-date-type-const"/>
+                    </constraints>
+                </property>
 				<!-- Дата начала -->
 				<property name="lecm-errands:start-date">
 					<type>d:date</type>
@@ -239,6 +277,22 @@
 						<tokenised>false</tokenised>
 					</index>
 				</property>
+                <property name="lecm-errands:type-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-errands:type-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
                 <!-- Номер документа основания - поле для атрибутивного поиска-->
                 <property name="lecm-errands:base-doc-number">
                     <type>d:text</type>
@@ -330,6 +384,18 @@
                     </source>
                     <target>
                         <class>lecm-document:base</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!-- Тип поручения -->
+                <association name="lecm-errands:type-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-errands-dic:errand-type</class>
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
