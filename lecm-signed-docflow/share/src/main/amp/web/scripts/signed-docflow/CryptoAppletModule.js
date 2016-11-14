@@ -545,7 +545,7 @@ function checkForApplet() {
 						scope: this,
 						fn: function (response) {
 							var cb;
-							hash = response.json[0].signedContent[0].filehash;
+							hash = response.json[0].signedContent[0].contentHash;
 
 							cb = (opts) ? opts.successCallback : null;
 								if (cb && YAHOO.lang.isFunction(cb.fn)) {
