@@ -160,7 +160,7 @@
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
 							<control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
-							<control-param name="employee_endpointMany">false</control-param>
+							<control-param name="employee_endpointMany">true</control-param>
 							<control-param name="employee_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="employee_nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="employee_plane">true</control-param>
@@ -173,7 +173,7 @@
 							<!-- lecm-orgstr:organization-unit -->
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
-							<control-param name="organization_endpointMany">false</control-param>
+							<control-param name="organization_endpointMany">true</control-param>
 							<control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
 							<control-param name="organization_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
@@ -268,7 +268,7 @@
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
 							<control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
-							<control-param name="employee_endpointMany">false</control-param>
+							<control-param name="employee_endpointMany">true</control-param>
 							<control-param name="employee_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="employee_nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="employee_plane">true</control-param>
@@ -281,7 +281,7 @@
 							<!-- lecm-orgstr:organization-unit -->
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
-							<control-param name="organization_endpointMany">false</control-param>
+							<control-param name="organization_endpointMany">true</control-param>
 							<control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
 							<control-param name="organization_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
@@ -570,7 +570,7 @@
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
 							<control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
-							<control-param name="employee_endpointMany">false</control-param>
+							<control-param name="employee_endpointMany">true</control-param>
 							<control-param name="employee_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="employee_nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="employee_plane">true</control-param>
@@ -583,7 +583,7 @@
 							<!-- lecm-orgstr:organization-unit -->
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
-							<control-param name="organization_endpointMany">false</control-param>
+							<control-param name="organization_endpointMany">true</control-param>
 							<control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
 							<control-param name="organization_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
@@ -726,7 +726,7 @@
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
 							<control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
-							<control-param name="employee_endpointMany">false</control-param>
+							<control-param name="employee_endpointMany">true</control-param>
 							<control-param name="employee_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="employee_nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="employee_plane">true</control-param>
@@ -737,7 +737,7 @@
 							<control-param name="employee_sortProp">lecm-orgstr:employee-short-name</control-param>>
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
-							<control-param name="organization_endpointMany">false</control-param>
+							<control-param name="organization_endpointMany">true</control-param>
 							<control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
 							<control-param name="organization_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
@@ -901,7 +901,7 @@
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
 							<control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
-							<control-param name="employee_endpointMany">false</control-param>
+							<control-param name="employee_endpointMany">true</control-param>
 							<control-param name="employee_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="employee_nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="employee_plane">true</control-param>
@@ -914,7 +914,7 @@
 							<!-- lecm-orgstr:organization-unit -->
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
-							<control-param name="organization_endpointMany">false</control-param>
+							<control-param name="organization_endpointMany">true</control-param>
 							<control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
 							<control-param name="organization_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
