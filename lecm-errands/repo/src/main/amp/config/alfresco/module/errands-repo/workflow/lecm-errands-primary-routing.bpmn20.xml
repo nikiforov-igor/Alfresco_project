@@ -14,7 +14,6 @@
                         <activiti:string><![CDATA[
        		                var document = bpm_package.children[0];
        		                if (document) {
-       		                    var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
 	                            var errandsList = eval('(' + lecmErrandWf_primaryRoutingErrandsList + ')');
 	                            if (errandsList) {
 	                                var i;
@@ -25,7 +24,7 @@
 	                                    if (defaultInitiator) {
 	                                        errand["assoc_lecm-errands_initiator-assoc"] = defaultInitiator.toString();
 	                                    }
-	                                    errands.createErrands(jsonUtils.toJSONObject(errand));
+	                                    errands.createErrands(errand);
 	                                }
 	                            }
                             }

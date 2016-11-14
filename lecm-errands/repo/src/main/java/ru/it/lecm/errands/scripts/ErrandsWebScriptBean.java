@@ -2,6 +2,7 @@ package ru.it.lecm.errands.scripts;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.jscript.ValueConverter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -14,7 +15,6 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
 import org.alfresco.util.ParameterCheck;
-import org.json.simple.JSONObject;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeArray;
 import org.mozilla.javascript.NativeJavaObject;
@@ -768,8 +768,11 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         threadPoolExecutor.execute(runnable);
     }
 
-    public void createErrands(final JSONObject json) {
+    public void createErrands(Scriptable json) {
         final String user = AuthenticationUtil.getFullyAuthenticatedUser();
+        ValueConverter converter = new ValueConverter();
+        final Map<String, String> fields = (Map<String, String>) converter.convertValueForJava(json);
+
         Runnable runnable = new Runnable() {
             public void run() {
                 try {
@@ -782,7 +785,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                     Map<String, String> properties = new HashMap<>();
                                     Map<String, String> associations = new HashMap<>();
 
-                                    for (Object entryObj: json.entrySet()) {
+                                    for (Object entryObj : fields.entrySet()) {
                                         //Не знаю почему, но если для json.entrySet() сразу указать Map.Entry, то компилятор ругается
                                         Map.Entry entry = (Map.Entry) entryObj;
 
