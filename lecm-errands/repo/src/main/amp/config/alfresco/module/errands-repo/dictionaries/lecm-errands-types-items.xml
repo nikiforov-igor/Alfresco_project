@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
     <item name="lecm-dic:Типы поручений" type="lecm-dic:dictionary">
-        <items updateMode="CreateOrUpdate">
+        <items>
             <item name="cm:На рассмотрение" type="lecm-errands-dic:errand-type">
                 <property name="cm:name"><![CDATA[На рассмотрение]]></property>
                 <property name="lecm-errands-dic:errand-type-default-type"><![CDATA[Рассмотреть документ]]></property>
