@@ -450,10 +450,10 @@ LogicECM.module.Base.Util = {
         return text;
     },
 
-    // функции для контролов:
+	// функции для контролов:
     getControlValueView: function(nodeRef, displayValue, showTitle) {
 
-		function onControlValueViewAvailable() {
+		function onControlValueViewAvailable(params) {
 			YAHOO.util.Event.on(id, 'click', LogicECM.module.Base.Util.viewAttributes.bind(LogicECM.module.Base.Util, params));
 		}
 
