@@ -184,6 +184,10 @@
                 </property>
                 <!-- В течение -->
                 <property name="eds-errands:period-during">
+                    <type>d:int</type>
+                    <default>10</default>
+                </property>
+                <property name="eds-errands:period-during-type">
                     <type>d:text</type>
                     <constraints>
                         <constraint ref="eds-errands:period-during-const"/>
@@ -192,7 +196,7 @@
                 <!--число повторений-->
                 <property name="eds-errands:repeat-count">
                     <type>d:int</type>
-                    <default>1</default>
+                    <default>10</default>
                 </property>
                 <!--нет конечной даты-->
                 <property name="eds-errands:endless">
