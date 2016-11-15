@@ -1,6 +1,9 @@
 .control.primary-routing {
     position: static;
     float: none;
+
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .control.primary-routing fieldset.fieldset {
