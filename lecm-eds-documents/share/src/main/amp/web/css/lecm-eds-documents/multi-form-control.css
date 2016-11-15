@@ -28,9 +28,8 @@
 }
 
 .control.primary-routing ul.primary-routing-documents-list li.primary-routing-documents-item {
-    padding-top: 16px;
+    padding-top: 10px;
     border-bottom: 1px solid #ccc;
-    margin: 0 10px;
     clear: both;
 }
 
@@ -106,4 +105,16 @@
 }
 .control.primary-routing .primary-routing-documents-item-container .yui-u {
     width: 55%;
+}
+
+.control.primary-routing .primary-routing-documents-item .primary-routing-documents-item-container div.form-fields {
+    padding: 0;
+}
+
+.yui-skin-lecmTheme.alfresco-share .control.primary-routing .primary-routing-documents-item .primary-routing-documents-item-container div.yui-u {
+    padding: 0;
+}
+
+.control.primary-routing .primary-routing-documents-item .primary-routing-documents-item-container .form-container fieldset {
+    margin-bottom: 0;
 }

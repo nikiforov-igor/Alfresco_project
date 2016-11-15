@@ -716,14 +716,15 @@
                 <appearance>
                     <set id="left"/>
                     <set id="right"/>
-                    <set id="r1" parent="right"/>
+                    <!--<set id="r1" parent="right"/>-->
                     <set id="limitation-date" parent="right" appearance="fieldset" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
+
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:title" set="r1">
+                    <field id="lecm-errands:title" set="left">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
@@ -795,7 +796,7 @@
                 <appearance>
                     <set id="left"/>
                     <set id="right"/>
-                    <set id="r1" parent="right"/>
+                    <!--<set id="r1" parent="right"/>-->
                     <set id="limitation-date" parent="right" appearance="fieldset" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
 
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
@@ -803,7 +804,7 @@
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:title" set="r1">
+                    <field id="lecm-errands:title" set="left">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
