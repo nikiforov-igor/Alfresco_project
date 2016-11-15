@@ -44,7 +44,7 @@
 .control.primary-routing li div.actions a.remove-item {
     background: url(../../../images/lecm-events/alf_remove_grey_16.png) no-repeat center center;
     padding-left: 20px;
-    height: 190px;
+    height: 140px;
 }
 
 .create-documents-form .control .label-div {
