@@ -13,7 +13,7 @@ LogicECM.module.Incoming.reviewerMandatory = function (field, args, event, form,
     var fieldForValidation = Dom.get(field.id.replace('reviewers-picker-items', 'reviewers'));
 
     if (!fieldForValidation) {
-        logger.log('Error: reviewer mandatory validator : field for validate not found!');
+        console.log('Error: reviewer mandatory validator : field for validate not found!');
         return false;
     }
 
