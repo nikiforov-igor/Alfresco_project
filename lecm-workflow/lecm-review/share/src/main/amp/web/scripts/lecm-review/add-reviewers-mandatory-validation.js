@@ -1,9 +1,3 @@
-if (typeof LogicECM == "undefined" || !LogicECM) {
-    LogicECM = {};
-}
-
-LogicECM.module = LogicECM.module || {};
-
 (function () {
     YAHOO.Bubbling.on('pickerReady', onPickerReady);
 
@@ -18,8 +12,4 @@ LogicECM.module = LogicECM.module || {};
                 message: Alfresco.util.message("Alfresco.forms.validation.mandatory.message")
             });
     }
-
-    LogicECM.module.Base.Util.loadScripts([
-        'scripts/lecm-review/reviewers-mandatory-validator.js'
-    ]);
 })();

@@ -5,8 +5,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.Incoming = LogicECM.module.Incoming || {};
 
-LogicECM.module.Incoming.reviewerMandatory = function (field, args, event, form, silent, message)
-{
+LogicECM.module.Incoming.reviewerMandatory = function (field, args, event, form, silent, message) {
     var Dom = YAHOO.util.Dom;
 
     /* В field передали поле с id ...-reviewers-picker-items, чтобы на него навесить pop-up с ошибкой,
