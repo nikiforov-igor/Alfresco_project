@@ -836,33 +836,35 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				}
 				if (startIndex < fillIndex) {
 					var iconItem = this.getMemberStatusHTML(item);
-					var icon = document.createElement("div");
-					icon.id = id;
-					icon.innerHTML = iconItem;
-					icon.className = "member-control-diagram-member-status";
+					if (iconItem) {
+						var icon = document.createElement("div");
+						icon.id = id;
+						icon.innerHTML = iconItem;
+						icon.className = "member-control-diagram-member-status";
 
-					if (item.memberStatus == "REQUEST_NEW_TIME") {
-						icon.style.cursor = "pointer";
-						var me = this;
-						var requestDate = new Date(item.memberFromDate);
-						var requestIndex = this.keyIndex[item.nodeRef];
-						YAHOO.util.Event.on(icon, "click", function(ev, obj) {
-							me.selectByDate(obj.requestDate, obj.requestIndex);
-						}, {
-							requestDate: requestDate,
-							requestIndex: requestIndex
-						});
+						if (item.memberStatus == "REQUEST_NEW_TIME") {
+							icon.style.cursor = "pointer";
+							var me = this;
+							var requestDate = new Date(item.memberFromDate);
+							var requestIndex = this.keyIndex[item.nodeRef];
+							YAHOO.util.Event.on(icon, "click", function(ev, obj) {
+								me.selectByDate(obj.requestDate, obj.requestIndex);
+							}, {
+								requestDate: requestDate,
+								requestIndex: requestIndex
+							});
+						}
+
+						var firstCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + startIndex);
+						var firstCellRegion = Dom.getRegion(firstCell);
+						var lastCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + fillIndex);
+						var lastCellRegion = Dom.getRegion(lastCell);
+						var left = firstCellRegion.left + (Math.round((lastCellRegion.left + cellSettings.cellWidth - firstCellRegion.left) / 2) - 10);
+
+						icon.style.left = (left - diagramBounds.left) + "px";
+						icon.style.top = (firstCellRegion.top - diagramBounds.top + 2) + "px";
+						diagram.appendChild(icon);
 					}
-
-					var firstCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + startIndex);
-					var firstCellRegion = Dom.getRegion(firstCell);
-					var lastCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + fillIndex);
-					var lastCellRegion = Dom.getRegion(lastCell);
-					var left = firstCellRegion.left + (Math.round((lastCellRegion.left + cellSettings.cellWidth - firstCellRegion.left) / 2) - 10);
-
-					icon.style.left = (left - diagramBounds.left) + "px";
-					icon.style.top = (firstCellRegion.top - diagramBounds.top + 2) + "px";
-					diagram.appendChild(icon);
 				}
 			}
 		},
@@ -969,7 +971,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				}
 
 				var img = "alf_clock_green_16.jpg";
-				var title = this.msg("label.events.participation.another_time") + ": " + Alfresco.util.formatDate(new Date(item.memberFromDate), this.msg("lecm.date-format.datetime"));
+				var title = this.msg("label.events.participation.another_time_suggested");
 				var iconItem = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-events/' + img + '" class="members-status" title="' + title + '"/>';
 
 				var icon = document.createElement("div");
