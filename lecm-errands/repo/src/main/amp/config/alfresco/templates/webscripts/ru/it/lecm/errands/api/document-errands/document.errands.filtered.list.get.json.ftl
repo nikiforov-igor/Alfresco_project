@@ -1,10 +1,10 @@
 <#macro renderErrand errand>
 	<#escape x as jsonUtils.encodeJSONString(x)>
 		"nodeRef": "${errand.getNodeRef().toString()}",
-		"description": "${errand.properties["lecm-errands:content"]?string}",
+		"description": "<#if errand.properties["lecm-errands:content"]?has_content>${errand.properties["lecm-errands:content"]?string}</#if>",
 		"title": "${errand.properties["lecm-errands:title"]?js_string}",
 		"statusMessage": "${errand.properties["lecm-statemachine:status"]}",
-		"dueDate": "${errand.properties["lecm-errands:limitation-date"]?string("dd.MM.yyyy")}",
+		"dueDate": "<#if errand.properties["lecm-errands:limitation-date"]?has_content>${errand.properties["lecm-errands:limitation-date"]?string("dd.MM.yyyy")}</#if>",
 		"startDate": "${errand.properties["cm:created"]?string("dd.MM.yyyy")}",
 		"isImportant": "${errand.properties["lecm-errands:is-important"]?string}",
 		"isExpired": "${errand.properties["lecm-errands:is-expired"]?string}",
