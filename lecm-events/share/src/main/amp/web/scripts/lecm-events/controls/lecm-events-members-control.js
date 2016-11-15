@@ -587,37 +587,36 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.keyIndex = [];
 			var cellBounds = this._calculateCell();
 			var delta = cellBounds.firstColumnWidth - this.firstColumnWidth;
-			for (var key in this.selectedItems) {
-				if (this.selectedItems.hasOwnProperty(key)) {
-					var item = this.selectedItems[key];
-					var row = document.createElement("div");
-					row.className = "member-control-diagram-row";
-					content.appendChild(row);
-					var firstColumn = document.createElement("div");
-					firstColumn.className = "member-control-diagram-first-cell";
-					firstColumn.style.width = cellBounds.firstColumnWidth + "px";
-					row.appendChild(firstColumn);
-					var textCell = document.createElement("div");
-					textCell.className = "member-control-diagram-first-cell-text";
-					textCell.innerHTML = item.selectedName;
-					textCell.title = item.selectedName;
-					firstColumn.appendChild(textCell);
-					var textBounds = Dom.getRegion(textCell);
-					textCell.setAttribute("style", "width: " + (delta + textBounds.width) + "px !important;");
+			var items = this.getSelectedItems(!!this.options.sortSelected);
+			items.forEach(function(key){
+				var item = this.selectedItems[key];
+				var row = document.createElement("div");
+				row.className = "member-control-diagram-row";
+				content.appendChild(row);
+				var firstColumn = document.createElement("div");
+				firstColumn.className = "member-control-diagram-first-cell";
+				firstColumn.style.width = cellBounds.firstColumnWidth + "px";
+				row.appendChild(firstColumn);
+				var textCell = document.createElement("div");
+				textCell.className = "member-control-diagram-first-cell-text";
+				textCell.innerHTML = item.selectedName;
+				textCell.title = item.selectedName;
+				firstColumn.appendChild(textCell);
+				var textBounds = Dom.getRegion(textCell);
+				textCell.setAttribute("style", "width: " + (delta + textBounds.width) + "px !important;");
 
-					var removeButton = document.createElement("div");
-					removeButton.className = "member-control-diagram-first-cell-remove";
-					firstColumn.appendChild(removeButton);
-					YAHOO.util.Event.on(removeButton, 'click', this.removeDiagramItem, {
-						node: item,
-						updateForms: true
-					}, this);
+				var removeButton = document.createElement("div");
+				removeButton.className = "member-control-diagram-first-cell-remove";
+				firstColumn.appendChild(removeButton);
+				YAHOO.util.Event.on(removeButton, 'click', this.removeDiagramItem, {
+					node: item,
+					updateForms: true
+				}, this);
 
-					this._drawHourCells(row, itemNum, false);
-					this.keyIndex[key] = itemNum;
-					itemNum++;
-				}
-			}
+				this._drawHourCells(row, itemNum, false);
+				this.keyIndex[key] = itemNum;
+				itemNum++;
+			}, this);
 			this.contentIsReady = true;
 		},
 
@@ -991,7 +990,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				}
 
 				var img = "alf_clock_green_16.jpg";
-				var title = this.msg("label.events.participation.another_time") + ": " + Alfresco.util.formatDate(new Date(item.memberFromDate), this.msg("lecm.date-format.datetime"));
+				var title = this.msg("label.events.participation.another_time_suggested");
 				var iconItem = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-events/' + img + '" class="members-status" title="' + title + '"/>';
 
 				var icon = document.createElement("div");
