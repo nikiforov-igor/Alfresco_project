@@ -111,17 +111,34 @@
                 // create the editor instance
                 this.editor = new Alfresco.util.RichEditor("tinyMCE", this.id, this.options.editorParameters);
 
+                if (!this.options.currentValue || this.options.currentValue.indexOf("mimetype=text/html") !== -1)
+                {
+                   this.editor.getEditor().settings.forced_root_block = "p";
+                }
                 // render and register event handler
                 this.editor.render();
-
-                // Make sure we persist the dom content from the editor in to the hidden textarea when appropriate
-                this.editor.subscribe("onChange", this._handleContentChange, this, true);
-                // Add validation to the editor
-                var keyUpIdentifier = (Alfresco.constants.HTML_EDITOR === 'YAHOO.widget.SimpleEditor') ? 'editorKeyUp' : 'onKeyUp';
-                this.editor.subscribe(keyUpIdentifier, function (e)
+                
+                // Make sure we persist the dom content from the editor in to the hidden textarea when appropriate 
+                var _this = this;
+                this.editor.getEditor().on('BeforeSetContent keyup', function(e) {
+                   _this._handleContentChange();
+                });
+                
+                // register the listener to add saving of the editor contents before form is submitted
+                YAHOO.Bubbling.on("formBeforeSubmit", this._handleContentChange, this);
+                // MNT-10232: Description is displayed with tags
+                if (this.id.indexOf("_prop_cm_") > 0 && this.id.indexOf("_prop_cm_content") == -1)
                 {
-                    this.editor.save();
-                }, this, true);
+                   this.editor.getEditor().on('SaveContent', function(e) {
+                      e.format = 'text';
+                      var content = tinyMCE.activeEditor.getBody().textContent;
+                      if (content == undefined)
+                      {
+                          content = tinyMCE.activeEditor.getBody().innerText;
+                      }
+                      e.content = content;
+                   });
+                }
             },
 
             /**
