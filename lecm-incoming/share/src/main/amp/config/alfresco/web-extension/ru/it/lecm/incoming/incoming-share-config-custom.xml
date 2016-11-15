@@ -498,6 +498,7 @@
                             <control-param name="contractor_hasNoAspects">lecm-orgstr-aspects:is-organization-aspect</control-param>
                             <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
                             <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
+                            <control-param name="contractor_createNewItemSubmit">LogicECM.checkDuplicatesForContractor</control-param>
                             <!-- lecm-contractor:contractor-type -->
                             <control-param name="organisation_label">Внутренний контрагент</control-param>
                             <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>

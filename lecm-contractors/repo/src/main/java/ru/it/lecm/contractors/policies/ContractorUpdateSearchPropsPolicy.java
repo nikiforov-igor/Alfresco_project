@@ -9,7 +9,6 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.contractors.api.Contractors;
-import ru.it.lecm.dictionary.beans.DictionaryBean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,14 +22,12 @@ import java.util.Map;
  */
 public class ContractorUpdateSearchPropsPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy {
     private final QName[] AFFECTED_PROPERTIES = {Contractors.PROP_CONTRACTOR_FULLNAME, Contractors.PROP_CONTRACTOR_SHORTNAME};
-    private final QName[] DIC_REPLACE_PROPERTIES = {Contractors.PROP_LEGALFORM_FULL_TITLE, Contractors.PROP_LEGALFORM_SHORT_TITLE};
 
     private final String SEARCH_POSTFIX = "-search";
-    private final String OPF_DIC_NAME = "Контрагенты Организационно-правовые формы";
 
     private PolicyComponent policyComponent;
     private NodeService nodeService;
-    private DictionaryBean dictionaryService;
+    private Contractors contractorsBean;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -40,8 +37,8 @@ public class ContractorUpdateSearchPropsPolicy implements NodeServicePolicies.On
         this.nodeService = nodeService;
     }
 
-    public void setDictionaryService(DictionaryBean dictionaryService) {
-        this.dictionaryService = dictionaryService;
+    public void setContractorsBean(Contractors contractorsBean) {
+        this.contractorsBean = contractorsBean;
     }
 
     public final void init() {
@@ -57,21 +54,11 @@ public class ContractorUpdateSearchPropsPolicy implements NodeServicePolicies.On
         if (nodeService.exists(nodeRef)) {
             List<QName> changedProps = getAffectedProperties(before, after);
             Map<QName, Serializable> properties = nodeService.getProperties(nodeRef);
-            NodeRef dicOPF = dictionaryService.getDictionaryByName(OPF_DIC_NAME);
-
             boolean hasChanges = false;
             for (QName changedProp : changedProps) {
                 QName searchProp = QName.createQName(Contractors.CONTRACTOR_NAMESPACE, changedProp.getLocalName() + SEARCH_POSTFIX);
 
-                final String currentValue = (String) properties.get(changedProp);
-
-                //1. удалить спец символы
-                String updatedValue = delNoDigOrLet(currentValue);
-                //2. удалить все коды из справочника ОПФ
-                if (dicOPF != null) {
-                    updatedValue = delDicValuesFromString(updatedValue, dicOPF);
-                }
-
+                String updatedValue = contractorsBean.formatContractorName((String) properties.get(changedProp));
                 properties.put(searchProp, updatedValue);
                 hasChanges = true;
             }
@@ -93,28 +80,4 @@ public class ContractorUpdateSearchPropsPolicy implements NodeServicePolicies.On
         return result;
     }
 
-    private String delNoDigOrLet(String s) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < s.length(); i++) {
-            char ch = s.charAt(i);
-            if (Character.isLetterOrDigit(ch) || Character.isSpaceChar(ch)) {
-                sb.append(s.charAt(i));
-            }
-        }
-        return sb.toString();
-    }
-
-    private String delDicValuesFromString(String str, NodeRef dictionary) {
-        List<NodeRef> children = dictionaryService.getChildren(dictionary);
-        for (NodeRef child : children) {
-            Map<QName, Serializable> recordProps = nodeService.getProperties(child);
-            for (QName dicProp : DIC_REPLACE_PROPERTIES) {
-                Object dicPropValue = recordProps.get(dicProp);
-                if (dicPropValue != null && dicPropValue.toString().length() > 0) {
-                    str = str.replaceAll(dicPropValue.toString(), "");
-                }
-            }
-        }
-        return str;
-    }
 }

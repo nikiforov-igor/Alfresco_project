@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Проверить на наличие дубликатов контрагента </shortname>
+	<description>Проверить на наличие дубликатов контрагента</description>
+	<url>/lecm/contractors/hasDuplicate</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+	<transaction allow="readonly">required</transaction>
+</webscript>

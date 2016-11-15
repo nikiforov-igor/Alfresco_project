@@ -38,6 +38,9 @@ public interface Contractors {
     QName PROP_LEGALFORM_SHORT_TITLE = QName.createQName(LEGALFORM_NAMESPACE, "short-title");
     QName PROP_LEGALFORM_FULL_TITLE = QName.createQName(LEGALFORM_NAMESPACE, "full-title");
 
+    String OPF_DIC_NAME = "Контрагенты Организационно-правовые формы";
+    QName[] DIC_REPLACE_PROPERTIES = {Contractors.PROP_LEGALFORM_FULL_TITLE, Contractors.PROP_LEGALFORM_SHORT_TITLE};
+
     void assignAsPrimaryRepresentative(NodeRef representativeToAssignAsPrimary);
 
     List<NodeRef> getContractorsForRepresentative(NodeRef childContractor);
@@ -61,5 +64,12 @@ public interface Contractors {
      * @return
      */
     NodeRef getContractor(NodeRef representative);
+
+    /**
+     * Возвращает обработанное название контрагента
+     * @param originalName название контрагента
+     * @return String обработанная строка
+     */
+    String formatContractorName(String originalName);
 
 }

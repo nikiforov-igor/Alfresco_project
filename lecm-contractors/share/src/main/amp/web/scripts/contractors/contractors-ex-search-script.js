@@ -1,11 +1,3 @@
-if (typeof LogicECM == "undefined" || !LogicECM) {
-    var LogicECM = {};
-}
-
-LogicECM.module = LogicECM.module || {};
-
-LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexControl || {};
-
 (function () {
     var ExtSearchUtils = LogicECM.module.AssociationComplexControl.ExtSearch;
 
@@ -100,9 +92,89 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
         return args;
     };
 
-    LogicECM.checkDuplicatesForContractor = function (fn, scope) {
-        alert("Test Duplicate");
-        fn.call(scope);
+    LogicECM.checkDuplicatesForContractor = function (fn, buttonScope, p_form) {
+        var fnSubmit = function () {
+            if (YAHOO.lang.isFunction(fn) && buttonScope) {
+                fn.call(buttonScope);
+            }
+        };
+
+        if (p_form != null && p_form.validate()) {
+            var contractorFull = p_form.getFormData()["prop_lecm-contractor_fullname"];
+            var contractorShort = p_form.getFormData()["prop_lecm-contractor_shortname"];
+            var contractorINN = p_form.getFormData()["prop_lecm-contractor_INN"];
+            var contractorKPP = p_form.getFormData()["prop_lecm-contractor_KPP"];
+
+            Alfresco.util.Ajax.jsonGet({
+                url: Alfresco.constants.PROXY_URI + "lecm/contractors/hasDuplicate",
+                dataObj: {
+                    fullName: contractorFull,
+                    shortName: contractorShort,
+                    inn: contractorINN ? contractorINN : '',
+                    kpp: contractorKPP ? contractorKPP : ''
+                },
+                successCallback: {
+                    fn: function (response) {
+                        var results = response.json;
+                        if (results && results.hasDuplicate) {
+                            alert("Имеются дубликаты!");
+                            fnSubmit();
+                            /*var formId = "contractors-repeats-" + Alfresco.util.generateDomId();
+                            var doBeforeDialogShow = function (p_form, p_dialog) {
+                                var contId = p_dialog.id + "-form-container";
+                                Alfresco.util.populateHTML(
+                                    [contId + "_h", "Найдены похожие элементы"]
+                                );
+                                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                            };
+
+                            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+                            var templateRequestParams = {
+                                htmlid: formId,
+                                itemKind: 'workflow',
+                                itemId: 'activiti$incomingOcSearchRepeats',
+                                mode: 'create',
+                                submitType: 'json',
+                                args: JSON.stringify({
+                                    fullName: encodeURIComponent(contractorFull),
+                                    shortName: encodeURIComponent(contractorShort),
+                                    inn: contractorINN,
+                                    kpp: contractorKPP
+                                }),
+                                showSubmitButton: true,
+                                showCancelButton: true
+                            };
+
+                            // Using Forms Service, so always create new instance
+                            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
+                            YAHOO.Bubbling.on("beforeFormRuntimeInit", LogicECM.submitFunctionOnBeforeFormRuntimeInit, {
+                                form: p_form,
+                                fnSubmit: fnSubmit,
+                                dialog: createDetails
+                            });
+                            createDetails.setOptions(
+                                {
+                                    width: "50em",
+                                    templateUrl: templateUrl,
+                                    templateRequestParams: templateRequestParams,
+                                    actionUrl: null,
+                                    destroyOnHide: true,
+                                    doBeforeDialogShow: {
+                                        fn: doBeforeDialogShow,
+                                        scope: this
+                                    },
+                                    failureMessage: "message.failure"
+                                }).show();*/
+                        } else {
+                            fnSubmit();
+                        }
+                    },
+                    scope: this
+                }
+            });
+        } else {
+            fnSubmit();
+        }
     }
 
 })();

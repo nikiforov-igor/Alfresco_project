@@ -880,7 +880,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 						//подменяем submit
 						var submitElement = p_form.submitElements[0];
 						var originalSubmitFunction = submitElement.submitForm;
-						submitElement.submitForm = this._fnCreateNewItemSubmit.bind(this, originalSubmitFunction, submitElement);
+						submitElement.submitForm = this._fnCreateNewItemSubmit.bind(this, originalSubmitFunction, submitElement, p_form);
 					},
 					scope: this
 				},
@@ -932,8 +932,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			return true;
 		},
 
-		_fnCreateNewItemSubmit: function (fn, scope) {
-			fn.call(scope);
+		_fnCreateNewItemSubmit: function (fn, buttonScope, p_form) {
+			fn.call(buttonScope);
 		},
 
 		_fnGetExtSearchQuery: function (form) {
