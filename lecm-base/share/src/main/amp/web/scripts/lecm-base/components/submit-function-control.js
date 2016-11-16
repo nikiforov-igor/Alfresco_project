@@ -13,7 +13,8 @@ LogicECM.module = LogicECM.module || {};
         options: {
             submitFunction: null,
             form: null,
-            nodeRef: null
+            nodeRef: null,
+            mode: null
         },
 
         submitFormFunction: null,

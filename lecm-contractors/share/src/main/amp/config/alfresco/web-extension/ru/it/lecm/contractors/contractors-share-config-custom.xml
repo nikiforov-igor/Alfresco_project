@@ -1078,6 +1078,7 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="submit-function"/>
                     <show id="lecm-contractor:lastName"/>
                     <show id="lecm-contractor:firstName"/>
                     <show id="lecm-contractor:middleName"/>
@@ -1103,6 +1104,12 @@
                     <show id="lecm-contractor:region-association"/>
                 </field-visibility>
                 <appearance>
+                    <field id="submit-function">
+                        <control template="/ru/it/lecm/base-share/components/controls/submit-function-control.ftl">
+                            <control-param name="scripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+                            <control-param name="submitFunction">LogicECM.checkDuplicatesForPerson</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-contractor:is-sole-proprietor">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
                             <control-param name="disabledFieldsIfNotSelect">lecm-contractor:OGRN</control-param>
@@ -1187,6 +1194,7 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="submit-function"/>
                     <show id="lecm-contractor:lastName"/>
                     <show id="lecm-contractor:firstName"/>
                     <show id="lecm-contractor:middleName"/>
@@ -1212,6 +1220,12 @@
                     <show id="lecm-contractor:region-association"/>
                 </field-visibility>
                 <appearance>
+                    <field id="submit-function">
+                        <control template="/ru/it/lecm/base-share/components/controls/submit-function-control.ftl">
+                            <control-param name="scripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+                            <control-param name="submitFunction">LogicECM.checkDuplicatesForPerson</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-contractor:is-sole-proprietor">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
                             <control-param name="disabledFieldsIfNotSelect">lecm-contractor:OGRN</control-param>

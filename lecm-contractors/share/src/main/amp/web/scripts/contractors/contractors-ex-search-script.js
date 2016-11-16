@@ -176,7 +176,7 @@
                     shortName: contractorShort,
                     inn: contractorINN ? contractorINN : '',
                     kpp: contractorKPP ? contractorKPP : '',
-                    nodeRef: p_form.getFormData()["alf_destination"]
+                    nodeRef: this.options.mode &&  this.options.mode !== "create" ? this.options.nodeRef : ''
                 },
                 successCallback: {
                     fn: function (response) {
@@ -219,6 +219,74 @@
         } else {
             fnSubmit();
         }
-    }
+    };
 
+    LogicECM.checkDuplicatesForPerson = function (fn, buttonScope, p_form) {
+        var fnSubmit = function () {
+            if (YAHOO.lang.isFunction(fn) && buttonScope) {
+                fn.call(buttonScope);
+            }
+        };
+
+        if (p_form != null && p_form.validate()) {
+            var lastName = p_form.getFormData()["prop_lecm-contractor_lastName"];
+            var firstName = p_form.getFormData()["prop_lecm-contractor_firstName"];
+            var middleName = p_form.getFormData()["prop_lecm-contractor_middleName"];
+            var region = p_form.getFormData()["assoc_lecm-contractor_region-association"];
+            var inn = p_form.getFormData()["prop_lecm-contractor_INN"];
+            var ogrn = p_form.getFormData()["prop_lecm-contractor_OGRN"];
+
+            Alfresco.util.Ajax.jsonGet({
+                url: Alfresco.constants.PROXY_URI + "lecm/physical-persons/hasDuplicate",
+                dataObj: {
+                    lastName: lastName,
+                    firstName: firstName,
+                    middleName: middleName ? middleName : '',
+                    region: region ? region : '',
+                    ogrn: ogrn ? ogrn : '',
+                    inn: inn ? inn : '',
+                    nodeRef: this.options.mode &&  this.options.mode !== "create" ? this.options.nodeRef : ''
+                },
+                successCallback: {
+                    fn: function (response) {
+                        var results = response.json;
+                        if (results && results.hasDuplicate) {
+                            var duplicates = results.duplicates;
+                            var message = "В справочнике найдены похожие элементы" + ":<br/>";
+                            for (var item in duplicates) {
+                                message += duplicates[item].fullName + "<br/>";
+                            }
+                            Alfresco.util.PopupManager.displayPrompt(
+                                {
+                                    title: "Найдены похожие элементы",
+                                    text: message,
+                                    noEscape: true,
+                                    buttons: [
+                                        {
+                                            text: Alfresco.util.message("button.ok"),
+                                            handler: function dlA_onAction_action() {
+                                                this.destroy();
+                                                fnSubmit();
+                                            }
+                                        },
+                                        {
+                                            text: Alfresco.util.message("button.cancel"),
+                                            handler: function dlA_onActionDelete_cancel() {
+                                                this.destroy();
+                                            },
+                                            isDefault: true
+                                        }
+                                    ]
+                                });
+                        } else {
+                            fnSubmit();
+                        }
+                    },
+                    scope: this
+                }
+            });
+        } else {
+            fnSubmit();
+        }
+    };
 })();

@@ -20,7 +20,8 @@
         var control = new LogicECM.module.SubmitFunction("${fieldHtmlId}").setOptions({
             submitFunction: ${params['submitFunction']},
             form: currentForm,
-            nodeRef: "${form.arguments.itemId!""}"
+            nodeRef: "${form.arguments.itemId!""}",
+            mode: "${form.mode}"
         });
 
         control.init();
