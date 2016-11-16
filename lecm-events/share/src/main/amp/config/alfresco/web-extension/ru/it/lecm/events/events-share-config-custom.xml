@@ -218,7 +218,7 @@
                 <field-visibility>
                     <!--Вложения-->
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
-                    <show id="lecm-base-dummy-aspects:script" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script"/>
                     <!-- Заголовок -->
                     <show id="lecm-events:title"/>
                     <!-- Весмь день -->

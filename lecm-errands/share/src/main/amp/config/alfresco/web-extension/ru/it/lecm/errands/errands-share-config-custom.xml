@@ -269,7 +269,7 @@
 	                <show id="lecm-errands:child-errands"/>
 	                <!-- Ссылки исполнения  -->
 	                <show id="lecm-errands:execution-links-assoc"/>
-                    <show id="lecm-base-dummy-aspects:script" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script"/>
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>
                 </field-visibility>

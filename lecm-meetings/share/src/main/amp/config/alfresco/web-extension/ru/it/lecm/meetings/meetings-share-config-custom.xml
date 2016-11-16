@@ -1256,7 +1256,7 @@
 		<forms>
 			<form id="holding">
 				<field-visibility>
-					<show id="lecm-base-dummy-aspects:script" force="true"/>
+					<show id="lecm-base-dummy-aspects:script"/>
 					<show id="lecm-document:indexTableRow" force="true"/>
 					<show id="lecm-meetings-ts:holding-reporter-assoc"/>
 					<show id="lecm-meetings-ts:holding-item-name"/>

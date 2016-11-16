@@ -170,7 +170,7 @@
 					<show id="lecm-sched:sched-employee-link-assoc"/>
 					<show id="lecm-sched:time-limit-start"/>
 					<show id="lecm-sched:time-limit-end"/>
-					<show id="lecm-base-dummy-aspects:script" force="true"/>
+					<show id="lecm-base-dummy-aspects:script"/>
 					<show id="lecm-sched:std-begin"/>
 					<show id="lecm-sched:std-end"/>
 					<show id="lecm-sched:type"/>
