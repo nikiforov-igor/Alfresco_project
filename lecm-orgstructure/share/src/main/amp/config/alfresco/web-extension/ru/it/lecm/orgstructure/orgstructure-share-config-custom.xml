@@ -23,7 +23,7 @@
 	                <show id="lecm-busjournal-aspects:history-list"/>
 	                <show id="lecm-orgstr:employee-only-business-roles"/>
 	                <show id="lecm-orgstr:employee-delegated-business-roles"/>
-                    <show id="lecm-base-dummy-aspects:script" for-mode="view"/>
+                    <show id="lecm-base-dummy-aspects:script2" force="true" for-mode="view"/>
 					<show id="lecm-subscr-aspects"/>
                 </field-visibility>
                 <appearance>
@@ -130,7 +130,7 @@
                             <control-param name="fixedHeader">true</control-param>
                         </control>
                     </field>
-					<field id="lecm-base-dummy-aspects:script" set="employeeSchedule">
+					<field id="lecm-base-dummy-aspects:script2" set="employeeSchedule">
 						<control template="/ru/it/lecm/orgstructure/controls/employee.schedule.ftl"/>
 					</field>
                 </appearance>
