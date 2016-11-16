@@ -1,4 +1,5 @@
-var results = [];
+var toExecute = [];
+var toReview = [];
 var incoming =  search.findNode(args["documentNodeRef"]);
 if (incoming) {
     var recipientsAssoc = incoming.associations["lecm-incoming:recipient-assoc"];
@@ -24,16 +25,18 @@ if (incoming) {
         }
 
         for (i = 0; i < recipients.length; i++) {
-            var errandType = errandTypeToExecute;
             if (orgstructure.hasBusinessRole(recipients[i], "RVZ")) {
-                errandType = errandTypeToReview;
+                toReview.push({
+                    recipient: recipients[i].nodeRef.toString(),
+                    errandType: errandTypeToReview.nodeRef.toString()
+                })
+            } else {
+                toExecute.push({
+                    recipient: recipients[i].nodeRef.toString(),
+                    errandType: errandTypeToExecute.nodeRef.toString()
+                })
             }
-
-            results.push({
-                recipient: recipients[i].nodeRef.toString(),
-                errandType: errandType.nodeRef.toString()
-            })
         }
     }
 }
-model.results = results;
+model.results = toReview.concat(toExecute);
