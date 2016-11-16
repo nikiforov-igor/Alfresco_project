@@ -10,7 +10,6 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 (function () {
 	var ACUtils = LogicECM.module.AssociationComplexControl.Utils,
-		ExtSearchUtils = LogicECM.module.AssociationComplexControl.ExtSearch,
 		BaseUtil = LogicECM.module.Base.Util,
 		Bubbling = YAHOO.Bubbling,
 		Dom = YAHOO.util.Dom,
@@ -797,7 +796,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				var formUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "/components/form?itemKind=type&itemId={itemId}&formId={formId}&mode=edit&showSubmitButton=false&showCancelButton=false",
 					{
 						itemId: this.options.itemType,
-						formId: ExtSearchUtils.FORM_ID
+						formId: "ex-control-search"
 					});
 
 				//var timeStamp = new Date().getTime();
@@ -876,11 +875,6 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 							Dom.addClass(p_dialog.id + "-form-container", this.options.createDialogClass);
 						}
 						this.stateParams.doubleClickLock = false;
-
-						//подменяем submit
-						var submitElement = p_form.submitElements[0];
-						var originalSubmitFunction = submitElement.submitForm;
-						submitElement.submitForm = this._fnCreateNewItemSubmit.bind(this, originalSubmitFunction, submitElement, p_form);
 					},
 					scope: this
 				},
@@ -932,16 +926,77 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			return true;
 		},
 
-		_fnCreateNewItemSubmit: function (fn, buttonScope, p_form) {
-			fn.call(buttonScope);
+		_fnGetExtSearchQuery: function (currentForm) {
+			var exSearchFilter = '',
+				propNamePrefix = '@',
+				first = true;
+
+			for (var i = 0; i < currentForm.elements.length; i++) {
+				var element = currentForm.elements[i],
+					propName = element.name,
+					propValue = YAHOO.lang.trim(element.value);
+
+				if (propName && propValue && propValue.length) {
+					if (propName.indexOf("prop_") == 0) {
+						propName = propName.substr(5);
+						if (propName.indexOf("_") !== -1) {
+							propName = propName.replace("_", ":");
+							if (propName.match("-range$") == "-range") {
+								var from, to, sepindex = propValue.indexOf("|");
+								if (propName.match("-date-range$") == "-date-range") {
+									propName = propName.substr(0, propName.length - "-date-range".length);
+									from = (sepindex === 0 ? "MIN" : propValue.substr(0, 10));
+									to = (sepindex === propValue.length - 1 ? "MAX" : propValue.substr(sepindex + 1, 10));
+								} else {
+									propName = propName.substr(0, propName.length - "-number-range".length);
+									from = (sepindex === 0 ? "MIN" : propValue.substr(0, sepindex));
+									to = (sepindex === propValue.length - 1 ? "MAX" : propValue.substr(sepindex + 1));
+								}
+								exSearchFilter += (first ? '' : ' AND ') + propNamePrefix + this.escape(propName) + ':"' + from + '".."' + to + '"';
+								first = false;
+							} else {
+								exSearchFilter += (first ? '' : ' AND ') + propNamePrefix + this.escape(propName) + ':' + this.applySearchSettingsToTerm(this.escape(propValue), 'MATCHES');
+								first = false;
+							}
+						}
+					} else if (propName.indexOf("assoc_") == 0) {
+						var assocName = propName.substring(6);
+						if (assocName.indexOf("_") !== -1) {
+							assocName = assocName.replace("_", ":") + "-ref";
+							exSearchFilter += (first ? '(' : ' AND (');
+							var assocValues = propValue.split(",");
+							var firstAssoc = true;
+							for (var k = 0; k < assocValues.length; k++) {
+								var assocValue = assocValues[k];
+								if (!firstAssoc) {
+									exSearchFilter += " OR ";
+								}
+								exSearchFilter += this.escape(assocName) + ':"' + this.applySearchSettingsToTerm(this.escape(assocValue), 'CONTAINS') + '"';
+								firstAssoc = false;
+							}
+							exSearchFilter += ") ";
+							first = false;
+						}
+					}
+				}
+			}
+			return exSearchFilter;
 		},
 
-		_fnGetExtSearchQuery: function (form) {
-			return ExtSearchUtils.getExtSearchQuery(form);
-		},
+		_fnGetArgumentsFromForm: function (currentForm) {
+			var args = {};
+			for (var i = 0; i < currentForm.elements.length; i++) {
+				var element = currentForm.elements[i],
+					propName = element.name,
+					propValue = YAHOO.lang.trim(element.value);
 
-		_fnGetArgumentsFromForm: function (form) {
-			return ExtSearchUtils.getArgsFromForm(form);
+				if (propName && (propName.indexOf("prop_") == 0 || propName.indexOf("assoc_") == 0)) {
+					if (propValue) {
+						args[propName] = propValue;
+					}
+				}
+			}
+			return args;
 		}
 
 	}, true);

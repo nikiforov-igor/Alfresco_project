@@ -28,6 +28,10 @@ function main() {
     }
     query += ')';
 
+    if (args["nodeRef"]) {
+        query += " AND NOT ID:\"" + args["nodeRef"] + "\"";
+    }
+
     var count = searchCounter.query({
         query: query,
         language: "fts-alfresco",
@@ -35,6 +39,21 @@ function main() {
     });
 
     model.hasDuplicate = count > 0;
+    model.duplicates = [];
+    if (model.hasDuplicate) {
+        var results = search.query({
+            query: query,
+            language: "fts-alfresco",
+            onerror: "exception"
+        });
+
+        for (var i in results) {
+            var contractor = results[i];
+            if (contractor) {
+                model.duplicates.push(contractor);
+            }
+        }
+    }
 }
 
 function _escapeString(value) {

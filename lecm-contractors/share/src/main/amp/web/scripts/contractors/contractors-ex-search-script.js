@@ -1,30 +1,94 @@
 (function () {
-    var ExtSearchUtils = LogicECM.module.AssociationComplexControl.ExtSearch;
+    function getInputValue(form, propName) {
+        var value = null;
+        var inputName = form[propName];
+        if (inputName != null) {
+            value = inputName.value;
+            value = YAHOO.lang.trim(value);
+        }
+        return value;
+    }
+
+    function getArgsFromForm(currentForm) {
+        var args = {};
+        for (var i = 0; i < currentForm.elements.length; i++) {
+            var element = currentForm.elements[i],
+                propName = element.name,
+                propValue = YAHOO.lang.trim(element.value);
+
+            if (propName && (propName.indexOf("prop_") == 0 || propName.indexOf("assoc_") == 0)) {
+                if (propValue) {
+                    args[propName] = propValue;
+                }
+            }
+        }
+        return args;
+    }
+
+    function applySearchSettingsToTerm(searchTerm, searchSettings) {
+        var decoratedTerm;
+
+        searchTerm = escape(searchTerm);
+
+        switch (searchSettings) {
+            case 'BEGINS':
+                decoratedTerm = searchTerm + '*';
+                break;
+            case 'ENDS':
+                decoratedTerm = '*' + searchTerm;
+                break;
+            case 'CONTAINS':
+                decoratedTerm = '*' + searchTerm + '*';
+                break;
+            case 'MATCHES':
+                decoratedTerm = searchTerm;
+                break;
+            default:
+                decoratedTerm = '*' + searchTerm + '*';
+                break;
+        }
+
+        return decoratedTerm;
+    }
+
+    function escape(value) {
+        var result = "";
+
+        for (var i = 0, c; i < value.length; i++) {
+            c = value.charAt(i);
+            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= 'а' && c <= 'я') || (c >= 'А' && c <= 'Я') || (c >= '0' && c <= '9') || c == '_')) {
+                result += '\\';
+            }
+
+            result += c;
+        }
+        return result;
+    }
 
     LogicECM.getExtQueryForContractor = function (currentForm) {
         var exSearchFilter = '';
         var nameValue, innValue, kppValue;
 
-        nameValue = ExtSearchUtils.getInputValue(currentForm, "prop_lecm-contractor_fullname");
+        nameValue = getInputValue(currentForm, "prop_lecm-contractor_fullname");
         if (nameValue) {
-            exSearchFilter += '(@lecm\\-contractor\\:fullname:' + ExtSearchUtils.applySearchSettingsToTerm(nameValue, 'CONTAINS')
-                + ' OR @lecm\\-contractor\\:shortname:' + ExtSearchUtils.applySearchSettingsToTerm(nameValue, 'CONTAINS') + ')';
+            exSearchFilter += '(@lecm\\-contractor\\:fullname:' + applySearchSettingsToTerm(nameValue, 'CONTAINS')
+                + ' OR @lecm\\-contractor\\:shortname:' + applySearchSettingsToTerm(nameValue, 'CONTAINS') + ')';
         }
 
-        innValue = ExtSearchUtils.getInputValue(currentForm, "prop_lecm-contractor_INN");
+        innValue = getInputValue(currentForm, "prop_lecm-contractor_INN");
         if (innValue) {
             if (exSearchFilter) {
                 exSearchFilter += " AND ";
             }
-            exSearchFilter += '=@lecm\\-contractor\\:INN:' + ExtSearchUtils.applySearchSettingsToTerm(innValue, 'MATCHES');
+            exSearchFilter += '=@lecm\\-contractor\\:INN:' + applySearchSettingsToTerm(innValue, 'MATCHES');
         }
 
-        kppValue = ExtSearchUtils.getInputValue(currentForm, "prop_lecm-contractor_KPP");
+        kppValue = getInputValue(currentForm, "prop_lecm-contractor_KPP");
         if (kppValue) {
             if (exSearchFilter) {
                 exSearchFilter += " AND ";
             }
-            exSearchFilter += '=@lecm\\-contractor\\:KPP:' + ExtSearchUtils.applySearchSettingsToTerm(kppValue, 'MATCHES');
+            exSearchFilter += '=@lecm\\-contractor\\:KPP:' + applySearchSettingsToTerm(kppValue, 'MATCHES');
         }
         return exSearchFilter;
     };
@@ -33,50 +97,50 @@
         var exSearchFilter = '';
         var nameValue, innValue, numberValue, addressValue, regionValue;
 
-        nameValue = ExtSearchUtils.getInputValue(currentForm, "prop_lecm-contractor_lastName");
+        nameValue = getInputValue(currentForm, "prop_lecm-contractor_lastName");
         if (nameValue) {
-            exSearchFilter += '(@lecm\\-contractor\\:lastName:' + ExtSearchUtils.applySearchSettingsToTerm(nameValue, 'CONTAINS')
-                + ' OR @lecm\\-contractor\\:firstName:' + ExtSearchUtils.applySearchSettingsToTerm(nameValue, 'CONTAINS')
-                + ' OR @lecm\\-contractor\\:middleName:' + ExtSearchUtils.applySearchSettingsToTerm(nameValue, 'CONTAINS') + ')';
+            exSearchFilter += '(@lecm\\-contractor\\:lastName:' + applySearchSettingsToTerm(nameValue, 'CONTAINS')
+                + ' OR @lecm\\-contractor\\:firstName:' + applySearchSettingsToTerm(nameValue, 'CONTAINS')
+                + ' OR @lecm\\-contractor\\:middleName:' + applySearchSettingsToTerm(nameValue, 'CONTAINS') + ')';
         }
 
-        innValue = ExtSearchUtils.getInputValue(currentForm, "prop_lecm-contractor_INN");
+        innValue = getInputValue(currentForm, "prop_lecm-contractor_INN");
         if (innValue) {
             if (exSearchFilter) {
                 exSearchFilter += " AND ";
             }
-            exSearchFilter += '=@lecm\\-contractor\\:INN:' + ExtSearchUtils.applySearchSettingsToTerm(innValue, 'MATCHES');
+            exSearchFilter += '=@lecm\\-contractor\\:INN:' + applySearchSettingsToTerm(innValue, 'MATCHES');
         }
 
-        numberValue = ExtSearchUtils.getInputValue(currentForm, "prop_lecm-contractor_document-number");
+        numberValue = getInputValue(currentForm, "prop_lecm-contractor_document-number");
         if (numberValue) {
             if (exSearchFilter) {
                 exSearchFilter += " AND ";
             }
-            exSearchFilter += '=@lecm\\-contractor\\:document\\-number:' + ExtSearchUtils.applySearchSettingsToTerm(numberValue, 'MATCHES');
+            exSearchFilter += '=@lecm\\-contractor\\:document\\-number:' + applySearchSettingsToTerm(numberValue, 'MATCHES');
         }
 
-        addressValue = ExtSearchUtils.getInputValue(currentForm, "prop_lecm-contractor_physical-address");
+        addressValue = getInputValue(currentForm, "prop_lecm-contractor_physical-address");
         if (addressValue) {
             if (exSearchFilter) {
                 exSearchFilter += " AND ";
             }
-            exSearchFilter += '@lecm\\-contractor\\:physical\\-address:' + ExtSearchUtils.applySearchSettingsToTerm(addressValue, 'CONTAINS');
+            exSearchFilter += '@lecm\\-contractor\\:physical\\-address:' + applySearchSettingsToTerm(addressValue, 'CONTAINS');
         }
 
-        regionValue = ExtSearchUtils.getInputValue(currentForm, "assoc_lecm-contractor_region-association");
+        regionValue = getInputValue(currentForm, "assoc_lecm-contractor_region-association");
         if (regionValue) {
             if (exSearchFilter) {
                 exSearchFilter += " AND ";
             }
-            exSearchFilter += '@lecm\\-contractor\\:region\\-association\\-ref:' + ExtSearchUtils.applySearchSettingsToTerm(regionValue, 'MATCHES');
+            exSearchFilter += '@lecm\\-contractor\\:region\\-association\\-ref:' + applySearchSettingsToTerm(regionValue, 'MATCHES');
         }
         return exSearchFilter;
     };
 
     LogicECM.getExtArgsForContractor = function (currentForm) {
-        var args = ExtSearchUtils.getArgsFromForm(currentForm);
-        var nameValue = ExtSearchUtils.getInputValue(currentForm, "prop_lecm-contractor_fullname");
+        var args = getArgsFromForm(currentForm);
+        var nameValue = getInputValue(currentForm, "prop_lecm-contractor_fullname");
         if (nameValue) {
             args["prop_lecm-contractor_shortname"] = nameValue;
         }
@@ -84,8 +148,8 @@
     };
 
     LogicECM.getExtArgsForPerson = function (currentForm) {
-        var args = ExtSearchUtils.getArgsFromForm(currentForm);
-        var addrValue = ExtSearchUtils.getInputValue(currentForm, "prop_lecm-contractor_physical-address");
+        var args = getArgsFromForm(currentForm);
+        var addrValue = getInputValue(currentForm, "prop_lecm-contractor_physical-address");
         if (addrValue) {
             args["prop_lecm-contractor_physical-address"] = addrValue;
         }
@@ -111,60 +175,40 @@
                     fullName: contractorFull,
                     shortName: contractorShort,
                     inn: contractorINN ? contractorINN : '',
-                    kpp: contractorKPP ? contractorKPP : ''
+                    kpp: contractorKPP ? contractorKPP : '',
+                    nodeRef: p_form.getFormData()["alf_destination"]
                 },
                 successCallback: {
                     fn: function (response) {
                         var results = response.json;
                         if (results && results.hasDuplicate) {
-                            alert("Имеются дубликаты!");
-                            fnSubmit();
-                            /*var formId = "contractors-repeats-" + Alfresco.util.generateDomId();
-                            var doBeforeDialogShow = function (p_form, p_dialog) {
-                                var contId = p_dialog.id + "-form-container";
-                                Alfresco.util.populateHTML(
-                                    [contId + "_h", "Найдены похожие элементы"]
-                                );
-                                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-                            };
-
-                            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
-                            var templateRequestParams = {
-                                htmlid: formId,
-                                itemKind: 'workflow',
-                                itemId: 'activiti$incomingOcSearchRepeats',
-                                mode: 'create',
-                                submitType: 'json',
-                                args: JSON.stringify({
-                                    fullName: encodeURIComponent(contractorFull),
-                                    shortName: encodeURIComponent(contractorShort),
-                                    inn: contractorINN,
-                                    kpp: contractorKPP
-                                }),
-                                showSubmitButton: true,
-                                showCancelButton: true
-                            };
-
-                            // Using Forms Service, so always create new instance
-                            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
-                            YAHOO.Bubbling.on("beforeFormRuntimeInit", LogicECM.submitFunctionOnBeforeFormRuntimeInit, {
-                                form: p_form,
-                                fnSubmit: fnSubmit,
-                                dialog: createDetails
-                            });
-                            createDetails.setOptions(
+                            var duplicates = results.duplicates;
+                            var message = "В справочнике найдены похожие элементы" + ":<br/>";
+                            for (var item in duplicates) {
+                                message += duplicates[item].fullName + "<br/>";
+                            }
+                            Alfresco.util.PopupManager.displayPrompt(
                                 {
-                                    width: "50em",
-                                    templateUrl: templateUrl,
-                                    templateRequestParams: templateRequestParams,
-                                    actionUrl: null,
-                                    destroyOnHide: true,
-                                    doBeforeDialogShow: {
-                                        fn: doBeforeDialogShow,
-                                        scope: this
-                                    },
-                                    failureMessage: "message.failure"
-                                }).show();*/
+                                    title: "Найдены похожие элементы",
+                                    text: message,
+                                    noEscape: true,
+                                    buttons: [
+                                        {
+                                            text: Alfresco.util.message("button.ok"),
+                                            handler: function dlA_onAction_action() {
+                                                this.destroy();
+                                                fnSubmit();
+                                            }
+                                        },
+                                        {
+                                            text: Alfresco.util.message("button.cancel"),
+                                            handler: function dlA_onActionDelete_cancel() {
+                                                this.destroy();
+                                            },
+                                            isDefault: true
+                                        }
+                                    ]
+                                });
                         } else {
                             fnSubmit();
                         }

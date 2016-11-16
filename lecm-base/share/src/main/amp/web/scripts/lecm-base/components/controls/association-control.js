@@ -149,9 +149,6 @@ LogicECM.module = LogicECM.module || {};
 				this.widgets[obj.itemKey].eventGroup = this.eventGroup;
 
 				//переопределение методов из options
-				if(obj.options.createNewItemSubmitFunction && YAHOO.lang.isFunction(obj.options.createNewItemSubmitFunction)) {
-					this.widgets[obj.itemKey]['_fnCreateNewItemSubmit'] = obj.options.createNewItemSubmitFunction;
-				}
 				if(obj.options.getExtSearchQueryFunction && YAHOO.lang.isFunction(obj.options.getExtSearchQueryFunction)) {
 					this.widgets[obj.itemKey]['_fnGetExtSearchQuery'] = obj.options.getExtSearchQueryFunction;
 				}
