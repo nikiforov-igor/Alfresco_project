@@ -735,7 +735,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:executor-assoc" set="left"/>
+                    <field id="lecm-errands:executor-assoc" set="left" label-id="label.primaryRouting.recipient"/>
 
                     <field id="lecm-errands:limitation-date-radio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
@@ -815,7 +815,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:executor-assoc" set="left"/>
+                    <field id="lecm-errands:executor-assoc" set="left" label-id="label.primaryRouting.recipient"/>
 
                     <field id="limitation-date-script" set="left">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
