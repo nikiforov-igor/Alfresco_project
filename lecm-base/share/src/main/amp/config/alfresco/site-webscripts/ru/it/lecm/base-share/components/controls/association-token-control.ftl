@@ -100,7 +100,7 @@
                 </#if>
             </label>
         </div>
-        <div id="${controlId}" class="container">
+        <div id="${controlId}" class="container collapse-width">
             <#if field.disabled == false>
                 <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
                 <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>

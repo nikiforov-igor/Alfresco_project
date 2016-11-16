@@ -2,39 +2,18 @@
     vertical-align: middle;
     margin-left: 5px;
 }
-
-.control.association-token-control .container.collapse-width,
-.control.association-token-control .container.collapse-width .value-div {
-    float: none;
-}
-
-.control.association-token-control .value-div div.cropped-item {
-    display: block;
-    float: left;
-    max-width: 96.5%
-}
-
-.control.association-token-control .value-div div.cropped-item .ci-value-div {
-    float: none;
-    max-width: 100%;
-}
-
-.control.association-token-control.vertical .value-div div.cropped-item {
-    float: none;
-    max-width: 96.5%;
-}
 .control.association-token-control .value-div div.cropped-item .ci-buttons-div img.members-status {
     margin: 0 0 -4px 5px;
 }
 
-.control.association-token-control .value-div .control-selected-values {
-    max-height: none;
+.control.association-token-control.vertical .value-div {
+	line-height: 0;
 }
 
-@supports (-moz-appearance:meterbar){
-    .control.association-token-control.editmode .value-div div.cropped-item .ci-value-div {
-        max-width: 90%;
-        float:left;
-    }
+.control.association-token-control.vertical .value-div span.mandatory-highlightable {
+	display: inline-block !important;
 }
 
+.control.association-token-control.vertical .value-div div.cropped-item {
+	float: none;
+}
