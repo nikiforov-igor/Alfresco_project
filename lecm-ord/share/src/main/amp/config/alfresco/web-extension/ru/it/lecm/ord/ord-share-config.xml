@@ -575,7 +575,7 @@
                     <show id="lecm-ord-table-structure:execution-date-real"/>
                     <show id="lecm-ord-table-structure:item-comment"/>
                     <show id="lecm-ord-table-structure:errand-assoc"/>
-                    <show id="lecm-base-dummy-aspects:script" />
+                    <show id="lecm-base-dummy-aspects:script" force="true" />
                 </field-visibility>
                 <appearance>
                     <set id="item-container" template="/ru/it/lecm/ord/components/class-set.ftl"/>

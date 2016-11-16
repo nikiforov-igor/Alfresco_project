@@ -507,7 +507,7 @@
 
                     <show id="os-aspects:sort-value"/>
                     <show id="os-aspects:common-index"/>
-                    <show id="lecm-base-dummy-aspects:script" />
+                    <show id="lecm-base-dummy-aspects:script" force="true" />
                     <!-- <show id="nomenclature-case-references"/> -->
                 </field-visibility>
                 <appearance>

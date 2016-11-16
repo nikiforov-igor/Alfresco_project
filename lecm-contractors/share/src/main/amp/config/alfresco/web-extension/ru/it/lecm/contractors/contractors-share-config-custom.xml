@@ -91,7 +91,7 @@
                     <show id="lecm-contractor:bank-location"/>
                     <!-- Местоположение банка -->
                     <show id="lecm-contractor:contractor-code"/>
-                    <show id="lecm-base-dummy-aspects:script"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <!-- Код контрагента -->
                     <show id="lecm-contractor:contractor-to-specialization-association"/>
                     <!-- FK Специализация -->
@@ -250,7 +250,7 @@
                     <show id="lecm-contractor:bank-location"/>
                     <!-- Местоположение банка -->
                     <show id="lecm-contractor:contractor-code"/>
-                    <show id="lecm-base-dummy-aspects:script"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <!-- Код контрагента -->
                     <show id="lecm-contractor:contractor-to-specialization-association"/>
                     <!-- FK Специализация -->
@@ -481,7 +481,7 @@
                     <show id="lecm-contractor:contractor-to-legalform-association"/>
                     <!-- FK ОПФ -->
 
-                    <show id="lecm-base-dummy-aspects:script"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-contractor:contractor-to-link-association"/>
                     <!-- FK Адресант (через ссылку) -->
                     <show id="lecm-contractor:interaction-type"/>
