@@ -1,0 +1,29 @@
+
+.yui-g.primary-routing-form fieldset {
+    border: none;
+    padding: 0;
+}
+.yui-g.primary-routing-form .label-div {
+    width: 120px;
+}
+.yui-g.primary-routing-form .yui-u.first .label-div {
+    width: 100px;
+}
+.yui-g.primary-routing-form legend {
+    width: 120px;
+    float: left;
+    line-height: 28px;
+    padding: 2px 10px 2px 0;
+    font-size: 100%;
+    text-align: right;
+}
+.yui-g.primary-routing-form .yui-u.first {
+    width: 53%;
+}
+.yui-g.primary-routing-form .yui-u {
+    width: 47%;
+}
+
+.yui-skin-lecmTheme.alfresco-share .yui-g.primary-routing-form div.yui-u {
+    padding: 0;
+}
