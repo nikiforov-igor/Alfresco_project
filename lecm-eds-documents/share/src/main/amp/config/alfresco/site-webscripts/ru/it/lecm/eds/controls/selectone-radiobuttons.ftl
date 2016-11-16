@@ -24,7 +24,7 @@
 <#assign disabled = field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>
 
 <#if form.mode == "view">
-	<div class="control selectone-radiobuttons viewmode">
+	<div id="${fieldHtmlId}-parent" class="control selectone-radiobuttons viewmode">
 		<div class="label-div">&nbsp;</div>
 		<#if fieldValue?string == "">
 			<#assign valueToShow=msg("form.control.novalue")>
@@ -54,7 +54,7 @@
 		</div>
 	</div>
 <#else>
-	<div class="control selectone-radiobuttons editmode">
+	<div id="${fieldHtmlId}-parent" class="control selectone-radiobuttons editmode">
 		<div class="label-div">&nbsp;</div>
 		<div class="container">
             <div class="buttons-div">

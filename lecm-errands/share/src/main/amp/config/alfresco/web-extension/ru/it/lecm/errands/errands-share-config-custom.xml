@@ -706,7 +706,6 @@
                     <!-- Исполнитель -->
                     <show id="lecm-errands:executor-assoc"/>
                     <!-- Срок исполнения -->
-                    <show id="limitation-date-script" force="true"/>
                     <show id="lecm-errands:limitation-date-radio"/>
                     <show id="errand-limitless" force="true"/>
                     <show id="lecm-errands:limitation-date-days"/>
@@ -759,18 +758,13 @@
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
-                    <field id="lecm-errands:limitation-date" set="limitation-date">
+                    <field id="lecm-errands:limitation-date" set="limitation-date" mandatory="true">
                         <control>
                             <control-param name="maxLimitArg">parentDocLimitationDate</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
                         </constraint-handlers>
-                    </field>
-                    <field id="limitation-date-script" set="left" >
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
-                        </control>
                     </field>
                 </appearance>
             </form>
@@ -786,7 +780,6 @@
                     <!-- Исполнитель -->
                     <show id="lecm-errands:executor-assoc"/>
                     <!-- Срок исполнения -->
-                    <show id="limitation-date-script" force="true"/>
                     <show id="lecm-errands:limitation-date-radio"/>
                     <show id="errand-limitless" force="true"/>
                     <show id="lecm-errands:limitation-date-days"/>
@@ -817,11 +810,6 @@
                     </field>
                     <field id="lecm-errands:executor-assoc" set="left" label-id="label.primaryRouting.recipient"/>
 
-                    <field id="limitation-date-script" set="left">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-errands:limitation-date-radio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DAYS</control-param>
@@ -844,7 +832,7 @@
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
-                    <field id="lecm-errands:limitation-date" set="limitation-date">
+                    <field id="lecm-errands:limitation-date" set="limitation-date" mandatory="true">
                         <control>
                             <control-param name="maxLimitArg">parentDocLimitationDate</control-param>
                         </control>
@@ -1712,6 +1700,7 @@
                     <show id="packageItems"/>
                     <show id="lecmErrandWf:primaryRoutingErrandsList"/>
                     <show id="change-errand-type-script" force="true"/>
+                    <show id="limitation-date-script" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="packageItems">
@@ -1729,6 +1718,11 @@
                             <control-param name="scripts">scripts/lecm-errands/errands-reinit-title-by-type.js</control-param>
                         </control>
                     </field>
+                    <field id="limitation-date-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
+                        </control>
+                    </field>
                 </appearance>
             </form>
             <form id="incomingPrimaryRouting">
@@ -1736,6 +1730,7 @@
                     <show id="packageItems"/>
                     <show id="lecmErrandWf:primaryRoutingErrandsList"/>
                     <show id="change-errand-type-script" force="true"/>
+                    <show id="limitation-date-script" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="packageItems">
@@ -1754,6 +1749,11 @@
                     <field id="change-errand-type-script">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-reinit-title-by-type.js</control-param>
+                        </control>
+                    </field>
+                    <field id="limitation-date-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
                         </control>
                     </field>
                 </appearance>
