@@ -454,7 +454,7 @@ LogicECM.module.Base.Util = {
     getControlValueView: function(nodeRef, displayValue, showTitle) {
 
 		function onControlValueViewAvailable(params) {
-			YAHOO.util.Event.on(id, 'click', LogicECM.module.Base.Util.viewAttributes.bind(LogicECM.module.Base.Util, params));
+			YAHOO.util.Event.on(this.id, 'click', LogicECM.module.Base.Util.viewAttributes.bind(LogicECM.module.Base.Util, params));
 		}
 
         var title = "",
@@ -467,7 +467,7 @@ LogicECM.module.Base.Util = {
 			itemId: nodeRef,
 			title: 'logicecm.view'
 		});
-		return YAHOO.lang.substitute("<span><a href='javascript:void(0);' id='{id}' title='{title}'>{displayValue}</a></span>", {
+		return YAHOO.lang.substitute("<span><a href='javascript:void(0);' id='{id}' {title}>{displayValue}</a></span>", {
 			id: id,
 			title: title,
 			displayValue: displayValue
@@ -479,18 +479,28 @@ LogicECM.module.Base.Util = {
     },
 
     getControlMarkeredEmployeeView: function(employeeNodeRef, displayValue, showLinkTitle, personClass, personTitle) {
-        var linkTitle = "";
+
+		function onControlEmployeeViewAvailable(params) {
+			YAHOO.util.Event.on(this.id, 'click', LogicECM.module.Base.Util.viewAttributes.bind(LogicECM.module.Base.Util, params));
+		}
+
+		var linkTitle = "",
+			id = YAHOO.util.Dom.generateId();
+
         if (showLinkTitle == null || showLinkTitle) {
             linkTitle = "title='" + Alfresco.component.Base.prototype.msg("title.click.for.extend.info") + "'";
         }
-        var personSpanTag = "";
-        personTitle = (personTitle && personTitle != "") ? (" title='" + personTitle + "'") : "";
-        if (personClass && personClass != "") {
-            personSpanTag = "<span class='person " + personClass + "'" + personTitle + ">";
-        } else {
-            personSpanTag = "<span class='person'" + personTitle + ">";
-        }
-		return personSpanTag + "<a href='javascript:void(0);' " + linkTitle + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + employeeNodeRef + "\', title: \'logicecm.employee.view\'})\">" + displayValue + "</a></span>";
+		YAHOO.util.Event.onAvailable(id, onControlEmployeeViewAvailable, {
+			itemId: employeeNodeRef,
+			title: 'logicecm.employee.view'
+		});
+		return YAHOO.lang.substitute("<span class='{personClass}' {personTitle}><a href='javascript:void(0);' id='{id}' {linkTitle}>{displayValue}</a></span>", {
+			personClass: personClass ? ("person " + personClass) : "person",
+			personTitle: personTitle ? ("title='" + personTitle + "'") : "",
+			id: id,
+			linkTitle: linkTitle,
+			displayValue: displayValue
+		});
     },
 
     getControlDefaultView: function (displayValue) {
