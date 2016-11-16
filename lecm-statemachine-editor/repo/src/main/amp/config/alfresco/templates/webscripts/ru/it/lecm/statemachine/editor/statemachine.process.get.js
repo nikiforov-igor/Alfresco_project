@@ -72,9 +72,8 @@ if (statemachineId != null && statemachineId != '') {
     var isSimple = machine.properties["lecm-stmeditor:simple-document"];
 	model.isSimple = isSimple != null && isSimple;
 
-	var modelQName = base.createQName(statemachineId.replace("_", ":"));
 	var aspectQName = base.createQName('lecm-document-aspects:finalize-to-unit');
-	var aspects = base.getType(modelQName).getDefaultAspectNames();
+	var aspects = base.getType(statemachineId.replace("_", ":")).getDefaultAspectNames();
     model.isFinalizeToUnit = aspects.contains(aspectQName);
 
 

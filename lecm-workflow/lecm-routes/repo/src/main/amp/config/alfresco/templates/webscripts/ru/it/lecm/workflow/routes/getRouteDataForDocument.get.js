@@ -51,8 +51,7 @@
 
 		if (approvalResult) {
 //			approvalResultTitle = getDecisionDisplayValue(approvalResult);
-			var qName = base.createQName('lecmApproveAspects:approvalDecision');
-			var propDefinition = base.getProperty(qName);
+			var propDefinition = base.getProperty('lecmApproveAspects:approvalDecision');
 			approvalResultTitle = Evaluator.translateField(propDefinition, approvalResult);
 		}
 

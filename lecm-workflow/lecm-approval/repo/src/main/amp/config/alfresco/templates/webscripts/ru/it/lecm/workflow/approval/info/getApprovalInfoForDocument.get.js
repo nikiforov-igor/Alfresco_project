@@ -9,8 +9,8 @@
 		if (currentIterationNode != null) {
 			var children = currentIterationNode.getChildren();
 			if (children != null) {
-				var decisionPropDefinition = getFieldDefinition("lecmApproveAspects:approvalDecision");
-				var statePropDefinition = getFieldDefinition("lecmApproveAspects:approvalState");
+				var decisionPropDefinition = base.getProperty("lecmApproveAspects:approvalDecision");
+				var statePropDefinition = base.getProperty("lecmApproveAspects:approvalState");
 
 				children.sort(function(a, b)
 				{
@@ -72,8 +72,3 @@
 	}
 	model.stages = stages;
 })();
-
-function getFieldDefinition(propName) {
-	var propQName = base.createQName(propName);
-	return base.getProperty(propQName);
-}

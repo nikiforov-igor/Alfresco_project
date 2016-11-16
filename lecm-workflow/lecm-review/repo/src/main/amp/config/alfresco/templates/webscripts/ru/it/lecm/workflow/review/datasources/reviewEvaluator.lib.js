@@ -22,7 +22,6 @@
             //fields[i] = напримери, cm_name
             var fName = fields[i];
             var realFieldName = fields[i].replace("_", ":");
-            var fieldQName = base.createQName(realFieldName);
 
             var nameSubstituteStringDef = null;
             if (nameSubstituteStrings != null && nameSubstituteStrings[i] != null && nameSubstituteStrings[i] != "") {
@@ -34,9 +33,9 @@
             // вытащить дефинишены
             var propDefinition = null, assocDefinition = null;
 
-            propDefinition = base.getProperty(fieldQName);
+            propDefinition = base.getProperty(realFieldName);
             if (propDefinition == null) {
-                assocDefinition = base.getAssociation(fieldQName);
+                assocDefinition = base.getAssociation(realFieldName);
             }
 
             if (propDefinition != null || assocDefinition != null) {

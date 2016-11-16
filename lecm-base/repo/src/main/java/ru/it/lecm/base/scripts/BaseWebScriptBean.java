@@ -361,8 +361,18 @@ public class BaseWebScriptBean extends BaseWebScript {
 		return dictionaryService.getProperty(name);
 	}
 	
+	public PropertyDefinition getProperty(String name) {
+		QName qName = QName.createQName(name, namespaceService);
+		return dictionaryService.getProperty(qName);
+	}
+	
 	public AssociationDefinition getAssociation(QName name) {
 		return dictionaryService.getAssociation(name);
+	}
+	
+	public AssociationDefinition getAssociation(String name) {
+		QName qName = QName.createQName(name, namespaceService);
+		return dictionaryService.getAssociation(qName);
 	}
 	
 	public String toPrefixString(PropertyDefinition prop){
