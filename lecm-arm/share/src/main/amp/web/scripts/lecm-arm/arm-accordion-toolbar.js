@@ -1,3 +1,5 @@
+/* global Alfresco, YAHOO */
+
 if (typeof LogicECM == "undefined" || !LogicECM) {
 	LogicECM = {};
 }
@@ -45,7 +47,11 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 		onNewRow: function(p_sType, p_aArgs, p_oItem) {
 			var attributes = p_oItem.attributes ? p_oItem.attributes : [];
 			var params = attributes.reduce(function(prev, curr) {
-				return prev + '&' + curr.initial.formsName + '=' + encodeURIComponent(curr.initial.value);
+				return YAHOO.lang.substitute('{prev}&{key}={value}', {
+					prev: prev,
+					key: curr.readonly ? 'readonly_' + curr.initial.formsName : curr.initial.formsName,
+					value:  encodeURIComponent(curr.initial.value)
+				});
 			}, 'documentType=' + encodeURIComponent(p_oItem.type));
 			window.location.href = Alfresco.constants.URL_PAGECONTEXT + p_oItem.page + "?documentType=" + p_oItem.type + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
 		},
