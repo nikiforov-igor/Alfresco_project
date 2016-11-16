@@ -105,18 +105,6 @@
     cursor: pointer;
 }
 
-.member-control-diagram-selector {
-    position: absolute;
-    top: 0;
-    z-index: 50000;
-}
-
-.member-control-diagram-selector-grab {
-}
-
-.member-control-diagram-selector-grabbing {
-}
-
 .member-control-diagram-selector-not-busy {
     color: #22B14C;
 }
@@ -135,8 +123,6 @@
 
 .member-control-diagram-member-status {
     position: absolute;
-    top: 0;
-    z-index: 100000;
     width: 20px;
     background-color: white;
     text-align: center;
