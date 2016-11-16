@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Incoming get recipients units without boss</shortname>
+    <description>Incoming datasource for create default errands</description>
+    <url>/lecm/incoming/getRecipientsUnitsWithoutBoss</url>
+    <format default="json"/>
+    <authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+</webscript>

@@ -1728,6 +1728,7 @@
             <form id="incomingPrimaryRouting">
                 <field-visibility>
                     <show id="packageItems"/>
+                    <show id="unit-recipients-without-boss" force="true"/>
                     <show id="lecmErrandWf:primaryRoutingErrandsList"/>
                     <show id="change-errand-type-script" force="true"/>
                     <show id="limitation-date-script" force="true"/>
@@ -1735,6 +1736,9 @@
                 <appearance>
                     <field id="packageItems">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="unit-recipients-without-boss">
+                        <control template="/ru/it/lecm/incoming/controls/recipients-without-boss-message-control.ftl"/>
                     </field>
                     <field id="lecmErrandWf:primaryRoutingErrandsList" label-id="field.primaryRouting.errands.title">
                         <control template="/ru/it/lecm/eds/controls/multi-form-control.ftl">
