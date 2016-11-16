@@ -3,7 +3,6 @@ var incoming = search.findNode(args["documentNodeRef"]);
 if (incoming) {
     var recipientsAssoc = incoming.associations["lecm-incoming:recipient-assoc"];
     if (recipientsAssoc) {
-        var recipients = [];
         var i, boss;
         for (i = 0; i < recipientsAssoc.length; i++) {
             if (recipientsAssoc[i].typeShort == "lecm-orgstr:organization-unit") {
