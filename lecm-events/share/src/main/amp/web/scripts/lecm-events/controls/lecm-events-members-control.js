@@ -31,7 +31,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		startHour: 6,
 		endHour: 22,
 		timeStep: 15,
-		firstColumnWidth: 154,
+		firstColumnWidth: null,
+		columnCalendarWidth: null,
 		startDate: null,
 		initialStartDate: null,
 		endDate: null,
@@ -419,6 +420,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 			this.cellBounds = null;
 			this.headerIsReady = false;
+			this.contentIsReady = false;
 			this.draw();
 		},
 
@@ -647,8 +649,12 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 */
 		drawDiagramHeader: function drawDiagramHeader_function() {
 			if (this.headerIsReady) return;
-			var calendarCellBounds = Dom.getRegion(this.id + "-date-cntrl-cal-cell");
-			this.firstColumnWidth = calendarCellBounds.width;
+			if (!this.firstColumnWidth) {
+				var calendarCellBounds = Dom.getRegion(this.id + "-date-cntrl-cal-cell");
+				this.firstColumnWidth = calendarCellBounds.width;
+				var calendarBounds = Dom.getRegion(this.id + "-date-cntrl-date");
+				this.columnCalendarWidth = calendarBounds.width;
+			}
 			//Устанавливаем размер контейнера
 			var cellBounds = this._calculateCell();
 			var hours = this.endHour - this.startHour + 1;
@@ -657,8 +663,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this._drawHourCells(header, 0, true);
 			Dom.get(this.id + "-date-cntrl-cal-cell").style.width = cellBounds.firstColumnWidth + "px";
 			var delta = cellBounds.firstColumnWidth - this.firstColumnWidth - 6;
-			var calendarBounds = Dom.getRegion(this.id + "-date-cntrl-date");
-			Dom.get(this.id + "-date-cntrl-date").setAttribute("style", "width: " + (delta + calendarBounds.width) + "px !important;");
+
+			Dom.get(this.id + "-date-cntrl-date").style.width = (delta + this.columnCalendarWidth) + "px";
 			this.headerIsReady = true;
 			Dom.get(this.options.controlId + "-diagram-container").style.width = width + "px";
 		},
