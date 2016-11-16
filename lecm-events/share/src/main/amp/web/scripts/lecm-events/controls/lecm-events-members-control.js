@@ -599,14 +599,29 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				firstColumn.className = "member-control-diagram-first-cell";
 				firstColumn.style.width = cellBounds.firstColumnWidth + "px";
 				row.appendChild(firstColumn);
+
+				//Обязательность сотрудника
+				var mandatoryCheckbox = document.createElement("input");
+				mandatoryCheckbox.type = "checkbox";
+				if (item.memberMandatory == null) {
+					item.memberMandatory = this.defaultMandatory;
+				}
+				mandatoryCheckbox.checked = item.memberMandatory;
+				mandatoryCheckbox.title = item.memberMandatory ? this.msg("label.events.participant.mandatory") : this.msg("label.events.participant.not_mandatory");
+				mandatoryCheckbox.className = "member-control-diagram-first-cell-mandatory";
+				firstColumn.appendChild(mandatoryCheckbox);
+				YAHOO.util.Event.on(mandatoryCheckbox, 'click', this.mandatoryCheckboxClick, item, this);
+
+				//Имя сотрудника
 				var textCell = document.createElement("div");
 				textCell.className = "member-control-diagram-first-cell-text";
 				textCell.innerHTML = item.selectedName;
 				textCell.title = item.selectedName;
 				firstColumn.appendChild(textCell);
 				var textBounds = Dom.getRegion(textCell);
-				textCell.setAttribute("style", "width: " + (delta + textBounds.width) + "px !important;");
+				textCell.style.width = (delta + textBounds.width) + "px";
 
+				//Кнопка удаления
 				var removeButton = document.createElement("div");
 				removeButton.className = "member-control-diagram-first-cell-remove";
 				firstColumn.appendChild(removeButton);
