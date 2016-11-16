@@ -450,13 +450,28 @@ LogicECM.module.Base.Util = {
         return text;
     },
 
-    // функции для контролов:
+	// функции для контролов:
     getControlValueView: function(nodeRef, displayValue, showTitle) {
-        var title = "";
+
+		function onControlValueViewAvailable(params) {
+			YAHOO.util.Event.on(id, 'click', LogicECM.module.Base.Util.viewAttributes.bind(LogicECM.module.Base.Util, params));
+		}
+
+        var title = "",
+			id = YAHOO.util.Dom.generateId();
+
         if (showTitle == null || showTitle) {
             title = "title='" + Alfresco.component.Base.prototype.msg("title.click.for.extend.info") + "'";
         }
-		return "<span><a href='javascript:void(0);' " + title + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + nodeRef + "\', title: \'logicecm.view\'})\">" + displayValue + "</a></span>";
+		YAHOO.util.Event.onAvailable(id, onControlValueViewAvailable, {
+			itemId: nodeRef,
+			title: 'logicecm.view'
+		});
+		return YAHOO.lang.substitute("<span><a href='javascript:void(0);' id='{id}' title='{title}'>{displayValue}</a></span>", {
+			id: id,
+			title: title,
+			displayValue: displayValue
+		});
     },
 
     getControlEmployeeView: function(employeeNodeRef, displayValue, showTitle) {
