@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+<beans>
+    <!-- ALF-6215 override -->
+    <bean id="webscript.org.alfresco.repository.workflow.task-instances.get" class="ru.it.lecm.base.scripts.LecmTaskInstancesGet" parent="abstractWorkflowWebScript">
+        <property name="processEngine" ref="activitiProcessEngine" />
+        <property name="tenantService" ref="tenantService" />
+        <property name="messageService" ref="messageService" />
+        <property name="serviceRegistry" ref="ServiceRegistry" />
+        <property name="authorityDAO" ref="authorityDAO" />
+        <property name="engineId" value="activiti" />
+        <property name="deployWorkflowsInTenant" value="${system.workflow.deployWorkflowsInTenant}" />
+        <property name="limit" value="${lecm.completed.task.list.maxItems}" />
+    </bean>
+
+</beans>
