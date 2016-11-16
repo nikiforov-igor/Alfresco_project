@@ -360,7 +360,7 @@ function checkForApplet() {
 
 							verifySignaturesSync(partialContentSignature, function (results) {
 								signs.forEach(function (sign, index) {
-									sign.valid = results[index];
+									sign.valid = results[index].valid;
 								});
 
 								cb = (options) ? options.successCallback : null;
@@ -521,9 +521,11 @@ function checkForApplet() {
 							signedMessage: signature.signatureContent
 						};
 					verifySignaturesSync(partialContentSignature, function (results) {
-									signature.valid = results[0];
-									loadRequest(signature);
-
+						signature.valid = results[0].valid;
+						GetCertificateInfo(results[0].certificate, function(result){
+							signature.certificate = result;
+							loadRequest(signature);
+						});
 					});
 				}
 				
