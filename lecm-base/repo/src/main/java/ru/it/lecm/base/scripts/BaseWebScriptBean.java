@@ -30,6 +30,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import org.alfresco.repo.dictionary.constraint.ListOfValuesConstraint;
 
 /**
  * @author dbashmakov
@@ -360,8 +361,18 @@ public class BaseWebScriptBean extends BaseWebScript {
 		return dictionaryService.getProperty(name);
 	}
 	
+	public PropertyDefinition getProperty(String name) {
+		QName qName = QName.createQName(name, namespaceService);
+		return dictionaryService.getProperty(qName);
+	}
+	
 	public AssociationDefinition getAssociation(QName name) {
 		return dictionaryService.getAssociation(name);
+	}
+	
+	public AssociationDefinition getAssociation(String name) {
+		QName qName = QName.createQName(name, namespaceService);
+		return dictionaryService.getAssociation(qName);
 	}
 	
 	public String toPrefixString(PropertyDefinition prop){
@@ -374,5 +385,27 @@ public class BaseWebScriptBean extends BaseWebScript {
 	
 	public QName createQName(String qname) {
 		return QName.createQName(qname, namespaceService);
+	}	
+	
+	public Set<QName> getSubTypes(QName type, boolean bln) {
+		return (Set<QName>) dictionaryService.getSubTypes(type, bln);
+	}
+	
+	public Set<QName> getSubTypes(String type, boolean bln) {
+		QName qNameType = QName.createQName(type, namespaceService);
+		return (Set<QName>) dictionaryService.getSubTypes(qNameType, bln);
+	}
+	
+	public TypeDefinition getType(QName type) {
+		return dictionaryService.getType(type);
+	}
+	
+	public TypeDefinition getType(String type) {
+		QName qName = QName.createQName(type, namespaceService);
+		return dictionaryService.getType(qName);
+	}
+	
+	public String getListConstraintDisplayValue(ListOfValuesConstraint constraint, String value) {
+		return constraint.getDisplayLabel(value, dictionaryService);
 	}
 }
