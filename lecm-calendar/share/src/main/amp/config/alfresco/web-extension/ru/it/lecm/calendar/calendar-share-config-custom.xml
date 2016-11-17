@@ -170,7 +170,7 @@
 					<show id="lecm-sched:sched-employee-link-assoc"/>
 					<show id="lecm-sched:time-limit-start"/>
 					<show id="lecm-sched:time-limit-end"/>
-					<show id="lecm-sched:reiteration-rules" force="true"/>
+					<show id="lecm-base-dummy-aspects:script" force="true"/>
 					<show id="lecm-sched:std-begin"/>
 					<show id="lecm-sched:std-end"/>
 					<show id="lecm-sched:type"/>
@@ -250,7 +250,7 @@
 										event="keyup" message-id="message.error.schedule.schedule-date-limit-validation.early-end" />
 						</constraint-handlers> -->
 					</field>
-					<field id="lecm-sched:reiteration-rules" label-id="label.schedule.form.reiteration-rules" mandatory="true" set="reiteration-rules">
+					<field id="lecm-base-dummy-aspects:script" label-id="label.schedule.form.reiteration-rules" mandatory="true" set="reiteration-rules">
 						<control template="/ru/it/lecm/wcalendar/controls/reiteration-rules-control.ftl"/>
 					</field>
 				</appearance>

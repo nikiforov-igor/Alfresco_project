@@ -562,7 +562,7 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/2b79d189-2080-49c7-bee5-e2e57bdfea27</nodeRef>
                                         <properties>
                                             <property>
@@ -1462,7 +1462,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/e0f6ef8b-d5b5-43f7-8b65-0cf1d9483416</nodeRef>
                                         <properties>
                                             <property>
@@ -2354,7 +2354,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/fc2cc861-8c5b-4d33-afe9-eba4f2bc288b</nodeRef>
                                         <properties>
                                             <property>
@@ -3359,7 +3359,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/3035321a-c084-4a8c-85d8-0e5f1b6c618b</nodeRef>
                                         <properties>
                                             <property>
@@ -4037,7 +4037,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/3ba79c36-d2e0-4fbd-b74a-8e2584d177e2</nodeRef>
                                         <properties>
                                             <property>
@@ -4863,7 +4863,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/504abb00-1c32-4288-a397-1b20dbd19802</nodeRef>
                                         <properties>
                                             <property>
@@ -5722,7 +5722,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/31c873d1-9815-4121-a7d2-924a0c6b2375</nodeRef>
                                         <properties>
                                             <property>
@@ -6528,7 +6528,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/d448a05b-397b-4c62-ace5-41d3c29424c7</nodeRef>
                                         <properties>
                                             <property>
@@ -6955,7 +6955,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/365c1086-0eb1-452f-a4ca-3a4f75675564</nodeRef>
                                         <properties>
                                             <property>
@@ -7285,7 +7285,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/8357f008-5f8e-4605-8d87-062b11000067</nodeRef>
                                         <properties>
                                             <property>

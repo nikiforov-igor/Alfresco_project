@@ -91,7 +91,7 @@
                     <show id="lecm-contractor:bank-location"/>
                     <!-- Местоположение банка -->
                     <show id="lecm-contractor:contractor-code"/>
-                    <show id="lecm-contractor:contractor-to-check-inn" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <!-- Код контрагента -->
                     <show id="lecm-contractor:contractor-to-specialization-association"/>
                     <!-- FK Специализация -->
@@ -198,7 +198,7 @@
                             </control-param>
                         </control>
                     </field>
-                    <field id="lecm-contractor:contractor-to-check-inn" set="contacts"
+                    <field id="lecm-base-dummy-aspects:script" set="contacts"
                            mandatory="true">            <!-- FK Специализация -->
                         <control template="/ru/it/lecm/contractors/contractors-check-inn.ftl"/>
                     </field>
@@ -250,7 +250,7 @@
                     <show id="lecm-contractor:bank-location"/>
                     <!-- Местоположение банка -->
                     <show id="lecm-contractor:contractor-code"/>
-                    <show id="lecm-contractor:contractor-to-check-inn" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <!-- Код контрагента -->
                     <show id="lecm-contractor:contractor-to-specialization-association"/>
                     <!-- FK Специализация -->
@@ -357,7 +357,7 @@
                             </control-param>
                         </control>
                     </field>
-                    <field id="lecm-contractor:contractor-to-check-inn" set="contacts"
+                    <field id="lecm-base-dummy-aspects:script" set="contacts"
                            mandatory="true">            <!-- FK Специализация -->
                         <control template="/ru/it/lecm/contractors/contractors-check-inn.ftl"/>
                     </field>
@@ -481,7 +481,7 @@
                     <show id="lecm-contractor:contractor-to-legalform-association"/>
                     <!-- FK ОПФ -->
 
-                    <show id="lecm-contractor:contractor-to-check-inn" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-contractor:contractor-to-link-association"/>
                     <!-- FK Адресант (через ссылку) -->
                     <show id="lecm-contractor:interaction-type"/>
@@ -604,7 +604,7 @@
                             </control-param>
                         </control>
                     </field>
-                    <field id="lecm-contractor:contractor-to-check-inn" set="contacts"
+                    <field id="lecm-base-dummy-aspects:script" set="contacts"
                            mandatory="true">            <!-- FK Специализация -->
                         <control template="/ru/it/lecm/contractors/contractors-check-inn.ftl"/>
                     </field>
