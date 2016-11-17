@@ -16,6 +16,10 @@ public class LecmMessageJavascriptExtension extends BaseWebScript {
 		this.lecmMessageService = lecmMessageService;
 	}
 
+	public ScriptNode getDocumentMessageFolder() {
+		return new ScriptNode(lecmMessageService.getDocumentMessageFolder(), serviceRegistry, getScope());
+	}
+
 	public boolean isMlSupported() {
 		return lecmMessageService.isMlSupported();
 	}
