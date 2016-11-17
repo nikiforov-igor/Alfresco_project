@@ -97,6 +97,7 @@ LogicECM.module = LogicECM.module || {};
 	                                                me.options.defaultValue = oResults.checked;
                                                     me.checkbox.checked = oResults.checked == "true";
                                                     me.initValue = me.checkbox.checked;
+                                                    me.onChange();
                                                 }
                                             }
                                         },
