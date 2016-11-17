@@ -38,8 +38,6 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
  */
 public abstract class AbstractBusinessJournalService extends BaseBean {
 
-    protected String bjRootID;
-    protected String bjArchiveID;
     protected LecmPermissionService lecmPermissionService;
     protected StateMachineServiceBean stateMachineService;
     private DictionaryBean dictionaryService;
@@ -506,14 +504,6 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
 
     public void setPersonService(PersonService personService) {
         this.personService = personService;
-    }
-
-    public NodeRef getBusinessJournalDirectory() {
-    	return getFolder(bjRootID);
-    }
-
-    public NodeRef getBusinessJournalArchiveDirectory() {
-        return getFolder(bjArchiveID);
     }
 
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {

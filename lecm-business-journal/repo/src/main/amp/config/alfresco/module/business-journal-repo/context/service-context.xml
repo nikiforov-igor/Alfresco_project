@@ -66,12 +66,6 @@
 		</property>
 	</bean>
 
-	<util:constant id="BJ_ROOT_ID" static-field="ru.it.lecm.businessjournal.beans.BusinessJournalService.BJ_ROOT_ID"/>
-	<util:constant id="BJ_ROOT_NAME" static-field="ru.it.lecm.businessjournal.beans.BusinessJournalService.BJ_ROOT_NAME"/>
-
-	<util:constant id="BJ_ARCHIVE_ROOT_ID" static-field="ru.it.lecm.businessjournal.beans.BusinessJournalService.BJ_ARCHIVE_ROOT_ID"/>
-	<util:constant id="BJ_ARCHIVE_ROOT_NAME" static-field="ru.it.lecm.businessjournal.beans.BusinessJournalService.BJ_ARCHIVE_ROOT_NAME"/>
-
 	<bean id="businessJournalAsyncThreadPool" class="org.alfresco.util.ThreadPoolExecutorFactoryBean">
 		<property name="poolName">
 			<value>businessJournalAsyncAction</value>
@@ -109,13 +103,6 @@
 		<property name="allowedCategories" value="#{'${businessjournal.resend.allowed.categories}' == '$'+'{businessjournal.resend.allowed.categories}' ? null : '${businessjournal.resend.allowed.categories}'.split(';')}"/>
         <property name="logSettingsCache" ref="bj.log.settings.cache" />
 		<property name="documentService" ref="documentService"/>
-		<!-- Автоматическое создание каталогов. -->
-		<property name="folders">
-			<map>
-				<entry key="#{BJ_ROOT_ID}" value="#{BJ_ROOT_NAME}"/>
-				<entry key="#{BJ_ARCHIVE_ROOT_ID}" value="#{BJ_ROOT_NAME}/#{BJ_ARCHIVE_ROOT_NAME}"/>
-			</map>
-		</property>
 	</bean>
 
     <bean name="bj.log.settings.cache" class="org.alfresco.repo.cache.TransactionalCache">

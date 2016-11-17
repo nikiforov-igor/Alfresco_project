@@ -1,10 +1,7 @@
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
-	<script type="text/javascript">//<![CDATA[
-		var bjContainer = ${bjContainer};
-
+	<script type="text/javascript">//<![CDATA[		
 		LogicECM.module = LogicECM.module || {};
-		LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
-		LogicECM.module.BusinessJournal.CONTAINER = LogicECM.module.BusinessJournal.CONTAINER || bjContainer.nodeRef;
+		LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};		
 
         LogicECM.module.BusinessJournal.IS_ENGINEER = ${isEngineer?string};
 		//]]>

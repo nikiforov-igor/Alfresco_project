@@ -21,7 +21,6 @@
                                 datagridMeta: {
                                     useFilterByOrg: false,
                                     itemType: "lecm-busjournal:bjRecord",
-                                    nodeRef: LogicECM.module.BusinessJournal.CONTAINER,
                                     sort:"lecm-busjournal:bjRecord-date|false"
 
                                 },

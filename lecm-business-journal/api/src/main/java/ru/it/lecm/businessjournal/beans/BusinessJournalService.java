@@ -20,11 +20,6 @@ public interface BusinessJournalService {
 	/**
 	 * Корневой узел Business Journal
 	 */
-	String BJ_ROOT_NAME = "Сервис Бизнес-журнал";
-	String BJ_ROOT_ID = "BJ_ROOT_ID";
-	String BJ_ARCHIVE_ROOT_NAME = "Архивные записи";
-	String BJ_ARCHIVE_ROOT_ID = "BJ_ARCHIVE_ROOT_ID";
-	String BJ_ARCHIVER_SETTINGS_NAME = "Настройки автоматического архивирования";
 	String BR_ASSOC_QNAME = "businessJournal";
 	String BR_ARCHIVE_ASSOC_QNAME = "archive";
 	String BR_ARCHIVE_SETTINGS_ASSOC_QNAME = "archiveSettings";
@@ -197,24 +192,12 @@ public interface BusinessJournalService {
 	 */
 	String getObjectDescription(NodeRef object);
 
-	/**
-	 * Метод, возвращающий корневую директорию
-	 * @return ссылка
-	 */
-	NodeRef getBusinessJournalDirectory();
-
     /**
 	 * Метод, проверяющий что заданная нода является записью бизнес-журнала
 	 *
 	 * @return true/false
 	 */
 	boolean isBJRecord(NodeRef ref);
-
-    /**
-	 * Метод, возвращающий директорию c архивными записями
-	 * @return ссылка
-	 */
-	NodeRef getBusinessJournalArchiveDirectory();
 
     /**
 	 * Является ли текущий пользователь технологом бизнес-журнала
