@@ -28,7 +28,6 @@ import org.springframework.context.ApplicationEvent;
 public class LecmMessageServiceImpl extends BaseBean implements LecmMessageService {
 
 	private final static Locale[] DEFAULT_LOCALES = { LocaleUtils.toLocale("ru"), LocaleUtils.toLocale("ru_RU") };
-	public final static String LECM_MESSAGE_FOLDER_ID = "LECM_MESSAGE_FOLDER_ID";
 
 	private final static Logger logger = LoggerFactory.getLogger(LecmMessageServiceImpl.class);
 
@@ -42,12 +41,7 @@ public class LecmMessageServiceImpl extends BaseBean implements LecmMessageServi
 
 	@Override
 	public NodeRef getServiceRootFolder() {
-		return getFolder(LECM_MESSAGE_FOLDER_ID);
-	}
-
-	@Override
-	public NodeRef getDocumentMessageFolder() {
-		return getServiceRootFolder();
+		return null;
 	}
 
 	public void setMessageService(MessageService messageService) {
