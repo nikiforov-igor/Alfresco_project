@@ -34,6 +34,7 @@
 					<!--Список согласующих-->
 					<show id="lecmApproveAspects:approvalFolderRef" force="true"/>
 					<show id="lecm-review-ts:review-table-assoc"/>
+					<show id="lecm-document:author-assoc"/>
 				</field-visibility>
 				<appearance>
 					<set id="common" label-id="label.attributes"/>
@@ -44,17 +45,17 @@
 					<field id="lecm-document:title" set="common" />
 					<field id="lecm-eds-document:document-type-assoc" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="notSelectedOptionShow">true</control-param>
+							<control-param name="notSelectedOptionLabel"> </control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
 					</field>
 					<field id="lecm-eds-document:execution-date" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
-                        </control>
+							<control-param name="minLimitCurrentDate">true</control-param>
+						</control>
 					</field>
 					<field id="lecm-eds-document:summaryContent" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
@@ -64,8 +65,8 @@
 					<field id="lecm-protocol:attended-assoc" set="common"/>
 					<field id="lecm-eds-document:note" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+							<control-param name="rows">4</control-param>
+						</control>
 					</field>
 					<field id="lecm-eds-document:sheets-number" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/number.ftl">
@@ -89,6 +90,8 @@
 							<control-param name="editFormTitleMsg">protocol.item.edit.form.title</control-param>
 							<control-param name="createFormTitleMsg">protocol.item.create.form.title</control-param>
 							<control-param name="viewFormTitleMsg">protocol.item.view.form.title</control-param>
+							<control-param name="jsDependencies">scripts/lecm-meetings/protocol-points-table.js</control-param>
+							<control-param name="jsObjectName">LogicECM.module.Meetings.protocolPointsTable</control-param>
 						</control>
 					</field>
 
@@ -96,42 +99,45 @@
 					<field id="lecmApproveAspects:approvalFolderRef" set="approvalTab">
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
 					</field>
-                    <field set="review" id="lecm-review-ts:review-table-assoc">
-                        <control template="/ru/it/lecm/workflow/review/controls/review-list-datagrid-control.ftl">
-                            <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
-                            <control-param name="datagridFormId">datagrid</control-param>
-                            <control-param name="isTableSortable">false</control-param>
-                            <control-param name="refreshAfterCreate">true</control-param>
-                            <control-param name="editable">true</control-param>
-                            <control-param name="forceEditable">true</control-param>
-                            <control-param name="showCreateBtn">false</control-param>
-                            <control-param name="allowCreate">false</control-param>
-                            <control-param name="allowEdit">false</control-param>
-                            <control-param name="allowDelete">false</control-param>
-                            <!--<control-param name="dataSource">lecm/review/ds/reviewListDS</control-param>-->
-                            <!--<control-param name="deleteMessageFunction">LogicECM.module.Contracts.getStageDeleteMessage</control-param>-->
-                            <!--<control-param name="newRowDialogTitle">reviewer.create.button.title</control-param>-->
-                            <!--<control-param name="createItemBtnMsg">reviewer.create.button.title</control-param>-->
-                            <!--<control-param name="editFormTitleMsg">reviewer.edit.form.title</control-param>-->
-                            <!--<control-param name="createFormTitleMsg">reviewer.create.form.title</control-param>-->
-                            <!--<control-param name="viewFormTitleMsg">stage.view.form.title</control-param>-->
-                            <!--<control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>-->
-                            <!--<control-param name="expandDataSource">lecm/workflow/review/ts/items/datagrid</control-param>-->
-                        </control>
-                    </field>
+					<field set="review" id="lecm-review-ts:review-table-assoc">
+						<control template="/ru/it/lecm/workflow/review/controls/review-list-datagrid-control.ftl">
+							<control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
+							<control-param name="datagridFormId">datagrid</control-param>
+							<control-param name="isTableSortable">false</control-param>
+							<control-param name="refreshAfterCreate">true</control-param>
+							<control-param name="editable">true</control-param>
+							<control-param name="forceEditable">true</control-param>
+							<control-param name="showCreateBtn">false</control-param>
+							<control-param name="allowCreate">false</control-param>
+							<control-param name="allowEdit">false</control-param>
+							<control-param name="allowDelete">false</control-param>
+							<!--<control-param name="dataSource">lecm/review/ds/reviewListDS</control-param>-->
+							<!--<control-param name="deleteMessageFunction">LogicECM.module.Contracts.getStageDeleteMessage</control-param>-->
+							<!--<control-param name="newRowDialogTitle">reviewer.create.button.title</control-param>-->
+							<!--<control-param name="createItemBtnMsg">reviewer.create.button.title</control-param>-->
+							<!--<control-param name="editFormTitleMsg">reviewer.edit.form.title</control-param>-->
+							<!--<control-param name="createFormTitleMsg">reviewer.create.form.title</control-param>-->
+							<!--<control-param name="viewFormTitleMsg">stage.view.form.title</control-param>-->
+							<!--<control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>-->
+							<!--<control-param name="expandDataSource">lecm/workflow/review/ts/items/datagrid</control-param>-->
+						</control>
+					</field>
+					<field id="lecm-document:author-assoc" set="common">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+					</field>
 				</appearance>
 			</form>
 			<!-- Форма просмотра на главной странице-->
-	        <form id="main-page-dashlets">
-		        <field-visibility>
-			        <show id="viewMetadata"/>
-		        </field-visibility>
-		        <appearance>
-			        <field id="viewMetadata">
-				        <control template="/ru/it/lecm/documents/controls/document-view-metadata-control.ftl"/>
-			        </field>
-		        </appearance>
-	        </form>
+			<form id="main-page-dashlets">
+				<field-visibility>
+					<show id="viewMetadata"/>
+				</field-visibility>
+				<appearance>
+					<field id="viewMetadata">
+						<control template="/ru/it/lecm/documents/controls/document-view-metadata-control.ftl"/>
+					</field>
+				</appearance>
+			</form>
 			<!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
 			<form id="document">
 				<field-visibility>
@@ -192,17 +198,17 @@
 					<field id="lecm-document:title"/>
 					<field id="lecm-eds-document:document-type-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="notSelectedOptionShow">true</control-param>
+							<control-param name="notSelectedOptionLabel"> </control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
 					</field>
 					<field id="lecm-eds-document:execution-date">
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
-                        </control>
+							<control-param name="minLimitCurrentDate">true</control-param>
+						</control>
 					</field>
 					<field id="lecm-eds-document:summaryContent">
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
@@ -225,8 +231,8 @@
 					<field id="lecm-protocol:attended-assoc"/>
 					<field id="lecm-eds-document:note">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+							<control-param name="rows">4</control-param>
+						</control>
 					</field>
 					<field id="lecm-document:subject-assoc"/>
 					<field id="lecm-eds-document:file-register-assoc"/>
@@ -243,19 +249,21 @@
 					<field id="lecm-protocol:temp-items-assoc" label-id="label.points">
 						<control template="/ru/it/lecm/base-share/components/controls/association-datagrid-control.ftl">
 							<control-param name="itemType">lecm-protocol-ts:point</control-param>
-                            <control-param name="allowCreate">true</control-param>
-                            <control-param name="allowExpand">false</control-param>
-                            <control-param name="showActions">true</control-param>
-                            <control-param name="fullDelete">true</control-param>
-                            <control-param name="height">100</control-param>
-                            <control-param name="rootNode">{usertemp}</control-param>
-                            <control-param name="showCreateButton">true</control-param>
-                            <control-param name="showSearch">false</control-param>
-                            <control-param name="showLabel">true</control-param>
-                            <control-param name="newRowDialogTitle">protocol.item.create.form.title</control-param>
-                            <control-param name="editRowDialogTitle">protocol.item.edit.form.title</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="allowExpand">false</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+							<control-param name="height">100</control-param>
+							<control-param name="rootNode">{usertemp}</control-param>
+							<control-param name="showCreateButton">true</control-param>
+							<control-param name="showSearch">false</control-param>
+							<control-param name="showLabel">true</control-param>
+							<control-param name="newRowDialogTitle">protocol.item.create.form.title</control-param>
+							<control-param name="editRowDialogTitle">protocol.item.edit.form.title</control-param>
 							<control-param name="datagridFormId">datagrid</control-param>
 							<control-param name="editFormId">protocol-create-view-point</control-param>
+							<control-param name="jsDependencies">scripts/lecm-meetings/protocol-points-association-datagrid.js</control-param>
+							<control-param name="jsObjectName">LogicECM.module.Meetings.protocolPointsAssociationDataGrid</control-param>
 						</control>
 					</field>
 
@@ -304,51 +312,56 @@
 					<show id="lecm-protocol:errands-autocreation"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-document:title"/>
 					<field id="lecm-eds-document:document-type-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="notSelectedOptionShow">true</control-param>
+							<control-param name="notSelectedOptionLabel"> </control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
 					</field>
 					<field id="lecm-eds-document:execution-date">
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
-                        </control>
+							<control-param name="minLimitCurrentDate">true</control-param>
+						</control>
 					</field>
 					<field id="lecm-eds-document:summaryContent">
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 					</field>
-					<field id="lecm-protocol:signers-assoc" mandatory="true">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="employeeAbsenceMarker">true</control-param>
-							<control-param name="itemType">lecm-orgstr:employee</control-param>
-							<control-param name="endpointMany">true</control-param>
+					<field id="lecm-protocol:signers-assoc">
+						<control>
 							<control-param name="useStrictFilterByOrg">true</control-param>
+							<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_APPROVERS</control-param>
 						</control>
 					</field>
-					<field id="lecm-protocol:meeting-chairman-assoc" mandatory="true"/>
-					<field id="lecm-protocol:secretary-assoc"/>
-					<field id="lecm-protocol:attended-assoc"/>
 					<field id="lecm-eds-document:note">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+							<control-param name="rows">4</control-param>
+						</control>
 					</field>
-					<field id="lecm-document:subject-assoc"/>
-					<field id="lecm-eds-document:file-register-assoc"/>
-					<field id="lecm-protocol:errands-autocreation"/>
 					<field id="lecm-eds-document:sheets-number">
 						<control template="/ru/it/lecm/base-share/components/controls/number.ftl">
 							<control-param name="maxLength">9</control-param>
+						</control>
+					</field>
+					<field id="lecm-protocol:meeting-chairman-assoc">
+						<control>
+							<control-param name="useStrictFilterByOrg">true</control-param>
+							<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
+						</control>
+					</field>
+					<field id="lecm-protocol:attended-assoc">
+						<control>
+							<control-param name="useStrictFilterByOrg">true</control-param>
+							<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
+						</control>
+					</field>
+					<field id="lecm-protocol:secretary-assoc">
+						<control>
+							<control-param name="useStrictFilterByOrg">true</control-param>
+							<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -526,6 +539,7 @@
 							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
 							<control-param name="firstUseStrictFilterByOrg">true</control-param>
+							<control-param name="firstAllowedNodesFormArgs">allowedForPoint</control-param>
 
 							<control-param name="secondItemType">lecm-representative:representative-type</control-param>
 							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
@@ -550,6 +564,7 @@
 							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
 							<control-param name="firstUseStrictFilterByOrg">true</control-param>
+							<control-param name="firstAllowedNodesFormArgs">allowedForPoint</control-param>
 
 							<control-param name="secondItemType">lecm-representative:representative-type</control-param>
 							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
@@ -569,8 +584,8 @@
 					</field>
 					<field id="lecm-protocol-ts:men-spoke" >
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+							<control-param name="rows">4</control-param>
+						</control>
 					</field>
 					<field id="lecm-protocol-ts:decision" >
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
@@ -578,13 +593,13 @@
 					<field id="lecm-protocol-ts:executor-assoc" mandatory="true"/>
 					<field id="lecm-protocol-ts:execution-date" >
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
-                        </control>
+							<control-param name="minLimitCurrentDate">true</control-param>
+						</control>
 					</field>
 					<field id="lecm-protocol-ts:note" >
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+							<control-param name="rows">4</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>
@@ -626,14 +641,14 @@
 				</field-visibility>
 				<appearance>
 					<set id="common"/>
-				    <set id="item0" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+					<set id="item0" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 					<set id="item1" parent="common" />
 
 					<field id="lecm-document:indexTableRow" read-only="true" help="" force="true" set="item0"/>
 					<field id="lecm-protocol-ts:point-status-assoc" read-only="true" set="item0">
 						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-                            <control-param name="formatString">{lecm-protocol-ts:point-status-assoc/cm:name}</control-param>
-                        </control>
+							<control-param name="formatString">{lecm-protocol-ts:point-status-assoc/cm:name}</control-param>
+						</control>
 					</field>
 					<field id="lecm-protocol-ts:point-formulation" set="item1"/>
 					<field id="lecm-protocol-ts:reporter-assoc" set="item1">
@@ -646,6 +661,7 @@
 							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
 							<control-param name="firstUseStrictFilterByOrg">true</control-param>
+							<control-param name="firstAllowedNodesFormArgs">allowedForPoint</control-param>
 
 							<control-param name="secondItemType">lecm-representative:representative-type</control-param>
 							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
@@ -670,6 +686,7 @@
 							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
 							<control-param name="firstUseStrictFilterByOrg">true</control-param>
+							<control-param name="firstAllowedNodesFormArgs">allowedForPoint</control-param>
 
 							<control-param name="secondItemType">lecm-representative:representative-type</control-param>
 							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
@@ -689,8 +706,8 @@
 					</field>
 					<field id="lecm-protocol-ts:men-spoke" set="item1">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+							<control-param name="rows">4</control-param>
+						</control>
 					</field>
 					<field id="lecm-protocol-ts:decision" set="item1">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
@@ -698,29 +715,29 @@
 					<field id="lecm-protocol-ts:executor-assoc" mandatory="true" set="item1"/>
 					<field id="lecm-protocol-ts:execution-date" set="item1">
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
-                        </control>
+							<control-param name="minLimitCurrentDate">true</control-param>
+						</control>
 					</field>
 					<field id="lecm-protocol-ts:execution-date-real" read-only="true"  set="item1">
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
-                        </control>
+							<control-param name="minLimitCurrentDate">true</control-param>
+						</control>
 					</field>
 					<field id="lecm-protocol-ts:note" set="item1">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+							<control-param name="rows">4</control-param>
+						</control>
 					</field>
 					<field id="lecm-protocol-ts:errand-assoc" set="item1">
 						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-                            <control-param name="formatString">
-                                <![CDATA[<a href='/share/page/document?nodeRef={lecm-protocol-ts:errand-assoc/nodeRef}'>{lecm-protocol-ts:errand-assoc/lecm-document:present-string}</a>]]>
-                            </control-param>
-                        </control>
+							<control-param name="formatString">
+								<![CDATA[<a href='/share/page/document?nodeRef={lecm-protocol-ts:errand-assoc/nodeRef}'>{lecm-protocol-ts:errand-assoc/lecm-document:present-string}</a>]]>
+							</control-param>
+						</control>
 					</field>
 					<field id="lecm-protocol:executed-button" set="item1">
-                        <control template="/ru/it/lecm/meetings/components/controls/execute-point-control.ftl"/>
-                    </field>
+						<control template="/ru/it/lecm/meetings/components/controls/execute-point-control.ftl"/>
+					</field>
 				</appearance>
 			</form>
 			<form id="protocol-create-view-point">
@@ -747,6 +764,7 @@
 							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
 							<control-param name="firstUseStrictFilterByOrg">true</control-param>
+							<control-param name="firstAllowedNodesFormArgs">allowedForPoint</control-param>
 
 							<control-param name="secondItemType">lecm-representative:representative-type</control-param>
 							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
@@ -771,6 +789,7 @@
 							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
 							<control-param name="firstUseStrictFilterByOrg">true</control-param>
+							<control-param name="firstAllowedNodesFormArgs">allowedForPoint</control-param>
 
 							<control-param name="secondItemType">lecm-representative:representative-type</control-param>
 							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
@@ -790,8 +809,8 @@
 					</field>
 					<field id="lecm-protocol-ts:men-spoke">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+							<control-param name="rows">4</control-param>
+						</control>
 					</field>
 					<field id="lecm-protocol-ts:decision">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
@@ -799,13 +818,13 @@
 					<field id="lecm-protocol-ts:executor-assoc" mandatory="true"/>
 					<field id="lecm-protocol-ts:execution-date">
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
-                        </control>
+							<control-param name="minLimitCurrentDate">true</control-param>
+						</control>
 					</field>
 					<field id="lecm-protocol-ts:note">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
+							<control-param name="rows">4</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>
@@ -820,5 +839,11 @@
 				</field-visibility>
 			</form>
 		</forms>
+	</config>
+
+	<config evaluator="string-compare" condition="Workflow">
+		<hidden-workflows>
+			<workflow name="activiti$lecm-protocol_document"/>
+		</hidden-workflows>
 	</config>
 </alfresco-config>

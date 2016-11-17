@@ -60,6 +60,9 @@
                         </control>
                     </field>
                     <field id="lecm-events:all-day">
+                        <control>
+                            <control-param name="fireMandatoryByChange">true</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.changeAllDayValidation" event="change"/>
                         </constraint-handlers>
@@ -101,7 +104,7 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
                             <control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
                             <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="additionalFilter">(ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND @lecm-orgstr\\:employee-person-login:?* ) AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
                             <control-param name="pickerItemsScript">/lecm/events/members/picker/items</control-param>
                         </control>
                     </field>
@@ -134,7 +137,7 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
                             <control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
                             <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="additionalFilter">(ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND @lecm-orgstr\\:employee-person-login:?* ) AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:subject-assoc">
@@ -221,7 +224,7 @@
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <!-- Заголовок -->
                     <show id="lecm-events:title"/>
-                    <!-- Весмь день -->
+                    <!-- Весь день -->
                     <show id="lecm-events:all-day"/>
                     <!-- Дата начала мероприятия -->
                     <show id="lecm-events:from-date"/>
@@ -276,6 +279,9 @@
                         </control>
                     </field>
                     <field id="lecm-events:all-day" set="createEventSet">
+                        <control>
+                            <control-param name="fireMandatoryByChange">true</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.changeAllDayValidation" event="change"/>
                         </constraint-handlers>
@@ -284,6 +290,7 @@
                         <control>
                             <control-param name="defaultValue">now</control-param>
                             <control-param name="defaultTime">12:00</control-param>
+                            <control-param name="changeFireAction">changeEventFromDate</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
@@ -293,6 +300,7 @@
                         <control>
                             <control-param name="defaultValue">now</control-param>
                             <control-param name="defaultTime">13:00</control-param>
+                            <control-param name="changeFireAction">changeEventToDate</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
@@ -330,7 +338,7 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
                             <control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
                             <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="additionalFilter">(ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND @lecm-orgstr\\:employee-person-login:?* ) AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:temp-members-assoc-json" set="createEventSet">
@@ -362,7 +370,7 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
                             <control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
                             <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="additionalFilter">(ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND @lecm-orgstr\\:employee-person-login:?* ) AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
                             <control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
                         </control>
                     </field>
@@ -425,6 +433,9 @@
                         </control>
                     </field>
                     <field id="lecm-events:all-day">
+                        <control>
+                            <control-param name="fireMandatoryByChange">true</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.changeAllDayValidation" event="change"/>
                         </constraint-handlers>
@@ -433,6 +444,7 @@
                         <control>
                             <control-param name="defaultValue">now</control-param>
                             <control-param name="defaultTime">12:00</control-param>
+                            <control-param name="changeFireAction">changeEventFromDate</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
@@ -442,6 +454,7 @@
                         <control>
                             <control-param name="defaultValue">now</control-param>
                             <control-param name="defaultTime">13:00</control-param>
+                            <control-param name="changeFireAction">changeEventToDate</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
@@ -476,7 +489,7 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
                             <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
                             <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="additionalFilter">(ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND @lecm-orgstr\\:employee-person-login:?* ) AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:invited-members-assoc">
@@ -505,7 +518,7 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
                             <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
                             <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="additionalFilter">(ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND @lecm-orgstr\\:employee-person-login:?* ) AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:description">
@@ -752,6 +765,18 @@
                     </field>
                 </appearance>
             </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-events-dic:resources-note"/>
+                    <show id="lecm-events-dic:resources-organization-assoc"/>
+                    <show id="lecm-events-dic:resources-responsible-assoc"/>
+                    <show id="lecm-events-dic:resources-require-approval"/>
+                    <show id="lecm-events-dic:resources-available"/>
+                    <show id="lecm-events-dic:resources-privilege-level"/>
+                    <show id="lecm-events-dic:resources-code"/>
+                </field-visibility>
+            </form>
         </forms>
     </config>
 
@@ -770,7 +795,7 @@
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="showViewIncompleteWarning">false</control-param>
-                            <control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
+                            <control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -792,7 +817,7 @@
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="showViewIncompleteWarning">false</control-param>
-                            <control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
+                            <control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -815,7 +840,7 @@
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="showViewIncompleteWarning">false</control-param>
-                            <control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
+                            <control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -837,7 +862,7 @@
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="showViewIncompleteWarning">false</control-param>
-                            <control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
+                            <control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -991,6 +1016,7 @@
             <workflow name="activiti$eventsMemberDecline"/>
             <workflow name="activiti$eventsRequestNewTime"/>
             <workflow name="activiti$removeRepeatable"/>
+            <workflow name="activiti$lecm-events_document"/>
         </hidden-workflows>
     </config>
 </alfresco-config>

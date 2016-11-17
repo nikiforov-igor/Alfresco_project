@@ -12,13 +12,19 @@
 		docNodeRef = search.findNode(docNodeRefString);
 	}
 
-	var node = search.findNode(pars.get('parent')),
-	fields = pars.get('fields'),
-	nameSubstituteStrings = pars.get('nameSubstituteStrings'),
-	children = [],
-	deputyAssocs = null;
+	var parent = pars.has('parent') ? pars.get('parent') : null;
+	var node = null,
+		fields = pars.get('fields'),
+		nameSubstituteStrings = pars.get('nameSubstituteStrings'),
+		children = [],
+		deputyAssocs = [];
 
-	deputyAssocs = node.assocs['lecm-deputy:deputy-assoc'];
+	if (parent != null && parent != '') {
+		node = search.findNode(parent);
+		if (node) {
+			deputyAssocs = node.assocs['lecm-deputy:deputy-assoc'];
+		}
+	}
 
 	for each(deputy in deputyAssocs) {
 		if(!docNodeRef || deputyService.isDeputyAcceptable(docNodeRef, deputy)) {

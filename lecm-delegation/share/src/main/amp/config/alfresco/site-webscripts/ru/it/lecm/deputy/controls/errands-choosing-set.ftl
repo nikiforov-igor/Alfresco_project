@@ -61,7 +61,7 @@
                             } else {
                                 if(obj.byChief) {
 
-                                    var filter = '@lecm-deputy\\:deputy-assoc-ref:"*' + obj.nodeRef + '*" OR @lecm-secretary-aspects\\:secretary-assoc-ref:"*' + obj.nodeRef + '*"';
+                                    var filter = '@lecm\\-deputy\\:deputy\\-assoc\\-ref:"*' + obj.nodeRef + '*" OR @lecm\\-secretary\\-aspects\\:secretary\\-assoc\\-ref:"*' + obj.nodeRef + '*"';
 
                                     LogicECM.module.Base.Util.reInitializeControl('${args.htmlid}', 'lecm-errands:initiator-assoc', {
                                         additionalFilter: filter

@@ -1,4 +1,11 @@
 <alfresco-config>
+    <config>
+        <forms>
+            <dependencies>
+                <js src="/scripts/lecm-os/os-validators.js" />
+            </dependencies>
+        </forms>
+    </config>
 	<config>
 		<forms>
 			<default-controls>
@@ -24,7 +31,7 @@
 					<control-param name="treeItemType">lecm-dic:hierarchical_dictionary_values</control-param>
 					<control-param name="endpointType">lecm-dic:hierarchical_dictionary_values</control-param>
                     <control-param name="childrenDataSource">lecm/os/nomenclature/datasource/avaliableUnits</control-param>
-					<control-param name="additionalFilter">NOT @lecm-os\\:nomenclature-unit-section-status:\"CLOSED\" OR NOT @lecm-os\\:nomenclature-year-section-status:\"CLOSED\"</control-param>
+					<control-param name="additionalFilter">NOT @lecm\\-os\\:nomenclature\\-unit\\-section\\-status:\"CLOSED\" OR NOT @lecm\\-os\\:nomenclature\\-year\\-section\\-status:\"CLOSED\"</control-param>
 				</type>
 				<type name="association:lecm-os:base_copy_action" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 					<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
@@ -38,7 +45,7 @@
 					<control-param name="treeItemType">lecm-dic:hierarchical_dictionary_values</control-param>
 					<control-param name="endpointType">lecm-dic:hierarchical_dictionary_values</control-param>
                     <control-param name="childrenDataSource">lecm/os/nomenclature/datasource/avaliableUnits</control-param>
-					<control-param name="additionalFilter">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND NOT @lecm-os\\:nomenclature-unit-section-status:\"CLOSED\" OR NOT @lecm-os\\:nomenclature-year-section-status:\"CLOSED\"</control-param>
+					<control-param name="additionalFilter">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND NOT @lecm\\-os\\:nomenclature\\-unit\\-section\\-status:\"CLOSED\" OR NOT @lecm\\-os\\:nomenclature\\-year\\-section\\-status:\"CLOSED\"</control-param>
 					<control-param name="changeItemsFireAction">osUnitCopyItemChanged</control-param>
 					<control-param name="treeBranchesDatasource">lecm/nomenclature/tree/notClosed</control-param>
 				</type>
@@ -52,11 +59,12 @@
 					<control-param name="childrenDataSource">lecm/os/nomenclature/datasource/avaliableUnits</control-param>
 					<control-param name="additionalFilter">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}}</control-param>
 					<control-param name="treeBranchesDatasource">lecm/nomenclature/tree</control-param>
+                    <control-param name="sortProp">lecm-os:nomenclature-year-section-year</control-param>
                 </type>
 				<type name="association:lecm-os:nomenclature-unit-section" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
-                    <control-param name="nameSubstituteString">{cm:title} {lecm-os:nomenclature-year-section-year}</control-param>
-                    <control-param name="treeNodeSubstituteString">{cm:title} {lecm-os:nomenclature-year-section-year}</control-param>
+                    <control-param name="nameSubstituteString">{cm:title|lecm-os:nomenclature-year-section-year}</control-param>
+                    <control-param name="treeNodeSubstituteString">{cm:title|lecm-os:nomenclature-year-section-year}</control-param>
                     <control-param name="showCreateNewLink">false</control-param>
                     <control-param name="showCreateNewButton">false</control-param>
                     <control-param name="plane">false</control-param>
@@ -65,13 +73,14 @@
                     <control-param name="treeItemType">lecm-dic:hierarchical_dictionary_values</control-param>
                     <control-param name="endpointType">lecm-os:nomenclature-unit-section</control-param>
                     <control-param name="childrenDataSource">lecm/os/nomenclature/datasource/avaliableUnits</control-param>
-					<control-param name="additionalFilter">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND NOT @lecm-os\\:nomenclature-unit-section-status:\"CLOSED\"</control-param>
+					<control-param name="additionalFilter">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND NOT @lecm\\-os\\:nomenclature\\-unit\\-section\\-status:\"CLOSED\"</control-param>
 					<control-param name="treeBranchesDatasource">lecm/nomenclature/tree/notClosed</control-param>
+                    <control-param name="sortProp">cm:title</control-param>
 				</type>
 				<type name="association:lecm-os:nomenclature-base-section" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
-					<control-param name="nameSubstituteString">{cm:title} {lecm-os:nomenclature-year-section-year}</control-param>
-					<control-param name="treeNodeSubstituteString">{cm:title} {lecm-os:nomenclature-year-section-year}</control-param>
+					<control-param name="nameSubstituteString">{cm:title|lecm-os:nomenclature-year-section-year}</control-param>
+					<control-param name="treeNodeSubstituteString">{cm:title|lecm-os:nomenclature-year-section-year}</control-param>
 					<control-param name="showCreateNewLink">false</control-param>
 					<control-param name="showCreateNewButton">false</control-param>
 					<control-param name="plane">false</control-param>
@@ -82,11 +91,12 @@
                     <control-param name="childrenDataSource">lecm/os/nomenclature/datasource/avaliableUnits</control-param>
 					<control-param name="additionalFilter">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}}</control-param>
 					<control-param name="treeBranchesDatasource">lecm/nomenclature/tree</control-param>
+					<control-param name="sortProp">cm:title</control-param>
 				</type>
 				<type name="association:lecm-os:nomenclature-case" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
                     <control-param name="nameSubstituteString">{lecm-os:nomenclature-case-index}-{cm:title}</control-param>
-                    <control-param name="treeNodeSubstituteString">{cm:title}{lecm-os:nomenclature-year-section-year}</control-param>
+                    <control-param name="treeNodeSubstituteString">{cm:title|lecm-os:nomenclature-year-section-year}</control-param>
                     <control-param name="showCreateNewLink">false</control-param>
                     <control-param name="showCreateNewButton">false</control-param>
                     <control-param name="plane">false</control-param>
@@ -95,7 +105,7 @@
                     <control-param name="treeItemType">lecm-dic:hierarchical_dictionary_values</control-param>
                     <control-param name="endpointType">lecm-os:nomenclature-case</control-param>
                     <control-param name="childrenDataSource">lecm/os/nomenclature/datasource/avaliableUnits</control-param>
-					<control-param name="additionalFilter">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND @lecm-os\\:nomenclature-case-status:\"OPEN\"</control-param>
+					<control-param name="additionalFilter">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND @lecm\\-os\\:nomenclature\\-case\\-status:\"OPEN\"</control-param>
                     <control-param name="treeBranchesDatasource">lecm/nomenclature/tree/ApprovedOnly</control-param>
                     <control-param name="showParentNodeInTreeView">false</control-param>
                     <control-param name="sortProp">lecm-os:nomenclature-case-index</control-param>
@@ -103,7 +113,7 @@
 				<type name="association:lecm-os:nomenclature-case-for-reports" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
                     <control-param name="nameSubstituteString">{lecm-os:nomenclature-case-index}-{cm:title}</control-param>
-                    <control-param name="treeNodeSubstituteString">{cm:title}{lecm-os:nomenclature-year-section-year}</control-param>
+                    <control-param name="treeNodeSubstituteString">{cm:title|lecm-os:nomenclature-year-section-year}</control-param>
                     <control-param name="showCreateNewLink">false</control-param>
                     <control-param name="showCreateNewButton">false</control-param>
                     <control-param name="plane">false</control-param>
@@ -114,6 +124,7 @@
                     <control-param name="childrenDataSource">lecm/os/nomenclature/datasource/avaliableUnits</control-param>
 					<control-param name="additionalFilter">{{FILTER_YEARS_BY_ORG({allowAdmin: true})}}</control-param>
                     <control-param name="treeBranchesDatasource">lecm/nomenclature/tree</control-param>
+                    <control-param name="sortProp">lecm-os:nomenclature-case-index</control-param>
                 </type>
                 <type name="association:lecm-os:nomenclature-case-volume" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
@@ -123,6 +134,7 @@
                     <control-param name="showCreateNewLink">false</control-param>
                     <control-param name="showCreateNewButton">false</control-param>
                     <control-param name="nameSubstituteString">№ {lecm-os:nomenclature-case-volume-number}</control-param>
+                    <control-param name="sortProp">lecm-os:nomenclature-case-volume-number</control-param>
                 </type>
 			</default-controls>
 		</forms>
@@ -219,14 +231,24 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-os:nomenclature-year-section-year">
-						<control template="/ru/it/lecm/os/controls/os-year-control.ftl">
-							<control-param name="orgFieldId">assoc:os-aspects:nomenclature-organization-assoc</control-param>
-						</control>
+                        <constraint-handlers>
+                            <constraint type="INVALID" validation-handler="LogicECM.module.OS.isCorrectYear" event="keyup" message-id="os.is.correct.year"/>
+                        </constraint-handlers>
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                            <control-param name="validationType">keyup</control-param>
+                            <control-param name="validationMessageId">os.year.unique</control-param>
+                            <control-param name="checkInArchive">false</control-param>
+                            <control-param name="validationFn">LogicECM.module.OS.uniqueYear</control-param>
+                        </control>
                     </field>
                     <field id="lecm-os:nomenclature-year-section-comment">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
                     <field id="os-aspects:nomenclature-organization-assoc">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.OS.isOrganizationCentralized" event="keyup" message-id="os.organization.selected"/>
+                        </constraint-handlers>
 						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="plane">true</control-param>
                             <control-param name="changeItemsFireAction">organizationChanged</control-param>
@@ -262,12 +284,22 @@
 					<show id="os-aspects:nomenclature-organization-assoc" />
                 </field-visibility>
                 <appearance>
-					<field id="lecm-os:nomenclature-year-section-year">
-						<control template="/ru/it/lecm/os/controls/os-year-control.ftl">
-							<control-param name="orgFieldId">assoc:os-aspects:nomenclature-organization-assoc</control-param>
-						</control>
+                    <field id="lecm-os:nomenclature-year-section-year">
+                        <constraint-handlers>
+                            <constraint type="INVALID" validation-handler="LogicECM.module.OS.isCorrectYear" event="keyup" message-id="os.is.correct.year"/>
+                        </constraint-handlers>
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                            <control-param name="validationType">keyup</control-param>
+                            <control-param name="validationMessageId">os.year.unique</control-param>
+                            <control-param name="checkInArchive">false</control-param>
+                            <control-param name="validationFn">LogicECM.module.OS.uniqueYear</control-param>
+                        </control>
                     </field>
 					<field id="os-aspects:nomenclature-organization-assoc">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.OS.isOrganizationCentralized" event="keyup" message-id="os.organization.selected"/>
+                        </constraint-handlers>
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
                     <field id="lecm-os:nomenclature-year-section-comment">
@@ -304,7 +336,7 @@
                     </field>
                     <field id="lecm-os:nomenclature-unit-section-unit-assoc">
                         <control template="/ru/it/lecm/os/controls/nomenclature-orgunit-validation.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="sortProp">lecm-orgstr:element-short-name</control-param>
@@ -357,7 +389,7 @@
 
                     <field id="lecm-os:nomenclature-unit-section-unit-assoc" set="set1">
                         <control template="/ru/it/lecm/os/controls/nomenclature-orgunit-validation.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="sortProp">lecm-orgstr:element-short-name</control-param>
@@ -388,7 +420,7 @@
                     </field>
                     <field id="lecm-os:nomenclature-unit-section-unit-assoc">
                         <control template="/ru/it/lecm/os/controls/nomenclature-orgunit-validation.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="sortProp">lecm-orgstr:element-short-name</control-param>

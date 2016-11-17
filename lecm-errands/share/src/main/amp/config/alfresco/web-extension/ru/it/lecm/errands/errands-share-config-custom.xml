@@ -410,13 +410,6 @@
                     <show id="lecm-errands:just-in-time"/>
                 </field-visibility>
                 <appearance>
-                    <set id="collapsible1"/>
-                    <set id="static1"/>
-                    <set id="collapsible2"/>
-                    <set id="exist-bussines-role" parent="collapsible2" template="/ru/it/lecm/deputy/controls/errands-choosing-set.ftl" />
-                    <set id="collapsible2-inner" parent="collapsible2"/>
-                    <set id="static2"/>
-
                     <field id="lecm-errands:title">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
@@ -431,53 +424,51 @@
                     <field id="lecm-errands:executor-assoc">
                         <control>
 	                        <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
-							<control-param name="showSearch">true</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
+                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:content">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
-	                <field id="lecm-errands:coexecutors-assoc" set="collapsible1">
+	                <field id="lecm-errands:coexecutors-assoc">
 		                <control>
-							<control-param name="showSearch">true</control-param>
 			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+                            <control-param name="useStrictFilterByOrg">true</control-param>
+                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 		                </control>
 	                </field>
-                    <field id="lecm-errands:limitation-date" mandatory="true" set="static1">
+                    <field id="lecm-errands:limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
                     </field>
-					<field id="lecm-errands:controller-assoc" set="collapsible2">
-						<control>
-							<control-param name="showSearch">true</control-param>
-						</control>
-					</field>
-                    <field id="lecm-errands:initiator-assoc" set="exist-bussines-role">
+                    <field id="lecm-errands:controller-assoc">
                         <control>
-                            <control-param name="changeItemsFireAction">initiatorChanged</control-param>
+                            <control-param name="useStrictFilterByOrg">true</control-param>
+                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:is-important" set="collapsible2-inner">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    <field id="lecm-errands:initiator-assoc">
+                        <control>
+                            <control-param name="useStrictFilterByOrg">true</control-param>
+                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
+                        </control>
                     </field>
-                    <field id="lecm-errands:without-initiator-approval" set="collapsible2-inner">
+                    <field id="lecm-errands:without-initiator-approval">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
 	                        <control-param name="defaultValueDataSource">lecm/errands/getDefaultWithoutInitiatorApproval</control-param>
                         </control>
                     </field>
-					<field id="lecm-errands:start-date" set="collapsible2-inner">
+					<field id="lecm-errands:start-date">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
 					</field>
-                    <field id="lecm-document:subject-assoc" set="collapsible2-inner">
+                    <field id="lecm-document:subject-assoc">
                         <control>
 	                        <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
                         </control>
-                    </field>
-                    <field id="lecm-errands:just-in-time" set="collapsible2-inner">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
                 </appearance>
             </form>

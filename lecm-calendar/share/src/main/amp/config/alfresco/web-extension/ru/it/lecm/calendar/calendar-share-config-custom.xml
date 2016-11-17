@@ -1,5 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <alfresco-config>
+	<config>
+		<forms>
+			<default-controls>
+				<type name="association:lecm-absence:reason"  template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+						<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отсутствия</control-param>
+						<control-param name="nameSubstituteString">{lecm-absence:code} - {cm:name}</control-param>
+						<control-param name="showCreateNewButton">false</control-param>
+				</type>
+			</default-controls>
+		</forms>
+	</config>
 	<!--Список годов-->
 	<config evaluator="model-type" condition="lecm-cal:calendar">
 		<forms>
@@ -43,11 +54,15 @@
 				<appearance>
 					<field id="lecm-cal:day"  mandatory="true">
 						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl">
+							<control-param name="currentValueArg">initialDate</control-param>
+							<control-param name="maxLimitArg">maxLimitDate</control-param>
+							<control-param name="minLimitArg">minLimitDate</control-param>
 							<control-param name="showTime">false</control-param>
 							<control-param name="dateMaxWidth">8em</control-param>
-							<control-param name="validateHandler">LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation</control-param>
-							<control-param name="messageHandler">LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation.message</control-param>
 						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" event="propertychange" validation-handler="LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation" message-id="lecm.calendar.same.date"/>
+						</constraint-handlers>
 					</field>
 				</appearance>
 			</form>
@@ -79,11 +94,15 @@
 				<appearance>
 					<field id="lecm-cal:day"  mandatory="true">
 						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl">
+							<control-param name="currentValueArg">initialDate</control-param>
+							<control-param name="maxLimitArg">maxLimitDate</control-param>
+							<control-param name="minLimitArg">minLimitDate</control-param>
 							<control-param name="showTime">false</control-param>
 							<control-param name="dateMaxWidth">8em</control-param>
-							<control-param name="validateHandler">LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation</control-param>
-							<control-param name="messageHandler">LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation.message</control-param>
 						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" event="propertychange" validation-handler="LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation" message-id="lecm.calendar.same.date"/>
+						</constraint-handlers>
 					</field>
 				</appearance>
 			</form>
@@ -146,7 +165,7 @@
 							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
 							<control-param name="firstUseStrictFilterByOrg">true</control-param>
 																					<control-param name="secondItemType">lecm-orgstr:organization-unit</control-param>
-							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
 							<control-param name="secondNameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="secondTreeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="secondTreeNodeTitleSubstituteString">{cm:name}</control-param>
@@ -190,7 +209,7 @@
 							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
 							<control-param name="firstUseStrictFilterByOrg">true</control-param>
 																					<control-param name="secondItemType">lecm-orgstr:organization-unit</control-param>
-							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
 							<control-param name="secondNameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="secondTreeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="secondTreeNodeTitleSubstituteString">{cm:name}</control-param>
@@ -337,11 +356,7 @@
 						<control template="/ru/it/lecm/wcalendar/controls/checkbox-disabling-field.ftl"/>
 					</field>
 					<field id="lecm-absence:abscence-reason-assoc" set="abscence-reason">
-						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отсутствия</control-param>
-							<control-param name="nameSubstituteString">{lecm-absence:code} - {cm:name}</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel"> </control-param>
+						<control>
 							<control-param name="showCreateNewButton">true</control-param>
 						</control>
 					</field>
@@ -384,15 +399,7 @@
 					<field id="lecm-absence:unlimited" set="unlimited">
 						<control template="/ru/it/lecm/wcalendar/controls/checkbox-disabling-field.ftl"/>
 					</field>
-					<field id="lecm-absence:abscence-reason-assoc" set="abscence-reason">
-						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отсутствия</control-param>
-							<control-param name="nameSubstituteString">{lecm-absence:code} - {cm:name}</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel"> </control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-						</control>
-					</field>
+					<field id="lecm-absence:abscence-reason-assoc" set="abscence-reason"/>
 					<field id="lecm-absence:comment" set="comment"/>
 				</appearance>
 			</form>
@@ -429,13 +436,6 @@
 						</control>
 					</field>
 					<field id="lecm-absence:abscence-reason-assoc" mandatory="true" label-id="label.absence.form.out-of-office.reason" set="other">
-						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отсутствия</control-param>
-							<control-param name="nameSubstituteString">{lecm-absence:code} - {cm:name}</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel"> </control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Absence.instantAbsenceReasonValidation" event="blur"/>
 						</constraint-handlers>

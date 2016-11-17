@@ -3,24 +3,24 @@
 * Style the yui-dt-expandablerow-trigger column
 *
 **/
-.yui-dt-data td {
+.graph-tree .yui-dt-data td {
     border-bottom: none !important;
 }
-.yui-dt {
+.graph-tree .yui-dt {
 	border-bottom: 1px solid #eee;
 }
-.yui-dt-expandablerow-trigger {
+.graph-tree .yui-dt-expandablerow-trigger {
         width: 10px;
         padding: 4px;
         background-color: #FFF;
 }
-.yui-dt-first {
+/*.yui-dt-first {
 	background-color: #FFF;
-}
+} */
 div.connections-list div#expandable_table table thead {
 	display: none;
 }
-.yui-dt-expandablerow-trigger a {
+.graph-tree .yui-dt-expandablerow-trigger a {
 	display:block;
 	padding:20px 5px 0;
 	cursor:pointer;

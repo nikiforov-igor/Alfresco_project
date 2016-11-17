@@ -566,13 +566,20 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 	@Override
 	public boolean caseHasDocumentsVolumes(NodeRef caseRef) {
+		return caseHasDocumentsVolumes(caseRef, true);
+	}
+
+	@Override
+	public boolean caseHasDocumentsVolumes(NodeRef caseRef, boolean checkVolumes) {
 		NodeRef docFolder = getDocuemntsFolder(caseRef);
+
 		List<ChildAssociationRef> docs = nodeService.getChildAssocs(docFolder);
+		List<ChildAssociationRef> volumes = null;
+		if (checkVolumes) {
+			volumes = nodeService.getChildAssocs(caseRef, new HashSet<>(Arrays.asList(TYPE_NOMENCLATURE_VOLUME)));
+		}
 
-		List<ChildAssociationRef> volumes = nodeService.getChildAssocs(caseRef, new HashSet<>(Arrays.asList(TYPE_NOMENCLATURE_VOLUME)));
-
-		return (docs != null && docs.size() > 0) || (volumes != null && volumes.size() > 0);
-
+		return (docs != null && docs.size() > 0) || (checkVolumes && (volumes != null && volumes.size() > 0));
 	}
 
 	private List<NodeRef> getAllOrgUnitsAssocs(NodeRef sectionNodeRef) {
@@ -709,13 +716,10 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		String user = AuthenticationUtil.getFullyAuthenticatedUser();
 
 		BusinessJournalRecord deleteRecord = businessJournalService.createBusinessJournalRecord(user, docNodeRef, EventCategory.DELETE, DOCUMENT_TEMPLATE);
-		BusinessJournalRecord reportingRecord = businessJournalService.createBusinessJournalRecord(user, docNodeRef, EventCategory.REMOVE_FROM_REPORTING, DOCUMENT_TEMPLATE);
 
 		cruellyDeleteNode(docNodeRef);
 
 		businessJournalService.sendRecord(deleteRecord);
-		businessJournalService.sendRecord(reportingRecord);
-
 	}
 
 	@Override
@@ -728,12 +732,10 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		String user = AuthenticationUtil.getFullyAuthenticatedUser();
 
 		BusinessJournalRecord deleteRecord = businessJournalService.createBusinessJournalRecord(user, yearSection, EventCategory.DELETE, OS_YEAR_TEMPLATE);
-		BusinessJournalRecord reportingRecord = businessJournalService.createBusinessJournalRecord(user, yearSection, EventCategory.REMOVE_FROM_REPORTING, OS_YEAR_TEMPLATE);
 
 		cruellyDeleteNode(yearSection);
 
 		businessJournalService.sendRecord(deleteRecord);
-		businessJournalService.sendRecord(reportingRecord);
 	}
 
 	@Override
@@ -753,12 +755,10 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		String user = AuthenticationUtil.getFullyAuthenticatedUser();
 
 		BusinessJournalRecord deleteRecord = businessJournalService.createBusinessJournalRecord(user, unitSection, EventCategory.DELETE, OS_UNIT_TEMPLATE);
-		BusinessJournalRecord reportingRecord = businessJournalService.createBusinessJournalRecord(user, unitSection, EventCategory.REMOVE_FROM_REPORTING, OS_UNIT_TEMPLATE);
 
 		cruellyDeleteNode(unitSection);
 
 		businessJournalService.sendRecord(deleteRecord);
-		businessJournalService.sendRecord(reportingRecord);
 	}
 
 	@Override
@@ -777,12 +777,10 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		String user = AuthenticationUtil.getFullyAuthenticatedUser();
 
 		BusinessJournalRecord deleteRecord = businessJournalService.createBusinessJournalRecord(user, caseRef, EventCategory.DELETE, CASE_TEMPLATE);
-		BusinessJournalRecord reportingRecord = businessJournalService.createBusinessJournalRecord(user, caseRef, EventCategory.REMOVE_FROM_REPORTING, CASE_TEMPLATE);
 
 		cruellyDeleteNode(caseRef);
 
 		businessJournalService.sendRecord(deleteRecord);
-		businessJournalService.sendRecord(reportingRecord);
 	}
 
 	@Override

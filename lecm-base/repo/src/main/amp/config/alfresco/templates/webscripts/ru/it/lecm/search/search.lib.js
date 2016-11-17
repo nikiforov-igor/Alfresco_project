@@ -355,10 +355,19 @@ function getSearchQuery(params) {
 
 		ftsQuery += (typesQuery.length !== 0 ? '(' + typesQuery + ')' : '');
 		ftsQuery += (formQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND' : '') + '(' + formQuery + ')') : '');
-		var useInject = filter.indexOf("NOT") == 0;
-		ftsQuery += (filter.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND (' : '(') + (useInject ? 'ISNOTNULL:\"cm:name\" AND ' : '') + filter + ')') : '');
-		useInject = filtersQuery.indexOf("NOT") == 0;
-		ftsQuery += (filtersQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND (' : ' (') + (useInject ? 'ISNOTNULL:\"cm:name\" AND ' : '') + filtersQuery + ')') : '');
+
+        var notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i;
+        var singleNotQuery = false;
+
+        if (filter.length !== 0) {
+            singleNotQuery = filter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(filter);
+            ftsQuery += ((ftsQuery.length !== 0 ? ' AND ' : '') + (!singleNotQuery ? '(' : '') + filter + (!singleNotQuery ? ')' : ''));
+        }
+
+        if (filtersQuery.length !== 0 ) {
+            singleNotQuery = !(filtersQuery.indexOf("NOT") == 0 || !notSingleQueryPattern.test(filtersQuery));
+            ftsQuery += ((ftsQuery.length !== 0 ? ' AND ' : '') + (!singleNotQuery ? '(' : '') + filtersQuery + (!singleNotQuery ? ')' : ''));
+        }
 		ftsQuery += (fullTextSearchQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND ' : '') + '(' + fullTextSearchQuery + ')') : '');
 
 		//фильтр по родителю

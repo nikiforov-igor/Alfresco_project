@@ -1,15 +1,12 @@
 package ru.it.lecm.documents.expression;
 
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.InvalidQNameException;
 import org.alfresco.service.namespace.NamespaceException;
 import org.alfresco.service.namespace.QName;
-import org.springframework.extensions.surf.util.I18NUtil;
-import org.springframework.util.StringUtils;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -44,39 +41,86 @@ public class ExpressionDocument {
 		this.serviceRegistry = serviceRegistry;
 	}
 
+    /**
+     * Получить NodeRef документа
+     * @return NodeRef документа
+     */
 	public NodeRef getNodeRef() {
 		return nodeRef;
 	}
 
-    //Значение аттрибута
+    /**
+     * Получить тип документа
+     * @return prefixed тип документа
+     */
     public String type() {
         return serviceRegistry.getNodeService().getType(nodeRef).toPrefixString(serviceRegistry.getNamespaceService());
     }
 
+    /**
+     * Получить название типа документа
+     * @return название тип документа
+     */
     public String typeTitle() {
         return documentService.getDocumentTypeLabel(type());
     }
 
-	//Значение аттрибута
+    /**
+     * Получить значение атрибута
+     * @param attributeName имя атрибута (в виде prefix:localName)
+     * @return значение атрибута
+     */
 	public Object attr(String attributeName) {
-		QName attribute = QName.createQName(attributeName,serviceRegistry.getNamespaceService());
+		QName attribute = QName.createQName(attributeName, serviceRegistry.getNamespaceService());
 		return serviceRegistry.getNodeService().getProperty(nodeRef, attribute);
 	}
 
-    public Object assocAttr(String assocName, String attributeName) {
-        QName assocTypaName = QName.createQName(assocName, serviceRegistry.getNamespaceService());
-        QName attributeTypeName = QName.createQName(attributeName, serviceRegistry.getNamespaceService());
+    /**
+     * Получить значение ассоцации
+     * @param assocName имя TARGET ассоциации (в виде prefix:localName)
+     * @return значение ассоациации
+     */
+    public NodeRef assoc(String assocName) {
+        List<NodeRef> assocs = assocList(assocName);
+        return !assocs.isEmpty() ? assocs.get(0) : null;
+    }
 
-        List<AssociationRef> associationRefs = serviceRegistry.getNodeService().getTargetAssocs(nodeRef,assocTypaName);
+    /**
+     * Получить значение ассоциации
+     * @param  assocName TARGET ассоциация (в виде prefix:localName)
+     * @return значение ассоациации
+     */
+    public List<NodeRef> assocList(String assocName) {
+        QName assocTypeName = QName.createQName(assocName, serviceRegistry.getNamespaceService());
+        List<NodeRef> assocs = new ArrayList<>();
+
+        List<AssociationRef> associationRefs = serviceRegistry.getNodeService().getTargetAssocs(nodeRef, assocTypeName);
         for (AssociationRef associationRef : associationRefs) {
             NodeRef assocNodeRef = associationRef.getTargetRef();
             if (assocNodeRef != null) {
-                return serviceRegistry.getNodeService().getProperty(assocNodeRef, attributeTypeName);
+                assocs.add(assocNodeRef);
             }
         }
-        return null;
+        return assocs;
     }
 
+    /**
+     * Получить значение атрибута ассоциации
+     * @param assocName имя ассоциации (в виде prefix:localName)
+     * @param attributeName имя атрибута (в виде prefix:localName)
+     * @return значение атрибута ассоциации
+     */
+    public Object assocAttr(String assocName, String attributeName) {
+        List<Object> attrs = assocAttrs(assocName, attributeName);
+        return !attrs.isEmpty() ? attrs.get(0) : null;
+    }
+
+    /**
+     * Проверить, что атрибута содержит одно из перечисленных значений
+     * @param attributeName имя атрибута (в виде prefix:localName)
+     * @param attrValues проверяемые значения
+     * @return true, если содержит, false- в обратном случае или если значение атрибута равно NULL
+     */
     public Boolean attrContains(String attributeName, String... attrValues) {
         QName attribute = QName.createQName(attributeName, serviceRegistry.getNamespaceService());
         Object attributeValue = serviceRegistry.getNodeService().getProperty(nodeRef, attribute);
@@ -100,7 +144,7 @@ public class ExpressionDocument {
 
     /**
      * Возвращает тип объекта, на который указывает ассоциация
-     * @param assocName имя ассоциации
+     * @param assocName имя ассоциации (в виде prefix:localName)
      * @return тип объекта, на который указывает ассоциация или NULL, если пусто
      */
     public String assocClass(String assocName) {
@@ -117,6 +161,12 @@ public class ExpressionDocument {
         return assocClazz;
     }
 
+    /**
+     * Получить список значений атрибута ассоциации
+     * @param assocName имя ассоциации (в виде prefix:localName)
+     * @param attributeName имя атрибута (в виде prefix:localName)
+     * @return значение атрибута ассоциации
+     */
     public List<Object> assocAttrs(String assocName, String attributeName) {
         QName assocTypaName = QName.createQName(assocName, serviceRegistry.getNamespaceService());
         QName attributeTypeName = QName.createQName(attributeName, serviceRegistry.getNamespaceService());
@@ -134,6 +184,12 @@ public class ExpressionDocument {
         return attributs;
     }
 
+    /**
+     * Получить список значений атрибута табличных данных
+     * @param tableName имя ассоциации на табличные данные (в виде prefix:localName)
+     * @param attributeName имя атрибута (в виде prefix:localName)
+     * @return список значений атрибута табличных данных
+     */
     public List<Object> tableItemsAttrs(String tableName, String attributeName) {
         QName tableTypeName = QName.createQName(tableName, serviceRegistry.getNamespaceService());
         QName attributeTypeName = QName.createQName(attributeName, serviceRegistry.getNamespaceService());
@@ -155,22 +211,31 @@ public class ExpressionDocument {
         return attributes;
     }
 
-	//Наличие вложения с определенным типом
+    /**
+     * Проверяет категорию на наличие вложений
+     * @param attachmentCategory - имя категории
+     * @return true - если в категории есть вложения
+     */
 	public boolean hasCategoryAttachment(String attachmentCategory) {
         return !documentAttachmentsService.getAttachmentsByCategory(nodeRef, attachmentCategory).isEmpty();
 	}
 
-	//Проверка условий на корректность хотя бы у одного из вложений
-	public boolean anyAttachmentAttribute(String attributeName, String condition, String value) {
-		return true;
-	}
+    /**
+     * Проверяет категорию на возможность записи в неё
+     * @param categoryName - имя категории
+     * @return true - если категория read-only или не существует
+     */
+    public boolean isReadOnlyCategory(String categoryName) {
+        NodeRef category = documentAttachmentsService.getCategory(categoryName, nodeRef);
+        return category == null || documentAttachmentsService.isReadonlyCategory(category);
+    }
 
-	//Проверка условий на корректность у всех вложений
-	public boolean allAttachmentAttribute(String attributeName, String condition, String value) {
-		return true;
-	}
-
-	//Наличие вложения с определенным типом
+    /**
+     * Проверка наличия связанного документа(-ов) с определенным типом и определенной связью
+     * @param connectionType - тип связи (код)
+     * @param documentType - тип документа (в виде prefix:localName)
+     * @return true - если есть хотя бы один не финальный документ, связанный требуемой связью
+     */
     public boolean hasConnectionDocuments(String connectionType, String documentType) {
         QName documentTypeQName = QName.createQName(documentType, serviceRegistry.getNamespaceService());
         List<NodeRef> connectedDocuments = documentConnectionService.getConnectedDocuments(nodeRef, connectionType, documentTypeQName);
@@ -184,12 +249,21 @@ public class ExpressionDocument {
         return false;
     }
 
-    //Имя предыдущего статуса документа
+    /**
+     * Получение имени предыдущего статуса документа
+     * @return имя предыдущего статуса
+     */
     public String getPreviousStatusName() {
         List<String> previousStatusesNames = stateMachineService.getPreviousStatusesNames(nodeRef);
         return previousStatusesNames.size() > 1 ? previousStatusesNames.get(1) : null;
     }
 
+    /**
+     * Проверка на наличие у документа дубликатов
+     * @param onlyHasRegDat не используется
+     * @param props свойства, по которым ищутся дубликаты (в виде prefix:localName)
+     * @return true если в системе есть дубликат документа
+     */
 	public boolean hasDuplicates(boolean onlyHasRegDat, String... props) {
 		NodeService nodeService = serviceRegistry.getNodeService();
 

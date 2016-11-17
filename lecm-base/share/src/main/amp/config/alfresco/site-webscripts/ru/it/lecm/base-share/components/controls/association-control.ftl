@@ -86,6 +86,8 @@
             </#if>
         </#list>
     </#if>
+<#elseif args["allowedNodesScript"]??>
+	<#assign allowedScript = args["allowedNodesScript"] />
 </#if>
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
@@ -250,6 +252,9 @@
 			</#if>
 			<#if params.useStrictFilterByOrg??>
 				useStrictFilterByOrg: "${params.useStrictFilterByOrg?string}",
+			</#if>
+			<#if params.doNotCheckAccess??>
+                doNotCheckAccess: ${params.doNotCheckAccess?string},
 			</#if>
 			<#if params.childrenDataSource??>
 				childrenDataSource: "${params.childrenDataSource}",

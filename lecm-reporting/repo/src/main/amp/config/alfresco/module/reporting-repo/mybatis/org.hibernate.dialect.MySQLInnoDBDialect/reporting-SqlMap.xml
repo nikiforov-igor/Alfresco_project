@@ -217,7 +217,7 @@
 </select>
 
 <select id="reporting-select-store-protocol-per-table" parameterType="SelectFromWhere" resultType="HashMap">
-	SELECT  sys_store_protocol, count(*) 
+	SELECT  'workspace' as sys_store_protocol, count(*)
 		FROM ${from}
 		GROUP BY sys_store_protocol 
 		ORDER BY sys_store_protocol;

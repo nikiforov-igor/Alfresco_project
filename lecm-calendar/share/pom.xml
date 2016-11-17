@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>ru.it.lecm.calendar</groupId>
 		<artifactId>lecm-calendar</artifactId>
-		<version>1.8.0</version>
+		<version>1.8.5</version>
 	</parent>
 
 	<artifactId>lecm-calendar-share</artifactId>

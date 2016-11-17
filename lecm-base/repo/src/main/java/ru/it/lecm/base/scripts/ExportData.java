@@ -136,10 +136,11 @@ public class ExportData extends AbstractWebScript {
                             result = getValue(timeZoneDiff, value);
                         } else if (valueObject instanceof List) {
                             List<HashMap<String, Object>> value = (List<HashMap<String, Object>>) valueObject;
+                            StringBuilder stringBuilder = new StringBuilder(result);
                             for (HashMap<String, Object> dataItem : value) {
-                                result += getValue(timeZoneDiff, dataItem) + "; ";
+                                stringBuilder.append(getValue(timeZoneDiff, dataItem)).append("; ");
                             }
-                            result = result.substring(0, result.length() - 2);
+                            result = stringBuilder.substring(0, stringBuilder.length() - 2);
                         }
                         wr.write(result);
                     }

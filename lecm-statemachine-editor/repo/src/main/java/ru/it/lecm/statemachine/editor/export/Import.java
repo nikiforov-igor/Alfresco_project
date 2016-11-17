@@ -5,6 +5,7 @@ import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ public class Import extends AbstractWebScript {
     private ContentService contentService;
     private DictionaryBean serviceDictionary;
     private LecmBasePropertiesService propertiesService;
+    private PermissionService permissionService;
 
     public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
         this.repositoryStructureHelper = repositoryStructureHelper;
@@ -58,6 +60,10 @@ public class Import extends AbstractWebScript {
 
     public void setPropertiesService(LecmBasePropertiesService propertiesService) {
         this.propertiesService = propertiesService;
+    }
+
+    public void setPermissionService(PermissionService permissionService) {
+        this.permissionService = permissionService;
     }
 
     @Override
@@ -101,7 +107,7 @@ public class Import extends AbstractWebScript {
                 }
 
                 if (inputStream != null) {
-                    XMLImporter xmlImporter = new XMLImporter(inputStream, repositoryStructureHelper, nodeService, serviceDictionary, stateMachineId);
+                    XMLImporter xmlImporter = new XMLImporter(inputStream, repositoryStructureHelper, nodeService, serviceDictionary,permissionService, stateMachineId);
                     xmlImporter.importStateMachine();
                     xmlImporter.close();
                     if (defaultStatemachine) {

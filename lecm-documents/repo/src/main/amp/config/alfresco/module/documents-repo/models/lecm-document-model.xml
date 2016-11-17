@@ -8,7 +8,8 @@
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
         <import uri="http://www.it.ru/lecm/connect/aspects/1.0" prefix="lecm-connect-aspects"/>
         <import uri="http://www.it.ru/lecm/subscriptions/aspects/1.0" prefix="lecm-subscr-aspects"/>
-        <import uri="http://www.it.ru/logicECM/document/member/1.0" prefix="lecm-doc-members"/>        <import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
+        <import uri="http://www.it.ru/logicECM/document/member/1.0" prefix="lecm-doc-members"/>
+		<import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 	</imports>
 	<namespaces>

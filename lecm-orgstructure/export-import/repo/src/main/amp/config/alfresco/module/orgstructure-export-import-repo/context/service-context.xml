@@ -24,6 +24,7 @@
 		  p:behaviourFilter-ref="policyBehaviourFilter"
 		  p:searchService-ref="searchService"
 		  p:namespaceService-ref="namespaceService"
+		  p:contractorsDictionaryName="${lecm.orgstructure.export-import.dictionary.contractors}"
 	/>
 
 	<bean id="orgstructure.export-import.export.service" parent="baseBean"

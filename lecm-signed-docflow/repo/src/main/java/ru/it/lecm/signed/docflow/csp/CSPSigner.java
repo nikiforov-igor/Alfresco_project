@@ -16,19 +16,21 @@ import ru.it.lecm.csp.signing.client.signature.SignatureProcessor;
 public class CSPSigner {
 
     private CSPSigner() {
-
     }
 
     private static SignatureProcessor signatureProcessor;
 
-    public CSPSigner(String dllpath) {
-        if (signatureProcessor == null || (signatureProcessor instanceof JavaCryptoApiWrapperMockImpl)) {
-            signatureProcessor = new CryptoApiWrapperSignatureProcessor().getInstanse(dllpath);
-        }
-    }
-
-    public SignatureProcessor getProcessor() {
-        return signatureProcessor;
+    public static SignatureProcessor getProcessor(final String dllpath) {
+        SignatureProcessor localInstance = signatureProcessor;
+		if (localInstance == null || (signatureProcessor instanceof JavaCryptoApiWrapperMockImpl)) {
+			synchronized (CSPSigner.class) {
+				localInstance = signatureProcessor;
+				if (localInstance == null) {
+					signatureProcessor = localInstance = new CryptoApiWrapperSignatureProcessor().getInstanse(dllpath);
+				}
+			}
+		}
+		return localInstance;
     }
 
 }

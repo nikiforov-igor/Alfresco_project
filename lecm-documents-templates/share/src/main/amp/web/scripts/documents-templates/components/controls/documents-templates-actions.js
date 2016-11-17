@@ -17,12 +17,14 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		this.setOptions(options);
 		this.setMessages(messages);
 		this.actionsId = containerId + '-actions';
+		Bubbling.on('updateButtonState', this.onUpdateButtonState, this);
 		return this;
 	};
 
 	YAHOO.lang.extend(LogicECM.module.DocumentsTemplates.Actions, Alfresco.component.Base, {
 
 		actionsId: null,
+		buttonsHide: true, /*default - disabled ADD button*/
 
 		onActionAddClick: function (event, actionEl) {
 			Bubbling.fire('addTemplateAttribute', {
@@ -52,16 +54,30 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			});
 		},
 
+		onUpdateButtonState: function (layer, args) {
+			this.buttonsHide = args[1].disabledState ? args[1].disabledState : false;
+			this._init(false);
+		},
+
 		onReady: function () {
+			this._init(true);
+		},
+
+		_init: function(firstTime) {
 			var actionAdd = Dom.get(this.id + '-action-add');
 			var actionSubmit = Dom.get(this.id + '-action-submit');
 			var actionClear = Dom.get(this.id + '-action-clear');
 
-			Event.on(actionAdd, 'click', this.onActionAddClick, actionAdd, this);
-			Event.on(actionSubmit, 'click', this.onActionSubmitClick, actionSubmit, this);
-			Event.on(actionClear, 'click', this.onActionClearClick, actionClear, this);
+			if (firstTime) {
+				Event.on(actionAdd, 'click', this.onActionAddClick, actionAdd, this);
+				Event.on(actionSubmit, 'click', this.onActionSubmitClick, actionSubmit, this);
+				Event.on(actionClear, 'click', this.onActionClearClick, actionClear, this);
+			}
 
-			console.log(this.name + '[' + this.id + '] is ready');
+			/*состояния кнопок*/
+			if (actionAdd) {
+				YAHOO.util.Dom.setStyle(actionAdd, 'display', this.buttonsHide ? 'none' : 'block');
+			}
 		}
 	}, true);
 })();

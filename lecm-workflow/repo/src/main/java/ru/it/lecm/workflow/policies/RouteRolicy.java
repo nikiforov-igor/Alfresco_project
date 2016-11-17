@@ -104,8 +104,8 @@ public class RouteRolicy implements OnUpdateNodePolicy, OnCreateChildAssociation
             return;
         }
         if (LecmWorkflowModel.TYPE_ROUTE.isMatch(nodeService.getType(routeRef))) {
-            String approvers = "";
-            String signers = "";
+            StringBuilder approvers = new StringBuilder();
+            StringBuilder signers = new StringBuilder();
             int signersCount = 0;
             int approversCount = 0;
             List<AssociationRef> ownerTargetAssocs = nodeService.getTargetAssocs(routeRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER);
@@ -133,11 +133,11 @@ public class RouteRolicy implements OnUpdateNodePolicy, OnCreateChildAssociation
                         if (!"".equals(shortName)) {
                             switch (listType) {
                                 case "SIGNING":
-                                    signers += (signersCount > 0 ? ", " : "") + shortName;
+                                    signers.append(signersCount > 0 ? ", " : "").append(shortName);
                                     signersCount++;
                                     break;
                                 case "APPROVAL":
-                                    approvers += (approversCount > 0 ? ", " : "") + shortName;
+                                    approvers.append(approversCount > 0 ? ", " : "").append(shortName);
                                     approversCount++;
                                     break;
                             }
@@ -146,16 +146,16 @@ public class RouteRolicy implements OnUpdateNodePolicy, OnCreateChildAssociation
                 }
             }
             if (approversCount > 1) {
-                approvers = "Согласующие: " + approvers + "\n";
+                approvers.insert(0, "Согласующие: ").append("\n");
             } else if (approversCount > 0) {
-                approvers = "Согласующий: " + approvers + "\n";
+                approvers.insert(0, "Согласующий: ").append("\n");
             }
             if (signersCount > 1) {
-                signers = "Подписанты: " + signers;
+                signers.insert(0, "Подписанты: ");
             } else if (signersCount > 0) {
-                signers = "Подписант: " + signers;
+                signers.insert(0, "Подписант: ");
             }
-            nodeService.setProperty(routeRef, ContentModel.PROP_DESCRIPTION, description + approvers + signers);
+            nodeService.setProperty(routeRef, ContentModel.PROP_DESCRIPTION, description + approvers.toString() + signers.toString());
         }
     }
 

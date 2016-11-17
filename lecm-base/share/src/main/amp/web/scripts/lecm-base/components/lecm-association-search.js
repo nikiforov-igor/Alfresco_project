@@ -661,6 +661,8 @@ LogicECM.module = LogicECM.module || {};
 			{
 				var additionalFilter = this.options.additionalFilter;
 				var allowedNodesFilter = "";
+				var notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i;
+				var singleNotQuery;
 
 				if (this.options.allowedNodes) {
 					if (this.options.allowedNodes.length) {
@@ -671,24 +673,30 @@ LogicECM.module = LogicECM.module || {};
 							allowedNodesFilter += "ID:\"" + this.options.allowedNodes[i] + "\"";
 						}
 					} else {
-						allowedNodesFilter = 'ISNULL:"sys:node-dbid"';
+						allowedNodesFilter = '(ISNULL:"sys:node-dbid" OR NOT EXISTS:"sys:node-dbid")';
 					}
 
-					if (additionalFilter) {
-						additionalFilter = "(" + additionalFilter + ") AND (" + allowedNodesFilter + ")";
+					if (additionalFilter != null && additionalFilter.length > 0) {
+						singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
+						additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND (" + allowedNodesFilter + ")";
 					} else {
 						additionalFilter = allowedNodesFilter;
 					}
 				}
 
 				if (this.options.ignoreNodes != null && this.options.ignoreNodes.length > 0) {
-					var ignoreNodesFilter = "(ISNOTNULL:\"cm:name\" AND  @cm\\:name:?*)";
+					var ignoreNodesFilter = "";
 					for (var i = 0; i < this.options.ignoreNodes.length; i++) {
-						ignoreNodesFilter += " AND NOT ID:\"" + this.options.ignoreNodes[i] + "\"";
+						if (ignoreNodesFilter !== "") {
+							ignoreNodesFilter += " AND ";
+						}
+						ignoreNodesFilter += "NOT ID:\"" + this.options.ignoreNodes[i] + "\"";
 					}
 
+					var addBrackets = this.options.ignoreNodes.length > 1;
 					if (additionalFilter != null && additionalFilter.length > 0) {
-						additionalFilter = "(" + additionalFilter + ") AND (" + ignoreNodesFilter + ")";
+						singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
+						additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND " + (addBrackets ? "(" : "") + ignoreNodesFilter + (addBrackets ? ")" : "");
 					} else {
 						additionalFilter = ignoreNodesFilter;
 					}

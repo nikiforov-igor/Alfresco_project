@@ -42,7 +42,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 
 	private final static Logger logger = LoggerFactory.getLogger(RoutesServiceImpl.class);
 	public final static String ROUTES_FOLDER_ID = "ROUTES_FOLDER";
-	private final String SEARCH_ROUTES_QUERY_FORMAT = "(+TYPE:\"%s\") AND (-ASPECT:\"sys:temporary\" AND -ASPECT:\"lecm-workflow:temp\") AND (+PARENT:\"%s\") AND (+ISNOTNULL:\"sys:node-dbid\")";
+	private final String SEARCH_ROUTES_QUERY_FORMAT = "(+TYPE:\"%s\") AND (-ASPECT:\"sys:temporary\" AND -ASPECT:\"lecm-workflow:temp\") AND (+PARENT:\"%s\") AND +ISNOTNULL:\"sys:node-dbid\"";
 	private final static String CUSTOM_ITERATION_TITLE = "Индивидуальный маршрут";
 
 	QName TYPE_CONTRACTOR = QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "contractor-type");
@@ -633,23 +633,95 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 	}
 
 	@Override
-	public boolean hasEmployeesInRoute(final NodeRef documentRef) {
-		NodeRef currentIterationRef = getDocumentCurrentIteration(documentRef);
-		return currentIterationRef != null && hasEmployeesInDocRoute(currentIterationRef);
+	public boolean hasEmployeesInRoute(final NodeRef nodeRef) {
+		return !isRouteEmpty(nodeRef, null, false, true);
 	}
 
 	@Override
-	public boolean hasEmployeesInDocRoute(NodeRef routeRef) {
-		boolean hasEmployeesInIteration = false;
-		List<NodeRef> items = getAllStageItemsOfRoute(routeRef);
-		for (NodeRef stageItemRef : items) {
-			List<AssociationRef> assocs = nodeService.getTargetAssocs(stageItemRef, RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
-			hasEmployeesInIteration = assocs.size() > 0;
-			if (hasEmployeesInIteration) {
-				break;
+	public boolean hasEmployeesInRoute(NodeRef route, NodeRef docForExpression) {
+		return !isRouteEmpty(route, docForExpression, false, true);
+	}
+
+	@Override
+	public boolean isRouteEmpty(final NodeRef nodeRef) {
+		return isRouteEmpty(nodeRef, null, true, false);
+	}
+
+	@Override
+	public boolean isRouteEmpty(NodeRef route, NodeRef docForExpression) {
+		return isRouteEmpty(route, docForExpression, true, false);
+	}
+
+	private boolean isRouteEmpty(NodeRef nodeRef, NodeRef document, boolean checkExpressions, boolean checkEmployees) {
+		boolean isEmptyByEmployees = true;
+		boolean isEmptyByExpressions = false;/* По постановке - не пусто, если этапов нет*/
+
+		NodeRef currentIterationRef = null;
+		NodeRef documentForExpression = document;
+
+		// Получаем маршрут + документ
+		if (nodeRef != null) {
+			QName type = nodeService.getType(nodeRef);
+			if (!RoutesModel.TYPE_ROUTE.equals(type)) { // document
+				currentIterationRef = getDocumentCurrentIteration(nodeRef);
+				if (documentForExpression == null) {
+					documentForExpression = nodeRef;
+				}
+			} else { // route
+				currentIterationRef = nodeRef;
+				if (documentForExpression == null) {
+					documentForExpression = getDocumentByIteration(currentIterationRef);
+				}
 			}
 		}
-		return hasEmployeesInIteration;
+
+		if (currentIterationRef != null) {
+			final List<NodeRef> stages = getAllStagesOfRoute(currentIterationRef);
+
+			final int stagesCount = stages.size();
+			int skippedCount = 0;
+
+			for (NodeRef stage : stages) {
+				if (checkExpressions && documentForExpression != null) {
+					Object stageExpression = nodeService.getProperty(stage, RoutesModel.PROP_STAGE_EXPRESSION);
+					if (stageExpression != null && !documentService.execExpression(documentForExpression, stageExpression.toString())) {
+						skippedCount++;
+						continue; //пропускаем те, что будут пропущены
+					}
+				}
+
+				if (checkEmployees) {
+					List<NodeRef> stageItems = getAllStageItemsOfStage(stage);
+					for (NodeRef stageItem : stageItems) {
+						List<AssociationRef> assocs = nodeService.getTargetAssocs(stageItem, RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
+						if (assocs.size() > 0) {
+							isEmptyByEmployees = false;
+							break;
+						}
+
+						if (documentForExpression != null) {
+							NodeRef employee = null;
+							NodeRef macrosNode = findNodeByAssociationRef(stageItem, RoutesModel.ASSOC_STAGE_ITEM_MACROS, RoutesMacrosModel.TYPE_MACROS, ASSOCIATION_TYPE.TARGET);
+							if (macrosNode != null && nodeService.exists(macrosNode)) {
+								String macrosString = (String) nodeService.getProperty(macrosNode, RoutesMacrosModel.PROP_MACROS_STRING);
+								try {
+									employee = evaluateMacrosString(macrosString, documentForExpression, orgstructureService.getCurrentEmployee());
+								} catch (ScriptException ex) {
+									logger.warn("Error executing script {}. Macros node: {}", macrosString, macrosNode);
+								}
+								if (employee != null) {
+									isEmptyByEmployees = false;
+									break;
+								}
+							}
+						}
+					}
+				}
+
+			}
+			isEmptyByExpressions = stagesCount > 0 && (skippedCount == stagesCount);
+		}
+		return (checkExpressions && isEmptyByExpressions) || (checkEmployees && isEmptyByEmployees);
 	}
 
 	@Override

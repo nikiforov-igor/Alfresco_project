@@ -236,7 +236,8 @@ LogicECM.module = LogicECM.module || {};
 							createFormId: "",
 							nodeRef: this.tableData.nodeRef,
 							actionsConfig: {
-								fullDelete: true
+								fullDelete: true,
+                                trash: false
 					        },
 							sort: this.options.sort ? this.options.sort : "lecm-document:indexTableRow",
 							useChildQuery: true
@@ -500,7 +501,7 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 									columnContent = "<a href='" + Alfresco.constants.URL_PAGECONTEXT+"document-attachment?nodeRef="+ data.value +"' title='" + data.displayValue + "'>" + fileIconHtml + data.displayValue + "</a>";
 									break;
 								case "cm:cmobject":
-									columnContent = "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + data.value + "\', null, \'" + "logicecm.view" + "\')\">" + data.displayValue + "</a>";
+									columnContent = "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + data.value + "\', title: \'logicecm.view\'})\">" + data.displayValue + "</a>";
 									break;
 								case "st:site":
 									var fileIcon = Alfresco.util.getFileIcon(data.displayValue, "st:sites", 16);
@@ -1059,17 +1060,18 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
         onAddRow: function(me, asset, owner, actionsConfig, confirmFunction) {
             if (this.doubleClickLock) return;
             this.doubleClickLock = true;
-            var orgMetadata = this.modules.dataGrid.datagridMeta;
+			var dataGrid = this.modules.dataGrid;
+            var orgMetadata = dataGrid.datagridMeta;
             if (orgMetadata != null && orgMetadata.nodeRef.indexOf(":") > 0) {
                 var destination = orgMetadata.nodeRef;
                 var itemType = orgMetadata.itemType;
 
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
-                    var addMsg = orgMetadata.addMessage;
+                    var createFormTitleMsg = dataGrid.options.createFormTitleMsg;
                     var contId = p_dialog.id + "-form-container";
                     Alfresco.util.populateHTML(
-                        [contId + "_h", addMsg ? addMsg : this.msg("label.create-row.title") ]
+                        [contId + "_h", createFormTitleMsg ? this.msg(createFormTitleMsg) : this.msg("label.create-row.title") ]
                     );
                     if (itemType && itemType != "") {
                         Dom.addClass(contId, itemType.replace(":", "_") + "_edit");
@@ -1129,7 +1131,7 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
                         },
                         onFailure:{
                             fn:function DataGrid_onActionCreate_failure(response) {
-                                this.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
+								LogicECM.module.Base.Util.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
                                 this.doubleClickLock = true;
                             },
                             scope:this

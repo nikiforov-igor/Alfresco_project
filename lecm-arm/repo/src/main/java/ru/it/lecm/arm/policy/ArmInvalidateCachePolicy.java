@@ -38,6 +38,10 @@ public class ArmInvalidateCachePolicy implements NodeServicePolicies.OnUpdateNod
 	}
 
 	public final void init() {
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+                ArmService.TYPE_ARM,
+                new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 ArmService.TYPE_ARM_BASE_NODE,
                 new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));

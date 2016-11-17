@@ -110,7 +110,31 @@
     <#elseif form.arguments[field.name]?has_content>
         <#assign renderPickerJSSelectedValue = form.arguments[field.name]/>
     </#if>
+	<#assign allowedNodesFirst = "">
+	<#assign allowedNodesSecond = "">
 
+	<#if params.firstAllowedNodesFormArgs??>
+		<#assign firstAllowedNodesFormArgs = params.firstAllowedNodesFormArgs?split(",")>
+		<#list firstAllowedNodesFormArgs as firstAllowedNodesFormArg>
+			<#if form.arguments[firstAllowedNodesFormArg]??>
+				<#if (allowedNodesFirst?length > 0)>
+					<#assign allowedNodesFirst = allowedNodesFirst + ","/>
+				</#if>
+				<#assign allowedNodesFirst = allowedNodesFirst + form.arguments[firstAllowedNodesFormArg]/>
+			</#if>
+		</#list>
+	</#if>
+	<#if params.secondAllowedNodesFormArgs??>
+		<#assign secondAllowedNodesFormArgs = params.secondAllowedNodesFormArgs?split(",")>
+		<#list secondAllowedNodesFormArgs as secondAllowedNodesFormArg>
+			<#if form.arguments[secondAllowedNodesFormArg]??>
+				<#if (allowedNodesSecond?length > 0)>
+					<#assign allowedNodesSecond = allowedNodesSecond + ","/>
+				</#if>
+				<#assign allowedNodesSecond = allowedNodesSecond + form.arguments[secondAllowedNodesFormArg]/>
+			</#if>
+		</#list>
+	</#if>
 (function() {
 	function init() {
         LogicECM.module.Base.Util.loadScripts([
@@ -122,8 +146,10 @@
 
     function createDoublePicker() {
 
-	    var fistControl = new LogicECM.module.MixAssociationTreeViewer("${fieldHtmlId}");
+	    var fistControl = new LogicECM.module.MixAssociationTreeViewer("${fieldHtmlId}", "-first");
 	    fistControl.setOptions({
+            fieldId: "${field.configName}",
+            formId: "${args.htmlid}",
 	        <#if disabled>
 	            disabled: true,
 	        </#if>
@@ -203,12 +229,17 @@
 			<#if params.itemTypeSubstituteStrings??>
 				itemTypeSubstituteStrings: "${params.itemTypeSubstituteStrings}",
 			</#if>
-		    clearFormsOnStart: true,
+			<#if (allowedNodesFirst?length > 0)>
+				allowedNodes: "${allowedNodesFirst}".split(","),
+			</#if>
+		    clearFormsOnStart: true
 	    });
 	    fistControl.setMessages(${messages});
 
-	    var secondControl = new LogicECM.module.MixAssociationTreeViewer("${fieldHtmlId}");
+	    var secondControl = new LogicECM.module.MixAssociationTreeViewer("${fieldHtmlId}", "-second");
 	    secondControl.setOptions({
+            fieldId: "${field.configName}-second",
+            formId: "${args.htmlid}",
 		    prefixPickerId: "${secondControlId}",
 		    <#if disabled>
 			    disabled: true,
@@ -288,6 +319,9 @@
 		    currentValue: "${field.value!''}",
 			<#if params.itemTypeSubstituteStrings??>
 				itemTypeSubstituteStrings: "${params.itemTypeSubstituteStrings}",
+			</#if>
+			<#if (allowedNodesSecond?length > 0)>
+				allowedNodes: "${allowedNodesSecond}".split(","),
 			</#if>
 		    clearFormsOnStart: true
 	    });

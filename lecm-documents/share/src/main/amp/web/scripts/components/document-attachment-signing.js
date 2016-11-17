@@ -140,7 +140,32 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onUploadSignature: function(event) {
-			CryptoApplet.loadSignAction(this.options.nodeRef, {successCallback: {fn: this.checkSigned, scope: this}});
+            var localSign = Dom.get(this.id+"-localSign"); 
+            localSign.click();
+		},
+        
+        handleClientLocalSign: function(evt) {
+            if (!window.FileReader) {
+                Alfresco.util.PopupManager.displayMessage({	text: 'Подписи не загружены, браузер не поддерживает FileAPI' });
+                return;
+            } 
+            var oFile = evt.target.files[0];
+            var oFReader = new FileReader();
+            if (!YAHOO.lang.isFunction(oFReader.readAsDataURL)) {
+                Alfresco.util.PopupManager.displayMessage({	text: 'Подписи не загружены, не поддерживаются некоторые функции FileAPI' });
+                return;
+            }
+            oFReader.onload = this.oFileReaderOnLoad.bind(this);
+            oFReader.readAsText(oFile);            
+        },
+        
+        oFileReaderOnLoad: function(oFREvent) { 
+            var sFileData = oFREvent.target.result;
+            CryptoApplet.loadSignAction(this.options.nodeRef, sFileData, {successCallback: {fn: this.checkSigned, scope: this}});
+	    },
+        
+        onExportSignature: function(event) {
+			CryptoApplet.exportSignAction(this.options.nodeRef);
 		},
 
 		onSignableSwitch: function(event) {
@@ -169,7 +194,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					fn: function(response) {
 						if (checkbox.checked) {
 							this.signingContainer.style.display = "block";
-							this.exchangeContainer.style.display = "block";
+							if (this.options.isExchangeEnabled) {
+								this.exchangeContainer.style.display = "block";
+							}
 						} else {
 							this.signingContainer.style.display = "none";
 							this.exchangeContainer.style.display = "none";

@@ -83,7 +83,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 		},
 		getCustomCellFormatter: function(grid, elCell, oRecord, oColumn, oData) {
 			var html = "", i, ii, columnContent, datalistColumn, data,
-				clickHandledStringTemplate = '<a href="javascript:void(0);" onclick="{clickHandler}(\'{nodeRef}\')">{content}</a>';
+				clickHandledStringTemplate = '<a href="javascript:void(0);" onclick="{clickHandler}({itemId:\'{nodeRef}\'})">{content}</a>';
 
 			if (!oRecord) {
 				oRecord = this.getRecord(elCell);
@@ -113,7 +113,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 									html += YAHOO.lang.substitute(clickHandledStringTemplate, {
 										nodeRef: oRecord.getData("nodeRef"),
 										content: columnContent,
-										clickHandler: "viewAttributes"
+										clickHandler: "LogicECM.module.Base.Util.viewAttributes"
 									});
 								} else {
 									html += columnContent;
@@ -190,7 +190,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			var html = "", i, ii, columnContent, datalistColumn, data,
 				resultItemCommentTemplate = '<a href="{proto}//{host}{pageContext}document-attachment?nodeRef={nodeRef}">' +
 				'<img src="{resContext}/components/images/generic-file-16.png" width="16"  alt="{displayValue}" title="{displayValue}"/></a>',
-				clickHandledStringTemplate = '<a href="javascript:void(0);" onclick="{clickHandler}(\'{nodeRef}\')">{content}</a>';
+				clickHandledStringTemplate = '<a href="javascript:void(0);" onclick="{clickHandler}({itemId:\'{nodeRef}\'})">{content}</a>';
 
 			if (!oRecord) {
 				oRecord = this.getRecord(elCell);
@@ -234,7 +234,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 									html += YAHOO.lang.substitute(clickHandledStringTemplate, {
 										nodeRef: oRecord.getData("nodeRef"),
 										content: columnContent,
-										clickHandler: "viewAttributes"
+										clickHandler: "LogicECM.module.Base.Util.viewAttributes"
 									});
 								} else {
 									html += columnContent;

@@ -79,18 +79,6 @@
 		</property>
 	</bean>
 
-	<bean id="cspdllpathstr" class="java.lang.String">
-        <constructor-arg value="${cspdll.path}"/>
-    </bean>
-
-    <bean id="catalinahomestr" class="java.lang.String">
-        <constructor-arg value="${catalina.home}"/>
-    </bean>
-
-    <bean id="enforcedurlstr" class="java.lang.String">
-        <constructor-arg value="${enforced.url}"/>
-    </bean>
-
 	<util:constant id="signedDocflowFolder" static-field="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl.SIGNED_DOCFLOW_FOLDER"/>
 	<bean id="signedDocflowService" class="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl" parent="baseBean"
 		  depends-on="lecm.signed-docflow.model-bootstrap">
@@ -107,9 +95,10 @@
 		<property name="contentService" ref="contentService"/>
 		<property name="behaviourFilter" ref="policyBehaviourFilter"/>
 		<property name="lockService" ref="lockService"/>
-		<property name="cspdllpath" ref="cspdllpathstr"/>
-        <property name="catalinahome" ref="catalinahomestr"/>
-        <property name="enforcedurl" ref="enforcedurlstr"/>
+		<property name="dsignWrapperPath" value="${dsign.wrapper.path}"/>
+        <property name="dsignTspUrl" value="${dsign.tsp.url}"/>
+        <property name="dsignEnabled" value="${dsign.enabled}"/>
+        <property name="dsignExchangeEnabled" value="${dsign.exchange.enabled}"/>
 	</bean>
 
 	<bean id="sendContentToPartnerService" class="ru.it.lecm.signed.docflow.SendContentToPartnerService" init-method="init"

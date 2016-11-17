@@ -6,9 +6,6 @@
 <#include "/org/alfresco/components/component.head.inc">
 <@script type="text/javascript" src="${url.context}/res/scripts/signed-docflow/sign-content.js"></@script>
 
-<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
-<@view.viewForm formId = el + "-view-attributes-form" />
-
 <#attempt>
 	<#import "/ru/it/lecm/signed/docflow/components/crypto.ftl" as crypto/>
 	<@crypto.initApplet/>

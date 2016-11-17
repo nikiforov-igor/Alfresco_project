@@ -44,6 +44,7 @@ public class BaseWebScriptBean extends BaseWebScript {
 	private NodeService nodeService;
     private OrgstructureBean orgstructureService;
     private AuthorityService authorityService;
+    private Properties globalProperties;
 
 	final int REQUEST_MAX = 1000;
 
@@ -261,6 +262,10 @@ public class BaseWebScriptBean extends BaseWebScript {
         this.orgstructureService = orgstructureService;
     }
 
+    public void setGlobalProperties(Properties globalProperties) {
+        this.globalProperties = globalProperties;
+    }
+
     public class TypeMapper {
         private String name;
         private String title;
@@ -357,6 +362,14 @@ public class BaseWebScriptBean extends BaseWebScript {
 		}
 		return result;
 	}
+
+    public String getGlobalProperty(String key) {
+        return this.globalProperties.getProperty(key, null);
+    }
+
+    public String getGlobalProperty(String key, String defaultValue) {
+        return this.globalProperties.getProperty(key, defaultValue);
+    }
 	public PropertyDefinition getProperty(QName name) {
 		return dictionaryService.getProperty(name);
 	}

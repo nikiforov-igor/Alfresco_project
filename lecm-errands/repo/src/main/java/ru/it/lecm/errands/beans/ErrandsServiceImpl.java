@@ -325,7 +325,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
 
 
-        List<NodeRef> documentErrandsDocs = documentConnectionService.getConnectedDocuments(document, null, TYPE_ERRANDS, true);
+        List<NodeRef> documentErrandsDocs = documentConnectionService.getConnectedDocuments(document, "onBasis", TYPE_ERRANDS, true);
         for (NodeRef errand : documentErrandsDocs) {
 
 			boolean hasPermission = lecmPermissionService.hasPermission("_ReadProperties", errand);

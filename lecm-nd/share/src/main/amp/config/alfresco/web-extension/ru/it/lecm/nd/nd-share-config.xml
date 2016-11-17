@@ -42,7 +42,7 @@
                     </field>
                     <field id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
                             <control-param name="nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
@@ -72,14 +72,7 @@
 		                </control>
 	                </field>
 					<field id="lecmSignAspects:signerEmployeeAssoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="employeeAbsenceMarker">true</control-param>
-							<control-param name="useStrictFilterByOrg">true</control-param>
-							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+						<control>
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
 						</control>
 					</field>
@@ -90,14 +83,7 @@
 						</control>
 					</field>
                     <field id="lecm-document-aspects:registrator-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-                            <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="employeeAbsenceMarker">true</control-param>
-                            <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+                        <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
                         </control>
                     </field>
@@ -125,10 +111,7 @@
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                 </field-visibility>
                 <appearance>
-	                <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
-
-                    <field id="lecm-document:title"/>
-                    <field id="lecm-eds-document:document-type-assoc"  mandatory="true">
+                    <field id="lecm-eds-document:document-type-assoc" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_НД</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -138,12 +121,8 @@
                         </control>
                     </field>
                     <field id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
-                            <control-param name="nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
+                        <control>
+                            <control-param name="useStrictFilterByOrg">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent" >
@@ -151,24 +130,15 @@
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecm-nd:begin-date"  label-id="label.nd.period" set="dates"/>
-                    <field id="lecm-nd:end-date" label="" set="dates"/>
-	                <field id="lecm-nd:unlimited" set="dates"/>
                     <field id="lecm-eds-document:note" >
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:subject-assoc"/>
 					<field id="lecmSignAspects:signerEmployeeAssoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="employeeAbsenceMarker">true</control-param>
+						<control>
 							<control-param name="useStrictFilterByOrg">true</control-param>
-							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
 						</control>
 					</field>
@@ -179,14 +149,9 @@
 						</control>
 					</field>
                     <field id="lecm-document-aspects:registrator-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-                            <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="employeeAbsenceMarker">true</control-param>
+                        <control>
                             <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
                         </control>
                     </field>
@@ -413,7 +378,7 @@
                     </field>
                     <field id="lecm-document-aspects:additional-organization-unit-assoc" set="common" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
@@ -446,15 +411,8 @@
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
 					</field>
 					<field id="lecmSignAspects:signerEmployeeAssoc" set="common">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="employeeAbsenceMarker">true</control-param>
-							<control-param name="useStrictFilterByOrg">true</control-param>
-							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
-							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
+						<control>
+                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
 						</control>
 					</field>
 					<field id="lecmSignAspects:isSigned" set="common"/>
@@ -464,14 +422,7 @@
 						</control>
 					</field>
                     <field id="lecm-document-aspects:registrator-assoc" set="common">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-                            <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="employeeAbsenceMarker">true</control-param>
-                            <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+                        <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
                         </control>
                     </field>

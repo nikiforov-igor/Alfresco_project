@@ -81,6 +81,7 @@ YAHOO.Bubbling.on("graphContainerReady", function (layer, args) {
                         var f_url = Alfresco.constants.PROXY_URI + "/lecm/document/connections/api/tree-datasource?documentNodeRef=" + nodeRef + "&isErrandCard=" + args[1].isErrandCard
                             + "&exclErrands=" + !args[1].isErrandCard
                             + "&onlySystem=" + args[1].onlySystem
+                            + "&connectionTypes=" + args[1].connectionTypes
                             + ((oData.data._oData.previosDocRef) ? "&previosDocRef=" + oData.data._oData.previosDocRef : "");
                         YAHOO.util.Event.onContentReady(t_id, function () {
                             layerbylayer(f_url, t_id, p_id)

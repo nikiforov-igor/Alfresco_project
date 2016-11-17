@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentFilter;
-import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.util.ArrayList;
@@ -87,20 +86,20 @@ public class ErrandsFilter extends DocumentFilter {
                         List<NodeRef> employees = new ArrayList<NodeRef>();
                         List<NodeRef> departmentEmployees = orgstructureService.getBossSubordinate(currentEmployee);
                         employees.addAll(departmentEmployees);
-                        String employeesQuery = "";
+                        StringBuilder employeesQuery = new StringBuilder();
                         if (employees.size() > 0) {
                             boolean addOR = false;
                             for (NodeRef employeeRef : employees) {
-                                employeesQuery += (addOR ? " OR " : "") + "(";
-                                employeesQuery += "@" + PROP_EXECUTOR + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
-                                employeesQuery += " OR ";
-                                employeesQuery += "@" + PROP_ITINITATOR + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
-                                employeesQuery += ")";
+                                employeesQuery.append(addOR ? " OR " : "").append("(");
+                                employeesQuery.append("@").append(PROP_EXECUTOR).append(":\"").append(employeeRef.toString().replace(":", "\\:")).append("\"");
+                                employeesQuery.append(" OR ");
+                                employeesQuery.append("@").append(PROP_ITINITATOR).append(":\"").append(employeeRef.toString().replace(":", "\\:")).append("\"");
+                                employeesQuery.append(")");
                                 addOR = true;
                             }
                         }
                         if (employeesQuery.length() > 0) {
-                            query += "(" + employeesQuery + ")";
+                            query += "(" + employeesQuery.toString() + ")";
                         }
                         break;
                     }

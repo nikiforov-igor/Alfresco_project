@@ -7,7 +7,6 @@
 
 <@markup id="html">
     <#if members??>
-        <#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
         <#assign aDateTime = .now>
         <#assign el=args.htmlid + aDateTime?iso_utc/>
         <#assign skipCount=5/>
@@ -29,14 +28,13 @@
             </h2>
 
             <div id="${el}-formContainer">
-                <@view.viewForm formId="${el}-view-node-form"/>
                 <#if members?? && members.items?? && (members.items?size > 0)>
                     <ul id="document-members-set" class="document-members-set document-right-set">
                         <#assign i=0/>
                         <#list members.items as item>
                             <#if i < skipCount>
                                 <li class="text-broken">
-                                ${view.showViewLink(item.employeeName, item.employeeRef, 'logicecm.employee.view')}<br/>
+                                    <a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.viewAttributes({itemId:'${item.employeeRef}', title: 'logicecm.employee.view'})">${item.employeeName}</a><br/>
                                 ${item.employeePosition}<br/>
                                     <#assign i = i+1/>
                                 </li>

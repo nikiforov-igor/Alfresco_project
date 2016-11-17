@@ -67,12 +67,28 @@ public interface RoutesService {
 
 	/**
 	 * Проверить существует ли привязанном к документу маршруте хотя бы один сотрудник
-	 * @param documentRef NodeRef-а на документ
+	 * @param nodeRef NodeRef-а на документ или непосредственно маршрут
 	 * @return true если хотя бы в одном этапе маршрута есть хотя бы один сотрудник. false в противном случае, а также
 	 * если маршрута нет
 	 */
-	boolean hasEmployeesInRoute(final NodeRef documentRef);
-	boolean hasEmployeesInDocRoute(final NodeRef routeRef);
+	boolean hasEmployeesInRoute(final NodeRef nodeRef);
+	boolean hasEmployeesInRoute(final NodeRef route, final NodeRef docForExpression);
+
+	/**
+	 * Проверить не состоит ли маршрут только из потенциально пропущенных этапов
+	 * @param nodeRef NodeRef-а Документа или маршрута
+	 * @return true если в маршруте нет ни одного полноценного этапа согласования по условиям выражений доступности
+	 */
+	boolean isRouteEmpty(final NodeRef nodeRef);
+
+	/**
+	 * Проверить не состоит ли маршрут только из потенциально пропущенных этапов
+	 * @param route NodeRef-а маршрута
+	 * @param docForExpression NodeRef-а документа на котором планируется запустить маршрут
+	 * @return true если в маршруте нет ни одного полноценного этапа согласования по условиям выражений доступности
+	 */
+	boolean isRouteEmpty(final NodeRef route, final NodeRef docForExpression);
+
 	boolean hasPotentialEmployeesInRoute(final NodeRef routeRef, final NodeRef documentRef);
 
 	String getApprovalState(NodeRef documentNode);

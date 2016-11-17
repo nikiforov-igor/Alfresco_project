@@ -77,7 +77,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			var templateUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/picker/node/" + nodeRef.uri + "/children";
 			var templateRequestParams = {
 				selectableType: "lecm-os:nomenclature-case",
-				additionalFilter: "@lecm-os\\:nomenclature-case-status:\"MARK_TO_DESTROY\" OR @lecm-os\\:nomenclature-case-status:\"CLOSED\"",
+				additionalFilter: "@lecm\\-os\\:nomenclature\\-case\\-status:\"MARK_TO_DESTROY\" OR @lecm\\-os\\:nomenclature\\-case\\-status:\"CLOSED\"",
 				searchTerm: "",
 				nameSubstituteString: "{lecm-os:nomenclature-case-index} - {cm:title}"
 			};
@@ -401,7 +401,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			}
 
 			itemsData.forEach(function(el) {
-				var msg = el.itemData['prop_os-aspects_sort-value'].displayValue+ ' - ' + el.itemData['prop_cm_title'].displayValue + '<br>';
+				var msg = el.itemData['prop_os-aspects_common-index'].displayValue+ ' - ' + el.itemData['prop_cm_title'].displayValue + '<br>';
 				html += "<div class=\"noerror-item\">" + msg + "</div>";
 			});
 
@@ -444,35 +444,15 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 				method: 'GET',
 				url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/caseHasDocsVolumes',
 				dataObj: {
-					items: p_oItem.items
+					items: p_oItem.items,
+					checkVolumes: false
 				},
 				successCallback: {
 					scope: this,
 					fn: function(response) {
 						if(response.json.notEmpty) {
-							Alfresco.util.PopupManager.displayPrompt({
-								title:Alfresco.util.message('lecm.os.lbl.nomen.doc.remove'),
-								text: Alfresco.util.message('lecm.os.msg.doc.contains.docs'),
-								buttons:[
-									{
-										text:Alfresco.util.message('lecm.os.btn.ok'),
-										handler: {
-											obj: {
-												context: this,
-												p_sType: p_sType,
-												p_aArgs: p_aArgs,
-												p_oItem: p_oItem
-											},
-											fn: destroyND
-										}
-									},
-									{
-										text:Alfresco.util.message('lecm.os.btn.cancel'),
-										handler:function DataGridActions__onActionDelete_cancel() {
-											this.destroy();
-										}
-									}
-								]
+							Alfresco.util.PopupManager.displayMessage({
+								text: Alfresco.util.message('lecm.os.msg.doc.contains.docs')
 							});
 						} else {
 							this.onGroupActionsClick(p_sType, p_aArgs, p_oItem);

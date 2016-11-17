@@ -782,7 +782,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                         }
 
                                         if (scope.options.attributeForShow != null && datalistColumn.name == scope.options.attributeForShow) {
-                                            html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\', null, \'" + scope.options.viewFormTitleMsg + "\')\">" + columnContent + "</a>";
+                                            html += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'"+ oRecord.getData("nodeRef") + "\', title:\'" + scope.options.viewFormTitleMsg+"\'})\">" + columnContent + "</a>";
                                         } else if (scope.options.attributeForOpen != null && datalistColumn.name == scope.options.attributeForOpen) {
                                             html += "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
                                         } else {
@@ -838,14 +838,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 		        if (displayValue.length == 0) {
 			        return "";
 		        }
-		        return "<span class='person'><a href='javascript:void(0);' onclick=\"showEmployeeViewByLink(\'" + employeeNodeRef + "\', \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
+		        return "<span class='person'><a href='javascript:void(0);'"+" onclick=\"LogicECM.module.Base.Util.showEmployeeViewByLink(\'" + employeeNodeRef + "\', \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
 	        },
 
 	        getEmployeeView: function DataGrid_getEmployeeView(employeeNodeRef, displayValue) {
 		        if (displayValue.length == 0) {
 			        return "";
 		        }
-		        return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
+                return "<span class='person'><a href='javascript:void(0);'"+" onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'"+ employeeNodeRef + "\', title: \'logicecm.employee.view\'})\">" + displayValue + "</a></span>";
 	        },
 
             /**
@@ -2008,13 +2008,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 var elActions = Dom.get(this.id + "-actions-" + (oArgs.el.id));
 
-                // Don't hide unless the More Actions drop-down is showing, or a dialog mask is present
-                if (!this.showingMoreActions || Dom.hasClass(document.body, "masked"))
-                {
-                    // Just hide the action links, rather than removing them from the DOM
-                    Dom.addClass(elActions, "hidden");
-                    this.deferredActionsMenu = null;
-                }
+                // Just hide the action links, rather than removing them from the DOM
+                Dom.addClass(elActions, "hidden");
+                this.deferredActionsMenu = null;
+
             },
 
             /**
@@ -2824,7 +2821,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         },
                         onFailure:{
                             fn:function DataGrid_onActionCreate_failure(response) {
-                                me.displayErrorMessageWithDetails(me.msg("logicecm.base.error"), me.msg("message.save.failure"), response.json.message);
+                                LogicECM.module.Base.Util.displayErrorMessageWithDetails(me.msg("logicecm.base.error"), me.msg("message.save.failure"), response.json.message);
 	                            me.editDialogOpening = false;
 	                            this.widgets.cancelButton.set("disabled", false);
                             },
@@ -2833,36 +2830,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     }).show();
             },
 
-            displayErrorMessageWithDetails: function(msgHeader, msgTitle, msgDetails) {
-                if (this.errorMessageDialog == null) {
-                    this.errorMessageDialog = new YAHOO.widget.SimpleDialog("errorMessageWithDetailsDialog", {
-                        width: "60em",
-                        fixedcenter: true,
-                        destroyOnHide: true,
-                        modal: true
-                    });
-                }
 
-                this.errorMessageDialog.setHeader(msgHeader);
-
-                var customMsg = msgDetails.match("\\[\\[.+\\]\\]");
-                if (customMsg != null) {
-                    msgDetails = customMsg[0].replace("[[", "").replace("]]", "");
-                }
-                var errorDialogBody = '<div class="grid-create-error-dialog"><h3>' + msgTitle + '</h3>';
-                errorDialogBody += '<a href="javascript:void(0);" id="' + this.id + '-error-message-show-details-link">' + this.msg("logicecm.base.error.show.details") + '</a></div>';
-                errorDialogBody += '<div id="' + this.id + '-error-message-show-details" class="error-dialog-details">' + msgDetails + '</div>';
-
-                this.errorMessageDialog.setBody(errorDialogBody);
-                this.errorMessageDialog.render(document.body);
-                this.errorMessageDialog.show();
-
-                Event.on(this.id + "-error-message-show-details-link", "click", this.errorMessageShowDetails, null, this);
-            },
-
-            errorMessageShowDetails: function() {
-                Dom.setStyle(this.id + "-error-message-show-details", "display", "block");
-            },
 
             /**
              * Create Data Item pop-up

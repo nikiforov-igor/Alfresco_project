@@ -156,6 +156,8 @@ LogicECM.module = LogicECM.module || {};
 
 				sortProp: "cm:name",
 
+				sortSelected: false,
+
 				selectedItemsNameSubstituteString: null,
 				// при выборе сотрудника в контроле отображать, доступен ли он в данный момент и если недоступен, то показывать его автоответ
 				employeeAbsenceMarker: false,
@@ -1831,7 +1833,7 @@ LogicECM.module = LogicECM.module || {};
 							allowedNodesFilter += "ID:\"" + this.options.allowedNodes[i] + "\"";
 						}
 					} else {
-						allowedNodesFilter = 'ISNULL:"sys:node-dbid"';
+						allowedNodesFilter = '(ISNULL:"sys:node-dbid" OR NOT EXISTS:"sys:node-dbid")';
 					}
 
 					if (additionalFilter != null && additionalFilter.length > 0) {
@@ -1889,8 +1891,11 @@ LogicECM.module = LogicECM.module || {};
 				if (item) {
 					this.selectedItems[item.nodeRef] = item;
 					this.singleSelectedItem = item;
-
-					this.updateAddedSelectedItem(item);
+					if(this.options.sortSelected){
+						this.updateSelectedItems();
+					}else {
+						this.updateAddedSelectedItem(item);
+					}
 					if (!this.options.multipleSelectMode) {
 						this.updateAddButtons();
 					} else if (this.addItemButtons.hasOwnProperty(item.nodeRef)) {
@@ -1914,25 +1919,25 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			updateSelectedItems: function () {
-				var items = this.selectedItems;
+				var me = this;
 				var fieldId = this.options.pickerId + "-selected-elements";
 				Dom.get(fieldId).innerHTML = '';
 				Dom.get(fieldId).className = 'currentValueDisplay';
 
-				for (var i in items) {
-					if (typeof(items[i]) != "function") {
-						var displayName = items[i].selectedName;
+				var items = this.getSelectedItems(!!this.options.sortSelected);
 
-						if (this.options.itemType == "lecm-orgstr:employee") {
-							var elementName = this.getEmployeeAbsenceMarkeredHTML(items[i].nodeRef, displayName, true);
-							Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(items[i]));
+				items.forEach(function(item, index, array){
+						var displayName = me.selectedItems[item].selectedName;
+
+						if (me.options.itemType == "lecm-orgstr:employee") {
+							var elementName = me.getEmployeeAbsenceMarkeredHTML(me.selectedItems[item].nodeRef, displayName, true);
+							Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, me.getRemoveButtonHTML(me.selectedItems[item]));
 						} else {
-							Dom.get(fieldId).innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, items[i]), this.getRemoveButtonHTML(items[i]));
+							Dom.get(fieldId).innerHTML += Util.getCroppedItem(me.getDefaultView(displayName, me.selectedItems[item]), me.getRemoveButtonHTML(me.selectedItems[item]));
 						}
 
-						YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + items[i].nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: "", updateForms: false}, this);
-					}
-				}
+						YAHOO.util.Event.onAvailable("t-" + me.options.prefixPickerId + me.selectedItems[item].nodeRef, me.attachRemoveClickListener, {node: me.selectedItems[item], dopId: "", updateForms: false}, me);
+				});
 			},
 
 			updateAddedSelectedItem: function(item) {
@@ -1959,7 +1964,7 @@ LogicECM.module = LogicECM.module || {};
 				var title = (this.options.showAssocViewForm && item.nodeRef != null) ? Alfresco.component.Base.prototype.msg("title.click.for.extend.info") : titleName;
 				var result = "<span class='not-person' title='" + title + "'>";
 				if (this.options.showAssocViewForm && item.nodeRef != null) {
-					result += "<a href='javascript:void(0);' " + " onclick=\"viewAttributes(\'" + item.nodeRef + "\', null, \'logicecm.view\')\">" + displayValue + "</a>";
+					result += "<a href='javascript:void(0);' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'"+ item.nodeRef + "\', title: \'logicecm.view\'})\">" + displayValue + "</a>";
 				} else {
 					result += displayValue;
 				}
@@ -2019,29 +2024,32 @@ LogicECM.module = LogicECM.module || {};
 				Dom.setStyle(el, "display", this.canCurrentValuesShow() ? "block" : "none");
 
 				if (el != null) {
+					var me = this;
+					var items = this.getSelectedItems(!!this.options.sortSelected);
+
 					if (clearCurrentDisplayValue) {
 						el.innerHTML = '';
 					}
-					for (var i in this.selectedItems) {
-						var displayName = this.selectedItems[i].selectedName;
+					items.forEach(function(item, index, array){
+						var displayName = me.selectedItems[item].selectedName;
 
-						if(this.options.disabled) {
-							if (this.options.itemType == "lecm-orgstr:employee") {
-								el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, displayName));
+						if(me.options.disabled) {
+							if (me.options.itemType == "lecm-orgstr:employee") {
+								el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(me.selectedItems[item].nodeRef, displayName));
 							} else {
-								el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]));
+								el.innerHTML += Util.getCroppedItem(me.getDefaultView(displayName, me.selectedItems[item]));
 							}
 						} else {
-							if (this.options.itemType == "lecm-orgstr:employee") {
-								var elementName = this.getEmployeeAbsenceMarkeredHTML(this.selectedItems[i].nodeRef, displayName, null);
-								el.innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+							if (me.options.itemType == "lecm-orgstr:employee") {
+								var elementName = me.getEmployeeAbsenceMarkeredHTML(me.selectedItems[item].nodeRef, displayName, null);
+								el.innerHTML += Util.getCroppedItem(elementName, me.getRemoveButtonHTML(me.selectedItems[item], "_c"));
 							} else {
-								el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]), this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+								el.innerHTML += Util.getCroppedItem(me.getDefaultView(displayName, me.selectedItems[item]), me.getRemoveButtonHTML(me.selectedItems[item], "_c"));
 							}
 
-							YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
+							YAHOO.util.Event.onAvailable("t-" + me.options.prefixPickerId + me.selectedItems[item].nodeRef + "_c", me.attachRemoveClickListener, {node: me.selectedItems[item], dopId: "_c", updateForms: true}, me);
 						}
-					}
+					});
 				}
 
 				if(!this.options.disabled)
@@ -2164,13 +2172,18 @@ LogicECM.module = LogicECM.module || {};
 				return removedItems;
 			},
 
-			getSelectedItems:function () {
-				var selectedItems = [];
+			getSelectedItems:function (sort) {
+				var selectedItems = [], me = this;
 
 				for (var item in this.selectedItems) {
 					if (this.selectedItems.hasOwnProperty(item)) {
 						selectedItems.push(item);
 					}
+				}
+				if(sort){
+					selectedItems = selectedItems.sort(function (a, b) {
+						return me.selectedItems[a].name.localeCompare(me.selectedItems[b].name);
+					});
 				}
 				return selectedItems;
 			},

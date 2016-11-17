@@ -194,13 +194,13 @@ public class RecordsListener implements MessageListener {
 
 		String query = " +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\"";
 
-		query += " AND (ISNULL:" + subscriptionType.replace(":", "\\:") + " OR "
+		query += " AND ((ISNULL:" + subscriptionType.replace(":", "\\:") + " OR NOT EXISTS:" + subscriptionType.replace(":", "\\:") + ") OR "
 				+ typeAttribute + ":\"\"";
 
 		if (byType != null) {
 			query += " OR (" + typeAttribute + ":\"" + byType.toString() + "\"";
-			query += " AND (ISNULL:" + subscriptionCategory.replace(":", "\\:")
-					+ " OR " + categoryAttribute + ":\"\"";
+			query += " AND ((ISNULL:" + subscriptionCategory.replace(":", "\\:") + " OR NOT EXISTS:" + subscriptionCategory.replace(":", "\\:")
+					+ ") OR " + categoryAttribute + ":\"\"";
 			if (byCategory != null) {
 				query += " OR " + categoryAttribute + ":\"" + byCategory.toString() + "\"";
 			}

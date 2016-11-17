@@ -80,7 +80,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 							switch (datalistColumn.name.toLowerCase()) { //  меняем отрисовку для конкретных колонок
 								case "cm:title":
-									columnContent += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\', null, null, '')\">" + data.displayValue + "</a>";
+									columnContent += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + oRecord.getData("nodeRef")+"\'})\">" + data.displayValue + "</a>";
 									columnContent += '<br />';
 									break;
 								default:
@@ -88,7 +88,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 							}
 
 							if (scope.options.attributeForShow != null && datalistColumn.name == scope.options.attributeForShow) {
-								html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\', null, \'" + scope.options.viewFormTitleMsg + "\', '')\">" + columnContent + "</a>";
+								html += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + oRecord.getData("nodeRef") + "\', title: \'scope.options.viewFormTitleMsg\' })\">" + columnContent + "</a>";
 							} else if (scope.options.attributeForOpen != null && datalistColumn.name == scope.options.attributeForOpen) {
 								html += "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
 							} else {
@@ -249,126 +249,6 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 		onReCreateNomenclature: function(p_items, owner, actionsConfig, fnPrompt) {
 			this.ActionsClickAdapter(p_items, this.actionsEnum[owner.className], actionsConfig, fnPrompt);
-		},
-
-		onActionEdit: function(item) {
-			// Для предотвращения открытия нескольких карточек (при многократном быстром нажатии на кнопку редактирования)
-			if (this.editDialogOpening) {
-				return;
-			}
-			this.editDialogOpening = true;
-			var me = this;
-
-			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
-			var templateRequestParams = {
-				itemKind: "node",
-				itemId: item.nodeRef,
-				mode: "edit",
-				submitType: "json",
-				showCancelButton: true
-			};
-
-
-			// Using Forms Service, so always create new instance
-			var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails");
-			editDetails.setOptions(
-				{
-					width: this.options.editFormWidth,
-					templateUrl:templateUrl,
-					templateRequestParams:templateRequestParams,
-					actionUrl:null,
-					destroyOnHide:true,
-					doBeforeDialogShow:{
-						fn: function(p_form, p_dialog) {
-
-							if(item.type == 'lecm-os:nomenclature-year-section') {
-								var data = p_form.getFormData();
-								var status = data['prop_lecm-os_nomenclature-year-section-status'];
-
-								switch (status) {
-									case 'PROJECT':
-										p_dialog.widgets.okButton.set('label', "Утвердить");
-										break;
-									case 'APPROVED':
-										p_dialog.widgets.okButton.set('label', "Закрыть");
-										break;
-								}
-							}
-
-							var contId = p_dialog.id + "-form-container";
-							if (item.type && item.type != "") {
-								Dom.addClass(contId, item.type.replace(":", "_") + "_edit");
-							}
-							p_dialog.dialog.setHeader(this.msg(this.options.editFormTitleMsg));
-							this.editDialogOpening = false;
-
-							p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-						},
-						scope:this
-					},
-					doBeforeFormSubmit: {
-						scope: this,
-						fn: function() {
-
-
-
-								var status = document.getElementsByName('prop_lecm-os_nomenclature-year-section-status')[0];
-								var sortField = document.getElementsByName('prop_os-aspects_sort-value')[0];
-								var commonIndexField = document.getElementsByName('prop_os-aspects_common-index')[0];
-								var unitIndexField = document.getElementsByName('prop_lecm-os_nomenclature-unit-section-index');
-								var caseIndexField = document.getElementsByName('prop_lecm-os_nomenclature-case-index');
-
-								if(status) {
-									switch (status.value) {
-										case 'PROJECT':
-											this.ActionsClickAdapter(item, this.actionsEnum.onActionApproveNomenclatureYear);
-											break;
-										case 'APPROVED':
-											this.ActionsClickAdapter(item, this.actionsEnum.onActionCloseNomenclatureYear, null, this.closeYearSection_Prompt_sync);
-											break;
-									}
-								}
-
-								if(unitIndexField && unitIndexField.length) {
-									sortField.value = 'a' + unitIndexField[0].value;
-									commonIndexField.value = unitIndexField[0].value;
-									return;
-								}
-
-								if(caseIndexField && caseIndexField.length) {
-									sortField.value = 'b' + caseIndexField[0].value;
-									commonIndexField.value = caseIndexField[0].value;
-									return;
-								}
-
-						}
-					},
-					onSuccess:{
-						fn:function DataGrid_onActionEdit_success(response) {
-							// Reload the node's metadata
-							Bubbling.fire("datagridRefresh",
-								{
-									bubblingLabel:me.options.bubblingLabel
-								});
-                            Bubbling.fire("armRefreshSelectedTreeNode"); // обновить ветку в дереве
-                            Alfresco.util.PopupManager.displayMessage({
-								text:this.msg("message.details.success")
-							});
-							this.editDialogOpening = false;
-						},
-						scope:this
-					},
-					onFailure:{
-						fn:function DataGrid_onActionEdit_failure(response) {
-							Alfresco.util.PopupManager.displayMessage(
-								{
-									text:this.msg("message.details.failure")
-								});
-							this.editDialogOpening = false;
-						},
-						scope:this
-					}
-				}).show();
 		},
 
 		onPrintInventory: function(p_items, owner, actionsConfig, fnPrompt) {
@@ -542,18 +422,18 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 										},
 										fn: closeAllCases
 									}
+								//}, {
+								//	text: 'Перенести переходящие дела',
+								//	handler: {
+								//		obj: {
+								//			context: this,
+								//			fn: execFunction,
+								//			items: items
+								//		},
+								//		fn: moveOpenTransientCases
+								//	}
 								}, {
-									text: 'Перенести переходящие дела',
-									handler: {
-										obj: {
-											context: this,
-											fn: execFunction,
-											items: items
-										},
-										fn: moveOpenTransientCases
-									}
-								}, {
-									text: 'Отмена',
+									text: Alfresco.util.message('lecm.os.msg.notClose'),
 									handler: {
 										fn: cancel
 									}
@@ -588,18 +468,18 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 										},
 										fn: closeAllCases
 									}
+								//}, {
+								//	text: Alfresco.util.message('lecm.os.msg.move.passing.docs'),
+								//	handler: {
+								//		obj: {
+								//			context: this,
+								//			fn: execFunction,
+								//			items: items
+								//		},
+								//		fn: moveOpenTransientCases
+								//	}
 								}, {
-									text: Alfresco.util.message('lecm.os.msg.move.passing.docs'),
-									handler: {
-										obj: {
-											context: this,
-											fn: execFunction,
-											items: items
-										},
-										fn: moveOpenTransientCases
-									}
-								}, {
-									text: Alfresco.util.message('lecm.os.btn.cancel'),
+									text: Alfresco.util.message('lecm.os.msg.notClose'),
 									handler: {
 										fn: cancel
 									}
@@ -638,38 +518,17 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 			Alfresco.util.Ajax.jsonRequest({
 				method: 'GET',
-				dataObj: {
-					selectableType: 'lecm-document:base,lecm-os:nomenclature-case-volume'
-				},
 				url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/caseHasDocsVolumes',
 				dataObj: {
-					items: item.nodeRef
+					items: item.nodeRef,
+					checkVolumes: false
 				},
 				successCallback: {
 					scope: this,
 					fn: function(response) {
 						if(response.json.notEmpty) {
-							Alfresco.util.PopupManager.displayPrompt({
-								title:Alfresco.util.message('lecm.os.lbl.nomen.doc.remove'),
-								text: Alfresco.util.message('lecm.os.msg.doc.contains.docs'),
-								buttons:[
-									{
-										text:Alfresco.util.message('lecm.os.btn.ok'),
-										handler: {
-											obj: {
-												context: this,
-												deleteFn: destroyND
-											},
-											fn: areYouReallyShurePrompt
-										}
-									},
-									{
-										text:Alfresco.util.message('lecm.os.btn.cancel'),
-										handler:function DataGridActions__onActionDelete_cancel() {
-											this.destroy();
-										}
-									}
-								]
+							Alfresco.util.PopupManager.displayMessage({
+								text: Alfresco.util.message('lecm.os.msg.doc.contains.docs')
 							});
 						} else {
 							execFunction.call(this);

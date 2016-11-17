@@ -238,6 +238,8 @@ public interface DocumentService {
 
     public NodeRef duplicateDocument(NodeRef document);
 
+    String getDocumentCopyURL(NodeRef document);
+
     /**
      * Метод для получения регистрационных номеров документа (номер проекта (если есть) и реального (если есть))
      *

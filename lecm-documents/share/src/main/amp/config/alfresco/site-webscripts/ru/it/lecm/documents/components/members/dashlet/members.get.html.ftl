@@ -1,4 +1,3 @@
-<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
 <#assign id = args.htmlid>
 
 <div class="dashlet document bordered members">
@@ -17,7 +16,7 @@
                         <img src="${url.context}/proxy/alfresco/lecm/profile/employee-photo?nodeRef=${member.employeeRef}"alt="Avatar" />
                     </div>
                     <div class="person">
-                        <h3>${view.showViewLink(member.employeeName, member.employeeRef, "logicecm.employee.view")}</h3>
+                        <h3><a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.viewAttributes({itemId:'${member.employeeRef}', title: 'logicecm.employee.view'})">${member.employeeName}</a></h3>
                         <div>${member.employeePosition}</div>
                         <div class="member-ref hidden1">${member.employeeRef}</div>
                     </div>

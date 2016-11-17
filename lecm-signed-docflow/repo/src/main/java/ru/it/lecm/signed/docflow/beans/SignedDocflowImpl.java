@@ -1,10 +1,5 @@
 package ru.it.lecm.signed.docflow.beans;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -13,18 +8,15 @@ import org.alfresco.service.cmr.lock.LockService;
 import org.alfresco.service.cmr.lock.LockType;
 import org.alfresco.service.cmr.lock.NodeLockedException;
 import org.alfresco.service.cmr.lock.UnableToAquireLockException;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.ContentReader;
-import org.alfresco.service.cmr.repository.ContentService;
-import org.alfresco.service.cmr.repository.ContentWriter;
-import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.version.VersionHistory;
 import org.alfresco.service.cmr.version.VersionService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.GUID;
 import org.alfresco.util.ISO8601DateFormat;
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,16 +24,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.csp.signing.client.exception.CryptoException;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.signed.docflow.api.Signature;
 import ru.it.lecm.signed.docflow.SignedDocflowEventCategory;
+import ru.it.lecm.signed.docflow.api.Signature;
 import ru.it.lecm.signed.docflow.api.SignedDocflow;
 import ru.it.lecm.signed.docflow.api.SignedDocflowModel;
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.io.IOUtils;
-import ru.it.lecm.csp.signing.client.exception.CryptoException;
 import ru.it.lecm.signed.docflow.csp.CSPSigner;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  *
@@ -63,11 +58,12 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	private ContentService contentService;
 	private BehaviourFilter behaviourFilter;
 	private LockService lockService;
-	private String cspdllpath;
-    private CSPSigner signer;
-    private String enforcedurl;
+	private String dsignWrapperPath;
+    private String dsignTspUrl;
+    private boolean dsignEnabled;
+    private boolean dsignExchangeEnabled;
 
-	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;
 	}
 
@@ -91,16 +87,27 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		this.lockService = lockService;
 	}
 
-	public void setCspdllpath(String cspdllpath) {
-        this.cspdllpath = cspdllpath;
-        signer = new CSPSigner(cspdllpath);
+	public void setDsignWrapperPath(String dsignWrapperPath) {
+        this.dsignWrapperPath = dsignWrapperPath;
     }
 
-    public void setEnforcedurl(String enforcedurl) {
-        this.enforcedurl = enforcedurl;
+    public void setDsignTspUrl(String dsignTspUrl) {
+        this.dsignTspUrl = dsignTspUrl;
     }
 
-	@Override
+    public void setDsignEnabled(boolean dsignEnabled) {
+        this.dsignEnabled = dsignEnabled;
+    }
+
+	public void setDsignExchangeEnabled(boolean dsignExchangeEnabled) {
+		this.dsignExchangeEnabled = dsignExchangeEnabled;
+	}
+
+	public boolean isDsignExchangeEnabled() {
+		return dsignExchangeEnabled;
+	}
+
+    @Override
 	public List<Signature> getSignatures(NodeRef signedContentRef) {
 		List<AssociationRef> signAssocs = nodeService.getSourceAssocs(signedContentRef, SignedDocflowModel.ASSOC_SIGN_TO_CONTENT);
 
@@ -524,6 +531,9 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 
     @Override
 	public Map<String, Object> getHashes(List<NodeRef> refsToSignList) {
+        if (!dsignEnabled) {
+            throw new UnsupportedOperationException("getHashes() is disabled. Check property 'dsign.enabled' in 'alfresco-global.properties' file.");
+        }
 		Map<String, Object> result = new HashMap<>();
         for (NodeRef refToSignList : refsToSignList) {
             String hash = generateHash(refToSignList);
@@ -540,11 +550,12 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	 * @param refToSignList
 	 * @return hashRef
 	 */
-	private String generateHash(NodeRef refToSignList) {
+    @Override
+	public String generateHash(NodeRef refToSignList) {
 		ContentReader sourceReader = contentService.getReader(refToSignList, ContentModel.PROP_CONTENT);
 		try {
 			byte[] sourceContentBytes = IOUtils.toByteArray(sourceReader.getContentInputStream());
-            byte[] targetContentBytes = signer.getProcessor().hashGostr3411(sourceContentBytes);
+            byte[] targetContentBytes = CSPSigner.getProcessor(dsignWrapperPath).hashGostr3411(sourceContentBytes);
 			return Hex.encodeHexString(targetContentBytes).toUpperCase();
 		} catch (IOException | CryptoException ex) {
 			logger.error("", ex);
@@ -554,7 +565,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 
     @Override
     public String getSTSAAddress() {
-        return enforcedurl;
+        return dsignTspUrl;
     }
 
 }

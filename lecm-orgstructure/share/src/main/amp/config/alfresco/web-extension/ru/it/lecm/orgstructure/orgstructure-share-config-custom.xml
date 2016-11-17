@@ -818,7 +818,7 @@
 	                <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
 	            <appearance>
-		            <field id="lecm-orgstr-aspects:linked-organization-assoc" label-id="staff_organization" substituteString="{..lecm-orgstr-aspects:linked-organization-assoc/lecm-orgstr:element-full-name}"/>
+		            <field id="lecm-orgstr-aspects:linked-organization-assoc" label-id="staff_organization"/>
 		            <field id="lecm-orgstr:staff-unit" substituteString="{../lecm-orgstr:element-short-name}"/>
 		            <field id="lecm-orgstr:element-member-position-assoc" label-id="lecm-orgstr_employee-main-position"/>
 		            <field id="lecm-orgstr:primary-position" label-id="staff_is_primary" substituteString="{lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-is-primary}"/>
@@ -1266,7 +1266,7 @@
 					</field>
 					<field id="lecm-orgstr:business-role-organization-element-assoc" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="plane">false</control-param>
@@ -1286,7 +1286,7 @@
 					</field>
 					<field id="lecm-orgstr:business-role-organization-element-member-assoc" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:element-member-position-assoc/cm:name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
 							<control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:element-member-position-assoc/cm:name} {../lecm-orgstr:element-short-name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
 							<control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>

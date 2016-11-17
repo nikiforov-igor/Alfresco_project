@@ -25,13 +25,34 @@
 					<show id="cm:name" force="true"/>
 					<show id="lecm-arm:code" force="true"/>
 					<show id="lecm-arm:show-calendar" force="true"/>
+					<show id="lecm-arm:show-in-menu" force="true"/>
+					<show id="lecm-arm:order" force="true"/>
+					<show id="lecm-arm:menu-business-roles-assoc" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-arm:code">
+					<set id="base"/>
+					<set id="menu-config" appearance="bordered-panel" label-id="label.arm.menu.config"/>
+
+					<field id="cm:name" set="base"/>
+					<field id="lecm-arm:code" set="base">
 						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
 						<constraint-handlers>
 							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
 						</constraint-handlers>
+					</field>
+					<field id="lecm-arm:show-calendar" set="base"/>
+
+					<field id="lecm-arm:show-in-menu" set="menu-config"/>
+					<field id="lecm-arm:order" set="menu-config"/>
+					<field id="lecm-arm:menu-business-roles-assoc" set="menu-config">
+						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="showViewIncompleteWarning">false</control-param>
+							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>
@@ -45,13 +66,34 @@
 					<show id="cm:name" force="true"/>
 					<show id="lecm-arm:code" force="true"/>
 					<show id="lecm-arm:show-calendar" force="true"/>
+					<show id="lecm-arm:show-in-menu"/>
+					<show id="lecm-arm:order"/>
+					<show id="lecm-arm:menu-business-roles-assoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-arm:code">
+					<set id="base"/>
+					<set id="menu-config" appearance="bordered-panel" label-id="label.arm.menu.config"/>
+
+					<field id="cm:name" set="base"/>
+					<field id="lecm-arm:code" set="base">
 						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
 						<constraint-handlers>
 							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
 						</constraint-handlers>
+					</field>
+					<field id="lecm-arm:show-calendar" set="base"/>
+
+					<field id="lecm-arm:show-in-menu" set="menu-config"/>
+					<field id="lecm-arm:order" set="menu-config"/>
+					<field id="lecm-arm:menu-business-roles-assoc" set="menu-config">
+						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="showViewIncompleteWarning">false</control-param>
+							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>
@@ -110,7 +152,7 @@
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="showViewIncompleteWarning">false</control-param>
-							<control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
+							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
 						</control>
 					</field>
 					<field id="lecm-arm:is-aggregation-node">
@@ -168,7 +210,7 @@
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="showViewIncompleteWarning">false</control-param>
-							<control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
+							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
 						</control>
 					</field>
 					<field id="lecm-arm:is-aggregation-node">

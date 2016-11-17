@@ -98,10 +98,6 @@
                 <property name="cm:name">Неудачная попытка входа</property>
                 <property name="lecm-busjournal:eventCategory-code">LOGIN_FAILED</property>
             </item>
-            <item name="cm:Удаление записи из базы Reporting" type="lecm-busjournal:eventCategory">
-                <property name="cm:name">Удаление записи из базы Reporting</property>
-                <property name="lecm-busjournal:eventCategory-code">REMOVE_FROM_REPORTING</property>
-            </item>
         </items>
     </item>
 </items>

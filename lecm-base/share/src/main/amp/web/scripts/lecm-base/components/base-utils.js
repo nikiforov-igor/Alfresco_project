@@ -450,13 +450,28 @@ LogicECM.module.Base.Util = {
         return text;
     },
 
-    // функции для контролов:
+	// функции для контролов:
     getControlValueView: function(nodeRef, displayValue, showTitle) {
-        var title = "";
+
+		function onControlValueViewAvailable(params) {
+			YAHOO.util.Event.on(this.id, 'click', LogicECM.module.Base.Util.viewAttributes.bind(LogicECM.module.Base.Util, params));
+		}
+
+        var title = "",
+			id = YAHOO.util.Dom.generateId();
+
         if (showTitle == null || showTitle) {
             title = "title='" + Alfresco.component.Base.prototype.msg("title.click.for.extend.info") + "'";
         }
-        return "<span><a href='javascript:void(0);' " + title + " onclick=\"viewAttributes(\'" + nodeRef + "\', null, \'logicecm.view\')\">" + displayValue + "</a></span>";
+		YAHOO.util.Event.onAvailable(id, onControlValueViewAvailable, {
+			itemId: nodeRef,
+			title: 'logicecm.view'
+		});
+		return YAHOO.lang.substitute("<span><a href='javascript:void(0);' id='{id}' {title}>{displayValue}</a></span>", {
+			id: id,
+			title: title,
+			displayValue: displayValue
+		});
     },
 
     getControlEmployeeView: function(employeeNodeRef, displayValue, showTitle) {
@@ -464,18 +479,28 @@ LogicECM.module.Base.Util = {
     },
 
     getControlMarkeredEmployeeView: function(employeeNodeRef, displayValue, showLinkTitle, personClass, personTitle) {
-        var linkTitle = "";
+
+		function onControlEmployeeViewAvailable(params) {
+			YAHOO.util.Event.on(this.id, 'click', LogicECM.module.Base.Util.viewAttributes.bind(LogicECM.module.Base.Util, params));
+		}
+
+		var linkTitle = "",
+			id = YAHOO.util.Dom.generateId();
+
         if (showLinkTitle == null || showLinkTitle) {
             linkTitle = "title='" + Alfresco.component.Base.prototype.msg("title.click.for.extend.info") + "'";
         }
-        var personSpanTag = "";
-        personTitle = (personTitle && personTitle != "") ? (" title='" + personTitle + "'") : "";
-        if (personClass && personClass != "") {
-            personSpanTag = "<span class='person " + personClass + "'" + personTitle + ">";
-        } else {
-            personSpanTag = "<span class='person'" + personTitle + ">";
-        }
-        return personSpanTag + "<a href='javascript:void(0);' " + linkTitle + " onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
+		YAHOO.util.Event.onAvailable(id, onControlEmployeeViewAvailable, {
+			itemId: employeeNodeRef,
+			title: 'logicecm.employee.view'
+		});
+		return YAHOO.lang.substitute("<span class='{personClass}' {personTitle}><a href='javascript:void(0);' id='{id}' {linkTitle}>{displayValue}</a></span>", {
+			personClass: personClass ? ("person " + personClass) : "person",
+			personTitle: personTitle ? ("title='" + personTitle + "'") : "",
+			id: id,
+			linkTitle: linkTitle,
+			displayValue: displayValue
+		});
     },
 
     getControlDefaultView: function (displayValue) {
@@ -837,7 +862,138 @@ LogicECM.module.Base.Util = {
 			var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
 			return v.toString(16);
 		});
+	},
+
+	viewAttributes: function (obj) {
+
+		var viewDialog = LogicECM.module.Base.Util.createDialog("view-node-panel_" + Alfresco.util.generateDomId());
+		var requestObj = {
+			itemKind: obj.itemKind ? obj.itemKind : "node",
+			itemId: obj.itemId,
+			mode: "view",
+			htmlid: obj.htmlid ? obj.htmlid : obj.itemId.replace("workspace://SpacesStore/", "").replace("-", ""),
+		};
+		if(obj.formId){
+			requestObj.formId = obj.formId;
+		}
+		if (obj.nodeId) {
+			requestObj.nodeId = obj.nodeId;
+		}
+		if (obj.setId) {
+			requestObj.setId = obj.setId;
+		}
+
+		Alfresco.util.Ajax.request({
+				scope: this,
+				url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+				dataObj: requestObj,
+				successCallback: {
+					scope: this,
+					fn: function (response) {
+						if (viewDialog) {
+							var message = obj.title ?
+								(Alfresco.messages.global[obj.title] ? Alfresco.messages.global[obj.title] : obj.title) :
+								Alfresco.util.message("logicecm.view");
+							viewDialog.setHeader(message);
+							viewDialog.setBody(response.serverResponse.responseText);
+							viewDialog.show();
+						}
+					}
+				},
+				failureMessage: obj.failureMessage ? Alfresco.messages.global[obj.failureMessage] : Alfresco.util.message("message.failure"),
+				execScripts: true
+			});
+	},
+
+	createDialog: function (formid) {
+		var viewDialog = Alfresco.util.createYUIPanel(formid, {
+				width: "60em",
+				destroyOnHide: true,
+				buttons: [
+					{
+						text  : Alfresco.util.message("button.close"),
+						handler : function (e) {
+							viewDialog.hide();
+						}
+					}
+
+				]
+			});
+		viewDialog.hideEvent.subscribe(function (event, args, params) {
+			LogicECM.module.Base.Util.formDestructor(event, args, params);
+		}, {moduleId: viewDialog.id, force: true}, this);
+		return viewDialog;
+	},
+
+	showEmployeeViewByLink: function (employeeLinkNodeRef, title) {
+		Alfresco.util.Ajax.jsonGet({
+				url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeeByLink?nodeRef=" + employeeLinkNodeRef,
+				successCallback:
+				{
+					fn: function (oResponse) {
+						if (oResponse.json.nodeRef) {
+							LogicECM.module.Base.Util.viewAttributes({
+								itemId: oResponse.json.nodeRef,
+								title: title
+							});
+						} else {
+							Alfresco.util.PopupManager.displayMessage(
+								{
+									text: Alfresco.util.message("message.details.failure")
+								});
+						}
+					},
+					scope: this
+				},
+				failureCallback:
+				{
+					fn: function (oResponse) {
+						Alfresco.util.PopupManager.displayMessage(
+							{
+								text: Alfresco.util.message("message.details.failure")
+							});
+					},
+					scope: this
+				}
+			});
+	},
+
+	displayErrorMessageWithDetails: function (msgHeader, msgTitle, msgDetails) {
+		var errorMessageDialog = new YAHOO.widget.SimpleDialog(Alfresco.util.generateDomId()+"-errorMessageWithDetailsDialog", {
+			width: "60em",
+			fixedcenter: true,
+			destroyOnHide: true,
+			modal: true
+		});
+
+		errorMessageDialog.setHeader(msgHeader);
+
+		var customMsg = msgDetails.match("\\[\\[.+\\]\\]");
+		if (customMsg != null) {
+			msgDetails = customMsg[0].replace("[[", "").replace("]]", "");
+		}
+		var errorDialogBodyTemplate = '<div class="grid-create-error-dialog"><h3>{title}</h3>' +
+			'<a href="javascript:void(0);" id="{ID}-error-message-show-details-link">{text}</a></div>' +
+			'<div id="{ID}-error-message-show-details" class="error-dialog-details">{details}</div>';
+		var errorDialogBody = YAHOO.lang.substitute(errorDialogBodyTemplate, {
+			title: msgTitle,
+			ID: errorMessageDialog.id,
+			text: Alfresco.util.message("logicecm.base.error.show.details"),
+			details: msgDetails
+		});
+		errorMessageDialog.setBody(errorDialogBody);
+		errorMessageDialog.render(document.body);
+		errorMessageDialog.show();
+
+		YAHOO.util.Event.on(errorMessageDialog.id + "-error-message-show-details-link", "click", function(){
+			Dom.setStyle(errorMessageDialog.id + "-error-message-show-details", "display", "block");
+		}, null, this);
+
+		errorMessageDialog.hideEvent.subscribe(function (event, args, params) {
+			LogicECM.module.Base.Util.formDestructor(event, args, params);
+		}, {moduleId: errorMessageDialog.id, force: true}, this);
 	}
+
 };
 
 LogicECM.module.Base.SimplePromise = function () {

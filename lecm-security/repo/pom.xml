@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>ru.it.lecm.security</groupId>
 		<artifactId>lecm-security</artifactId>
-		<version>1.8.0</version>
+		<version>1.8.5</version>
 	</parent>
 
 	<artifactId>lecm-security-repo</artifactId>

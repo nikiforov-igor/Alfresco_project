@@ -331,3 +331,22 @@ div.error-item
     top: 0;
     display: none;
 }
+
+#arm-with-tree .tree .ygtv-highlight .ygtvfocus,
+#arm-with-tree .tree .ygtv-highlight .ygtvfocus .ygtvlabel,
+#arm-with-tree .tree .ygtv-highlight .ygtvfocus .ygtvlabel:link,
+#arm-with-tree .tree .ygtv-highlight .ygtvfocus .ygtvlabel:visited,
+#arm-with-tree .tree .ygtv-highlight .ygtvfocus .ygtvlabel:hover,
+#arm-with-tree .tree .ygtv-highlight .ygtv-highlight0 .ygtvfocus,
+#arm-with-tree .tree .ygtv-highlight .ygtv-highlight0 .ygtvfocus .ygtvlabel,
+#arm-with-tree .tree .ygtv-highlight .ygtv-highlight0 .ygtvfocus .ygtvlabel:link,
+#arm-with-tree .tree .ygtv-highlight .ygtv-highlight0 .ygtvfocus .ygtvlabel:visited,
+#arm-with-tree .tree .ygtv-highlight .ygtv-highlight0 .ygtvfocus .ygtvlabel:hover,
+#arm-with-tree .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus,
+#arm-with-tree .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel,
+#arm-with-tree .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:link,
+#arm-with-tree .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:visited,
+#arm-with-tree .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:hover {
+    background-color: rgba(255, 255, 255, 0);
+    color: inherit;
+}

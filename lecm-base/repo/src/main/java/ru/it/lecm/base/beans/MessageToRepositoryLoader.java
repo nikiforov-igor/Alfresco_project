@@ -1,6 +1,5 @@
 package ru.it.lecm.base.beans;
 
-import java.util.List;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
@@ -8,13 +7,19 @@ import org.alfresco.repo.solr.SolrActiveEvent;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.service.cmr.admin.RepoAdminService;
 import org.alfresco.service.transaction.TransactionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
+
+import java.util.List;
 
 /**
  *
  * @author vmalygin
  */
 public class MessageToRepositoryLoader implements ApplicationListener<SolrActiveEvent>, RunAsWork<Void>, RetryingTransactionCallback<Void> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageToRepositoryLoader.class);
 
 	private RepoAdminService repoAdminService;
 	private TransactionService transactionService;
@@ -79,6 +84,11 @@ public class MessageToRepositoryLoader implements ApplicationListener<SolrActive
 	}
 
 	private void loadMessagesFromLocation(String messageLocation, boolean useDefault) {
+        LOGGER.debug("loadMessagesFromLocation(\"{}\", {})", messageLocation, useDefault);
+        if (!useDefault) {
+            //TODO hotfix/ALF-6563
+            return;
+        }
 		String locationBaseName = messageLocation;
 		int idx = messageLocation.lastIndexOf('/');
 		if (idx != -1) {
@@ -95,6 +105,7 @@ public class MessageToRepositoryLoader implements ApplicationListener<SolrActive
 		boolean bundleExists = messageBundles.contains(locationBaseName);
 		if (!bundleExists || useDefault) {
 			if (bundleExists) {
+                LOGGER.debug("Bundle \"{}\" exists - undeploy it", locationBaseName);
 				/*
 				undeployMessageBundle выполняет удаление нод из репозитория,
 				но не помечает их как sys:temporary, поэтому они накапливаются в корзине

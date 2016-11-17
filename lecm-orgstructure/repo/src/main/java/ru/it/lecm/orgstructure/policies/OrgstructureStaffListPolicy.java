@@ -52,10 +52,6 @@ public class OrgstructureStaffListPolicy
 		final NodeRef employee = orgstructureService.getEmployeeByPosition(staff);
 		List<String> objects = Arrays.asList(positionRef.toString());
         businessJournalService.log(unit, EventCategory.REMOVE_STAFF_POSITION, "#initiator внес(ла) сведения об исключении должности #object1 из подразделения #mainobject", objects);
-        objects = new ArrayList<>();
-        objects.add(positionRef.toString());
-        objects.add(unit.toString());
-        businessJournalService.log(staff, EventCategory.REMOVE_FROM_REPORTING, "#initiator внес(ла) сведения об исключении должности #object1 из подразделения #object2", objects);
 
         // исключение штаной SG_DP ...
         final Types.SGDeputyPosition sgDP = PolicyUtils.makeDeputyPos(staff, nodeService, orgstructureService, logger);

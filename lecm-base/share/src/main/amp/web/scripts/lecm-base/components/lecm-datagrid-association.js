@@ -938,7 +938,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                         },
                         onFailure:{
                             fn:function DataGrid_onActionCreate_failure(response) {
-                                this.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
+                                LogicECM.module.Base.Util.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
                                 this.doubleClickLock = false;
                             },
                             scope:this

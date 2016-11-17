@@ -509,7 +509,7 @@ public class LucenePreparedQueryHelper {
         final String stMIN = ArgsHelper.dateToStr(from, "MIN");
         final String stMAX = ArgsHelper.dateToStr(upto, "MAX");
 
-        return (includeNullValue ? " (ISNULL:\"@" + luceneEncode(fldName) +  "\" OR NOT EXISTS:\"@" + luceneEncode(fldName) + "\" ) OR " : "@") + luceneEncode(fldName) + ":[\"" + stMIN + "\" TO \"" + stMAX + "\"]";
+        return (includeNullValue ? " (ISNULL:\"" + fldName +  "\" OR NOT EXISTS:\"" + fldName + "\" ) OR " : "@") + luceneEncode(fldName) + ":[\"" + stMIN + "\" TO \"" + stMAX + "\"]";
     }
 
     /**
@@ -540,7 +540,7 @@ public class LucenePreparedQueryHelper {
         //  используем формат без разделителя, чтобы нормально выполнялся строковый поиск ...
         final String stMIN = (from != null) ? String.valueOf(from.doubleValue()) : "MIN";
         final String stMAX = (upto != null) ? String.valueOf(upto.doubleValue()) : "MAX";
-        return " (ISNULL:\"" + luceneEncode(fldName) + "\" OR NOT EXISTS:\"" + luceneEncode(fldName) + "\" ) OR " + "@" + luceneEncode(fldName) + ":[" + stMIN + " TO " + stMAX + "]";
+        return " (ISNULL:\"" + fldName + "\" OR NOT EXISTS:\"" + fldName + "\" ) OR " + "@" + luceneEncode(fldName) + ":[" + stMIN + " TO " + stMAX + "]";
     }
 
     /**

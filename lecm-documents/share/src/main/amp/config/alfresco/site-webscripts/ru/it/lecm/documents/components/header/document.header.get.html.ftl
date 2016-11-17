@@ -107,7 +107,8 @@
                 {
                     var copyControl = new LogicECM.module.DocumentCopy("${id}").setMessages(${messages});
                     copyControl.setOptions({
-                        documentRef: "${nodeRef}"
+                        documentRef: "${nodeRef}",
+                        copyURL: "${copyURL}"
                     });
                 })();
                 //]]></script>

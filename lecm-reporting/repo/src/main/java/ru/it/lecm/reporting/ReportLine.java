@@ -111,32 +111,32 @@ public class ReportLine {
     }
 
     public String getUpdateSet() {
-        String returnString = "";
+        StringBuilder returnString = new StringBuilder();
         String ignoreKey = "sys_node_uuid";
         Enumeration keys = this.getKeys();
 
         while (keys.hasMoreElements()) {
             String key = (String) keys.nextElement();
             if (!ignoreKey.contains(key)) {
-                if (!returnString.equals("")) {
-                    returnString = returnString + ", ";
+                if (returnString.length() > 0) {
+                    returnString.append(", ");
                 }
 
                 String value = this.getValue(key);
                 String type = this.getType(key);
                 if ("Oracle".equalsIgnoreCase(this.vendor)) {
-                    returnString = returnString + key.toLowerCase() + "=" + this.formatValue(type, value);
+                    returnString.append(key.toLowerCase()).append("=").append(this.formatValue(type, value));
                 } else {
-                    returnString = returnString + key + "=" + this.formatValue(type, value);
+                    returnString.append(key).append("=").append(this.formatValue(type, value));
                 }
             }
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("SQL-update:" + returnString);
+            logger.debug("SQL-update:" + returnString.toString());
         }
 
-        return returnString;
+        return returnString.toString();
     }
 
     private String formatValue(String type, String value) {
@@ -208,39 +208,39 @@ public class ReportLine {
     }
 
     public String getInsertListOfKeys() {
-        String returnString = "";
+        StringBuilder returnString = new StringBuilder();
         String key;
         Enumeration keys = this.getKeys();
 
         while (keys.hasMoreElements()) {
-            if (!returnString.equals("")) {
-                returnString = returnString + ", ";
+            if (returnString.length() > 0) {
+                returnString.append(", ");
             }
 
             key = (String) keys.nextElement();
             if ("Oracle".equalsIgnoreCase(this.vendor)) {
-                returnString = returnString + key.toLowerCase();
+                returnString.append(key.toLowerCase());
             } else {
-                returnString = returnString + key;
+                returnString.append(key);
             }
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("SQL-keys :" + returnString);
+            logger.debug("SQL-keys :" + returnString.toString());
         }
 
-        return returnString;
+        return returnString.toString();
     }
 
     public String getInsertListOfValues() {
-        String returnString = "";
+        StringBuilder returnString = new StringBuilder();
 
         String value;
         String type;
-        for (Enumeration keys = this.getKeys(); keys.hasMoreElements(); returnString = returnString + this.formatValue(type, value)) {
+        for (Enumeration keys = this.getKeys(); keys.hasMoreElements(); returnString.append(this.formatValue(type, value))) {
             String key = (String) keys.nextElement();
-            if (!returnString.equals("")) {
-                returnString = returnString + ", ";
+            if (returnString.length() > 0) {
+                returnString.append(", ");
             }
 
             value = this.getValue(key);
@@ -248,10 +248,10 @@ public class ReportLine {
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("SQL-values:" + returnString);
+            logger.debug("SQL-values:" + returnString.toString());
         }
 
-        return returnString;
+        return returnString.toString();
     }
 
     public Properties getTypes() {

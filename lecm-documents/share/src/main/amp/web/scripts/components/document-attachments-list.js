@@ -81,7 +81,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
     LogicECM.DocumentAttachmentsList.generateLECMUserLink = function (scope, oUser, oUserRef)
     {
         if (oUserRef != null) {
-            return "<span><a href=\"javascript:void(0);\" onclick=\"viewAttributes('" + oUserRef + "')\">" + (oUser.userName ?  oUser.userName : oUser) + "</a></span>";
+            return "<span><a href='javascript:void(0);'" + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + oUserRef + "\'})\">" + (oUser.userName ? oUser.userName : oUser) + "</a></span>";
         } else {
             return $userProfile(oUser.userName, YAHOO.lang.trim(oUser.firstName + " " + oUser.lastName));
         }
