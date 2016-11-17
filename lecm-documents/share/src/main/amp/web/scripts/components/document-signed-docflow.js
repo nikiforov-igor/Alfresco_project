@@ -195,6 +195,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onViewSignatures: function (event) {
+            Alfresco.util.PopupManager.zIndex = 100003;
 			var form = new Alfresco.module.SimpleDialog(this.id + "-signs-all-form");
 
 			form.setOptions({
@@ -213,9 +214,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				doBeforeDialogShow:{
 					fn: function( p_form, p_dialog ) {
 						p_dialog.dialog.setHeader(this.msg("title.signing_info"));
+                        p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+						window.tmpDialog = p_dialog;
 						p_form.doBeforeFormSubmit = {
 							fn: function() {
 								this.setAJAXSubmit(false);
+                                tmpDialog.hide();
 							},
 							scope: p_form
 						};
