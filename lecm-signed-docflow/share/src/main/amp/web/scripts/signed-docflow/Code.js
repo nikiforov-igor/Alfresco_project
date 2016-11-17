@@ -1346,7 +1346,7 @@ function verifySignature (hash, sSignedMessage){
     try {
         oSignedData.VerifyHash(oHashedData, sSignedMessage);
     } catch (err) {
-        alert("Failed to verify signature");
+        console.log("Failed to verify signature");
         return {"certificate":oSignedData.Signers(1).Certificate, "valid": false};
     }
     return {"certificate":oSignedData.Signers(1).Certificate, "valid": true};
@@ -1360,8 +1360,9 @@ function GetCertificateInfo(cert, callback) {
 
     function getAttributeValue(str, attribute) {
         var index = str.indexOf(attribute + "=");
-        if (index == -1)
+        if (index == -1) {
             return str;
+        }
         str = str.substring(index + attribute.length + 1);
         index = str.indexOf(",");
         if (index == -1) {
@@ -1370,30 +1371,26 @@ function GetCertificateInfo(cert, callback) {
         return str.substring(0, index);
     }
 
-    var dateObj = new Date();
     var result;
     try {
         var Validator = cert.IsValid();
         var IsValid = Validator.Result;
         var ValidFromDate = new Date((cert.ValidFromDate));
         var ValidToDate = new Date((cert.ValidToDate));
-        var version = cert.Version;                           //3
-        var thumbprint = cert.Thumbprint;                     //"040F78E8E5A619546EAF9AB891174BBAA00093B5"
+        var version = cert.Version;
+        var thumbprint = cert.Thumbprint;
         var subject = "";
-        try {
-            var subject = cert.SubjectName;                       //"STREET=У 1, CN=Теле2_Тест_3, SN=Тестов, G=Тест Третий, C=RU, S=77 г. Москва, L=г. М, O=Теле2_Тест_3, T=Директор, OGRN=0067333755082, SNILS=26481117067, INN=009999324755"
-        } catch(ex) {
-        };
-        var serialNumber = cert.SerialNumber;                 //"01D0D0E54C4B5D00000000000379085D"
-        var issuer = cert.IssuerName;                         //"CN=ЗАО Калуга Астрал (УЦ 889), O=ЗАО Калуга Астрал, E=ca@astralnalog.ru, S=40 Калужская область, L=Калуга, C=RU, INN=004029017981, OGRN=1024001434049, STREET=Улица Циолковского дом 4"
-        var hasPrivateKey = cert.HasPrivateKey();             //true
+        var subject = cert.SubjectName;
+        var serialNumber = cert.SerialNumber;
+        var issuer = cert.IssuerName;
+        var hasPrivateKey = cert.HasPrivateKey();
         var shortissuer = getAttributeValue(issuer, "CN");
         var shortsubject = getAttributeValue(subject, "CN");
         result = {
             shortissuer: shortissuer,
             shortsubject: shortsubject,
-            validTo: /*getNormalDate(*/ValidToDate/*)*/,
-            validFrom: /*getNormalDate(*/ValidFromDate/*)*/,
+            validTo: ValidToDate,
+            validFrom: ValidFromDate,
             normalValidTo: getNormalDate(ValidToDate),
             normalValidFrom: getNormalDate(ValidFromDate),
             version: version,
@@ -1405,7 +1402,7 @@ function GetCertificateInfo(cert, callback) {
             isValid: IsValid
         };
     }catch (ex) {
-        alert("Ошибка при получении свойства SubjectName: " + GetErrorMessage(ex));
+        console.log("Ошибка при получении информации из объекта сертификата: " + GetErrorMessage(ex));
     }
 
     callback(result);

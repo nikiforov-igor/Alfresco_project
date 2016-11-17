@@ -485,7 +485,6 @@ function checkForApplet() {
 						    successCallback: {
 							    scope: this,
 							    fn: function (response) {
-								    //[!] Взять на заметку
 								    var text = (response.json.signResponse === 'SIGN_OK') ? Alfresco.util.message('lecm.signdoc.msg.signature.loaded') : Alfresco.util.message('lecm.signdoc.msg.sign.tested.download.failed'),
 									    cb = (options) ? options.successCallback : null;
 								    Alfresco.util.PopupManager.displayMessage({text: text});

@@ -140,26 +140,26 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onUploadSignature: function(event) {
-            var localSign = document.getElementById(this.id+"-localSign"); 
+            var localSign = Dom.get(this.id+"-localSign"); 
             localSign.click();
 		},
         
         handleClientLocalSign: function(evt) {
-            var oFile = document.getElementById(this.id+"-localSign").files[0];
+            if (!window.FileReader) {
+                console.log("The File APIs are not fully supported in this browser.");
+            } 
+            var oFile = evt.target.files[0];
             var oFReader = new FileReader();
-            if (typeof(oFReader.readAsDataURL)!="function") {
-                alert("Method readAsDataURL() is not supported in FileReader.");
+            if (YAHOO.lang.isFunction(oFReader.readAsDataURL)) {
+                console.log("Method readAsDataURL() is not supported in FileReader.");
             }
-            oFReader.readAsText(oFile);
-            oFReader.onload = this.oFileReaderOnLoad();
+            oFReader.onload = this.oFileReaderOnLoad.bind(this);
+            oFReader.readAsText(oFile);            
         },
         
-        oFileReaderOnLoad: function() { 
-            var thisContext=this;
-	        return function(oFREvent){
-                var sFileData = oFREvent.target.result;
-                CryptoApplet.loadSignAction(thisContext.options.nodeRef, sFileData, {successCallback: {fn: thisContext.checkSigned, scope: thisContext}});
-            }
+        oFileReaderOnLoad: function(oFREvent) { 
+            var sFileData = oFREvent.target.result;
+            CryptoApplet.loadSignAction(this.options.nodeRef, sFileData, {successCallback: {fn: this.checkSigned, scope: this}});
 	    },
         
         onExportSignature: function(event) {

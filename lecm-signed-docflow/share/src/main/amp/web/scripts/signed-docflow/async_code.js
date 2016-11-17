@@ -1509,8 +1509,9 @@ function GetCertificateInfo(cert, callback) {
 
         function getAttributeValue(str, attribute) {
             var index = str.indexOf(attribute + "=");
-            if (index == -1)
+            if (index == -1) {
                 return str;
+            }
             str = str.substring(index + attribute.length + 1);
             index = str.indexOf(",");
             if (index == -1) {
@@ -1529,26 +1530,22 @@ function GetCertificateInfo(cert, callback) {
 
             if(hasPrivateKey) {
                 var privateKey = yield cert.PrivateKey;
-                var containerName = yield privateKey.ContainerName;    //27B340E2-FD1D-4B0C-9561-F05FBF51FF87
+                var containerName = yield privateKey.ContainerName;
                 var providerName = yield privateKey.ProviderName; 
             }
-            var version = yield cert.Version;                           //3
-            var thumbprint = yield cert.Thumbprint;                     //"040F78E8E5A619546EAF9AB891174BBAA00093B5"
+            var version = yield cert.Version;
+            var thumbprint = yield cert.Thumbprint;
             var subject = "";
-            try {
-                var subject = yield cert.SubjectName;                       //"STREET=У 1, CN=Теле2_Тест_3, SN=Тестов, G=Тест Третий, C=RU, S=77 г. Москва, L=г. М, O=Теле2_Тест_3, T=Директор, OGRN=0067333755082, SNILS=26481117067, INN=009999324755"
-            } catch(ex) {
-            };
-            var serialNumber = yield cert.SerialNumber;                 //"01D0D0E54C4B5D00000000000379085D"
-            var issuer = yield cert.IssuerName;                         //"CN=ЗАО Калуга Астрал (УЦ 889), O=ЗАО Калуга Астрал, E=ca@astralnalog.ru, S=40 Калужская область, L=Калуга, C=RU, INN=004029017981, OGRN=1024001434049, STREET=Улица Циолковского дом 4"
-                 //Crypto-Pro GOST R 34.10-2001 Cryptographic Service Provider
+            var subject = yield cert.SubjectName;
+            var serialNumber = yield cert.SerialNumber;
+            var issuer = yield cert.IssuerName;
             var shortissuer = getAttributeValue(issuer, "CN");
             var shortsubject = getAttributeValue(subject, "CN");
             result = {
                 shortissuer: shortissuer,
                 shortsubject: shortsubject,
-                validTo: /*getNormalDate(*/ValidToDate/*)*/,
-                validFrom: /*getNormalDate(*/ValidFromDate/*)*/,
+                validTo: ValidToDate,
+                validFrom: ValidFromDate,
                 normalValidTo: getNormalDate(ValidToDate),
                 normalValidFrom: getNormalDate(ValidFromDate),
                 version: version,
@@ -1561,8 +1558,8 @@ function GetCertificateInfo(cert, callback) {
                 containerName: containerName,
                 providerName: providerName
             };
-        }catch (e) {
-            debugger;
+        }catch (ex) {
+            console.log("Ошибка при получении информации из объекта сертификата: " + GetErrorMessage(ex));
         }
         return yield result;
     }).then(function (result){ callback(result); });
