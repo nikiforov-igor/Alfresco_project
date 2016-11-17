@@ -14,46 +14,7 @@
     </config>
 
     <config evaluator="node-type" condition="lecm-internal:document">
-        <forms>
-            <!-- Форма для модального представления -->
-            <!-- TODO: Похоже, нигде не используется -->
-            <!-- <form id="internal-modal">
-                <field-visibility>
-                    <show id="lecm-document:regnum"/>																	
-                    <show id="lecm-document-aspects:reg-data-date" force="true"/>
-                    <show id="lecm-document:creator"/>
-                    <show id="lecm-eds-document:summaryContent"/>
-                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
-                    <show id="lecm-internal:full-form" force="true" for-mode="view"/>
-                </field-visibility>
-                <appearance>
-                    <set id="header" appearance=""  template="/org/alfresco/components/form/3-column-set.ftl"/>
-                    <set id="content" appearance=""/>
-                    <set id="uploader" appearance=""/>
-
-                    <field id="lecm-document:regnum" set="header"/>
-                    <field id="lecm-document-aspects:reg-data-date" set="header"/>
-                    <field id="lecm-document:creator" set="header"/>
-
-                    <field id="lecm-eds-document:summaryContent" set="content">
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
-                    </field>
-
-                    <field id="lecm-document-aspects:attachments-temp-assoc" set="uploader" label="Вложения">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
-                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
-                            <control-param name="directoryName">Вложения</control-param>
-                        </control>
-                    </field>
-
-                    <field id="lecm-internal:full-form" set="full-form">
-                        <control template="/ru/it/lecm/internal/controls/simple-doc-link-control.ftl">
-                            <control-param name="text">К полной форме</control-param>
-                        </control>
-                    </field>
-
-                </appearance>
-            </form> -->
+        <forms>            
             <!-- Форма редатирования-->
             <form>
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
