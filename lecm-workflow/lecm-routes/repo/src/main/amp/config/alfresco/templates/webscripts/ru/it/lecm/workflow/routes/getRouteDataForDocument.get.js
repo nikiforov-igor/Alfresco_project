@@ -1,20 +1,6 @@
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/evaluator.lib.js">
 
 (function () {
-	/*
-	 * TODO: убедиться, что оно заведётся без этой функции
-	function getDecisionDisplayValue(decision) {
-		var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
-		var dictionaryService = ctx.getBean('dictionaryService');
-		var namespaceService = ctx.getBean('namespaceService');
-		var fieldQName = Packages.org.alfresco.service.namespace.QName.createQName(approvalDecisionQName, namespaceService);
-		var propDefinition = dictionaryService.getProperty(fieldQName);
-		var constraint = propDefinition.getConstraints().get(0).getConstraint();
-
-		return constraint.getDisplayLabel(decision, dictionaryService);
-	}
-	*/
-
 	function getSourceRouteForIteration(currentIteration) {
 		var sourceRoute = routesService.getSourceRouteForIteration(currentIteration);
 		if (sourceRoute) {
@@ -50,7 +36,6 @@
 			currentIterationNode.properties[approvalDecisionQName] : '';
 
 		if (approvalResult) {
-//			approvalResultTitle = getDecisionDisplayValue(approvalResult);
 			var propDefinition = base.getProperty('lecmApproveAspects:approvalDecision');
 			approvalResultTitle = Evaluator.translateField(propDefinition, approvalResult);
 		}

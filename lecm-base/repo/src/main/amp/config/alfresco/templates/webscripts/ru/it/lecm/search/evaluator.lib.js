@@ -164,7 +164,6 @@ var Evaluator = {
      * @return {String}
      */
 	
-//	TODO: Проверить
 	translateField: function Evaluator_translateField(objDef, value) {
 		if (!objDef) {
 			return null;
