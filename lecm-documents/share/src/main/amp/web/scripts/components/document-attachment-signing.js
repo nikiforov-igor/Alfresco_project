@@ -146,12 +146,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
         
         handleClientLocalSign: function(evt) {
             if (!window.FileReader) {
-                console.log("The File APIs are not fully supported in this browser.");
+                Alfresco.util.PopupManager.displayMessage({	text: 'Подписи не загружены, браузер не поддерживает FileAPI' });
+                return;
             } 
             var oFile = evt.target.files[0];
             var oFReader = new FileReader();
-            if (YAHOO.lang.isFunction(oFReader.readAsDataURL)) {
-                console.log("Method readAsDataURL() is not supported in FileReader.");
+            if (!YAHOO.lang.isFunction(oFReader.readAsDataURL)) {
+                Alfresco.util.PopupManager.displayMessage({	text: 'Подписи не загружены, не поддерживаются некоторые функции FileAPI' });
+                return;
             }
             oFReader.onload = this.oFileReaderOnLoad.bind(this);
             oFReader.readAsText(oFile);            
