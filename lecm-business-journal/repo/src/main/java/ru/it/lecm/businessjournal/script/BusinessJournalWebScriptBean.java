@@ -156,18 +156,6 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
         return service.getRecordsCount(filterObject, andFilter, includeArchived);
     }
 
-    /**
-     * получить корневую директорию сервиса
-     */
-    @SuppressWarnings("unused")
-    public ScriptNode getDirectory() {
-    	NodeRef ref = service.getBusinessJournalDirectory();
-    	if(ref != null) {
-    		return new ScriptNode(ref, serviceRegistry, getScope());
-    	}
-        return null;
-    }
-
     private Map<BusinessJournalRecord.Field, String> getFilter(Scriptable filter) {
         HashMap<BusinessJournalRecord.Field, String> result = new HashMap<BusinessJournalRecord.Field, String>();
         if (filter != null) {
@@ -243,19 +231,6 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
      */
     public boolean archiveRecord(Long recordId) {
         return service.moveRecordToArchive(recordId);
-    }
-
-    /**
-     * получить директорию с архивными записями
-     */
-    @SuppressWarnings("unused")
-    public ScriptNode getArchiveDirectory() {
-        try {
-            NodeRef ref = service.getBusinessJournalArchiveDirectory();
-            return new ScriptNode(ref, serviceRegistry, getScope());
-        } catch (Exception e) {
-            throw new ScriptException("Не удалось получить директорию с архивными записями", e);
-        }
     }
 
     /**

@@ -61,9 +61,6 @@ public class RESTClient extends AbstractBusinessJournalService implements Busine
 	}
 
 	public void init() {
-		bjRootID = BJ_ROOT_ID;
-		bjArchiveID = BJ_ARCHIVE_ROOT_ID;
-
 		ClientConfig clientConfig = new DefaultClientConfig();
 		mapper = new ObjectMapper();
 		dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);

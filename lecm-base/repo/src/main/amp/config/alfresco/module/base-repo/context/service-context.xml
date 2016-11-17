@@ -498,7 +498,6 @@
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
-	<util:constant id="LECM_MESSAGE_FOLDER_ID" static-field="ru.it.lecm.base.beans.LecmMessageServiceImpl.LECM_MESSAGE_FOLDER_ID"/>
 	<bean id="lecmMessageService"
 	      parent="baseBean"
 	      init-method="init"
@@ -509,11 +508,6 @@
 		<property name="repoMessagesLocation" ref="customMessagesRepositoryLocation"/>
 		<property name="searchService" ref="searchService"/>
 		<property name="locales" value="${lecm.mlLocales}"/>
-		<property name="folders">
-			<map>
-				<entry key="#{LECM_MESSAGE_FOLDER_ID}" value="Сервис Сообщения"/>
-			</map>
-		</property>
 	</bean>
 
 	<bean id="lecmMessagesLoader"
