@@ -1468,6 +1468,7 @@ function verifySignature (hash, sSignedMessage){
     function* verifyGenerator(){
         yield cadesplugin;
         var CADESCOM_HASH_ALGORITHM_CP_GOST_3411 = 100;
+        var signers, signer, cert;
         var oHashedData = yield cadesplugin.CreateObjectAsync("CAdESCOM.HashedData");
         oHashedData.Algorithm = CADESCOM_HASH_ALGORITHM_CP_GOST_3411; 
         oHashedData.SetHashValue(hash);
@@ -1476,11 +1477,14 @@ function verifySignature (hash, sSignedMessage){
 
         try {
             yield oSignedData.VerifyHash(oHashedData, sSignedMessage);
+            signers = yield oSignedData.Signers;
+            signer = yield signers.Item(1);
+            cert = yield signer.Certificate;
         } catch (err) {
-            return false;
+            return {"certificate":cert, "valid": false};
         }
 
-        return true;
+        return {"certificate":cert, "valid": true};
     }
 }
 
@@ -1492,6 +1496,73 @@ function verifySignaturesSync (signs, callback) {
     Promise.all(promises).then(function(results) {
         callback(results);
     });
+}
+
+function GetCertificateInfo(cert, callback) {
+    return cadesplugin.async_spawn(function*() {
+        yield cadesplugin;
+        var result;
+
+        function getNormalDate(d) {
+            return  ('0' + d.getDate()).slice(-2) + '.' + ('0' + (d.getMonth() + 1)).slice(-2) + '.' + d.getFullYear();
+        }
+
+        function getAttributeValue(str, attribute) {
+            var index = str.indexOf(attribute + "=");
+            if (index == -1) {
+                return str;
+            }
+            str = str.substring(index + attribute.length + 1);
+            index = str.indexOf(",");
+            if (index == -1) {
+                return str;
+            }
+            return str.substring(0, index);
+        }
+
+        var dateObj = new Date();
+        try {
+            var Validator = yield cert.IsValid();
+            var IsValid = yield Validator.Result;
+            var ValidFromDate = new Date((yield cert.ValidFromDate));
+            var ValidToDate = new Date((yield cert.ValidToDate));
+            var hasPrivateKey = yield cert.HasPrivateKey();
+
+            if(hasPrivateKey) {
+                var privateKey = yield cert.PrivateKey;
+                var containerName = yield privateKey.ContainerName;
+                var providerName = yield privateKey.ProviderName; 
+            }
+            var version = yield cert.Version;
+            var thumbprint = yield cert.Thumbprint;
+            var subject = "";
+            var subject = yield cert.SubjectName;
+            var serialNumber = yield cert.SerialNumber;
+            var issuer = yield cert.IssuerName;
+            var shortissuer = getAttributeValue(issuer, "CN");
+            var shortsubject = getAttributeValue(subject, "CN");
+            result = {
+                shortissuer: shortissuer,
+                shortsubject: shortsubject,
+                validTo: ValidToDate,
+                validFrom: ValidFromDate,
+                normalValidTo: getNormalDate(ValidToDate),
+                normalValidFrom: getNormalDate(ValidFromDate),
+                version: version,
+                thumbprint: thumbprint,
+                subject: subject,
+                serialNumber : serialNumber,
+                issuer: issuer,
+                hasPrivateKey: hasPrivateKey,
+                isValid: IsValid,
+                containerName: containerName,
+                providerName: providerName
+            };
+        }catch (ex) {
+            console.log("Ошибка при получении информации из объекта сертификата: " + GetErrorMessage(ex));
+        }
+        return yield result;
+    }).then(function (result){ callback(result); });
 }
 
 function GetCertificateES6(thumbprint) {

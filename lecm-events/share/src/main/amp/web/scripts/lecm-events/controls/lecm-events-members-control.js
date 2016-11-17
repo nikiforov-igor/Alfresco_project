@@ -31,7 +31,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		startHour: 6,
 		endHour: 22,
 		timeStep: 15,
-		firstColumnWidth: 154,
+		firstColumnWidth: null,
+		columnCalendarWidth: null,
 		startDate: null,
 		initialStartDate: null,
 		endDate: null,
@@ -419,6 +420,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 			this.cellBounds = null;
 			this.headerIsReady = false;
+			this.contentIsReady = false;
 			this.draw();
 		},
 
@@ -587,7 +589,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.keyIndex = [];
 			var cellBounds = this._calculateCell();
 			var delta = cellBounds.firstColumnWidth - this.firstColumnWidth;
-			for (var key in this.selectedItems) {
+			var items = this.getSelectedItems(!!this.options.sortSelected);
+			items.forEach(function(key){
 				var item = this.selectedItems[key];
 				var row = document.createElement("div");
 				row.className = "member-control-diagram-row";
@@ -596,14 +599,29 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				firstColumn.className = "member-control-diagram-first-cell";
 				firstColumn.style.width = cellBounds.firstColumnWidth + "px";
 				row.appendChild(firstColumn);
+
+				//Обязательность сотрудника
+				var mandatoryCheckbox = document.createElement("input");
+				mandatoryCheckbox.type = "checkbox";
+				if (item.memberMandatory == null) {
+					item.memberMandatory = this.defaultMandatory;
+				}
+				mandatoryCheckbox.checked = item.memberMandatory;
+				mandatoryCheckbox.title = item.memberMandatory ? this.msg("label.events.participant.mandatory") : this.msg("label.events.participant.not_mandatory");
+				mandatoryCheckbox.className = "member-control-diagram-first-cell-mandatory";
+				firstColumn.appendChild(mandatoryCheckbox);
+				YAHOO.util.Event.on(mandatoryCheckbox, 'click', this.mandatoryCheckboxClick, item, this);
+
+				//Имя сотрудника
 				var textCell = document.createElement("div");
 				textCell.className = "member-control-diagram-first-cell-text";
 				textCell.innerHTML = item.selectedName;
 				textCell.title = item.selectedName;
 				firstColumn.appendChild(textCell);
 				var textBounds = Dom.getRegion(textCell);
-				textCell.setAttribute("style", "width: " + (delta + textBounds.width) + "px !important;");
+				textCell.style.width = (delta + textBounds.width) + "px";
 
+				//Кнопка удаления
 				var removeButton = document.createElement("div");
 				removeButton.className = "member-control-diagram-first-cell-remove";
 				firstColumn.appendChild(removeButton);
@@ -615,7 +633,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				this._drawHourCells(row, itemNum, false);
 				this.keyIndex[key] = itemNum;
 				itemNum++;
-			}
+			}, this);
 			this.contentIsReady = true;
 		},
 
@@ -625,6 +643,18 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 * @param params
 		 */
 		removeDiagramItem: function removeDiagramItem_function(ev, params) {
+			var diagram = Dom.get(this.options.controlId + "-diagram");
+			for (var key in this.selectedItems) {
+				if (this.selectedItems.hasOwnProperty(key)) {
+					var item = this.selectedItems[key];
+					var rowIndex = this.keyIndex[item.nodeRef];
+					var id = this.options.controlId + "-diagram-member-status-" + rowIndex;
+					var prevIcon = Dom.get(id);
+					if (prevIcon) {
+						diagram.removeChild(prevIcon);
+					}
+				}
+			}
 			this._reset();
 			this.removeNode(ev, params);
 		},
@@ -634,8 +664,12 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 */
 		drawDiagramHeader: function drawDiagramHeader_function() {
 			if (this.headerIsReady) return;
-			var calendarCellBounds = Dom.getRegion(this.id + "-date-cntrl-cal-cell");
-			this.firstColumnWidth = calendarCellBounds.width;
+			if (!this.firstColumnWidth) {
+				var calendarCellBounds = Dom.getRegion(this.id + "-date-cntrl-cal-cell");
+				this.firstColumnWidth = calendarCellBounds.width;
+				var calendarBounds = Dom.getRegion(this.id + "-date-cntrl-date");
+				this.columnCalendarWidth = calendarBounds.width;
+			}
 			//Устанавливаем размер контейнера
 			var cellBounds = this._calculateCell();
 			var hours = this.endHour - this.startHour + 1;
@@ -644,8 +678,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this._drawHourCells(header, 0, true);
 			Dom.get(this.id + "-date-cntrl-cal-cell").style.width = cellBounds.firstColumnWidth + "px";
 			var delta = cellBounds.firstColumnWidth - this.firstColumnWidth - 6;
-			var calendarBounds = Dom.getRegion(this.id + "-date-cntrl-date");
-			Dom.get(this.id + "-date-cntrl-date").setAttribute("style", "width: " + (delta + calendarBounds.width) + "px !important;");
+
+			Dom.get(this.id + "-date-cntrl-date").style.width = (delta + this.columnCalendarWidth) + "px";
 			this.headerIsReady = true;
 			Dom.get(this.options.controlId + "-diagram-container").style.width = width + "px";
 		},
@@ -778,12 +812,14 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 				var diagram = Dom.get(this.options.controlId + "-diagram");
 				for (var key in this.selectedItems) {
-					var item = this.selectedItems[key];
-					var rowIndex = this.keyIndex[item.nodeRef];
-					var id = this.options.controlId + "-diagram-member-status-" + rowIndex;
-					var prevIcon = Dom.get(id);
-					if (prevIcon) {
-						diagram.removeChild(prevIcon);
+					if (this.selectedItems.hasOwnProperty(key)) {
+						var item = this.selectedItems[key];
+						var rowIndex = this.keyIndex[item.nodeRef];
+						var id = this.options.controlId + "-diagram-member-status-" + rowIndex;
+						var prevIcon = Dom.get(id);
+						if (prevIcon) {
+							diagram.removeChild(prevIcon);
+						}
 					}
 				}
 				return;
@@ -822,48 +858,50 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var diagram = Dom.get(this.options.controlId + "-diagram");
 			var diagramBounds = Dom.getRegion(diagram);
 			for (var key in this.selectedItems) {
-				var item = this.selectedItems[key];
-				var rowIndex = this.keyIndex[item.nodeRef];
-				for (var i = startIndex; i <= fillIndex; i++) {
-					var cell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + i);
-					Dom.addClass(cell, "member-control-diagram-current");
-				}
-				//Добавляем иконку
-				var id = this.options.controlId + "-diagram-member-status-" + rowIndex;
-				var prevIcon = Dom.get(id);
-				if (prevIcon) {
-					diagram.removeChild(prevIcon);
-				}
-				if (startIndex < fillIndex) {
-					var iconItem = this.getMemberStatusHTML(item);
-					if (iconItem) {
-						var icon = document.createElement("div");
-						icon.id = id;
-						icon.innerHTML = iconItem;
-						icon.className = "member-control-diagram-member-status";
+				if (this.selectedItems.hasOwnProperty(key)) {
+					var item = this.selectedItems[key];
+					var rowIndex = this.keyIndex[item.nodeRef];
+					for (var i = startIndex; i <= fillIndex; i++) {
+						var cell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + i);
+						Dom.addClass(cell, "member-control-diagram-current");
+					}
+					//Добавляем иконку
+					var id = this.options.controlId + "-diagram-member-status-" + rowIndex;
+					var prevIcon = Dom.get(id);
+					if (prevIcon) {
+						diagram.removeChild(prevIcon);
+					}
+					if (startIndex < fillIndex) {
+						var iconItem = this.getMemberStatusHTML(item);
+						if (iconItem) {
+							var icon = document.createElement("div");
+							icon.id = id;
+							icon.innerHTML = iconItem;
+							icon.className = "member-control-diagram-member-status";
 
-						if (item.memberStatus == "REQUEST_NEW_TIME") {
-							icon.style.cursor = "pointer";
-							var me = this;
-							var requestDate = new Date(item.memberFromDate);
-							var requestIndex = this.keyIndex[item.nodeRef];
-							YAHOO.util.Event.on(icon, "click", function(ev, obj) {
-								me.selectByDate(obj.requestDate, obj.requestIndex);
-							}, {
-								requestDate: requestDate,
-								requestIndex: requestIndex
-							});
+							if (item.memberStatus == "REQUEST_NEW_TIME") {
+								icon.style.cursor = "pointer";
+								var me = this;
+								var requestDate = new Date(item.memberFromDate);
+								var requestIndex = this.keyIndex[item.nodeRef];
+								YAHOO.util.Event.on(icon, "click", function (ev, obj) {
+									me.selectByDate(obj.requestDate, obj.requestIndex);
+								}, {
+									requestDate: requestDate,
+									requestIndex: requestIndex
+								});
+							}
+
+							var firstCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + startIndex);
+							var firstCellRegion = Dom.getRegion(firstCell);
+							var lastCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + fillIndex);
+							var lastCellRegion = Dom.getRegion(lastCell);
+							var left = firstCellRegion.left + (Math.round((lastCellRegion.left + cellSettings.cellWidth - firstCellRegion.left) / 2) - 10);
+
+							icon.style.left = (left - diagramBounds.left) + "px";
+							icon.style.top = (firstCellRegion.top - diagramBounds.top + 2) + "px";
+							diagram.appendChild(icon);
 						}
-
-						var firstCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + startIndex);
-						var firstCellRegion = Dom.getRegion(firstCell);
-						var lastCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + fillIndex);
-						var lastCellRegion = Dom.getRegion(lastCell);
-						var left = firstCellRegion.left + (Math.round((lastCellRegion.left + cellSettings.cellWidth - firstCellRegion.left) / 2) - 10);
-
-						icon.style.left = (left - diagramBounds.left) + "px";
-						icon.style.top = (firstCellRegion.top - diagramBounds.top + 2) + "px";
-						diagram.appendChild(icon);
 					}
 				}
 			}
@@ -958,9 +996,11 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				var cellSettings = this._calculateCell();
 				var item;
 				for (var key in this.selectedItems) {
-					var item = this.selectedItems[key];
-					if (requestIndex == this.keyIndex[item.nodeRef]) {
-						break;
+					if (this.selectedItems.hasOwnProperty(key)) {
+						var item = this.selectedItems[key];
+						if (requestIndex == this.keyIndex[item.nodeRef]) {
+							break;
+						}
 					}
 				}
 				//Добавляем иконку
