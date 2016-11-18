@@ -101,6 +101,16 @@ public class LecmTransactionHelperImpl implements LecmTransactionHelper {
         return doInTransaction(cb, false);
     }
 
+	/**
+	 * Метод использует RetryingTransactionHelper для выполнения переданного 
+	 * callback'а в условной транзакции. Создание транзакции зависит от флага 
+	 * createTxIfNeeded - если он установлен в true, то транзакция будет создана
+	 * в случае необходимости, иначе - метод вернёт null
+	 * 
+	 * Данный метод следует использовать только для отладки и выявления мест, 
+	 * которые потенциально требуют транзакции, но принудительное её 
+	 * использование может повлечь блокировку
+	 */
 	@Override
 	public <R> R doInNotGuaranteedTransaction(RetryingTransactionHelper.RetryingTransactionCallback<R> cb, boolean readonly) {
 		try {

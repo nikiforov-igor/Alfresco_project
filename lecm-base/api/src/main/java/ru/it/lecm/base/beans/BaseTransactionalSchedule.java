@@ -26,6 +26,22 @@ import org.quartz.Trigger;
  * 
  * Также класс содержит часть однотипной логики для уменьшения дублирования кода
  * 
+ * При наследовании обязательны к заполнению следующие поля:
+ * 
+ *   jobName
+ *   jobGroup
+ *   triggerName
+ *   triggerGroup
+ *   actionName
+ *   cronExpression
+ * 
+ * Значения по умолчанию:
+ * 
+ *   transactionMode - ISOLATED_TRANSACTIONS
+ *   compensatingActionMode - IGNORE
+ *   onServerStart - false
+ *   runAsUser - System
+ * 
  * @author ikhalikov
  */
 public abstract class BaseTransactionalSchedule extends AbstractScheduledAction {
@@ -159,6 +175,11 @@ public abstract class BaseTransactionalSchedule extends AbstractScheduledAction 
 		return this.triggerGroup;
 	}
 
+	/**
+	 * Метод, в котором нужно реализовать логику шедулера, он, в свою очередь,
+	 * будет выполняться уже в методе getNodes в транзакции
+	 * @return
+	 */
 	public abstract List<NodeRef> getNodesInTx();
 	
 	@Override
