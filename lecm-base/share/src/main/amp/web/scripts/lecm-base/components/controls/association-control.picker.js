@@ -287,6 +287,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					Bubbling.fire(this.options.changeItemsFireAction, params);
 				}
 			}
+			Bubbling.fire("mandatoryControlValueUpdated", this);
 		},
 
 		onOkButtonClick: function (evt, params) {
