@@ -18,6 +18,7 @@
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/documentlibrary/actions.css" />
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-documents/graph-view-control.css" />
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/document-details/document-metadata.css" />
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata-form.css" />
 <#-- TODO: IMPORTANT for IE ! -->
 <#-- В IE9 следующие файлы подключаются только при использовании тэга <link>,
     при подключении макросом - не работают.
@@ -71,7 +72,6 @@ LogicECM.module.Documents = LogicECM.module.Documents|| {};
         <div class="yui-gc">
             <div class="bordered-panel doc-right-part">
 				<@region id="document-actions" scope="template"/>
-				<@region id="document-metadata" scope="template"/>
 				<#if documentType?? && documentType == "{http://www.it.ru/logicECM/meetings/1.0}document">
 				<@region id="meeting-agenda" scope="template"/>
 				</#if>
