@@ -76,12 +76,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					fn: function( p_form, p_dialog ) {
                         this.doubleClickLock = false;
 						p_dialog.dialog.setHeader(this.msg("title.signing_info"));
-						p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-						var tmpDialog = p_dialog;
+						p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id, force: true}, this);
 						p_form.doBeforeFormSubmit = {
 							fn: function() {
 								this.setAJAXSubmit(false);
-								tmpDialog.hide();
+								p_dialog.hide();
 							},
 							scope: p_form
 						};
