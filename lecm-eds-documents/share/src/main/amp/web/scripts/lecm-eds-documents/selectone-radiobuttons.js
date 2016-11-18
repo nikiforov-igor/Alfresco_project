@@ -46,7 +46,7 @@ LogicECM.module = LogicECM.module || {};
                     input.setAttribute("disabled", "true");
                     input.value = "";
                 }
-				var radios = YAHOO.util.Selector.query('input[name="' + this.options.fieldName + '"]');
+				var radios = YAHOO.util.Selector.query('input[name="' + this.options.fieldName + '"]', this.id + "-parent");
 				if (radios && radios.length) {
 					radios.forEach(function(el) {
 						el.setAttribute("disabled", "true");
@@ -62,7 +62,7 @@ LogicECM.module = LogicECM.module || {};
                     if (input) {
                         input.removeAttribute("disabled");
                     }
-					var radios = YAHOO.util.Selector.query('input[name="' + this.options.fieldName + '"]');
+					var radios = YAHOO.util.Selector.query('input[name="' + this.options.fieldName + '"]', this.id + "-parent");
 					if (radios && radios.length) {
 						radios.forEach(function(el) {
 							el.removeAttribute("disabled");
@@ -75,13 +75,15 @@ LogicECM.module = LogicECM.module || {};
         onReady: function () {
             LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
             if (this.options.fieldName) {
-                var radioButtons = document.getElementsByName(this.options.fieldName);
-                for (var i = 0; i < radioButtons.length; i++) {
-                    YAHOO.util.Event.addListener(radioButtons[i], "click", this.onValueChanged, null, this);
-                    if (radioButtons[i].checked) {
-                        this.onValueChanged({
-                            target: radioButtons[i]
-                        });
+                var radioButtons = YAHOO.util.Selector.query('input[name="' + this.options.fieldName + '"]', this.id + "-parent");
+                if (radioButtons && radioButtons.length) {
+                    for (var i = 0; i < radioButtons.length; i++) {
+                        YAHOO.util.Event.addListener(radioButtons[i], "click", this.onValueChanged, null, this);
+                        if (radioButtons[i].checked) {
+                            this.onValueChanged({
+                                target: radioButtons[i]
+                            });
+                        }
                     }
                 }
             }

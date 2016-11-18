@@ -55,11 +55,11 @@
 })();
 //]]></script>
 
-<div class="control primary-routing">
+<div class="control multi-form">
     <input type="hidden" name="${field.name}" id="${fieldHtmlId}" value=""/>
     <fieldset class="fieldset">
         <legend>${field.label?html}</legend>
-        <ul id="${fieldHtmlId}-primary-routing-documents-list" class="primary-routing-documents-list"></ul>
+        <ul id="${fieldHtmlId}-multi-form-documents-list" class="multi-form-documents-list"></ul>
     </fieldset>
 
 <#if !disabled>
