@@ -27,7 +27,7 @@
             }
 
             if (organization && organization.nodeRef) {
-                LogicECM.module.Base.Util.enableControl(formId, "lecm-events-dic:resources-responsible-assoc");
+                LogicECM.module.Base.Util.readonlyControl(formId, "lecm-events-dic:resources-responsible-assoc", false);
                 YAHOO.util.Event.onAvailable(LogicECM.module.Base.Util.getComponentReadyElementId(formId, "lecm-events-dic:resources-responsible-assoc"), function() {
                     YAHOO.Bubbling.fire("refreshItemList", {
                         formId: formId,
@@ -36,7 +36,7 @@
                     });
                 }, this);
             } else {
-                LogicECM.module.Base.Util.disableControl(formId, "lecm-events-dic:resources-responsible-assoc");
+                LogicECM.module.Base.Util.readonlyControl(formId, "lecm-events-dic:resources-responsible-assoc", true);
             }
         }
     }

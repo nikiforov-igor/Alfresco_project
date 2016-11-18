@@ -307,7 +307,7 @@ LogicECM.module.Events.updateLocationDSValidation =
 						reinitialize = true;
 					}
 
-					LogicECM.module.Base.Util.enableControl(formId, "lecm-events:location-assoc");
+					LogicECM.module.Base.Util.readonlyControl(formId, "lecm-events:location-assoc", false);
 					if (reinitialize) {
 						LogicECM.module.Base.Util.reInitializeControl(formId, "lecm-events:location-assoc", {
 							fromDate: fromDate,
@@ -315,7 +315,7 @@ LogicECM.module.Events.updateLocationDSValidation =
 						});
 					}
 				} else {
-					LogicECM.module.Base.Util.disableControl(formId, "lecm-events:location-assoc");
+					LogicECM.module.Base.Util.readonlyControl(formId, "lecm-events:location-assoc", true);
 				}
 			}
 		}
