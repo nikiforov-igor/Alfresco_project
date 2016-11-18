@@ -229,23 +229,8 @@
 	</bean>
 
 	<bean id="events.eventsNotificationSchedule" class="ru.it.lecm.events.schedule.EventNotificationSchedule" parent="baseTransactionalSchedule">
-		<property name="transactionMode">
-			<value>ISOLATED_TRANSACTIONS</value>
-		</property>
-		<property name="compensatingActionMode">
-			<value>IGNORE</value>
-		</property>
-		<property name="nodeService">
-			<ref bean="nodeService"/>
-		</property>
 		<property name="cronExpression">
 			<value>0 0 5 */1 * ?</value>
-		</property>
-		<property name="firstStartExpression">
-			<value>0 */15 * * * ?</value>
-		</property>
-		<property name="onServerStart">
-			<value>false</value>
 		</property>
 		<property name="jobName">
 			<value>events-sys-agent-status</value>
@@ -259,17 +244,8 @@
 		<property name="triggerGroup">
 			<value>events-status-trigger</value>
 		</property>
-		<property name="scheduler">
-			<ref bean="schedulerFactory"/>
-		</property>
-		<property name="actionService">
-			<ref bean="ActionService"/>
-		</property>
-		<property name="transactionService">
-			<ref bean="TransactionService"/>
-		</property>
-		<property name="runAsUser">
-			<value>System</value>
+		<property name="actionName">
+			<value>events.eventsNotificationExecutor</value>
 		</property>
 		<property name="documentService" ref="documentService"/>
 		<property name="calendarBean" ref="WorkCalendarService"/>

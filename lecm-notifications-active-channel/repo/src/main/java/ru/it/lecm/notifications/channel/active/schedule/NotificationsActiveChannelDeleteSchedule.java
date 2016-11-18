@@ -1,9 +1,6 @@
 package ru.it.lecm.notifications.channel.active.schedule;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
-import org.alfresco.repo.action.scheduled.InvalidCronExpression;
-import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -15,9 +12,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.quartz.CronTrigger;
-import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.notifications.beans.NotificationsService;
@@ -41,52 +36,11 @@ public class NotificationsActiveChannelDeleteSchedule extends BaseTransactionalS
 	/*
  * The cron expression
  */
-	private String cronExpression;
-
-	private String firstStartExpression = "0 */15 * * * ?";
-
-	private boolean onServerStart = false;
-
-	/*
-	 * The name of the job
-	 */
-	private String jobName = "notificationa-active-channel-cleaner";
-
-	/*
-	 * The job group
-	 */
-	private String jobGroup = "notifications-active-channel";
-
-	/*
-	 * The name of the trigger
-	 */
-	private String triggerName = "notifications-active-channel-delete-trigger";
-
-	/*
-	 * The name of the trigger group
-	 */
-	private String triggerGroup = "notifications-active-channel-trigger";
-
-	/*
-	 * The scheduler
-	 */
-	private Scheduler scheduler;
-
-	private SearchService searchService;
-	private NodeService nodeService;
 	private NamespaceService namespaceService;
 	private NotificationsActiveChannel notificationsActiveChannel;
 	private int deleteUnreadOlderThan = -1;
 
 	public NotificationsActiveChannelDeleteSchedule() {
-	}
-
-	public void setNodeService(NodeService nodeService) {
-		this.nodeService = nodeService;
-	}
-
-	public void setSearchService(SearchService searchService) {
-		this.searchService = searchService;
 	}
 
 	public void setNotificationsActiveChannel(NotificationsActiveChannel notificationsActiveChannel) {
@@ -97,84 +51,8 @@ public class NotificationsActiveChannelDeleteSchedule extends BaseTransactionalS
 		this.namespaceService = namespaceService;
 	}
 
-	public Scheduler getScheduler() {
-		return scheduler;
-	}
-
-	public void setScheduler(Scheduler scheduler) {
-		this.scheduler = scheduler;
-	}
-
-	public void setCronExpression(String cronExpression) {
-		this.cronExpression = cronExpression;
-	}
-
-
-	public String getCronExpression() {
-		return cronExpression;
-	}
-
-	public void setFirstStartExpression(String firstStartExpression) {
-		this.firstStartExpression = firstStartExpression;
-	}
-
-	public void setJobName(String jobName) {
-		this.jobName = jobName;
-	}
-
-	public String getJobName() {
-		return jobName;
-	}
-
-	public void setJobGroup(String jobGroup) {
-		this.jobGroup = jobGroup;
-	}
-
-	public String getJobGroup() {
-		return jobGroup;
-	}
-
-	public void setTriggerName(String triggerName) {
-		this.triggerName = triggerName;
-	}
-
-	public String getTriggerName() {
-		return triggerName;
-	}
-
-	public void setTriggerGroup(String triggerGroup) {
-		this.triggerGroup = triggerGroup;
-	}
-
-	public String getTriggerGroup() {
-		return this.triggerGroup;
-	}
-
 	public void setDeleteUnreadOlderThan(int deleteUnreadOlderThan) {
 		this.deleteUnreadOlderThan = deleteUnreadOlderThan;
-	}
-
-	public void afterPropertiesSet() throws Exception {
-		register(getScheduler());
-	}
-
-	public void setOnServerStart(boolean onServerStart) {
-		this.onServerStart = onServerStart;
-	}
-
-	/* (non-Javadoc)
- * @see org.alfresco.repo.action.scheduled.AbstractScheduledAction#getTrigger()
- */
-	@Override
-	public Trigger getTrigger() {
-		try {
-			CronTrigger trigger = new CronTrigger(getTriggerName(), getTriggerGroup(), onServerStart ? firstStartExpression : cronExpression);
-			trigger.setJobName(getJobName());
-			trigger.setJobGroup(getJobGroup());
-			return trigger;
-		} catch (final ParseException e) {
-			throw new InvalidCronExpression("Invalid chron expression: n" + getCronExpression());
-		}
 	}
 
 	/**
@@ -183,17 +61,6 @@ public class NotificationsActiveChannelDeleteSchedule extends BaseTransactionalS
 	 */
 	@Override
 	public List<NodeRef> getNodesInTx() {
-		if (onServerStart) { // если был запуск на старте - подменяем триггер на основной
-			CronTrigger trigger = (CronTrigger) getTrigger();
-			try {
-				trigger.setCronExpression(cronExpression);
-				getScheduler().rescheduleJob(getTriggerName(), getTriggerGroup(), trigger);
-				onServerStart = false; // включаем основной триггер
-			} catch (final ParseException | SchedulerException ex) {
-				logger.error("Error rescheduleJob" + ex);
-			}
-		}
-
 		Set<NodeRef> nodes = new HashSet<>();
 		nodes.addAll(getOldNotifications());
 		nodes.addAll(getOldUnreadedNotifications());
@@ -327,13 +194,5 @@ public class NotificationsActiveChannelDeleteSchedule extends BaseTransactionalS
 			}
 		}
 		return result;
-	}
-
-	/* (non-Javadoc)                            ``
- * @see org.alfresco.repo.action.scheduled.AbstractScheduledAction#getAction(org.alfresco.service.cmr.repository.NodeRef)
- */
-	@Override
-	public Action getAction(NodeRef nodeRef) {
-		return getActionService().createAction("deleteAction");
 	}
 }

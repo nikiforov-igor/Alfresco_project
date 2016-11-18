@@ -282,15 +282,6 @@
 		<property name="orgstructureService">
 			<ref bean="serviceOrgstructure" />
 		</property>
-		<property name="nodeService">
-			<ref bean="nodeService" />
-		</property>
-		<property name="transactionMode">
-			<value>ISOLATED_TRANSACTIONS</value>
-		</property>
-		<property name="compensatingActionMode">
-			<value>IGNORE</value>
-		</property>
 		<property name="cronExpression">
 			<value>0 0 4 * * ?</value>
 		</property>
@@ -306,17 +297,8 @@
 		<property name="triggerGroup">
 			<value>usertemp-directory-trigger</value>
 		</property>
-		<property name="scheduler">
-			<ref bean="schedulerFactory"/>
-		</property>
-		<property name="actionService">
-			<ref bean="ActionService"/>
-		</property>
-		<property name="transactionService">
-			<ref bean="TransactionService"/>
-		</property>
-		<property name="runAsUser">
-			<value>System</value>
+		<property name="actionName">
+			<value>deleteAction</value>
 		</property>
 	</bean>
 
@@ -533,11 +515,13 @@
 	<bean id="baseTransactionalSchedule" class="ru.it.lecm.base.beans.BaseTransactionalSchedule" abstract="true"
 		p:transactionMode="ISOLATED_TRANSACTIONS"
 		p:compensatingActionMode="IGNORE"
-		p:cronExpression="0 0 0/1 1/1 * ? *"
 		p:scheduler-ref="schedulerFactory"
 		p:actionService-ref="ActionService"
 		p:transactionService-ref="TransactionService"
 		p:lecmTransactionHelper-ref="lecmTransactionHelper"
+		p:nodeService-ref="nodeService"
+		p:searchService-ref="searchService"
+		p:onServerStart="false"
 		p:runAsUser="System"
 	/>
 
