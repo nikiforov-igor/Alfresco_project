@@ -715,7 +715,6 @@
                 <appearance>
                     <set id="left"/>
                     <set id="right"/>
-                    <!--<set id="r1" parent="right"/>-->
                     <set id="limitation-date" parent="right" appearance="fieldset" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
 
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
@@ -789,7 +788,6 @@
                 <appearance>
                     <set id="left"/>
                     <set id="right"/>
-                    <!--<set id="r1" parent="right"/>-->
                     <set id="limitation-date" parent="right" appearance="fieldset" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
 
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
