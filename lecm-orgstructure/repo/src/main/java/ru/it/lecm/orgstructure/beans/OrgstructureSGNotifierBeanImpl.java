@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.policies.PolicyUtils;
+import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.Types;
 import ru.it.lecm.security.Types.SGKind;
 import ru.it.lecm.security.Types.SGPosition;
@@ -743,6 +744,20 @@ public class OrgstructureSGNotifierBeanImpl
 			sgNotifier.sgInclude( sgDestMe, sgSrcPrivBR);
 		else
 			sgNotifier.sgExclude( sgDestMe, sgSrcPrivBR);
+	}
+
+	@Override
+	public void notifySpecDelegationChanged(LecmPermissionService.LecmPermissionGroup permissionGroup,
+											NodeRef sourceEmployee, NodeRef destEmployee, boolean created) {
+		final SGPosition posUserSpec = Types.SGKind.getSGSpecialUserRole(sourceEmployee.getId(), permissionGroup, null, null);
+
+		// получаем личные группы пользователей для бизнес-ролей
+		final Types.SGPrivateMeOfUser sgSourceMe = PolicyUtils.makeEmploeePos(destEmployee, nodeService, orgstructureService, logger);
+		if (created) { // включить личную группу того кому делегируем в группу бизнес роли того кто делегирует ...
+			sgNotifier.sgInclude(sgSourceMe, posUserSpec);
+		} else {
+			sgNotifier.sgExclude(sgSourceMe, posUserSpec);
+		}
 	}
 
 
