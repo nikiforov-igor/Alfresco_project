@@ -1411,9 +1411,12 @@ function SignatureFromContent(nodeRef, signatureContent, signatureNodeRef, conte
 
 	if (nodeRef && signatureContent) {
 		try {
-			contentURI = new Alfresco.util.NodeRef(this.contentAssociation).uri;
-			var signData = JSON.parse(this.signatureContent);
-			this.signature = signData.signature;
+			try{
+				var signData = JSON.parse(this.signatureContent);
+				this.signature = signData.signature;
+			} catch(err){
+				this.signature = this.signatureContent;
+			}
 			now = Alfresco.util.toISO8601(new Date());
 			this.validateDate = now;
 			this.signDate = now;
@@ -1438,16 +1441,19 @@ function SignatureFromFile(nodeRef, fileHash, clientLocalSign) {
 
 	this.signatureContent = null;
 	this.contentAssociation = nodeRef;
-	this.contentHash = null;
+	this.contentHash = fileHash;
 	this.valid = false;
 	this.validateDate = null;
 	this.certificate = null;
 	this.signDate = null;
 
 	if (nodeRef) {
-		var signData = JSON.parse(clientLocalSign);
-		this.signatureContent = signData.signature;
-		this.contentHash = signData.hash;
+		try{
+			var signData = JSON.parse(clientLocalSign);
+			this.signatureContent = signData.signature;
+		} catch(err){
+			this.signatureContent = clientLocalSign;
+		}
 		//this.certificate = new CertificateFromBase64(result.getCert());
 		try {
 			if (this.signatureContent && this.signatureContent.length) {
