@@ -30,18 +30,6 @@
     margin-bottom: 0;
 }
 
-.errands-limitation-date-set .errands-limitation-date-set-limitless {
-    overflow: hidden;
-}
-
-.errands-limitation-date-set .errands-limitation-date-set-type {
-    overflow: hidden;
-}
-
-.errands-limitation-date-set .errands-limitation-date-set-date {
-	float: left;
-    width: calc(100% - 150px);
-}
 
 /*.errands-limitation-date-set-date .control.date .container {*/
 	/*min-width: 100px !important;*/
@@ -51,3 +39,30 @@
 /*#yui-main .document-metadata .errands-limitation-date-set .errands-limitation-date-set-date .control.date {*/
     /*width: 150px;*/
 /*}*/
+
+.errands-limitation-date-set .errands-limitation-date-set-limitless {
+    float: left ;
+    width:calc(100% - 220px);
+}
+
+.errands-limitation-date-set .errands-limitation-date-set-type {
+    float: left;
+    width: calc(100% - 270px);
+}
+
+.errands-limitation-date-set .errands-limitation-date-set-date {
+    float: left;
+    width: calc(100% - 220px);
+}
+.errands-limitation-date-set .errands-limitation-date-set-date .control {
+    margin-bottom: 0;
+}
+.errands-limitation-date-set .errands-limitation-date-set-radio .control input:last-of-type {
+    margin-top: 14px;
+}
+.errands-limitation-date-set .errands-limitation-date-set-radio .label-div{
+    display:block;
+}
+.errands-limitation-date-set .errands-limitation-date-set-radio .container  {
+    min-width: 10px;
+}

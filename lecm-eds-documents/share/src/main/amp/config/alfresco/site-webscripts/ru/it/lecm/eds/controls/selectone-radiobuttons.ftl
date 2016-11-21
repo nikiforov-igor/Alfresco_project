@@ -25,7 +25,13 @@
 
 <#if form.mode == "view">
 	<div id="${fieldHtmlId}-parent" class="control selectone-radiobuttons viewmode">
-		<div class="label-div">&nbsp;</div>
+		<div class="label-div">
+			<label for="${fieldHtmlId}">${field.label?html}:
+				<#if field.mandatory>
+					<span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
+				</#if>
+        	</label>
+		</div>
 		<#if fieldValue?string == "">
 			<#assign valueToShow=msg("form.control.novalue")>
 		<#else>
@@ -55,7 +61,13 @@
 	</div>
 <#else>
 	<div id="${fieldHtmlId}-parent" class="control selectone-radiobuttons editmode">
-		<div class="label-div">&nbsp;</div>
+		<div class="label-div">
+            <label for="${fieldHtmlId}">${field.label?html}:
+				<#if field.mandatory>
+                    <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
+				</#if>
+            </label>
+		</div>
 		<div class="container">
             <div class="buttons-div">
                 <@formLib.renderFieldHelp field=field />
