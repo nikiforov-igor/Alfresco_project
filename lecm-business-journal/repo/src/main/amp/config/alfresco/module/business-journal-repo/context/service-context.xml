@@ -180,13 +180,7 @@
 		</property>
 	</bean>
 
-	<bean id="businessJournalAuthLoggerSchedule" class="ru.it.lecm.businessjournal.schedule.BusinessJournalAuthLoggerSchedule">
-		<property name="transactionMode">
-			<value>ISOLATED_TRANSACTIONS</value>
-		</property>
-		<property name="compensatingActionMode">
-			<value>IGNORE</value>
-		</property>
+	<bean id="businessJournalAuthLoggerSchedule" class="ru.it.lecm.businessjournal.schedule.BusinessJournalAuthLoggerSchedule" parent="baseTransactionalSchedule">
 		<property name="jobName">
 			<value>business-journal-auth-logger</value>
 		</property>
@@ -199,20 +193,11 @@
 		<property name="triggerGroup">
 			<value>business-journal-trigger</value>
 		</property>
-		<property name="scheduler">
-			<ref bean="schedulerFactory"/>
-		</property>
-		<property name="actionService">
-			<ref bean="ActionService"/>
+		<property name="actionName">
+			<value>businessJournalAuthLoggerScheduleExecutor</value>
 		</property>
 		<property name="businessJournalService">
 			<ref bean="businessJournalService"/>
-		</property>
-		<property name="transactionService">
-			<ref bean="TransactionService"/>
-		</property>
-		<property name="runAsUser">
-			<value>System</value>
 		</property>
 		<property name="auditService">
 			<ref bean="auditService"/>
