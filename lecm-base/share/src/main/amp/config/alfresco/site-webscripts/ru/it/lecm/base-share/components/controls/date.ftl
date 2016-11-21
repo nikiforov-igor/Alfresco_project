@@ -186,7 +186,6 @@
                         }).setMessages(
                 ${messages}
                 );
-                picker.draw();
             <#if showTime>
 
                 var zIndex = $('#${containerId}').zIndex(),
@@ -220,6 +219,7 @@
                     }
                 });
             </#if>
+                picker.draw();
             }
 
             YAHOO.util.Event.onAvailable('${fieldHtmlId}', init, this, true);

@@ -16,6 +16,8 @@
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/components/documentlibrary/actions.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-documents/graph-view-control.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/components/document-details/document-metadata.css" />
+    <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata-form.css" />
+
     <#-- TODO: IMPORTANT for IE ! -->
     <#-- В IE9 следующие файлы подключаются только при использовании тэга <link>,
         при подключении макросом - не работают.
