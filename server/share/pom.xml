@@ -221,13 +221,6 @@
 			<type>amp</type>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.eds-errands</groupId>
-			<artifactId>eds-errands-share</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.signed-docflow</groupId>
 			<artifactId>signed-docflow-share</artifactId>
 			<version>${platform.version}</version>
@@ -624,11 +617,6 @@
 							<type>amp</type>
 						</overlay>
 						<overlay>
-							<groupId>ru.it.lecm.eds-errands</groupId>
-							<artifactId>eds-errands-share</artifactId>
-							<type>amp</type>
-						</overlay>
-						<overlay>
 							<groupId>ru.it.lecm.signed-docflow</groupId>
 							<artifactId>signed-docflow-share</artifactId>
 							<type>amp</type>
@@ -941,11 +929,6 @@
                                     <artifactId>errands-share</artifactId>
                                     <type>amp</type>
                                 </overlay>
-								<overlay>
-									<groupId>ru.it.lecm.eds-errands</groupId>
-									<artifactId>eds-errands-share</artifactId>
-									<type>amp</type>
-								</overlay>
                                 <overlay>
                                     <groupId>ru.it.lecm.signed-docflow</groupId>
                                     <artifactId>signed-docflow-share</artifactId>
