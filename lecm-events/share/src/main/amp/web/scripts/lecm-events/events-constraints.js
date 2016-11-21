@@ -28,7 +28,61 @@ LogicECM.module.Events.toDateValue = null;
 LogicECM.module.Events.currentFromDateValue = null;
 LogicECM.module.Events.currentToDateValue = null;
 
+LogicECM.module.Events.currentEmployeeBeginTime = null;
+LogicECM.module.Events.currentEmployeeEndTime = null;
+
 LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromDateFieldId, toDateFieldId) {
+    if (LogicECM.module.Events.currentEmployeeBeginTime && LogicECM.module.Events.currentEmployeeEndTime) {
+        LogicECM.module.Events.doBaseChangeAllDayValidation(field, form, fromDateFieldId, toDateFieldId);
+    } else {
+        LogicECM.module.Events.loadCurrentEmployeeSchedule(field, form, fromDateFieldId, toDateFieldId);
+    }
+    return true;
+};
+
+LogicECM.module.Events.loadCurrentEmployeeSchedule = function (field, form, fromDateFieldId, toDateFieldId) {
+    Alfresco.util.Ajax.jsonGet({
+        url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getCurrentEmployee",
+        successCallback: {
+            fn: function (response) {
+                var employee = response.json;
+
+                if (employee && employee.nodeRef) {
+                    Alfresco.util.Ajax.jsonPost({
+                        url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/wcalendar/schedule/get/employeeScheduleStdTime",
+						dataObj: {
+							nodeRef: employee.nodeRef,
+							fromParent: true,
+							exclDefault: false
+						},
+                        successCallback: {
+                            fn: function (response) {
+                                var result = response.json;
+                                if (result) {
+                                    if (result.begin) {
+                                        LogicECM.module.Events.currentEmployeeBeginTime = result.begin;
+                                    } else {
+                                        LogicECM.module.Events.currentEmployeeBeginTime = "00:01";
+                                    }
+                                    if (result.end) {
+                                        LogicECM.module.Events.currentEmployeeEndTime = result.end;
+                                    } else {
+                                        LogicECM.module.Events.currentEmployeeEndTime = "23:59";
+                                    }
+                                    LogicECM.module.Events.doBaseChangeAllDayValidation(field, form, fromDateFieldId, toDateFieldId);
+                                }
+                            },
+                            scope: this
+                        }
+                    });
+                }
+            },
+            scope: this
+        }
+    });
+};
+
+LogicECM.module.Events.doBaseChangeAllDayValidation = function (field, form, fromDateFieldId, toDateFieldId) {
 	if (field.form != null) {
 		var fromDate = field.form["prop_" + fromDateFieldId.replace(":", "_")];
 		var toDate = field.form["prop_" + toDateFieldId.replace(":", "_")];
@@ -40,17 +94,17 @@ LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromD
 		var toTime = Dom.get(toDate.id + "-cntrl-time");
 
 		var allDay = field.value == "true";
-
+		toDateField.readOnly = !allDay;
 		var times = [
 			{
 				field: fromTime,
-				allDayValue: "00:01",
+				allDayValue: LogicECM.module.Events.currentEmployeeBeginTime,
 				savedValue: LogicECM.module.Events.fromDateValue,
 				fieldId: fromDateFieldId
 			},
 			{
 				field: toTime,
-				allDayValue: "23:59",
+				allDayValue: LogicECM.module.Events.currentEmployeeEndTime,
 				savedValue: LogicECM.module.Events.toDateValue,
 				fieldId: toDateFieldId
 			}
@@ -81,8 +135,17 @@ LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromD
 			}
 		});
 
-		LogicECM.module.Events.fromDateValue = times[0].savedValue;
-		LogicECM.module.Events.toDateValue = times[1].savedValue;
+		if (allDay && times[0].savedValue) {
+			LogicECM.module.Events.fromDateValue = times[0].savedValue;
+		} else if (!allDay) {
+			LogicECM.module.Events.fromDateValue = times[0].savedValue;
+		}
+
+		if (allDay && times[1].savedValue) {
+			LogicECM.module.Events.toDateValue = times[1].savedValue;
+		} else if (!allDay) {
+			LogicECM.module.Events.toDateValue = times[1].savedValue;
+		}
 
 		var dates = [
 			{
@@ -153,20 +216,24 @@ LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromD
 };
 
 LogicECM.module.Events.repeateDateValidationFunction = function (field, form, fromDateFieldId, toDateFieldId) {
-	if (field.form != null) {
+	if (field.form) {
 		var fromDate = field.form["prop_" + fromDateFieldId.replace(":", "_")];
 		var toDate = field.form["prop_" + toDateFieldId.replace(":", "_")];
 
-		Dom.removeClass(fromDate.id+ "-cntrl-date", "invalid");
-		Dom.removeClass(toDate.id + "-cntrl-date", "invalid");
+        var fromDateInput = Dom.get(fromDate.id + "-cntrl-date");
+        var toDateInput = Dom.get(toDate.id + "-cntrl-date");
 
-
-		var fromDateTime = Alfresco.util.fromISO8601(fromDate.value);
-		var toDateTime = Alfresco.util.fromISO8601(toDate.value);
-		if (toDateTime < fromDateTime) {
-			Dom.addClass(fromDate.id+ "-cntrl-date", "invalid");
-			Dom.addClass(toDate.id + "-cntrl-date", "invalid");
-		}
+        if (fromDate.value.length > 0 && toDate.value.length > 0) {
+            var fromDateTime = Alfresco.util.fromISO8601(fromDate.value);
+            var toDateTime = Alfresco.util.fromISO8601(toDate.value);
+            if (toDateTime < fromDateTime) {
+                Dom.addClass(fromDateInput, "invalid");
+                Dom.addClass(toDateInput, "invalid");
+            } else {
+                Dom.removeClass(fromDateInput, "invalid");
+                Dom.removeClass(toDateInput, "invalid");
+            }
+        }
 	}
 	return true;
 };
@@ -197,7 +264,7 @@ LogicECM.module.Events.repeatableValidation =
 	function (field, args,  event, form, silent, message) {
 		if (field.form != null) {
 			var repeatable = field.form["prop_lecm-events_repeatable"];
-			return repeatable.value == "false" || field.value.length > 0
+			return repeatable.value == "false" || field.value.length > 0;
 		}
 		return false;
 	};

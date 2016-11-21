@@ -3,7 +3,7 @@ if (!args["newValue"] || args["newValue"].length == 0
     model.isUnique = false;
     model.isUniqueInArchive = false;
 } else {
-    var queryBase = "@" + (args["propertyName"].replace(":", "\\:")).split("-").join("\\-") + ":\"" + args["newValue"] + "\" ";
+    var queryBase = "=@" + (args["propertyName"].replace(":", "\\:")).split("-").join("\\-") + ":\"" + args["newValue"] + "\" ";
 
     var typeName = null;
     if (args["typeName"] && args["typeName"].length > 0 || args["nodeRef"] && args["nodeRef"].length > 0) {
@@ -22,7 +22,7 @@ if (!args["newValue"] || args["newValue"].length == 0
         queryBase = queryBase + " AND NOT ID:\"" + args["nodeRef"] + "\"";
     }
 
-    var queryActive = queryBase + " AND (ISNULL:\"lecm-dic:active\" OR @lecm\\-dic\\:active:true) ";
+    var queryActive = queryBase + " AND NOT @lecm\\-dic\\:active:false";
     var queryArchive = queryBase + " AND @lecm\\-dic\\:active:false";
 
     var nodesActive = searchCounter.query(

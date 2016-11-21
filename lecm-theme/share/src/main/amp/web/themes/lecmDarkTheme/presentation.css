@@ -1447,7 +1447,7 @@ body.alfresco-guest
     height: 72px;
     width: 428px;
     background: transparent url(images/logo.png) no-repeat;
-    position: fixed;
+    position: absolute;
     margin-left: 280px;
     margin-top: 40px;
 }
@@ -2489,6 +2489,12 @@ div#lightbox {
 }
 /* lecm-arm-documents : end */
 
+/* arm menu : start */
+.yui-skin-lecmDarkTheme .arm-menu-item {
+    background-image: url("/share/components/images/header/docs_16_light.png");
+}
+/* arm menu : end */
+
 .yui-skin-lecmDarkTheme .ygtv-highlight .ygtv-highlight1,
 .yui-skin-lecmDarkTheme .ygtv-highlight .ygtv-highlight1 .ygtvlabel {
     background-color: #43A7CB;
@@ -2592,9 +2598,12 @@ div#lightbox {
     background: url('images/LECM_C-style-icons-5-innactive-16.png') no-repeat center center;
 }
 
-.yui-skin-lecmDarkTheme .document-header .document-action .favorite .yui-button .first-child,
-.yui-skin-lecmDarkTheme .document-header .document-action .favorite.enabled .yui-button .first-child {
+.yui-skin-lecmDarkTheme .document-header .document-action .favorite .yui-button .first-child {
     background: url('images/LECM_C-style-icons-6-16.png') no-repeat center center;
+}
+.yui-skin-lecmDarkTheme .document-header .document-action .favorite.enabled .yui-button .first-child {
+    background: url('images/LECM_C-style-icons-6-16.png') no-repeat center,
+    url('/share/res/components/images/star-selected_16x16.png') no-repeat center;
 }
 .yui-skin-lecmDarkTheme .document-header .document-action .favorite.disabled .first-child,
 .yui-skin-lecmDarkTheme .document-header .document-action .favorite .yui-button-disabled .first-child {

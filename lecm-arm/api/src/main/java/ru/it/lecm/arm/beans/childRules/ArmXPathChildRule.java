@@ -10,12 +10,12 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.base.beans.SearchQueryProcessorService;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import ru.it.lecm.base.beans.SearchQueryProcessorService;
 
 /**
  * User: AIvkin
@@ -76,23 +76,23 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 			sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 			sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 
-			String query = "PATH:\"" + rootXPath + "\" AND ((ISNULL:\"lecm\\-dic:active\" OR NOT EXISTS:\"lecm\\-dic:active\") OR lecm\\-dic:active:true)";
+			StringBuilder query = new StringBuilder().append("PATH:\"").append(rootXPath).append("\" AND NOT @lecm\\-dic\\:active:false");
 			if (types != null && types.size() > 0) {
-				query += " AND (";
+				query.append(" AND (");
 				for (int i = 0; i < types.size(); i++) {
-					query += "TYPE:\"" + types.get(i).trim() + "\"";
+					query.append("TYPE:\"").append(types.get(i).trim()).append("\"");
 					if (i < types.size() - 1) {
-						query += " OR ";
+						query.append(" OR ");
 					}
 				}
-				query += ")";
+				query.append(")");
 			}
 
 			if(filter != null && !filter.isEmpty()) {
-				query += " AND (" + filter + ")";
+				query.append(" AND (").append(filter).append(")");
 			}
 
-			String processedQuery = processorService.processQuery(query);
+			String processedQuery = processorService.processQuery(query.toString());
 
 			sp.setQuery(processedQuery);
 			sp.addSort("@" + ContentModel.PROP_NAME, true);
@@ -130,23 +130,23 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 			sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 			sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 
-			String query = "PARENT:\"" + node.toString() + "\" AND ((ISNULL:\"lecm\\-dic:active\" OR NOT EXISTS:\"lecm\\-dic:active\") OR lecm\\-dic:active:true)";
+			StringBuilder query = new StringBuilder().append("PARENT:\"").append(node.toString()).append("\" AND NOT @lecm\\-dic:active:false");
 			if (types != null && types.size() > 0) {
-				query += " AND (";
+				query.append(" AND (");
 				for (int i = 0; i < types.size(); i++) {
-					query += "TYPE:\"" + types.get(i).trim() + "\"";
+					query.append("TYPE:\"").append(types.get(i).trim()).append("\"");
 					if (i < types.size() - 1) {
-						query += " OR ";
+						query.append(" OR ");
 					}
 				}
-				query += ")";
+				query.append(")");
 			}
 
 			if(filter != null && !filter.isEmpty()) {
-				query += " AND (" + filter + ")";
+				query.append(" AND (").append(filter).append(")");
 			}
 
-			String processedQuery = processorService.processQuery(query);
+			String processedQuery = processorService.processQuery(query.toString());
 
 			sp.setQuery(processedQuery);
 			sp.addSort("@" + ContentModel.PROP_NAME, true);

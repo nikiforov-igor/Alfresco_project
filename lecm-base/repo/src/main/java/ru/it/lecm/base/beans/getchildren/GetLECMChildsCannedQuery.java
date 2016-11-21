@@ -310,28 +310,32 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 		for (QName filterSortProp : filterSortProps) {
 			if (AuditablePropertiesEntity.getAuditablePropertyQNames().contains(filterSortProp)) {
 				params.setAuditableProps(true);
+				cnt++;
 			} else if (filterSortProp.equals(SORT_QNAME_NODE_TYPE)) {
 				params.setNodeType(true);
+				cnt++;
 			} else {
 				Long sortQNameId = getQNameId(filterSortProp);
 				if (sortQNameId != null) {
-					if (cnt == 0) {
-						params.setProp1qnameId(sortQNameId);
-					} else if (cnt == 1) {
-						params.setProp2qnameId(sortQNameId);
-					} else if (cnt == 2) {
-						params.setProp3qnameId(sortQNameId);
-					} else {
-						// belts and braces
-						throw new AlfrescoRuntimeException("GetChildren: unexpected - cannot set sort parameter: " + cnt);
+					switch (cnt) {
+						case 0:
+							params.setProp1qnameId(sortQNameId);
+							break;
+						case 1:
+							params.setProp2qnameId(sortQNameId);
+							break;
+						case 2:
+							params.setProp3qnameId(sortQNameId);
+							break;
+						default:
+							// belts and braces
+							throw new AlfrescoRuntimeException("GetChildren: unexpected - cannot set sort parameter: " + cnt);
 					}
+					cnt++;
 				} else {
 					logger.warn("Skipping filter/sort param - cannot find: " + filterSortProp);
-					break;
 				}
 			}
-
-			cnt++;
 		}
 
 		return cnt;

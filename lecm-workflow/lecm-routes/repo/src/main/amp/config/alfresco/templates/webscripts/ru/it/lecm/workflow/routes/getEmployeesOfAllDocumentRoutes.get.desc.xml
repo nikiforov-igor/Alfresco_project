@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+    <shortname>Get employees of all routes of document</shortname>
+    <description>Get employees of all routes of document</description>
+    <url>/lecm/workflow/routes/getEmployeesOfAllDocumentRoutes?nodeRef={nodeRef}</url>
+    <authentication>user</authentication>
+    <format default="json"/>
+    <transaction>required</transaction>
+</webscript>

@@ -42,6 +42,9 @@
 .datagrid .onActionViewDocument a {
     background-image: url("../../../images/lecm-base/components/preview-16.png");
 }
+.datagrid .onActionMove a {
+    background-image: url("../../../images/lecm-base/components/move-16.png");
+}
 .datagrid .show-archive-cb-div {
     padding: 5px;
     text-align: right;

@@ -50,8 +50,6 @@ public class OrgstructureWorkForcePolicy
             final List<String> objects = new ArrayList<String>(1);
             objects.add(nodeRef.toString());
             businessJournalService.log(group, EventCategory.REMOVE_GROUP_ROLE, "#initiator внес(ла) сведения об исключении роли #object1 из рабочей группы #mainobject", objects);
-            objects.add(group.toString());
-            businessJournalService.log(nodeRef, EventCategory.REMOVE_FROM_REPORTING, "#initiator внес(ла) сведения об исключении роли #mainobject из рабочей группы #object2", objects);
         } catch (Exception ex) {
             logger.warn("Не удалось получить рабочую группу по удаляемому участнику");
         }

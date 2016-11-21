@@ -211,6 +211,9 @@
         <#if field.control.params.useStrictFilterByOrg??>
             useStrictFilterByOrg: "${field.control.params.useStrictFilterByOrg?string}",
         </#if>
+        <#if field.control.params.doNotCheckAccess??>
+            doNotCheckAccess: ${field.control.params.doNotCheckAccess?string},
+        </#if>
         <#if field.control.params.childrenDataSource??>
             childrenDataSource: "${field.control.params.childrenDataSource}",
         </#if>

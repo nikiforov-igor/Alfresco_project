@@ -5,7 +5,7 @@
     <parent>
         <groupId>ru.it.lecm.regnumbers</groupId>
         <artifactId>lecm-regnumbers</artifactId>
-        <version>1.8.0</version>
+        <version>1.8.5</version>
     </parent>
 
     <artifactId>lecm-regnumbers-share</artifactId>

@@ -24,7 +24,7 @@
                 <property name="cm:name">Является основанием для</property>
                 <property name="lecm-connect-types:reverse-name">Создан на основании</property>
                 <property name="lecm-connect-types:code">onBasis</property>
-                <property name="lecm-connect-types:for-auto-create">true</property>
+                <property name="lecm-connect-types:for-auto-create">false</property>
             </item>
             <item name="cm:Отменяет" type="lecm-connect-types:connection-type">
                 <property name="cm:name">Отменяет</property>

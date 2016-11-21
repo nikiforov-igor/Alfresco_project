@@ -157,11 +157,6 @@ public class DocumentConnectionPolicy implements OnCreateAssociationPolicy/*, On
 				objects.add(connectedDocument.toString());
 
 				businessJournalService.log(primaryDocument, EventCategory.DELETE_DOCUMENT_CONNECTION, "#initiator удалил(а) связь документов #mainobject и #object1", objects);
-
-                objects = new ArrayList<>(2);
-                objects.add(primaryDocument.toString());
-                objects.add(connectedDocument.toString());
-				businessJournalService.log(nodeRef, EventCategory.REMOVE_FROM_REPORTING, "#initiator удалил(а) связь документов #object1 и #object2", objects);
 			}
 		}
 	}

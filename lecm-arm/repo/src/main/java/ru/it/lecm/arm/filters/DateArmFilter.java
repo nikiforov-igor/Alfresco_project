@@ -36,7 +36,7 @@ public class DateArmFilter implements ArmDocumentsFilter {
 
 	@Override
 	public String getQuery(String fields, List<String> args) {
-		String resultedQuery = "";
+		StringBuilder resultedQuery = new StringBuilder();
 		if (args != null && !args.isEmpty() && fields != null && !fields.isEmpty()) {
 			logger.debug("Filter args: " + StringUtils.collectionToCommaDelimitedString(args));
 			logger.debug("Filter params: " + fields);
@@ -44,7 +44,7 @@ public class DateArmFilter implements ArmDocumentsFilter {
 			String filterValue = args.get(0);
 
 			if (filterValue == null) {
-				return resultedQuery;
+				return resultedQuery.toString();
 			}
 
 			try {
@@ -79,7 +79,7 @@ public class DateArmFilter implements ArmDocumentsFilter {
 					for (String field : fields.split(",")) {
 						String fieldProp = field.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
 
-						resultedQuery += (addOR ? " OR " : "") + "@" + fieldProp + ":" + dateCompareQuery;
+						resultedQuery.append(addOR ? " OR " : "").append("@").append(fieldProp).append(":").append(dateCompareQuery);
 						addOR = true;
 					}
 				}
@@ -87,6 +87,6 @@ public class DateArmFilter implements ArmDocumentsFilter {
 				logger.warn("Incorrect filter! Filter args:" + StringUtils.collectionToCommaDelimitedString(args));
 			}
 		}
-		return resultedQuery;
+		return resultedQuery.toString();
 	}
 }

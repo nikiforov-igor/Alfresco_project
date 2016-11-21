@@ -123,7 +123,12 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, DOCUMENT_APPROVAL_FOLDER);
 		PropertyMap props = new PropertyMap();
 		props.put(ContentModel.PROP_NAME, DOCUMENT_APPROVAL_FOLDER);
-		return nodeService.createNode(documentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, props).getChildRef();
+		NodeRef approvalFolder = nodeService.createNode(documentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, props).getChildRef();
+		if (!nodeService.hasAspect(documentRef, ASPECT_APPROVAL_DATA)) {
+			nodeService.addAspect(documentRef, ASPECT_APPROVAL_DATA, null);
+			nodeService.createAssociation(documentRef, approvalFolder, ASSOC_APPROVAL_FOLDER);
+		}
+		return approvalFolder;
 	}
 
 	@Override

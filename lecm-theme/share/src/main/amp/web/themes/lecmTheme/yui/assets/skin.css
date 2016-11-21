@@ -116,6 +116,10 @@ line-height: 2;*line-height:1.7;
 min-height: 2em;*min-height:auto;
 color: #000;
 }
+.yui-skin-lecmTheme .document-action .disabled .yui-button .first-child{
+    border-color: #ccc !important;
+}
+
 .yui-skin-lecmTheme .yui-button a {*line-height:1.875;*padding-bottom:1px;
 }
 .yui-skin-lecmTheme .yui-split-button button,.yui-skin-lecmTheme .yui-menu-button button {

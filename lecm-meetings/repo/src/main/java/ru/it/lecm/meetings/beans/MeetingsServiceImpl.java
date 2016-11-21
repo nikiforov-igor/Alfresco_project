@@ -354,17 +354,23 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 					List<NodeRef> rows = documentTableService.getTableDataRows(table);
 					if (null != rows) {
 						result.put("size", rows.size());
-						Boolean approveAgenda = (Boolean)nodeService.getProperty(meeting, PROP_MEETINGS_APPROVE_AGENDA);
-						if (approveAgenda) {
-							result.put("status", "approvement_not_needed");
-							result.put("hideStatus", false);
-						} else {
-							String approvalState = routesService.getApprovalState(meeting);
-							if (null == approvalState || approvalState.isEmpty() || "UNDEF".equals(approvalState) ){
-								approvalState = "NEW";
+						Boolean isDeleted = Boolean.TRUE.equals(nodeService.getProperty(meeting, EventsService.PROP_EVENT_REMOVED));
+						if (!isDeleted) {
+							Boolean approveAgenda = (Boolean)nodeService.getProperty(meeting, PROP_MEETINGS_APPROVE_AGENDA);
+							if (approveAgenda) {
+								result.put("status", "approvement_not_needed");
+								result.put("hideStatus", false);
+							} else {
+								String approvalState = routesService.getApprovalState(meeting);
+								if (null == approvalState || approvalState.isEmpty() || "UNDEF".equals(approvalState) ){
+									approvalState = "NEW";
+								}
+								result.put("status", approvalState);
+								result.put("hideStatus", rows.size() <= 0);
 							}
-							result.put("status", approvalState);
-							result.put("hideStatus", rows.size() <= 0);
+						} else {
+							result.put("status", "DELETED");
+							result.put("hideStatus", true);
 						}
 					}
 				}

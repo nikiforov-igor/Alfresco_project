@@ -18,15 +18,10 @@
             "delete": ((review.deleteRowAllowed(node)==true) && node.hasPermission("Delete"))
         };
 
-        //сервисы
-        var dictionaryService = ctx.getBean("dictionaryService");
-        var namespaceService = ctx.getBean("namespaceService");
-
         for (var i = 0; i < fields.length; i++) {
             //fields[i] = напримери, cm_name
             var fName = fields[i];
             var realFieldName = fields[i].replace("_", ":");
-            var fieldQName = Packages.org.alfresco.service.namespace.QName.createQName(realFieldName, namespaceService);
 
             var nameSubstituteStringDef = null;
             if (nameSubstituteStrings != null && nameSubstituteStrings[i] != null && nameSubstituteStrings[i] != "") {
@@ -38,16 +33,16 @@
             // вытащить дефинишены
             var propDefinition = null, assocDefinition = null;
 
-            propDefinition = dictionaryService.getProperty(fieldQName);
+            propDefinition = base.getProperty(realFieldName);
             if (propDefinition == null) {
-                assocDefinition = dictionaryService.getAssociation(fieldQName);
+                assocDefinition = base.getAssociation(realFieldName);
             }
 
             if (propDefinition != null || assocDefinition != null) {
                 var isAssoc = assocDefinition != null,
                     type = isAssoc ?
-                        assocDefinition.getTargetClass().getName().toPrefixString(namespaceService) :
-                        propDefinition.getDataType().getName().toPrefixString(namespaceService),
+                        base.qNameToPrefixString(assocDefinition.getTargetClass().getName()) :
+                        base.qNameToPrefixString(propDefinition.getDataType().getName()),
                     endpointMany = isAssoc ? assocDefinition.isTargetMany() : false;
 
                 if (!isAssoc && type.indexOf("d:") == 0) {
@@ -93,7 +88,7 @@
                     }
                 } else {
                     fieldData.value = value;
-                    fieldData.displayValue =  isAssoc ? value : Evaluator.translateField(propDefinition, value, dictionaryService);
+                    fieldData.displayValue =  isAssoc ? value : Evaluator.translateField(propDefinition, value);
 
                     if (Evaluator.decorateFieldData(fieldData, node, nameSubstituteStringDef)) {
                         nodeData[(isAssoc ? "assoc_" : "prop_") + fName] = fieldData;

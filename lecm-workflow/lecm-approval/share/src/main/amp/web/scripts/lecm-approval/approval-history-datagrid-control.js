@@ -35,15 +35,11 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			if (!hasComment) {
 				return null;
 			}
-			var result,
-				messageTemplate = '<a href="javascript:void(0)" onclick="viewAttributes(\'{nodeRef}\', null, \'label.view.approval.details\', \'viewStageResult\')">{value}</a>';
 
-			result = YAHOO.lang.substitute(messageTemplate, {
-				nodeRef: nodeRef,
-				value: decisionData.displayValue
-			});
-
-			return result;
+			return "<a href=\"javascript:void(0);\" onclick=\"LogicECM.module.Base.Util.viewAttributes(" +
+				"{itemId:\'" + nodeRef + "\'," +
+				"title: \'label.view.approval.details\', " +
+				"formId: \'viewApprovalResult\' })>" + decisionData.displayValue + "</a>";
 		}
 		var html = null;
 

@@ -100,14 +100,14 @@ public class ReportMainProducer extends AbstractWebScript {
         final Map<String, String> templateParams = webScriptRequest.getServiceMatch().getTemplateVars();
         final String reportName = Utils.coalesce(templateParams.get("report"), templateParams.get("reportCode"));
         final String templateCode = requestParameters.get("templateCode");
-        String reportKey = reportName;
+        StringBuilder reportKey = new StringBuilder(reportName);
         for (Map.Entry<String, String> entry : requestParameters.entrySet()) {
-            reportKey += entry.getKey() + entry.getValue();
+            reportKey.append(entry.getKey()).append(entry.getValue());
         }
         WebScriptResponse old;
         try {
             lock.lock();
-            old = reportMap.put(reportKey, webScriptResponse);
+            old = reportMap.put(reportKey.toString(), webScriptResponse);
         } finally {
             lock.unlock();
         }
@@ -118,7 +118,7 @@ public class ReportMainProducer extends AbstractWebScript {
                 if (result != null) {
                     try {
                         lock.lock();
-                        WebScriptResponse lastWebScriptResponse = reportMap.remove(reportKey);
+                        WebScriptResponse lastWebScriptResponse = reportMap.remove(reportKey.toString());
                         lastWebScriptResponse.reset();
                         lastWebScriptResponse.setContentType(result.getMimeType());
                         lastWebScriptResponse.setContentEncoding(result.getEncoding());
@@ -134,7 +134,7 @@ public class ReportMainProducer extends AbstractWebScript {
                     }
                 }
             } finally {
-                reportMap.remove(reportKey);
+                reportMap.remove(reportKey.toString());
             }
         } else {
             try {

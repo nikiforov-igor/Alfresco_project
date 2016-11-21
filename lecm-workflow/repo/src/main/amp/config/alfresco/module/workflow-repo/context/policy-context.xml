@@ -4,27 +4,27 @@
 	   xmlns:p="http://www.springframework.org/schema/p"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean init-method="init"
+	<bean id="workflowAssigneesListItemPolicy" init-method="init"
 		  depends-on="workflow.model.bootstrap"
 		  class="ru.it.lecm.workflow.policies.WorkflowAssigneesListItemPolicy"
 		  p:policyComponent-ref="policyComponent"
 		  p:nodeService-ref="nodeService"
 		  p:orgstructureBean-ref="serviceOrgstructure"/>
 
-	<bean init-method="init"
+	<bean id="routeRolicy" init-method="init"
 		  depends-on="workflow.model.bootstrap"
 		  class="ru.it.lecm.workflow.policies.RouteRolicy"
 		  p:policyComponent-ref="policyComponent"
 		  p:nodeService-ref="nodeService"/>
 
-	<bean init-method="init"
+	<bean id="workflowResultListPolicy" init-method="init"
 		  depends-on="workflow.model.bootstrap"
 		  class="ru.it.lecm.workflow.policies.WorkflowResultListPolicy"
 		  p:policyComponent-ref="policyComponent"
 		  p:nodeService-ref="nodeService"
 		  p:orgstructureBean-ref="serviceOrgstructure"/>
 
-	<bean init-method="init"
+	<bean id="workflowAssociationPolicy" init-method="init"
 		  depends-on="workflow.model.bootstrap"
 		  class="ru.it.lecm.workflow.policies.WorkflowAssociationPolicy"
 		  parent="logicEcmAssociationPolicy"/>

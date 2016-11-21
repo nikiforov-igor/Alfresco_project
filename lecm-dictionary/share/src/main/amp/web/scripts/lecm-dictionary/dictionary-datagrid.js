@@ -21,13 +21,8 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
 
 (function () {
-    var $html = Alfresco.util.encodeHTML,
-        $links = Alfresco.util.activateLinks,
-        $userProfile = Alfresco.util.userProfileLink;
-    var attributeForShow;
-
-    LogicECM.module.Dictionary.DataGrid = function (containerId, attributeForShowing) {
-        attributeForShow = attributeForShowing;
+    LogicECM.module.Dictionary.DataGrid = function (containerId, rootNode) {
+        this.rootNode = rootNode;
         return LogicECM.module.Dictionary.DataGrid.superclass.constructor.call(this, containerId);
     };
 
@@ -40,6 +35,8 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
     YAHOO.lang.augmentObject(LogicECM.module.Dictionary.DataGrid.prototype, {
+        rootNode: null,
+
         isDeletable: function DataGrid_isDeletable(itemData) {
             return itemData["prop_deletable"] == undefined || itemData["prop_deletable"].value == "" || itemData["prop_deletable"].value == "true";
         },
@@ -181,6 +178,51 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                         }
                     });
             }
+        },
+
+        onActionMove:function (item) {
+            var me = this;
+
+            var args = {};
+            if (this.rootNode != null && this.rootNode.path != null) {
+                args.rootLocation = this.rootNode.path;
+            }
+
+            new Alfresco.module.SimpleDialog("move-dictionary-item-form" + Alfresco.util.generateDomId()).setOptions({
+                width: "50em",
+                templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
+                templateRequestParams: {
+                    submissionUrl: "/lecm/dictionary/action/changeParent/node",
+                    itemKind: "type",
+                    itemId: "lecm-dic:hierarchical_dictionary_values",
+                    formId: "moveDictionaryItem",
+                    mode: "create",
+                    submitType: "json",
+                    showCancelButton: true,
+                    itemNodeRef: item.nodeRef,
+                    ignoreNodes: item.nodeRef,
+                    args: JSON.stringify(args)
+                },
+                actionUrl: null,
+                destroyOnHide: true,
+                doBeforeDialogShow: {
+                    fn: function (p_form, p_dialog) {
+                        var contId = p_dialog.id + "-form-container";
+                        var dialogName = me.msg("title.dictionary.move");
+                        Alfresco.util.populateHTML(
+                            [contId + "_h", dialogName]
+                        );
+
+                        p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                    }
+                },
+                onSuccess: {
+                    fn: function (response) {
+                        YAHOO.Bubbling.fire("selectedCurrentNode");
+                    },
+                    scope: this
+                }
+            }).show();
         }
     }, true);
 })();

@@ -146,6 +146,12 @@
                     <default>false</default>
                 </property>
 
+                <!--Не рассылать приглашения-->
+                <property name="lecm-events:not-send-invitation">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+
                 <property name="lecm-events:temp-members-assoc-json">
                     <type>d:text</type>
                     <mandatory>false</mandatory>

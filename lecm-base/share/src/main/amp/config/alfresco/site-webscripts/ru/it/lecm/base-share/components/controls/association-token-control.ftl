@@ -61,61 +61,74 @@
     <#assign fieldValue=form.fields[fieldKey].value?replace(";", ",")>
 </#if>
 
+<#assign sortSelected = false>
+<#if params.sortSelected?? && params.sortSelected == "true">
+    <#assign  sortSelected = true>
+</#if>
+
+<#assign  verticalListClass = "">
+<#if params.verticalList?? && params.verticalList == "true">
+    <#assign  verticalListClass = "vertical">
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
-<#if disabled>
-<div id="${controlId}" class="control association-token-control viewmode">
-	<div class="label-div">
-        <#if showViewIncompleteWarning && (field.endpointMandatory!false || field.mandatory!false) && fieldValue == "">
-		<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}"/><span>
-        </#if>
-		<label>${field.label?html}:</label>
-	</div>
-	<div class="container">
-		<div class="value-div">
-			<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${fieldValue?html}" />
-			<span id="${controlId}-currentValueDisplay" class="mandatory-highlightable"></span>
-		</div>
-	</div>
-</div>
-<#else>
-<div class="control association-token-control editmode">
-	<div class="label-div">
-		<label for="${controlId}">
-        ${field.label?html}:
-            <#if field.endpointMandatory!false || field.mandatory!false>
-				<span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
-            </#if>
-		</label>
-	</div>
-	<div id="${controlId}" class="container">
-        <#if field.disabled == false>
-			<input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
-			<input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
-			<input type="hidden" id="${controlId}-selectedItems"/>
 
-			<div id="${controlId}-itemGroupActions" class="buttons-div">
-				<input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
-                <#if showCreateNewButton>
-					<span class="create-new-button">
+<#if disabled>
+    <div id="${controlId}" class="control association-token-control ${verticalListClass} viewmode">
+        <div class="label-div">
+            <#if showViewIncompleteWarning && (field.endpointMandatory!false || field.mandatory!false) && fieldValue == "">
+            <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png"
+                                                  title="${msg("form.field.incomplete")}"/><span>
+            </#if>
+            <label>${field.label?html}:</label>
+        </div>
+        <div class="container">
+            <div class="value-div">
+                <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${fieldValue?html}"/>
+                <span id="${controlId}-currentValueDisplay" class="mandatory-highlightable"></span>
+            </div>
+        </div>
+    </div>
+<#else>
+    <div id="${controlId}" class="control association-token-control ${verticalListClass} editmode">
+        <div class="label-div">
+            <label for="${controlId}">
+            ${field.label?html}:
+                <#if field.endpointMandatory!false || field.mandatory!false>
+                    <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
+                </#if>
+            </label>
+        </div>
+        <div id="${controlId}" class="container collapse-width">
+            <#if field.disabled == false>
+                <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
+                <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
+                <input type="hidden" id="${controlId}-selectedItems"/>
+
+                <div id="${controlId}-itemGroupActions" class="buttons-div">
+                    <input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
+                    <#if showCreateNewButton>
+                        <span class="create-new-button">
                         <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>
                     </span>
-                </#if>
-			</div>
+                    </#if>
+                </div>
 
-            <@renderTreePickerDialogHTML controlId plane showSearch/>
-        </#if>
-
-		<div class="value-div">
-			<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${fieldValue?html}" />
-            <#if showAutocomplete>
-				<input id="${controlId}-autocomplete-input" type="text" class="mandatory-highlightable"/>
+                <@renderTreePickerDialogHTML controlId plane showSearch/>
             </#if>
-			<div id="${controlId}-currentValueDisplay" class="control-selected-values <#if showAutocomplete>hidden1<#else>mandatory-highlightable</#if>"></div>
-		</div>
-	</div>
-	<div id="${controlId}-autocomplete-container"></div>
-</div>
+
+            <div class="value-div">
+                <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${fieldValue?html}"/>
+                <#if showAutocomplete>
+                    <input id="${controlId}-autocomplete-input" type="text" class="mandatory-highlightable"/>
+                </#if>
+                <div id="${controlId}-currentValueDisplay"
+                     class="control-selected-values <#if showAutocomplete>hidden1<#else>mandatory-highlightable</#if>"></div>
+            </div>
+        </div>
+        <div id="${controlId}-autocomplete-container"></div>
+    </div>
 </#if>
 <div class="clear"></div>
 
@@ -207,11 +220,15 @@
 				showPath: ${showPath?string},
 				showAutocomplete: ${showAutocomplete?string},
 				currentValue: "${fieldValue!''}",
+                sortSelected: ${sortSelected?string},
             <#if params.defaultValueDataSource??>
 				defaultValueDataSource: "${params.defaultValueDataSource}",
             </#if>
             <#if params.useStrictFilterByOrg??>
 				useStrictFilterByOrg: "${params.useStrictFilterByOrg?string}",
+            </#if>
+            <#if params.doNotCheckAccess??>
+                doNotCheckAccess: ${params.doNotCheckAccess?string},
             </#if>
             <#if params.childrenDataSource??>
 				childrenDataSource: "${params.childrenDataSource}",

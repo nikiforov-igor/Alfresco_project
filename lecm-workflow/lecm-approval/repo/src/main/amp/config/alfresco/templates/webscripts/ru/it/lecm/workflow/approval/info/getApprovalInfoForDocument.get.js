@@ -9,12 +9,8 @@
 		if (currentIterationNode != null) {
 			var children = currentIterationNode.getChildren();
 			if (children != null) {
-				var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
-				var dictionaryService = ctx.getBean("dictionaryService");
-				var namespaceService = ctx.getBean("namespaceService");
-
-				var decisionPropDefinition = getFieldDefinition("lecmApproveAspects:approvalDecision", dictionaryService, namespaceService);
-				var statePropDefinition = getFieldDefinition("lecmApproveAspects:approvalState", dictionaryService, namespaceService);
+				var decisionPropDefinition = base.getProperty("lecmApproveAspects:approvalDecision");
+				var statePropDefinition = base.getProperty("lecmApproveAspects:approvalState");
 
 				children.sort(function(a, b)
 				{
@@ -43,11 +39,11 @@
 									dueDate: item.properties["lecmWorkflowRoutes:stageItemDueDate"],
 									decision: {
 										value: item.properties["lecmApproveAspects:approvalDecision"],
-										displayValue: Evaluator.translateField(decisionPropDefinition, item.properties["lecmApproveAspects:approvalDecision"], dictionaryService)
+										displayValue: Evaluator.translateField(decisionPropDefinition, item.properties["lecmApproveAspects:approvalDecision"])
 									},
 									state: {
 										value: item.properties["lecmApproveAspects:approvalState"],
-										displayValue: Evaluator.translateField(statePropDefinition, item.properties["lecmApproveAspects:approvalState"], dictionaryService)
+										displayValue: Evaluator.translateField(statePropDefinition, item.properties["lecmApproveAspects:approvalState"])
 									}
 								});
 							}
@@ -59,11 +55,11 @@
 								type: stage.properties["lecmWorkflowRoutes:stageWorkflowType"],
 								decision: {
 									value: stage.properties["lecmApproveAspects:approvalDecision"],
-									displayValue: Evaluator.translateField(decisionPropDefinition, stage.properties["lecmApproveAspects:approvalDecision"], dictionaryService)
+									displayValue: Evaluator.translateField(decisionPropDefinition, stage.properties["lecmApproveAspects:approvalDecision"])
 								},
 								state: {
 									value: stage.properties["lecmApproveAspects:approvalState"],
-									displayValue: Evaluator.translateField(statePropDefinition, stage.properties["lecmApproveAspects:approvalState"], dictionaryService)
+									displayValue: Evaluator.translateField(statePropDefinition, stage.properties["lecmApproveAspects:approvalState"])
 								},
 								term: stage.properties["lecmWorkflowRoutes:stageWorkflowTerm"]
 							},
@@ -76,8 +72,3 @@
 	}
 	model.stages = stages;
 })();
-
-function getFieldDefinition(propName, dictionaryService, namespaceService) {
-	var propQName = Packages.org.alfresco.service.namespace.QName.createQName(propName, namespaceService);
-	return dictionaryService.getProperty(propQName);
-}

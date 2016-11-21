@@ -1,6 +1,7 @@
 <#assign viewFormat>${msg("form.control.date-picker.view.date.format")}</#assign>
 
 <#assign controlId = fieldHtmlId + "-cntrl">
+<#if field.control.params.onlyPositive?? && field.control.params.onlyPositive == "true"><#assign onlyPositive=true><#else><#assign onlyPositive=false></#if>
 
 <script type="text/javascript">//<![CDATA[
 (function()
@@ -12,9 +13,12 @@
     }
 
     function createNumberRange(){
-        new LogicECM.NumberRange("${controlId}", "${fieldHtmlId}").setMessages(
+        var control = new LogicECM.NumberRange("${controlId}", "${fieldHtmlId}").setMessages(
         ${messages}
         );
+        control.setOptions({
+            onlyPositive: ${onlyPositive?string}
+        });
     }
 
     YAHOO.util.Event.onDOMReady(init);

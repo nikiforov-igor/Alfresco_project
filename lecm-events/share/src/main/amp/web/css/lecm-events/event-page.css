@@ -1,11 +1,6 @@
-.yui-skin-lecmTheme .event-page .control .label-div {
-    width: auto;
-    max-width: 300px;
-}
 .yui-skin-lecmTheme .event-page .form-fields {
     padding-bottom: 1em;
 }
 .yui-skin-lecmTheme .event-page .form-fields .lecm-dashlet-actions {
-    padding-right: 0;
-    margin: 10px 3px 0;
+	width: 16px;
 }

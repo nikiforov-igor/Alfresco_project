@@ -30,9 +30,9 @@ LogicECM.module = LogicECM.module || {};
 
     var IDENT_CREATE_NEW = "~CREATE~NEW~";
 
-    LogicECM.module.AssociationTreeViewer = function(htmlId)
+    LogicECM.module.AssociationTreeViewer = function(htmlId, subName)
 	{
-        LogicECM.module.AssociationTreeViewer.superclass.constructor.call(this, "AssociationTreeViewer", htmlId);
+        LogicECM.module.AssociationTreeViewer.superclass.constructor.call(this, "AssociationTreeViewer" + (subName ? subName : ""), htmlId);
         YAHOO.Bubbling.on("refreshItemList", this.onRefreshItemList, this);
         YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemAdded, this);
 		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
@@ -160,6 +160,8 @@ LogicECM.module = LogicECM.module || {};
 
             useStrictFilterByOrg: false,
 
+            doNotCheckAccess: false,
+
             defaultValue: null,
 
 	        defaultValueDataSource: null,
@@ -282,7 +284,8 @@ LogicECM.module = LogicECM.module || {};
                     this.createPickerDialog();
                 }
 
-	            Event.addListener(this.options.pickerId + "-picker-items", "scroll", this.onPickerItemsContainerScroll.bind(this));
+                Event.removeListener(this.options.pickerId + "-picker-items", "scroll", this.onPickerItemsContainerScroll);
+                Event.addListener(this.options.pickerId + "-picker-items", "scroll", this.onPickerItemsContainerScroll, this, true);
 
                 if (!this.options.lazyLoading) {
                     this._loadSearchProperties();
@@ -669,7 +672,6 @@ LogicECM.module = LogicECM.module || {};
 	            }
 		        this.searchData = searchData;
 
-				if (this.option)
 	            this.isSearch = true;
 	            this._updateItems(nodeRef, searchData);
 			} else if (searchTerm === "") {
@@ -1040,7 +1042,7 @@ LogicECM.module = LogicECM.module || {};
                                             }
                                         });
                                 }
-                                
+
                                 this._loadSelectedItems(this.options.clearFormsOnStart, true);
 
                                 if (this.options.showCreateNewButton && this.widgets.createNewButton != null) {
@@ -1448,7 +1450,7 @@ LogicECM.module = LogicECM.module || {};
                 return $html(p_value);
             };
 
-            return YAHOO.lang.substitute(template, item, renderHelper);
+            return YAHOO.lang.substitute(template, item);
         },
 
         canItemBeSelected: function AssociationTreeViewer_canItemBeSelected(id)
@@ -1492,9 +1494,8 @@ LogicECM.module = LogicECM.module || {};
 
 		onPickerItemsContainerScroll: function(event) {
 			var container = event.currentTarget;
-			if (container.scrollTop + container.clientHeight == container.scrollHeight) {
-				Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "visible");
-
+			if (container.scrollTop + container.clientHeight == container.scrollHeight && !this.isSearch) {
+                Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "visible");
 				this._loadItems(this.currentNode.data.nodeRef, this.searchData, false);
 			}
 		},
@@ -1524,6 +1525,7 @@ LogicECM.module = LogicECM.module || {};
 				}
 
 				this.alreadyShowCreateNewLink = true;
+                this.isSearch = false;
 			};
 
 			var failureHandler = function AssociationTreeViewer__updateItems_failureHandler(sRequest, oResponse)
@@ -1537,6 +1539,7 @@ LogicECM.module = LogicECM.module || {};
 				{
 					try
 					{
+                        this.isSearch = false;
 						var response = YAHOO.lang.JSON.parse(oResponse.responseText);
 						this.widgets.dataTable.set("MSG_ERROR", response.message);
 						this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
@@ -1558,6 +1561,7 @@ LogicECM.module = LogicECM.module || {};
 			// call the pickerchildren data webscript
             //if widget is active and not destroyed!!!
             if (this.widgets.dataSource) {
+                this.isSearch = true;
                 this.widgets.dataSource.sendRequest(url,
                     {
                         success: successHandler,
@@ -1577,38 +1581,46 @@ LogicECM.module = LogicECM.module || {};
         {
 	        var additionalFilter = this.options.additionalFilter;
 			var allowedNodesFilter = "";
+            var notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i;
+            var singleNotQuery;
 
-			if (this.options.allowedNodes) {
-				if (this.options.allowedNodes.length) {
-					for (var i in this.options.allowedNodes) {
-						if (allowedNodesFilter.length > 0) {
-							allowedNodesFilter += " OR ";
-						}
-						allowedNodesFilter += "ID:\"" + this.options.allowedNodes[i] + "\"";
-					}
-				} else {
-					allowedNodesFilter = 'ISNULL:"sys:node-dbid"';
-				}
+            if (this.options.allowedNodes) {
+                if (this.options.allowedNodes.length) {
+                    for (var i in this.options.allowedNodes) {
+                        if (allowedNodesFilter.length > 0) {
+                            allowedNodesFilter += " OR ";
+                        }
+                        allowedNodesFilter += "ID:\"" + this.options.allowedNodes[i] + "\"";
+                    }
+                } else {
+                    allowedNodesFilter = '(ISNULL:"sys:node-dbid" OR NOT EXISTS:"sys:node-dbid")';
+                }
 
-				if (additionalFilter) {
-					additionalFilter = "(" + additionalFilter + ") AND (" + allowedNodesFilter + ")";
-				} else {
-					additionalFilter = allowedNodesFilter;
-				}
-			}
+                if (additionalFilter != null && additionalFilter.length > 0) {
+                    singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
+                    additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND (" + allowedNodesFilter + ")";
+                } else {
+                    additionalFilter = allowedNodesFilter;
+                }
+            }
 
-	        if (this.options.ignoreNodes != null && this.options.ignoreNodes.length > 0) {
-		        var ignoreNodesFilter = "ISNOTNULL:\"cm:name\"";
-		        for (var i = 0; i < this.options.ignoreNodes.length; i++) {
-			        ignoreNodesFilter += " AND NOT ID:\"" + this.options.ignoreNodes[i] + "\"";
-		        }
+            if (this.options.ignoreNodes != null && this.options.ignoreNodes.length > 0) {
+                var ignoreNodesFilter = "";
+                for (var i = 0; i < this.options.ignoreNodes.length; i++) {
+                    if (ignoreNodesFilter !== "") {
+                        ignoreNodesFilter += " AND ";
+                    }
+                    ignoreNodesFilter += "NOT ID:\"" + this.options.ignoreNodes[i] + "\"";
+                }
 
-		        if (additionalFilter != null && additionalFilter.length > 0) {
-			        additionalFilter = "(" + additionalFilter + ") AND (" + ignoreNodesFilter + ")";
-		        } else {
-			        additionalFilter = ignoreNodesFilter;
-		        }
-	        }
+                var addBrackets = this.options.ignoreNodes.length > 1;
+                if (additionalFilter != null && additionalFilter.length > 0) {
+                    singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
+                    additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND " + (addBrackets ? "(" : "") + ignoreNodesFilter + (addBrackets ? ")" : "");
+                } else {
+                    additionalFilter = ignoreNodesFilter;
+                }
+            }
 
             return "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
                 "&skipCount=" + this.skipItemsCount + "&size=" + this.getMaxSearchResult() +
@@ -1616,6 +1628,7 @@ LogicECM.module = LogicECM.module || {};
 	            "&sortProp=" + encodeURIComponent(this.options.sortProp) +
 	            "&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
 				"&additionalFilter=" + encodeURIComponent(additionalFilter) +
+                "&doNotCheckAccess=" + encodeURIComponent("" + this.options.doNotCheckAccess) +
                 "&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg) +
                 "&pathRoot=" + encodeURIComponent(this.options.rootLocation) +
                 "&pathNameSubstituteString=" + encodeURIComponent(this.options.pathNameSubstituteString);
@@ -1659,7 +1672,7 @@ LogicECM.module = LogicECM.module || {};
             var fieldId = this.options.pickerId + "-selected-elements";
             Dom.get(fieldId).innerHTML = '';
             Dom.get(fieldId).className = 'currentValueDisplay';
-            
+
 
             var num = 0;
             for (i in items) {
@@ -1730,7 +1743,7 @@ LogicECM.module = LogicECM.module || {};
             var title = (this.options.showAssocViewForm && item.nodeRef != null) ? Alfresco.component.Base.prototype.msg("title.click.for.extend.info") : displayValue;
 	        var result = "<span class='not-person' title='" + title + "'>";
 	        if (this.options.showAssocViewForm && item.nodeRef != null) {
-		        result += "<a href='javascript:void(0);' " + " onclick=\"viewAttributes(\'" + item.nodeRef + "\', null, \'logicecm.view\')\">" + displayValue + "</a>";
+                result += "<a href='javascript:void(0);' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + item.nodeRef + "\', title: \'logicecm.view\'})\">" + displayValue + "</a>";
 	        } else {
 		        result += displayValue;
 	        }
@@ -1773,12 +1786,12 @@ LogicECM.module = LogicECM.module || {};
 	        }
 
             var el = Dom.get(this.options.controlId + "-currentValueDisplay");
-            
+
 	        if (el != null) {
 		        if (clearCurrentDisplayValue) {
 	                el.innerHTML = '';
 		        }
-                
+
 	            for (var i in this.selectedItems) {
 	                if (this.options.plane || !this.options.showSelectedItemsPath) {
 	                    var displayName = this.selectedItems[i].selectedName;
@@ -1816,7 +1829,7 @@ LogicECM.module = LogicECM.module || {};
 	        }
 
             if (!this.options.disabled) {
-                
+
                 var addItems = this.getAddedItems();
 
                 // Update added fields in main form to be submitted
@@ -1880,14 +1893,14 @@ LogicECM.module = LogicECM.module || {};
 			            selectedItems:selectedItems,
 			            selectedItemsMetaData:Alfresco.util.deepCopy(this.selectedItems)
 		            });
-                
+
                 if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
                     var params = {
                         selectedItems: this.selectedItems,
                         formId: this.options.formId,
                         fieldId: this.options.fieldId
                     };
-                    
+
                     YAHOO.Bubbling.fire(this.options.changeItemsFireAction, params);
                 }
             }
@@ -2135,7 +2148,7 @@ LogicECM.module = LogicECM.module || {};
 				this.allowedNodes = null;
 				this.allowedNodesScript = null;
 
-				this.init();
+				this.onReady();
 			}
 		}
 	});

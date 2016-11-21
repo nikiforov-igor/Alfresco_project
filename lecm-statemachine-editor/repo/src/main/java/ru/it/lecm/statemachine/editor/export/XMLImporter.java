@@ -5,10 +5,14 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.editor.StatemachineEditorModel;
@@ -32,10 +36,13 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 public class XMLImporter {
+    private static final transient Logger logger = LoggerFactory.getLogger(XMLImporter.class);
+
     public static final String WRONG_XML_FORMAT = "Wrong XML format! ";
     public static final String ACTION_ID_PROPERTY = "actionId";
     public static final String ACTION_EXECUTION_PROPERTY = "actionExecution";
     private NodeService nodeService;
+    private PermissionService permissionService;
     private DictionaryBean serviceDictionary;
 
     private XMLStreamReader xmlr;
@@ -45,19 +52,58 @@ public class XMLImporter {
     private NodeRef statusesNodeRef;
     private NodeRef rolesNodeRef;
     private NodeRef alternativesNodeRef;
+    RepositoryStructureHelper repositoryHelper;
 
     private Map<String, NodeRef> businessRoles = new HashMap<String, NodeRef>();
 
     //TODO Refactoring in progress
     public XMLImporter(InputStream inputStream, RepositoryStructureHelper repositoryHelper, NodeService nodeService, DictionaryBean serviceDictionary, String stateMachineId) throws XMLStreamException {
-            this.nodeService = nodeService;
-            this.serviceDictionary = serviceDictionary;
-            
-            final NodeRef companyHome = repositoryHelper.getHomeRef();
-            NodeRef stateMachinesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.STATEMACHINES);
-            this.stateMachineNodeRef = nodeService.getChildByName(stateMachinesRoot, ContentModel.ASSOC_CONTAINS, stateMachineId);
-            
-            this.xmlr = XMLInputFactory.newInstance().createXMLStreamReader(inputStream);
+        this(inputStream,repositoryHelper,nodeService,serviceDictionary,null,stateMachineId);
+    }
+
+    public XMLImporter(InputStream inputStream, RepositoryStructureHelper repositoryHelper, NodeService nodeService,
+                       DictionaryBean serviceDictionary, PermissionService permissionService, String stateMachineId) throws XMLStreamException {
+
+        this.nodeService = nodeService;
+        this.serviceDictionary = serviceDictionary;
+        this.repositoryHelper = repositoryHelper;
+        this.permissionService = permissionService;
+
+        try {
+            stateMachineNodeRef = getStateMachineFolder(stateMachineId);
+        }  catch (WriteTransactionNeededException e) {
+            logger.error(e.getMessage());
+        }
+
+        this.xmlr = XMLInputFactory.newInstance().createXMLStreamReader(inputStream);
+    }
+    /**
+     * Проверяем наличие дефолтной МС.
+     * Если пусто - создаем.
+     * @param stateMachineId
+     * TODO рефакторинг - разбить на составляющие и запихнуть в какой-нибудь сервисный бин
+     * + задействовать его же в statemachine.process.get вебскрипте
+     */
+    private NodeRef getStateMachineFolder(String stateMachineId) throws WriteTransactionNeededException{
+
+        final NodeRef companyHome = repositoryHelper.getHomeRef();
+        NodeRef stateMachinesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.STATEMACHINES);
+        if(stateMachinesRoot==null) {
+                stateMachinesRoot = repositoryHelper.createFolder(companyHome, StatemachineEditorModel.STATEMACHINES);
+                if(permissionService!=null) {
+                    permissionService.setInheritParentPermissions(stateMachinesRoot, false);
+                }
+        }
+        //проверяем ноду мс
+        NodeRef stateMachineNodeRef = nodeService.getChildByName(stateMachinesRoot, ContentModel.ASSOC_CONTAINS, stateMachineId);
+        if (stateMachineNodeRef == null) {
+            Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+            properties.put(ContentModel.PROP_NAME, stateMachineId);
+            ChildAssociationRef stateMachineChildAssocRef = nodeService.createNode(stateMachinesRoot, ContentModel.ASSOC_CONTAINS,
+                    QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, stateMachineId), StatemachineEditorModel.TYPE_STATEMACHINE, properties);
+            stateMachineNodeRef = stateMachineChildAssocRef.getChildRef();
+        }
+        return stateMachineNodeRef;
     }
 
     public void importStateMachine() throws XMLStreamException {

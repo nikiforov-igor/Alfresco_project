@@ -4,8 +4,8 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.reports.api.ReportDSContext;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
-import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.utils.LuceneSearchWrapper;
+import ru.it.lecm.reports.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -68,9 +68,9 @@ public class ErrandsOutOfTimeProvider extends GenericDSProviderBase {
 
         if (!executorsRefs.isEmpty()) {
             builder.emmit(hasData ? " AND (" : "");
-            String executorsQuery = "";
+            StringBuilder executorsQuery = new StringBuilder();
             for (String executorRef : executorsRefs) {
-                executorsQuery += ("@lecm\\-errands\\:executor\\-assoc\\-ref:\"" + executorRef + "\" OR ");
+                executorsQuery.append("@lecm\\-errands\\:executor\\-assoc\\-ref:\"").append(executorRef).append("\" OR ");
             }
             builder.emmit(executorsQuery.substring(0, executorsQuery.length() - 4));
             builder.emmit(hasData ? ")" : "");

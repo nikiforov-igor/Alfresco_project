@@ -1,5 +1,4 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
-<#include "/ru/it/lecm/base-share/components/view.lib.ftl"/>
 <@templateHeader>
 	<@script type="text/javascript" src="${url.context}/res/components/documentlibrary/actions.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/yui/resize/resize.js"></@script>
@@ -57,7 +56,6 @@ LogicECM.module.Documents = LogicECM.module.Documents|| {};
 </@>
 
 <@templateBody>
-	<@viewForm />
 <div id="alf-hd">
 	<@region id="html-upload" scope="global" chromeless="true" />
     <@region id="flash-upload" scope="global" chromeless="true" />
@@ -73,6 +71,7 @@ LogicECM.module.Documents = LogicECM.module.Documents|| {};
         <div class="yui-gc">
             <div class="bordered-panel doc-right-part">
 				<@region id="document-actions" scope="template"/>
+				<@region id="document-metadata" scope="template"/>
 				<#if documentType?? && documentType == "{http://www.it.ru/logicECM/meetings/1.0}document">
 				<@region id="meeting-agenda" scope="template"/>
 				</#if>

@@ -115,6 +115,7 @@
 		<property name="authorityService" ref="authorityService" />
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="workflowNodeConverter" ref="activitiNodeConverter"/>
+		<property name="globalProperties" ref="global-properties"/>
 	</bean>
 
 	<bean id="lecmRepositoryWebScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.LecmRepositoryWebScriptBean">
@@ -203,6 +204,7 @@
 		<property name="models">
 			<list>
 				<value>alfresco/module/base-repo/models/lecm-base-aspects-model.xml</value>
+				<value>alfresco/module/base-repo/models/lecm-base-dummy-script-aspects-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
@@ -490,7 +492,6 @@
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
-	<util:constant id="LECM_MESSAGE_FOLDER_ID" static-field="ru.it.lecm.base.beans.LecmMessageServiceImpl.LECM_MESSAGE_FOLDER_ID"/>
 	<bean id="lecmMessageService"
 	      parent="baseBean"
 	      depends-on="dictionaryBootstrap"
@@ -500,11 +501,6 @@
 		<property name="repoMessagesLocation" ref="customMessagesRepositoryLocation"/>
 		<property name="searchService" ref="searchService"/>
 		<property name="locales" value="${lecm.mlLocales}"/>
-		<property name="folders">
-			<map>
-				<entry key="#{LECM_MESSAGE_FOLDER_ID}" value="Сервис Сообщения"/>
-			</map>
-		</property>
 	</bean>
 
 	<bean id="lecmMessagesLoader"

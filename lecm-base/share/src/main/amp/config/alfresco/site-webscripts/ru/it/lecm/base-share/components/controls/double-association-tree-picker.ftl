@@ -164,7 +164,7 @@
 
     function createDoublePicker() {
 
-	    var fistControl = new LogicECM.module.AssociationTreeViewer("${fieldHtmlId}");
+	    var fistControl = new LogicECM.module.AssociationTreeViewer("${fieldHtmlId}", "-first");
 	    fistControl.setOptions({
 	        <#if disabled>
 	            disabled: true,
@@ -262,7 +262,7 @@
 	    });
 	    fistControl.setMessages(${messages});
 
-	    var secondControl = new LogicECM.module.AssociationTreeViewer("${fieldHtmlId}");
+	    var secondControl = new LogicECM.module.AssociationTreeViewer("${fieldHtmlId}", "-second");
 	    secondControl.setOptions({
 		    prefixPickerId: "${secondControlId}",
 		    <#if disabled>

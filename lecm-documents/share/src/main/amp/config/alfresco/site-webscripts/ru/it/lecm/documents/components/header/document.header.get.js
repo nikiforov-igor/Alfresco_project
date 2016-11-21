@@ -52,6 +52,12 @@ function main() {
             model.viewUrl = result.url;
         }
 
+        url = '/lecm/document/api/copy/url?nodeRef=' + encodeURI(model.nodeRef);
+        var copyReq = remote.connect("alfresco").get(url);
+        if (copyReq.status == 200) {
+            var result = eval('(' + copyReq + ')');
+            model.copyURL = result.copyURL;
+        }
     } else {
 		var accessInfo = DocumentUtils.getNodeAccess(model.nodeRef, user.id);
 		if (accessInfo) {

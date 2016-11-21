@@ -134,6 +134,7 @@ public interface OperativeStorageService {
 	public void grantPermissionToArchivist(NodeRef docNodeRef);
 
 	public boolean caseHasDocumentsVolumes(NodeRef caseRef);
+	public boolean caseHasDocumentsVolumes(NodeRef caseRef, boolean checkVolumes);
 
 	public boolean canCopyUnits(List<NodeRef> units, NodeRef dest);
 

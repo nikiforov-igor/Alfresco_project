@@ -5,7 +5,7 @@
     <parent>
         <groupId>ru.it.lecm.base</groupId>
         <artifactId>base</artifactId>
-        <version>1.8.0</version>
+        <version>1.8.5</version>
     </parent>
 
     <artifactId>base-share-api</artifactId>

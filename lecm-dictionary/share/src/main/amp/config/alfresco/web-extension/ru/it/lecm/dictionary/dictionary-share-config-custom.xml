@@ -143,6 +143,29 @@
 					<show id="cm:name" />
 				</field-visibility>
 			</form>
+
+            <form id="moveDictionaryItem">
+                <field-visibility>
+                    <show id="cm:title" force="true"/>
+                    <show id="childNodeRef" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:title" label-id="label.dictionary.move.parent" mandatory="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-control.ftl">
+                            <control-param name="fieldName">parentNodeRef</control-param>
+                            <control-param name="rootLocationArg">rootLocation</control-param>
+                            <control-param name="endpointType">lecm-dic:hierarchical_dictionary_values</control-param>
+                            <control-param name="treeBranchesDatasource">lecm/dictionary/move/tree</control-param>
+                            <control-param name="rootNodeScript">lecm/dictionary/move/root</control-param>
+                        </control>
+                    </field>
+                    <field id="childNodeRef">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-arguments-hidden-control.ftl">
+                            <control-param name="argName">itemNodeRef</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
 		</forms>
 	</config>
 
@@ -166,13 +189,6 @@
 					<show id="lecm-currency:alphabetic-code"/>
 					<show id="lecm-currency:digital-code"/>
 				</field-visibility>
-				<appearance>
-					<field id="lecm-currency:digital-code">
-						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
-							<control-param name="nameSuffix">-strong-constant</control-param>
-						</control>
-					</field>
-				</appearance>
 			</form>
 			<form id="search">
 				<field-visibility>

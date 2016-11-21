@@ -61,7 +61,7 @@
         tmpParams.nameSubstituteStrings = ',,,{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name},{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}';
         tmpParams.parent = orgstructure.getEmployeesDirectory().nodeRef.toString();
         tmpParams.searchNodes = null;
-        tmpParams.showInactive = true;
+        tmpParams.showInactive = false;
         tmpParams.sort = 'lecm-orgstr:employee-last-name|true';
         tmpParams.startIndex = params.startIndex;
         tmpParams.useChildQuery = false;
@@ -89,5 +89,4 @@
 
         model.data = processResults(delegationOpts, params.fields, params.nameSubstituteStrings, params.startIndex, model.data.paging.totalRecords);
     }
-
 })();

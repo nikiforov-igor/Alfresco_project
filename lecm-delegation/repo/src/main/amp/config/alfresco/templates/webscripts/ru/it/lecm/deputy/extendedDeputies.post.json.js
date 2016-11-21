@@ -29,21 +29,23 @@
 		deputyAssocs = currentEmployee.assocs['lecm-deputy:deputy-assoc'],
 		chiefsAssocs = currentEmployee.assocs['lecm-secretary-aspects:chief-assoc'];
 
+	var allDeputies = deputyAssocs ? deputyAssocs : [];
+
 	if(chiefsAssocs) {
 		for each(var chiefAssoc in chiefsAssocs) {
 			var chiefDeputyAssocs = chiefAssoc.assocs['lecm-deputy:deputy-assoc'];
 
 			for each(var chiefDep in chiefDeputyAssocs) {
-				deputyAssocs.push(chiefDep);
+				allDeputies.push(chiefDep);
 			}
 		}
 	}
 
-	eliminateDuplicates(deputyAssocs);
+	eliminateDuplicates(allDeputies);
 
-	for each(var deputy in deputyAssocs) {
+	for each(var deputy in allDeputies) {
 		var employeeAssocs = deputy.assocs['lecm-deputy:employee-assoc'];
-		if(employeeAssocs) {
+		if(employeeAssocs && employeeAssocs.length) {
 			var employee = employeeAssocs[0];
 			var employeeNodeRef = employee.nodeRef.toString();
 

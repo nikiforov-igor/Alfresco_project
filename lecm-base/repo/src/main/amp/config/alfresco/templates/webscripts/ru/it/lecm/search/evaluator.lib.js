@@ -163,24 +163,26 @@ var Evaluator = {
      * @param value {String} default value
      * @return {String}
      */
-	translateField: function Evaluator_translateField(propertyDef, value) {
-		//if (propertyDef == null || propertyDef == "") {
-		//	return null;
-		//}
-		//if (propertyDef.getConstraints() != null) {
-		//	for (var i = 0, len = propertyDef.getConstraints().size(); i < len; ++i) {
-        //        var constraint = propertyDef.getConstraints().get(i).getConstraint();
-		//		if ("LIST" == constraint.getType()) {
-		//			var allowedV = constraint.getAllowedValues();
-		//			for (var j = 0; j < allowedV.size(); ++j) {
-		//				var allowedVasString = "" + allowedV.get(j);
-        //                if (value == allowedVasString) {
-        //                    return constraint.getDisplayLabel(allowedVasString, dictionaryService);
-        //                }
-		//			}
-		//		}
-		//	}
-		//}
+	
+	translateField: function Evaluator_translateField(objDef, value) {
+		if (!objDef) {
+			return null;
+		}
+
+		if (objDef.constraints) {
+			for (var i = 0, len = objDef.constraints.size(); i < len; ++i) {
+                var constraint = objDef.constraints.get(i).constraint;
+				if ("LIST" == constraint.type) {
+					var allowedV = constraint.allowedValues;
+					for (var j = 0; j < allowedV.size(); ++j) {
+						var allowedValue = "" + allowedV.get(j);
+                        if (value == allowedValue) {
+                            return base.getListConstraintDisplayValue(constraint, allowedValue);
+                        }
+					}
+				}
+			}
+		}
 		return value;
 	},
 
@@ -212,7 +214,6 @@ var Evaluator = {
             //fields[i] = напримери, cm_name
             var fName = fields[i];
             var realFieldName = fields[i].replace("_", ":");
-            var fieldQName = base.createQName(realFieldName);
 
             var nameSubstituteStringDef = null;
             if (nameSubstituteStrings != null && nameSubstituteStrings[i] != null && nameSubstituteStrings[i] != "") {
@@ -225,10 +226,10 @@ var Evaluator = {
             var propDefinition = null, assocDefinition = null;
 
 			///////////// PropertyDefinition
-            propDefinition = base.getProperty(fieldQName);
+            propDefinition = base.getProperty(realFieldName);
             if (propDefinition == null) {
             ///////////// assocDefinition
-                assocDefinition = base.getAssociation(fieldQName);
+                assocDefinition = base.getAssociation(realFieldName);
             }
 
             if (propDefinition != null || assocDefinition != null) {

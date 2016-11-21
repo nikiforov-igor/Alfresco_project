@@ -586,12 +586,12 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
      * 		- ArmServiceImpl -> getActiveWorkflowsQuery
      */
     @Override
-    public List<NodeRef> getDocumentsWithActiveTasks(String employeeLogin, Set<String> workflowIds, Integer remainingDays) {
+    public List<NodeRef> getDocumentsWithActiveTasks(String employeeLogin, Set<String> tasksNames, Integer remainingDays) {
         Set<NodeRef> documents = new HashSet<NodeRef>();
 
         List<WorkflowTask> tasks = getAssignedAndPooledTasks(employeeLogin);
         for (WorkflowTask task : tasks) {
-            if (workflowIds == null || workflowIds.isEmpty() || workflowIds.contains(task.getDefinition().getId())) {
+            if (tasksNames == null || tasksNames.isEmpty() || tasksNames.contains(task.getDefinition().getId())) {
 	            NodeRef doc = getTaskDocument(task, null);
                 if (doc != null) {
 	                if (remainingDays == null) {
@@ -612,45 +612,47 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     }
 
     @Override
-    public List<NodeRef> getDocumentsWithFinishedTasks(String authority, Set<String> workflowIds) {
-        Set<NodeRef> documents = new HashSet<>();
+    public List<NodeRef> getDocumentsWithFinishedTasks(List<NodeRef> documents, String authority, Set<String> taskNames) {
+        List<NodeRef> resultedDocs = new ArrayList<>();
 
-        Set<String> excluded = new HashSet<>();
-        for (String key : getStateMachines().getKeys()) {
-            StateMachene machine = getStateMachines().get(key);
-            excluded.add(ACTIVITI_PREFIX + machine.getName());
-        }
+        final WorkflowService workflowService = serviceRegistry.getWorkflowService();
 
-        WorkflowInstanceQuery query = new WorkflowInstanceQuery();
-        query.setActive(true);
-        query.setExcludedDefinitions(new ArrayList<>(excluded));
+        for (NodeRef document : documents) {
+            final String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
 
-        List<WorkflowInstance> workflows = serviceRegistry.getWorkflowService().getWorkflows(query);
-        for (WorkflowInstance workflow : workflows) {
-            String processId = workflow.getId().replace(ACTIVITI_PREFIX, "");
-
-            HistoryService historyService = activitiProcessEngineConfiguration.getHistoryService();
-            HistoricTaskInstanceQuery taskQuery = historyService.createHistoricTaskInstanceQuery()
-                    .taskAssignee(authority)
-                    .processInstanceId(processId)
-                    .finished();
-
-            List<HistoricTaskInstance> historicTasks = taskQuery.list();
-
-            for (HistoricTaskInstance historicTask : historicTasks) {
-                if (workflowIds == null || workflowIds.isEmpty() || workflowIds.contains(historicTask.getFormKey())) {
-                    NodeRef doc = getStatemachineDocument(workflow.getId());
-
-                    if (doc != null) {
-                        documents.add(doc);
-                        break;
-                    }
-                }
-
+            boolean hasTask = isUserHasFinishedTask(authority, executionId, workflowService.getWorkflowsForContent(document, true), taskNames) ||
+                    isUserHasFinishedTask(authority, executionId, workflowService.getWorkflowsForContent(document, false), taskNames);
+            if (hasTask) {
+                resultedDocs.add(document);
             }
         }
-        return new ArrayList<>(documents);
+        return new ArrayList<>(resultedDocs);
     }
+
+    private boolean isUserHasFinishedTask(String authority, String docExecutionId, List<WorkflowInstance> workflows, Set<String> taskNames) {
+        final HistoryService historyService = activitiProcessEngineConfiguration.getHistoryService();
+
+        if (workflows != null) {
+            for (WorkflowInstance workflow : workflows) {
+                if (!workflow.getId().equals(docExecutionId)) {
+                    String processId = workflow.getId().replace(ACTIVITI_PREFIX, "");
+
+                    HistoricTaskInstanceQuery taskQuery = historyService.createHistoricTaskInstanceQuery()
+                            .taskAssignee(authority)
+                            .processInstanceId(processId)
+                            .finished();
+
+                    for (HistoricTaskInstance historicTask : taskQuery.list()) {
+                        if (taskNames == null || taskNames.isEmpty() || taskNames.contains(historicTask.getFormKey())) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     /*
      * Используется в
      * 		- DocumentsRemovalServiceImpl -> purge

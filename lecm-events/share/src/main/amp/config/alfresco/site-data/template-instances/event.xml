@@ -94,7 +94,7 @@
                 </sub-component>
             </sub-components>
         </component>
-		
+
 
         <!-- Комментарии -->
         <component>
@@ -148,6 +148,15 @@
             </properties>
         </component>
 
+		<!-- Основные сведения -->
+        <component>
+            <region-id>document-metadata</region-id>
+            <url>/lecm/components/document/document-meta</url>
+            <properties>
+                <nodeRef>{nodeRef}</nodeRef>
+            </properties>
+        </component>
+
         <!-- Повестка -->
         <component>
             <region-id>meeting-agenda</region-id>
@@ -164,7 +173,7 @@
                 </sub-component>
             </sub-components>
         </component>
-		
+
         <!-- Вложения -->
         <component>
             <region-id>document-attachments</region-id>

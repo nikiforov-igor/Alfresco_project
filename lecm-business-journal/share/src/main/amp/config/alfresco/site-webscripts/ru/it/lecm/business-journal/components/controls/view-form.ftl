@@ -213,6 +213,18 @@
             var sUrl = Alfresco.constants.PROXY_URI + "/lecm/business-journal/component/record?recordId=${args.nodeId}";
             var callback = {
                 success: function (oResponse) {
+
+                    function addOnClickListener(el,ref){
+                        var reqObj = {
+                            formId: '${panelId}',
+                            itemId: ref,
+                            htmlId: 'LinkMetadata-' + ref.replace(/\//g, "_"),
+                            setId: 'common',
+                            failureMessage: 'message.object-not-found'
+                        };
+                        YAHOO.util.Event.addListener(el, "click",LogicECM.module.Base.Util.viewAttributes.bind(LogicECM.module.Base.Util,reqObj));
+                    }
+
                     var response = eval("(" + oResponse.responseText + ")");
                     if (response.date) {
                         document.getElementById("${formId}-date").innerHTML =  Alfresco.util.formatDate(Alfresco.util.fromISO8601(response.date), "dd mmm yyyy HH:MM:ss");
@@ -225,21 +237,27 @@
                     }
                     if (response.type) {
                         if (response.typeRef) {
-                            document.getElementById("${formId}-type").innerHTML = "<a href='javascript:void(0);' onclick=\"_viewLinkAttributes('${panelId}','" + response.typeRef + "')\">" + response.type + "</a>";
+                            var el = document.getElementById("${formId}-type");
+                            el.innerHTML = "<a href='javascript:void(0);'>" + response.type + "</a>";
+                            addOnClickListener(el,response.typeRef);
                         } else {
                             document.getElementById("${formId}-type").innerHTML = response.type;
                         }
                     }
                     if (response.initiator) {
                         if (response.initiatorRef) {
-                            document.getElementById("${formId}-initiator").innerHTML = "<a href='javascript:void(0);' onclick=\"_viewLinkAttributes('${panelId}','" + response.initiatorRef + "')\">" + response.initiator + "</a>";
+                            var el = document.getElementById("${formId}-initiator");
+                            el.innerHTML = "<a href='javascript:void(0);'>" + response.initiator + "</a>";
+                            addOnClickListener(el,response.initiatorRef);
                         } else {
                             document.getElementById("${formId}-initiator").innerHTML = response.initiator;
                         }
                     }
                     if (response.mainObject) {
                         if (response.mainObjectRef) {
-                            document.getElementById("${formId}-mainObject").innerHTML = "<a href='javascript:void(0);' onclick=\"_viewLinkAttributes('${panelId}','" + response.mainObjectRef + "')\">" + response.mainObject + "</a>";
+                            var el = document.getElementById("${formId}-mainObject");
+                            el.innerHTML = "<a href='javascript:void(0);'>" + response.mainObject + "</a>";
+                            addOnClickListener(el,response.mainObjectRef);
                         } else {
                             document.getElementById("${formId}-mainObject").innerHTML = response.mainObject;
                         }

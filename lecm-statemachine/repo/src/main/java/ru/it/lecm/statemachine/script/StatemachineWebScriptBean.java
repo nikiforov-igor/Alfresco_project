@@ -20,6 +20,7 @@ import ru.it.lecm.statemachine.bean.WorkflowTaskBean;
 import ru.it.lecm.statemachine.bean.WorkflowTaskListBean;
 
 import java.util.*;
+import ru.it.lecm.statemachine.DefaultStatemachines;
 
 /**
  * User: pmelnikov Date: 15.03.13 Time: 13:56
@@ -28,6 +29,11 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 
 	private OrgstructureBean orgstructureService;
 	private StateMachineServiceBean stateMachineHelper;
+	private DefaultStatemachines defaultStatemachines;
+
+	public void setDefaultStatemachines(DefaultStatemachines defaultStatemachines) {
+		this.defaultStatemachines = defaultStatemachines;
+	}
 
 	private final static Logger logger = LoggerFactory.getLogger(StatemachineWebScriptBean.class);
 
@@ -478,5 +484,9 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 
 	public void disconnectFromStatemachine(final ScriptNode document, final String processInstanceID) {
 		stateMachineHelper.disconnectFromStatemachine(document.getNodeRef(), processInstanceID);
+	}
+	
+	public String getDefaultStatemachinePath(String statemachine) {
+		return defaultStatemachines.getPath(statemachine);
 	}
 }

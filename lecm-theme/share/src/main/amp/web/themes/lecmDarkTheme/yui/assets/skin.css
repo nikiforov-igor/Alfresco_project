@@ -121,6 +121,9 @@ version: 2.6.0
     border-color: #306984;
     background-color: #3C83A5 !important;
 }
+.yui-skin-lecmDarkTheme .document-action .disabled .yui-button {
+    background-color: #ccc !important;
+}
 .yui-skin-lecmDarkTheme .control .buttons-div .yui-button .first-child,
 .yui-skin-lecmDarkTheme .document-action .yui-button .first-child {
     border-color: #306984 !important;

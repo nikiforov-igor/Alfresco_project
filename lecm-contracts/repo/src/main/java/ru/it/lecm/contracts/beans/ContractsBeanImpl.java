@@ -195,7 +195,7 @@ public class ContractsBeanImpl extends BaseBean {
 
         // фильтр по сотрудниками-создателям
         if (initiatorsList != null && !initiatorsList.isEmpty()) {
-            String employeesFilter = "";
+            StringBuilder employeesFilter = new StringBuilder();
 
             boolean addOR = false;
 
@@ -203,7 +203,7 @@ public class ContractsBeanImpl extends BaseBean {
                 String authorProperty = documentService.getAuthorProperty(type);
                 authorProperty = authorProperty.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
                 for (NodeRef employeeRef : initList.get(type)) {
-                    employeesFilter += (addOR ? " OR " : "") + "@" + authorProperty + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
+                    employeesFilter.append(addOR ? " OR " : "").append("@").append(authorProperty).append(":\"").append(employeeRef.toString().replace(":", "\\:")).append("\"");
                     addOR = true;
                 }
             }
@@ -216,12 +216,12 @@ public class ContractsBeanImpl extends BaseBean {
         // фильтр по конкретным документам (например, тем в которых данный сотрудник - участник)
         if (docsList != null && !docsList.isEmpty()) {
             boolean addOR = false;
-            String docsFilter = "";
+            StringBuilder docsFilter = new StringBuilder();
             for (NodeRef docRef : docsList) {
-                docsFilter += (addOR ? " OR " : "") + "ID:" + docRef.toString().replace(":", "\\:");
+                docsFilter.append(addOR ? " OR " : "").append("ID:").append(docRef.toString().replace(":", "\\:"));
                 addOR = true;
             }
-            filterQuery += (filterQuery.length() > 0 ? " AND (" : "(") + docsFilter + ")";
+            filterQuery += (filterQuery.length() > 0 ? " AND (" : "(") + docsFilter.toString() + ")";
         }
 
         // Фильтр по датам

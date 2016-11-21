@@ -1,0 +1,182 @@
+.member-control-diagram {
+    width: 100%;
+    position: relative;
+}
+
+.member-control-diagram-container {
+    display: inline-block;
+}
+
+.member-control-diagram-header-first-cell {
+    border: 1px solid #666;
+    height: 26px;
+    display: inline-block;
+    color: black;
+    text-align: center;
+    float: left;
+    width: 175px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.form-container input.date-entry.member-control-diagram-header-calendar {
+    border-top: none;
+    border-bottom: none;
+    margin: 0;
+    height: 20px;
+    text-align: center;
+    width: 95px;
+}
+
+.member-control-diagram-header-calendar-container {
+    float: left;
+}
+
+.member-control-diagram-empty-cell {
+    height: 24px;
+    position: absolute;
+    top: 0;
+    cursor: default;
+}
+
+.member-control-diagram-header-cell {
+    border-top: 1px solid #666;
+    border-right: 1px solid #666;
+    border-bottom: 1px solid #666;
+    background-color: #bbb;
+    height: 24px;
+    display: inline-block;
+    position: relative;
+}
+
+.member-control-diagram-header-text-cell {
+    height: 24px;
+    line-height: 26px;
+    color: black;
+    text-align: center;
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.member-control-diagram-cell {
+    border-right: 1px solid #666;
+    border-bottom: 1px solid #666;
+    height: 24px;
+    color: black;
+    text-align: center;
+    display: inline-block;
+    position: relative;
+    background-color: #BFF7C4;
+}
+
+.member-control-diagram-first-cell {
+    border-left: 1px solid #666;
+    border-bottom: 1px solid #666;
+    border-right: 1px solid #666;
+    height: 25px;
+    display: inline-block;
+    float: left;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.member-control-diagram-first-cell-text {
+    width: 125px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin: 5px;
+    float: left;
+}
+
+.member-control-diagram-first-cell-mandatory {
+    float: left;
+    margin-top: 5px;
+    margin-left: 5px;
+    width: 13px;
+}
+
+.member-control-diagram-first-cell-remove {
+    width: 16px;
+    height: 20px;
+    background: url(../../../themes/lecmTheme/images/sprite.png) no-repeat 0 -1097px;
+    margin-right: -10px;
+    margin-top: 2px;
+    float: left;
+    cursor: pointer;
+}
+
+.member-control-diagram-selector-not-busy {
+    color: #22B14C;
+}
+
+.member-control-diagram-selector-busy {
+    color: #FFC90E;
+}
+
+.member-control-diagram-busy-cell {
+    background-color: #ED1C24;
+}
+
+.member-control-diagram-current {
+    background-color: #bbb;
+}
+
+.member-control-diagram-member-status {
+    position: absolute;
+    width: 20px;
+    background-color: white;
+    text-align: center;
+    border-radius: 3px;
+    padding-top: 2px;
+    height: 18px;
+}
+
+.member-control-diagram-selection {
+    background-color: #4DA1CF;
+}
+
+.member-control-diagram-header {
+    height: 26px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.member-control-diagram-row {
+    height: 25px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.member-control-diagram-header-prevdate {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    cursor: pointer;
+    float: left;
+    background: url(../../../images/lecm-events/prev.png) no-repeat 4px 5px;
+}
+
+.member-control-diagram-header-nextdate {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: inline-block;
+    float: left;
+    background: url(../../../images/lecm-events/next.png) no-repeat 3px 5px;
+}
+
+.member-control-diagram-header-pointdate {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: inline-block;
+    float: left;
+    background: url(../../../images/lecm-events/point.png) no-repeat 4px 5px;
+}

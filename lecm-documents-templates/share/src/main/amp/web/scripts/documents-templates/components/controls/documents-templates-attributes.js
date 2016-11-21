@@ -21,6 +21,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		Bubbling.on('addTemplateAttribute', this.onAddTemplateAttribute, this);
 		Bubbling.on('clearTemplateAttributes', this.onClearTemplateAttributes, this);
 		Bubbling.on('beforeSubmitTemplate', this.onBeforeSubmitTemplate, this);
+		Bubbling.on('templateOrganizationSelect', this.onTemplateOrganizationSelect, this);
 		return this;
 	};
 
@@ -33,6 +34,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		_fieldsPromise: null,
 
 		templateDocType: null,
+		templateOrganization: null,
 
 		defaultParams: null,
 
@@ -92,6 +94,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			this.templates = {};
 			this.selectedFields = {};
 			this.templateDocType = Selector.query('input[name="prop_lecm-template_doc-type"]', form, true).value;
+			this.templateOrganization = Selector.query('input[name="assoc_lecm-template_organizationAssoc"]', form, true).value;
 			this.defaultParams = {
 				defaultValue: '',
 				docType: this.templateDocType,
@@ -242,17 +245,16 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		},
 
 		onChangeAttribute: function (event, obj) {
-			/* event can be null */
-			/* this === LogicECM.module.DocumentsTemplates.Attributes */
 			var previousComponents = this._getPreviousComponents(obj.record.getId()),
 				selectedOption = obj.elSelect.options[obj.elSelect.selectedIndex],
 				dataStr = (selectedOption.dataset) ? selectedOption.dataset.attribute : selectedOption.getAttribute('data-attribute'),
 				initial = obj.record.getData('initial'),
 				prevField = obj.record.getData('attribute'),
 				field = JSON.parse(dataStr),
+				isAssoc = (this.DICTIONARY_TYPES.indexOf(field.dataType) == -1),
 				fieldType = (this.DICTIONARY_TYPES.indexOf(field.dataType) > -1) ? 'd:' + field.dataType : field.dataType,
 				fieldParams = (field.control.params && field.control.params.length) ? field.control.params : [],
-				params = fieldParams.reduce(function(prev, curr) {
+				params = fieldParams.reduce(function (prev, curr) {
 					var param = {};
 					param[curr.name] = curr.value;
 					return YAHOO.lang.merge(prev, param);
@@ -261,6 +263,60 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				})),
 				fieldId = field.formsName,
 				htmlid = obj.record.getId() + '-value-ctrl';
+
+			/*Добавим фильтр по организации*/
+			if (this.templateOrganization != null && isAssoc) {
+				var filerAdded = false;
+				var orgFilter, existsFilter, orgField;
+
+				/*2 случая комплексных контролов*/
+				for (var key in params) {
+					if (params.hasOwnProperty(key)) {
+						var prefix, index = key.indexOf("AdditionalFilter");
+						if (index > 0) { // double-picker logic
+							prefix = key.substring(0, index);
+							orgField = params[prefix + 'Org_field'] && params[prefix + 'Org_field'].length > 0 ? params[prefix + 'Org_field'] : null;
+
+							orgFilter =
+								"{{IN_SAME_ORGANIZATION({strict:" + (params[prefix + 'UseStrictFilterByOrg'] ? params[prefix + 'UseStrictFilterByOrg'] : "false") +
+								(orgField != null ? ", org_field:\\\"" + orgField + "\\\"" : "") +
+								", organization:\\\"" + this.templateOrganization + "\\\"})}}";
+
+							existsFilter = params[prefix + 'AdditionalFilter'];
+
+							params[prefix + 'DoNotCheckAccess'] = true;
+							params[prefix + 'AdditionalFilter'] = (existsFilter && existsFilter.length > 0 ? existsFilter + ' AND ' : '') + orgFilter;
+
+							filerAdded = true;
+						} else if (key.indexOf("additionalFilter") > 0) { // association-complex logic
+							prefix = key.substring(0, key.indexOf("additionalFilter"));
+							orgField = params[prefix + 'org_field'] && params[prefix + 'org_field'].length > 0 ? params[prefix + 'org_field'] : null;
+
+							orgFilter =
+								"{{IN_SAME_ORGANIZATION({strict:" + (params[prefix + 'useStrictFilterByOrg'] ? params[prefix + 'useStrictFilterByOrg'] : "false") +
+								(orgField != null ? ", org_field:\\\"" + orgField + "\\\"" : "") +
+								", organization:\\\"" + this.templateOrganization + "\\\"})}}";
+
+							existsFilter = params[prefix + 'additionalFilter'];
+
+							params[prefix + 'doNotCheckAccess'] = true;
+							params[prefix + 'additionalFilter'] = (existsFilter && existsFilter.length > 0 ? existsFilter + ' AND ' : '') + orgFilter;
+
+							filerAdded = true;
+						}
+					}
+				}
+				if (!filerAdded) {/* по дефолту - добавляем*/
+					orgField = params['org_field'] && params['org_field'].length > 0 ? params['org_field'] : null;
+					orgFilter =
+						"{{IN_SAME_ORGANIZATION({strict:" + (params['useStrictFilterByOrg'] ? params['useStrictFilterByOrg'] : "false") +
+						(orgField != null ? ", org_field:\\\"" + orgField + "\\\"" : "") +
+						", organization:\\\"" + this.templateOrganization + "\\\"})}}";
+
+					params['doNotCheckAccess'] = true;
+					params['additionalFilter'] = (params['additionalFilter'] && params['additionalFilter'].length > 0 ? params['additionalFilter'] + ' AND ' : '') + orgFilter;
+				}
+			}
 
 			if (field.name === initial.attribute && initial.value) {
 				params.defaultValue = initial.value;
@@ -277,6 +333,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			this._updateDisabledOptions();
 			obj.record.setData('attribute', field);
 			obj.record.setData('value', htmlid + '_' + fieldId);
+
 			Alfresco.util.Ajax.request({
 				url: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/control',
 				dataObj: {
@@ -378,6 +435,28 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			this.widgets.hiddenValue.value = '[]';
 		},
 
+		onTemplateOrganizationSelect: function (layer, args) {
+			var organization = null;
+
+			var selectedItems = args[1].selectedItems;
+			if (selectedItems != null) {
+				var keys = Object.keys(selectedItems);
+				for (var i = 0; i < keys.length; i++) {
+					organization = selectedItems[keys[i]];
+				}
+			}
+
+			if (this.templateOrganization && (!organization || organization.nodeRef != this.templateOrganization)) {
+				this.onClearTemplateAttributes();
+			}
+
+			this.templateOrganization = organization != null ? organization.nodeRef : null;
+
+			Bubbling.fire('updateButtonState', {
+				disabledState: this.templateOrganization == null
+			});
+		},
+
 		onBeforeSubmitTemplate: function (layer, args) {
 			/* this === LogicECM.module.DocumentsTemplates.Attributes */
 			var records = this.widgets.datatable.getRecordSet().getRecords();
@@ -399,7 +478,6 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		},
 
 		onReady: function () {
-			console.log(this.name + '[' + this.id + '] is ready');
 			this.widgets.hiddenValue = Dom.get(this.id + '-value');
 			this.templates.deleteTemplate = Dom.get(this.id  + '-delete-template').innerHTML;
 			this.templates.attributeTemplate = Dom.get(this.id  + '-attribute-template').innerHTML;

@@ -263,13 +263,11 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 
 		//удаляем сам документ
         BusinessJournalRecord record1 = businessJournalService.createBusinessJournalRecord(user, documentRef, EventCategory.DELETE, DOCUMENT_TEMPLATE);
-        BusinessJournalRecord record2 = businessJournalService.createBusinessJournalRecord(user, documentRef, EventCategory.REMOVE_FROM_REPORTING, DOCUMENT_TEMPLATE);
 		cruellyDeleteNode(documentRef);
 
 		//сообщаем об удалении в бизнес журнал
 		logger.debug("Document {} of type {} successfully purged", documentRef, documentType);
 		businessJournalService.sendRecord(record1);
-		businessJournalService.sendRecord(record2);
 	}
 
     @Override

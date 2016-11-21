@@ -190,9 +190,9 @@
                     </target>
                 </association>
 
-                <!-- Организация-отправитель -->
+                <!-- Корреспондент -->
                 <association name="lecm-incoming:sender-assoc">
-                    <title>Организация-отправитель</title>
+                    <title>Корреспондент</title>
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>
@@ -203,9 +203,9 @@
                         <many>false</many>
                     </target>
                 </association>
-                <!-- Отправитель -->
+                <!-- Представитель корреспондента -->
                 <association name="lecm-incoming:addressee-assoc">
-                    <title>Отправитель</title>
+                    <title>Представитель корреспондента</title>
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>

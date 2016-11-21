@@ -218,8 +218,8 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
     }
 
     @Override
-    public List<NodeRef> getDocumentsWithFinishedTasks(String employeeLogin, Set<String> workflowIds) {
-        return lifecycleStateMachineHelper.getDocumentsWithFinishedTasks(employeeLogin, workflowIds);
+    public List<NodeRef> getDocumentsWithFinishedTasks(List<NodeRef> documents, String employeeLogin, Set<String> taskNames) {
+        return lifecycleStateMachineHelper.getDocumentsWithFinishedTasks(documents, employeeLogin, taskNames);
     }
 
     @Override

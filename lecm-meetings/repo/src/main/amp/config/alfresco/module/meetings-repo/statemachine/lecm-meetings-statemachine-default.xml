@@ -131,7 +131,7 @@
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
+                                                                <value><![CDATA[true]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionExpression</name>
@@ -523,7 +523,7 @@
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -683,11 +683,43 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value><![CDATA[doc.tableItemsAttrs("lecm-meetings-ts:itemsTable","cm:name").size() > 0]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>85999eb0-4ca8-4c50-bb8f-e78874979032
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/b14cd205-7367-4ca5-a014-787c4027f1fc
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Согласование не может быть запущено, так как будут пропущены все этапы маршрута]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!@routesService.isRouteEmpty(doc.nodeRef)]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -1193,6 +1225,21 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-events_not-send-invitation</name>
+                                        <nodeRef>workspace://SpacesStore/232ac2b9-ce61-4380-a0f9-7c4ccc02eac9</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -1415,7 +1462,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
+                                                                <value><![CDATA[true]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionExpression</name>
@@ -2094,6 +2141,21 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-events_not-send-invitation</name>
+                                        <nodeRef>workspace://SpacesStore/f1372fac-86cf-4033-b4d7-b949298af023</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -2675,6 +2737,21 @@ if (document !== null) {
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-events_not-send-invitation</name>
+                                        <nodeRef>workspace://SpacesStore/9e88a2bf-aada-4ba4-b59c-f57e39d64699</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -3105,6 +3182,21 @@ if (document !== null) {
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-events_not-send-invitation</name>
+                                        <nodeRef>workspace://SpacesStore/cbcc6044-f21c-42c9-b519-8b615a9453dc</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -3365,6 +3457,44 @@ if (document !== null) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>workspace://SpacesStore/02548952-2acb-4d41-b3c7-9f2fa88a7125</reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>00064de4-5551-4656-81e9-1b0975336ee9</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/e6155087-5b5c-4472-8f61-1285c81dd1eb
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value><![CDATA[doc.attr("lecm-events:removed")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/63730519-8427-4002-b782-64613af5446c
+                                                                </reference>
                                                             </association>
                                                         </associations>
                                                         <roleAssociations/>
@@ -3914,6 +4044,21 @@ if (document !== null) {
                                             <property>
                                                 <name>editableField</name>
                                                 <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-events_not-send-invitation</name>
+                                        <nodeRef>workspace://SpacesStore/7d705685-db05-4b63-b0fc-e3805393a52c</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>

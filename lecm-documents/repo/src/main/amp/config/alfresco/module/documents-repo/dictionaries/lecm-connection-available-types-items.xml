@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Доступные типы связи" type="lecm-dic:dictionary">
+        <property name="cm:name"><![CDATA[Доступные типы связи]]></property>
+        <property name="lecm-dic:attributeForShow"><![CDATA[cm:name]]></property>
+        <property name="lecm-dic:type"><![CDATA[lecm-connect-types:available-connection-type]]></property>
+        <property name="lecm-dic:plane"><![CDATA[true]]></property>
+        <property name="lecm-dic:description"><![CDATA[Доступные типы связи документов]]></property>
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:f69713ec-4b1b-4fc8-b90a-910cce8b7b6d" type="lecm-connect-types:available-connection-type">
+                <property name="lecm-connect-types:connected-document-type"><![CDATA[lecm-errands:document]]></property>
+                <property name="lecm-connect-types:primary-document-type"><![CDATA[lecm-incoming:document]]></property>
+                <assocs>
+                    <assoc type="lecm-connect-types:not-available-connection-types-assoc"
+                           path="/Business platform/LECM/Сервис Справочники/Типы связи/В ответ на"/>
+                    <assoc type="lecm-connect-types:not-available-connection-types-assoc"
+                           path="/Business platform/LECM/Сервис Справочники/Типы связи/Повторный к"/>
+                    <assoc type="lecm-connect-types:default-connection-type-assoc"
+                           path="/Business platform/LECM/Сервис Справочники/Типы связи/К сведению"/>
+                    <assoc type="lecm-connect-types:recommended-connection-types-assoc"
+                           path="/Business platform/LECM/Сервис Справочники/Типы связи/Является основанием для"/>
+                    <assoc type="lecm-connect-types:not-available-connection-types-assoc"
+                           path="/Business platform/LECM/Сервис Справочники/Типы связи/Отменяет"/>
+                    <assoc type="lecm-connect-types:not-available-connection-types-assoc"
+                           path="/Business platform/LECM/Сервис Справочники/Типы связи/Вводит в действие документ"/>
+                    <assoc type="lecm-connect-types:not-available-connection-types-assoc"
+                           path="/Business platform/LECM/Сервис Справочники/Типы связи/Повторное"/>
+                    <assoc type="lecm-connect-types:not-available-connection-types-assoc"
+                           path="/Business platform/LECM/Сервис Справочники/Типы связи/Мероприятие на основании"/>
+                </assocs>
+            </item>
+            <item name="cm:4efb0a68-dc38-43f8-8de9-badf82aa45d1" type="lecm-connect-types:available-connection-type">
+                <property name="lecm-connect-types:connected-document-type">
+                    <![CDATA[lecm-outgoing:document]]></property>
+                <property name="lecm-connect-types:primary-document-type"><![CDATA[lecm-incoming:document]]></property>
+                <assocs>
+                    <assoc type="lecm-connect-types:default-connection-type-assoc"
+                           path="/Business platform/LECM/Сервис Справочники/Типы связи/К сведению"/>
+                    <assoc type="lecm-connect-types:recommended-connection-types-assoc"
+                           path="/Business platform/LECM/Сервис Справочники/Типы связи/К сведению"/>
+                    <assoc type="lecm-connect-types:recommended-connection-types-assoc"
+                           path="/Business platform/LECM/Сервис Справочники/Типы связи/Отменяет"/>
+                    <assoc type="lecm-connect-types:recommended-connection-types-assoc"
+                           path="/Business platform/LECM/Сервис Справочники/Типы связи/Повторное"/>
+                </assocs>
+            </item>
+        </items>
+    </item>
+</items>

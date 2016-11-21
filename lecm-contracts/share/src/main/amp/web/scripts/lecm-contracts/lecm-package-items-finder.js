@@ -377,7 +377,13 @@ LogicECM.module = LogicECM.module || {};
                                                 "<div>{icon} <a href='" + link + "'>{name}</a></div>");
                                         } else {
                                             displayValue += this.options.objectRenderer.renderItem(item, 16,
-                                                "<div>{icon} <a href='javascript:void(0)'; onclick=\"_viewLinkAttributes(\'" + this.id + "-link\',\'" + item.nodeRef + "\')\">" + "{name}</a></div>");
+                                                "<div>{icon} <a href='javascript:void(0)'; onclick=\"LogicECM.module.Base.Util.viewAttributes({" +
+                                                "formId:\'" + this.id + "-link\'," +
+                                                "itemId:\'" + item.nodeRef + "\'," +
+                                                "htmlId: \'LinkMetadata-" + item.nodeRef.replace(/\//g, "_") + "\'," +
+                                                "setId:\'common\'," +
+                                                "failureMessage: \'message.object-not-found\'})\">" + "{name}</a></div>");
+
                                         }
                                     }
                                     else if (this.options.displayMode == "list") {

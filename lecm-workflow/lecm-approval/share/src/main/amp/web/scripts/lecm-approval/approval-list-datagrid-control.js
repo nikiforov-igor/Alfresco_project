@@ -169,6 +169,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 
 		this.name = 'LogicECM.module.Approval.ApprovalListDataGridControl';
 
+		YAHOO.Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
+
 		return this;
 	};
 
@@ -429,7 +431,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 							macrosName = messageSplittedArr.splice(0, 2)[1];
 							macrosScript = messageSplittedArr.join(' | ');
 							message = Alfresco.util.message('message.error.running.macros') + ' ' + macrosName;
-							this.displayErrorMessageWithDetails(Alfresco.util.message('title.error.running.macros'), message, macrosScript);
+							LogicECM.module.Base.Util.displayErrorMessageWithDetails(Alfresco.util.message('title.error.running.macros'), message, macrosScript);
 						}
 						this.getApprovalData(function () {
 							this.fillCurrentApprovalState();
@@ -445,7 +447,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				},
 				onFailure: {
 					fn: function (response) {
-						this.displayErrorMessageWithDetails(Alfresco.util.message('logicecm.base.error'), Alfresco.util.message('message.save.failure'), response.json.message);
+						LogicECM.module.Base.Util.displayErrorMessageWithDetails(Alfresco.util.message('logicecm.base.error'), Alfresco.util.message('message.save.failure'), response.json.message);
 					},
 					scope: this
 				}
@@ -817,7 +819,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				},
 				onFailure: {
 					fn: function (response) {
-						this.displayErrorMessageWithDetails(Alfresco.util.message('logicecm.base.error'), Alfresco.util.message('message.save.failure'), response.json.message);
+						LogicECM.module.Base.Util.displayErrorMessageWithDetails(Alfresco.util.message('logicecm.base.error'), Alfresco.util.message('message.save.failure'), response.json.message);
 					},
 					scope: this
 				}
@@ -830,6 +832,24 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			this.onDelete(p_items, owner, actionsConfig, function () {
 				this.getApprovalData(this.fillCurrentApprovalState);
 			}, null);
+		},
+		onDataItemsDeleted: function DataGrid_onDataItemsDeleted(layer, args) {
+			var obj = args[1], recordFound, el;
+
+			if (obj && this._hasEventInterest(obj.bubblingLabel) && obj.items) {
+				for (var i = 0, ii = obj.items.length; i < ii; i++) {
+					recordFound = this._findRecordByParameter(obj.items[i].nodeRef, "nodeRef");
+					if (recordFound) {
+						el = this.widgets.dataTable.getTrEl(recordFound);
+						Alfresco.util.Anim.fadeOut(el, {
+							callback: function () {
+								this.widgets.dataTable.deleteRow(recordFound);
+							},
+							scope: this
+						});
+					}
+				}
+			}
 		},
 
 		refreshSourceRoute: function () {
@@ -858,15 +878,10 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				if (!hasComment) {
 					return null;
 				}
-				var result,
-					messageTemplate = '<a href="javascript:void(0)" onclick="viewAttributes(\'{nodeRef}\', null, \'label.view.stage.details\', \'viewStageResult\')">{value}</a>';
-
-				result = YAHOO.lang.substitute(messageTemplate, {
-					nodeRef: nodeRef,
-					value: decisionData.displayValue
-				});
-
-				return result;
+				return "<a href=\"javascript:void(0);\" onclick=\"LogicECM.module.Base.Util.viewAttributes(" +
+					"{itemId:\'" + nodeRef + "\'," +
+					"title: \'label.view.stage.details\', " +
+					"formId: \'viewStageResult\' })>" + decisionData.displayValue + "</a>";
 			}
 			var html = null;
 
@@ -914,21 +929,16 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 
 	LogicECM.module.Approval.StageExpanded.getCustomCellFormatter = function (grid, elCell, oRecord, oColumn, oData) {
 		function formatState(nodeRef, decisionData, hasComment) {
-			var result,
-					commentIcon = '<img alt="' + Alfresco.util.message('label.comment') + '" src="' + Alfresco.constants.URL_RESCONTEXT + 'themes/lecmTheme/images/create-new-button.png">',
-					messageTemplate = '<a href="javascript:void(0)" onclick="viewAttributes(\'{nodeRef}\', null, \'label.view.approval.details\', \'viewApprovalResult\')">{value} {icon}</a>';
-
+			var commentIcon = '<img alt="' + Alfresco.util.message('label.comment') + '" src="' + Alfresco.constants.URL_RESCONTEXT + 'themes/lecmTheme/images/create-new-button.png">';
 			if (decisionData.value === 'NO_DECISION') {
 				return null;
 			}
+			return "<a href=\"javascript:void(0);\" onclick=\"LogicECM.module.Base.Util.viewAttributes(" +
+				"{itemId:\'" + nodeRef + "\'," +
+				"title: \'label.view.approval.details\', " +
+				"formId: \'viewApprovalResult\' })>"
+				+ decisionData.displayValue + (hasComment ? commentIcon : '')+ "</a>";
 
-			result = YAHOO.lang.substitute(messageTemplate, {
-				nodeRef: nodeRef,
-				value: decisionData.displayValue,
-				icon: hasComment ? commentIcon : ''
-			});
-
-			return result;
 		}
 		var html = '', i, oDataLength, datalistColumn, data, decision, hasComment, nodeRef;
 

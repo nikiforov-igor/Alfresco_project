@@ -23,13 +23,7 @@ import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.operativestorage.beans.OperativeStorageService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import org.apache.commons.lang.StringUtils;
+import java.util.*;
 
 import static ru.it.lecm.operativestorage.beans.OperativeStorageService.ASPECT_MOVE_TO_CASE;
 
@@ -239,15 +233,21 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 		return createScriptable(ignoredYears);
 	}
 
-	public boolean isYearUniq(String year, String orgNodeRef) {
+	public boolean isYearUniq(String year, String orgNodeRef, String currentNodeRef) {
+		if (orgNodeRef == null || orgNodeRef.length() == 0 || !NodeRef.isNodeRef(orgNodeRef)) {
+			return true;
+		}
+
 		Integer yearInt = Integer.parseInt(year);
-		boolean isCentralized = (boolean) nodeService.getProperty(operativeStorageService.getSettings(), OperativeStorageService.PROP_OPERATIVE_STORAGE_CENRALIZED);
 		Map<Integer, List<NodeRef>> yearsMap = new HashMap<>();
+
+		NodeRef currentYearUnit = currentNodeRef != null && currentNodeRef.length() > 0 ? new NodeRef(currentNodeRef) : null;
+		NodeRef organization = new NodeRef(orgNodeRef);
 
 		List<ChildAssociationRef> assocs = nodeService.getChildAssocs(operativeStorageService.getNomenclatureFolder(), ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
 		for (ChildAssociationRef assoc : assocs) {
 			NodeRef childYear = assoc.getChildRef();
-			if(Boolean.TRUE.equals(nodeService.getProperty(childYear, BaseBean.IS_ACTIVE))) {
+			if (Boolean.TRUE.equals(nodeService.getProperty(childYear, BaseBean.IS_ACTIVE)) && !Objects.equals(currentYearUnit, childYear)) {
 				List<NodeRef> childYearOrgs = new ArrayList<>();
 				List<AssociationRef> childYearOrgAssocs = nodeService.getTargetAssocs(childYear, OperativeStorageService.ASSOC_NOMENCLATURE_LINKED_ORG);
 
@@ -258,7 +258,7 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 				Integer yearKey = (Integer) nodeService.getProperty(childYear, OperativeStorageService.PROP_NOMENCLATURE_YEAR_SECTION_YEAR);
 
 				List<NodeRef> yearOrgs = yearsMap.get(yearKey);
-				if(yearOrgs != null) {
+				if (yearOrgs != null) {
 					yearOrgs.addAll(childYearOrgs);
 				} else {
 					yearsMap.put(yearKey, childYearOrgs);
@@ -266,18 +266,8 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 			}
 		}
 
-		boolean yearContains = yearsMap.containsKey(yearInt);
-
-		if(isCentralized) {
-			return !yearContains;
-		} else {
-			List<NodeRef> orgs = yearsMap.get(yearInt);
-			if(orgs != null && !orgs.isEmpty()) {
-				return !StringUtils.join(orgs, ',').contains(orgNodeRef);
-			}
-
-			return true;
-		}
+		List<NodeRef> orgs = yearsMap.get(yearInt);
+		return orgs == null || orgs.isEmpty() || !orgs.contains(organization);
 	}
 
 	public void createSectionByUnit(String yearRef) {
@@ -332,6 +322,10 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 
 	public boolean caseHasDocsOrVolumes(String caseNodeRefString) {
 		return operativeStorageService.caseHasDocumentsVolumes(new NodeRef(caseNodeRefString));
+	}
+
+	public boolean caseHasDocsOrVolumes(String caseNodeRefString, boolean checkVolumes) {
+		return operativeStorageService.caseHasDocumentsVolumes(new NodeRef(caseNodeRefString), checkVolumes);
 	}
 
 	public boolean canCopyUnits(String unitsString, String destNodeRef) {

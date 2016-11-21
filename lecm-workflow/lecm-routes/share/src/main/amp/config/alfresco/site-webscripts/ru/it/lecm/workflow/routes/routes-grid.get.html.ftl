@@ -12,7 +12,7 @@
             datagrid.setOptions({
                 usePagination: true,
                 disableDynamicPagination: true,
-                showExtendSearchBlock: false,
+                showExtendSearchBlock: true,
                 showCheckboxColumn: false,
                 overrideSortingWith: false,
                 bubblingLabel: LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,

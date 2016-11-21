@@ -24,6 +24,7 @@ public final class RoutesModel {
 	public final static QName TYPE_STAGE = QName.createQName(ROUTES_URL, "stage");
 	public final static QName PROP_STAGE_WORKFLOW_TYPE = QName.createQName(ROUTES_URL, "stageWorkflowType");
 	public final static QName PROP_STAGE_WORKFLOW_TERM = QName.createQName(ROUTES_URL, "stageWorkflowTerm");
+	public final static QName PROP_STAGE_EXPRESSION = QName.createQName(ROUTES_URL, "stageExpression");
 
 	public final static QName TYPE_STAGE_ITEM = QName.createQName(ROUTES_URL, "stageItem");
 	public final static QName PROP_STAGE_ITEM_TERM = QName.createQName(ROUTES_URL, "stageItemTerm");

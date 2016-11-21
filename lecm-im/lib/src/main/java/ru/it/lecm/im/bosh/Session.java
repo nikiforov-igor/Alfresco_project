@@ -46,14 +46,14 @@ public class Session {
 		
 		Random rand = new Random();
 		
-		String str = new String();
+		StringBuilder str = new StringBuilder();
 		
 		for (int i = 0; i < len; i++)
-			str += charlist.charAt(rand.nextInt(charlist.length()));
+			str.append(charlist.charAt(rand.nextInt(charlist.length())));
 
         logger.trace("New session id created: " + str);
 
-		return str;
+		return str.toString();
 	}
 	
 	public static Session getSession(String sid) {
@@ -604,7 +604,7 @@ public class Session {
 	
 	// Reads from socket
 	private String readFromSocket(long rid) throws IOException {
-		String retval = "";
+		StringBuilder retval = new StringBuilder();
 		char buf[] = new char[16];
 		int c = 0;
 		
@@ -617,7 +617,7 @@ public class Session {
 				if (this.br.ready()) {
                     logger.trace("this.br.ready() == true");
 					while (this.br.ready() && (c = this.br.read(buf, 0, buf.length)) >= 0) {
-                        retval += new String(buf, 0, c);
+                        retval.append(new String(buf, 0, c));
                         logger.trace("readFromSocket inner While end");
                     }
 
@@ -625,7 +625,7 @@ public class Session {
 				}
 				
 				else {
-					if ((this.hold == 0 && r != null && System.currentTimeMillis() - r.getCDate() > 200) || (this.hold > 0 && ((r != null && System.currentTimeMillis() - r.getCDate() >= this.getWait() * 1000) || this.numPendingRequests() > this.getHold() || !retval.equals(""))) || r.isAborted()) {
+					if ((this.hold == 0 && r != null && System.currentTimeMillis() - r.getCDate() > 200) || (this.hold > 0 && ((r != null && System.currentTimeMillis() - r.getCDate() >= this.getWait() * 1000) || this.numPendingRequests() > this.getHold() || (retval.length() > 0))) || r.isAborted()) {
                         logger.trace("readFromSocket done for " + rid);
 						break;
 					}
@@ -648,13 +648,13 @@ public class Session {
             throw new IOException("Socket is closed!");
 		}
 		
-		return retval;
+		return retval.toString();
 	}
 
 	// Sends all nodes in list to remote XMPP server make sure that nodes get
 	public Session sendNodes(NodeList nl) {
 		// Build a string
-		String out = "";
+		StringBuilder out = new StringBuilder();
 		StreamResult strResult = new StreamResult();
 		
 		try {
@@ -666,7 +666,7 @@ public class Session {
 				strResult.setWriter(new StringWriter());
 				tf.transform(new DOMSource(nl.item(i)), strResult);
 				String tStr = strResult.getWriter().toString();
-				out += tStr;
+				out.append(tStr);
 			}
 		}
 		
@@ -680,7 +680,7 @@ public class Session {
 				this.osw.write("<stream:stream to='" + this.to + "'" + appendXMLLang(this.getXMLLang()) + " xmlns='jabber:client' " + " xmlns:stream='http://etherx.jabber.org/streams'" + " version='1.0'" + ">");
 			}
 			
-			this.osw.write(out);
+			this.osw.write(out.toString());
 			this.osw.flush();
 		}
 		

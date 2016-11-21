@@ -17,7 +17,6 @@ LogicECM.module = LogicECM.module || {};
 
 (function () {
     var Dom = YAHOO.util.Dom;
-    var $siteURL = Alfresco.util.siteURL;
 
     LogicECM.module.DocumentCopy = function (fieldHtmlId) {
         LogicECM.module.DocumentCopy.superclass.constructor.call(this, "LogicECM.module.DocumentCopy", fieldHtmlId, [ "container", "datasource"]);
@@ -28,52 +27,26 @@ LogicECM.module = LogicECM.module || {};
     YAHOO.extend(LogicECM.module.DocumentCopy, Alfresco.component.Base,
         {
             options: {
-                documentRef: null
+                documentRef: null,
+                copyURL: null
             },
 
             controlId: null,
             copyButton: null,
 
             onReady: function () {
-                this.copyButton = Alfresco.util.createYUIButton(this, this.controlId + "-copy-button", this.onCopy, {},
+                this.copyButton = Alfresco.util.createYUIButton(this, this.controlId + "-copy-button", this.onCopy,  {
+                        disabled: !this.options.copyURL,
+                        title: this.options.copyURL ? this.msg("button.copy") : this.msg("button.copy.unavaiable")
+                    },
                     Dom.get(this.controlId + "-copy-button"));
 
-                this.render();
-            },
-
-            render: function () {
-                Dom.get(this.controlId + "-copy-button").title = this.msg("button.copy");
-                Dom.addClass(this.controlId + "-copy", "enabled");
+                Dom.addClass(this.controlId + "-copy", this.options.copyURL ? "enabled" : "disabled");
             },
 
             onCopy: function () {
-                if (this.options.documentRef) {
-                    var nodeRef = new Alfresco.util.NodeRef(this.options.documentRef);
-                    Alfresco.util.Ajax.request({
-                        method: "POST",
-                        url: Alfresco.constants.PROXY_URI + "lecm/document/api/duplicate/node/" + nodeRef.uri,
-                        dataObj: { "nodeRefs": [this.options.documentRef] },
-                        requestContentType: "application/json",
-                        responseContentType: "application/json",
-                        successCallback: {
-                            fn: function(data) {
-                                if (data != null) {
-                                    if (data.json != null && data.json.results != null && data.json.results.length == 1) {
-                                        window.location = $siteURL("document?nodeRef=" + data.json.results[0].nodeRef);
-                                    }
-                                }
-                            },
-                            scope: this
-                        },
-                        failureCallback: {
-                            fn: function() {
-                                Alfresco.util.PopupManager.displayMessage({
-                                    text: Alfresco.component.Base.prototype.msg("message.duplicate.failure")
-                                });
-                            },
-                            scope:this
-                        }
-                    });
+                if (this.options.documentRef && this.options.copyURL) {
+                    document.location.href = Alfresco.constants.URL_PAGECONTEXT + this.options.copyURL;
                 }
             }
         });

@@ -38,7 +38,7 @@
                         <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[totalamount]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[3]]></property>
-                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[onlyPositive=true;]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"

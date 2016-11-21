@@ -21,13 +21,12 @@
  */
 package ru.it.lecm.im.client.xmpp.packet;
 
+import ru.it.lecm.im.client.xmpp.TextUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import ru.it.lecm.im.client.xmpp.TextUtils;
-import ru.it.lecm.im.client.xmpp.TextUtils;
 
 /**
  * @author bmalkow
@@ -66,28 +65,28 @@ public class PacketImp implements Packet {
 	}
 
 	public String getAsString() {
-		String result = "<" + name;
+		StringBuilder result = new StringBuilder("<" + name);
 
 		for (Map.Entry<String, String> attr : this.attributes.entrySet()) {
 			String x = " " + attr.getKey() + "='" + TextUtils.escape(attr.getValue()) + "'";
-			result += x;
+			result.append(x);
 		}
 
 		if (children.size() > 0) {
-			result += ">";
+			result.append(">");
 			for (Packet child : this.children) {
-				result += child.getAsString();
+				result.append(child.getAsString());
 			}
-			result += "</" + name + ">";
+			result.append("</").append(name).append(">");
 		} else if (cData != null) {
-			result += ">";
-			result += TextUtils.escape(cData);
-			result += "</" + name + ">";
+			result.append(">");
+			result.append(TextUtils.escape(cData));
+			result.append("</").append(name).append(">");
 		} else {
-			result += "/>";
+			result.append("/>");
 		}
 
-		return result;
+		return result.toString();
 	}
 
 	public String getAtribute(String attrName) {

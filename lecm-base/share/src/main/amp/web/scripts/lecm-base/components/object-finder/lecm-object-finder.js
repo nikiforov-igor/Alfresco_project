@@ -17,44 +17,6 @@
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
-var linkViewDialog = null;
-var linkViewId = null;
-function _viewLinkAttributes(id, nodeRef, setId){
-	if (linkViewDialog == null) {
-	    linkViewDialog = Alfresco.util.createYUIPanel(id,
-	        {
-	            width: "70em"
-	        });
-	}
-    linkViewId = id;
-    Alfresco.util.Ajax.request(
-        {
-            url:Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
-            dataObj:{
-                htmlid:"LinkMetadata-" + nodeRef.replace(/\//g, "_"),
-                itemKind:"node",
-                itemId:nodeRef,
-                formId:id,
-                mode:"view",
-                setId: (setId != undefined && setId != null) ? setId : "common"
-            },
-            successCallback:{
-                fn:function (response) {
-                    var formEl = Dom.get(linkViewId + "-content");
-                    formEl.innerHTML = response.serverResponse.responseText;
-                    YAHOO.Bubbling.on("hidePanel", _hideLinkAttributes);
-                    if (linkViewDialog != null) {
-                        Dom.setStyle(id, "display", "block");
-                        linkViewDialog.show();
-                    }
-                }
-            },
-            failureMessage: Alfresco.component.Base.prototype.msg("message.object-not-found"),
-            execScripts:true
-        });
-    return false;
-}
-
 function _hideLinkAttributes(layer, args) {
     var mayHide = false;
     if (linkViewDialog != null) {
@@ -1090,7 +1052,12 @@ LogicECM.module = LogicECM.module || {};
                                      "<div>{icon} <a href='" + link + "'>{name}</a></div>");
                              } else {
                                  displayValue += this.options.objectRenderer.renderItem(item, 16,
-                                     "<div>{icon} <a href='javascript:void(0)'; onclick=\"_viewLinkAttributes(\'" + this.id + "-link\',\'" + item.nodeRef + "\')\">" + "{name}</a></div>");
+                                     "<div>{icon} <a href='javascript:void(0)'; onclick=\"LogicECM.module.Base.Util.viewAttributes({" +
+                                     "formId:\'"+ this.id + "-link\'," +
+                                     "itemId:\'" + item.nodeRef + "\'," +
+                                     "htmlId: \'LinkMetadata-" + item.nodeRef.replace(/\//g, "_")+ "\'," +
+                                     "setId:\'common\'," +
+                                     "failureMessage: \'message.object-not-found\'})\">" + "{name}</a></div>");
                              }
                          }
                          else if (this.options.displayMode == "list") {

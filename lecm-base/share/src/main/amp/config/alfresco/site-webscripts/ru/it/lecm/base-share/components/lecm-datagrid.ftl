@@ -1,5 +1,3 @@
-<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
-
 <#-- Макрос для подключения грида
 Список параметров:
 id(обязательный) - идентификатор, использующийся для построения html и передающийся в объект DataGrid. Лучше использовать args.htmlid (по аналогии с другими местами в Alfresco)
@@ -13,9 +11,6 @@ viewFormId(необязательный) - по умолчанию равен vi
 <input id="yui-history-field" type="hidden" />
 <div id="${id}-body" class="datagrid">
 	<div class="datagrid-meta">
-		<#if showViewForm>
-            <@view.viewForm formId=viewFormId/>
-		</#if>
 		<h2 id="${id}-title"></h2>
 		<div id="${id}-description" class="datagrid-description"></div>
 	</div>

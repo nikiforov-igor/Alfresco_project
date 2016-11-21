@@ -48,24 +48,24 @@ public class InSameOrganizationProcessor extends SearchQueryProcessor {
         NodeRef organization;
         Set<String> auth = authorityService.getAuthoritiesForUser(userName);
 
+        final String organizationProperty = orgFieldShort.toString().replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+        sbQuery.append("@").append(organizationProperty).append(":");
+
         if (!AuthenticationUtil.isRunAsUserTheSystemUser() && !auth.contains("GROUP_LECM_GLOBAL_ORGANIZATIONS_ACCESS")) {
-        	final String organizationProperty = orgFieldShort.toString();
-            sbQuery.append("@").append(organizationProperty.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-")).append(":");
-            
-        	organization = organizationParam != null && NodeRef.isNodeRef(organizationParam) ? new NodeRef(organizationParam) : orgstructureBean.getUserOrganization(userName);
+            organization = organizationParam != null && NodeRef.isNodeRef(organizationParam) ? new NodeRef(organizationParam) : orgstructureBean.getUserOrganization(userName);
             if (organization != null) {
                 sbQuery.append("\"").append(organization.toString().replace(":", "\\:")).append("\"");
             } else {
                 sbQuery.append("\"NOT_REF\"");
             }
         } else {
-        	//sbQuery.append("\"").append(organizationParam != null && NodeRef.isNodeRef(organizationParam) ? organizationParam.replace(":", "\\:") : "?*").append("\"");
-        	sbQuery.append("ISNODE:T");
+        	sbQuery.append("\"").append(organizationParam != null && NodeRef.isNodeRef(organizationParam) ? organizationParam.replace(":", "\\:") : "?*").append("\"");
+//        	sbQuery.append("ISNODE:T");
         }
-        //if (!useStrictAccess) {
-        //    sbQuery.append(" OR (ISNULL:").append("\"").append(organizationProperty).append("\"");
-        //    sbQuery.append(" OR NOT EXISTS:").append("\"").append(organizationProperty).append("\")");
-        //}
+        if (!useStrictAccess) {
+                sbQuery.append(" OR (ISNULL:").append("\"").append(organizationProperty).append("\"");
+                sbQuery.append(" OR NOT EXISTS:").append("\"").append(organizationProperty).append("\")");
+            }
 
         return sbQuery.toString();
     }

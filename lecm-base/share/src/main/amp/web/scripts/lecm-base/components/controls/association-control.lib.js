@@ -22,7 +22,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (options.allowedNodes) {
 				allowedNodesFilter = options.allowedNodes.reduce(function (prev, curr) {
 					return prev + (prev.length ? ' OR ' : '') + 'ID:"' + curr + '"';
-				}, options.allowedNodes.length ? '' : 'ISNULL:"sys:node-dbid"');
+				}, options.allowedNodes.length ? '' : '(ISNULL:"sys:node-dbid" OR NOT EXISTS:"sys:node-dbid")');
 
 				if (additionalFilter) {
 					additionalFilter = '(' + additionalFilter + ') AND (' + allowedNodesFilter + ')';
@@ -34,7 +34,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (options.ignoreNodes && options.ignoreNodes.length) {
 				ignoreNodesFilter = options.ignoreNodes.reduce(function (prev, curr) {
 					return prev + ' AND NOT ID:"' + curr + '"';
-				}, 'ISNOTNULL:"cm:name"');
+				}, '(ISNOTNULL:\"cm:name\" AND  @cm\\:name:\"?*\")');
 
 				if (additionalFilter) {
 					additionalFilter = '(' + additionalFilter + ') AND (' + ignoreNodesFilter + ')';
@@ -146,7 +146,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			var title = (options.showAssocViewForm && item.nodeRef != null) ? Alfresco.util.message('title.click.for.extend.info') : titleName;
 			var result = '<span class="not-person" title="' + title + '">';
 			if (options.showAssocViewForm && item.nodeRef != null) {
-				result += "<a href='javascript:void(0);' " + " onclick=\"viewAttributes(\'" + item.nodeRef + "\', null, \'logicecm.view\')\">" + displayValue + "</a>";
+				result += "<a href='javascript:void(0);' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + item.nodeRef + "\', title: \'logicecm.view\'})\">" + displayValue + "</a>";
 			} else {
 				result += displayValue;
 			}
