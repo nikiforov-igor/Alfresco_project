@@ -69,12 +69,41 @@
         <constraint name="lecm-errands:limitation-date-radio-const" type="LIST">
             <parameter name="allowedValues">
                 <list>
-                    <value>LIMITLESS</value>
                     <value>DAYS</value>
                     <value>DATE</value>
+					<value>LIMITLESS</value>
                 </list>
             </parameter>
         </constraint>
+		<constraint name="lecm-errands:report-recipient-type-const" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>AUTHOR</value>
+					<value>CONTROLLER</value>
+					<value>AUTHOR_AND_CONTROLLER</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-errands:periodically-radio-const" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>DATERANGE</value>
+					<value>DURING</value>
+					<value>REPEAT_COUNT</value>
+					<value>ENDLESS</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-errands:period-during-const" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>DAYS</value>
+					<value>WEEKS</value>
+					<value>MONTHS</value>
+					<value>YEARS</value>
+				</list>
+			</parameter>
+		</constraint>
     </constraints>
 
     <types>
@@ -149,9 +178,70 @@
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
+				<!-- Требуется отчет -->
+				<property name="lecm-errands:report-required">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<!-- Получатель отчета-->
+				<property name="lecm-errands:report-recipient-type">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="lecm-errands:report-recipient-type-const"/>
+					</constraints>
+				</property>
 				<!-- Дата завершения поручения -->
 				<property name="lecm-errands:end-date">
 					<type>d:date</type>
+				</property>
+
+				<!-- Направлять периодически -->
+				<property name="lecm-errands:periodically">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+
+				<!--Периодичность-->
+				<property name="lecm-errands:periodically-radio">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<constraints>
+						<constraint ref="lecm-errands:periodically-radio-const"/>
+					</constraints>
+				</property>
+				<!--Повторять-->
+				<property name="lecm-errands:reiteration-rule">
+					<type>d:text</type>
+					<default>"{"type":"DAILY","data":[]}"</default>
+				</property>
+				<!--Дата начала периода-->
+				<property name="lecm-errands:period-start">
+					<type>d:date</type>
+				</property>
+				<!--Дата окончания периода-->
+				<property name="lecm-errands:period-end">
+					<type>d:date</type>
+				</property>
+				<!-- В течение -->
+				<property name="lecm-errands:period-during">
+					<type>d:int</type>
+					<default>10</default>
+				</property>
+				<property name="lecm-errands:period-during-type">
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="lecm-errands:period-during-const"/>
+					</constraints>
+				</property>
+				<!--число повторений-->
+				<property name="lecm-errands:reiteration-count">
+					<type>d:int</type>
+					<default>10</default>
+				</property>
+				<!--нет конечной даты-->
+				<property name="lecm-errands:period-endless">
+					<type>d:boolean</type>
 				</property>
 
 				<!-- Атрибуты исполнения поручения-->
@@ -269,6 +359,22 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="lecm-errands:base-assoc-ref">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="lecm-errands:base-assoc-text-content">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 				<property name="lecm-errands:additional-document-assoc-ref">
 					<type>d:text</type>
 					<index enabled="true">
@@ -302,9 +408,15 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+
+				<!-- Поручения, созданные на основании -->
+				<property name="lecm-errands:child-errands">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
 			</properties>
 			<associations>
-				<!-- Инициатор -->
+				<!-- Автор -->
 				<association name="lecm-errands:initiator-assoc">
 					<source>
 						<mandatory>false</mandatory>
@@ -376,7 +488,19 @@
 						<many>true</many>
 					</target>
 				</association>
-                <!-- Ссылка на основной документ, если есть -->
+				<!-- Основание -->
+				<association name="lecm-errands:base-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-document:base</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+                <!-- Документ-основание, если есть -->
                 <association name="lecm-errands:additional-document-assoc">
                     <source>
                         <mandatory>false</mandatory>

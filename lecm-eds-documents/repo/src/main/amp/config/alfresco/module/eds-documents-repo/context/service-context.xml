@@ -12,10 +12,8 @@
 	</util:list>
 	<util:list id="eds.document.models">
 		<value>alfresco/module/${artifactId}/models/lecm-eds-document-model.xml</value>
-		<value>alfresco/module/${artifactId}/models/eds-document-aspects-model.xml</value>
 	</util:list>
 	<util:list id="eds.models.labels">
-		<value>alfresco/module/${artifactId}/messages/eds-document-aspects-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-eds-document-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-eds-global-settings-model</value>
 	</util:list>

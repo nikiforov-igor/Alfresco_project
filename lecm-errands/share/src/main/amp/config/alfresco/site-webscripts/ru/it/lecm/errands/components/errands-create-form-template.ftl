@@ -13,10 +13,16 @@
     <#list form.structure as item>
         <#if item.kind == "set">
             <#assign setCount=setCount+1/>
-            <#if setCount % 2 == 0>
-                <div class="${formId}-panel hidden1">
+            <#if setCount gt 2 && item.id?matches("static[0-9]*") != true>
+                <#if item.id == "block3">
+                <div class="${formId}-panel-block3 hidden1">
                     <@formLib.renderSet set=item/>
                 </div>
+                <#else>
+                <div class="${formId}-panel-block hidden1">
+                    <@formLib.renderSet set=item/>
+                </div>
+                </#if>
             <#else>
                 <@formLib.renderSet set=item/>
             </#if>
@@ -24,57 +30,81 @@
             <@formLib.renderField field=form.fields[item.id] />
         </#if>
     </#list>
-    <div class="form-buttons ${formId}-panel hidden1">
-        <span id="${formId}-save-draft" class="yui-button yui-push-button">
-            <span class="first-child">
-                <button type="button">${msg("label.save-draft")}</button>
-            </span>
+
+    <span id="${formId}-expand-panel" class="yui-button yui-push-button">
+        <span class="first-child">
+            <button type="button">${msg("label.show-details")}</button>
         </span>
-    </div>
-    <div class="form-buttons">
-        <span id="${formId}-expand-panel" class="yui-button yui-push-button">
-            <span class="first-child">
-                <button type="button">${msg("label.show-details")}</button>
-            </span>
+    </span>
+    <span id="${formId}-save-draft" class="yui-button yui-push-button">
+        <span class="first-child">
+            <button type="button">${msg("label.save-draft")}</button>
         </span>
-    </div>
+    </span>
+
 </@>
 
+
+
 <script type="text/javascript">
-    (function() {
+    (function () {
         var Dom = YAHOO.util.Dom,
                 Event = YAHOO.util.Event,
                 Selector = YAHOO.util.Selector,
                 Bubbling = YAHOO.Bubbling,
-                expandButtonId = "${formId}-expand-panel",
-                saveDraftButtonId = "${formId}-save-draft",
-                okButton,
-                saveDraftYUIButton;
+                expandButton,
+                saveDraftButton,
+                periodicallyCheckBox,
+                routeButton,
+                formButtons;
+
 
         function init() {
-            var expandPanel = function(e) {
-                var expandButton = Dom.get(expandButtonId);
-                var saveDraftButton = Dom.get(saveDraftButtonId);
-                var form = Dom.get("${formId}");
+            var toggleBlock = function (e) {
+                var panels = [];
+                if (e.target == periodicallyCheckBox) {
+                    panels = Dom.getElementsByClassName('${formId}-panel-block3');
+                } else {
+                    expandButton.parentNode.removeChild(expandButton);
+                    panels = Dom.getElementsByClassName('${formId}-panel-block');
+                    Dom.removeClass(formButtons,"form-4-buttons");
+                }
+                var hidden = panels[0].classList.contains("hidden1");
+                for (var i = 0; i < panels.length; i++) {
+                    if (hidden) {
+                        Dom.removeClass(panels[i], 'hidden1');
+                    } else {
+                        Dom.addClass(panels[i], 'hidden1');
+                    }
+                }
 
-                okButton = Selector.query(".form-buttons .yui-submit-button", form, true);
-                expandButton.parentNode.removeChild(expandButton);
-                Dom.insertBefore(saveDraftButton, okButton);
-                Bubbling.fire("addSubmitElement", saveDraftYUIButton);
-
-                Dom.addClass("${formId}", 'hidden-disable');
             };
-            var saveDraft = function() {
-                var hidden = Dom.getElementBy(function(el) {
+            var saveDraft = function () {
+                var hidden = Dom.getElementBy(function (el) {
                     return el.name == "prop_lecm-errands_is-short";
                 }, 'input', "${formId}");
 
                 hidden.value = "false";
-                okButton.click();
+                routeButton = Selector.query(".yui-submit-button", formButtons, true);
+                routeButton.click();
             };
 
-            Alfresco.util.createYUIButton(this, "", expandPanel, {}, expandButtonId);
-            saveDraftYUIButton = Alfresco.util.createYUIButton(this, "", saveDraft, {}, saveDraftButtonId);
+            var periodicallyInput = document.getElementsByName('prop_lecm-errands_periodically')[0];
+            periodicallyCheckBox = Dom.get(periodicallyInput.id+'-entry');
+            if (periodicallyCheckBox) {
+                Event.addListener(periodicallyCheckBox, "change", toggleBlock);
+            }
+            routeButton = Dom.get("${formId}-submit");
+            expandButton = Dom.get("${formId}-expand-panel");
+            saveDraftButton = Dom.get("${formId}-save-draft");
+            Event.addListener(expandButton,"click",toggleBlock);
+            Event.addListener(saveDraftButton,"click",saveDraft);
+            Dom.insertBefore(saveDraftButton,routeButton);
+            Dom.insertBefore(expandButton,saveDraftButton);
+            formButtons = Dom.get("${formId}-buttons");
+            Dom.addClass(formButtons,"form-4-buttons");
+
+
 
             Alfresco.util.Ajax.request({
                 url: Alfresco.constants.PROXY_URI + "/lecm/errands/isHideAdditionAttributes",
@@ -82,7 +112,7 @@
                     fn: function (response) {
                         var oResults = JSON.parse(response.serverResponse.responseText);
                         if (oResults && !oResults.hide) {
-                            expandPanel();
+                            toggleBlock();
                         }
                     }
                 },
@@ -92,5 +122,5 @@
         }
 
         Event.onContentReady("${formId}", init);
-    }) ();
+    })();
 </script>

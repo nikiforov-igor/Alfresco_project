@@ -64,4 +64,5 @@
 }
 .errands-limitation-date-set .errands-limitation-date-set-radio .container  {
     min-width: 10px;
+    float:left;
 }
