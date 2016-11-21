@@ -206,6 +206,8 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                             li.innerHTML = itemsHtml;
                             ul.appendChild(li);
 
+                            YAHOO.util.Event.onAvailable(this.id + "_" + num + "_item", this.clacActionsHeight, num, this);
+
                             ul.scrollTop = ul.scrollHeight;
 
                             Dom.setStyle(formId + "-form-buttons", "visibility", "hidden");
@@ -238,6 +240,14 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                     divRemoveActionId: this.id + "_" + num + "_remove",
                     messageRemove: this.msg('button.delete')
                 });
+            },
+
+            clacActionsHeight: function(num) {
+                var li = Dom.get(this.id + "_" + num + "_item");
+                var removeItem = Dom.get(this.id + "_" + num + "_remove");
+                if (li && removeItem) {
+                    Dom.setStyle(removeItem, "height", (li.offsetHeight - 10) + "px");
+                }
             },
 
             attachRemoveItemClickListener: function (num) {

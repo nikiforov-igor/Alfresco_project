@@ -23,11 +23,15 @@
                     <show id="lecm-resolutions:limitation-date-type"/>
                     <show id="lecm-resolutions:limitation-date"/>
 
+                    <show id="lecm-resolutions:errands-json"/>
+                    <show id="change-errand-type-script" force="true"/>
+                    <show id="errands-limitation-date-script" force="true"/>
+
                     <show id="lecm-resolutions:reviewers-assoc"/>
                 </field-visibility>
                 <appearance>
                     <set id="start"/>
-                    <set id="limitation-date" appearance="fieldset" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
+                    <set id="limitation-date" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="end"/>
 
                     <field id="lecm-resolutions:control" set="start"/>
@@ -66,6 +70,24 @@
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
                         </constraint-handlers>
+                    </field>
+
+                    <field id="lecm-resolutions:errands-json" label-id="field.primaryRouting.errands.title" set="end">
+                        <control template="/ru/it/lecm/eds/controls/multi-form-control.ftl">
+                            <control-param name="availableRemoveDefault">false</control-param>
+                            <control-param name="documentType">lecm-errands:document</control-param>
+                            <control-param name="documentFromId">from-resolution</control-param>
+                        </control>
+                    </field>
+                    <field id="change-errand-type-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl" set="end">
+                            <control-param name="scripts">scripts/lecm-errands/errands-reinit-title-by-type.js</control-param>
+                        </control>
+                    </field>
+                    <field id="errands-limitation-date-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl" set="end">
+                            <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
+                        </control>
                     </field>
 
                     <field id="lecm-resolutions:reviewers-assoc" set="end">
