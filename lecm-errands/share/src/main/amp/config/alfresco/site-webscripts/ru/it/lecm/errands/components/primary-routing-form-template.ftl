@@ -1,5 +1,14 @@
 <#import "/org/alfresco/components/form/form.lib.ftl" as formLib />
 
+<script type="text/javascript">//<![CDATA[
+(function() {
+    LogicECM.module.Base.Util.loadCSS([
+        'css/lecm-errands/primary-routing-form.css'
+    ]);
+
+})();
+//]]></script>
+
 <#if formUI == "true">
     <@formLib.renderFormsRuntime formId=formId />
 </#if>
