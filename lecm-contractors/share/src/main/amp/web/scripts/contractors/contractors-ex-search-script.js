@@ -183,32 +183,60 @@
                         var results = response.json;
                         if (results && results.hasDuplicate) {
                             var duplicates = results.duplicates;
-                            var message = "В справочнике найдены похожие элементы" + ":<br/>";
-                            for (var item in duplicates) {
-                                message += duplicates[item].fullName + "<br/>";
+                            var duplicatesFilter = '';
+                            for (var i in duplicates) {
+                                if (duplicatesFilter.length > 0) {
+                                    duplicatesFilter += ",";
+                                }
+                                duplicatesFilter += duplicates[i].nodeRef;
                             }
-                            Alfresco.util.PopupManager.displayPrompt(
+
+                            var formId = "contractor-duplicates-" +  Alfresco.util.generateDomId();
+
+                            var doBeforeDialogShow = function (p_form, p_dialog) {
+                                var message = this.msg("title.find.duplicates");
+                                p_dialog.dialog.setHeader(message);
+
+                                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id, force: true}, this);
+                                Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
+                                p_dialog.widgets.okButton.set('label', this.msg("label.continue"));
+
+                                //подменяем submit
+                                var submitElement = p_form.submitElements[0];
+                                submitElement.submitForm = function () {
+                                    fnSubmit();
+                                    p_dialog.hide();
+                                };
+                            };
+
+                            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+                            var templateRequestParams = {
+                                htmlid: formId,
+                                itemKind: "type",
+                                itemId: 'lecm-contractor:contractor-type',
+                                formId:"show-duplicates",
+                                mode: 'create',
+                                submitType: 'json',
+                                args: JSON.stringify({
+                                    contractor_duplicates:duplicatesFilter
+                                }),
+                                showSubmitButton: true,
+                                showCancelButton: true
+                            };
+
+                            var createDetails = new Alfresco.module.SimpleDialog(formId + "-showDialog");
+                            createDetails.setOptions(
                                 {
-                                    title: "Найдены похожие элементы",
-                                    text: message,
-                                    noEscape: true,
-                                    buttons: [
-                                        {
-                                            text: Alfresco.util.message("button.ok"),
-                                            handler: function dlA_onAction_action() {
-                                                this.destroy();
-                                                fnSubmit();
-                                            }
-                                        },
-                                        {
-                                            text: Alfresco.util.message("button.cancel"),
-                                            handler: function dlA_onActionDelete_cancel() {
-                                                this.destroy();
-                                            },
-                                            isDefault: true
-                                        }
-                                    ]
-                                });
+                                    width: "45em",
+                                    templateUrl: templateUrl,
+                                    templateRequestParams: templateRequestParams,
+                                    actionUrl: null,
+                                    destroyOnHide: true,
+                                    doBeforeDialogShow: {
+                                        fn: doBeforeDialogShow,
+                                        scope: this
+                                    }
+                                }).show();
                         } else {
                             fnSubmit();
                         }
@@ -252,32 +280,60 @@
                         var results = response.json;
                         if (results && results.hasDuplicate) {
                             var duplicates = results.duplicates;
-                            var message = "В справочнике найдены похожие элементы" + ":<br/>";
-                            for (var item in duplicates) {
-                                message += duplicates[item].fullName + "<br/>";
+                            var duplicatesFilter = '';
+                            for (var i in duplicates) {
+                                if (duplicatesFilter.length > 0) {
+                                    duplicatesFilter += ",";
+                                }
+                                duplicatesFilter += duplicates[i].nodeRef;
                             }
-                            Alfresco.util.PopupManager.displayPrompt(
+
+                            var formId = "person-duplicates-" +  Alfresco.util.generateDomId();
+
+                            var doBeforeDialogShow = function (p_form, p_dialog) {
+                                var message = this.msg("title.find.duplicates");
+                                p_dialog.dialog.setHeader(message);
+
+                                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id, force: true}, this);
+                                Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
+                                p_dialog.widgets.okButton.set('label', this.msg("label.continue"));
+
+                                //подменяем submit
+                                var submitElement = p_form.submitElements[0];
+                                submitElement.submitForm = function () {
+                                    fnSubmit();
+                                    p_dialog.hide();
+                                };
+                            };
+
+                            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+                            var templateRequestParams = {
+                                htmlid: formId,
+                                itemKind: "type",
+                                itemId: 'lecm-contractor:physical-person-type',
+                                formId:"show-duplicates",
+                                mode: 'create',
+                                submitType: 'json',
+                                args: JSON.stringify({
+                                    person_duplicates: duplicatesFilter
+                                }),
+                                showSubmitButton: true,
+                                showCancelButton: true
+                            };
+
+                            var createDetails = new Alfresco.module.SimpleDialog(formId + "-showDialog");
+                            createDetails.setOptions(
                                 {
-                                    title: "Найдены похожие элементы",
-                                    text: message,
-                                    noEscape: true,
-                                    buttons: [
-                                        {
-                                            text: Alfresco.util.message("button.ok"),
-                                            handler: function dlA_onAction_action() {
-                                                this.destroy();
-                                                fnSubmit();
-                                            }
-                                        },
-                                        {
-                                            text: Alfresco.util.message("button.cancel"),
-                                            handler: function dlA_onActionDelete_cancel() {
-                                                this.destroy();
-                                            },
-                                            isDefault: true
-                                        }
-                                    ]
-                                });
+                                    width: "45em",
+                                    templateUrl: templateUrl,
+                                    templateRequestParams: templateRequestParams,
+                                    actionUrl: null,
+                                    destroyOnHide: true,
+                                    doBeforeDialogShow: {
+                                        fn: doBeforeDialogShow,
+                                        scope: this
+                                    }
+                                }).show();
                         } else {
                             fnSubmit();
                         }

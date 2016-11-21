@@ -6,7 +6,7 @@ function main() {
     var inn = args["inn"] ? args["inn"] : null;
     var ogrn = args["ogrn"] ? args["ogrn"] : null;
 
-    var query = 'TYPE:\"lecm-contractor:physical-person-type\" AND (';
+    var query = 'TYPE:\"lecm-contractor:physical-person-type\" AND NOT @lecm\\-dic\\:active:false AND (';
 
     var subQueryByNames = '';
 

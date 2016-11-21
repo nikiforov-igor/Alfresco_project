@@ -59,7 +59,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			searchTerm: null,
 			exSearchFilter: null,
 			exSearchFormId: null,
-			loadingInProcess: false	
+			loadingInProcess: false
 		},
 
 		options: {
@@ -264,7 +264,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				params.hasNoAspects = this.options.hasNoAspects;
 			}
 
-            Alfresco.util.Ajax.jsonGet({
+			Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.treeBranchesDatasource + '/' + node.data.nodeRef.replace("://", "/") + '/items',
 				dataObj: params,
 				successCallback: {
@@ -465,10 +465,10 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 			if (exSearchFilter) {
 				this.stateParams.isSearch = true;
-				this.loadTableData(true, '', exSearchFilter);
+				this.loadTableData(true, this.currentState.searchTerm, exSearchFilter);
 			} else if ('' === exSearchFilter) {
-				this.stateParams.isSearch = false;
-				this.loadTableData(true, '', '');
+				this.stateParams.isSearch = !this.currentState.searchTerm;
+				this.loadTableData(true, this.currentState.searchTerm, '');
 			}
 
 			if (event) {
@@ -478,7 +478,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 		onExSearchClear: function() {
 			this._loadSearchForm();
-			this.loadTableData(true, '', '');
+			this.loadTableData(true, this.currentState.searchTerm, '');
 		},
 
 		onSearch: function () {
@@ -506,10 +506,10 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					return prev + (prev.length ? '#' : '') + curr + ':' + searchData.replace(/#/g, '');
 				}, '');
 				searchTerm = searchTerm ? searchTerm : 'cm:name:' + searchData;
-				this.loadTableData(true, searchTerm);
+				this.loadTableData(true, searchTerm, this.currentState.exSearchFilter);
 			} else if ('' === searchData) {
-				this.stateParams.isSearch = false;
-				this.loadTableData(true, '');
+				this.stateParams.isSearch = !this.currentState.exSearchFilter;
+				this.loadTableData(true, '', this.currentState.exSearchFilter);
 			} else {
 				Alfresco.util.PopupManager.displayMessage({
 					text: this.msg('form.control.object-picker.search.enter-more', this.options.minSearchTermLength)
@@ -569,7 +569,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				this.currentState.loadingInProcess = true;
 				this.loadTableData(false, this.currentState.searchTerm, this.currentState.exSearchFilter);
 			}
-			
+
 		},
 
 		onAdd: function (event) {
@@ -595,14 +595,14 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				nodeData = args[1].added;
 				key = args[1].key;
 				if (!key || key === this.key) {
-                    if (this.widgets.datatable) {
-                        records = this.widgets.datatable.getRecordSet().getRecords();
-                        this.currentState.temporarySelected[nodeData.nodeRef] = nodeData;
-                        records.forEach(function (record) {
-                            var tdEl = this.widgets.datatable.getTdEl({
-                                column: this.widgets.datatable.getColumn('add'),
-                                record: record
-                            });
+					if (this.widgets.datatable) {
+						records = this.widgets.datatable.getRecordSet().getRecords();
+						this.currentState.temporarySelected[nodeData.nodeRef] = nodeData;
+						records.forEach(function (record) {
+							var tdEl = this.widgets.datatable.getTdEl({
+								column: this.widgets.datatable.getColumn('add'),
+								record: record
+							});
 							if (IDENT_CREATE_NEW !== record.getData('type')) {
 								if (tdEl.firstChild.firstChild) {
 									tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.temporarySelected, this.parentControl);
@@ -612,8 +612,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 									tdEl.parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, options, this.currentState.temporarySelected, this.parentControl);
 								}
 							}
-                        }, this);
-                    }
+						}, this);
+					}
 				}
 			}
 		},
@@ -881,36 +881,36 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				onSuccess:{
 					fn:function (response) {
 
-                        Alfresco.util.Ajax.jsonPost({
-                            url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.pickerItemsScript,
-                            dataObj: {
-                                items: [response.json.persistedObject],
-                                itemValueType: 'nodeRef',
-                                itemNameSubstituteString: this.options.nameSubstituteString,
-                                selectedItemsNameSubstituteString: ACUtils.getSelectedItemsNameSubstituteString(this.options),
-                                pathRoot: this.options.rootLocation,
-                                pathNameSubstituteString: this.options.treeNodeSubstituteString,
-                                useObjectDescription: this.options.useObjectDescription
-                            },
-                            successCallback: {
-                                scope: this,
-                                fn: function (successResponse) {
-                                    var items =successResponse.json.data.items;
+						Alfresco.util.Ajax.jsonPost({
+							url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.pickerItemsScript,
+							dataObj: {
+								items: [response.json.persistedObject],
+								itemValueType: 'nodeRef',
+								itemNameSubstituteString: this.options.nameSubstituteString,
+								selectedItemsNameSubstituteString: ACUtils.getSelectedItemsNameSubstituteString(this.options),
+								pathRoot: this.options.rootLocation,
+								pathNameSubstituteString: this.options.treeNodeSubstituteString,
+								useObjectDescription: this.options.useObjectDescription
+							},
+							successCallback: {
+								scope: this,
+								fn: function (successResponse) {
+									var items =successResponse.json.data.items;
 
-                                    if (items && items[0]) {
-                                        this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
-                                            added: items[0],
-                                            options: this.options,
-                                            key: this.key
-                                        });
-                                    }
-                                }
-                            },
-                            failureCallback: {
-                                scope: this,
-                                fn: function () {}
-                            }
-                        });
+									if (items && items[0]) {
+										this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
+											added: items[0],
+											options: this.options,
+											key: this.key
+										});
+									}
+								}
+							},
+							failureCallback: {
+								scope: this,
+								fn: function () {}
+							}
+						});
 
 						this.stateParams.doubleClickLock = false;
 					},

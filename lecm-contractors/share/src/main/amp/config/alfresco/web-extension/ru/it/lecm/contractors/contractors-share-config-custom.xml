@@ -485,6 +485,37 @@
                     <field id="lecm-contractor:KPP" set="two"/>
                 </appearance>
             </form>
+            <form id="datagrid-ext">
+                <field-visibility>
+                    <show id="lecm-contractor:shortname"/>
+                    <show id="lecm-contractor:INN"/>
+                    <show id="lecm-contractor:KPP"/>
+                </field-visibility>
+            </form>
+            <form id="show-duplicates">
+                <field-visibility>
+                    <show id="lecm-contractor:duplicates"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-contractor:duplicates">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-datagrid-control.ftl">
+                            <control-param name="itemType">lecm-contractor:contractor-type</control-param>
+                            <control-param name="showCreateButton">false</control-param>
+                            <control-param name="showActions">false</control-param>
+                            <!-- <control-param name="height">500</control-param>-->
+                            <control-param name="datagridFormId">datagrid-ext</control-param>
+                            <control-param name="showLabel">false</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="selectedItemsFormArgs">contractor_duplicates</control-param>
+                            <control-param name="prefixLabelId">label.dictionary.has.duplicates</control-param>
+                            <control-param name="postfixLabelId">label.continue.with.selected.data</control-param>
+                            <control-param name="usePagination">true</control-param>
+                            <control-param name="isTableSortable">true</control-param>
+                            <control-param name="pageSize">5</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 
@@ -824,6 +855,15 @@
                     <!-- Местоположение банка -->
 
                 </appearance>
+            </form>
+            <form id="expand-info">
+                <field-visibility>
+                    <show id="lecm-contractor:legal-address"/>
+                    <show id="lecm-contractor:physical-address"/>
+                    <show id="lecm-contractor:phone"/>
+                    <show id="lecm-contractor:contractor-code"/>
+                    <show id="lecm-contractor:contractor-to-specialization-association"/>
+                </field-visibility>
             </form>
         </forms>
     </config>
@@ -1187,6 +1227,43 @@
                     <show id="lecm-contractor:INN" force="true"/>
                 </field-visibility>
             </form>
+            <form id="datagrid-ext">
+                <field-visibility>
+                    <show id="lecm-contractor:fullname"/>
+                    <show id="lecm-contractor:physical-address"/>
+                    <show id="lecm-contractor:is-sole-proprietor"/>
+                    <show id="lecm-contractor:INN"/>
+                    <show id="lecm-contractor:region-association"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-contractor:fullname" label="Имя"/>
+                    <field id="lecm-contractor:is-sole-proprietor" label="ИП"/>
+                </appearance>
+            </form>
+            <form id="show-duplicates">
+                <field-visibility>
+                    <show id="lecm-person:duplicates"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-person:duplicates">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-datagrid-control.ftl">
+                            <control-param name="itemType">lecm-contractor:physical-person-type</control-param>
+                            <control-param name="showCreateButton">false</control-param>
+                            <control-param name="showActions">false</control-param>
+                            <!--<control-param name="height">500</control-param>-->
+                            <control-param name="datagridFormId">datagrid-ext</control-param>
+                            <control-param name="showLabel">false</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
+                            <control-param name="selectedItemsFormArgs">person_duplicates</control-param>
+                            <control-param name="prefixLabelId">label.dictionary.has.duplicates</control-param>
+                            <control-param name="postfixLabelId">label.continue.with.selected.data</control-param>
+                            <control-param name="usePagination">true</control-param>
+                            <control-param name="isTableSortable">true</control-param>
+                            <control-param name="pageSize">5</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 
@@ -1245,6 +1322,22 @@
                             <control-param name="createNewMessageId">label.new-specialization</control-param>
                         </control>
                     </field>
+                </appearance>
+            </form>
+            <form id="expand-info">
+                <field-visibility>
+                    <show id="lecm-contractor:representative-to-certifying-document-association"/>
+                    <show id="lecm-contractor:legal-address"/>
+                    <show id="lecm-contractor:OGRN"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-contractor:representative-to-certifying-document-association">
+                        <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
+                            <control-param name="formatString">{lecm-contractor:representative-to-certifying-document-association/} {lecm-contractor:document-series} {lecm-contractor:document-number}</control-param>
+                            <control-param name="emptyValueKey">form.control.novalue</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contractor:legal-address" label-id="title.physical_person_legal_address"/>
                 </appearance>
             </form>
         </forms>

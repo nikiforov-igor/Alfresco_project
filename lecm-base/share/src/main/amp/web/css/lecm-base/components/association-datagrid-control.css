@@ -5,3 +5,12 @@
     word-break: break-all;
     word-break: break-word;
 }
+
+.control.association-datagrid .grid .expand-row .form-fields {
+    color: grey;
+    padding: 5px 50px;
+}
+
+.control.association-datagrid .grid .expand-row .form-fields .control {
+    margin-bottom: 0;
+}

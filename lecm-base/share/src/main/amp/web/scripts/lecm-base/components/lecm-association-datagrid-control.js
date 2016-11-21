@@ -62,8 +62,6 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
 (function () {
 
     var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event,
-        Selector = YAHOO.util.Selector,
         Bubbling = YAHOO.Bubbling;
 
     LogicECM.module.Base.AssociationDataGrid = function (htmlId) {
@@ -79,79 +77,14 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
     YAHOO.lang.augmentObject(LogicECM.module.Base.AssociationDataGrid.prototype, {
-        expand: false,
-        selectedItems: {},
         filterValues: "",
+
         inputAdded: null,
         inputRemoved: null,
         input: null,
         selectItemsTag: null,
 
-        itemType: null,
-        assocType: null,
         documentRef: null,
-
-        addFooter: function() {
-            if (this.documentRef != null && this.itemType != null && this.assocType != null) {
-                var sUrl = sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/tables/api/getTotalRows" +
-                    "?documentNodeRef=" + encodeURIComponent(this.documentRef) +
-                    "&tableDataType=" + encodeURIComponent(this.itemType) +
-                    "&tableDataAssocType=" + encodeURIComponent(this.assocType);
-                Alfresco.util.Ajax.jsonGet(
-                    {
-                        url: sUrl,
-                        successCallback: {
-                            fn: function (response) {
-                                var oResults = response.json;
-                                if (oResults != null && oResults.length > 0) {
-                                    var row = oResults[0];
-                                    var item = {
-                                        itemData: {},
-                                        nodeRef: row.nodeRef,
-                                        type: "total"
-                                    };
-
-                                    var datagridColumns = this.datagridColumns;
-                                    if (datagridColumns != null) {
-                                        for (var i = 0; i < datagridColumns.length; i++) {
-                                            var field = datagridColumns[i].name;
-                                            var totalFields = Object.keys(row.itemData);
-                                            for (var j = 0; j < totalFields.length; j++) {
-                                                var totalField = totalFields[j];
-                                                if (totalField.indexOf(field) == 0) {
-                                                    var value = row.itemData[totalField];
-                                                    item.itemData[datagridColumns[i].formsName] = {
-                                                        value: value,
-                                                        displayValue: value
-                                                    };
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    this.widgets.dataTable.addRow(item);
-                                }
-                            },
-                            scope: this
-                        },
-                        failureCallback: {
-                            fn: function (oResponse) {
-
-                            },
-                            scope: this
-                        }
-                    });
-            }
-        },
-
-	    getRowFormater: function () {
-		    return function (elTr, oRecord) {
-	            if (oRecord.getData("type") == "total") {
-	                YAHOO.util.Dom.addClass(elTr, 'total-row');
-	            }
-	            return true;
-		    }
-        },
 
         onActionEdit:function DataGrid_onActionEdit(item) {
             // Для предотвращения открытия нескольких карточек (при многократном быстром нажатии на кнопку редактирования)
@@ -191,7 +124,7 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
                             p_dialog.dialog.setHeader(this.msg(this.options.editFormTitleMsg));
                             this.editDialogOpening = false;
 
-                            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id, force: true}, this);
                         },
                         scope:this
                     },
@@ -307,7 +240,7 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
                                         me.filterValues = me.selectItemsTag != null ? me.selectItemsTag.value : null;
                                     }
                                 }
-                                me._setSearchConfigFilter();
+                                me._setSearchConfigFilter(this.filterValues);
                                 Bubbling.fire("initDatagrid",
                                     {
                                         datagrid: me
@@ -327,9 +260,9 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
                     });
             }
         },
+
         onDelete_Prompt: function (fnAfterPrompt, me, items, itemsString) {
             if (me._hasEventInterest(me.options.bubblingLabel)) {
-
                 Alfresco.util.PopupManager.displayPrompt(
                     {
                         title: this.msg("message.confirm.delete.title", items.length),
@@ -352,7 +285,7 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
                                             me.selectItemsTag.value = me.inputAdded.value + "," + me.input.value;
                                             me.filterValues = me.selectItemsTag.value;
                                         }
-                                        me._setSearchConfigFilter();
+                                        me._setSearchConfigFilter(this.filterValues);
                                         Bubbling.fire("initDatagrid",
                                             {
                                                 datagrid: me
@@ -375,11 +308,13 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
                     });
             }
         },
-        _setSearchConfigFilter: function () {
-            var filterValues = this.filterValues;
+
+        _setSearchConfigFilter: function (values) {
+            this.filterValues = values;
+
             var filter = "";
-            if (filterValues != null && filterValues != "") {
-                var items = filterValues.split(",");
+            if (this.filterValues != null && this.filterValues != "") {
+                var items = this.filterValues.split(",");
                 for (var item in items) {
                     if (items[item] != "") {
                         filter = filter + " ID:" + items[item].replace(":", "\\:");
@@ -390,66 +325,6 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
                 filter += "ID:NOT_REF";
             }
             this.options.datagridMeta.searchConfig = {filter: (filter.length > 0 ? filter : "")};
-        },
-        /**
-         * Развернуть информацию
-         */
-        expandRow: function onViewInformation() {
-            var numSelectItem = this.widgets.dataTable.getTrIndex(arguments[1].id);
-            var trId = this.widgets.dataTable.getRecord(numSelectItem).getId();
-            var selectItem = Dom.get(trId);
-            if (selectItem.getAttribute('class').indexOf("expanded") != -1) {
-                this.collapseRow(selectItem);
-            } else {
-                Alfresco.util.Ajax.request(
-                    {
-                        url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
-                        dataObj: {
-                            htmlid: "${fieldHtmlId}" + arguments[0].nodeRef,
-                            itemKind: "node",
-                            itemId: arguments[0].nodeRef,
-                            formId: "table-structure-info",
-                            mode: "view"
-                        },
-                        successCallback: {
-                            fn: function (response) {
-                                if (response.serverResponse != null) {
-                                    var me = response.serverResponse.argument.config.scope;
-                                    var rowId = response.serverResponse.argument.config.rowId;
-                                    var numSelectItem = me.widgets.dataTable.getTrIndex(rowId);
-                                    var oData = me.widgets.dataTable.getRecord(numSelectItem).getData();
-                                    me.widgets.dataTable.addRow(oData, numSelectItem + 1);
-
-                                    var trId = me.widgets.dataTable.getRecord(numSelectItem).getId();
-                                    var selectItem = Dom.get(trId);
-                                    selectItem.setAttribute('class', (selectItem.getAttribute('class') + " " + "expanded"));
-
-                                    trId = me.widgets.dataTable.getRecord(numSelectItem + 1).getId();
-                                    var newRecord = Dom.get(trId);
-                                    for (var i = 0; i < newRecord.children.length; i++) {
-                                        newRecord.removeChild(newRecord.children[i]);
-                                    }
-                                    var colCount = me.datagridColumns.length + 1;
-                                    newRecord.className = "CLASS_EXPANSION";
-                                    newRecord.innerHTML = "<td colspan=" + colCount + " class=\"CLASS_EXPANSION_LINE\">" + response.serverResponse.responseText + "</td>";
-                                }
-                            }
-                        },
-                        failureMessage: "message.failure",
-                        execScripts: true,
-                        scope: this,
-                        rowId: arguments[1].id
-                    });
-            }
-        },
-        /**
-         * Свернуть информацию
-         * @param selectItem
-         */
-        collapseRow: function (selectItem) {
-            var infoTag = Dom.getNextSibling(selectItem);
-            this.widgets.dataTable.deleteRow(infoTag);
-            selectItem.setAttribute('class', selectItem.getAttribute('class').replace("expanded"));
         },
 
         getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
@@ -481,9 +356,9 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
 
                                     columnContent = "<a href=\'" + Alfresco.constants.URL_PAGECONTEXT+'document-attachment?nodeRef='+ data.value +"\'\">" + fileIconHtml + data.displayValue + "</a>";
                                     break;
-								case "cm:cmobject":
-									columnContent = "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'"+ data.value + "\', title: \'logicecm.view\'})\">" + data.displayValue + "</a>";
-									break;
+                                case "cm:cmobject":
+                                    columnContent = "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'"+ data.value + "\', title: \'logicecm.view\'})\">" + data.displayValue + "</a>";
+                                    break;
                                 default:
                                     break;
                             }
@@ -499,6 +374,28 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
                 }
             }
             return html.length > 0 ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
+        },
+
+        onExpandClick: function(e, record) {
+            var row = this.widgets.dataTable.getRow(record);
+            if (Dom.hasClass(row, "expanded")) {
+                Dom.get("expand-" + record.getId()).innerHTML = "+";
+                Dom.removeClass(row, "expanded");
+                this.onCollapse(record);
+            } else {
+                if (this.options.collapseAllOnExpand) {
+                    this.collapseAll();
+                }
+                Dom.addClass(row, "expanded");
+                Dom.get("expand-" + record.getId()).innerHTML = "-";
+                var rowId = this.getExpandedRecordId(record);
+                if (Dom.get(rowId) != null) {
+                    Dom.setStyle(rowId, "display", "table-row");
+                } else {
+                    this.prepareExpandedRow(record);
+                    this.onExpand(record);
+                }
+            }
         }
     }, true)
 

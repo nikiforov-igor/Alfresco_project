@@ -107,7 +107,7 @@ public class ContractorsJavascriptExtension extends BaseWebScript {
         return null;
     }
 
-    public String formatContrractorName(final String originalStr) {
+    public String formatContractorName(final String originalStr) {
         return contractors.formatContractorName(originalStr);
     }
 }
