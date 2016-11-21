@@ -9,7 +9,7 @@
     padding: 10px;
 }
 
-.control.multi-form ul.multi-form-documents-list {
+.yui-panel .control.multi-form ul.multi-form-documents-list {
     max-height: 70vh;
     overflow-y: auto;
 }
