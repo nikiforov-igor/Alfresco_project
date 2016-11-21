@@ -32,9 +32,9 @@ public class DownloadAsZipWebscript extends StreamContent {
 		String zipName = zipSignedContentService.writeZipToStream(res.getOutputStream(), nodeRef, false);
 
 		zipName = FileNameValidator.getValidFileName(zipName);
-		zipName = URLEncoder.encode(zipName, "UTF8");
+		zipName = URLEncoder.encode(zipName, "UTF8").replaceAll("\\+", "%20");
 		res.setContentType(MIMETYPE_APPLICATION_ZIP);
-		String headerValue = "attachment; filename=\"" + zipName + ".zip\"; charset=UTF-8";
+		String headerValue = "attachment; filename*=UTF-8''" + zipName + ".zip; charset=UTF-8";
 		res.setHeader("Content-Disposition", headerValue);
 	}
 }
