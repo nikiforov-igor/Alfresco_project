@@ -56,7 +56,8 @@
                 saveDraftButton,
                 periodicallyCheckBox,
                 routeButton,
-                formButtons;
+                formButtons,
+                hidden;
 
 
         function init() {
@@ -80,10 +81,6 @@
 
             };
             var saveDraft = function () {
-                var hidden = Dom.getElementBy(function (el) {
-                    return el.name == "prop_lecm-errands_is-short";
-                }, 'input', "${formId}");
-
                 hidden.value = "false";
                 routeButton = Selector.query(".yui-submit-button", formButtons, true);
                 routeButton.click();
@@ -104,6 +101,11 @@
             formButtons = Dom.get("${formId}-buttons");
             Dom.addClass(formButtons,"form-4-buttons");
 
+            hidden = Dom.getElementBy(function (el) {
+                return el.name == "prop_lecm-errands_is-short";
+            }, 'input', "${formId}");
+
+            hidden.value = "true";
 
 
             Alfresco.util.Ajax.request({
