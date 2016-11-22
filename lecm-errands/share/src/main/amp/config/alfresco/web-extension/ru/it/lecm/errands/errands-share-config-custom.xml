@@ -841,9 +841,6 @@
                 </appearance>
             </form>
             <form id="from-resolution">
-                <create-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl" />
-                <edit-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl" />
-
                 <field-visibility>
                     <!--  Типы поручений -->
                     <show id="lecm-errands:type-assoc"/>
@@ -863,8 +860,9 @@
                     <show id="lecm-errands:limitation-date"/>
                 </field-visibility>
                 <appearance>
-                    <set id="left"/>
-                    <set id="right"/>
+                    <set id="parent" template="/ru/it/lecm/eds/controls/2-column-parent-set.ftl"/>
+                    <set id="left" parent="parent"/>
+                    <set id="right" parent="parent"/>
                     <set id="limitation-date" parent="right" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
 
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
