@@ -11,11 +11,11 @@
 		</property>
 	</bean>
 
-	<!--<bean id="resolutionsResourceBundlesWebApp" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">-->
-		<!--<property name="resourceBundles">-->
-			<!--<list>-->
-				<!--<value>alfresco.web-extension.ru.it.lecm.resolutions.form</value>-->
-			<!--</list>-->
-		<!--</property>-->
-	<!--</bean>-->
+	<bean id="resolutionsResourceBundlesWebApp" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
+		<property name="resourceBundles">
+			<list>
+				<value>alfresco.web-extension.ru.it.lecm.resolutions.form</value>
+			</list>
+		</property>
+	</bean>
 </beans>

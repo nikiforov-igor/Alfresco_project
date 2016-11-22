@@ -41,6 +41,11 @@
                 <value>arm?code=SED</value>
             </parameter>
         </constraint>
+        <constraint name="lecm-resolutions:document-url-constraint" type="ru.it.lecm.documents.constraints.DocumentUrlConstraint">
+            <parameter name="createUrl">
+                <value>resolution-create</value>
+            </parameter>
+        </constraint>
 
         <constraint name="lecm-resolutions:limitation-date-type-const" type="LIST">
             <parameter name="allowedValues">

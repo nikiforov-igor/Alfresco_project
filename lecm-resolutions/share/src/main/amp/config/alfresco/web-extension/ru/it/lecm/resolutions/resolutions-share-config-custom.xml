@@ -33,6 +33,7 @@
                     <set id="start"/>
                     <set id="limitation-date" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="end"/>
+                    <set id="reviewers" appearance="fieldset" label-id="label.review"/>
 
                     <field id="lecm-resolutions:control" set="start"/>
                     <field id="lecm-document:subject-assoc" set="start"/>
@@ -90,7 +91,7 @@
                         </control>
                     </field>
 
-                    <field id="lecm-resolutions:reviewers-assoc" set="end">
+                    <field id="lecm-resolutions:reviewers-assoc" set="reviewers">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
                             <control-param name="items">employee,organization</control-param>
                             <!-- lecm-orgstr:employee -->

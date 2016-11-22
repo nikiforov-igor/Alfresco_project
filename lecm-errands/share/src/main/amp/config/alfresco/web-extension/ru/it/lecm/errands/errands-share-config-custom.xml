@@ -715,7 +715,7 @@
                 <appearance>
                     <set id="left"/>
                     <set id="right"/>
-                    <set id="limitation-date" parent="right" appearance="fieldset" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
+                    <set id="limitation-date" parent="right" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
 
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
                         <control>
@@ -788,7 +788,7 @@
                 <appearance>
                     <set id="left"/>
                     <set id="right"/>
-                    <set id="limitation-date" parent="right" appearance="fieldset" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
+                    <set id="limitation-date" parent="right" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
 
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
                         <control>
@@ -841,6 +841,9 @@
                 </appearance>
             </form>
             <form id="from-resolution">
+                <create-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl" />
+                <edit-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl" />
+
                 <field-visibility>
                     <!--  Типы поручений -->
                     <show id="lecm-errands:type-assoc"/>
@@ -860,16 +863,16 @@
                     <show id="lecm-errands:limitation-date"/>
                 </field-visibility>
                 <appearance>
-                    <set id="start"/>
-                    <set id="limitation-date" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
-                    <set id="end"/>
+                    <set id="left"/>
+                    <set id="right"/>
+                    <set id="limitation-date" parent="right" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
 
-                    <field id="lecm-errands:type-assoc" set="start" mandatory="true">
+                    <field id="lecm-errands:type-assoc" set="left" mandatory="true">
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:title" set="start">
+                    <field id="lecm-errands:title" set="left">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
@@ -880,14 +883,14 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:executor-assoc" set="start"/>
-                    <field id="lecm-errands:coexecutors-assoc" set="start">
+                    <field id="lecm-errands:executor-assoc" set="left"/>
+                    <field id="lecm-errands:coexecutors-assoc" set="left">
                         <control>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:controller-assoc" set="start">
+                    <field id="lecm-errands:controller-assoc" set="left">
                         <control>
                             <control-param name="showSearch">true</control-param>
                         </control>
