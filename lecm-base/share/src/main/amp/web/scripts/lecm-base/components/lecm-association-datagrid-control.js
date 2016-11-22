@@ -63,6 +63,8 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
 
     var Dom = YAHOO.util.Dom,
         Bubbling = YAHOO.Bubbling;
+    var $html = Alfresco.util.encodeHTML,
+        $links = Alfresco.util.activateLinks;
 
     LogicECM.module.Base.AssociationDataGrid = function (htmlId) {
         return LogicECM.module.Base.AssociationDataGrid.superclass.constructor.call(this, htmlId);
@@ -85,6 +87,10 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
         selectItemsTag: null,
 
         documentRef: null,
+
+        tooltipPosition: null,
+        maxStripColumnWidth: 9999,
+        strippedColumns: null,
 
         onActionEdit:function DataGrid_onActionEdit(item) {
             // Для предотвращения открытия нескольких карточек (при многократном быстром нажатии на кнопку редактирования)
@@ -349,7 +355,23 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
                             data = oData[i];
 
                             var columnContent = "";
-                            switch (datalistColumn.dataType.toLowerCase()) { //  меняем отрисовку для конкретных колонок
+                            switch (datalistColumn.dataType.toLowerCase()) {
+                                case "text":
+                                    var hexColorPattern = /^#[0-9a-f]{6}$/i;
+                                    if (data.displayValue.indexOf("!html ") == 0) {
+                                        columnContent += data.displayValue.substring(6);
+                                    } else if (hexColorPattern.test(data.displayValue)) {
+                                        columnContent += $links(data.displayValue + '<div class="color-block" style="background-color: ' + data.displayValue + ';">&nbsp</div>');
+                                    } else {
+                                        columnContent += $links($html(data.displayValue));
+                                    }
+                                    break;
+                                case "boolean":
+                                    columnContent += '<div class="centered">';
+                                    columnContent += (data.value ? grid.msg("message.yes") : grid.msg("message.no"));
+                                    columnContent += '</div>';
+                                    break;
+
                                 case "cm:content":
                                     var fileIcon = Alfresco.util.getFileIcon(data.displayValue, "cm:content", 16);
                                     var fileIconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + fileIcon +"'/>";
@@ -360,13 +382,37 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
                                     columnContent = "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'"+ data.value + "\', title: \'logicecm.view\'})\">" + data.displayValue + "</a>";
                                     break;
                                 default:
+                                    if (datalistColumn.type == "association") {
+                                        columnContent += $html(data.displayValue);
+                                    } else if (data.displayValue == "true" || data.displayValue == "false") {
+                                        columnContent += '<div class="centered">';
+                                        columnContent += (data.displayValue == "true" ? grid.msg("message.yes") : grid.msg("message.no"));
+                                        columnContent += '</div>';
+                                    }
                                     break;
                             }
-                            if (columnContent != "") {
-                                html += columnContent;
+                            if (columnContent) {
+                                if (grid.options.noWrapValues) {
+                                    html += ("<div class='nowrap'>" + columnContent + "</div>");
+                                } else {
+                                    html += columnContent
+                                }
 
                                 if (i < ii - 1) {
                                     html += "<br />";
+                                }
+                            }
+                        }
+
+                        if (columnContent && grid.strippedColumns) {
+                            if (grid.strippedColumns.indexOf(datalistColumn.name.toLowerCase()) >= 0) {
+                                var stripedTooltip = html.replace(/<\/?[^>]+>/g,'');
+                                if (stripedTooltip.length > grid.maxStripColumnWidth) {
+                                    var content = stripedTooltip.substring(0, grid.maxStripColumnWidth) + "...";
+                                    if (grid.options.noWrapValues) {
+                                        content = ("<div class='nowrap'>" + content + "</div>");
+                                    }
+                                    html = '<div class="tt">' + html + '</div>' + content;
                                 }
                             }
                         }
@@ -396,6 +442,60 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
                     this.onExpand(record);
                 }
             }
+        },
+
+        onCellMouseover: function (oArgs) {
+            var td = oArgs.target;
+            if (td) {
+                var tooltip = Selector.query(".yui-dt-liner .tt", td, true);
+                if (tooltip) {
+                    var windowWidth = window.innerWidth,
+                        tdWidth = td.offsetWidth,
+                        tooltipWidth = tooltip.offsetWidth,
+                        d = 20, // отступ
+                        xy = YAHOO.util.Dom.getXY(td);
+
+                    xy[1] = xy[1] + d;
+                    if (xy[0] + tooltipWidth + 4 * d > windowWidth) {
+                        xy[0] = xy[0] + tdWidth - tooltipWidth - d;
+                    } else {
+                        xy[0] = xy[0] + d;
+                    }
+                    this.tooltipPosition = xy;
+                    YAHOO.util.Dom.setXY(tooltip, xy);
+                }
+            }
+        },
+
+        onCellMouseout: function (oArgs) {
+            var td = oArgs.target;
+            if (td) {
+                var tooltip = Selector.query(".yui-dt-liner .tt", td, true);
+                if (tooltip) {
+                    if (this.tooltipPosition != null) {
+                        this.tooltipPosition[0] = -2000;
+                        YAHOO.util.Dom.setXY(tooltip, this.tooltipPosition);
+                        this.tooltipPosition = null;
+                    }
+                }
+            }
+        },
+
+        customTableSetup: function () {
+            this.widgets.dataTable.subscribe("cellMouseoverEvent", this.onCellMouseover, this, true);
+            this.widgets.dataTable.subscribe("cellMouseoutEvent", this.onCellMouseout, this, true);
+        },
+
+        _showVersionLabel: function (oData, id) {
+            /*disable*/
+        },
+
+        _setMaxStripColumnWidth: function (value) {
+            this.maxStripColumnWidth = value;
+        },
+
+        _setStrippedColumns: function (values) {
+            this.strippedColumns = values;
         }
     }, true)
 

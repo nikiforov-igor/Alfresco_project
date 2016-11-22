@@ -488,6 +488,7 @@
             <form id="datagrid-ext">
                 <field-visibility>
                     <show id="lecm-contractor:shortname"/>
+                    <show id="lecm-contractor:fullname"/>
                     <show id="lecm-contractor:INN"/>
                     <show id="lecm-contractor:KPP"/>
                 </field-visibility>
@@ -502,7 +503,6 @@
                             <control-param name="itemType">lecm-contractor:contractor-type</control-param>
                             <control-param name="showCreateButton">false</control-param>
                             <control-param name="showActions">false</control-param>
-                            <!-- <control-param name="height">500</control-param>-->
                             <control-param name="datagridFormId">datagrid-ext</control-param>
                             <control-param name="showLabel">false</control-param>
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
@@ -510,8 +510,12 @@
                             <control-param name="prefixLabelId">label.dictionary.has.duplicates</control-param>
                             <control-param name="postfixLabelId">label.continue.with.selected.data</control-param>
                             <control-param name="usePagination">true</control-param>
-                            <control-param name="isTableSortable">true</control-param>
+                            <control-param name="isTableSortable">false</control-param>
                             <control-param name="pageSize">5</control-param>
+                            <control-param name="datagridNoWrapValues">true</control-param>
+                            <control-param name="datagridStrippedCols">lecm-contractor:fullname</control-param>
+                            <control-param name="datagridMaxSColWidth">21</control-param>
+                            <control-param name="datagridStyles">middle-align</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -864,6 +868,21 @@
                     <show id="lecm-contractor:contractor-code"/>
                     <show id="lecm-contractor:contractor-to-specialization-association"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-contractor:contractor-to-specialization-association">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                            <control-param name="rootLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации
+                            </control-param>
+                            <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="plane">false</control-param>
+                            <control-param name="showSelectedItemsPath">false</control-param>
+                            <control-param name="treeItemType">lecm-specialization:specialization-type</control-param>
+                            <control-param name="createNewMessageId">label.new-specialization</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -1250,7 +1269,6 @@
                             <control-param name="itemType">lecm-contractor:physical-person-type</control-param>
                             <control-param name="showCreateButton">false</control-param>
                             <control-param name="showActions">false</control-param>
-                            <!--<control-param name="height">500</control-param>-->
                             <control-param name="datagridFormId">datagrid-ext</control-param>
                             <control-param name="showLabel">false</control-param>
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
@@ -1258,8 +1276,12 @@
                             <control-param name="prefixLabelId">label.dictionary.has.duplicates</control-param>
                             <control-param name="postfixLabelId">label.continue.with.selected.data</control-param>
                             <control-param name="usePagination">true</control-param>
-                            <control-param name="isTableSortable">true</control-param>
+                            <control-param name="isTableSortable">false</control-param>
                             <control-param name="pageSize">5</control-param>
+                            <control-param name="datagridNoWrapValues">true</control-param>
+                            <control-param name="datagridStrippedCols">lecm-contractor:physical-address</control-param>
+                            <control-param name="datagridMaxSColWidth">21</control-param>
+                            <control-param name="datagridStyles">middle-align</control-param>
                         </control>
                     </field>
                 </appearance>

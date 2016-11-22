@@ -11,6 +11,43 @@
     padding: 5px 50px;
 }
 
-.control.association-datagrid .grid .expand-row .form-fields .control {
+.yui-skin-lecmTheme .control.association-datagrid .grid .expand-row .form-fields .control {
     margin-bottom: 0;
+}
+
+.yui-skin-lecmTheme .control.association-datagrid .grid .expand-row .form-fields .control .container,
+.yui-skin-lecmTheme .control.association-datagrid .grid .expand-row .form-fields .control .label-div {
+    line-height: 20px;
+}
+
+.yui-skin-lecmTheme .control.association-datagrid .yui-dt-liner .tt {
+    width: 400px;
+    max-height: 300px;
+    position: absolute;
+    margin-top: 30px;
+    padding: 5px;
+    overflow: auto;
+    border: 1px solid #ccc;
+    z-index: 10;
+    background: #f7f7d0;
+    margin-left: 0;
+    left:-2000px;
+    opacity: 0;
+    -moz-transition: opacity .2s .4s;
+    -webkit-transition: opacity .2s .4s;
+    -o-transition: opacity .2s .4s;
+    -ms-transition: opacity .2s .4s;
+    transition: opacity .2s .4s;
+}
+.yui-skin-lecmTheme .datagrid .yui-dt-liner:hover .tt {
+    opacity: 1;
+    margin-left: -30px;
+}
+
+.yui-skin-lecmTheme .control.association-datagrid .nowrap {
+    white-space: nowrap;
+}
+
+.yui-skin-lecmTheme .control.association-datagrid.middle-align .value-div .datagrid .grid.yui-dt .yui-dt-data td {
+    vertical-align: middle;
 }

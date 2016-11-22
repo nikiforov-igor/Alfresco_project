@@ -227,7 +227,7 @@
                             var createDetails = new Alfresco.module.SimpleDialog(formId + "-showDialog");
                             createDetails.setOptions(
                                 {
-                                    width: "45em",
+                                    width: "800px",
                                     templateUrl: templateUrl,
                                     templateRequestParams: templateRequestParams,
                                     actionUrl: null,
@@ -324,7 +324,7 @@
                             var createDetails = new Alfresco.module.SimpleDialog(formId + "-showDialog");
                             createDetails.setOptions(
                                 {
-                                    width: "45em",
+                                    width: "800px",
                                     templateUrl: templateUrl,
                                     templateRequestParams: templateRequestParams,
                                     actionUrl: null,

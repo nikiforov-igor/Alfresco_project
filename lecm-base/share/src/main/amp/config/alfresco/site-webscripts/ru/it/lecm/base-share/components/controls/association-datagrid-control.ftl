@@ -25,7 +25,7 @@
 
 <#assign showActions = true/>
 <#if field.control.params.showActions??>
-    <#assign showActions = field.control.params.showActions/>
+    <#assign showActions = field.control.params.showActions = "true"/>
 </#if>
 <#if ((form.mode == "view") && !allowExpand)>
     <#assign showActions = false/>
@@ -40,7 +40,7 @@
 
 <#assign usePagination = false/>
 <#if field.control.params.usePagination??>
-    <#assign usePagination = field.control.params.usePagination/>
+    <#assign usePagination = field.control.params.usePagination == "true"/>
 </#if>
 <#assign pageSize = 10/>
 <#if field.control.params.pageSize??>
@@ -54,7 +54,12 @@
 
 <#assign collapseAllOnExpand = true/>
 <#if field.control.params.collapseAllOnExpand??>
-    <#assign collapseAllOnExpand = field.control.params.collapseAllOnExpand/>
+    <#assign collapseAllOnExpand = field.control.params.collapseAllOnExpand == "true"/>
+</#if>
+
+<#assign noWrapValues = true/>
+<#if field.control.params.datagridNoWrapValues??>
+    <#assign noWrapValues = field.control.params.datagridNoWrapValues == "true"/>
 </#if>
 <#-- Datagrid Config End-->
 
@@ -159,7 +164,6 @@
         var datagrid = new LogicECM.module.Base.DataGridControl_${objectId}('${containerId}').setOptions({
             usePagination: ${usePagination?string},
             pageSize: ${pageSize},
-            /*showExtendSearchBlock: false,*/
             createFormTitleMsg: "${newRowTitle}",
             editFormTitleMsg: "${editRowTitle}",
             formMode: "${form.mode?string}",
@@ -223,11 +227,17 @@
             attributeForShow: "${attributeForShow?string}",
             repeating: ${field.repeating?string},
             expandable:${allowExpand?string},
-            collapseAllOnExpand: ${collapseAllOnExpand?string}
+            collapseAllOnExpand: ${collapseAllOnExpand?string},
+            noWrapValues:${noWrapValues?string}
         }).setMessages(${messages});
 
         datagrid._setSearchConfigFilter('${defaultValue!''}');
-
+        <#if field.control.params.datagridMaxSColWidth?has_content>
+            datagrid._setMaxStripColumnWidth(${field.control.params.datagridMaxSColWidth});
+        </#if>
+        <#if field.control.params.datagridStrippedCols?has_content>
+            datagrid._setStrippedColumns("${field.control.params.datagridStrippedCols}");
+        </#if>
         var inputTag = Dom.get("${fieldHtmlId}");
         var inputAddedTag = Dom.get("${fieldHtmlId}-added");
         var inputRemovedTag = Dom.get("${fieldHtmlId}-removed");
@@ -328,7 +338,7 @@
 })();
 //]]></script>
 
-<div class="control association-datagrid with-grid">
+<div class="control association-datagrid <#if field.control.params.datagridStyles??>${field.control.params.datagridStyles}</#if> with-grid">
 <#if showLabel>
     <div class="label-div">
         <label for="${fieldHtmlId}">

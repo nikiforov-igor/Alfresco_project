@@ -1587,6 +1587,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 	                }
                     this._setupPaginatior();
                     this.widgets.dataTable = this._setupDataTable(columnDefinitions, this);
+                    this.customTableSetup();
                     if (!this.search) {
                     // initialize Search
                         this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
@@ -1647,6 +1648,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     useFilterByOrg: this.datagridMeta.useFilterByOrg,
                     sort:sort
                 });
+            },
+
+            customTableSetup: function () {
+                //override in childs
             },
 
 	        getDatableSortBy: function(columnDefinitions) {
