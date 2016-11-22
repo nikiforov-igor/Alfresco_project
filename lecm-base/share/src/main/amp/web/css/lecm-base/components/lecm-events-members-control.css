@@ -10,10 +10,6 @@
 	line-height: 0;
 }
 
-.control.association-token-control.vertical .value-div span.mandatory-highlightable {
-	display: inline-block !important;
-}
-
 .control.association-token-control.vertical .value-div div.cropped-item {
 	float: none;
 }
