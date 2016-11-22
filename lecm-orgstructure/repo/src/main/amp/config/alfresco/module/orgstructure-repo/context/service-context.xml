@@ -84,6 +84,7 @@
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="authorityService" ref="authorityService" />
 		<property name="userOrganizationsCache" ref="userOrganizationsCache"/>
+		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean"/>
 		<property name="folders">
 			<map>
 				<entry key="#{ORGANIZATION_ROOT_ID}" value="Сервис Структура организации и сотрудников"/>

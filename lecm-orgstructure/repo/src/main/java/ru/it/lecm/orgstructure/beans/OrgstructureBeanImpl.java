@@ -43,6 +43,11 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	private AuthorityService authorityService;
     private SimpleCache<String, NodeRef> userOrganizationsCache;
 	private NamespaceService namespaceService;
+	private OrgstructureSGNotifierBean orgSGNotifier;
+
+	public void setOrgSGNotifier(OrgstructureSGNotifierBean orgSGNotifier) {
+		this.orgSGNotifier = orgSGNotifier;
+	}
 
     public void setPersonService(PersonService personService) {
 		this.personService = personService;
@@ -2263,4 +2268,9 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         Set<String> auth = authorityService.getAuthoritiesForUser(AuthenticationUtil.getFullyAuthenticatedUser());
         return auth.contains("GROUP_LECM_GLOBAL_ORGANIZATIONS_ACCESS");
     }
+	
+	@Override
+	public void autoEmployeesTie() {
+		orgSGNotifier.autoTieAllEmployeers();
+	}
 }

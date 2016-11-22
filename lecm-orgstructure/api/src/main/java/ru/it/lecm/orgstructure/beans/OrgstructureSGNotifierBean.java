@@ -149,5 +149,9 @@ public interface OrgstructureSGNotifierBean {
      * @param created true, если делегируется и false, если отбирается
      */
     void notifyBossDelegationChanged( NodeRef sourceEmployee, NodeRef destEmployee, boolean created);
-
+	
+	/**
+	 * Привязать для всех активных Сотрудников Login/userId к sgME группам
+	 */
+	void autoTieAllEmployeers();
 }
