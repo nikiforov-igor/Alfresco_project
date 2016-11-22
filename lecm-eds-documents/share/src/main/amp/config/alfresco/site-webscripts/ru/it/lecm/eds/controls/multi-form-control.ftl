@@ -64,13 +64,13 @@
     <fieldset class="fieldset">
         <legend>${field.label?html}</legend>
         <ul id="${fieldHtmlId}-multi-form-documents-list" class="multi-form-documents-list"></ul>
-    </fieldset>
 
-<#if !disabled>
-    <span id="${fieldHtmlId}-addButton" class="yui-button yui-push-button">
-        <span class="first-child">
-            <button type="button" title="${msg("actions.add")}">${msg("actions.add")}</button>
-        </span>
-    </span>
-</#if>
+        <#if !disabled>
+            <span id="${fieldHtmlId}-addButton" class="yui-button yui-push-button">
+                <span class="first-child">
+                    <button type="button" title="${msg("actions.add")}">${msg("actions.add")}</button>
+                </span>
+            </span>
+        </#if>
+    </fieldset>
 </div>
