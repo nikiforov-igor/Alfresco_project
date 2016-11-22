@@ -141,11 +141,15 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
         final boolean changed = !PolicyUtils.safeEquals(prevActive, curActive);
 
         if (before.size() == after.size() && !changed) {
-            businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator внес(ла) изменения в сведения о подразделении #mainobject");
+            String msg = String.format("#initiator внес(ла) изменения в сведения %s #mainobject",
+                    isOrganization(nodeRef) ? "об организации" : "о подразделении");
+            businessJournalService.log(nodeRef, EventCategory.EDIT, msg);
         }
 
-        if (changed && !curActive) { // бьыли изменения во флаге и подразделение помечено как неактивное
-            businessJournalService.log(nodeRef, EventCategory.DELETE, "#initiator удалил(а) сведения о подразделении #mainobject");
+        if (changed && !curActive) { // были изменения во флаге и подразделение помечено как неактивное
+            String msg = String.format("#initiator удалил(а) сведения %s #mainobject",
+                    isOrganization(nodeRef) ? "об организации" : "о подразделении");
+            businessJournalService.log(nodeRef, EventCategory.DELETE, msg);
         }
     }
 
@@ -244,7 +248,9 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
         }
 
         final String initiator = authService.getCurrentUserName();
-        businessJournalService.log(initiator, unit, EventCategory.ADD, "#initiator создал(а) новое подразделение #mainobject в подразделении #object1", objects);
+        String msg = String.format("#initiator создал(а) %s #mainobject в подразделении #object1",
+                isOrganization(unit) ? "новую организацию" : "новое подразделение");
+        businessJournalService.log(initiator, unit, EventCategory.ADD, msg, objects);
     }
 
     private void createOrganizationUnitStore(NodeRef unit) {
@@ -326,5 +332,12 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
 
         //Создаем ассоциацию подразделения с папкой
         nodeService.createAssociation(unit, ref.getChildRef(), OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
+    }
+
+    private boolean isOrganization(NodeRef unit) {
+        NodeRef parent = orgstructureService.getParentUnit(unit);
+
+        return nodeService.hasAspect(unit, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION) &&
+                parent != null && parent.equals(orgstructureService.getHolding());
     }
 }

@@ -54,9 +54,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				doBeforeDialogShow: {
 					fn: function(p_form, p_dialog) {
 						p_dialog.dialog.setHeader(Alfresco.util.message('lecm.signdoc.ttl.view.sign.info'));
+                        p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id, force: true}, this);
 						p_form.doBeforeFormSubmit = {
 							fn: function() {
 								this.setAJAXSubmit(false);
+                                p_dialog.hide();
 							},
 							scope: p_form
 						};
