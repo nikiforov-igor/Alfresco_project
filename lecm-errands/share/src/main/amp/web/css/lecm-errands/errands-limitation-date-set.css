@@ -53,7 +53,8 @@
     float: left;
     width: calc(100% - 220px);
 }
-.errands-limitation-date-set .errands-limitation-date-set-date .control {
+.errands-limitation-date-set .errands-limitation-date-set-date .control,
+.errands-limitation-date-set .errands-limitation-date-set-radio .control {
     margin-bottom: 0;
 }
 .errands-limitation-date-set .errands-limitation-date-set-radio .control input:last-of-type {

@@ -33,17 +33,9 @@
 }
 
 .control.multi-form ul.multi-form-documents-list li.multi-form-documents-item {
-    padding-top: 10px;
+    margin-bottom: 10px;
     border-bottom: 1px solid #ccc;
     clear: both;
-}
-
-.control.multi-form ul.multi-form-documents-list li.multi-form-documents-item:first-of-type {
-    padding-top: 0;
-}
-
-.control.multi-form ul.multi-form-documents-list li.multi-form-documents-item:last-of-type {
-    border-bottom: none;
 }
 
 .control.multi-form li div.actions a.remove-item {

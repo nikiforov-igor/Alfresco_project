@@ -53,9 +53,9 @@
         <constraint name="lecm-resolutions:limitation-date-radio-const" type="LIST">
             <parameter name="allowedValues">
                 <list>
-                    <value>LIMITLESS</value>
                     <value>DAYS</value>
                     <value>DATE</value>
+                    <value>LIMITLESS</value>
                 </list>
             </parameter>
         </constraint>
