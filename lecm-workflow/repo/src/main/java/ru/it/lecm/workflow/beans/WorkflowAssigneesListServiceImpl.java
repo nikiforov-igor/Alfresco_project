@@ -428,7 +428,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	@Override
 	public NodeRef getServiceRootFolder() {
-		return getAssigneesListsFolder();
+		return null;
 	}
 
 	private NodeRef createEmptyAssigneesList(final NodeRef parentRef, final NodeRef employeeRef, final String name, final boolean isAnonymous) {
@@ -614,22 +614,6 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	public int getAssigneesListDaysToComplete(final NodeRef assigneesListRef) {
 		Integer daysToComplete = (Integer) nodeService.getProperty(assigneesListRef, LecmWorkflowModel.PROP_ASSIGNEE_DAYS_TO_COMPLETE);
 		return (daysToComplete != null) ? daysToComplete : 0;
-	}
-	
-	@Override
-	protected void onBootstrap(ApplicationEvent event) {
-		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-			@Override
-			public Void execute() throws Throwable {
-				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-					@Override
-					public Void doWork() throws Exception {
-						getServiceRootFolder();
-						return null;
-					}
-				});
-			}
-		});
 	}
 	
 }
