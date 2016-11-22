@@ -60,6 +60,9 @@
 				</type>
 				<type name="association:lecm-review-ts:saveas" template="/ru/it/lecm/workflow/review/controls/review-list-save-control.ftl">
 				</type>
+				<type name="association:lecm-review-ts:load-script" template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                    <control-param name="scripts">scripts/lecm-review/reviewers-mandatory-validator.js,scripts/lecm-review/add-reviewers-mandatory-validation.js</control-param>
+				</type>
 			</default-controls>
 		</forms>
 	</config>

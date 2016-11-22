@@ -91,7 +91,7 @@
         </div>
     </div>
 <#else>
-    <div id="${controlId}" class="control association-token-control ${verticalListClass} editmode">
+    <div class="control association-token-control ${verticalListClass} editmode">
         <div class="label-div">
             <label for="${controlId}">
             ${field.label?html}:

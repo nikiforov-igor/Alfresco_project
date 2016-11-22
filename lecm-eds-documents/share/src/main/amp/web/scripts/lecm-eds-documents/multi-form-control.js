@@ -189,22 +189,26 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                     successCallback: {
                         fn: function (response) {
                             var html = response.serverResponse.responseText;
-                            var ul = Dom.get(this.id + "-primary-routing-documents-list");
+                            var ul = Dom.get(this.id + "-multi-form-documents-list");
 
                             var li = document.createElement('li');
                             li.id = this.id + "_" + num + "_item";
-                            Dom.addClass(li, "primary-routing-documents-item");
+                            Dom.addClass(li, "multi-form-documents-item");
 
                             var itemsHtml = "";
                             if (!this.options.disabled && (!args || this.options.availableRemoveDefault)) {
                                 itemsHtml += this.getActionsDivHTML(num);
                             }
-                            itemsHtml += "<div id='" + formId + "_container' class='primary-routing-documents-item-container'>";
+                            itemsHtml += "<div id='" + formId + "_container' class='multi-form-documents-item-container'>";
                             itemsHtml += html;
                             itemsHtml += "</div>";
 
                             li.innerHTML = itemsHtml;
                             ul.appendChild(li);
+
+                            YAHOO.util.Event.onAvailable(this.id + "_" + num + "_item", this.calcActionsHeight, num, this);
+
+                            ul.scrollTop = ul.scrollHeight;
 
                             Dom.setStyle(formId + "-form-buttons", "visibility", "hidden");
                             Dom.setStyle(formId + "-form-buttons", "display", "none");
@@ -236,6 +240,14 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                     divRemoveActionId: this.id + "_" + num + "_remove",
                     messageRemove: this.msg('button.delete')
                 });
+            },
+
+            calcActionsHeight: function(num) {
+                var li = Dom.get(this.id + "_" + num + "_item");
+                var removeItem = Dom.get(this.id + "_" + num + "_remove");
+                if (li && removeItem) {
+                    Dom.setStyle(removeItem, "height", (li.offsetHeight - 10) + "px");
+                }
             },
 
             attachRemoveItemClickListener: function (num) {

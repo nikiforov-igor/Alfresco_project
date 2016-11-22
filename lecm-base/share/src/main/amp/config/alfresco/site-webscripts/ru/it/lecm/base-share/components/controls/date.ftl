@@ -186,7 +186,6 @@
                         }).setMessages(
                 ${messages}
                 );
-                picker.draw();
             <#if showTime>
 
                 var zIndex = $('#${containerId}').zIndex(),
@@ -220,6 +219,7 @@
                     }
                 });
             </#if>
+                picker.draw();
             }
 
             YAHOO.util.Event.onAvailable('${fieldHtmlId}', init, this, true);
@@ -242,8 +242,8 @@
                     <div id="${controlId}" class="datepicker"></div>
                 </#if>
                 <div class="value-div">
-                    <input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="${defaultValue?html}"/>
                     <div class="date-entry-container <#if !showTime>only-date</#if>">
+                        <input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="${defaultValue?html}"/>
                         <input id="${controlId}-date" name="-" type="text" class="date-entry mandatory-highlightable"
                                <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"
                                <#else>tabindex="0"</#if> />

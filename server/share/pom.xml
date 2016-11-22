@@ -801,6 +801,13 @@
                     <scope>runtime</scope>
                     <type>amp</type>
                 </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.resolutions</groupId>
+                    <artifactId>resolutions-share</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
             </dependencies>
             <build>
                 <plugins>
@@ -1056,6 +1063,11 @@
 		                            <artifactId>meetings-share</artifactId>
 		                            <type>amp</type>
 	                            </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.resolutions</groupId>
+                                    <artifactId>resolutions-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
                             </overlays>
                         </configuration>
                         <dependencies>

@@ -1020,6 +1020,13 @@
                     <scope>runtime</scope>
                     <type>amp</type>
                 </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.resolutions</groupId>
+                    <artifactId>resolutions-repo</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
             </dependencies>
             <build>
                 <plugins>
@@ -1294,6 +1301,11 @@
 		                            <artifactId>meetings-repo</artifactId>
 		                            <type>amp</type>
 	                            </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.resolutions</groupId>
+                                    <artifactId>resolutions-repo</artifactId>
+                                    <type>amp</type>
+                                </overlay>
                             </overlays>
                         </configuration>
                         <dependencies>

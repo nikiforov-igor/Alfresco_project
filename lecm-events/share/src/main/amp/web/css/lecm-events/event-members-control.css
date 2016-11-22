@@ -87,12 +87,19 @@
 }
 
 .member-control-diagram-first-cell-text {
-    width: 143px;
+    width: 125px;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     margin: 5px;
     float: left;
+}
+
+.member-control-diagram-first-cell-mandatory {
+    float: left;
+    margin-top: 5px;
+    margin-left: 5px;
+    width: 13px;
 }
 
 .member-control-diagram-first-cell-remove {
@@ -103,18 +110,6 @@
     margin-top: 2px;
     float: left;
     cursor: pointer;
-}
-
-.member-control-diagram-selector {
-    position: absolute;
-    top: 0;
-    z-index: 50000;
-}
-
-.member-control-diagram-selector-grab {
-}
-
-.member-control-diagram-selector-grabbing {
 }
 
 .member-control-diagram-selector-not-busy {
@@ -135,8 +130,6 @@
 
 .member-control-diagram-member-status {
     position: absolute;
-    top: 0;
-    z-index: 100000;
     width: 20px;
     background-color: white;
     text-align: center;

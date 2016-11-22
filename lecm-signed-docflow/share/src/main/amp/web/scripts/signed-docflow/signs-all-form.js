@@ -189,6 +189,7 @@
 			});
 		},
 		onReady: function() {
+            Alfresco.util.PopupManager.zIndex = YAHOO.util.Dom.get(this.htmlId + '-form-container_c').style['z-index'] + 1;
 			this._initViewModel();
 			this._initRefreshButton();
 

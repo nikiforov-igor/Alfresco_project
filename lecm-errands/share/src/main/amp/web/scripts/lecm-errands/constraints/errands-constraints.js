@@ -24,9 +24,9 @@ LogicECM.module.Errands.limitationDateValidation =
             if (radioValue == "LIMITLESS") {
                 return true;
             } else if (radioValue == "DAYS") {
-                return days.value.length > 0;
+                return (days.value.length > 0) || (field.name != "prop_lecm-errands_limitation-date-days");
             } else {
-                return limitationDate && limitationDate.value.length;
+                return (limitationDate && limitationDate.value.length) || (field.name != "prop_lecm-errands_limitation-date");
             }
         }
         return true;

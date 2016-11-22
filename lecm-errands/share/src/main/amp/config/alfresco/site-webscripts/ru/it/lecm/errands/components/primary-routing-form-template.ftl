@@ -1,4 +1,14 @@
 <#import "/org/alfresco/components/form/form.lib.ftl" as formLib />
+<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/primary-routing-form-template.css" />
+
+<script type="text/javascript">//<![CDATA[
+(function() {
+    LogicECM.module.Base.Util.loadCSS([
+        'css/lecm-errands/primary-routing-form.css'
+    ]);
+
+})();
+//]]></script>
 
 <script type="text/javascript">//<![CDATA[
 (function() {
@@ -16,7 +26,7 @@
     <#list form.structure as item>
         <#if item.kind == "set">
             <#if item_index == 0>
-            <div class="yui-g"><div class="yui-u first">
+            <div class="yui-g primary-routing-form"><div class="yui-u first">
             <#else>
             <div class="yui-u">
             </#if>

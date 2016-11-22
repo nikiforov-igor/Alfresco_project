@@ -35,10 +35,14 @@
             fixSimpleDialogId: "${params.fixSimpleDialogId}",
         </#if>
 
+        <#if form.arguments??>
             args: {
-            <#list form.arguments?keys as key>
-                "${key}": "${form.arguments[key]?string}"<#if key_has_next>,</#if>
-            </#list>},
+                <#list form.arguments?keys as key>
+                    <#if form.arguments[key]??>
+                        "${key}": "${form.arguments[key]?string}"<#if key_has_next>,</#if>
+                    </#if>
+                </#list>},
+        </#if>
             rootForm: runtimeForm
         });
         YAHOO.Bubbling.unsubscribe("beforeFormRuntimeInit", onBeforeFormRuntimeInit);
@@ -55,11 +59,11 @@
 })();
 //]]></script>
 
-<div class="control primary-routing">
+<div class="control multi-form">
     <input type="hidden" name="${field.name}" id="${fieldHtmlId}" value=""/>
     <fieldset class="fieldset">
         <legend>${field.label?html}</legend>
-        <ul id="${fieldHtmlId}-primary-routing-documents-list" class="primary-routing-documents-list"></ul>
+        <ul id="${fieldHtmlId}-multi-form-documents-list" class="multi-form-documents-list"></ul>
     </fieldset>
 
 <#if !disabled>

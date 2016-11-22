@@ -1,25 +1,30 @@
-.control.primary-routing {
+.control.multi-form {
     position: static;
     float: none;
 }
 
-.control.primary-routing fieldset.fieldset {
+.control.multi-form fieldset.fieldset {
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
 }
 
-.control.primary-routing div.primary-routing-documents-item {
+.yui-panel .control.multi-form ul.multi-form-documents-list {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.control.multi-form div.multi-form-documents-item {
     border-bottom: 1px solid #ccc;
     margin: 0 10px;
     clear: both;
 }
 
-.control.primary-routing li.primary-routing-documents-item div.primary-routing-documents-item-container {
+.control.multi-form li.multi-form-documents-item div.multi-form-documents-item-container {
     display: flex;
 }
 
-.control.primary-routing li div.actions {
+.control.multi-form li div.actions {
     float: right;
     text-align: right;
     border-left: 1px solid #ccc;
@@ -27,25 +32,23 @@
     margin-top: -2px;
 }
 
-.control.primary-routing ul.primary-routing-documents-list li.primary-routing-documents-item {
-    padding-top: 16px;
+.control.multi-form ul.multi-form-documents-list li.multi-form-documents-item {
+    padding-top: 10px;
     border-bottom: 1px solid #ccc;
-    margin: 0 10px;
     clear: both;
 }
 
-.control.primary-routing ul.primary-routing-documents-list li.primary-routing-documents-item:first-of-type {
+.control.multi-form ul.multi-form-documents-list li.multi-form-documents-item:first-of-type {
     padding-top: 0;
 }
 
-.control.primary-routing ul.primary-routing-documents-list li.primary-routing-documents-item:last-of-type {
+.control.multi-form ul.multi-form-documents-list li.multi-form-documents-item:last-of-type {
     border-bottom: none;
 }
 
-.control.primary-routing li div.actions a.remove-item {
+.control.multi-form li div.actions a.remove-item {
     background: url(../../../images/lecm-events/alf_remove_grey_16.png) no-repeat center center;
     padding-left: 20px;
-    height: 190px;
 }
 
 .create-documents-form .control .label-div {
@@ -80,30 +83,18 @@
     margin-right: 10px;
 }
 
-.control.primary-routing .primary-routing-documents-item-container fieldset {
-    border: none;
-    padding: 0;
-}
-.control.primary-routing .primary-routing-documents-item-container .label-div {
-    width: 120px;
-}
-.control.primary-routing .primary-routing-documents-item-container .yui-u.first .label-div {
-    width: 100px;
-}
-.control.primary-routing .primary-routing-documents-item-container legend {
-    width: 120px;
-    float: left;
-    line-height: 28px;
-    padding: 2px 10px 2px 0;
-    font-size: 100%;
-    text-align: right;
-}
-.control.primary-routing .primary-routing-documents-item-container .form-container {
+.control.multi-form .multi-form-documents-item-container .form-container {
     width: 100%;
 }
-.control.primary-routing .primary-routing-documents-item-container .yui-u.first {
-    width: 45%;
+
+.control.multi-form .multi-form-documents-item .multi-form-documents-item-container div.form-fields {
+    padding: 0;
 }
-.control.primary-routing .primary-routing-documents-item-container .yui-u {
-    width: 55%;
+
+.control.multi-form .multi-form-documents-item .multi-form-documents-item-container .form-container fieldset {
+    margin-bottom: 0;
+}
+
+.control.multi-form .label-div ~ .container {
+    min-width: 140px;
 }

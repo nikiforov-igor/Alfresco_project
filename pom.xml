@@ -764,6 +764,7 @@
                 <module>lecm-internal</module>
                 <module>lecm-ord</module>
                 <module>lecm-nd</module>
+                <module>lecm-resolutions</module>
             </modules>
         </profile>
         <profile>

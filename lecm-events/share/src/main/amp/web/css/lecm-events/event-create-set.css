@@ -102,18 +102,6 @@
     box-sizing: border-box;
 }
 
-.create-event-set .event-create-center .control.checkbox-control .label-div {
-    display: none;
-}
-.create-event-set .event-create-center .control.checkbox-control .value-div {
-    padding-left: 0;
-}
-.create-event-set .event-create-center .control.checkbox-control .value-div label {
-    float: left;
-    margin-left: 0;
-    margin-right: 10px;
-}
-
 /* Контрол выбора даты/времени */
 .create-event-set .event-create-center .control.date .container,
 .create-event-set .event-create-center .control.date .value-div {
@@ -149,4 +137,3 @@
 .update-repeated {
     padding: 1em;
 }
-

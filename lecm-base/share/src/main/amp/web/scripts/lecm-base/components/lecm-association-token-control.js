@@ -2018,7 +2018,9 @@ LogicECM.module = LogicECM.module || {};
                         Dom.removeClass(container, "collapse-width");
                     } else {
                         Dom.setStyle(autocompleteInput, "display", "none");
-                        Dom.addClass(container, "collapse-width");
+						if (Object.keys(this.selectedItems).length > 0) {
+							Dom.addClass(container, "collapse-width");
+						}
                     }
 				}
 				Dom.setStyle(el, "display", this.canCurrentValuesShow() ? "block" : "none");
