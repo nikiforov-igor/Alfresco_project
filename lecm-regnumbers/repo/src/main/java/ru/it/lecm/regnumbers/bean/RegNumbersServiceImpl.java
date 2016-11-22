@@ -71,17 +71,15 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 		PropertyCheck.mandatory(this, "documentConnectionService", documentConnectionService);
 		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
 		logger.info("!!!!!!!!!!!!!!!!!! init");
-//		templateDictionaryNode = dictionaryService.getDictionaryByName(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME);
 	}
-	
-	@Override
-	protected void onBootstrap(ApplicationEvent event)
-	{
-		logger.info("!!!!!!!!!!!!!!!!!! onBootstrap: "+event);
-		templateDictionaryNode = dictionaryService.getDictionaryByName(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME);
-		logger.info("!!!!!!!!!!!!!!!!!! onBootstrap: "+templateDictionaryNode);
+
+	public NodeRef getTemplateDictionaryNode() {
+		if (templateDictionaryNode == null) {
+			templateDictionaryNode = dictionaryService.getDictionaryByName(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME);
+		}
+		return templateDictionaryNode;
 	}
-	
+		
 	@Override
 	protected void onShutdown(ApplicationEvent event)
 	{
@@ -240,7 +238,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	public NodeRef getTemplateNodeByCode(String dictionaryTemplateCode) {
 		NodeRef result = null;
 
-		List<ChildAssociationRef> dictionaryValuesAssocs = nodeService.getChildAssocsByPropertyValue(templateDictionaryNode, RegNumbersService.PROP_TEMPLATE_SERVICE_ID, dictionaryTemplateCode);
+		List<ChildAssociationRef> dictionaryValuesAssocs = nodeService.getChildAssocsByPropertyValue(getTemplateDictionaryNode(), RegNumbersService.PROP_TEMPLATE_SERVICE_ID, dictionaryTemplateCode);
 
 		for (ChildAssociationRef assoc : dictionaryValuesAssocs) {
 			NodeRef templateNode = assoc.getChildRef();
