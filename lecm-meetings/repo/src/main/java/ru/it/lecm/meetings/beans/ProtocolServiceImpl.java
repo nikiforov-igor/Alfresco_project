@@ -202,13 +202,12 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                 // срок поручения
                 Date limitationDate = (Date) nodeService.getProperty(point, ProtocolService.PROP_PROTOCOL_POINT_EXEC_DATE);
                 nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, limitationDate);
+				nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_IS_EXPIRED, checkPointStatus(point, P_STATUSES.EXPIRED_STATUS));
 
                 //создадим ассоциацию между между Протоколом и созданным поручением, системная связь создастся автоматически
                 nodeService.createAssociation(errand, protocol, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
                 // создадим ассоциацию пункта с поручением
                 nodeService.createAssociation(point, errand, ProtocolService.ASSOC_PROTOCOL_POINT_ERRAND);
-                // переведем пункт в статус "на исполнениии"
-                changePointStatus(point, ProtocolService.P_STATUSES.PERFORMANCE_STATUS);
                 //подпишем Протокол в качестве наблюдателя за поручением
                 documentEventService.subscribe(errand, protocol);
             }

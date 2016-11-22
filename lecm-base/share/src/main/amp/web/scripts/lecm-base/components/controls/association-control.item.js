@@ -141,7 +141,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			}
 
 			if ('lecm-orgstr:employee' === record.getData('type')) {
-				template += '<h3 class="item-name">' + BaseUtil.getControlEmployeeView('{nodeRef}', '{name}', true) + '</h3>';
+				template += '<h3 class="item-name">' + BaseUtil.getControlEmployeeView(record.getData('nodeRef'), '{name}', true) + '</h3>';
 			} else {
 				if (this.owner.options.showAssocViewForm) {
 					template += '<h3 class="item-name">' + BaseUtil.getControlValueView(record.getData('nodeRef'), '{name}', '{name}') + '</h3>';
