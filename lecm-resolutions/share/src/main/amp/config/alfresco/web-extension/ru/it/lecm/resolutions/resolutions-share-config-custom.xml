@@ -15,6 +15,7 @@
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
+                    <show id="lecm-resolutions:closers"/>
 
                     <show id="limitation-date-script" force="true"/>
                     <show id="lecm-resolutions:limitation-date-radio"/>
@@ -41,6 +42,9 @@
                     <field id="lecm-document:subject-assoc" set="start-left"/>
                     <field id="lecm-resolutions:author-assoc" set="start-left"/>
                     <field id="lecm-resolutions:controller-assoc" set="start-left"/>
+                    <field id="lecm-resolutions:closers" set="start-left">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
 
                     <field id="lecm-resolutions:control" set="start-right-start"/>
                     <field id="limitation-date-script" set="start-right-start" >

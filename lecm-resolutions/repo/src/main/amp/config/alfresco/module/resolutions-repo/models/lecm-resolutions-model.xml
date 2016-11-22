@@ -64,6 +64,14 @@
                 </list>
             </parameter>
         </constraint>
+        <constraint name="lecm-resolutions:closers-const" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>AUTHOR</value>
+                    <value>CONTROLLER</value>
+                </list>
+            </parameter>
+        </constraint>
     </constraints>
 
     <types>
@@ -109,6 +117,14 @@
                 <property name="lecm-resolutions:control">
                     <type>d:boolean</type>
                     <default>false</default>
+                </property>
+                <!-- Закрывающий-->
+                <property name="lecm-resolutions:closers">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <constraints>
+                        <constraint ref="lecm-resolutions:closers-const"/>
+                    </constraints>
                 </property>
                 <!--Поручения-->
                 <property name="lecm-resolutions:errands-json">
