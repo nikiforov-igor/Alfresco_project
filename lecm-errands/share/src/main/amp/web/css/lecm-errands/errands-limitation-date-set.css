@@ -29,19 +29,8 @@
     margin-bottom: 0;
 }
 
-
-/*.errands-limitation-date-set-date .control.date .container {*/
-	/*min-width: 100px !important;*/
-/*}*/
-
-/*.errands-limitation-date-set .errands-limitation-date-set-date .control.date,*/
-/*#yui-main .document-metadata .errands-limitation-date-set .errands-limitation-date-set-date .control.date {*/
-    /*width: 150px;*/
-/*}*/
-
 .errands-limitation-date-set .errands-limitation-date-set-limitless {
     float: left ;
-    width:calc(100% - 220px);
 }
 
 .errands-limitation-date-set .errands-limitation-date-set-type {

@@ -27,3 +27,11 @@
 .yui-skin-lecmTheme.alfresco-share .yui-g.primary-routing-form div.yui-u {
     padding: 0;
 }
+
+.primary-routing-form  .errands-limitation-date-set .errands-limitation-date-set-type {
+    width: calc(100% - 210px);
+}
+
+.primary-routing-form  .errands-limitation-date-set .errands-limitation-date-set-date {
+    width: calc(100% - 160px);
+}
