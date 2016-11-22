@@ -53,9 +53,7 @@
 						</control>
 					</field>
 					<field id="lecm-eds-document:execution-date" set="common">
-						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-							<control-param name="minLimitCurrentDate">true</control-param>
-						</control>
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
 					<field id="lecm-eds-document:summaryContent" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
@@ -206,9 +204,7 @@
 						</control>
 					</field>
 					<field id="lecm-eds-document:execution-date">
-						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-							<control-param name="minLimitCurrentDate">true</control-param>
-						</control>
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
 					<field id="lecm-eds-document:summaryContent">
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
@@ -322,9 +318,7 @@
 						</control>
 					</field>
 					<field id="lecm-eds-document:execution-date">
-						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-							<control-param name="minLimitCurrentDate">true</control-param>
-						</control>
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
 					<field id="lecm-eds-document:summaryContent">
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
@@ -592,9 +586,7 @@
 					</field>
 					<field id="lecm-protocol-ts:executor-assoc" mandatory="true"/>
 					<field id="lecm-protocol-ts:execution-date" >
-						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-							<control-param name="minLimitCurrentDate">true</control-param>
-						</control>
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:note" >
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
@@ -714,14 +706,10 @@
 					</field>
 					<field id="lecm-protocol-ts:executor-assoc" mandatory="true" set="item1"/>
 					<field id="lecm-protocol-ts:execution-date" set="item1">
-						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-							<control-param name="minLimitCurrentDate">true</control-param>
-						</control>
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:execution-date-real" read-only="true"  set="item1">
-						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-							<control-param name="minLimitCurrentDate">true</control-param>
-						</control>
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:note" set="item1">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
@@ -817,9 +805,7 @@
 					</field>
 					<field id="lecm-protocol-ts:executor-assoc" mandatory="true"/>
 					<field id="lecm-protocol-ts:execution-date">
-						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-							<control-param name="minLimitCurrentDate">true</control-param>
-						</control>
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:note">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
