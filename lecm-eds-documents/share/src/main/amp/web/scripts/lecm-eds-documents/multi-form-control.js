@@ -206,7 +206,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                             li.innerHTML = itemsHtml;
                             ul.appendChild(li);
 
-                            YAHOO.util.Event.onAvailable(this.id + "_" + num + "_item", this.clacActionsHeight, num, this);
+                            YAHOO.util.Event.onAvailable(this.id + "_" + num + "_item", this.calcActionsHeight, num, this);
 
                             ul.scrollTop = ul.scrollHeight;
 
@@ -242,7 +242,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 });
             },
 
-            clacActionsHeight: function(num) {
+            calcActionsHeight: function(num) {
                 var li = Dom.get(this.id + "_" + num + "_item");
                 var removeItem = Dom.get(this.id + "_" + num + "_remove");
                 if (li && removeItem) {
