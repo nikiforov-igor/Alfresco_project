@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-resolutions:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Резолюции</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+    <imports>
+        <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/resolutions/1.0" prefix="lecm-resolutions"/>
+    </namespaces>
+
+    <constraints>
+        <constraint name="lecm-resolutions:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
+            <parameter name="presentString">
+                <value><![CDATA[№ {lecm-resolutions:number}, срок {lecm-resolutions:limitation-date?dd.MM.yyyy}]]></value>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-resolutions:attachment-categories" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>Резолюция|RESOLUTION</value>
+                </list>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-resolutions:author-property-constraint" type="ru.it.lecm.documents.constraints.AuthorPropertyConstraint">
+            <parameter name="authorProperty">
+                <value>lecm-resolutions:initiator-assoc-ref</value>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-resolutions:reg-number-properties-constraint" type="ru.it.lecm.documents.constraints.RegNumberPropertiesConstraint">
+            <parameter name="regNumbersProperties">
+                <value>lecm-resolutions:number</value>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-resolutions:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
+            <parameter name="armUrl">
+                <value>arm?code=SED</value>
+            </parameter>
+        </constraint>
+
+        <constraint name="lecm-resolutions:limitation-date-type-const" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>WORK</value>
+                    <value>CALENDAR</value>
+                </list>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-resolutions:limitation-date-radio-const" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>LIMITLESS</value>
+                    <value>DAYS</value>
+                    <value>DATE</value>
+                </list>
+            </parameter>
+        </constraint>
+    </constraints>
+
+    <types>
+        <type name="lecm-resolutions:document">
+            <title>Logic Ecm Resolutions Document</title>
+            <parent>lecm-document:base</parent>
+            <properties>
+                <!-- Номер резолюции-->
+                <property name="lecm-resolutions:number">
+                    <type>d:text</type>
+                    <default>Не присвоено</default>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
+                <!-- Срок поручения-->
+                <property name="lecm-resolutions:limitation-date">
+                    <type>d:date</type>
+                    <mandatory>false</mandatory>
+                </property>
+                <property name="lecm-resolutions:limitation-date-radio">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <constraints>
+                        <constraint ref="lecm-resolutions:limitation-date-radio-const"/>
+                    </constraints>
+                </property>
+                <property name="lecm-resolutions:limitation-date-days">
+                    <type>d:int</type>
+                    <mandatory>false</mandatory>
+                    <default>1</default>
+                </property>
+                <property name="lecm-resolutions:limitation-date-type">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <constraints>
+                        <constraint ref="lecm-resolutions:limitation-date-type-const"/>
+                    </constraints>
+                </property>
+                <!-- Контроль-->
+                <property name="lecm-resolutions:control">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+                <!--Поручения-->
+                <property name="lecm-resolutions:errands-json">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
+
+                <!-- Поиск/сортировка ассоциаций-->
+                <property name="lecm-resolutions:author-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-resolutions:author-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-resolutions:controller-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-resolutions:controller-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-resolutions:base-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-resolutions:base-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-resolutions:base-document-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-resolutions:base-document-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+            <associations>
+                <!-- Автор -->
+                <association name="lecm-resolutions:author-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!-- Контролер -->
+                <association name="lecm-resolutions:controller-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!-- Ознакамливающиеся -->
+                <association name="lecm-resolutions:reviewers-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>cm:cmobject</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+                <!-- Основание -->
+                <association name="lecm-resolutions:base-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-document:base</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!-- Документ-основание -->
+                <association name="lecm-resolutions:base-document-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-document:base</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+        </type>
+    </types>
+</model>

@@ -35,10 +35,14 @@
             fixSimpleDialogId: "${params.fixSimpleDialogId}",
         </#if>
 
+        <#if form.arguments??>
             args: {
-            <#list form.arguments?keys as key>
-                "${key}": "${form.arguments[key]?string}"<#if key_has_next>,</#if>
-            </#list>},
+                <#list form.arguments?keys as key>
+                    <#if form.arguments[key]??>
+                        "${key}": "${form.arguments[key]?string}"<#if key_has_next>,</#if>
+                    </#if>
+                </#list>},
+        </#if>
             rootForm: runtimeForm
         });
         YAHOO.Bubbling.unsubscribe("beforeFormRuntimeInit", onBeforeFormRuntimeInit);

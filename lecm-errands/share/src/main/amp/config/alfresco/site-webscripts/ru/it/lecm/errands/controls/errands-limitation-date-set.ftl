@@ -20,9 +20,6 @@
     <div class="errands-limitation-date-set-radio">
         <@formLib.renderField field=form.fields[set.children[0].id]/>
     </div>
-    <div class="errands-limitation-date-set-limitless">
-        <@formLib.renderField field=form.fields[set.children[1].id]/>
-    </div>
     <div class="errands-limitation-date-set-days">
         <@formLib.renderField field=form.fields[set.children[2].id]/>
     </div>
@@ -32,6 +29,9 @@
 
     <div class="errands-limitation-date-set-date">
         <@formLib.renderField field=form.fields[set.children[4].id]/>
+    </div>
+    <div class="errands-limitation-date-set-limitless">
+    <@formLib.renderField field=form.fields[set.children[1].id]/>
     </div>
     <div class="clear"></div>
 </div>
