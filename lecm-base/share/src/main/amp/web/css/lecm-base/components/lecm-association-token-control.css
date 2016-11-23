@@ -1,11 +1,13 @@
 .control.association-token-control .container.collapse-width,
 .control.association-token-control .container.collapse-width .value-div {
     float: left;
+    max-width: calc(100% - 36px);
 }
 .control.association-token-control .value-div .control-selected-values {
     border: none !important;
 }
 .control.association-token-control .value-div div.cropped-item {
+    max-width: calc(100% - 22px);
     width: auto;
     height: 20px;
     line-height: 20px;
@@ -26,10 +28,17 @@
     margin: 0 -10px 0 5px;
 }
 .control.association-token-control .value-div div.cropped-item .ci-value-div {
-    max-width: 150px;
+    max-width: 100%;
     padding: 0;
     float: left;
 }
+
+.control.association-token-control.editmode .value-div div.cropped-item .ci-value-div {
+    max-width: calc(100% - 21px);
+    padding: 0;
+    float: left;
+}
+
 .control.association-token-control .value-div span.person a {
     background: none;
     padding-left: 0;
@@ -37,4 +46,9 @@
 
 .control.association-token-control .label-div ~ .container {
     min-width: 0;
+}
+
+.control.association-token-control.editmode .label-div ~ .container {
+    min-width: 0;
+    max-width: calc(100% - 190px);
 }

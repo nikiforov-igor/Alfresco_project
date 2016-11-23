@@ -1,0 +1,97 @@
+.errands-validity-set .control span.help-icon {
+    display: none;
+}
+
+.errands-validity-set .errands-validity-set-radio {
+     float: left;
+ }
+.errands-validity-set .errands-validity-set-radio .container {
+    min-width:10px;
+    float: left;
+}
+.errands-validity-set .errands-validity-set-radio .control .value-div {
+    width: 20px;
+}
+.errands-validity-set .errands-validity-set-radio .control label.checkbox {
+    display: none;
+}
+.errands-validity-set .errands-validity-set-radio .control input {
+    margin-top: 8px;
+    margin-bottom: 22px;
+}
+.errands-validity-set .errands-validity-set-radio .control input:nth-child(2){
+    margin-bottom: 42px;
+}
+
+.errands-validity-set .errands-validity-set-dates {
+    float:left;
+    width: calc(100% - 220px);
+    margin-bottom:0;
+}
+
+.errands-validity-set .errands-validity-set-dates .daterange-start-date .label-div {
+    display: none;
+}
+.errands-validity-set .errands-validity-set-dates .daterange-set .column,
+.errands-validity-set .errands-validity-set-dates .daterange-set .column.last {
+    width:50%;
+    float:left
+}
+.errands-validity-set .errands-validity-set-dates .daterange-set .column.last .label-div{
+    width:auto;
+    padding:0;
+}
+.errands-validity-set .errands-validity-set-dates .daterange-set {
+    margin-bottom:0;
+}
+
+.errands-validity-set .errands-validity-set-during {
+    float:left;
+    width: calc(100% - 220px);
+}
+.errands-validity-set .errands-validity-set-during .yui-g .yui-u.first .label-div{
+    text-align: left;
+    width:calc(100% - 78px);
+    display:block;
+    padding-right:0;
+}
+.errands-validity-set .errands-validity-set-reiteration-count .yui-g .yui-u.first .container,
+.errands-validity-set .errands-validity-set-during .yui-g .yui-u.first .container{
+    width: 50px;
+    float: left;
+}
+.errands-validity-set .errands-validity-set-during .yui-g .yui-u .label-div{
+    display:none;
+}
+.errands-validity-set .errands-validity-set-during .yui-g .yui-u .container,
+.errands-validity-set .errands-validity-set-reiteration-count .container{
+    min-width: 50px;
+}
+.errands-validity-set .errands-validity-set-during .control.editmode .container .value-div input[type=text] {
+    margin-bottom: 0;
+}
+.errands-validity-set .errands-validity-set-reiteration-count {
+    float:left;
+    width: calc(100% - 220px);
+}
+.errands-validity-set .errands-validity-set-reiteration-count .count-label-div {
+    float:left;
+    line-height:28px;
+}
+.errands-validity-set .errands-validity-set-reiteration-count .yui-g .yui-u.first .label-div{
+     text-align: left;
+     width:auto;
+     display:block;
+ }
+.errands-validity-set .errands-validity-set-reiteration-count .yui-g .yui-u .label-div{
+    display:none;
+}
+.errands-validity-set .errands-validity-set-period-endless {
+    float:left;
+    width: calc(100% - 220px);
+}
+.errands-validity-set .errands-validity-set-period-endless .label-div{
+    display:none;
+}
+
+
