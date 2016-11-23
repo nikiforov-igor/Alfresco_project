@@ -16,6 +16,7 @@
     function createControl() {
         new LogicECM.module.eds.MultiFormControl("${fieldHtmlId}").setOptions({
             disabled: ${disabled?string},
+            currentValue: ${field.value!'[]'},
         <#if params.availableRemoveDefault??>
             availableRemoveDefault: ${params.availableRemoveDefault},
         </#if>
