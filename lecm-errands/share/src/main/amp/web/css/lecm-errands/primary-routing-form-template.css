@@ -35,3 +35,8 @@
 .primary-routing-form  .errands-limitation-date-set .errands-limitation-date-set-date {
     width: calc(100% - 160px);
 }
+
+.primary-routing-form .errands-limitation-date-set .errands-limitation-date-set-radio .container {
+    min-width: 10px;
+    float:left;
+}

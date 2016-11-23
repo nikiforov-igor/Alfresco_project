@@ -32,9 +32,16 @@
 
 		if(nodeRef) {
             var titleElement = Dom.get(obj.formId + "_prop_lecm-errands_title");
-            if (titleElement && errandsTypesForTitles[nodeRef]) {
-                titleElement.value = errandsTypesForTitles[nodeRef];
+            var contentElement = Dom.get(obj.formId + "_prop_lecm-errands_content");
+            if (errandsTypesForTitles[nodeRef]) {
+                if (titleElement) {
+                    titleElement.value = errandsTypesForTitles[nodeRef];
+                }
+                if (contentElement && !contentElement.value) {
+                    contentElement.value = errandsTypesForTitles[nodeRef];
+                }
             }
+
 		}
 	}
 })();
