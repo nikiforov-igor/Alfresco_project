@@ -49,10 +49,10 @@
 .errands-limitation-date-set .errands-limitation-date-set-radio .control input:last-of-type {
     margin-top: 14px;
 }
-.errands-limitation-date-set .errands-limitation-date-set-radio .label-div{
+.errands-limitation-date-set .errands-limitation-date-set-radio .label-div {
     display:block;
 }
-.errands-limitation-date-set .errands-limitation-date-set-radio .container  {
+.errands-limitation-date-set .errands-limitation-date-set-radio .control .container  {
     min-width: 10px;
     float:left;
 }

@@ -30,6 +30,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
         {
             options: {
                 disabled: false,
+                currentValue: [],
                 rootForm: null,
                 documentFromId: null,
                 defaultValueFromId: null,
@@ -45,6 +46,8 @@ LogicECM.module.eds = LogicECM.module.eds || {};
             forms: [],
 
             onReady: function () {
+                this.loadCurrentValue();
+
                 if (this.options.documentType && !this.options.disabled) {
                     this.loadDefaultValue();
 
@@ -75,6 +78,15 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                     if (simpleDialogComponents && simpleDialogComponents.length) {
                         var simpleDialog = simpleDialogComponents[0];
                         YAHOO.Bubbling.unsubscribe("beforeFormRuntimeInit", simpleDialog.onBeforeFormRuntimeInit)
+                    }
+                }
+            },
+
+            loadCurrentValue: function() {
+                if (this.options.currentValue && this.options.currentValue.length) {
+                    var i;
+                    for (i = 0; i < this.options.currentValue.length; i++) {
+                        this.onAdd(null, null, this.options.currentValue[i]);
                     }
                 }
             },
