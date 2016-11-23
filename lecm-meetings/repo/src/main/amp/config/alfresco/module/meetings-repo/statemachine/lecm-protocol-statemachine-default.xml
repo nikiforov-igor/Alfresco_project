@@ -4684,10 +4684,18 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
         tableData = tableAssocs[0];
         protocolPoints = documentTables.getTableDataRows(tableData.nodeRef.toString());
         currentDate = new Date();
+        currentDate.setHours(0);
+        currentDate.setMinutes(0);
+        currentDate.setSeconds(0);
+        currentDate.setMilliseconds(0);
         for (i in protocolPoints) {
             point = protocolPoints[i];
             executionDate = new Date(point.properties['lecm-protocol-ts:execution-date'].getTime());
-            if (executionDate.getFullYear() < currentDate.getFullYear() || executionDate.getMonth() < currentDate.getMonth() || executionDate.getDate() < currentDate.getDate()) {
+            executionDate.setHours(0);
+            executionDate.setMinutes(0);
+            executionDate.setSeconds(0);
+            executionDate.setMilliseconds(0);
+            if (executionDate.getTime() < currentDate.getTime()) {
                 protocolService.changePointStatus(point.nodeRef.toString(), 'EXPIRED_STATUS');
             }
         }
