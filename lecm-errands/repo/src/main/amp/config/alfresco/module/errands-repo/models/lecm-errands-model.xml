@@ -408,12 +408,6 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
-
-				<!-- Поручения, созданные на основании -->
-				<property name="lecm-errands:child-errands">
-					<type>d:text</type>
-					<mandatory>false</mandatory>
-				</property>
 			</properties>
 			<associations>
 				<!-- Автор -->
@@ -488,7 +482,7 @@
 						<many>true</many>
 					</target>
 				</association>
-				<!-- Основание -->
+				<!-- Документ - основание дерева поручений -->
 				<association name="lecm-errands:base-assoc">
 					<source>
 						<mandatory>false</mandatory>
@@ -500,7 +494,7 @@
 						<many>false</many>
 					</target>
 				</association>
-                <!-- Документ-основание, если есть -->
+                <!-- Непосредстевнный родитель поручения -->
                 <association name="lecm-errands:additional-document-assoc">
                     <source>
                         <mandatory>false</mandatory>

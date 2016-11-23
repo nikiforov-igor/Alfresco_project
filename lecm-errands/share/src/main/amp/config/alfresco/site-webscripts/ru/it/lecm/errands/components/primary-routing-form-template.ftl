@@ -1,24 +1,6 @@
 <#import "/org/alfresco/components/form/form.lib.ftl" as formLib />
 <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/primary-routing-form-template.css" />
 
-<script type="text/javascript">//<![CDATA[
-(function() {
-    LogicECM.module.Base.Util.loadCSS([
-        'css/lecm-errands/primary-routing-form.css'
-    ]);
-
-})();
-//]]></script>
-
-<script type="text/javascript">//<![CDATA[
-(function() {
-    LogicECM.module.Base.Util.loadCSS([
-        'css/lecm-errands/primary-routing-form.css'
-    ]);
-
-})();
-//]]></script>
-
 <#if formUI == "true">
     <@formLib.renderFormsRuntime formId=formId />
 </#if>

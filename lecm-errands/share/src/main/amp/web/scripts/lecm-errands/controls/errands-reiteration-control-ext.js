@@ -51,7 +51,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
     LogicECM.module.Errands.ReiterationExt = function (htmlId) {
         LogicECM.module.Base.ReiterationExt.superclass.constructor.call(this, "LogicECM.module.Base.ReiterationExt", htmlId, ["button", "container"]);
 
-        this.typeContainerPrefix = this.id +'-type-container-';
+        this.typeContainerPrefix = this.id + '-type-container-';
 
         YAHOO.Bubbling.on("hideControl", this.onHideControl, this);
         YAHOO.Bubbling.on("showControl", this.onShowControl, this);
@@ -65,7 +65,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
             isPanelShown: false,
             currentType: "DAILY",
             currentPickerType: null,
-            pickerTypes: ['week-days','month-days'],
+            pickerTypes: ['week-days', 'month-days'],
             days: Alfresco.util.message('days.short').split(','),
             daysFull: Alfresco.util.message('days.long').split(','),
 
@@ -79,7 +79,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                 Event.addListener(select, 'click', this.onChangeType, this, true);
                 var value = this.getControlValue();
                 var message = this.getSummary(value);
-                if(value){
+                if (value) {
                     this.currentType = value.type;
                     select.value = this.getControlValue().type;
                     //select.selectedOptions[0].innerHTML = message;
@@ -88,7 +88,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                 LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
             },
             getValue: function getValue_function() {
-                if(this.currentType != "DAILY") {
+                if (this.currentType != "DAILY") {
                     var nodes = YAHOO.util.Selector.query('.item.checked', this.typeContainerPrefix + this.currentPickerType);
                     var data = [];
                     for (var i in nodes) {
@@ -104,7 +104,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                     } else {
                         return null;
                     }
-                }else{
+                } else {
                     return {
                         type: this.currentType,
                         data: []
@@ -130,32 +130,33 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                     return "(" + Alfresco.util.message("label.reiteration.not-specified") + ")";
                 }
                 var summary = "";
-                if(value.type === "DAILY") {
+                if (value.type === "DAILY") {
                     summary += this.msg("label.reiteration-control.options." + value.type.toLowerCase());
                 }
-                else if(value.type === "WEEKLY"){
+                else if (value.type === "WEEKLY") {
                     summary += this.msg("label.reiteration-control.options." + value.type.toLowerCase()) + ", ";
                     for (var i in value.data) {
                         var index = parseInt(value.data[i] - 1);
-                        if(i != 0){
-                            summary+= ', ';
+                        if (i != 0) {
+                            summary += ', ';
                         }
                         summary += this.daysFull[index];
                     }
-                }else{
-                    summary += this.msg("label.reiteration-control.options." + value.type.toLowerCase()) + ", " + Alfresco.util.message("date-unit.plural.day") +": ";
+                } else {
+                    summary += this.msg("label.reiteration-control.options." + value.type.toLowerCase()) + ", " + Alfresco.util.message("date-unit.plural.day") + ": ";
                     for (var i in value.data) {
-                        if(i != 0){
-                            summary+= ', ';
+                        if (i != 0) {
+                            summary += ', ';
                         }
-                        summary += value.data[i] ;
+                        summary += value.data[i];
                     }
                 }
                 return summary;
             },
 
             openDialog: function openDialog_function() {
-                if (!this.panel) {this.id + '-dialog-panel'
+                if (!this.panel) {
+                    this.id + '-dialog-panel'
                     this.panel = new YAHOO.widget.SimpleDialog("simpledialog1", {
                         width: "100px",
                         fixedcenter: true,
@@ -165,27 +166,31 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                         model: true,
                         constraintoviewport: true,
                         buttons: [
-                            { text: Alfresco.util.message("form.button.submit.label"), handler: this.onOk.bind(this), isDefault:true },
-                            { text: Alfresco.util.message("button.cancel"),  handler: this.onCancel.bind(this)}
+                            {
+                                text: Alfresco.util.message("form.button.submit.label"),
+                                handler: this.onOk.bind(this),
+                                isDefault: true
+                            },
+                            {text: Alfresco.util.message("button.cancel"), handler: this.onCancel.bind(this)}
                         ]
                     });
 
                     this.panel.setHeader(Alfresco.util.message("label.reiteration.repeat"));
 
-                    var html  = '<div id="' + this.id + '-dialog-panel-container" class="reiteration">'
+                    var html = '<div id="' + this.id + '-dialog-panel-container" class="reiteration">'
                     html += '<div id="' + this.id + '-label-type" style="text-align: center"><span class="label"></span></div>';
                     html += '<div class="delim">&nbsp;</div>';
-                    html += '<div id="' + this.typeContainerPrefix +'week-days" class="container hidden1">';
+                    html += '<div id="' + this.typeContainerPrefix + 'week-days" class="container hidden1">';
                     html += '<div class="container-aligment">';
                     for (var i = 1; i <= 7; i++) {
-                        html += '<div class="item" id="' + this.typeContainerPrefix +'week-days' + i + '">' + this.days[i - 1] + '</div>';
+                        html += '<div class="item" id="' + this.typeContainerPrefix + 'week-days' + i + '">' + this.days[i - 1] + '</div>';
                     }
                     html += '</div>';
                     html += '</div>';
-                    html += '<div id="' + this.typeContainerPrefix +'month-days" class="container hidden1">';
+                    html += '<div id="' + this.typeContainerPrefix + 'month-days" class="container hidden1">';
                     html += '<div class="container-aligment">';
                     for (var i = 1; i <= 31; i++) {
-                        html += '<div class="item" id="' + this.typeContainerPrefix +'month-days' + i + '">' + i + '</div>';
+                        html += '<div class="item" id="' + this.typeContainerPrefix + 'month-days' + i + '">' + i + '</div>';
                         if (i % 7 == 0) {
                             html += "<br/>";
                         }
@@ -209,38 +214,37 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
 
 
             onChangeType: function onChangeType_function(ev, args) {
-                    if(ev.detail == 0) {
-                        var to = ev.target.value;
-                        if (to && to != "DAILY") {
-                            if (!this.isPanelShown) {
-                                this.openDialog();
-                            }
-                            if (this.currentType != to) {
-                                this._switchType(this.currentType, to);
-                            }
-                        }else if(to == "DAILY"){
-                            this.currentType = to;
-                            this.updateValue(this.getValue());
+                if (ev.detail == 0) {
+                    var to = ev.target.value;
+                    if (to && to != "DAILY") {
+                        if (!this.isPanelShown) {
+                            this.openDialog();
                         }
+                        if (this.currentType != to) {
+                            this._switchType(this.currentType, to);
+                        }
+                    } else if (to == "DAILY") {
+                        this.currentType = to;
+                        this.updateValue(this.getValue());
                     }
-
+                }
             },
 
             _switchType: function _switchType(from, to) {
                 var toPickerType = this.getPickerTypeByRepeatType(to);
 
                 if (from) {
-                    if(this.currentPickerType != toPickerType) {
+                    if (this.currentPickerType != toPickerType) {
                         Dom.addClass(this.typeContainerPrefix + this.currentPickerType, 'hidden1');
                     }
                     var nodes = YAHOO.util.Selector.query('.item.checked', this.typeContainerPrefix + this.currentPickerType);
                     Dom.removeClass(nodes, 'checked');
                 }
                 if (to) {
-                    YAHOO.util.Selector.query('span',this.id + '-label-type',true).innerHTML=this.msg('label.reiteration-control.options.'+to.toLowerCase());
+                    YAHOO.util.Selector.query('span', this.id + '-label-type', true).innerHTML = this.msg('label.reiteration-control.options.' + to.toLowerCase());
                     this.currentType = to;
 
-                    if(this.currentPickerType != toPickerType) {
+                    if (this.currentPickerType != toPickerType) {
                         Dom.removeClass(this.typeContainerPrefix + toPickerType, 'hidden1');
                         this.currentPickerType = toPickerType;
                     }
@@ -248,12 +252,12 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
 
                 this.updateSummary();
             },
-            getPickerTypeByRepeatType: function(repeatType){
+            getPickerTypeByRepeatType: function (repeatType) {
                 var pickerType = null;
-                if(repeatType){
-                    if(repeatType === "WEEKLY"){
+                if (repeatType) {
+                    if (repeatType === "WEEKLY") {
                         pickerType = this.pickerTypes[0];
-                    }else{
+                    } else {
                         pickerType = this.pickerTypes[1];
                     }
                 }

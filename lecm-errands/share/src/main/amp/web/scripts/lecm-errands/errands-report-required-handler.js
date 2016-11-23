@@ -1,7 +1,5 @@
 (function() {
 
-
-
     YAHOO.Bubbling.on('errandControllerChanged', enableReportRecipientSelectOptions);
     YAHOO.Bubbling.on('errandReportRequiredChanged', toggleReportRecipientField);
 
@@ -17,7 +15,6 @@
                 recipientField.selectedIndex = 0;
             }
         }
-
     }
 
     function toggleReportRecipientField(layer,args){
@@ -28,5 +25,4 @@
             Dom.setStyle(recipientField.parentNode.parentNode.parentNode, "display", !requiredReport ? "none" : "block");
         }
     }
-
 })();

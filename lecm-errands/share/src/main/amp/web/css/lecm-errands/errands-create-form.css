@@ -8,3 +8,6 @@
 .control.errands-reiteration.editmode .container .value-div{
     margin-bottom:0;
 }
+.set .block3{
+    border: dashed 1px gray;
+}
