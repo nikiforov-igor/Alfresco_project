@@ -87,7 +87,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			hasAspects: null,
 			hasNoAspects: null,
 			showExSearch: false,
-			fillFormFromSearch: false
+			fillFormFromSearch: false,
+			showEditButton: false
 		},
 
 		widgets: {
@@ -174,6 +175,16 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 //				elCell.innerHTML = '<a href="javascript:void(0);" ' + style + ' class="add-item add-' + this.owner.eventGroup + '" title="' + this.owner.msg('form.control.object-picker.add-item') + '" tabindex="0"><span class="addIcon">&nbsp;</span></a>';
 //				elCell.innerHTML = '<a href="javascript:void(0);" ' + style + ' class="add-item" title="' + this.owner.msg('form.control.object-picker.add-item') + '" tabindex="0"><span class="addIcon">&nbsp;</span></a>';
 //				scope.addItemButtons[nodeRef] = containerId;
+			}
+		},
+
+		_editFormatter: function (elCell, record, column, data) {
+			var nodeRef, hidden;
+			if (record.getData('selectable') && record.getData("hasWritePermission")) {
+				nodeRef = record.getData('nodeRef');
+				hidden = ACUtils.canItemBeSelected(nodeRef, this.owner.options, this.owner.currentState.temporarySelected, this.owner.parentControl) ? '' : ' hidden ';
+
+				elCell.innerHTML = '<a href="javascript:void(0);"' + hidden + 'title="' + this.owner.msg('actions.edit') + '" tabindex="0"><i class="icon-edit"></i></a>';
 			}
 		},
 
@@ -572,19 +583,23 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 		},
 
-		onAdd: function (event) {
+		onClick: function (event) {
 			/* обработка добавления элемента в выбранные */
 			var column = this.widgets.datatable.getColumn(event.target),
 				record = this.widgets.datatable.getRecord(event.target);
-
-			if ('add' === column.key && !event.target.firstChild.firstChild.hidden) {
-				//просигналить пикеру что эту ноду надо нарисовать в selectedItems
-				this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
-					added: record.getData(),
-					options: this.options,
-					key: this.key
-				});
-				return false;
+			if (!event.target.firstChild.firstChild.hidden) {
+				if ('add' === column.key) {
+					//просигналить пикеру что эту ноду надо нарисовать в selectedItems
+					this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
+						added: record.getData(),
+						options: this.options,
+						key: this.key
+					});
+					return false;
+				} else if ('edit' === column.key) {
+					this._onRecordEdit(record);
+					return false;
+				}
 			}
 		},
 
@@ -599,17 +614,26 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 						records = this.widgets.datatable.getRecordSet().getRecords();
 						this.currentState.temporarySelected[nodeData.nodeRef] = nodeData;
 						records.forEach(function (record) {
-							var tdEl = this.widgets.datatable.getTdEl({
+							var tdEls = [];
+							tdEls.push(this.widgets.datatable.getTdEl({
 								column: this.widgets.datatable.getColumn('add'),
 								record: record
-							});
+							}));
+							if (this.options.showEditButton) {
+								tdEls.push(this.widgets.datatable.getTdEl({
+									column: this.widgets.datatable.getColumn('edit'),
+									record: record
+								}));
+							}
 							if (IDENT_CREATE_NEW !== record.getData('type')) {
-								if (tdEl.firstChild.firstChild) {
-									tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.temporarySelected, this.parentControl);
-								}
+								tdEls.forEach(function (tdEl) {
+									if (tdEl.firstChild.firstChild) {
+										tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.temporarySelected, this.parentControl);
+									}
+								}, this);
 							} else {
-								if (tdEl.parentElement)	{
-									tdEl.parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, options, this.currentState.temporarySelected, this.parentControl);
+								if (tdEls[0].parentElement)	{
+									tdEls[0].parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, options, this.currentState.temporarySelected, this.parentControl);
 								}
 							}
 						}, this);
@@ -643,16 +667,27 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			}
 
 			records.forEach(function (record) {
-				var tdEl = this.widgets.datatable.getTdEl({
+				var tdEls = [];
+				tdEls.push(this.widgets.datatable.getTdEl({
 					column: this.widgets.datatable.getColumn('add'),
 					record: record
-				});
+				}));
+				if (this.options.showEditButton) {
+					tdEls.push(this.widgets.datatable.getTdEl({
+						column: this.widgets.datatable.getColumn('edit'),
+						record: record
+					}));
+				}
 				if (IDENT_CREATE_NEW !== record.getData('type')) {
-					if (tdEl.firstChild.firstChild) {
-						tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), this.options, this.currentState.temporarySelected, this.parentControl);
+					tdEls.forEach(function (tdEl) {
+						if (tdEl.firstChild.firstChild) {
+							tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), this.options, this.currentState.temporarySelected, this.parentControl);
+						}
+					}, this);
+				} else {
+					if (tdEls[0].parentElement)	{
+						tdEls[0].parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, this.options, this.currentState.temporarySelected, this.parentControl);
 					}
-				} else if (tdEl.parentElement)	{
-					tdEl.parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, this.options, this.currentState.temporarySelected, this.parentControl);
 				}
 			}, this);
 
@@ -773,10 +808,22 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}
 			});
 			this.widgets.datasource.doBeforeParseData = this.bind(this.doBeforeParseData);
-			this.widgets.datatable = new YAHOO.widget.ScrollingDataTable(this.id + '-datatable', [
-				{ key: 'name', label: 'Item', sortable: false, formatter: this._nameFormatter, className: 'name-td' },
-				{ key: 'add', label: 'Add', sortable: false, minWidth: 16, width: 16, formatter: this._addFormatter, className: 'add-td' }
-			], this.widgets.datasource, {
+			var columnDefinitions =
+				[
+					{key: 'name', label: 'Item', sortable: false, formatter: this._nameFormatter, className: 'name-td'},
+					{key: 'add', label: 'Add', sortable: false, minWidth: 16, width: 16, formatter: this._addFormatter, className: 'add-td'}
+				];
+			if (this.options.showEditButton) {
+				columnDefinitions.push({
+					key: "edit",
+					label: "Edit",
+					sortable: false,
+					formatter: this._editFormatter,
+					width: 16,
+					className: 'edit-td'
+				});
+			}
+			this.widgets.datatable = new YAHOO.widget.ScrollingDataTable(this.id + '-datatable', columnDefinitions, this.widgets.datasource, {
 				height: '150px',
 				renderLoopSize: 100,
 				initialLoad: false,
@@ -784,7 +831,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			});
 			this.widgets.datatable.owner = this;
 //			this.widgets.datatable.on('renderEvent', this.onDatatableRendered, null, this);
-			this.widgets.datatable.on('cellClickEvent', this.onAdd, null, this);
+			this.widgets.datatable.on('cellClickEvent', this.onClick, null, this);
 			this.widgets.datatable.on('tableScrollEvent', this.onDatatableScroll, null, this);
 
 			this.loadHelper.fulfil('ready');
@@ -923,6 +970,64 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					scope:this
 				}
 			}).show();
+			return true;
+		},
+
+		_onRecordEdit: function (record) {
+			if (this.doubleClickLock) return;
+			this.doubleClickLock = true;
+			if (record) {
+				var nodeRef = record.getData("nodeRef");
+
+				if (nodeRef != null) {
+					new Alfresco.module.SimpleDialog("edit-form-dialog-" + this.eventGroup).setOptions({
+						width: "50em",
+						templateUrl: "lecm/components/form",
+						templateRequestParams: {
+							itemKind: "node",
+							itemId: nodeRef,
+							mode: "edit",
+							submitType: "json",
+							showCancelButton: true
+						},
+						actionUrl: null,
+						destroyOnHide: true,
+						doBeforeDialogShow: {
+							fn: function (p_form, p_dialog) {
+								var message;
+								if (this.options.editMessage) {
+									message = this.options.editMessage;
+								} else {
+									message = this.msg("dialog.edit.title");
+								}
+								p_dialog.dialog.setHeader(message);
+
+								p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+
+								Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
+								if (this.options.editDialogClass != "") {
+									Dom.addClass(p_dialog.id + "-form-container", this.options.editDialogClass);
+								}
+								this.doubleClickLock = false;
+							},
+							scope: this
+						},
+						onSuccess: {
+							fn: function (response) {
+								this.doubleClickLock = false;
+								this.loadTableData(true, this.currentState.searchTerm, this.currentState.exSearchFilter)
+							},
+							scope: this
+						},
+						onFailure: {
+							fn: function () {
+								this.doubleClickLock = false;
+							},
+							scope: this
+						}
+					}).show();
+				}
+			}
 			return true;
 		},
 

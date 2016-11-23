@@ -73,17 +73,23 @@
 }
 
 .association-picker .panel-right .datatable .add-td,
-.association-picker .panel-datatable .datatable .add-td {
+.association-picker .panel-datatable .datatable .add-td,
+.association-picker .panel-right .datatable .edit-td,
+.association-picker .panel-datatable .datatable .edit-td {
 	width: 1px;
 }
 
 .association-picker .panel-right .datatable .add-td .yui-dt-liner,
-.association-picker .panel-datatable .datatable .add-td .yui-dt-liner {
+.association-picker .panel-datatable .datatable .add-td .yui-dt-liner,
+.association-picker .panel-right .datatable .edit-td .yui-dt-liner,
+.association-picker .panel-datatable .datatable .edit-td .yui-dt-liner {
 	text-align: center;
 }
 
 .association-picker .panel-right .datatable .add-td .yui-dt-liner a,
-.association-picker .panel-datatable .datatable .add-td .yui-dt-liner a {
+.association-picker .panel-datatable .datatable .add-td .yui-dt-liner a,
+.association-picker .panel-right .datatable .edit-td .yui-dt-liner a,
+.association-picker .panel-datatable .datatable .edit-td .yui-dt-liner a{
 	color: #565553;
 	text-decoration: none;
 }
@@ -113,4 +119,8 @@
 	display: block;
 	width: 100px;
 	text-align: right;
+}
+
+.association-picker .panel-datatable .datatable .yui-dt-liner {
+	padding: 4px 6px;
 }

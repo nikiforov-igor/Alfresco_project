@@ -72,6 +72,7 @@
                             <control-param name="contractor_showSearch">false</control-param>
                             <control-param name="contractor_showExSearch">true</control-param>
                             <control-param name="contractor_showCreateNewLink">true</control-param>
+                            <control-param name="contractor_showEditButton">true</control-param>
                             <control-param name="contractor_fillFormFromSearch">true</control-param>
                             <control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
                             <control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
@@ -106,6 +107,7 @@
                             <control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
                             <control-param name="person_plane">true</control-param>
                             <control-param name="person_showCreateNewLink">true</control-param>
+                            <control-param name="person_showEditButton">true</control-param>
                             <control-param name="person_fillFormFromSearch">true</control-param>
                             <control-param name="person_showSearch">false</control-param>
                             <control-param name="person_showExSearch">true</control-param>
@@ -307,6 +309,7 @@
                             <control-param name="contractor_showSearch">false</control-param>
                             <control-param name="contractor_showExSearch">true</control-param>
                             <control-param name="contractor_showCreateNewLink">true</control-param>
+                            <control-param name="contractor_showEditButton">true</control-param>
                             <control-param name="contractor_fillFormFromSearch">true</control-param>
                             <control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
                             <control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
@@ -341,6 +344,7 @@
                             <control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
                             <control-param name="person_plane">true</control-param>
                             <control-param name="person_showCreateNewLink">true</control-param>
+                            <control-param name="person_showEditButton">true</control-param>
                             <control-param name="person_fillFormFromSearch">true</control-param>
                             <control-param name="person_showSearch">false</control-param>
                             <control-param name="person_showExSearch">true</control-param>
@@ -490,6 +494,7 @@
                             <control-param name="contractor_showSearch">false</control-param>
                             <control-param name="contractor_showExSearch">true</control-param>
                             <control-param name="contractor_showCreateNewLink">true</control-param>
+                            <control-param name="contractor_showEditButton">true</control-param>
                             <control-param name="contractor_fillFormFromSearch">true</control-param>
                             <control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
                             <control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
@@ -525,6 +530,7 @@
                             <control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
                             <control-param name="person_plane">true</control-param>
                             <control-param name="person_showCreateNewLink">true</control-param>
+                            <control-param name="person_showEditButton">true</control-param>
                             <control-param name="person_fillFormFromSearch">true</control-param>
                             <control-param name="person_showSearch">false</control-param>
                             <control-param name="person_showExSearch">true</control-param>
@@ -688,6 +694,7 @@
                             <control-param name="contractor_showSearch">false</control-param>
                             <control-param name="contractor_showExSearch">true</control-param>
                             <control-param name="contractor_showCreateNewLink">true</control-param>
+                            <control-param name="contractor_showEditButton">true</control-param>
                             <control-param name="contractor_fillFormFromSearch">true</control-param>
                             <control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
                             <control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
@@ -722,6 +729,7 @@
                             <control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
                             <control-param name="person_plane">true</control-param>
                             <control-param name="person_showCreateNewLink">true</control-param>
+                            <control-param name="person_showEditButton">true</control-param>
                             <control-param name="person_fillFormFromSearch">true</control-param>
                             <control-param name="person_showSearch">false</control-param>
                             <control-param name="person_showExSearch">true</control-param>
@@ -952,6 +960,7 @@
                             <control-param name="contractor_showSearch">false</control-param>
                             <control-param name="contractor_showExSearch">true</control-param>
                             <control-param name="contractor_showCreateNewLink">true</control-param>
+                            <control-param name="contractor_showEditButton">true</control-param>
                             <control-param name="contractor_fillFormFromSearch">true</control-param>
                             <control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
                             <control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
@@ -986,6 +995,7 @@
                             <control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
                             <control-param name="person_plane">true</control-param>
                             <control-param name="person_showCreateNewLink">true</control-param>
+                            <control-param name="person_showEditButton">true</control-param>
                             <control-param name="person_fillFormFromSearch">true</control-param>
                             <control-param name="person_showSearch">false</control-param>
                             <control-param name="person_showExSearch">true</control-param>
