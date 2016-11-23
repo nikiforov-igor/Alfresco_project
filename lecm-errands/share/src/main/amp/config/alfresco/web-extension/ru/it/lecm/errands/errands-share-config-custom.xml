@@ -302,13 +302,13 @@
                 <appearance>
                     <set id="exist-business-role" template="/ru/it/lecm/deputy/controls/errands-choosing-set.ftl" />
                     <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
-                    <set id="block2-1" template="/ru/it/lecm/errands/components/hidden-set.ftl"/>
-                    <set id="block3"  template="/ru/it/lecm/errands/components/hidden-set.ftl"/>
+                    <set id="block2-1" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="block3"  template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
                     <set id="errand-validity" parent="block3" template="/ru/it/lecm/errands/controls/errands-validity-set.ftl"/>
                     <set id="validity-dates" parent="errand-validity" template="/ru/it/lecm/base-share/components/controls/daterange.ftl"/>
                     <set id="during" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="repeat" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="block2-2" template="/ru/it/lecm/errands/components/hidden-set.ftl"/>
+                    <set id="block2-2" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
                     <set id="static"/>
 
                     <field id="lecm-errands:type-assoc" mandatory="true" >
@@ -333,7 +333,9 @@
                         </control>
                     </field>
                     <field id="lecm-errands:content" >
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">8</control-param>
+                        </control>
                     </field>
                     <field id="lecm-errands:executor-assoc" >
                         <control>
@@ -470,12 +472,12 @@
                     </field>
 
                     <field id="save-draft-button" label-id="label.save-draft">
-                        <control template="/ru/it/lecm/errands/components/button-control.ftl">
+                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
                             <control-param name="clickFireAction">saveDraftButtonClick</control-param>
                         </control>
                     </field>
                     <field id="expand-button" label-id="label.show-details">
-                        <control template="/ru/it/lecm/errands/components/button-control.ftl">
+                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
                             <control-param name="clickFireAction">expandButtonClick</control-param>
                         </control>
                     </field>
@@ -495,9 +497,8 @@
                             <control-param name="scripts">scripts/lecm-errands/errands-reinit-executors.js</control-param>
                         </control>
                     </field>
-
                     <field id="errands-create-form-script">
-                        <control template="/ru/it/lecm/errands/controls/load-script-with-layer-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/components/lecm-errands-create-form.js</control-param>
                             <control-param name="scriptLoadedFireAction">errandsCreateFormScriptLoaded</control-param>
                         </control>
@@ -573,7 +574,9 @@
                         </control>
                     </field>
                     <field id="lecm-errands:content">
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">8</control-param>
+                        </control>
                     </field>
                     <field id="lecm-errands:executor-assoc">
                         <control>

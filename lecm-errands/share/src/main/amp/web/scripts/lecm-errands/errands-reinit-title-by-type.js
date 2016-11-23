@@ -34,15 +34,11 @@
             var titleElement = Dom.get(obj.formId + "_prop_lecm-errands_title");
             var contentElement = Dom.get(obj.formId + "_prop_lecm-errands_content");
             if (errandsTypesForTitles[nodeRef]) {
-                if(titleElement) {
+                if (titleElement) {
                     titleElement.value = errandsTypesForTitles[nodeRef];
                 }
-                if(contentElement && !contentElement.value){
+                if (contentElement && !contentElement.value) {
                     contentElement.value = errandsTypesForTitles[nodeRef];
-                    var richtextFrame = YAHOO.util.Selector.query("iframe",contentElement.parentNode,true);
-                    if(richtextFrame){
-                        YAHOO.util.Selector.query("body",richtextFrame.contentDocument,true).innerHTML='<p>'+errandsTypesForTitles[nodeRef]+'</p>';
-                    }
                 }
             }
 

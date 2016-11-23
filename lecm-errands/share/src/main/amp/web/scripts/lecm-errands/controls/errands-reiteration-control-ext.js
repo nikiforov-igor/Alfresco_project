@@ -82,11 +82,11 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                 if (value) {
                     this.currentType = value.type;
                     select.value = this.getControlValue().type;
-                    //select.selectedOptions[0].innerHTML = message;
                 }
 
                 LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
             },
+
             getValue: function getValue_function() {
                 if (this.currentType != "DAILY") {
                     var nodes = YAHOO.util.Selector.query('.item.checked', this.typeContainerPrefix + this.currentPickerType);
@@ -212,7 +212,6 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
 
             },
 
-
             onChangeType: function onChangeType_function(ev, args) {
                 if (ev.detail == 0) {
                     var to = ev.target.value;
@@ -249,9 +248,9 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                         this.currentPickerType = toPickerType;
                     }
                 }
-
                 this.updateSummary();
             },
+
             getPickerTypeByRepeatType: function (repeatType) {
                 var pickerType = null;
                 if (repeatType) {
@@ -263,11 +262,11 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                 }
                 return pickerType;
             },
+
             onHideControl: function (layer, args) {
                 if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
                     Dom.setStyle(this.id + "-parent", "display", "none");
                     this.isPanelShown = false;
-
                 }
             },
 
@@ -276,20 +275,6 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                     Dom.setStyle(this.id + "-parent", "display", "block");
                     this.isPanelShown = true;
                 }
-            },
-            updateValue: function updateValue_function(value) {
-                if (value === null) {
-                    Dom.get(this.id).value = "";
-                } else {
-                    Dom.get(this.id).value = JSON.stringify(value);
-                }
-                var summary = this.getSummary(value)
-                var el = Dom.get(this.id + '-displayValue');
-                el.innerHTML = summary;
-                //var select = Dom.get(this.id + '-type');
-                //select.selectedOptions[0].innerHTML = summary;
             }
-
-
         });
 })();

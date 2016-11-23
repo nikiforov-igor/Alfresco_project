@@ -19,13 +19,14 @@
         var sets = [];
         var fieldHtmlId;
         var hidden;
-        var queryTemplate = 'div[class^=\"' + formId + '-form-panel {targetClass}\"]';
+        var queryTemplate = 'div[class^=\"{formId}-form-panel {targetClass}\"]';
 
         switch (layer) {
             case 'expandButtonClick':
                 fieldHtmlId = args[1].fieldHtmlId;
                 sets = Selector.query(Substitute(queryTemplate, {
-                    targetClass: 'block2'
+                    targetClass: 'block2',
+                    formId: formId
                 }));
                 var expandButton = Dom.get(fieldHtmlId);
                 if (sets.length) {
@@ -42,7 +43,8 @@
             case 'periodicallyErrandChange':
                 fieldHtmlId = formId + '_prop_' + args[1].fieldId.replace('\:', '_');
                 sets = Selector.query(Substitute(queryTemplate, {
-                    targetClass: 'block3'
+                    targetClass: 'block3',
+                    formId: formId
                 }));
                 hidden = Dom.get(fieldHtmlId).value == "true";
                 break;
@@ -90,6 +92,4 @@
         });
 
     }
-
-
 })();

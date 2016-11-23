@@ -11,9 +11,9 @@
 
 <#if form.mode != "view">
 <span id="${fieldHtmlId}" class="yui-button yui-push-button">
-        <span class="first-child">
-            <button type="button">${msg("${field.label?html}")}</button>
-        </span>
+    <span class="first-child">
+        <button type="button">${msg("${field.label?html}")}</button>
+    </span>
 </span>
 </#if>
 
@@ -33,14 +33,14 @@
                     formButtons.prepend(button);
                     break;
                 default:
-                    formButtons.append(button);
+                    formButtons.prepend(button);
                     break;
             }
             YAHOO.util.Event.addListener(button,'click',function(){
                 YAHOO.Bubbling.fire("${clickFireAction}", {
-                formId: "${formId}",
-                fieldHtmlId: "${fieldHtmlId}"
-            });});
+                    formId: "${formId}",
+                    fieldHtmlId: "${fieldHtmlId}"
+                });});
 
         }
     }

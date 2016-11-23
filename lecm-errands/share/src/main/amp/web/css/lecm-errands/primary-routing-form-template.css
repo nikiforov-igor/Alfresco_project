@@ -28,28 +28,15 @@
     padding: 0;
 }
 
-.primary-routing .errands-limitation-date-set .errands-limitation-date-set-limitless {
-    overflow: hidden;
-    width:auto;
-}
-
-.primary-routing .errands-limitation-date-set .errands-limitation-date-set-radio .label-div{
-    display:none;
-
-}
-.primary-routing .errands-limitation-date-set .errands-limitation-date-set-radio .control input:last-of-type {
-    margin-top: 8px;
-}
-
-.errands-limitation-date-set .errands-limitation-date-set-radio {
-    float: left;
-    width: 20px;
-}
-
 .primary-routing-form  .errands-limitation-date-set .errands-limitation-date-set-type {
     width: calc(100% - 210px);
 }
 
 .primary-routing-form  .errands-limitation-date-set .errands-limitation-date-set-date {
     width: calc(100% - 160px);
+}
+
+.primary-routing-form .errands-limitation-date-set .errands-limitation-date-set-radio .container {
+    min-width: 10px;
+    float:left;
 }

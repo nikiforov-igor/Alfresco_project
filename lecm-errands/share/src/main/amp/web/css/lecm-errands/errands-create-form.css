@@ -1,13 +1,13 @@
 .hidden-disable .hidden1 {
-    display: block;
-}
-.yui-skin-lecmTheme .form-container .form-buttons.form-4-buttons{
+     display: block;
+ }
+.yui-skin-lecmTheme .form-container .form-buttons.form-4-buttons {
     width: 100%;
     padding: 0 1em 1em 100px;
 }
-.control.errands-reiteration.editmode .container .value-div{
-    margin-bottom:0;
+.control.errands-reiteration.editmode .container .value-div {
+    margin-bottom: 0;
 }
-.set .block3{
+.set .block3 {
     border: dashed 1px gray;
 }
