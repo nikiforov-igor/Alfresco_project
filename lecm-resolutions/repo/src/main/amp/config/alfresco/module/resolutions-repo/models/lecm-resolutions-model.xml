@@ -41,6 +41,11 @@
                 <value>arm?code=SED</value>
             </parameter>
         </constraint>
+        <constraint name="lecm-resolutions:document-url-constraint" type="ru.it.lecm.documents.constraints.DocumentUrlConstraint">
+            <parameter name="createUrl">
+                <value>resolution-create</value>
+            </parameter>
+        </constraint>
 
         <constraint name="lecm-resolutions:limitation-date-type-const" type="LIST">
             <parameter name="allowedValues">
@@ -53,9 +58,17 @@
         <constraint name="lecm-resolutions:limitation-date-radio-const" type="LIST">
             <parameter name="allowedValues">
                 <list>
-                    <value>LIMITLESS</value>
                     <value>DAYS</value>
                     <value>DATE</value>
+                    <value>LIMITLESS</value>
+                </list>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-resolutions:closers-const" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>AUTHOR</value>
+                    <value>CONTROLLER</value>
                 </list>
             </parameter>
         </constraint>
@@ -104,6 +117,14 @@
                 <property name="lecm-resolutions:control">
                     <type>d:boolean</type>
                     <default>false</default>
+                </property>
+                <!-- Закрывающий-->
+                <property name="lecm-resolutions:closers">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <constraints>
+                        <constraint ref="lecm-resolutions:closers-const"/>
+                    </constraints>
                 </property>
                 <!--Поручения-->
                 <property name="lecm-resolutions:errands-json">

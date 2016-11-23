@@ -33,17 +33,6 @@
     width:auto;
 }
 
-.primary-routing .errands-limitation-date-set .errands-limitation-date-set-type {
-    overflow: hidden;
-    width: auto;
-    float: none;
-}
-
-.primary-routing .errands-limitation-date-set .errands-limitation-date-set-date {
-    float: left;
-    width: calc(100% - 150px);
-}
-
 .primary-routing .errands-limitation-date-set .errands-limitation-date-set-radio .label-div{
     display:none;
 
@@ -55,4 +44,12 @@
 .errands-limitation-date-set .errands-limitation-date-set-radio {
     float: left;
     width: 20px;
+}
+
+.primary-routing-form  .errands-limitation-date-set .errands-limitation-date-set-type {
+    width: calc(100% - 210px);
+}
+
+.primary-routing-form  .errands-limitation-date-set .errands-limitation-date-set-date {
+    width: calc(100% - 160px);
 }

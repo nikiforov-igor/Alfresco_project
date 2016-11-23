@@ -15,6 +15,7 @@
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
+                    <show id="lecm-resolutions:closers"/>
 
                     <show id="limitation-date-script" force="true"/>
                     <show id="lecm-resolutions:limitation-date-radio"/>
@@ -30,16 +31,23 @@
                     <show id="lecm-resolutions:reviewers-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <set id="start"/>
-                    <set id="limitation-date" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
+                    <set id="start" template="/ru/it/lecm/eds/controls/2-column-parent-set.ftl"/>
+                    <set id="start-left" parent="start"/>
+                    <set id="start-right" parent="start"/>
+                    <set id="start-right-start" parent="start-right"/>
+                    <set id="limitation-date" parent="start-right" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="end"/>
+                    <set id="reviewers" appearance="fieldset" label-id="label.review"/>
 
-                    <field id="lecm-resolutions:control" set="start"/>
-                    <field id="lecm-document:subject-assoc" set="start"/>
-                    <field id="lecm-resolutions:author-assoc" set="start"/>
-                    <field id="lecm-resolutions:controller-assoc" set="start"/>
+                    <field id="lecm-document:subject-assoc" set="start-left"/>
+                    <field id="lecm-resolutions:author-assoc" set="start-left"/>
+                    <field id="lecm-resolutions:controller-assoc" set="start-left"/>
+                    <field id="lecm-resolutions:closers" set="start-left">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
 
-                    <field id="limitation-date-script" set="start" >
+                    <field id="lecm-resolutions:control" set="start-right-start"/>
+                    <field id="limitation-date-script" set="start-right-start" >
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-resolution/resolutions-change-limitation-date.js</control-param>
                         </control>
@@ -90,7 +98,7 @@
                         </control>
                     </field>
 
-                    <field id="lecm-resolutions:reviewers-assoc" set="end">
+                    <field id="lecm-resolutions:reviewers-assoc" set="reviewers">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
                             <control-param name="items">employee,organization</control-param>
                             <!-- lecm-orgstr:employee -->
