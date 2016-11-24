@@ -536,7 +536,7 @@ LogicECM.module = LogicECM.module || {};
 					// if disabled show the (None) message
 					this.selectedItems = {};
 					this.singleSelectedItem = null;
-					var clear = Boolean (clearCurrentDisplayValue);
+					var clear = clearCurrentDisplayValue;
 					if (!this.options.disabled) {
 						this.updateSelectedItems();
 						this.updateAddButtons();

@@ -846,9 +846,6 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 						formId: "ex-control-search"
 					});
 
-				//var timeStamp = new Date().getTime();
-				//this.options.currentFormClearTimeStep = timeStamp;
-
 				var formData = {
 					htmlid: this.widgets.exSearch.id + "-" + Alfresco.util.generateDomId()
 				};

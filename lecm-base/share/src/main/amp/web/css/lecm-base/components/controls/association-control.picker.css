@@ -84,6 +84,7 @@
 .association-picker .panel-right .datatable .edit-td .yui-dt-liner,
 .association-picker .panel-datatable .datatable .edit-td .yui-dt-liner {
 	text-align: center;
+	padding: 4px 6px;
 }
 
 .association-picker .panel-right .datatable .add-td .yui-dt-liner a,
@@ -119,8 +120,4 @@
 	display: block;
 	width: 100px;
 	text-align: right;
-}
-
-.association-picker .panel-datatable .datatable .yui-dt-liner {
-	padding: 4px 6px;
 }

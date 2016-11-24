@@ -101,9 +101,6 @@
 							<#else>
 								ignoreNodes: [],
 							</#if>
-							<#if params[itemKey + '_createNewItemSubmit']??>
-                                createNewItemSubmitFunction: ${params[itemKey + '_createNewItemSubmit']},
-							</#if>
 							<#if params[itemKey + '_getExtSearchQuery']??>
                                 getExtSearchQueryFunction: ${params[itemKey + '_getExtSearchQuery']},
 							</#if>
@@ -132,8 +129,8 @@
 			'scripts/lecm-base/components/controls/association-control.lib.js',
 			'scripts/lecm-base/components/controls/association-control.picker.js',
 			'scripts/lecm-base/components/controls/association-control.item.js'
-			<#if params.extendScripts??>
-				<#list params.extendScripts?split(",") as js>
+			<#if params.additionalScripts?has_content>
+				<#list params.additionalScripts?split(",") as js>
 					,'${js}'
 				</#list>
 			</#if>

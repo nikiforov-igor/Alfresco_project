@@ -51,7 +51,7 @@
 							<control-param name="showAutocomplete">true</control-param>
 							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
 							<control-param name="cssClasses">with-ex-search</control-param>
-							<control-param name="extendScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+							<control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
 							<!-- lecm-contractor:contractor-type -->
 							<control-param name="contractor_label">Внешний контрагент</control-param>
 							<control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
@@ -245,7 +245,7 @@
 							<control-param name="showAutocomplete">true</control-param>
 							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
 							<control-param name="cssClasses">with-ex-search</control-param>
-							<control-param name="extendScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+							<control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
 							<!-- lecm-contractor:contractor-type -->
 							<control-param name="contractor_label">Внешний контрагент</control-param>
 							<control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
@@ -362,7 +362,7 @@
 							<control-param name="showAutocomplete">true</control-param>
 							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
 							<control-param name="cssClasses">with-ex-search</control-param>
-							<control-param name="extendScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+							<control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
 							<!-- lecm-contractor:contractor-type -->
 							<control-param name="contractor_label">Внешний контрагент</control-param>
 							<control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
@@ -478,7 +478,7 @@
 							<control-param name="showAutocomplete">true</control-param>
 							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
 							<control-param name="cssClasses">with-ex-search</control-param>
-							<control-param name="extendScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+							<control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
 							<!-- lecm-contractor:contractor-type -->
 							<control-param name="contractor_label">Внешний контрагент</control-param>
 							<control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
@@ -655,7 +655,7 @@
 							<control-param name="showAutocomplete">true</control-param>
 							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
 							<control-param name="cssClasses">with-ex-search</control-param>
-							<control-param name="extendScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+							<control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
 							<!-- lecm-contractor:contractor-type -->
 							<control-param name="contractor_label">Внешний контрагент</control-param>
 							<control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
@@ -811,7 +811,7 @@
 							<control-param name="showAutocomplete">true</control-param>
 							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
 							<control-param name="cssClasses">with-ex-search</control-param>
-							<control-param name="extendScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+							<control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
 							<!-- lecm-contractor:contractor-type -->
 							<control-param name="contractor_label">Внешний контрагент</control-param>
 							<control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
@@ -985,7 +985,7 @@
 							<control-param name="showAutocomplete">true</control-param>
 							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
 							<control-param name="cssClasses">with-ex-search</control-param>
-							<control-param name="extendScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+							<control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
 							<!-- lecm-contractor:contractor-type -->
 							<control-param name="contractor_label">Внешний контрагент</control-param>
 							<control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>

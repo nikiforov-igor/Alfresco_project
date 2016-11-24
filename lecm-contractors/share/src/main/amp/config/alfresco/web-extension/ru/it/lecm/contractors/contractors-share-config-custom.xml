@@ -9,7 +9,7 @@
                     <control-param name="showAutocomplete">true</control-param>
                     <control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
                     <control-param name="cssClasses">with-ex-search</control-param>
-                    <control-param name="extendScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+                    <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                     <!-- lecm-contractor:contractor-type -->
                     <control-param name="contractor_label">Внешний контрагент</control-param>
                     <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
@@ -31,7 +31,6 @@
                     <control-param name="contractor_hasNoAspects">lecm-orgstr-aspects:is-organization-aspect</control-param>
                     <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
                     <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
-                    <control-param name="contractor_createNewItemSubmit">LogicECM.checkDuplicatesForContractor</control-param>
                     <!-- lecm-contractor:contractor-type -->
                     <control-param name="organisation_label">Внутренний контрагент</control-param>
                     <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
@@ -508,12 +507,11 @@
                             <control-param name="datagridFormId">datagrid-ext</control-param>
                             <control-param name="showLabel">false</control-param>
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
-                            <control-param name="selectedItemsFormArgs">contractor_duplicates</control-param>
+                            <control-param name="selectedItemsFormArgs">duplicates_str</control-param>
                             <control-param name="prefixLabelId">label.dictionary.has.duplicates</control-param>
                             <control-param name="postfixLabelId">label.continue.with.selected.data</control-param>
                             <control-param name="usePagination">true</control-param>
                             <control-param name="isTableSortable">false</control-param>
-                            <control-param name="pageSize">5</control-param>
                             <control-param name="datagridNoWrapValues">true</control-param>
                             <control-param name="datagridStrippedCols">lecm-contractor:fullname</control-param>
                             <control-param name="datagridMaxSColWidth">21</control-param>
@@ -1274,12 +1272,11 @@
                             <control-param name="datagridFormId">datagrid-ext</control-param>
                             <control-param name="showLabel">false</control-param>
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
-                            <control-param name="selectedItemsFormArgs">person_duplicates</control-param>
+                            <control-param name="selectedItemsFormArgs">duplicates_str</control-param>
                             <control-param name="prefixLabelId">label.dictionary.has.duplicates</control-param>
                             <control-param name="postfixLabelId">label.continue.with.selected.data</control-param>
                             <control-param name="usePagination">true</control-param>
                             <control-param name="isTableSortable">false</control-param>
-                            <control-param name="pageSize">5</control-param>
                             <control-param name="datagridNoWrapValues">true</control-param>
                             <control-param name="datagridStrippedCols">lecm-contractor:physical-address</control-param>
                             <control-param name="datagridMaxSColWidth">21</control-param>

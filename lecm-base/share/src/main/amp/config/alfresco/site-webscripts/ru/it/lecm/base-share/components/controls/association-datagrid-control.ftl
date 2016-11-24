@@ -42,7 +42,7 @@
 <#if field.control.params.usePagination??>
     <#assign usePagination = field.control.params.usePagination == "true"/>
 </#if>
-<#assign pageSize = 10/>
+<#assign pageSize = 5/>
 <#if field.control.params.pageSize??>
     <#assign pageSize = field.control.params.pageSize/>
 </#if>
@@ -146,7 +146,7 @@
             bubblingLabel: "${bubblingId}",
             itemType: "${itemType}",
             destination: nodeRef,
-        newRowButtonType:<#if field.disabled == true>"inActive"<#else>"defaultActive"</#if>
+            newRowButtonType:<#if field.disabled == true>"inActive"<#else>"defaultActive"</#if>
         });
     </#if>
     }
@@ -163,6 +163,7 @@
 
         var datagrid = new LogicECM.module.Base.DataGridControl_${objectId}('${containerId}').setOptions({
             usePagination: ${usePagination?string},
+            showExtendSearchBlock: ${exSearch?string},
             pageSize: ${pageSize},
             createFormTitleMsg: "${newRowTitle}",
             editFormTitleMsg: "${editRowTitle}",
