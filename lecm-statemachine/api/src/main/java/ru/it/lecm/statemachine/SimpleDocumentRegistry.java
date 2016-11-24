@@ -2,6 +2,7 @@ package ru.it.lecm.statemachine;
 
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.LecmBaseException;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * Created by pmelnikov on 09.04.2015.
@@ -24,5 +25,17 @@ public interface SimpleDocumentRegistry {
      * @return
      */
     boolean isSimpleDocument(QName type);
+	
+	/**
+	 * Проверка на наличие корневой папки для типа документа
+	 * Создаёт папку, если её нет и нарезает права в соответствии с указанными
+	 * в МС
+	 * 
+	 * @param type - текстовое представление типа документа
+	 * @param forceRebuildACL - если true, то права будут перенарезаны 
+	 *							даже при наличии папки
+	 * @throws WriteTransactionNeededException 
+	 */
+	void checkTypeFolder(String type, boolean forceRebuildACL) throws WriteTransactionNeededException;
 
 }

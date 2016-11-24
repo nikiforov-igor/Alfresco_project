@@ -242,6 +242,11 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
         return getHelper(documentType).getArchiveFolders(documentType);
     }
 
+	@Override
+	public String getArchiveFolder(String documentType) {
+		return getHelper(documentType).getArchiveFolder(documentType);
+	}
+
     @Override
     public void resetStateMachene() {
         lifecycleStateMachineHelper.resetStateMachene();
@@ -257,6 +262,16 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
         getHelper(documentRef).disconnectFromStatemachine(documentRef, processInstanceID);
     }
 
+	@Override
+	public Map<String, String> getPermissions(String type) {
+		return lifecycleStateMachineHelper.getPermissions(type);
+	}
+
+	@Override
+	public boolean isSimpleDocument(String type) {
+		return lifecycleStateMachineHelper.isSimpleDocument(type);
+	}
+
     private StateMachineServiceBean getHelper(String type) {
         return getHelper(QName.createQName(type, namespaceService));
     }
@@ -269,8 +284,8 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
         if (simpleDocumentRegistry.isSimpleDocument(type)) {
             return simpleStatemachineHelper;
         } else {
-            return lifecycleStateMachineHelper;
-        }
+			return lifecycleStateMachineHelper;
+		}
     }
-
+	
 }

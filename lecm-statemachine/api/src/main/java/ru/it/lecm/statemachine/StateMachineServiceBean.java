@@ -220,6 +220,14 @@ public interface StateMachineServiceBean {
      * 		- documents.summary.get.js
      */
 	Set<String> getArchiveFolders(String documentType);
+	
+	/**
+	 * TODO: Сейчас это костыль, чтобы обойти проблемы с макросами
+	 * Нужно понять нужен ли будет этот метод в будущем и стоит ли чинить getArchiveFolders
+	 * @param documentType
+	 * @return 
+	 */
+	String getArchiveFolder(String documentType);
 
 	void resetStateMachene();
 
@@ -240,5 +248,17 @@ public interface StateMachineServiceBean {
 	 */
 	void disconnectFromStatemachine(final NodeRef documentRef, final String processInstanceID);
 
-
+	/**
+	 * Получить БР с уровнями привелегий по умолчанию 
+	 * @param type
+	 * @return 
+	 */
+	Map<String, String> getPermissions(String type);
+	
+	/**
+	 * Проверка имеет ли документ флаг simpleDocument
+	 * @param type
+	 * @return 
+	 */
+	boolean isSimpleDocument(String type);
 }

@@ -39,8 +39,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.statemachine.SimpleDocumentRegistry;
 import ru.it.lecm.statemachine.bean.SimpleDocumentRegistryImpl;
-import ru.it.lecm.statemachine.SimpleDocumentRegistryItem;
 
 /**
  * User: PMelnikov
@@ -56,9 +56,14 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
     private TransactionListener transactionListener;
     private BusinessJournalService businessJournalService;
 	private DocumentConnectionService documentConnectionService;
-    private SimpleDocumentRegistryImpl simpleDocumentRegistry;
+    private SimpleDocumentRegistry simpleDocumentRegistry;
     private DocumentService documentService;
     private RepositoryStructureHelper repositoryStructureHelper;
+	private NamespaceService namespaceService;
+
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
+	}
 
     public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
         this.repositoryStructureHelper = repositoryStructureHelper;
@@ -125,7 +130,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
             logger.error("Cannot create connections root folder", ex);
         }
 
-        if (!simpleDocumentRegistry.isSimpleDocument(type)) {
+        if (!stateMachineHelper.isSimpleDocument(type.toPrefixString(namespaceService))) {
             // Ensure that the transaction listener is bound to the transaction
             AlfrescoTransactionSupport.bindListener(this.transactionListener);
 
@@ -145,12 +150,15 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
             AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
                 @Override
                 public Object doWork() throws Exception {
-                    SimpleDocumentRegistryItem registryItem = simpleDocumentRegistry.getRegistryItem(type);
-
-                    String rootFolder = documentService.execStringExpression(docRef, registryItem.getStorePath());
+					String typeStr = type.toPrefixString(namespaceService);
+					String archiveFolderStr = stateMachineHelper.getArchiveFolder(typeStr);
+					
+                    String rootFolder = documentService.execStringExpression(docRef, archiveFolderStr);
                     if (rootFolder == null) {
                         rootFolder = "/Документы без МС";
                     }
+					
+					simpleDocumentRegistry.checkTypeFolder(typeStr, false);
 
                     NodeRef archiveFolder = repositoryStructureHelper.getCompanyHomeRef();
                     //Создаем основной путь до папки

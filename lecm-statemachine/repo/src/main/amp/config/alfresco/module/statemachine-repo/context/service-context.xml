@@ -105,10 +105,8 @@
         <property name="statemachenesCache" ref="statemachines.cache" />
 	</bean>
 
-	<bean id="simpleStateMachineHelper" class="ru.it.lecm.statemachine.SimpleStatemachineHelper">
+	<bean id="simpleStateMachineHelper" class="ru.it.lecm.statemachine.SimpleStatemachineHelper" parent="lifecycleStateMachineHelper">
 		<property name="simpleDocumentRegistry" ref="simpleDocumentRegistry" />
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="orgstructureBean" ref="serviceOrgstructure"/>
 	</bean>
 
 	<bean id="stateMachineHelper" class="ru.it.lecm.statemachine.StatemachineHelperProxy">
@@ -222,6 +220,7 @@
 		<property name="simpleDocumentRegistry" ref="simpleDocumentRegistry" />
 		<property name="documentService" ref="documentService"/>
 		<property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
+		<property name="namespaceService" ref="namespaceService" />
 	</bean>
 
     <bean id="stateMachineDeleteDocumentPolicy" class="ru.it.lecm.statemachine.policy.StateMachineDeleteDocumentPolicy" init-method="init">
@@ -420,6 +419,7 @@
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
 		<property name="permissionService" ref="permissionService"/>
         <property name="namespaceService" ref="namespaceService" />
+        <property name="stateMachineService" ref="stateMachineHelper" />
 	</bean>
 
 </beans>

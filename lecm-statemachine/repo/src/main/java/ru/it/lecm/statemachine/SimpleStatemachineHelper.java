@@ -1,15 +1,12 @@
 package ru.it.lecm.statemachine;
 
 import org.activiti.engine.task.Task;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.bean.SimpleDocumentRegistryImpl;
 
 import java.io.Serializable;
@@ -23,21 +20,11 @@ import java.util.Set;
  *
  * Класс работы с документами без жизненного цикла
  */
-public class SimpleStatemachineHelper implements StateMachineServiceBean {
+public class SimpleStatemachineHelper extends LifecycleStateMachineHelper {
 
     final private static Logger logger = LoggerFactory.getLogger(SimpleStatemachineHelper.class);
 
     private SimpleDocumentRegistryImpl simpleDocumentRegistry;
-    private ServiceRegistry serviceRegistry;
-    private OrgstructureBean orgstructureBean;
-
-    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-        this.serviceRegistry = serviceRegistry;
-    }
-
-    public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
-        this.orgstructureBean = orgstructureBean;
-    }
 
     public void setSimpleDocumentRegistry(SimpleDocumentRegistryImpl simpleDocumentRegistry) {
         this.simpleDocumentRegistry = simpleDocumentRegistry;
@@ -74,34 +61,34 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
         throw createNotImplementedException();
     }
 
-    @Override
-    public boolean isStarter(String type) {
-        Set<String> accessRoles = getStarterRoles(type);
-        NodeRef employee = orgstructureBean.getCurrentEmployee();
-        final String employeeLogin = orgstructureBean.getEmployeeLogin(employee);
-        @SuppressWarnings("unchecked")
-        Set<String> auth = (Set<String>) AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-            @Override
-            public Object doWork() throws Exception {
-                return serviceRegistry.getAuthorityService().getAuthoritiesForUser(employeeLogin);
-            }
-        });
-        for (String accessRole : accessRoles) {
-            if (auth.contains("GROUP__LECM$BR!" + accessRole)) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    @Override
+//    public boolean isStarter(String type) {
+//        Set<String> accessRoles = getStarterRoles(type);
+//        NodeRef employee = orgstructureBean.getCurrentEmployee();
+//        final String employeeLogin = orgstructureBean.getEmployeeLogin(employee);
+//        @SuppressWarnings("unchecked")
+//        Set<String> auth = (Set<String>) AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+//            @Override
+//            public Object doWork() throws Exception {
+//                return serviceRegistry.getAuthorityService().getAuthoritiesForUser(employeeLogin);
+//            }
+//        });
+//        for (String accessRole : accessRoles) {
+//            if (auth.contains("GROUP__LECM$BR!" + accessRole)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
-    @Override
-    public Set<String> getStarterRoles(String documentType) {
-        Set<String> result = new HashSet<>();
-        QName typeQName = QName.createQName(documentType, serviceRegistry.getNamespaceService());
-        SimpleDocumentRegistryItem item = simpleDocumentRegistry.getRegistryItem(typeQName);
-        result.addAll(item.getStarters());
-        return result;
-    }
+//    @Override
+//    public Set<String> getStarterRoles(String documentType) {
+//        Set<String> result = new HashSet<>();
+//        QName typeQName = QName.createQName(documentType, serviceRegistry.getNamespaceService());
+//        SimpleDocumentRegistryItem item = simpleDocumentRegistry.getRegistryItem(typeQName);
+//        result.addAll(item.getStarters());
+//        return result;
+//    }
 
     @Override
     public NodeRef getTaskDocument(WorkflowTask task, List<String> documentTypes) {
@@ -111,12 +98,6 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
     @Override
     public List<WorkflowTask> getDocumentTasks(NodeRef documentRef, boolean activeTasks) {
         throw createNotImplementedException();
-    }
-
-    @Override
-    public boolean isNotArmCreate(String type) {
-        QName typeQName = QName.createQName(type, serviceRegistry.getNamespaceService());
-        return simpleDocumentRegistry.getRegistryItem(typeQName).isNotArmCreated();
     }
 
     @Override
@@ -260,9 +241,9 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
 
     @Override
     public Set<String> getArchiveFolders(String documentType) {
-        return new HashSet<>();
-    }
-
+		return new HashSet<>();
+	}
+		
     @Override
     public void resetStateMachene() {
         throw createNotImplementedException();
@@ -278,4 +259,8 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
         throw createNotImplementedException();
     }
 
+	@Override
+	public void afterPropertiesSet() {
+		// DO NOTHING
+	}	
 }

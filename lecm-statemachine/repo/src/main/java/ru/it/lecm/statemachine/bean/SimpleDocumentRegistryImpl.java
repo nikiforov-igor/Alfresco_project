@@ -16,6 +16,8 @@ import ru.it.lecm.statemachine.SimpleDocumentRegistry;
 import ru.it.lecm.statemachine.SimpleDocumentRegistryItem;
 
 import java.util.*;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 /**
  * Created by pmelnikov on 09.04.2015.
@@ -27,6 +29,11 @@ public class SimpleDocumentRegistryImpl extends BaseBean implements SimpleDocume
     private LecmPermissionService lecmPermissionService;
     private PermissionService permissionService;
     private NamespaceService namespaceService;
+	private StateMachineServiceBean stateMachineService;
+
+	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+		this.stateMachineService = stateMachineService;
+	}
 
     public void setRepositoryHelper(Repository repositoryHelper) {
         this.repositoryHelper = repositoryHelper;
@@ -105,11 +112,64 @@ public class SimpleDocumentRegistryImpl extends BaseBean implements SimpleDocume
 
     @Override
     public boolean isSimpleDocument(QName type) {
-        return types.containsKey(type.toPrefixString(namespaceService));
+//        return types.containsKey(type.toPrefixString(namespaceService));
+		return stateMachineService.isSimpleDocument(type.toPrefixString(namespaceService));
     }
 
     public SimpleDocumentRegistryItem getRegistryItem(QName type) {
         return types.get(type.toPrefixString(namespaceService));
     }
+	
+	private void rebuildACL(String type, NodeRef typeRoot) {
+		Map<String, String> permissions = stateMachineService.getPermissions(type);
+		Map<String, LecmPermissionService.LecmPermissionGroup> permissionGroups = new HashMap<>();
+		for (Map.Entry<String, String> role : permissions.entrySet()) {
+			LecmPermissionService.LecmPermissionGroup permissionGroup = lecmPermissionService.findPermissionGroup(role.getValue());
+			if (permissionGroup != null) {
+				permissionGroups.put(role.getKey(), permissionGroup);
+			}
+		}
+		
+		Set<AccessPermission> allowedPermissions = permissionService.getAllSetPermissions(typeRoot);
+		for (AccessPermission permission : allowedPermissions) {
+			if (permission.isSetDirectly() && permission.getAuthority().startsWith(PermissionService.GROUP_PREFIX + Types.PFX_LECM)) {
+				permissionService.deletePermission(typeRoot, permission.getAuthority(), permission.getPermission());
+			}
+		}
 
+		if (!permissionGroups.isEmpty()) {
+			lecmPermissionService.rebuildStaticACL(typeRoot, permissionGroups);
+		}
+	}
+
+	@Override
+	public void checkTypeFolder(String type, boolean forceRebuildACL) throws WriteTransactionNeededException {
+		String pathStr = "Документы без МС";
+		String archiveFolder = stateMachineService.getArchiveFolder(type);
+		
+		if (archiveFolder != null && !archiveFolder.isEmpty()) {
+			String[] storePath = archiveFolder.split("/");
+			for (String pathItem : storePath) {
+				if (!"".equals(pathItem)) {
+					pathStr = pathItem;
+					break;
+				}
+			}
+		}
+		
+		NodeRef typeRoot = getFolder(repositoryHelper.getCompanyHome(), pathStr);
+		if (typeRoot == null) {
+			List<String> paths = new ArrayList<>();
+			paths.add(pathStr);
+			typeRoot = createPath(repositoryHelper.getCompanyHome(), paths);
+			
+			rebuildACL(type, typeRoot);
+		}
+		
+		if (forceRebuildACL) {
+			rebuildACL(type, typeRoot);
+		}
+		
+	}
+	
 }

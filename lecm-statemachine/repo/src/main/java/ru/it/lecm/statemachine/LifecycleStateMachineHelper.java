@@ -840,6 +840,12 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         return folders;
     }
 
+	@Override
+	public String getArchiveFolder(String documentType) {
+		String statmachene = documentType.replace(":", "_");
+        return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().getArchiveFolder();
+	}
+
     private NodeRef serviceRoot = null;
     private NodeRef versionsRoot = null;
     //TODO Передеалть в Map?
@@ -1037,7 +1043,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     	private List<String> staticRoles = new ArrayList<String>();
     	private List<String> dinamicRoles = new ArrayList<String>();
     	private List<String> starterRoles = new ArrayList<String>();
+		private Map<String, String> permissions = new HashMap<>();
     	private boolean notArmCreate = false;
+		private boolean simpleDocument = false;
 
         private boolean initialized = false;
         private Lock lock = new ReentrantLock();
@@ -1088,6 +1096,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 									    if("name".equals(stateMachineProp.getFirstChild().getLocalName())&&"notArmCreate".equals(stateMachineProp.getFirstChild().getTextContent())){
 										    notArmCreate = Boolean.valueOf(stateMachineProp.getLastChild().getTextContent());
 			    						}
+									    if("name".equals(stateMachineProp.getFirstChild().getLocalName())&&"simple-document".equals(stateMachineProp.getFirstChild().getTextContent())){
+										    simpleDocument = Boolean.valueOf(stateMachineProp.getLastChild().getTextContent());
+			    						}
 			    					}
 			    				}
 			    				if("subFolders".equals(stateMachineNode.getLocalName())){
@@ -1104,6 +1115,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 			    									Boolean isCreator = false;
 			    									Boolean isStatic = false;
 			    									String roleName = "";
+													String rolePrivilege = "";
 			    									for(int l=0;l<rolesListProps.getLength();l++) {
 			    										Node rolesListProp = rolesListProps.item(l);
 			    										if("type".equals(rolesListProp.getLocalName())&&"static-role-item".equals(rolesListProp.getTextContent())) {
@@ -1116,6 +1128,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
                                                                 if("name".equals(n11.getFirstChild().getLocalName())&&"isCreator".equals(n11.getFirstChild().getTextContent())){
                                                                     isCreator = Boolean.parseBoolean(n11.getLastChild().getTextContent());
                                                                 }
+                                                                if("name".equals(n11.getFirstChild().getLocalName())&&"static-role-privilege".equals(n11.getFirstChild().getTextContent())){
+                                                                    rolePrivilege = n11.getLastChild().getTextContent();
+                                                                }
                                                             }
 			    										}
 			    										if("roleAssociations".equals(rolesListProp.getLocalName())&&rolesListProp.getFirstChild()!=null) {
@@ -1127,6 +1142,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 			    									if(isStatic)staticRoles.add(roleName);
 			    									if(!isStatic)dinamicRoles.add(roleName);
 			    									if(isCreator)starterRoles.add(roleName);
+													permissions.put(roleName, rolePrivilege);
 			    								}
 			    							}
 			    						}
@@ -1651,6 +1667,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     	public List<String>  getStarterRoles() {
     		return starterRoles;
     	}
+    	public Map getPermissions() {
+    		return permissions;
+    	}
     	public String getArchiveFolder() {
     		return archiveFolder;
     	}
@@ -1659,6 +1678,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     	}
         public boolean isNotArmCreate() {
 		    return notArmCreate;
+	    }
+        public boolean isSimpleDocument() {
+		    return simpleDocument;
 	    }
 
 	    public StateMachineStatus getStatusByName(String name) {
@@ -2756,6 +2778,21 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 	public void disconnectFromStatemachine(final NodeRef documentRef, final String processInstanceID) {
 		new DocumentWorkflowUtil().removeWorkflow(documentRef, processInstanceID);
 	}
+	
+	@Override
+	public Map<String, String> getPermissions(String type) {
+		String statmachene = type.replace(":", "_");
+        return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().getPermissions();
+	}
+	
+	@Override
+	public boolean isSimpleDocument(String type) {
+		String statmachene = type.replace(":", "_");
+        return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().isSimpleDocument();
+	}
+	
 ///////////////////////////////////////////////////////// Statemachine Structure start ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////// Statemachine Structure end ////////////////////////////////////////////////////////////////
+
+
 }

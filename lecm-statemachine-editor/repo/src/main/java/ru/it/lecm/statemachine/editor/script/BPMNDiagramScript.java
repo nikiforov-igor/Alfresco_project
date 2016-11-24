@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import ru.it.lecm.statemachine.SimpleDocumentRegistry;
 
 /**
  * User: PMelnikov
@@ -51,7 +52,12 @@ public class BPMNDiagramScript extends AbstractWebScript {
 	private ProcessEngine activitiProcessEngine;
 	private StateMachineServiceBean statemachineService;
 	private SimpleDocumentDeployer simpleDocumentDeployer;
+	private SimpleDocumentRegistry simpleDocumentRegistry;
 	private WorkflowService workflowService;
+
+	public void setSimpleDocumentRegistry(SimpleDocumentRegistry simpleDocumentRegistry) {
+		this.simpleDocumentRegistry = simpleDocumentRegistry;
+	}
 
 	public void setStatemachineService(StateMachineServiceBean statemachineService) {
 		this.statemachineService = statemachineService;
@@ -139,8 +145,8 @@ public class BPMNDiagramScript extends AbstractWebScript {
 						//Сохраняем свойсвтва контейнера версий
 						nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION, lastVersion);
 					} else {
-						simpleDocumentDeployer.appendType(statemachine);
-						Object lastVersionProp = nodeService.getProperty(statemachineVersions, StatemachineEditorModel.PROP_SIMPLE_DOCUMENT_LAST_VERSION);
+//						simpleDocumentDeployer.appendType(statemachine);
+						Object lastVersionProp = nodeService.getProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION);
 						long newVersion = 0;
 						if (lastVersionProp != null) {
 							try {
@@ -149,10 +155,10 @@ public class BPMNDiagramScript extends AbstractWebScript {
 						}
 						newVersion++;
 						lastVersion = Long.toString(newVersion);
-						nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_SIMPLE_DOCUMENT_LAST_VERSION, lastVersion);
+						nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION, lastVersion);
 					}
 
-					String versionFolderName = "version_" + (isSimpleDocument ? "NA_" + lastVersion : lastVersion);
+					String versionFolderName = "version_" + lastVersion;
 		            NodeRef version = nodeService.getChildByName(statemachineVersions, ContentModel.ASSOC_CONTAINS, versionFolderName);
 					if (version == null) {
 						Map<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
@@ -197,6 +203,12 @@ public class BPMNDiagramScript extends AbstractWebScript {
 		            }
 
 		            statemachineService.resetStateMachene();
+					
+					if (isSimpleDocument) {
+						String docType = (String) nodeService.getProperty(statemachineVersions, ContentModel.PROP_NAME);
+						// Проверим папку и перенарежем права
+						simpleDocumentRegistry.checkTypeFolder(docType, true);
+					}
 		            
 		            logger.debug("Машина состояний развернута");
                 }
