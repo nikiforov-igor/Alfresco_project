@@ -37,7 +37,7 @@ LogicECM.module.Resolutions.controllerValidation =
         if (field.form) {
             var control = field.form["prop_lecm-resolutions_control"];
 
-            return (control && control.value == "false") || (field.value && field.value.value.length);
+            return (control && control.value == "false") || (field.value && field.value.length);
         }
         return true;
     };
