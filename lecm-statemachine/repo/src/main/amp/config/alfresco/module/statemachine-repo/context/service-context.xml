@@ -90,15 +90,12 @@
 		<property name="transactionService" ref="transactionService"/>
 	</bean>
 
-	<bean id="lifecycleStateMachineHelper" class="ru.it.lecm.statemachine.LifecycleStateMachineHelper">
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="nodeService" ref="nodeService"/>
+	<bean id="lifecycleStateMachineHelper" class="ru.it.lecm.statemachine.LifecycleStateMachineHelper" parent="baseBean">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
         <property name="documentMembersService" ref="documentMembersService"/>
         <property name="businessJournalService" ref="businessJournalService" />
-        <property name="transactionService" ref="transactionService" />
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
         <property name="documentConnectionService" ref="documentConnectionService"/>
         <property name="workCalendarService" ref="WorkCalendarService" />
@@ -106,7 +103,7 @@
 	</bean>
 
 	<bean id="simpleStateMachineHelper" class="ru.it.lecm.statemachine.SimpleStatemachineHelper" parent="lifecycleStateMachineHelper">
-		<property name="simpleDocumentRegistry" ref="simpleDocumentRegistry" />
+		<property name="permissionService" ref="permissionService" />
 	</bean>
 
 	<bean id="stateMachineHelper" class="ru.it.lecm.statemachine.StatemachineHelperProxy">

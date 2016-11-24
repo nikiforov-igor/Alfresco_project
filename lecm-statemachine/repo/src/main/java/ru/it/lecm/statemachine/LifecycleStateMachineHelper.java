@@ -77,6 +77,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import ru.it.lecm.base.beans.BaseBean;
 
 //import org.joda.time.Days;
 
@@ -91,37 +92,22 @@ import java.util.concurrent.locks.ReentrantLock;
  * 1. Запускать пользовательские процессы из машины состояний
  * 2. Передавать сигнал о завершении пользовательского процесс машине состояний с передачей переменных из пользовательского процесса
  */
-public class LifecycleStateMachineHelper implements StateMachineServiceBean, InitializingBean {
+public class LifecycleStateMachineHelper extends BaseBean implements StateMachineServiceBean, InitializingBean {
 	private final static Logger logger = LoggerFactory.getLogger(LifecycleStateMachineHelper.class);
 
     public static String ACTIVITI_PREFIX = "activiti$";
 
-    private ServiceRegistry serviceRegistry;
-    private Repository repositoryHelper;
-    private AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
-    private OrgstructureBean orgstructureBean;
-    private DocumentMembersService documentMembersService;
-    private BusinessJournalService businessJournalService;
-    private TransactionService transactionService;
-    private DocumentConnectionService documentConnectionService;
-    private LecmPermissionService lecmPermissionService;
-    private IWorkCalendar workCalendarService;
-    private NodeService nodeService;
+    protected Repository repositoryHelper;
+    protected AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
+    protected OrgstructureBean orgstructureBean;
+    protected DocumentMembersService documentMembersService;
+    protected BusinessJournalService businessJournalService;
+    protected DocumentConnectionService documentConnectionService;
+    protected LecmPermissionService lecmPermissionService;
+    protected IWorkCalendar workCalendarService;
 
     Lock lock = new ReentrantLock();
     
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
-
-    public void setTransactionService(TransactionService transactionService) {
-    	this.transactionService = transactionService;
-    }
-
-    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-    	this.serviceRegistry = serviceRegistry;
-    }
-
     public void setRepositoryHelper(Repository repositoryHelper) {
         this.repositoryHelper = repositoryHelper;
     }
@@ -2790,6 +2776,17 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 		String statmachene = type.replace(":", "_");
         return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().isSimpleDocument();
 	}
+	
+	@Override
+	public void checkArchiveFolder(String type, boolean forceRebuildACL) {
+		// Не реализовано, т.к такой функционал пока что нужен только для документов без ЖЦ
+	}
+	
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
+	}
+	
 	
 ///////////////////////////////////////////////////////// Statemachine Structure start ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////// Statemachine Structure end ////////////////////////////////////////////////////////////////

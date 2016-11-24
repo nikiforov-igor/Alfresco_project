@@ -7,13 +7,19 @@ import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.statemachine.bean.SimpleDocumentRegistryImpl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.alfresco.service.cmr.security.AccessPermission;
+import org.alfresco.service.cmr.security.PermissionService;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.security.Types;
 
 /**
  * Created by pmelnikov on 08.04.2015.
@@ -23,12 +29,12 @@ import java.util.Set;
 public class SimpleStatemachineHelper extends LifecycleStateMachineHelper {
 
     final private static Logger logger = LoggerFactory.getLogger(SimpleStatemachineHelper.class);
+	
+	private PermissionService permissionService;
 
-    private SimpleDocumentRegistryImpl simpleDocumentRegistry;
-
-    public void setSimpleDocumentRegistry(SimpleDocumentRegistryImpl simpleDocumentRegistry) {
-        this.simpleDocumentRegistry = simpleDocumentRegistry;
-    }
+	public void setPermissionService(PermissionService permissionService) {
+		this.permissionService = permissionService;
+	}
 
     @Override
     public boolean isReadOnlyCategory(NodeRef document, String category) {
@@ -40,9 +46,31 @@ public class SimpleStatemachineHelper extends LifecycleStateMachineHelper {
         logger.error(ex.getMessage(), ex);
         return ex;
     }
+	
+	private void rebuildACL(String type, NodeRef typeRoot) {
+		Map<String, String> permissions = getPermissions(type);
+		Map<String, LecmPermissionService.LecmPermissionGroup> permissionGroups = new HashMap<>();
+		for (Map.Entry<String, String> role : permissions.entrySet()) {
+			LecmPermissionService.LecmPermissionGroup permissionGroup = lecmPermissionService.findPermissionGroup(role.getValue());
+			if (permissionGroup != null) {
+				permissionGroups.put(role.getKey(), permissionGroup);
+			}
+		}
+		
+		Set<AccessPermission> allowedPermissions = permissionService.getAllSetPermissions(typeRoot);
+		for (AccessPermission permission : allowedPermissions) {
+			if (permission.isSetDirectly() && permission.getAuthority().startsWith(PermissionService.GROUP_PREFIX + Types.PFX_LECM)) {
+				permissionService.deletePermission(typeRoot, permission.getAuthority(), permission.getPermission());
+			}
+		}
+
+		if (!permissionGroups.isEmpty()) {
+			lecmPermissionService.rebuildStaticACL(typeRoot, permissionGroups);
+		}
+	}
 
     @Override
-    public boolean hasActiveStatemachine(NodeRef document) {
+    public boolean hasActiveStatemachine(NodeRef document) {		
         throw createNotImplementedException();
     }
 
@@ -60,35 +88,6 @@ public class SimpleStatemachineHelper extends LifecycleStateMachineHelper {
     public List<WorkflowInstance> getDocumentWorkflows(NodeRef nodeRef, boolean isActive) {
         throw createNotImplementedException();
     }
-
-//    @Override
-//    public boolean isStarter(String type) {
-//        Set<String> accessRoles = getStarterRoles(type);
-//        NodeRef employee = orgstructureBean.getCurrentEmployee();
-//        final String employeeLogin = orgstructureBean.getEmployeeLogin(employee);
-//        @SuppressWarnings("unchecked")
-//        Set<String> auth = (Set<String>) AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-//            @Override
-//            public Object doWork() throws Exception {
-//                return serviceRegistry.getAuthorityService().getAuthoritiesForUser(employeeLogin);
-//            }
-//        });
-//        for (String accessRole : accessRoles) {
-//            if (auth.contains("GROUP__LECM$BR!" + accessRole)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
-//    @Override
-//    public Set<String> getStarterRoles(String documentType) {
-//        Set<String> result = new HashSet<>();
-//        QName typeQName = QName.createQName(documentType, serviceRegistry.getNamespaceService());
-//        SimpleDocumentRegistryItem item = simpleDocumentRegistry.getRegistryItem(typeQName);
-//        result.addAll(item.getStarters());
-//        return result;
-//    }
 
     @Override
     public NodeRef getTaskDocument(WorkflowTask task, List<String> documentTypes) {
@@ -258,6 +257,39 @@ public class SimpleStatemachineHelper extends LifecycleStateMachineHelper {
     public void disconnectFromStatemachine(NodeRef documentRef, String processInstanceID) {
         throw createNotImplementedException();
     }
+
+	@Override
+	public void checkArchiveFolder(String type, boolean forceRebuildACL) {
+		String pathStr = "Документы без МС";
+		String archiveFolder = getArchiveFolder(type);
+		
+		if (archiveFolder != null && !archiveFolder.isEmpty()) {
+			String[] storePath = archiveFolder.split("/");
+			for (String pathItem : storePath) {
+				if (!"".equals(pathItem)) {
+					pathStr = pathItem;
+					break;
+				}
+			}
+		}
+		
+		NodeRef typeRoot = getFolder(repositoryHelper.getCompanyHome(), pathStr);
+		if (typeRoot == null) {
+			try {
+				List<String> paths = new ArrayList<>();
+				paths.add(pathStr);
+				typeRoot = createPath(repositoryHelper.getCompanyHome(), paths);
+				
+				rebuildACL(type, typeRoot);
+			} catch (WriteTransactionNeededException ex) {
+				logger.error("Failed to create Simple Document folder due lack of RW transaction", ex);
+			}
+		}
+		
+		if (forceRebuildACL) {
+			rebuildACL(type, typeRoot);
+		}
+	}
 
 	@Override
 	public void afterPropertiesSet() {

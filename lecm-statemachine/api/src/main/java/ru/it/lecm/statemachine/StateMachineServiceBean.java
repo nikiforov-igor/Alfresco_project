@@ -261,4 +261,15 @@ public interface StateMachineServiceBean {
 	 * @return 
 	 */
 	boolean isSimpleDocument(String type);
+	
+	/**
+	 * Проверка на наличие корневой папки для типа документа
+	 * Создаёт папку, если её нет и нарезает права в соответствии с указанными
+	 * в МС
+	 * 
+	 * @param type - текстовое представление типа документа
+	 * @param forceRebuildACL - если true, то права будут перенарезаны 
+	 *							даже при наличии папки 
+	 */
+	void checkArchiveFolder(String type, boolean forceRebuildACL);
 }
