@@ -100,15 +100,22 @@
                             <control-param name="availableRemoveDefault">false</control-param>
                             <control-param name="documentType">lecm-errands:document</control-param>
                             <control-param name="documentFromId">from-resolution</control-param>
+                            <control-param name="argsConfig"><![CDATA[{
+                                    "assoc_lecm-resolutions_controller-assoc": "assoc_lecm-errands_controller-assoc",
+                                    "prop_lecm-resolutions_limitation-date-radio": "prop_lecm-errands_limitation-date-radio",
+                                    "prop_lecm-resolutions_limitation-date-days": "prop_lecm-errands_limitation-date-days",
+                                    "prop_lecm-resolutions_limitation-date-type": "prop_lecm-errands_limitation-date-type",
+                                    "prop_lecm-resolutions_limitation-date": "prop_lecm-errands_limitation-date"
+                                }]]></control-param>
                         </control>
                     </field>
-                    <field id="change-errand-type-script">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl" set="end">
+                    <field id="change-errand-type-script" set="end">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-reinit-title-by-type.js</control-param>
                         </control>
                     </field>
-                    <field id="errands-limitation-date-script">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl" set="end">
+                    <field id="errands-limitation-date-script" set="end">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
                         </control>
                     </field>

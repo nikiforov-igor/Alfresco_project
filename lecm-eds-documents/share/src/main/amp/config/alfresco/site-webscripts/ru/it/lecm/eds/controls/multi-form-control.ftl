@@ -37,6 +37,9 @@
         <#if params.fixSimpleDialogId??>
             fixSimpleDialogId: "${params.fixSimpleDialogId}",
         </#if>
+        <#if params.argsConfig??>
+            argsConfig: ${params.argsConfig},
+        </#if>
 
         <#if form.arguments??>
             args: {
