@@ -6,7 +6,7 @@ model.updated = 0;
 var propsForUpdate = ["lecm-contractor:fullname", "lecm-contractor:shortname"];
 var letsContinue = true;
 
-var i, j,  size, size2, result, skipCount;
+var result, skipCount;
 
 skipCount = 0;
 
@@ -28,10 +28,12 @@ while (letsContinue) {
     skipCount += result.length;
 
     if (letsContinue) {
+        var i, j,  size, size2, contractor, propValue;
+
         for (i = 0, size = result.length; i < size; i++) {
-            var contractor = result[i];
+            contractor = result[i];
             for (j = 0, size2 = propsForUpdate.length; j < size2; j++) {
-                var propValue = contractor.properties[propsForUpdate[j]];
+                propValue = contractor.properties[propsForUpdate[j]];
                 if (propValue) {
                     contractor.properties[propsForUpdate[j] + "-search"] = contractorsRootObject.formatContractorName(propValue);
                 }
