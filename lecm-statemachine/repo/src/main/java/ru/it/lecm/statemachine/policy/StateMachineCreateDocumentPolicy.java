@@ -39,8 +39,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
-import ru.it.lecm.statemachine.SimpleDocumentRegistry;
-import ru.it.lecm.statemachine.bean.SimpleDocumentRegistryImpl;
 
 /**
  * User: PMelnikov
@@ -56,7 +54,6 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
     private TransactionListener transactionListener;
     private BusinessJournalService businessJournalService;
 	private DocumentConnectionService documentConnectionService;
-    private SimpleDocumentRegistry simpleDocumentRegistry;
     private DocumentService documentService;
     private RepositoryStructureHelper repositoryStructureHelper;
 	private NamespaceService namespaceService;
@@ -72,10 +69,6 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
     public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
 		this.documentConnectionService = documentConnectionService;
 	}
-
-    public void setSimpleDocumentRegistry(SimpleDocumentRegistryImpl simpleDocumentRegistry) {
-        this.simpleDocumentRegistry = simpleDocumentRegistry;
-    }
 
     final static Logger logger = LoggerFactory.getLogger(StateMachineCreateDocumentPolicy.class);
     private StateMachineServiceBean stateMachineHelper;
@@ -158,7 +151,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                         rootFolder = "/Документы без МС";
                     }
 					
-					simpleDocumentRegistry.checkTypeFolder(typeStr, false);
+					stateMachineHelper.checkArchiveFolder(typeStr, false);
 
                     NodeRef archiveFolder = repositoryStructureHelper.getCompanyHomeRef();
                     //Создаем основной путь до папки

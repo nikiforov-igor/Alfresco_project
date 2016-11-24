@@ -32,7 +32,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import ru.it.lecm.statemachine.SimpleDocumentRegistry;
 
 /**
  * User: PMelnikov
@@ -50,12 +49,7 @@ public class BPMNDiagramScript extends AbstractWebScript {
     private LecmBasePropertiesService propertiesService;
 	private ProcessEngine activitiProcessEngine;
 	private StateMachineServiceBean statemachineService;
-	private SimpleDocumentRegistry simpleDocumentRegistry;
 	private WorkflowService workflowService;
-
-	public void setSimpleDocumentRegistry(SimpleDocumentRegistry simpleDocumentRegistry) {
-		this.simpleDocumentRegistry = simpleDocumentRegistry;
-	}
 
 	public void setStatemachineService(StateMachineServiceBean statemachineService) {
 		this.statemachineService = statemachineService;
@@ -204,7 +198,7 @@ public class BPMNDiagramScript extends AbstractWebScript {
 					if (isSimpleDocument) {
 						String docType = (String) nodeService.getProperty(statemachineVersions, ContentModel.PROP_NAME);
 						// Проверим папку и перенарежем права
-						simpleDocumentRegistry.checkTypeFolder(docType, true);
+						statemachineService.checkArchiveFolder(docType, true);
 					}
 		            
 		            logger.debug("Машина состояний развернута");

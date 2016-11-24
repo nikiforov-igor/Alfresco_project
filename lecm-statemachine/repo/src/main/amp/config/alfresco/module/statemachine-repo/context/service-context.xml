@@ -109,7 +109,6 @@
 	<bean id="stateMachineHelper" class="ru.it.lecm.statemachine.StatemachineHelperProxy">
 		<property name="simpleStatemachineHelper" ref="simpleStateMachineHelper" />
 		<property name="lifecycleStateMachineHelper" ref="lifecycleStateMachineHelper" />
-		<property name="simpleDocumentRegistry" ref="simpleDocumentRegistry" />
 		<property name="namespaceService" ref="namespaceService" />
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
@@ -214,7 +213,6 @@
         <property name="businessJournalService" ref="businessJournalService" />
         <property name="stateMachineHelper" ref="stateMachineHelper"/>
 		<property name="documentConnectionService" ref="documentConnectionService"/>
-		<property name="simpleDocumentRegistry" ref="simpleDocumentRegistry" />
 		<property name="documentService" ref="documentService"/>
 		<property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
 		<property name="namespaceService" ref="namespaceService" />
@@ -410,13 +408,5 @@
 			</list>
 		</property>
 	</bean>-->
-
-	<bean id="simpleDocumentRegistry" class="ru.it.lecm.statemachine.bean.SimpleDocumentRegistryImpl" parent="baseBean">
-		<property name="repositoryHelper" ref="repositoryHelper" />
-		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
-		<property name="permissionService" ref="permissionService"/>
-        <property name="namespaceService" ref="namespaceService" />
-        <property name="stateMachineService" ref="stateMachineHelper" />
-	</bean>
 
 </beans>

@@ -65,7 +65,6 @@
         <property name="propertiesService" ref="propertiesService"/>
 		<property name="activitiProcessEngine" ref="activitiProcessEngine"/>
 		<property name="statemachineService" ref="stateMachineHelper"/>
-		<property name="simpleDocumentRegistry" ref="simpleDocumentRegistry"/>
 		<property name="repositoryStructureHelper" ref="repositoryStructureHelper"/>
 	</bean>
 

@@ -7,7 +7,6 @@ import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import ru.it.lecm.statemachine.bean.SimpleDocumentRegistryImpl;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,7 +22,6 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
 
     private SimpleStatemachineHelper simpleStatemachineHelper;
     private LifecycleStateMachineHelper lifecycleStateMachineHelper;
-    private SimpleDocumentRegistryImpl simpleDocumentRegistry;
     private NamespaceService namespaceService;
     private NodeService nodeService;
 
@@ -33,10 +31,6 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
 
     public void setLifecycleStateMachineHelper(LifecycleStateMachineHelper lifecycleStateMachineHelper) {
         this.lifecycleStateMachineHelper = lifecycleStateMachineHelper;
-    }
-
-    public void setSimpleDocumentRegistry(SimpleDocumentRegistryImpl simpleDocumentRegistry) {
-        this.simpleDocumentRegistry = simpleDocumentRegistry;
     }
 
     public void setNamespaceService(NamespaceService namespaceService) {
@@ -281,11 +275,16 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
     }
 
     private StateMachineServiceBean getHelper(QName type) {
-        if (simpleDocumentRegistry.isSimpleDocument(type)) {
+        if (lifecycleStateMachineHelper.isSimpleDocument(type.toPrefixString(namespaceService))) {
             return simpleStatemachineHelper;
         } else {
 			return lifecycleStateMachineHelper;
 		}
     }
+
+	@Override
+	public void checkArchiveFolder(String type, boolean forceRebuildACL) {
+		getHelper(type).checkArchiveFolder(type, forceRebuildACL);
+	}
 	
 }
