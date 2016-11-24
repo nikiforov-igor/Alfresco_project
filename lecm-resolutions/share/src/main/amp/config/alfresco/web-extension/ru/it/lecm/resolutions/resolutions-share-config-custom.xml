@@ -43,7 +43,11 @@
                     <set id="reviewers" parent="reviewers-fieldset" template="/org/alfresco/components/form/2-column-set.ftl"/>
 
                     <field id="lecm-document:subject-assoc" set="start-left"/>
-                    <field id="lecm-resolutions:author-assoc" set="start-left"/>
+                    <field id="lecm-resolutions:author-assoc" set="start-left">
+                        <control>
+                            <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-resolutions:controller-assoc" set="start-left">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.controllerValidation" event="change" />
