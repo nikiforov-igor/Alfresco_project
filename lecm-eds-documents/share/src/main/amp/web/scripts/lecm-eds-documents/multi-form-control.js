@@ -82,12 +82,11 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 }
             },
 
-            loadCurrentValue: function() {
+            loadCurrentValue: function () {
                 if (this.options.currentValue && this.options.currentValue.length) {
-                    var i;
-                    for (i = 0; i < this.options.currentValue.length; i++) {
-                        this.onAdd(null, null, this.options.currentValue[i]);
-                    }
+                    this.options.currentValue.forEach(function (item) {
+                        this.onAdd(null, null, item)
+                    }, this);
                 }
             },
 
@@ -254,7 +253,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 });
             },
 
-            calcActionsHeight: function(num) {
+            calcActionsHeight: function (num) {
                 var li = Dom.get(this.id + "_" + num + "_item");
                 var removeItem = Dom.get(this.id + "_" + num + "_remove");
                 if (li && removeItem) {
