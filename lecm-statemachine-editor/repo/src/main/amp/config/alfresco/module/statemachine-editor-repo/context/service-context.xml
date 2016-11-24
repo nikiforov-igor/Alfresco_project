@@ -65,7 +65,6 @@
         <property name="propertiesService" ref="propertiesService"/>
 		<property name="activitiProcessEngine" ref="activitiProcessEngine"/>
 		<property name="statemachineService" ref="stateMachineHelper"/>
-		<property name="simpleDocumentDeployer" ref="simpleDocumentDeployer"/>
 		<property name="simpleDocumentRegistry" ref="simpleDocumentRegistry"/>
 		<property name="repositoryStructureHelper" ref="repositoryStructureHelper"/>
 	</bean>
@@ -115,12 +114,5 @@
             </map>
         </constructor-arg>
     </bean>
-
-	<bean id="simpleDocumentDeployer" class="ru.it.lecm.statemachine.editor.SimpleDocumentDeployer" init-method="init">
-		<property name="namespaceService" ref="namespaceService" />
-		<property name="nodeService" ref="nodeService" />
-		<property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
-		<property name="simpleDocumentRegistry" ref="simpleDocumentRegistry" />
-	</bean>
 
 </beans>

@@ -23,7 +23,6 @@ import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
-import ru.it.lecm.statemachine.editor.SimpleDocumentDeployer;
 import ru.it.lecm.statemachine.editor.StatemachineEditorModel;
 import ru.it.lecm.statemachine.editor.export.XMLExporter;
 
@@ -51,7 +50,6 @@ public class BPMNDiagramScript extends AbstractWebScript {
     private LecmBasePropertiesService propertiesService;
 	private ProcessEngine activitiProcessEngine;
 	private StateMachineServiceBean statemachineService;
-	private SimpleDocumentDeployer simpleDocumentDeployer;
 	private SimpleDocumentRegistry simpleDocumentRegistry;
 	private WorkflowService workflowService;
 
@@ -145,7 +143,6 @@ public class BPMNDiagramScript extends AbstractWebScript {
 						//Сохраняем свойсвтва контейнера версий
 						nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION, lastVersion);
 					} else {
-//						simpleDocumentDeployer.appendType(statemachine);
 						Object lastVersionProp = nodeService.getProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION);
 						long newVersion = 0;
 						if (lastVersionProp != null) {
@@ -353,10 +350,6 @@ public class BPMNDiagramScript extends AbstractWebScript {
 		ByteArrayInputStream is = new ByteArrayInputStream(backupOut.toByteArray());
 		writer.putContent(is);
 		is.close();
-	}
-
-	public void setSimpleDocumentDeployer(SimpleDocumentDeployer simpleDocumentDeployer) {
-		this.simpleDocumentDeployer = simpleDocumentDeployer;
 	}
 
 }
