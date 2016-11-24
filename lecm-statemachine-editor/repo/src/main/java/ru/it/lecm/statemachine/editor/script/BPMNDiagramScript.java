@@ -134,8 +134,6 @@ public class BPMNDiagramScript extends AbstractWebScript {
 						WorkflowDeployment wd = workflowService.deployDefinition("activiti", bpmnIS, "text/xml", fileName);
 						lastVersion = wd.getDefinition().getVersion();
 						bpmnIS.close();
-						//Сохраняем свойсвтва контейнера версий
-						nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION, lastVersion);
 					} else {
 						Object lastVersionProp = nodeService.getProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION);
 						long newVersion = 0;
@@ -146,8 +144,10 @@ public class BPMNDiagramScript extends AbstractWebScript {
 						}
 						newVersion++;
 						lastVersion = Long.toString(newVersion);
-						nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION, lastVersion);
 					}
+					
+					//Сохраняем свойсвтва контейнера версий
+					nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION, lastVersion);
 
 					String versionFolderName = "version_" + lastVersion;
 		            NodeRef version = nodeService.getChildByName(statemachineVersions, ContentModel.ASSOC_CONTAINS, versionFolderName);
