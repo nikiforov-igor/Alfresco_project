@@ -573,7 +573,12 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 			if (created) {
 				delegateTasks(sourceEmployee, bossAssistant);
 			}
-		} else {
+
+			//Предаем права на группу "Участник"
+			LecmPermissionService.LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(READER_PERMISSION_GROUP);
+			sgNotifierService.notifySpecDelegationChanged(pgGranting, sourceEmployee, bossAssistant, created);
+
+	} else {
 			logger.warn("boss assistant is null, no security groups changed");
 		}
 	}

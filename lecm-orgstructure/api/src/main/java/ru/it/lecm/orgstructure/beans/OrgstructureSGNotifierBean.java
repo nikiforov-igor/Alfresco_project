@@ -2,6 +2,7 @@ package ru.it.lecm.orgstructure.beans;
 
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.Types.SGPosition;
 
 /**
@@ -141,6 +142,17 @@ public interface OrgstructureSGNotifierBean {
      */
     void notifyBRDelegationChanged( NodeRef brole, NodeRef sourceEmployee, NodeRef destEmployee, boolean created);
 
+
+    /**
+     * Оповещение о делегировании (и отборе) специальной пермиссии от одного Сотрудника другому
+     * @param permissionGroup пермиссия
+     * @param sourceEmployee от кого
+     * @param destEmployee кому
+     * @param created true, если пермиссия делегируется и false, если отбирается
+     */
+
+    void notifySpecDelegationChanged(LecmPermissionService.LecmPermissionGroup permissionGroup,
+                                     NodeRef sourceEmployee, NodeRef destEmployee, boolean created);
 
     /**
      * Оповещение о делегировании (и отборе) руководящей позиции от одного Сотрудника другому
