@@ -51,3 +51,7 @@
 .yui-skin-lecmTheme .control.association-datagrid.middle-align .value-div .datagrid .grid.yui-dt .yui-dt-data td {
     vertical-align: middle;
 }
+
+.yui-skin-lecmTheme .control.with-grid.max-height65 .datagrid .grid {
+    max-height: 65vh;
+}

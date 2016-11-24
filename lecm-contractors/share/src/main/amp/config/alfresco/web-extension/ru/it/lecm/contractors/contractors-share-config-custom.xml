@@ -517,7 +517,7 @@
                             <control-param name="datagridNoWrapValues">true</control-param>
                             <control-param name="datagridStrippedCols">lecm-contractor:fullname</control-param>
                             <control-param name="datagridMaxSColWidth">21</control-param>
-                            <control-param name="datagridStyles">middle-align</control-param>
+                            <control-param name="datagridStyles">middle-align max-height65</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1283,7 +1283,7 @@
                             <control-param name="datagridNoWrapValues">true</control-param>
                             <control-param name="datagridStrippedCols">lecm-contractor:physical-address</control-param>
                             <control-param name="datagridMaxSColWidth">21</control-param>
-                            <control-param name="datagridStyles">middle-align</control-param>
+                            <control-param name="datagridStyles">middle-align max-height65</control-param>
                         </control>
                     </field>
                 </appearance>
