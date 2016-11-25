@@ -149,10 +149,10 @@ LogicECM.module = LogicECM.module || {};
 				this.widgets[obj.itemKey].eventGroup = this.eventGroup;
 
 				//переопределение методов из options
-				if(obj.options.getExtSearchQueryFunction && YAHOO.lang.isFunction(obj.options.getExtSearchQueryFunction)) {
+				if(YAHOO.lang.isFunction(obj.options.getExtSearchQueryFunction)) {
 					this.widgets[obj.itemKey]['_fnGetExtSearchQuery'] = obj.options.getExtSearchQueryFunction;
 				}
-				if(obj.options.getArgumentsFromFormFunction && YAHOO.lang.isFunction(obj.options.getArgumentsFromFormFunction)) {
+				if(YAHOO.lang.isFunction(obj.options.getArgumentsFromFormFunction)) {
 					this.widgets[obj.itemKey]['_fnGetArgumentsFromForm'] = obj.options.getArgumentsFromFormFunction;
 				}
 			}, this);

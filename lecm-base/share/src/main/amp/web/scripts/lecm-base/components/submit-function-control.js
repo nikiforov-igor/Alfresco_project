@@ -25,7 +25,7 @@ LogicECM.module = LogicECM.module || {};
             if (this.options.form && this.options.form.formsRuntime) {
                 this.formsRuntime = this.options.form.formsRuntime;
 
-                if (this.options.submitFunction && YAHOO.lang.isFunction(this.options.submitFunction)) {
+                if (YAHOO.lang.isFunction(this.options.submitFunction)) {
                     this.submitButton = this.formsRuntime.submitElements[0];
                     this.submitFormFunction = this.submitButton.submitForm;
 
