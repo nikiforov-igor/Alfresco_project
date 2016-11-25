@@ -22,7 +22,6 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
 
     private SimpleStatemachineHelper simpleStatemachineHelper;
     private LifecycleStateMachineHelper lifecycleStateMachineHelper;
-    private NamespaceService namespaceService;
     private NodeService nodeService;
 
     public void setSimpleStatemachineHelper(SimpleStatemachineHelper simpleStatemachineHelper) {
@@ -31,10 +30,6 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
 
     public void setLifecycleStateMachineHelper(LifecycleStateMachineHelper lifecycleStateMachineHelper) {
         this.lifecycleStateMachineHelper = lifecycleStateMachineHelper;
-    }
-
-    public void setNamespaceService(NamespaceService namespaceService) {
-        this.namespaceService = namespaceService;
     }
 
     public void setNodeService(NodeService nodeService) {
@@ -258,7 +253,7 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
 
 	@Override
 	public Set<String> getArchiveFolders(QName documentType) {
-		getHelper(documentType).getArchiveFolders(documentType);
+		return getHelper(documentType).getArchiveFolders(documentType);
 	}
 
 	@Override
@@ -307,7 +302,7 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
 	}
 
     private StateMachineServiceBean getHelper(String type) {
-        return getHelper(QName.createQName(type, namespaceService));
+        return getHelper(lifecycleStateMachineHelper.isSimpleDocument(type));
     }
 
     private StateMachineServiceBean getHelper(NodeRef document) {
@@ -315,12 +310,16 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
     }
 
     private StateMachineServiceBean getHelper(QName type) {
-        if (lifecycleStateMachineHelper.isSimpleDocument(type.toPrefixString(namespaceService))) {
+        return getHelper(lifecycleStateMachineHelper.isSimpleDocument(type));
+    }
+	
+	private StateMachineServiceBean getHelper(boolean isSimpleDocument) {
+		if (isSimpleDocument) {
             return simpleStatemachineHelper;
         } else {
 			return lifecycleStateMachineHelper;
 		}
-    }
+	}
 
 	@Override
 	public void checkArchiveFolder(String type, boolean forceRebuildACL) {

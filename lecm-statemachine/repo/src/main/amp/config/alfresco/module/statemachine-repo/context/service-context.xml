@@ -110,7 +110,6 @@
 	<bean id="stateMachineHelper" class="ru.it.lecm.statemachine.StatemachineHelperProxy">
 		<property name="simpleStatemachineHelper" ref="simpleStateMachineHelper" />
 		<property name="lifecycleStateMachineHelper" ref="lifecycleStateMachineHelper" />
-		<property name="namespaceService" ref="namespaceService" />
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
 
@@ -216,7 +215,6 @@
 		<property name="documentConnectionService" ref="documentConnectionService"/>
 		<property name="documentService" ref="documentService"/>
 		<property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
-		<property name="namespaceService" ref="namespaceService" />
 	</bean>
 
     <bean id="stateMachineDeleteDocumentPolicy" class="ru.it.lecm.statemachine.policy.StateMachineDeleteDocumentPolicy" init-method="init">

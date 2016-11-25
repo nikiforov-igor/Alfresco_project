@@ -56,11 +56,6 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 	private DocumentConnectionService documentConnectionService;
     private DocumentService documentService;
     private RepositoryStructureHelper repositoryStructureHelper;
-	private NamespaceService namespaceService;
-
-	public void setNamespaceService(NamespaceService namespaceService) {
-		this.namespaceService = namespaceService;
-	}
 
     public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
         this.repositoryStructureHelper = repositoryStructureHelper;
@@ -123,7 +118,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
             logger.error("Cannot create connections root folder", ex);
         }
 
-        if (!stateMachineHelper.isSimpleDocument(type.toPrefixString(namespaceService))) {
+        if (!stateMachineHelper.isSimpleDocument(type)) {
             // Ensure that the transaction listener is bound to the transaction
             AlfrescoTransactionSupport.bindListener(this.transactionListener);
 
@@ -143,15 +138,14 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
             AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
                 @Override
                 public Object doWork() throws Exception {
-					String typeStr = type.toPrefixString(namespaceService);
-					String archiveFolderStr = stateMachineHelper.getArchiveFolder(typeStr);
+					String archiveFolderStr = stateMachineHelper.getArchiveFolder(type);
 					
                     String rootFolder = documentService.execStringExpression(docRef, archiveFolderStr);
                     if (rootFolder == null) {
                         rootFolder = "/Документы без МС";
                     }
 					
-					stateMachineHelper.checkArchiveFolder(typeStr, false);
+					stateMachineHelper.checkArchiveFolder(type, false);
 
                     NodeRef archiveFolder = repositoryStructureHelper.getCompanyHomeRef();
                     //Создаем основной путь до папки
