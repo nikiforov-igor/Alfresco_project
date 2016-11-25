@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.cmr.security.PermissionService;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
@@ -262,7 +263,8 @@ public class SimpleStatemachineHelper extends LifecycleStateMachineHelper {
 	public void checkArchiveFolder(String type, boolean forceRebuildACL) {
 		String pathStr = "Документы без МС";
 		String archiveFolder = getArchiveFolder(type);
-		
+		boolean rebuildACLRequired = forceRebuildACL;
+
 		if (archiveFolder != null && !archiveFolder.isEmpty()) {
 			String[] storePath = archiveFolder.split("/");
 			for (String pathItem : storePath) {
@@ -272,21 +274,25 @@ public class SimpleStatemachineHelper extends LifecycleStateMachineHelper {
 				}
 			}
 		}
-		
+
 		NodeRef typeRoot = getFolder(repositoryHelper.getCompanyHome(), pathStr);
 		if (typeRoot == null) {
+			String user = AuthenticationUtil.getFullyAuthenticatedUser();
+			AuthenticationUtil.setFullyAuthenticatedUser(AuthenticationUtil.getSystemUserName());
 			try {
 				List<String> paths = new ArrayList<>();
 				paths.add(pathStr);
 				typeRoot = createPath(repositoryHelper.getCompanyHome(), paths);
 				
-				rebuildACL(type, typeRoot);
+				rebuildACLRequired = true;
 			} catch (WriteTransactionNeededException ex) {
 				logger.error("Failed to create Simple Document folder due lack of RW transaction", ex);
+			} finally {
+				AuthenticationUtil.setFullyAuthenticatedUser(user);
 			}
 		}
-		
-		if (forceRebuildACL) {
+
+		if (rebuildACLRequired) {
 			rebuildACL(type, typeRoot);
 		}
 	}
