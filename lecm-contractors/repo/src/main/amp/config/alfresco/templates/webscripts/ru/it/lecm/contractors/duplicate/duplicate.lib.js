@@ -1,3 +1,5 @@
+<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/search.lib.js">
+
 function getDuplicatesInfo (model, query) {
     var count = searchCounter.query({
         query: query,
@@ -21,4 +23,14 @@ function getDuplicatesInfo (model, query) {
             }
         }
     }
+};
+
+function concatQuery(baseQuery, operator, field, value, notEscape, notQuoted) {
+    if (value) {
+        if (baseQuery) {
+            baseQuery += (' ' + operator + ' ');
+        }
+        baseQuery += (field + ':' +  (notQuoted ? '' : '\"') + (notEscape ? value : escapeString("" + value)) + (notQuoted ? '' : '\"'));
+    }
+    return baseQuery;
 }
