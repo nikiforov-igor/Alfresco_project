@@ -33,6 +33,10 @@
                     <show id="errands-change-controller-handler-script" force="true"/>
 
                     <show id="lecm-resolutions:reviewers-assoc"/>
+
+                    <show id="lecm-resolutions:is-draft"/>
+                    <show id="resolution-create-form" force="true"/>
+                    <show id="save-draft-button" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="start" template="/ru/it/lecm/eds/controls/2-column-parent-set.ftl"/>
@@ -40,9 +44,10 @@
                     <set id="start-right" parent="start"/>
                     <set id="start-right-start" parent="start-right"/>
                     <set id="limitation-date" parent="start-right" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
-                    <set id="end"/>
+                    <set id="errands"/>
                     <set id="reviewers-fieldset" appearance="fieldset" label-id="label.review"/>
                     <set id="reviewers" parent="reviewers-fieldset" template="/org/alfresco/components/form/2-column-set.ftl"/>
+                    <set id="end"/>
 
                     <field id="lecm-document:subject-assoc" set="start-left"/>
                     <field id="lecm-resolutions:author-assoc" set="start-left">
@@ -105,7 +110,7 @@
                         </constraint-handlers>
                     </field>
 
-                    <field id="lecm-resolutions:errands-json" label-id="field.primaryRouting.errands.title" set="end">
+                    <field id="lecm-resolutions:errands-json" label-id="field.primaryRouting.errands.title" set="errands">
                         <control template="/ru/it/lecm/eds/controls/multi-form-control.ftl">
                             <control-param name="availableRemoveDefault">false</control-param>
                             <control-param name="documentType">lecm-errands:document</control-param>
@@ -119,17 +124,17 @@
                                 }]]></control-param>
                         </control>
                     </field>
-                    <field id="change-errand-type-script" set="end">
+                    <field id="change-errand-type-script" set="errands">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-reinit-title-by-type.js</control-param>
                         </control>
                     </field>
-                    <field id="errands-limitation-date-script" set="end">
+                    <field id="errands-limitation-date-script" set="errands">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
                         </control>
                     </field>
-                    <field id="errands-change-controller-handler-script" >
+                    <field id="errands-change-controller-handler-script" set="errands">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-change-controller-handler.js</control-param>
                         </control>
@@ -161,6 +166,21 @@
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_showAssocViewForm">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-resolutions:is-draft" set="end">
+                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    </field>
+                    <field id="resolution-create-form" set="end">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-resolution/lecm-resolution-create-form.js</control-param>
+                            <control-param name="scriptLoadedFireAction">resolutionCreateFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                    <field id="save-draft-button" label-id="label.save-draft" set="end">
+                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
+                            <control-param name="clickFireAction">saveDraftResolutionButtonClick</control-param>
                         </control>
                     </field>
                 </appearance>
