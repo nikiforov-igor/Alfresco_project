@@ -45,6 +45,8 @@ public interface StateMachineServiceBean {
 	 * @return
 	 */
 	boolean isStarter(String type);
+	
+	boolean isStarter(QName type);
 
 	/*
      * Используется в
@@ -67,6 +69,8 @@ public interface StateMachineServiceBean {
 	 * @return true - если нельзя создавать из АРМ-а
 	 */
 	boolean isNotArmCreate(String type);
+	
+	boolean isNotArmCreate(QName type);
 
 	/**
 	 * Возвращает список возможных статусов для определенного типа документа
@@ -75,6 +79,8 @@ public interface StateMachineServiceBean {
 	 * @return
 	 */
 	List<String> getStatuses(String documentType, boolean includeActive, boolean includeFinal);
+	
+	List<String> getStatuses(QName documentType, boolean includeActive, boolean includeFinal);
 
 	/**
 	 * Получение всех динамических ролей по документу
@@ -120,6 +126,8 @@ public interface StateMachineServiceBean {
 	 * @return
 	 */
 	Set<String> getStarterRoles(String documentType);
+
+	Set<String> getStarterRoles(QName documentType);
 
 	void checkReadOnlyCategory(NodeRef document, String category);
 
@@ -220,6 +228,8 @@ public interface StateMachineServiceBean {
      * 		- documents.summary.get.js
      */
 	Set<String> getArchiveFolders(String documentType);
+
+	Set<String> getArchiveFolders(QName documentType);
 	
 	/**
 	 * TODO: Сейчас это костыль, чтобы обойти проблемы с макросами
@@ -228,6 +238,8 @@ public interface StateMachineServiceBean {
 	 * @return 
 	 */
 	String getArchiveFolder(String documentType);
+	
+	String getArchiveFolder(QName documentType);
 
 	void resetStateMachene();
 
@@ -255,12 +267,16 @@ public interface StateMachineServiceBean {
 	 */
 	Map<String, String> getPermissions(String type);
 	
+	Map<String, String> getPermissions(QName type);
+	
 	/**
 	 * Проверка имеет ли документ флаг simpleDocument
 	 * @param type
 	 * @return 
 	 */
 	boolean isSimpleDocument(String type);
+	
+	boolean isSimpleDocument(QName type);
 	
 	/**
 	 * Проверка на наличие корневой папки для типа документа
@@ -272,4 +288,6 @@ public interface StateMachineServiceBean {
 	 *							даже при наличии папки 
 	 */
 	void checkArchiveFolder(String type, boolean forceRebuildACL);
+	
+	void checkArchiveFolder(QName type, boolean forceRebuildACL);
 }

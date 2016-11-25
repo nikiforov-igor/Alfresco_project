@@ -100,6 +100,7 @@
         <property name="documentConnectionService" ref="documentConnectionService"/>
         <property name="workCalendarService" ref="WorkCalendarService" />
         <property name="statemachenesCache" ref="statemachines.cache" />
+        <property name="namespaceService" ref="namespaceService" />
 	</bean>
 
 	<bean id="simpleStateMachineHelper" class="ru.it.lecm.statemachine.SimpleStatemachineHelper" parent="lifecycleStateMachineHelper">

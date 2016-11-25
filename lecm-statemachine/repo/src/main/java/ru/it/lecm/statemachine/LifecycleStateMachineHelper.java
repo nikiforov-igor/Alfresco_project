@@ -105,9 +105,15 @@ public class LifecycleStateMachineHelper extends BaseBean implements StateMachin
     protected DocumentConnectionService documentConnectionService;
     protected LecmPermissionService lecmPermissionService;
     protected IWorkCalendar workCalendarService;
+	protected NamespaceService namespaceService;
+
 
     Lock lock = new ReentrantLock();
     
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
+	}
+	
     public void setRepositoryHelper(Repository repositoryHelper) {
         this.repositoryHelper = repositoryHelper;
     }
@@ -233,6 +239,11 @@ public class LifecycleStateMachineHelper extends BaseBean implements StateMachin
         return isStarter(type, employee);
     }
 
+	@Override
+	public boolean isStarter(QName type) {
+		return isStarter(type.toPrefixString(namespaceService));
+	}
+
     /*
      * Выборка статусов для всех экземпляров процессов для определенного типа документа
      * @param documentType - тип документа
@@ -254,6 +265,11 @@ public class LifecycleStateMachineHelper extends BaseBean implements StateMachin
         Collections.sort(statusesList);
         return statusesList;
     }
+
+	@Override
+	public List<String> getStatuses(QName documentType, boolean includeActive, boolean includeFinal) {
+		return getStatuses(documentType.toPrefixString(namespaceService), includeActive, includeFinal);
+	}
 
     @Override
     public List<String> getAllDynamicRoles(NodeRef document) {
@@ -290,6 +306,12 @@ public class LifecycleStateMachineHelper extends BaseBean implements StateMachin
         accessRoles.addAll(getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().getStarterRoles());
         return accessRoles;
     }
+
+	@Override
+	public Set<String> getStarterRoles(QName documentType) {
+		return getStarterRoles(documentType.toPrefixString(namespaceService));
+	}
+	
     /*
      * Возвращает текущий Task процесса по processInstanceId
      * Если процесс на переходе, то вернет предидущую Task-у
@@ -827,11 +849,23 @@ public class LifecycleStateMachineHelper extends BaseBean implements StateMachin
     }
 
 	@Override
+	public Set<String> getArchiveFolders(QName documentType) {
+		return getArchiveFolders(documentType.toPrefixString(namespaceService));
+	}
+	
+	
+
+	@Override
 	public String getArchiveFolder(String documentType) {
 		String statmachene = documentType.replace(":", "_");
         return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().getArchiveFolder();
 	}
 
+	@Override
+	public String getArchiveFolder(QName documentType) {
+		return getArchiveFolder(documentType.toPrefixString(namespaceService));
+	}
+	
     private NodeRef serviceRoot = null;
     private NodeRef versionsRoot = null;
     //TODO Передеалть в Map?
@@ -2691,7 +2725,7 @@ public class LifecycleStateMachineHelper extends BaseBean implements StateMachin
         }
 		return false;
 	}
-
+	
 	/**
      * Возвращает можно ли создавать документ из АРМ-а
      * @param type - тип документа
@@ -2701,6 +2735,11 @@ public class LifecycleStateMachineHelper extends BaseBean implements StateMachin
 	public boolean isNotArmCreate(String type) {
     	String statmachene = type.replace(":", "_");
         return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().isNotArmCreate();
+    }
+	
+	@Override
+	public boolean isNotArmCreate(QName type) {
+        return isNotArmCreate(type.toPrefixString(namespaceService));
     }
 
 
@@ -2770,16 +2809,31 @@ public class LifecycleStateMachineHelper extends BaseBean implements StateMachin
 		String statmachene = type.replace(":", "_");
         return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().getPermissions();
 	}
+
+	@Override
+	public Map<String, String> getPermissions(QName type) {
+		return getPermissions(type.toPrefixString(namespaceService));
+	}
 	
 	@Override
 	public boolean isSimpleDocument(String type) {
 		String statmachene = type.replace(":", "_");
         return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().isSimpleDocument();
 	}
+
+	@Override
+	public boolean isSimpleDocument(QName type) {
+		return isSimpleDocument(type.toPrefixString(namespaceService));
+	}
 	
 	@Override
 	public void checkArchiveFolder(String type, boolean forceRebuildACL) {
 		// Не реализовано, т.к такой функционал пока что нужен только для документов без ЖЦ
+	}
+
+	@Override
+	public void checkArchiveFolder(QName type, boolean forceRebuildACL) {
+		checkArchiveFolder(type.toPrefixString(namespaceService), forceRebuildACL);
 	}
 	
 	@Override
@@ -2787,7 +2841,7 @@ public class LifecycleStateMachineHelper extends BaseBean implements StateMachin
 		return null;
 	}
 	
-	
+
 ///////////////////////////////////////////////////////// Statemachine Structure start ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////// Statemachine Structure end ////////////////////////////////////////////////////////////////
 
