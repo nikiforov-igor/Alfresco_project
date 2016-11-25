@@ -85,6 +85,8 @@
 <#if field.control.params.showExSearchBtn??>
     <#assign exSearch = (field.control.params.showExSearchBtn == "true")/>
 </#if>
+
+<#assign showToolbar=showCreateButton || showSearchControl || exSearch>
 <#-- Toolbar Config End -->
 
 <#-- Dialogs Config Start -->
@@ -141,7 +143,7 @@
     var Dom = YAHOO.util.Dom;
 
     function createToolbar(nodeRef) {
-    <#if showCreateButton || showSearchControl || exSearch>
+    <#if showToolbar>
         new LogicECM.module.Base.Toolbar(null, "${fieldHtmlId}").setMessages(${messages}).setOptions({
             bubblingLabel: "${bubblingId}",
             itemType: "${itemType}",
@@ -360,7 +362,7 @@
     </#if>
         <div class="value-div">
             <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${defaultValue?html}"/>
-        <#if showCreateButton || showSearchControl || exSearch>
+        <#if showToolbar>
             <@comp.baseToolbar fieldHtmlId true showSearchControl exSearch>
                 <#if showCreateButton>
                     <div class="new-row">
