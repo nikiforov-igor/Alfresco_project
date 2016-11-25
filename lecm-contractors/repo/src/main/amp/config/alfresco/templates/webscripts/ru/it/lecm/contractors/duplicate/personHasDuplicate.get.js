@@ -1,3 +1,6 @@
+<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/search.lib.js">
+<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/contractors/duplicate/duplicate.lib.js">
+
 function main() {
     var lastName = args["lastName"] ? args["lastName"] : null;
     var firstName = args["firstName"] ? args["firstName"] : null;
@@ -43,13 +46,13 @@ function main() {
         if (query.length > 0) {
             query += ' OR ';
         }
-        query += '=@lecm\\-contractor\\:INN:\"' + _escapeString(inn) + '\"';
+        query += '=@lecm\\-contractor\\:INN:\"' + escapeString(inn) + '\"';
     }
     if (ogrn && ogrn.length > 0) {
         if (query.length > 0) {
             query += ' OR ';
         }
-        query += '=@lecm\\-contractor\\:OGRN:\"' + _escapeString(ogrn) + '\"';
+        query += '=@lecm\\-contractor\\:OGRN:\"' + escapeString(ogrn) + '\"';
     }
     query += ')';
 
@@ -57,48 +60,7 @@ function main() {
         query += " AND NOT ID:\"" + args["nodeRef"] + "\"";
     }
 
-    var count = searchCounter.query({
-        query: query,
-        language: "fts-alfresco",
-        onerror: "exception"
-    });
-
-    model.hasDuplicate = count > 0;
-    model.duplicates = [];
-
-    if (model.hasDuplicate) {
-        var results = search.query({
-            query: query,
-            language: "fts-alfresco",
-            onerror: "exception"
-        });
-
-        for (var i in results) {
-            var person = results[i];
-            if (person) {
-                model.duplicates.push(person);
-            }
-        }
-    }
-}
-
-function _escapeString(value) {
-    var result = "";
-    for (var i = 0, c; i < value.length; i++) {
-        c = value.charAt(i);
-        if (i == 0) {
-            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= 'а' && c <= 'я') || (c >= 'А' && c <= 'Я') || (c >= '0' && c <= '9') || c == '_')) {
-                result += '\\';
-            }
-        }
-        else {
-            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= 'а' && c <= 'я') || (c >= 'А' && c <= 'Я') || (c >= '0' && c <= '9') || c == '_' || c == '$' || c == '#')) {
-                result += '\\';
-            }
-        }
-        result += c;
-    }
-    return result;
-}
+    getDuplicatesInfo(model, query);
+};
 
 main();
