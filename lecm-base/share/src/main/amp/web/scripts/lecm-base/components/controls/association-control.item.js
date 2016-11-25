@@ -840,14 +840,16 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		_loadSearchForm: function () {
 			if (this.options.showExSearch && this.widgets.exSearch) {
 				// load the form component for the appropriate type
-				var formUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "/components/form?itemKind=type&itemId={itemId}&formId={formId}&mode=edit&showSubmitButton=false&showCancelButton=false",
-					{
-						itemId: this.options.itemType,
-						formId: "ex-control-search"
-					});
+				var formUrl = Alfresco.constants.URL_SERVICECONTEXT + "/components/form";
 
 				var formData = {
-					htmlid: this.widgets.exSearch.id + "-" + Alfresco.util.generateDomId()
+					htmlid: this.widgets.exSearch.id + "-" + Alfresco.util.generateDomId(),
+					itemKind: "type",
+					itemId: this.options.itemType,
+					formId: "ex-control-search",
+					mode: "edit",
+					showSubmitButton: false,
+					showCancelButton: false
 				};
 				this.currentState.exSearchFormId = formData.htmlid + "-form";
 
@@ -857,7 +859,11 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 						dataObj: formData,
 						successCallback: {
 							fn: function (response) {
-								this.widgets.exSearch.innerHTML = response.serverResponse.responseText;
+								var markupAndScripts = Alfresco.util.Ajax.sanitizeMarkup(response.serverResponse.responseText),
+									markup = markupAndScripts[0],
+									scripts = markupAndScripts[1];
+								this.widgets.exSearch.innerHTML = markup;
+								setTimeout(scripts, 0);
 							},
 							scope: this
 						},
@@ -869,12 +875,10 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 		_generateCreateNewParams: function (nodeRef, itemType) {
 			var args = {};
-			if (this.options.fillFormFromSearch) {
-				if (this.widgets.exSearch && this.currentState.exSearchFormId) {
-					var currentForm = Dom.get(this.currentState.exSearchFormId);
-					if (currentForm) {
-						args = this._fnGetArgumentsFromForm(currentForm);
-					}
+			if (this.options.fillFormFromSearch && this.widgets.exSearch && this.currentState.exSearchFormId) {
+				var currentForm = Dom.get(this.currentState.exSearchFormId);
+				if (currentForm) {
+					args = this._fnGetArgumentsFromForm(currentForm);
 				}
 			}
 			return {
