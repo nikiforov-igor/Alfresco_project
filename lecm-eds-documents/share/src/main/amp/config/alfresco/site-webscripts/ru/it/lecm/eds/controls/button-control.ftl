@@ -30,10 +30,10 @@
                     formButtons.appendChild(button);
                     break;
                 case 'prepend':
-                    formButtons.insertBefore(button,formButtons.children[0]);
+                    formButtons.insertBefore(button,formButtons.firstElementChild);
                     break;
                 default:
-                    formButtons.insertBefore(button,formButtons.children[0]);
+                    formButtons.insertBefore(button,formButtons.firstElementChild);
                     break;
             }
             YAHOO.util.Event.addListener(button,'click',function(){
