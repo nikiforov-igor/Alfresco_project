@@ -21,7 +21,8 @@
     width: calc(100% - 205px);
 }
 
-.resolution-create-form fieldset .yui-g .yui-u .control .label-div {
+.resolution-create-form fieldset .yui-g .yui-u .control .label-div,
+.resolution-create-form fieldset .yui-g .yui-u.first .control .label-div {
     width: 170px;
 }
 
