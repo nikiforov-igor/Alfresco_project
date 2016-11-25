@@ -181,7 +181,7 @@ public class ContractorsBean extends BaseBean implements Contractors {
                 sb.append(s.charAt(i));
             }
         }
-        return sb.toString();
+        return sb.toString().trim();
     }
 
     private String delDicValuesFromString(String str, NodeRef dictionary) {
