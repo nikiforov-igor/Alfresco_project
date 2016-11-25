@@ -68,6 +68,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
             pickerTypes: ['week-days', 'month-days'],
             days: Alfresco.util.message('days.short').split(','),
             daysFull: Alfresco.util.message('days.long').split(','),
+            clickCount : 0,
 
             onReady: function () {
                 var first = this.days.shift();
@@ -76,7 +77,14 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                 this.daysFull.push(first);
 
                 var select = Dom.get(this.id + '-type');
-                Event.addListener(select, 'click', this.onChangeType, this, true);
+                Event.addListener(select, 'click',function(e,args){
+                    //один открыть dropdown, другой выбрать опцию.
+                    this.clickCount++;
+                    if(e.detail == 0 || this.clickCount == 2 || e.offsetY < 0) {
+                        this.onChangeType(e, args);
+                        this.clickCount = 0;
+                    }
+                }, this, true);
                 var value = this.getControlValue();
                 var message = this.getSummary(value);
                 if (value) {
@@ -213,19 +221,17 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
             },
 
             onChangeType: function onChangeType_function(ev, args) {
-                if (ev.detail == 0) {
-                    var to = ev.target.value;
-                    if (to && to != "DAILY") {
-                        if (!this.isPanelShown) {
-                            this.openDialog();
-                        }
-                        if (this.currentType != to) {
-                            this._switchType(this.currentType, to);
-                        }
-                    } else if (to == "DAILY") {
-                        this.currentType = to;
-                        this.updateValue(this.getValue());
+                var to = ev.target.value;
+                if (to && to != "DAILY") {
+                    if (!this.isPanelShown) {
+                        this.openDialog();
                     }
+                    if (this.currentType != to) {
+                        this._switchType(this.currentType, to);
+                    }
+                } else if (to == "DAILY") {
+                    this.currentType = to;
+                    this.updateValue(this.getValue());
                 }
             },
 

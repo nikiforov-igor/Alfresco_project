@@ -27,13 +27,13 @@
         if(formButtons && button) {
             switch ("${insertType}") {
                 case 'append':
-                    formButtons.append(button);
+                    formButtons.appendChild(button);
                     break;
                 case 'prepend':
-                    formButtons.prepend(button);
+                    formButtons.insertBefore(button,formButtons.children[0]);
                     break;
                 default:
-                    formButtons.prepend(button);
+                    formButtons.insertBefore(button,formButtons.children[0]);
                     break;
             }
             YAHOO.util.Event.addListener(button,'click',function(){
