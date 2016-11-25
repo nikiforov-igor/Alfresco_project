@@ -976,7 +976,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (record) {
 				var nodeRef = record.getData("nodeRef");
 
-				if (nodeRef != null) {
+				if (nodeRef) {
 					new Alfresco.module.SimpleDialog("edit-form-dialog-" + this.eventGroup).setOptions({
 						width: "50em",
 						templateUrl: "lecm/components/form",
@@ -999,10 +999,10 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 								}
 								p_dialog.dialog.setHeader(message);
 
-								p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+								p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id,  force: true}, this);
 
 								Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
-								if (this.options.editDialogClass != "") {
+								if (this.options.editDialogClass) {
 									Dom.addClass(p_dialog.id + "-form-container", this.options.editDialogClass);
 								}
 								this.doubleClickLock = false;
