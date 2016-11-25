@@ -30,6 +30,7 @@
                     <show id="lecm-resolutions:errands-json"/>
                     <show id="change-errand-type-script" force="true"/>
                     <show id="errands-limitation-date-script" force="true"/>
+                    <show id="errands-change-controller-handler-script" force="true"/>
 
                     <show id="lecm-resolutions:reviewers-assoc"/>
                 </field-visibility>
@@ -126,6 +127,11 @@
                     <field id="errands-limitation-date-script" set="end">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
+                        </control>
+                    </field>
+                    <field id="errands-change-controller-handler-script" >
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-change-controller-handler.js</control-param>
                         </control>
                     </field>
 
