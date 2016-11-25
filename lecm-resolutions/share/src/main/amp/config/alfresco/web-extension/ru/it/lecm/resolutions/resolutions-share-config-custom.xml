@@ -17,6 +17,7 @@
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
+                    <show id="resolution-change-controller-script" force="true"/>
                     <show id="lecm-resolutions:closers"/>
 
                     <show id="limitation-date-script" force="true"/>
@@ -49,9 +50,17 @@
                         </control>
                     </field>
                     <field id="lecm-resolutions:controller-assoc" set="start-left">
+                        <control>
+                            <control-param name="changeItemsFireAction">resolutionControllerChanged</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.controllerValidation" event="change" />
                         </constraint-handlers>
+                    </field>
+                    <field id="resolution-change-controller-script" set="start-left" >
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-resolution/resolution-change-controller.js</control-param>
+                        </control>
                     </field>
                     <field id="lecm-resolutions:closers" set="start-left">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
