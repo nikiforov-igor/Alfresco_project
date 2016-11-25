@@ -21,8 +21,15 @@
    </#if>
 </#if>
 
+<#assign disabled = field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>
+
+<#assign hidden = false>
+<#if field.control.params.hidden?? && field.control.params.hidden == "true">
+    <#assign hidden = true>
+</#if>
+
 <#if form.mode == "view">
-	<div class="control selectone viewmode">
+	<div id="${fieldHtmlId}-parent" class="control selectone viewmode<#if hidden> hidden1</#if>">
 		<div class="label-div">
 			<#if field.mandatory && !(field.value?is_number) && field.value == "">
 			<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png"
@@ -58,7 +65,7 @@
 		</div>
 	</div>
 <#else>
-	<div class="control selectone editmode">
+	<div id="${fieldHtmlId}-parent" class="control selectone editmode<#if hidden> hidden1</#if>">
 		<div class="label-div">
 			<label for="${fieldHtmlId}">${field.label?html}:
 				<#if field.mandatory>
@@ -93,3 +100,31 @@
 	</div>
 </#if>
 <div class="clear"></div>
+
+<script type="text/javascript">//<![CDATA[
+(function () {
+
+    function init() {
+        LogicECM.module.Base.Util.loadScripts([
+            'scripts/lecm-base/components/selectone-controller.js'
+        ], processController);
+    }
+
+    function processController() {
+        new LogicECM.module.SelectOneController("${fieldHtmlId}").setOptions({
+        <#if field.configName??>
+            fieldId: "${field.configName}",
+        </#if>
+        <#if args.htmlid??>
+            formId: "${args.htmlid}",
+        </#if>
+        <#if field.control.params.fireChangeEventName??>
+            fireChangeEventName: '${ield.control.params.fireChangeEventName}',
+        </#if>
+            disabled: ${disabled?string},
+        });
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
+  })();
+</script>
