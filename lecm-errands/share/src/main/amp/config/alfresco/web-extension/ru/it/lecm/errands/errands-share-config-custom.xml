@@ -393,7 +393,9 @@
                     </field>
 
                     <field id="lecm-errands:reiteration-rule" set="block3">
-                        <control template="/ru/it/lecm/errands/controls/errands-reiteration-control.ftl"/>
+                        <control template="/ru/it/lecm/errands/controls/errands-reiteration-control.ftl">
+                            <control-param name="defaultType">DAILY</control-param>
+                        </control>
                     </field>
 
                     <field id="lecm-errands:periodically-radio" set="errand-validity" mandatory="true">
