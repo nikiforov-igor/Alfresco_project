@@ -4,9 +4,7 @@
 "errands": [
     <#if results??>
         <#list results as result>
-        {
-        "result": ${result?string},
-        }<#if result_has_next>,</#if>
+            ${result?string}<#if result_has_next>,</#if>
         </#list>
     </#if>
 ]
