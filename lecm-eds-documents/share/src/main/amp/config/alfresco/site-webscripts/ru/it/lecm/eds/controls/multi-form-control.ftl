@@ -40,6 +40,9 @@
         <#if params.argsConfig??>
             argsConfig: ${params.argsConfig},
         </#if>
+        <#if params.submitFireEvent??>
+            submitFireEvent: "${params.submitFireEvent}",
+        </#if>
 
         <#if form.arguments??>
             args: {

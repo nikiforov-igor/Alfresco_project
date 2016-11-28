@@ -115,6 +115,7 @@
                             <control-param name="availableRemoveDefault">false</control-param>
                             <control-param name="documentType">lecm-errands:document</control-param>
                             <control-param name="documentFromId">from-resolution</control-param>
+                            <control-param name="submitFireEvent">sendResolution</control-param>
                             <control-param name="argsConfig"><![CDATA[{
                                     "assoc_lecm-resolutions_controller-assoc": "assoc_lecm-errands_controller-assoc",
                                     "prop_lecm-resolutions_limitation-date-radio": "prop_lecm-errands_limitation-date-radio",
