@@ -131,7 +131,10 @@ public abstract class AbstractCommonWCalendarBean extends BaseBean implements IC
 				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
 					@Override
 					public Void doWork() throws Exception {
-						createWCalendarContainer();
+						NodeRef container = getWCalendarContainer();
+						if (container == null) {
+							createWCalendarContainer();
+						}
 						return null;
 					}
 				});				
