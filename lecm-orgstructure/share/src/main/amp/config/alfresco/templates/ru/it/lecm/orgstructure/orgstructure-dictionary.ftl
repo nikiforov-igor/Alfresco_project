@@ -46,7 +46,7 @@
 <@bpage.basePage showHeader=true showTitle=true showToolbar=false showMenu=false>
     <div class="yui-t1" id="arm-with-tree">
         <@panels.twoPanels initialWidth=300 leftRegions=["accordion-toolbar","documents-tree"]>
-            <div id="arm-documents-html" class="hidden1 orgstructure-dictionary-page">
+            <div id="arm-documents-html" class="hidden1 orgstructure-page">
                 <@region id="arm-html-node" scope="template" />
             </div>
         </@panels.twoPanels>

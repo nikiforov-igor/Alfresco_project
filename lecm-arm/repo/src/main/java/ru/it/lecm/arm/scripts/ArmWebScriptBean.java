@@ -397,7 +397,10 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
         Boolean showCalendar = (Boolean) nodeService.getProperty(armRef, ArmService.PROP_ARM_SHOW_CALENDAR);
         return armRef != null && showCalendar != null && showCalendar;
     }
-
+    public boolean checkShowCreateButton(String code) {
+        NodeRef armRef = armService.getArmByCode(code);
+        return armRef != null && Boolean.TRUE.equals(nodeService.getProperty(armRef, ArmService.PROP_ARM_SHOW_CREATE_BUTTON));
+    }
     /**
      * Возвращает список АРМов для меню
      */

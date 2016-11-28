@@ -68,8 +68,7 @@
     margin-top: -4px;
 }
 
-.orgstructure-dictionary .orgstructure-tree,
-.orgstructure-dictionary-page .orgstructure-tree {
+.orgstructure-dictionary .orgstructure-tree {
     white-space: nowrap;
     overflow-x: hidden;
     overflow-y: auto;
@@ -77,8 +76,7 @@
     position: relative;
 }
 
-.orgstructure-dictionary .orgstructure-tree:after,
-.orgstructure-dictionary-page .orgstructure-tree:after {
+.orgstructure-dictionary .orgstructure-tree:after {
     content: "";
     width: 50px;
     height: 100%;
@@ -99,17 +97,4 @@
     width: 10px;
     max-width: 10px;
     visibility:hidden;
-}
-
-/* Страница Справочник организации */
-#yui-main #arm-with-tree #yui-main-2 .orgstructure-dictionary-page .toolbar {
-    height: 33px;
-    border-bottom: 1px solid #ccc;
-    margin: 0 -20px 10px;
-}
-#yui-main #arm-with-tree #yui-main-2 .orgstructure-dictionary-page .toolbar .header-bar {
-    padding: 2px 0;
-}
-#yui-main #arm-with-tree #yui-main-2 .orgstructure-dictionary-page .toolbar .header-bar .right {
-    margin-right: 20px;
 }
