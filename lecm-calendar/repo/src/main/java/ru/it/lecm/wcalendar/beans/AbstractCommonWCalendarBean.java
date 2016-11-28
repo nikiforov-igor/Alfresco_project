@@ -16,6 +16,8 @@ import ru.it.lecm.wcalendar.ICommonWCalendar;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 /**
  *
@@ -120,4 +122,21 @@ public abstract class AbstractCommonWCalendarBean extends BaseBean implements IC
 	public NodeRef getServiceRootFolder() {
             return getFolder(WORK_CALENDAR_FOLDER_ID);
 	}
+
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+			@Override
+			public Void execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+					@Override
+					public Void doWork() throws Exception {
+						createWCalendarContainer();
+						return null;
+					}
+				});				
+			}
+		});
+	}
+	
 }
