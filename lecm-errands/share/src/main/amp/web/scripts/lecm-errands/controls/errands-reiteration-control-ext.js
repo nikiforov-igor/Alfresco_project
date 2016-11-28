@@ -81,6 +81,8 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                     this.loadDefaultValue();
                 }
                 var el = Dom.get(this.id + '-displayValue');
+                //если поле не disabled - отображается как ссылка,
+                // иначе просто span
                 if (el.tagName === "A") {
                     Event.addListener(el, 'click', function (e) {
                         this.openDialog(e);
@@ -247,7 +249,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
             },
             onChangeType: function onChangeType_function(ev, args) {
                 var to = ev.target.value;
-                if (to || this.currentType != to) {
+                if (to && this.currentType != to) {
                     this._switchType(this.currentType, to);
                 }
             },
