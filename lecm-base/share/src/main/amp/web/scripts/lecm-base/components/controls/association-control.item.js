@@ -1033,60 +1033,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		},
 
 		_fnGetExtSearchQuery: function (currentForm) {
-			var exSearchFilter = '',
-				propNamePrefix = '@',
-				first = true;
-
-			for (var i = 0; i < currentForm.elements.length; i++) {
-				var element = currentForm.elements[i],
-					propName = element.name,
-					propValue = YAHOO.lang.trim(element.value);
-
-				if (propName && propValue && propValue.length) {
-					if (propName.indexOf("prop_") == 0) {
-						propName = propName.substr(5);
-						if (propName.indexOf("_") !== -1) {
-							propName = propName.replace("_", ":");
-							if (propName.match("-range$") == "-range") {
-								var from, to, sepindex = propValue.indexOf("|");
-								if (propName.match("-date-range$") == "-date-range") {
-									propName = propName.substr(0, propName.length - "-date-range".length);
-									from = (sepindex === 0 ? "MIN" : propValue.substr(0, 10));
-									to = (sepindex === propValue.length - 1 ? "MAX" : propValue.substr(sepindex + 1, 10));
-								} else {
-									propName = propName.substr(0, propName.length - "-number-range".length);
-									from = (sepindex === 0 ? "MIN" : propValue.substr(0, sepindex));
-									to = (sepindex === propValue.length - 1 ? "MAX" : propValue.substr(sepindex + 1));
-								}
-								exSearchFilter += (first ? '' : ' AND ') + propNamePrefix + this.escape(propName) + ':"' + from + '".."' + to + '"';
-								first = false;
-							} else {
-								exSearchFilter += (first ? '' : ' AND ') + propNamePrefix + this.escape(propName) + ':' + this.applySearchSettingsToTerm(this.escape(propValue), 'MATCHES');
-								first = false;
-							}
-						}
-					} else if (propName.indexOf("assoc_") == 0) {
-						var assocName = propName.substring(6);
-						if (assocName.indexOf("_") !== -1) {
-							assocName = assocName.replace("_", ":") + "-ref";
-							exSearchFilter += (first ? '(' : ' AND (');
-							var assocValues = propValue.split(",");
-							var firstAssoc = true;
-							for (var k = 0; k < assocValues.length; k++) {
-								var assocValue = assocValues[k];
-								if (!firstAssoc) {
-									exSearchFilter += " OR ";
-								}
-								exSearchFilter += this.escape(assocName) + ':"' + this.applySearchSettingsToTerm(this.escape(assocValue), 'CONTAINS') + '"';
-								firstAssoc = false;
-							}
-							exSearchFilter += ") ";
-							first = false;
-						}
-					}
-				}
-			}
-			return exSearchFilter;
+			return ACUtils.getQueryFromForm(currentForm);
 		},
 
 		_fnGetArgumentsFromForm: function (currentForm) {
