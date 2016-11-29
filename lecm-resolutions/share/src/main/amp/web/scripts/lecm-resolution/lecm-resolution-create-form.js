@@ -67,6 +67,7 @@
                                         }
                                     } else {
                                         var formId = args[1].form.formId.replace("-form", "") + "_prop_lecm-resolutions_errands-json-line-";
+                                        var hasInvalidErrands = false;
                                         for (var i = 0; i < errandsExecutionDates.length; i++) {
                                             if (!response.json.errands[i]) {
                                                 var inputId;
@@ -78,9 +79,13 @@
 
                                                 if (inputId) {
                                                     Dom.addClass(inputId, "execution-date-invalid");
-                                                    submitResolutionForm();
+                                                    hasInvalidErrands = true;
+                                                    break;
                                                 }
                                             }
+                                        }
+                                        if (hasInvalidErrands) {
+                                            submitResolutionForm();
                                         }
                                     }
                                 }
