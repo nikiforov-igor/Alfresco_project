@@ -131,6 +131,11 @@
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                 </property>
+                <!-- Короткое -->
+                <property name="lecm-resolutions:is-draft">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
 
                 <!-- Поиск/сортировка ассоциаций-->
                 <property name="lecm-resolutions:author-assoc-ref">

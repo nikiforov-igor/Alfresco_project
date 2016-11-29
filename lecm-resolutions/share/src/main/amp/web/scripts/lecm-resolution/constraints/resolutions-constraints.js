@@ -41,3 +41,12 @@ LogicECM.module.Resolutions.controllerValidation =
         }
         return true;
     };
+LogicECM.module.Resolutions.ErrandsExecutionDateValidation =
+    function (field) {
+        if (YAHOO.util.Dom.hasClass(field, "execution-date-invalid")) {
+            YAHOO.util.Dom.removeClass(field, "execution-date-invalid");
+            return false;
+        } else {
+            return true;
+        }
+    };

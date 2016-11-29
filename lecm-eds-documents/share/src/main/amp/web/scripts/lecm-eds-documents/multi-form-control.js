@@ -39,7 +39,8 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 availableRemoveDefault: true,
                 fixSimpleDialogId: null,
                 argsConfig: null,
-                args: null
+                args: null,
+                submitFireEvent: null
             },
             currentLine: 0,
             rootSubmitElement: null,
@@ -167,7 +168,14 @@ LogicECM.module.eds = LogicECM.module.eds || {};
             },
 
             submitRootForm: function () {
-                if (YAHOO.lang.isFunction(this.rootFormSubmitFunction) && this.rootSubmitElement) {
+                if (this.options.submitFireEvent) {
+                    YAHOO.Bubbling.fire(this.options.submitFireEvent,
+                        {
+                            form: this.options.rootForm,
+                            submitFunction: this.rootFormSubmitFunction,
+                            submitElement: this.rootSubmitElement
+                        });
+                } else if (YAHOO.lang.isFunction(this.rootFormSubmitFunction) && this.rootSubmitElement) {
                     this.rootFormSubmitFunction.call(this.rootSubmitElement);
                 }
             },
