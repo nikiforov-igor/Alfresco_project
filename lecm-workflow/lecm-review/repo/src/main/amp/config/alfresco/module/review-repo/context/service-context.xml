@@ -126,23 +126,16 @@
 		  p:reviewService-ref="reviewService"
 	/>
 
-	<bean id="reviewNotificationSchedule" class="ru.it.lecm.workflow.review.schedule.ReviewNotificationSchedule"
-		  p:transactionMode="ISOLATED_TRANSACTIONS"
-		  p:compensatingActionMode="IGNORE"
+	<bean id="reviewNotificationSchedule" class="ru.it.lecm.workflow.review.schedule.ReviewNotificationSchedule" parent="baseTransactionalSchedule"
           p:cronExpression="0 0 5 */1 * ?"
-          p:firstStartExpression="0 */15 * * * ?"
-          p:onServerStart="false"
           p:jobName="review-notification"
 		  p:jobGroup="review"
 		  p:triggerName="review-notification-trigger"
 		  p:triggerGroup="review-trigger"
-		  p:runAsUser="System"
-		  p:scheduler-ref="schedulerFactory"
+		  p:actionName="reviewNotificationExecutor"
 		  p:documentService-ref="documentService"
 		  p:reviewService-ref="reviewService"
 		  p:calendarBean-ref="WorkCalendarService"
-		  p:actionService-ref="ActionService"
-		  p:transactionService-ref="TransactionService"
 	/>
 
 	<bean parent="ServiceFolderPermissionHelper">

@@ -320,24 +320,9 @@
     <property name="publicAction" value="false" />
     </bean>
 
-    <bean id="errandsEveryDayStatusSchedule" class="ru.it.lecm.errands.shedule.EveryDayStatusShedule">
-        <property name="transactionMode">
-            <value>ISOLATED_TRANSACTIONS</value>
-        </property>
-        <property name="compensatingActionMode">
-            <value>IGNORE</value>
-        </property>
-        <property name="nodeService">
-            <ref bean="nodeService"/>
-        </property>
+    <bean id="errandsEveryDayStatusSchedule" class="ru.it.lecm.errands.shedule.EveryDayStatusShedule" parent="baseTransactionalSchedule">
         <property name="cronExpression">
             <value>0 0 5 */1 * ?</value>
-        </property>
-        <property name="firstStartExpression">
-            <value>0 */15 * * * ?</value>
-        </property>
-        <property name="onServerStart">
-            <value>false</value>
         </property>
         <property name="jobName">
             <value>errands-sys-agent-status</value>
@@ -351,17 +336,8 @@
         <property name="triggerGroup">
             <value>errands-status-trigger</value>
         </property>
-        <property name="scheduler">
-            <ref bean="schedulerFactory"/>
-        </property>
-        <property name="actionService">
-            <ref bean="ActionService"/>
-        </property>
-        <property name="transactionService">
-            <ref bean="TransactionService"/>
-        </property>
-        <property name="runAsUser">
-            <value>System</value>
+        <property name="actionName">
+            <value>errandsEveryDayStatusExecutor</value>
         </property>
         <property name="namespaceService" ref="namespaceService"/>
         <property name="documentService" ref="documentService"/>
@@ -374,16 +350,7 @@
     <property name="publicAction" value="false" />
     </bean>
 
-    <bean id="errandsEveryDayNotificationSchedule" class="ru.it.lecm.errands.shedule.EveryDayNotificationShedule">
-        <property name="transactionMode">
-            <value>ISOLATED_TRANSACTIONS</value>
-        </property>
-        <property name="compensatingActionMode">
-            <value>IGNORE</value>
-        </property>
-        <property name="nodeService">
-            <ref bean="nodeService"/>
-        </property>
+    <bean id="errandsEveryDayNotificationSchedule" class="ru.it.lecm.errands.shedule.EveryDayNotificationShedule" parent="baseTransactionalSchedule">
         <property name="cronExpression">
             <value>0 15 5 */1 * ?</value>
         </property>
@@ -405,17 +372,8 @@
         <property name="triggerGroup">
             <value>errands-notifications-trigger</value>
         </property>
-        <property name="scheduler">
-            <ref bean="schedulerFactory"/>
-        </property>
-        <property name="actionService">
-            <ref bean="ActionService"/>
-        </property>
-        <property name="transactionService">
-            <ref bean="TransactionService"/>
-        </property>
-        <property name="runAsUser">
-            <value>System</value>
+        <property name="actionName">
+            <value>errandsEveryDayNotificationExecutor</value>
         </property>
         <property name="documentService" ref="documentService"/>
     </bean>

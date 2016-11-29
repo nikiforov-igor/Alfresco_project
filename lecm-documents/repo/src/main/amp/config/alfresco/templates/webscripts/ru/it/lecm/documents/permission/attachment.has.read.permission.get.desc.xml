@@ -5,5 +5,5 @@
 	<url>/lecm/documents/isEmpHasPermToReadAttachment</url>
 	<format default="json">extension</format>
 	<authentication runas="admin">none</authentication>
-    <transaction alllow="readonly">none</transaction>
+    <transaction allow="readonly">required</transaction>
 </webscript>

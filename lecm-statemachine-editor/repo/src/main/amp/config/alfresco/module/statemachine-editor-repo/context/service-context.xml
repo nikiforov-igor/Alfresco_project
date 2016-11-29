@@ -120,6 +120,7 @@
 		<property name="nodeService" ref="nodeService" />
 		<property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
 		<property name="simpleDocumentRegistry" ref="simpleDocumentRegistry" />
+		<property name="lecmTransactionHelper" ref="lecmTransactionHelper" />
 	</bean>
 
 </beans>
