@@ -136,29 +136,15 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 	}
 	
 	@Override
-	protected void onBootstrap(ApplicationEvent event)
-	{
+	public void initService() {
+		super.initService();
 		//создание контейнера для хранения параметров делегирования
-		AuthenticationUtil.runAsSystem(new RunAsWork<Void>() {
-
-			@Override
-			public Void doWork() throws Exception {
-				return lecmTransactionHelper.doInRWTransaction(new RetryingTransactionCallback<Void>() {
-
-					@Override
-					public Void execute() throws Throwable {
-						if (null == getDelegationOptsContainer()) {
-							createDelegationOptsContainer();
-						}
-						if (null == getGlobalSettingsNode()) {
-							createGlobalSettingsNode();
-						}
-						return null;
-					}
-				});
-
-			}
-		});
+		if (null == getDelegationOptsContainer()) {
+			createDelegationOptsContainer();
+		}
+		if (null == getGlobalSettingsNode()) {
+			createGlobalSettingsNode();
+		}
 	}
 
 	private NodeRef createDelegationOptsContainer() {

@@ -95,29 +95,15 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         this.documentConnectionService = documentConnectionService;
     }
     
-    protected void onBootstrap(ApplicationEvent event)
-	{
-//    	super.onBootstrap(event);
-			AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-
-            @Override
-            public Void doWork() throws Exception {
-                lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-
-                    @Override
-                    public Void execute() throws Throwable {
-                        if (null == getSettingsNode()) {
-                            settingsNode = createSettingsNode();
-                        }
-                        if (null == getDashletSettingsNode()) {
-                            dashletSettingsNode = createDashletSettingsNode();
-                        }
-                        return null;
-                    }
-                });
-                return null;
-            }
-        });
+    @Override
+	public void initService() {
+		super.initService();
+		if (null == getSettingsNode()) {
+			settingsNode = createSettingsNode();
+		}
+		if (null == getDashletSettingsNode()) {
+			dashletSettingsNode = createDashletSettingsNode();
+		}
 	}
 
     @Override

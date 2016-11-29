@@ -800,21 +800,5 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 
 		return resultList;
 	}
-	
-	@Override
-	protected void onBootstrap(ApplicationEvent event) {
-		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-			@Override
-			public Void execute() throws Throwable {
-				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-					@Override
-					public Void doWork() throws Exception {
-						getServiceRootFolder();
-						return null;
-					}
-				});
-			}
-		});
-	}
 
 }

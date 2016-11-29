@@ -124,22 +124,11 @@ public abstract class AbstractCommonWCalendarBean extends BaseBean implements IC
 	}
 
 	@Override
-	protected void onBootstrap(ApplicationEvent event) {
-		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-			@Override
-			public Void execute() throws Throwable {
-				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-					@Override
-					public Void doWork() throws Exception {
-						NodeRef container = getWCalendarContainer();
-						if (container == null) {
-							createWCalendarContainer();
-						}
-						return null;
-					}
-				});				
-			}
-		});
+	public void initService() {
+		// TODO: Надо привести сервис календарей к обычной системе папок и избавиться это этой странной логики
+		if(getWCalendarContainer() == null){
+			createWCalendarContainer();
+		}
 	}
 	
 }

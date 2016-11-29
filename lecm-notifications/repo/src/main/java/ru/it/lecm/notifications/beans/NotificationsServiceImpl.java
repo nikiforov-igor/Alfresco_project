@@ -123,21 +123,12 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         transactionListener = new NotificationTransactionListener();
     }
     
-    protected void onBootstrap(ApplicationEvent event)
-	{
-      //Проверить наличие и создать ноду с глобальными настройками.
-      //TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
-		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-
-			@Override
-			public Void execute() throws Throwable {
-				if (null == getGlobalSettingsNode()) {
-					settingsNode = createGlobalSettingsNode();
-				}
-				return null;
-			}
-		});
-      //transactionListener = new NotificationTransactionListener();
+    @Override
+	public void initService() {
+		super.initService();
+		if (null == getGlobalSettingsNode()) {
+			settingsNode = createGlobalSettingsNode();
+		}
 	}
 
     @Override

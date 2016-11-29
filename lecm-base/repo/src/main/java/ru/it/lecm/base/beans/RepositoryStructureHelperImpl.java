@@ -47,6 +47,7 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
     private final DateFormat FolderNameFormatDay = new SimpleDateFormat("dd");
 
     private static NodeRef rootref = null;
+	private static NodeRef homeRef = null;
     
     private Repository repository;
     private NodeService nodeService;
@@ -324,7 +325,10 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
      */
     @Override
     public NodeRef getHomeRef() {
-        return getFolder(getRootRef(), home);
+		if (homeRef == null) {
+			homeRef = getFolder(getRootRef(), home);
+		}
+        return homeRef;
     }
 
     /**

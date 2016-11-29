@@ -74,18 +74,4 @@ public class DocumentTemplateServiceImpl extends BaseBean implements DocumentTem
 		return templates;
 	}
 
-	@Override
-	protected void onBootstrap(ApplicationEvent event) {
-		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-			@Override
-			public NodeRef execute() throws Throwable {
-				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-					@Override
-					public NodeRef doWork() throws Exception {
-						return getServiceRootFolder();
-					}
-				});
-			}
-		});
-	}
 }

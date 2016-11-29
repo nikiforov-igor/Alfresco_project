@@ -8,7 +8,6 @@ package ru.it.lecm.operativestorage.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -21,7 +20,6 @@ import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.PropertyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.TransactionNeededException;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
@@ -98,27 +96,14 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		this.permissionService = permissionService;
 	}
 	
-	protected void onBootstrap(ApplicationEvent event)
-	{
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-		transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-			@Override
-			public Object execute() throws Throwable {
-				AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-					@Override
-					public Object doWork() throws Exception {
-						if (getSettings() == null) {
-							PropertyMap props = new PropertyMap();
-							props.put(PROP_OPERATIVE_STORAGE_CENRALIZED, true);
-							settingsNode = createNode(getOperativeStorageFolder(), TYPE_OPERATIVE_STORAGE_SETTING, OPERATIVE_STORAGE_GLOBAL_SETTING_NAME, props);
-							return null;
-						}
-						return null;
-					}
-				});
-				return null;
-			}
-		}, false, true);
+	@Override
+	public void initService() {
+		super.initService();
+		if (getSettings() == null) {
+			PropertyMap props = new PropertyMap();
+			props.put(PROP_OPERATIVE_STORAGE_CENRALIZED, true);
+			settingsNode = createNode(getOperativeStorageFolder(), TYPE_OPERATIVE_STORAGE_SETTING, OPERATIVE_STORAGE_GLOBAL_SETTING_NAME, props);				
+		}
 	}
 
 	@Override

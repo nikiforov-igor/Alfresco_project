@@ -42,22 +42,4 @@ public class WorkflowFoldersServiceImpl extends BaseBean implements WorkflowFold
             return getFolder(ASSIGNEES_LISTS_WORKING_COPY_FOLDER);
 	}
 	
-	@Override
-	protected void onBootstrap(ApplicationEvent event) {
-		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-			@Override
-			public Void execute() throws Throwable {
-				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-					@Override
-					public Void doWork() throws Exception {
-						getServiceRootFolder();
-						getWorkflowFolder();
-						getGlobalResultFolder();
-						getAssigneesListWorkingCopyFolder();
-						return null;
-					}
-				});
-			}
-		});
-	}
 }

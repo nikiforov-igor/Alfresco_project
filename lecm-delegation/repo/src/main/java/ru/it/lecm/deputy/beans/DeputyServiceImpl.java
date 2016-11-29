@@ -65,48 +65,12 @@ public class DeputyServiceImpl extends BaseBean implements DeputyService {
 	}
 	
 	@Override
-	protected void onBootstrap(ApplicationEvent event)
+	public void initService()
 	{
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-        transactionHelper.setForceWritable(true);
-        transactionHelper.doInTransaction(
-			new RetryingTransactionHelper.RetryingTransactionCallback<Object>(){
-				@Override
-				public Object execute() throws Throwable {
-					return AuthenticationUtil.runAs(new RunAsWork<Object>()
-			        {
-			            public Object doWork()
-			            {
-							UserTransaction userTransaction = transactionService.getUserTransaction();
-					        try
-					        {
-					            userTransaction.begin();
-								if (getDeputySettingsNode() == null) {
-									createDeputySettingsNode();
-								}
-								userTransaction.commit();
-					        }
-					        catch(Throwable e)
-					        {
-					            // rollback the transaction
-					            try
-					            { 
-					                if (userTransaction != null) 
-					                {
-					                    userTransaction.rollback();
-					                }
-					            }
-					            catch (Exception ex)
-					            {
-					                // NOOP 
-					            }
-					            throw new AlfrescoRuntimeException("Service folders [deputy-settings-node] bootstrap failed", e);
-					        }
-							return null;
-			            }
-			        }, AuthenticationUtil.getSystemUserName());
-				}
-			},false,true);
+		super.initService();
+		if (getDeputySettingsNode() == null) {
+			createDeputySettingsNode();
+		}
 	}
 
 	@Override

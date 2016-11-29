@@ -110,31 +110,21 @@ public class ContractsBeanImpl extends BaseBean {
     }
     
 	@Override
-	protected void onBootstrap(ApplicationEvent event) {
-		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-			@Override
-			public NodeRef doWork() {
-				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-					@Override
-					public NodeRef execute() {
-						final NodeRef serviceRoot = getFolder(CONTRACTS_ROOT_ID);
-						dashletSettings = nodeService.getChildByName(serviceRoot, ContentModel.ASSOC_CONTAINS, CONTRACTS_DASHLET_SETTINGS_ID);
-						if (dashletSettings == null) {
-							try {
-								QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, CONTRACTS_DASHLET_SETTINGS_ID);
-								Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-								properties.put(ContentModel.PROP_NAME, CONTRACTS_DASHLET_SETTINGS_ID);
-								ChildAssociationRef childAssoc = nodeService.createNode(serviceRoot, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_DASHLET_SETTINGS, properties);
-								dashletSettings = childAssoc.getChildRef();
-							} catch(Exception e) {
-								dashletSettings = nodeService.getChildByName(serviceRoot, ContentModel.ASSOC_CONTAINS, CONTRACTS_DASHLET_SETTINGS_ID);
-							}
-						}
-						return null;
-					}
-				});
+	public void initService() {
+		super.initService();
+		final NodeRef serviceRoot = getFolder(CONTRACTS_ROOT_ID);
+		dashletSettings = nodeService.getChildByName(serviceRoot, ContentModel.ASSOC_CONTAINS, CONTRACTS_DASHLET_SETTINGS_ID);
+		if (dashletSettings == null) {
+			try {
+				QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, CONTRACTS_DASHLET_SETTINGS_ID);
+				Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+				properties.put(ContentModel.PROP_NAME, CONTRACTS_DASHLET_SETTINGS_ID);
+				ChildAssociationRef childAssoc = nodeService.createNode(serviceRoot, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_DASHLET_SETTINGS, properties);
+				dashletSettings = childAssoc.getChildRef();
+			} catch(Exception e) {
+				dashletSettings = nodeService.getChildByName(serviceRoot, ContentModel.ASSOC_CONTAINS, CONTRACTS_DASHLET_SETTINGS_ID);
 			}
-		});
+		}
 	}
 
     /**

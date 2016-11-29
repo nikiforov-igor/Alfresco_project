@@ -5,7 +5,6 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.repo.version.VersionModel;
 import org.alfresco.service.cmr.repository.ContentReader;
@@ -18,7 +17,6 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyMap;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
@@ -63,10 +61,14 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
         this.contentService = contentService;
     }
     
-    protected void onBootstrap(ApplicationEvent event)
-	{
-    	RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-		transactionHelper.doInTransaction(this, false, true);
+    @Override
+	public void initService() {
+		super.initService();
+		// TODO: Нужно либо добавлять throws везде, либо разворачивать логику
+		try {
+			doWork();
+		} catch (Exception ex) {
+		}
 	}
 
 	@Override
