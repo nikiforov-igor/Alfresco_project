@@ -23,6 +23,7 @@ public interface ArmService {
 	QName TYPE_ARM = QName.createQName(ARM_NAMESPACE_URI, "arm");
 	QName PROP_ARM_CODE = QName.createQName(ARM_NAMESPACE_URI, "code");
 	QName PROP_ARM_SHOW_CALENDAR = QName.createQName(ARM_NAMESPACE_URI, "show-calendar");
+	QName PROP_ARM_SHOW_CREATE_BUTTON = QName.createQName(ARM_NAMESPACE_URI, "show-create-button");
 
 	QName TYPE_ARM_BASE_NODE = QName.createQName(ARM_NAMESPACE_URI, "base-node");
 	QName TYPE_ARM_ACCORDION = QName.createQName(ARM_NAMESPACE_URI, "accordion");

@@ -94,7 +94,6 @@
     </util:list>
 
 	<util:list id="operative.storage.arm.os">
-		<value>alfresco/module/${artifactId}/arm/os-settings-arm.xml</value>
 		<value>alfresco/module/${artifactId}/arm/os-arm.xml</value>
 	</util:list>
 
