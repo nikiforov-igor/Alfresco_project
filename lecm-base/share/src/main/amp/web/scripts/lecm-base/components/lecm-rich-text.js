@@ -8,6 +8,7 @@
  */
 (function()
 {
+	var Dom = YAHOO.util.Dom;
     /**
      * RichTextControl constructor.
      *
@@ -20,6 +21,7 @@
     {
         // NOTE: This allows us to have a subclass
         var componentName = (typeof name == "undefined" || name === null) ? "LogicECM.RichTextControl" : name;
+		YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
         return LogicECM.RichTextControl.superclass.constructor.call(this, componentName, htmlId, ["button"]);
     };
 
@@ -65,8 +67,14 @@
                  * @property editorParameters
                  * @type object
                  */
-                editorParameters: null
+                editorParameters: null,
+
+				fieldId: null,
+
+				formId: null
             },
+
+			readonly: false,
 
             /**
              * The editor instance for the control
@@ -75,6 +83,27 @@
              * @type object
              */
             editor: null,
+
+			onReadonlyControl : function (layer, args) {
+				var editorControls, prop, textarea, fn;
+				if (!this.options.disabled && this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+					this.readonly = args[1].readonly;
+					if (this.editor) {
+						this.editor.getEditor().getBody().setAttribute('contenteditable', !args[1].readonly);
+						editorControls = this.editor.getEditor().controlManager.controls;
+						for (prop in editorControls) {
+							if (editorControls.hasOwnProperty(prop)) {
+								editorControls[prop].setDisabled(args[1].readonly);
+							}
+						}
+					}
+					textarea = Dom.get(this.id);
+					if (textarea) {
+						fn = args[1].readonly ? textarea.setAttribute : textarea.removeAttribute;
+						fn.call(textarea, "readonly", "");
+					}
+				}
+			},
 
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -98,6 +127,7 @@
                     // that are not disabled
                     this._renderEditor();
                 }
+
             },
 
             /**
@@ -106,16 +136,30 @@
              * @method _renderEditor
              * @private
              */
-            _renderEditor: function RichTextControl__renderEditor()
-            {
+            _renderEditor: function RichTextControl__renderEditor() {
                 // create the editor instance
                 this.editor = new Alfresco.util.RichEditor("tinyMCE", this.id, this.options.editorParameters);
+
+				// Make sure we persist the dom content from the editor in to the hidden textarea when appropriate
+				this.editor.subscribe("onChange", this._handleContentChange, this, true);
+				this.editor.subscribe("onPostRender", function() {
+					var shortcuts, prop;
+					shortcuts = this.editor.getEditor().shortcuts;
+					for (prop in shortcuts) {
+						if (shortcuts.hasOwnProperty(prop)) {
+							shortcuts[prop].func = (function (obj, func) {
+								return function() {
+									!obj.readonly && func();
+								};
+							})(this, shortcuts[prop].func);
+						}
+					}
+					LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
+				}, this, true);
 
                 // render and register event handler
                 this.editor.render();
 
-                // Make sure we persist the dom content from the editor in to the hidden textarea when appropriate
-                this.editor.subscribe("onChange", this._handleContentChange, this, true);
             },
 
             /**
