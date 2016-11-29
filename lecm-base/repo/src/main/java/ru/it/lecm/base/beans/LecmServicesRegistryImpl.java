@@ -37,7 +37,7 @@ public class LecmServicesRegistryImpl extends AbstractLifecycleBean implements L
 	 */
 	@Override
 	public void register(LecmService service) {
-		services.put(service.getClass().getSimpleName(), service);
+		services.put(service.getClass().getName(), service);
 	}
 	
 	/**
