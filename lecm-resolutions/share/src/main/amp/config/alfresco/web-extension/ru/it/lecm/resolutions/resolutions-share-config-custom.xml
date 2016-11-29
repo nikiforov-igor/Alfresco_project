@@ -35,6 +35,8 @@
                     <show id="lecm-resolutions:reviewers-assoc"/>
 
                     <show id="lecm-resolutions:is-draft"/>
+                    <show id="lecm-resolutions:base-assoc"/>
+                    <show id="lecm-resolutions:base-document-assoc"/>
                     <show id="resolution-create-form" force="true"/>
                     <show id="save-draft-button" force="true"/>
                 </field-visibility>
@@ -172,6 +174,12 @@
 
                     <field id="lecm-resolutions:is-draft" set="end">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    </field>
+                    <field id="lecm-resolutions:base-assoc" set="end">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecm-resolutions:base-document-assoc" set="end">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
                     </field>
                     <field id="resolution-create-form" set="end">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
