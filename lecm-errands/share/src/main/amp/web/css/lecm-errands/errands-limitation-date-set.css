@@ -7,14 +7,14 @@
     float: left;
 }
 .errands-limitation-date-set .errands-limitation-date-set-radio .control .value-div {
-    width: 20px;
+    width: 12px;
 }
 .errands-limitation-date-set .errands-limitation-date-set-radio .control label.checkbox {
     display: none;
 }
 .errands-limitation-date-set .errands-limitation-date-set-radio .control input {
     margin-top: 8px;
-    margin-bottom: 22px;
+    margin-bottom: 21px;
 }
 
 .errands-limitation-date-set .errands-limitation-date-set-days {
@@ -30,17 +30,22 @@
 }
 
 .errands-limitation-date-set .errands-limitation-date-set-limitless {
-    float: left ;
+    float: left;
+    margin-top: -3px;
+}
+
+.errands-limitation-date-set .errands-limitation-date-set-limitless .control {
+    margin-bottom: 8px;
 }
 
 .errands-limitation-date-set .errands-limitation-date-set-type {
     float: left;
-    width: calc(100% - 270px);
+    width: calc(100% - 260px);
 }
 
 .errands-limitation-date-set .errands-limitation-date-set-date {
     float: left;
-    width: calc(100% - 220px);
+    width: calc(100% - 210px);
 }
 .errands-limitation-date-set .errands-limitation-date-set-date .control,
 .errands-limitation-date-set .errands-limitation-date-set-radio .control {
@@ -48,11 +53,12 @@
 }
 .errands-limitation-date-set .errands-limitation-date-set-radio .control input:last-of-type {
     margin-top: 14px;
+    margin-bottom: 10px;
 }
-.errands-limitation-date-set .errands-limitation-date-set-radio .label-div{
+.errands-limitation-date-set .errands-limitation-date-set-radio .label-div {
     display:block;
 }
-.errands-limitation-date-set .errands-limitation-date-set-radio .container  {
+.errands-limitation-date-set .errands-limitation-date-set-radio .control .container  {
     min-width: 10px;
     float:left;
 }

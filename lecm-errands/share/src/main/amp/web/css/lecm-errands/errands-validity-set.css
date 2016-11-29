@@ -4,13 +4,13 @@
 
 .errands-validity-set .errands-validity-set-radio {
      float: left;
- }
+}
 .errands-validity-set .errands-validity-set-radio .container {
     min-width:10px;
     float: left;
 }
 .errands-validity-set .errands-validity-set-radio .control .value-div {
-    width: 20px;
+    width: 12px;
 }
 .errands-validity-set .errands-validity-set-radio .control label.checkbox {
     display: none;
@@ -20,15 +20,19 @@
     margin-bottom: 22px;
 }
 .errands-validity-set .errands-validity-set-radio .control input:nth-child(2){
-    margin-bottom: 42px;
+    margin-bottom: 40px;
 }
-
+.errands-validity-set .errands-validity-set-radio .control input:last-of-type{
+    margin-top: 12px;
+}
 .errands-validity-set .errands-validity-set-dates {
     float:left;
-    width: calc(100% - 220px);
+    width: calc(100% - 210px);
     margin-bottom:0;
 }
-
+.errands-validity-set .errands-validity-set-dates .buttons-div{
+    display: block;
+}
 .errands-validity-set .errands-validity-set-dates .daterange-start-date .label-div {
     display: none;
 }
@@ -44,14 +48,13 @@
 .errands-validity-set .errands-validity-set-dates .daterange-set {
     margin-bottom:0;
 }
-
 .errands-validity-set .errands-validity-set-during {
     float:left;
-    width: calc(100% - 220px);
+    width: calc(100% - 210px);
 }
 .errands-validity-set .errands-validity-set-during .yui-g .yui-u.first .label-div{
     text-align: left;
-    width:calc(100% - 78px);
+    width:calc(100% - 75px);
     display:block;
     padding-right:0;
 }
@@ -72,7 +75,7 @@
 }
 .errands-validity-set .errands-validity-set-reiteration-count {
     float:left;
-    width: calc(100% - 220px);
+    width: calc(100% - 210px);
 }
 .errands-validity-set .errands-validity-set-reiteration-count .count-label-div {
     float:left;
@@ -88,10 +91,12 @@
 }
 .errands-validity-set .errands-validity-set-period-endless {
     float:left;
-    width: calc(100% - 220px);
+    width: calc(100% - 210px);
 }
 .errands-validity-set .errands-validity-set-period-endless .label-div{
     display:none;
 }
-
+.errands-validity-set .errands-validity-set-period-endless .value-div{
+    padding-left: 0;
+}
 
