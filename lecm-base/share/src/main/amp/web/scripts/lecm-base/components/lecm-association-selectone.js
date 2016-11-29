@@ -32,6 +32,8 @@ LogicECM.module = LogicECM.module || {};
         this.controlId = fieldHtmlId;
         this.currentDisplayValueId = fieldHtmlId + "-currentValueDisplay";
 
+		YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
+
         return this;
     };
 
@@ -111,6 +113,8 @@ LogicECM.module = LogicECM.module || {};
             defaultValue: null,
 
             doubleClickLock: false,
+
+			readonly: false,
 
             setOptions: function AssociationSelectOne_setOptions(obj)
             {
@@ -550,6 +554,31 @@ LogicECM.module = LogicECM.module || {};
                     }
                 }
                 return params;
-            }
+            },
+
+			onReadonlyControl: function (layer, args) {
+				var addedInput, removedInput, selectInput, fn;
+				if (!this.options.disabled && this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+					this.readonly = args[1].readonly;
+					if (this.createNewButton) {
+						this.createNewButton.set('disabled', args[1].readonly);
+					}
+					selectInput = Dom.get(this.selectItemId);
+					if (selectInput) {
+						fn = args[1].readonly ? selectInput.setAttribute : selectInput.removeAttribute;
+						fn.call(selectInput, "readonly", "");
+					}
+					if (!args[1].readonly) {
+						addedInput = Dom.get(this.addedItemId);
+						if (addedInput) {
+							addedInput.disabled = false;
+						}
+						removedInput = Dom.get(this.removedItemId);
+						if (removedInput) {
+							removedInput.disabled = false;
+						}
+					}
+				}
+			}
         });
 })();
