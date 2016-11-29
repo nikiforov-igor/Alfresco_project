@@ -19,6 +19,10 @@
                 form["prop_lecm-resolutions_is-draft"].value = true;
             }
         }
+        submitResolutionForm();
+    }
+
+    function submitResolutionForm() {
         var routeButton = Selector.query(".yui-submit-button", formButtons, true);
         routeButton.click();
     }
@@ -56,8 +60,29 @@
                         },
                         successCallback: {
                             fn: function (response) {
-                                if (response.json && response.json.length) {
+                                if (response.json && response.json.errands) {
+                                    if (response.json.total) {
+                                        if (YAHOO.lang.isFunction(args[1].submitFunction) && args[1].submitElement) {
+                                            args[1].submitFunction.call(args[1].submitElement);
+                                        }
+                                    } else {
+                                        var formId = args[1].form.formId.replace("-form", "") + "_prop_lecm-resolutions_errands-json-line-";
+                                        for (var i = 0; i < errandsExecutionDates.length; i++) {
+                                            if (!response.json.errands[i]) {
+                                                var inputId;
+                                                if (errandsExecutionDates[i]["date-radio"] == "DAYS") {
+                                                    inputId = formId + (i + 1) + "_prop_lecm-errands_limitation-date-days";
+                                                } else if (errandsExecutionDates[i]["date-radio"] == "DATE") {
+                                                    inputId = formId + (i + 1) + "_prop_lecm-errands_limitation-date";
+                                                }
 
+                                                if (inputId) {
+                                                    Dom.addClass(inputId, "execution-date-invalid");
+                                                    submitResolutionForm();
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
