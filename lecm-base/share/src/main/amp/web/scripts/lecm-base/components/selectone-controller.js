@@ -29,16 +29,16 @@ LogicECM.module = LogicECM.module || {};
         },
 
         onReady: function () {
+            this.widgets.inputEl = Dom.get(this.id);
             LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
             YAHOO.util.Event.addListener(this.id, "change", this.onValueChanged, null, this);
         },
 
         onValueChanged: function () {
-            if (this.options.fireChangeEventName) {
-                var input = Dom.get(this.id);
+            if (this.options.fireChangeEventName && this.widgets.inputEl) {
                 YAHOO.Bubbling.fire(this.options.fireChangeEventName, {
-                    element: input,
-                    value: input.value,
+                    element: this.widgets.inputEl,
+                    value: this.widgets.inputEl.value,
                     selectone: this
                 });
             }
@@ -46,9 +46,8 @@ LogicECM.module = LogicECM.module || {};
 
         onDisableControl: function (layer, args) {
             if (this.options.formId === args[1].formId && this.options.fieldId === args[1].fieldId) {
-                var input = Dom.get(this.id);
-                if (input) {
-                    input.setAttribute("disabled", "true");
+                if (this.widgets.inputEl) {
+                    this.widgets.inputEl.setAttribute("disabled", "true");
                 }
 
             }
@@ -57,9 +56,8 @@ LogicECM.module = LogicECM.module || {};
         onEnableControl: function (layer, args) {
             if (this.options.formId === args[1].formId && this.options.fieldId === args[1].fieldId) {
                 if (!this.options.disabled) {
-                    var input = Dom.get(this.id);
-                    if (input) {
-                        input.removeAttribute("disabled");
+                    if (this.widgets.inputEl) {
+                        this.widgets.inputEl.removeAttribute("disabled");
                     }
                 }
             }
@@ -73,9 +71,8 @@ LogicECM.module = LogicECM.module || {};
                 }
 
                 if (this.options.selectCurrentValue) {
-                    var input = Dom.get(this.id);
-                    if (input) {
-                        input.value = this.options.selectCurrentValue;
+                    if (this.widgets.inputEl) {
+                        this.widgets.inputEl.value = this.options.selectCurrentValue;
                     }
                 }
             }
