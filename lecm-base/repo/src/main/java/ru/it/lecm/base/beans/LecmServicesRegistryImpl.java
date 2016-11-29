@@ -56,7 +56,9 @@ public class LecmServicesRegistryImpl extends AbstractLifecycleBean implements L
 							String name = entry.getKey();
 							final LecmService service = entry.getValue();
 
-							logger.debug("Going to bootstrap service {}", name);
+							if (logger.isTraceEnabled()) {
+								logger.trace("Going to bootstrap service {}", name);
+							}
 							service.initService();
 						}
 						return null;
