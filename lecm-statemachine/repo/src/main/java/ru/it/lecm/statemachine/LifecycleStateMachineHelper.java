@@ -78,6 +78,7 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import ru.it.lecm.base.beans.BaseBean;
+import org.activiti.engine.impl.util.DefaultClockImpl;
 
 //import org.joda.time.Days;
 
@@ -148,7 +149,7 @@ public class LifecycleStateMachineHelper extends BaseBean implements StateMachin
 
     @Override
     public void afterPropertiesSet() {
-    	ClockReader cr = activitiProcessEngineConfiguration.getProcessEngineConfiguration().getClock();
+		ClockReader cr = new DefaultClockImpl();
     	//ClockReader cr = Context.getProcessEngineConfiguration().getClock();
     	MapBusinessCalendarManager mapBusinessCalendarManager = new MapBusinessCalendarManager();
         //mapBusinessCalendarManager.addBusinessCalendar(DurationBusinessCalendar.NAME, new DurationBusinessCalendar());
