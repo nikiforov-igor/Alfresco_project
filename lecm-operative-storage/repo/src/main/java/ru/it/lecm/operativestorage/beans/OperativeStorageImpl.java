@@ -8,7 +8,6 @@ package ru.it.lecm.operativestorage.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -21,7 +20,6 @@ import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.PropertyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.TransactionNeededException;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
@@ -39,7 +37,6 @@ import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.logging.Level;
 
 /**
  *

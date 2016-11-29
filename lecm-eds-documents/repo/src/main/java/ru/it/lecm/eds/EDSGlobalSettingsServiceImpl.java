@@ -1,7 +1,6 @@
 package ru.it.lecm.eds;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
@@ -9,7 +8,6 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
