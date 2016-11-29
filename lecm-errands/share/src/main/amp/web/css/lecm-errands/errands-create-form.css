@@ -2,12 +2,25 @@
      display: block;
  }
 .yui-skin-lecmTheme .form-container .form-buttons.form-4-buttons {
-    width: 100%;
-    padding: 0 1em 1em 100px;
+    padding: 0 1em 1em 0;
+    text-align: right;
 }
 .control.errands-reiteration.editmode .container .value-div {
     margin-bottom: 0;
 }
 .set .block3 {
     border: dashed 1px gray;
+}
+.errands-limitation-date-set .errands-limitation-date-set-radio .label-div {
+    display: block;
+    width:160px;
+}
+.errands-limitation-date-set .errands-limitation-date-set-type {
+    float: left;
+    width: calc(100% - 240px);
+}
+
+.errands-limitation-date-set .errands-limitation-date-set-date {
+    float: left;
+    width: calc(100% - 190px);
 }

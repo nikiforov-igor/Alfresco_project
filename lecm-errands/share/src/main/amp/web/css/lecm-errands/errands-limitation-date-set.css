@@ -40,12 +40,12 @@
 
 .errands-limitation-date-set .errands-limitation-date-set-type {
     float: left;
-    width: calc(100% - 270px);
+    width: calc(100% - 260px);
 }
 
 .errands-limitation-date-set .errands-limitation-date-set-date {
     float: left;
-    width: calc(100% - 220px);
+    width: calc(100% - 210px);
 }
 .errands-limitation-date-set .errands-limitation-date-set-date .control,
 .errands-limitation-date-set .errands-limitation-date-set-radio .control {
