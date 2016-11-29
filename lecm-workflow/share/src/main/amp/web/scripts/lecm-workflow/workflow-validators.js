@@ -177,31 +177,3 @@ LogicECM.module.Workflow.routeHasEmployeesValidator =
 
 		return valid;
 	};
-
-LogicECM.module.Workflow.routeIsEmptyValidator =
-	function (field) {
-		var valid = false;
-		var docNodeRef = Alfresco.util.getQueryStringParameter('nodeRef');
-		if (field.value) {
-			jQuery.ajax({
-				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/routes/isRouteEmpty?routeRef=" + field.value + "&documentRef=" + docNodeRef,
-				type: "GET",
-				timeout: 30000,
-				async: false,
-				dataType: "json",
-				contentType: "application/json",
-				processData: false,
-				success: function (result) {
-					valid = result && !result.isRouteEmpty;
-				},
-				error: function() {
-					Alfresco.util.PopupManager.displayMessage({
-						text: this.msg('message.field.validation.failed')
-					});
-					valid = false;
-				}
-			});
-		}
-
-		return valid;
-	};
