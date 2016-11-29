@@ -125,7 +125,12 @@
                     changeFireAction: null
                 },
 
-	            tempDisabled: false,
+                /**
+                 * Vertical indent for picker from text of date
+                 */
+                datePickerVerticalIndent: 5,
+
+                tempDisabled: false,
 
                 /**
                  * Object container for storing YUI widget instances.
@@ -275,11 +280,11 @@
                         me.widgets.calendar.render();
                     }
 
-                    Event.addListener(me.id + "-date", "keyup", me._handleFieldChange, me, true);
-                    Event.addListener(me.id + "-time", "keyup", me._handleFieldChange, me, true);
+                    Event.addListener(me.id + "-date", "keyup", me._inputKeyup, me, true);
+                    Event.addListener(me.id + "-time", "keyup", me._inputKeyup, me, true);
 
-                    // Hide Calendar if we click anywhere in the document other than the calendar
-                    Event.on(document, "click", function(e) {
+                    // Hide Calendar if we mouseup anywhere in the document other than the calendar
+                    Event.on(document, "mouseup", function(e) {
                         var inputEl = Dom.get(me.id + "-date");
                         var iconEl = Dom.get(me.id + "-icon");
                         var el = Event.getTarget(e);
@@ -339,6 +344,11 @@
                  * мы выносим его в body и позиционируем по кнопке его вызова
                  */
                 _showPicker: function DatePicker__showPicker(event) {
+                    //проверяем на возможность редактирования, если редактировать нельзя - ничего не показываем
+                    var dateEl = Dom.get(this.id + "-date");
+                    if (dateEl && dateEl.readOnly) {
+                        return;
+                    }
                     // При открытии календаря посылаем событие, чтобы закрыть все другие открытые календари
                     Bubbling.fire("showDatePicker", {datepicker : this});
 
@@ -346,8 +356,7 @@
 		                var me = this;
 		                var picker = Dom.get(me.id);
 		                var parent = picker.parentNode;
-		                var clicked = Event.getTarget(event) || Dom.get(me.id + "-date");
-		                var d = 10;                                                         // величина отступа
+		                var clicked = Event.getTarget(event) || dateEl;
 
 		                if (!Dom.hasClass(parent, "alfresco-share")) {                      // если календарь лежит не в body, нужно перенести
                             var body = Selector.query('body')[0];
@@ -367,21 +376,21 @@
 		                }
                         me.widgets.calendar.show();                                         // сначала сделать видимым, потом позиционировать, иначе позиционирование не отрабатывает
 
-                        var x = (Dom.getX(clicked) + clicked.offsetWidth) - picker.offsetWidth - d;
+                        var x = (Dom.getX(clicked) + clicked.offsetWidth) - picker.offsetWidth - this.datePickerVerticalIndent;
                         if (Dom.getX(picker) != x) {
                             Dom.setX(picker, x);
                         }
 
-                        var y = Dom.getY(clicked) + clicked.offsetHeight - d;
+                        var y = Dom.getY(clicked) + clicked.offsetHeight - this.datePickerVerticalIndent;
 		                var height = picker.offsetHeight;
 
 		                if (y + height > Dom.getViewportHeight()) {                        // если календарь не помещается до низа окна
-			                y -= height;                                                   // откроем его вверх
+                            y -= height + this.datePickerVerticalIndent * 3;                                           // откроем его вверх
 		                }
                         if (Dom.getY(picker) != y) {
                             Dom.setY(picker, y);
                         }
-                        Dom.get(me.id + "-date").focus();
+                        dateEl.focus();
                     }
                 },
                 /**
@@ -443,7 +452,7 @@
                         // always inform the forms runtime that the control value has been updated
                         Bubbling.fire("mandatoryControlValueUpdated", me);
 
-                        if (me.options.changeFireAction != null) {
+                        if (me.options.changeFireAction) {
                             Bubbling.fire(me.options.changeFireAction, {
                                 date: isoValue
                             });
@@ -459,6 +468,12 @@
 
                     me._hidePicker();
                 },
+
+                _inputKeyup: function (event) {
+                    this._hidePicker();
+                    this._handleFieldChange(event);
+                },
+
                 /**
                  * Handles the date or time being changed in either input field.
                  *
@@ -507,13 +522,16 @@
                                         //       function gets called as well as a result of rendering the picker above,
                                         //       that's also why we don't update the hidden field in here either.
                                     }
+                                    if (me.options.changeFireAction) {
+                                        Bubbling.fire(me.options.changeFireAction, {
+                                            date: isoValue
+                                        });
+                                    }
                                 }
                             }
                             else {
                                 Dom.addClass(me.id + "-date", "invalid");
-                                if (YAHOO.env.ua.ie) {
-                                    Bubbling.fire("mandatoryControlValueUpdated", me);
-                                }
+                                Dom.get(me.currentValueHtmlId).value = "";
                             }
                         }
                     }
@@ -526,9 +544,9 @@
                             Alfresco.logger.debug("Hidden field '" + me.currentValueHtmlId + "' has been reset");
 
                         // inform the forms runtime that the control value has been updated
-                        if (me.options.mandatory || YAHOO.env.ua.ie) {
-                            Bubbling.fire("mandatoryControlValueUpdated", me);
-                        }
+                    }
+                    if (me.options.mandatory || YAHOO.env.ua.ie) {
+                        Bubbling.fire("mandatoryControlValueUpdated", me);
                     }
                 },
 

@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>ru.it.lecm</groupId>
 		<artifactId>server</artifactId>
-		<version>1.8.0</version>
+		<version>1.8.5</version>
 	</parent>
 
 	<groupId>ru.it.lecm.server</groupId>
@@ -573,6 +573,10 @@
 							<groupId>org.alfresco</groupId>
 							<artifactId>alfresco</artifactId>
 							<type>war</type>
+							<excludes>
+								<exclude>WEB-INF/lib/poi-*-beta2-20130720.jar</exclude>
+								<exclude>WEB-INF/lib/xmlbeans-2.3.0.jar</exclude>
+							</excludes>
 						</overlay>
 						<!-- Add / order your AMPs here -->
 						<overlay>
@@ -981,6 +985,10 @@
                                     <groupId>org.alfresco</groupId>
                                     <artifactId>alfresco</artifactId>
                                     <type>war</type>
+									<excludes>
+										<exclude>WEB-INF/lib/poi-*-beta2-20130720.jar</exclude>
+										<exclude>WEB-INF/lib/xmlbeans-2.3.0.jar</exclude>
+									</excludes>
                                 </overlay>
                                 <!-- Add / order your AMPs here -->
                                 <overlay>

@@ -29,7 +29,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import static ru.it.lecm.orgstructure.beans.OrgstructureBean.POSITIONS_DICTIONARY_NAME;
 import ru.it.lecm.orgstructure.exportimport.ExportImportHelper;
@@ -68,6 +70,15 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 	private ExportImportHelper helper;
 
 	private final static String DEFAULT_PASSWORD = "12345";
+	private String contractorsDictionaryName;
+
+	public void setContractorsDictionaryName(String contractorsDictionaryName) {
+		this.contractorsDictionaryName = contractorsDictionaryName;
+	}
+
+	public String getContractorsDictionaryName() {
+		return contractorsDictionaryName;
+	}
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -97,30 +108,36 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		this.namespaceService = namespaceService;
 	}
 
-	public void init() {
-//		PropertyCheck.mandatory(this, "nodeService", nodeService);
-//		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
-//		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
-//		PropertyCheck.mandatory(this, "dictionaryService", dictionaryService);
-//		PropertyCheck.mandatory(this, "transactionService", transactionService);
-//		PropertyCheck.mandatory(this, "personService", personService);
-//		PropertyCheck.mandatory(this, "authService", authService);
-//		PropertyCheck.mandatory(this, "behaviourFilter", behaviourFilter);
-//		PropertyCheck.mandatory(this, "searchService", searchService);
-//		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
-//
-//		authenticationService = (MutableAuthenticationService) authService;
-//
-//		positionsRoot = dictionaryService.getDictionaryByName(POSITIONS_DICTIONARY_NAME);
-//		businessRolesRoot = dictionaryService.getDictionaryByName(OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME);
-//
-//		helper = new ExportImportHelper(nodeService, namespaceService, searchService, orgstructureService);
-	}
-	
-	protected void onBootstrap(ApplicationEvent event)
-	{
+	public NodeRef getPositionsRoot() {
+		if (positionsRoot == null) {
+			positionsRoot = dictionaryService.getDictionaryByName(POSITIONS_DICTIONARY_NAME);
+		}
+		return positionsRoot;
 	}
 
+	public NodeRef getBusinessRolesRoot() {
+		if (businessRolesRoot == null) {
+			businessRolesRoot = dictionaryService.getDictionaryByName(OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME);
+		}
+		return businessRolesRoot;
+	}
+
+	public void init() {
+		PropertyCheck.mandatory(this, "nodeService", nodeService);
+		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
+		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
+		PropertyCheck.mandatory(this, "dictionaryService", dictionaryService);
+		PropertyCheck.mandatory(this, "transactionService", transactionService);
+		PropertyCheck.mandatory(this, "personService", personService);
+		PropertyCheck.mandatory(this, "authService", authService);
+		PropertyCheck.mandatory(this, "behaviourFilter", behaviourFilter);
+		PropertyCheck.mandatory(this, "searchService", searchService);
+		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
+
+		authenticationService = (MutableAuthenticationService) authService;
+		helper = new ExportImportHelper(nodeService, namespaceService, searchService, orgstructureService);
+	}
+	
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
@@ -204,7 +221,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 						if (positionNode != null) {
 							positionNode = updatePosition(positionNode, position);
 						} else {
-							positionNode = nodeService.getChildByName(positionsRoot, ContentModel.ASSOC_CONTAINS, positionName);
+							positionNode = nodeService.getChildByName(getPositionsRoot(), ContentModel.ASSOC_CONTAINS, positionName);
 							if (positionNode == null) {
 								positionNode = createPosition(id, position);
 							} else {
@@ -242,7 +259,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		props.put(OrgstructureBean.PROP_STAFF_POSITION_NAME_G, StringUtils.trim(position.getNameGenitive()));
 		props.put(OrgstructureBean.PROP_STAFF_POSITION_CODE, StringUtils.trim(position.getCode()));
 
-		NodeRef createdStaffPosition = nodeService.createNode(positionsRoot, ContentModel.ASSOC_CONTAINS, generateRandomQName(), OrgstructureBean.TYPE_STAFF_POSITION, props).getChildRef();
+		NodeRef createdStaffPosition = nodeService.createNode(getPositionsRoot(), ContentModel.ASSOC_CONTAINS, generateRandomQName(), OrgstructureBean.TYPE_STAFF_POSITION, props).getChildRef();
 
 		helper.addID(createdStaffPosition, id);
 
@@ -499,6 +516,11 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 							departNode = nodeService.getChildByName(parentNode, ContentModel.ASSOC_CONTAINS, nameShort);
 							if (departNode == null) {
 								departNode = createDepartment(id, parentNode, depart);
+								if("0".equals(parentID)){
+									NodeRef contractorNode = createOrgContractor(depart);
+									nodeService.addAspect(departNode,OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION,null);
+									nodeService.createAssociation(departNode,contractorNode,OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+								}
 							} else {
 								logger.error("Невозможно выполнить импорт подразделения {}: в системе уже существует подразделение {} с именем {}",new Object[] { depart, departNode, nameShort });
 								return false;
@@ -528,6 +550,26 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		logger.info("Закончен импорт списка подразделений");
 	}
 
+	/**
+	 * Создает внутреннего контрагента на основе подразделения
+	 * @param department
+	 * @return
+	 */
+	private NodeRef createOrgContractor(Department department){
+
+		PropertyMap props = new PropertyMap();
+		props.put(ContentModel.PROP_NAME, StringUtils.trim(department.getNameShort()));
+		props.put(Contractors.PROP_CONTRACTOR_FULLNAME, StringUtils.trim(department.getNameFull()));
+		props.put(Contractors.PROP_CONTRACTOR_SHORTNAME, StringUtils.trim(department.getNameShort()));
+		props.put(Contractors.PROP_CONTRACTOR_CODE, StringUtils.trim(department.getCode()));
+
+		NodeRef contractorsDic = dictionaryService.getDictionaryByName(contractorsDictionaryName);
+		NodeRef contractorNode = nodeService.createNode(contractorsDic, ContentModel.ASSOC_CONTAINS,
+				generateRandomQName(),Contractors.TYPE_CONTRACTOR, props).getChildRef();
+		nodeService.addAspect(contractorNode, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION, null);
+
+		return contractorNode;
+	}
 	private NodeRef createDepartment(String id, NodeRef parentNode, Department department) {
 		PropertyMap props = new PropertyMap();
 
@@ -905,7 +947,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 
 		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
 
-		NodeRef businessRoleNode = nodeService.createNode(businessRolesRoot, ContentModel.ASSOC_CONTAINS, assocQName, OrgstructureBean.TYPE_BUSINESS_ROLE, props).getChildRef();
+		NodeRef businessRoleNode = nodeService.createNode(getBusinessRolesRoot(), ContentModel.ASSOC_CONTAINS, assocQName, OrgstructureBean.TYPE_BUSINESS_ROLE, props).getChildRef();
 
 		for (NodeRef employee : employeeNodes) {
 			orgstructureService.includeEmployeeIntoBusinessRole(businessRoleNode, employee);

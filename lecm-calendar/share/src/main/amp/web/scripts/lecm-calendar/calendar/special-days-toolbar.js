@@ -23,12 +23,24 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 		},
 		_createSpecialDay: function WCalendarToolbar_createSpecialDay(wantedBubblingLabel) {
 			var scope = this;
+
 			return function(event, obj) {
 				var dataGrid = LogicECM.module.Base.Util.findComponentByBubblingLabel("LogicECM.module.Base.DataGrid", wantedBubblingLabel);
 				var datagridMeta = dataGrid.datagridMeta;
 				var destination = datagridMeta.nodeRef;
 				var itemType = datagridMeta.itemType;
 				var headerLabel;
+				var selectedYear = dataGrid.options.currentYear;
+				var pickerDateString;
+				var maxDateString = "12/31/" + selectedYear;
+				var minDateString = "01/01/" + selectedYear;
+				var date = new Date();
+
+				if (date.getFullYear() != selectedYear) {
+					pickerDateString = minDateString;
+				} else {
+					pickerDateString = Alfresco.util.formatDate(date, "mm/dd/yyyy");
+				}
 
 				if (wantedBubblingLabel.toString() == LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL.toString()) {
 					headerLabel = "label.calendar.create-new-working.title";
@@ -49,14 +61,20 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 						"&destination={destination}" +
 						"&mode={mode}" +
 						"&submitType={submitType}" +
-						"&showCancelButton=true";
+						"&showCancelButton=true"+
+						"&maxLimitDate={maxDate}"+
+						"&minLimitDate={minDate}"+
+						"&initialDate={pickerDate}";
 				var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url, {
 					itemKind: "type", //The "kind" of item the form is for, the only supported kind currently is "node".
 					itemId: itemType, //The identifier of the item the form is for, this will be different for each "kind" of item, for "node" it will be a NodeRef.
 					formId: "createNewSpecialDayForm", //The form configuration to lookup, refers the id attribute of the form element. If omitted the default form i.e. the form element without an id attribute is used.
 					destination: destination, //Provides a destination for any new items created by the form, when present a hidden field is generated with a name of alf_destination.
 					mode: "create", //The mode the form will be rendered in, valid values are "view", "edit" and "create", the default is "edit".
-					submitType: "json" //The "enctype" to use for the form submission, valid values are "multipart", "json" and "urlencoded", the default is "multipart".
+					submitType: "json", //The "enctype" to use for the form submission, valid values are "multipart", "json" and "urlencoded", the default is "multipart".
+					maxDate: maxDateString,
+					minDate: minDateString,
+					pickerDate:pickerDateString
 				});
 
 				var specialDayFormID = "specialDayForm";
@@ -78,7 +96,7 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 							var dayStr = pad((dayDate.getMonth() + 1), 2) + pad(dayDate.getDate(), 2);
 
 							htmlNodeDate.value = dayStr;
-
+							
 							function pad(num, size) {
 								var s = num + "";
 								while (s.length < size)

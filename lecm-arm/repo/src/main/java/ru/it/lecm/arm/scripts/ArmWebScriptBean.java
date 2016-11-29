@@ -339,7 +339,7 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
                     }
                     if (accordion != null) {
                         result.put("accordion", accordion.getId());
-                        String nodePath = accordion.getId();
+                        StringBuilder nodePath = new StringBuilder(accordion.getId());
                         NodeRef prevNode = accordion;
                         NodeRef parentNode = armRef;
                         for (int i = 1; i < splitPath.length; i++) {
@@ -351,9 +351,9 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
                                     parentNode = prevNode;
                                     prevNode = node.getNodeRef();
                                     if (node.getNodeRef() == null) {
-                                        nodePath += "." + node.getArmNodeRef().getId() + "-" + node.getTitle();
+                                        nodePath.append(".").append(node.getArmNodeRef().getId()).append("-").append(node.getTitle()).append('-').append(node.getArmNodeRef().getId());
                                     } else {
-                                        nodePath += "." + node.getNodeRef().getId();
+                                        nodePath.append(".").append(node.getNodeRef().getId()).append('-').append(node.getArmNodeRef().getId());
                                     }
                                     break;
                                 }
@@ -362,7 +362,7 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
                                 break;
                             }
                         }
-                        result.put("selected", nodePath);
+                        result.put("selected", nodePath.toString());
                         result.put("pageNum", 1);
                     }
                 }
@@ -396,5 +396,14 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
         NodeRef armRef = armService.getArmByCode(code);
         Boolean showCalendar = (Boolean) nodeService.getProperty(armRef, ArmService.PROP_ARM_SHOW_CALENDAR);
         return armRef != null && showCalendar != null && showCalendar;
+    }
+
+    /**
+     * Возвращает список АРМов для меню
+     */
+    @SuppressWarnings("unused")
+    public Scriptable getArmsForMenu() {
+        List<NodeRef> arms = armService.getArmsForMenu();
+        return arms != null ? createScriptable(arms) : null;
     }
 }

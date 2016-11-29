@@ -182,7 +182,7 @@ function checkForApplet() {
                 */
 				return false;
 			},
-			signAction: function (nodeRefList, options) {
+			signAction: function (nodeRefList, options, parentDialog) {
 
 				if (!YAHOO.lang.isArray(nodeRefList)) {
 					nodeRefList = [nodeRefList];
@@ -191,6 +191,7 @@ function checkForApplet() {
                 var signform = {};
 
 				this.loadCertsForm({
+					parentDialog: parentDialog,
 					title: Alfresco.util.message('lecm.signdoc.msg.signing'),
 					actionURL: ""/*Alfresco.constants.PROXY_URI + 'lecm/signed-docflow/signContent'*/,
 					doBeforeAjaxCallback: {
@@ -344,16 +345,29 @@ function checkForApplet() {
 							for (i = 0; i < response.json.length; i++) {
 								for (j = 0; j < response.json[i].signedContent.length; j++) {
 									for (k = 0; k < response.json[i].signedContent[j].signsInfo.length; k++) {
-										sign = new SignatureFromContent(response.json[i].signedContent[j].nodeRef, response.json[i].signedContent[j].signsInfo[k].signature, response.json[i].signedContent[j].signsInfo[k].nodeRef);
+										sign = new SignatureFromContent(response.json[i].signedContent[j].nodeRef, response.json[i].signedContent[j].signsInfo[k].signature, response.json[i].signedContent[j].signsInfo[k].nodeRef, response.json[i].signedContent[j].contentHash);
 										signs.push(sign);
 									}
 								}
 							}
+							
+							var partialContentSignature = signs.map(function (sign) {
+								return {
+									hash: sign.contentHash,
+									signedMessage: sign.signature
+								}
+							});
 
-							cb = (options) ? options.successCallback : null;
-							if (cb && YAHOO.lang.isFunction(cb.fn)) {
-								cb.fn.apply(cb.scope, [signs]);
-							}
+							verifySignaturesSync(partialContentSignature, function (results) {
+								signs.forEach(function (sign, index) {
+									sign.valid = results[index].valid;
+								});
+
+								cb = (options) ? options.successCallback : null;
+								if (cb && YAHOO.lang.isFunction(cb.fn)) {
+									cb.fn.call(cb.scope, signs);
+								}
+							});
 						}
 					},
 					failureCallback: {
@@ -458,44 +472,95 @@ function checkForApplet() {
 			 ==========================================================
 			 */
 
-			loadSignAction: function (nodeRef, options) {
-				var dataObj = {},
-					signature = new SignatureFromFile(nodeRef);
-				if (signature.getStatus()) {
-					dataObj = signature.getJSONInfo();
+			loadSignAction: function (nodeRef, clientLocalSign,  options) {
+				function loadRequest (signature){
+					var dataObj = {};
+					if (signature.getStatus()) {
+					    dataObj = signature.getJSONInfo();
 
-					Alfresco.util.Ajax.jsonRequest({
-						method: 'POST',
-						url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/signed-docflow/loadSign',
-						dataObj: dataObj,
-						successCallback: {
-							scope: this,
-							fn: function (response) {
-								//[!] Взять на заметку
-								var text = (response.json.signResponse === 'SIGN_OK') ? Alfresco.util.message('lecm.signdoc.msg.signature.loaded') : Alfresco.util.message('lecm.signdoc.msg.sign.tested.download.failed'),
-									cb = (options) ? options.successCallback : null;
-								Alfresco.util.PopupManager.displayMessage({text: text});
+					    Alfresco.util.Ajax.jsonRequest({
+						    method: 'POST',
+						    url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/signed-docflow/loadSign',
+						    dataObj: dataObj,
+						    successCallback: {
+							    scope: this,
+							    fn: function (response) {
+								    var text = (response.json.signResponse === 'SIGN_OK') ? Alfresco.util.message('lecm.signdoc.msg.signature.loaded') : Alfresco.util.message('lecm.signdoc.msg.sign.tested.download.failed'),
+									    cb = (options) ? options.successCallback : null;
+								    Alfresco.util.PopupManager.displayMessage({text: text});
 
+								    if (cb && YAHOO.lang.isFunction(cb.fn)) {
+									    cb.fn.apply(cb.scope, [response]);
+								    }
+							    }
+						    },
+						    failureCallback: {
+							    scope: this,
+							    fn: function () {
+								    Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.load.sign.failed')});
+
+								    var cb = (options) ? options.failureCallback : null;
+								    if (cb && YAHOO.lang.isFunction(cb.fn)) {
+									    cb.fn.apply(cb.scope);
+								    }
+							    }
+						    }
+					    });
+				    } else {
+					    Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.not.valid.sign.cancel')});
+				    }
+				}
+				
+				function verifySign(fileHash){
+					signature = new SignatureFromFile(nodeRef, fileHash, clientLocalSign);
+
+					var partialContentSignature = [];
+					partialContentSignature[0]= {
+							hash: fileHash,
+							signedMessage: signature.signatureContent
+						};
+					verifySignaturesSync(partialContentSignature, function (results) {
+						signature.valid = results[0].valid;
+						GetCertificateInfo(results[0].certificate, function(result){
+							signature.certificate = result;
+							loadRequest(signature);
+						});
+					});
+				}
+				
+				var opts = {
+					successCallback: {
+						scope: this,
+						fn: verifySign
+					}
+				};
+				
+				this.getFileHash(nodeRef,  clientLocalSign, opts);
+
+			},
+			getFileHash: function(nodeRef, clientLocalSign, opts){
+				Alfresco.util.Ajax.jsonRequest({
+					method: 'GET',
+					url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/signed-docflow/getDocumentSignsInfo?nodeRef=' + nodeRef,
+					successCallback: {
+						scope: this,
+						fn: function (response) {
+							var cb;
+							hash = response.json[0].signedContent[0].contentHash;
+
+							cb = (opts) ? opts.successCallback : null;
 								if (cb && YAHOO.lang.isFunction(cb.fn)) {
-									cb.fn.apply(cb.scope, [response]);
-								}
-							}
-						},
-						failureCallback: {
-							scope: this,
-							fn: function () {
-								Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.load.sign.failed')});
-
-								var cb = (options) ? options.failureCallback : null;
-								if (cb && YAHOO.lang.isFunction(cb.fn)) {
-									cb.fn.apply(cb.scope);
-								}
+									cb.fn.apply(cb.scope, [hash]);
 							}
 						}
-					});
-				} else {
-					Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.not.valid.sign.cancel')});
-				}
+					},
+					failureCallback: {
+						scope: this,
+						fn: function () {
+							Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.get.sings.info.failed')});
+						}
+					}
+				});
 			},
 			exportSignAction: function (nodeRef) {
 				document.location.href = Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/signed-docflow/getZip?nodeRef=' + nodeRef;
@@ -832,11 +897,20 @@ function checkForApplet() {
 
 				form = new Alfresco.module.SimpleDialog(params.htmlId);
 				form.setOptions({
+					parentDialog: params.parentDialog,
 					width: '20em',
 					templateUrl: url,
 					templateRequestParams: templateRequestParams,
 					actionUrl: params.actionURL,
 					destroyOnHide: true,
+					doAfterDialogHide: {
+						scope: this,
+						fn: function (p_form, p_dialog) {
+							if (p_dialog.options.parentDialog) {
+								p_dialog.options.parentDialog.hide();
+							}
+						}
+					},
 					doBeforeDialogShow: {
 						scope: this,
 						fn: function (p_form, p_dialog) {
@@ -885,7 +959,12 @@ function checkForApplet() {
 				}).show();
 			},
 			loadMultipleForm: function (params) {
-
+				
+				function recoverButtonsState(dialog) {
+					dialog.widgets.cancelButton.set("disabled", false);
+					dialog.widgets.okButton.set("disabled", false);
+				}
+				
 				function renderForm(response) {
 					var templateRequestParams = {
 						itemKind: 'type',
@@ -897,8 +976,8 @@ function checkForApplet() {
 						obj: JSON.stringify(response.json)
 					};
 					var url = Alfresco.constants.URL_SERVICECONTEXT + 'components/form';
-					var form = new Alfresco.module.SimpleDialog(params.htmlId);
-					form.setOptions({
+					var dialog = new Alfresco.module.SimpleDialog(params.htmlId);
+					dialog.setOptions({
 						width: '30em',
 						templateUrl: url,
 						templateRequestParams: templateRequestParams,
@@ -908,6 +987,7 @@ function checkForApplet() {
 							scope: this,
 							fn: function (p_form, p_dialog) {
 								p_dialog.dialog.setHeader(params.title);
+								p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 							}},
 						doBeforeAjaxRequest: {
 							scope: this,
@@ -924,11 +1004,12 @@ function checkForApplet() {
 									Alfresco.util.PopupManager.displayMessage({
 										text: Alfresco.util.message('lecm.signdoc.msg.must.select.one.or.more.docs')
 									});
+									recoverButtonsState(dialog);
 									return false;
 								}
 
 								if (cb && YAHOO.lang.isFunction(cb.fn)) {
-									cb.fn.apply(cb.scope, [nodeRefList, cb.obj]);
+									cb.fn.apply(cb.scope, [nodeRefList, cb.obj, dialog]);
 								}
 
 								if (!params.actionURL) {
@@ -1314,13 +1395,15 @@ function prepareBase64(base64Content) {
  ==========================================================
  */
 
-function SignatureFromContent(nodeRef, signatureContent, signatureNodeRef) {
+function SignatureFromContent(nodeRef, signatureContent, signatureNodeRef, contentHash) {
 
 	var contentURI, result, now;
 
 	this.signatureNodeRef = signatureNodeRef;
 	this.signatureContent = prepareBase64(signatureContent);
 	this.contentAssociation = nodeRef;
+	this.contentHash = contentHash;
+    this.signature = null;
 	this.signDate = null;
 	this.valid = false;
 	this.validateDate = null;
@@ -1328,10 +1411,12 @@ function SignatureFromContent(nodeRef, signatureContent, signatureNodeRef) {
 
 	if (nodeRef && signatureContent) {
 		try {
-			contentURI = new Alfresco.util.NodeRef(this.contentAssociation).uri;
-			result = signApplet.check(Alfresco.constants.PROXY_URI + 'api/node/content/' + contentURI, 'URL', this.signatureContent);
-			this.valid = result.getResult();
-			this.certificate = new CertificateFromBase64(result.getCert());
+			try{
+				var signData = JSON.parse(this.signatureContent);
+				this.signature = signData.signature;
+			} catch(err){
+				this.signature = this.signatureContent;
+			}
 			now = Alfresco.util.toISO8601(new Date());
 			this.validateDate = now;
 			this.signDate = now;
@@ -1351,25 +1436,27 @@ function SignatureFromContent(nodeRef, signatureContent, signatureNodeRef) {
  ==========================================================
  */
 
-function SignatureFromFile(nodeRef) {
+function SignatureFromFile(nodeRef, fileHash, clientLocalSign) {
 	var contentURI, result, now, signatureRaw;
 
 	this.signatureContent = null;
 	this.contentAssociation = nodeRef;
+	this.contentHash = fileHash;
 	this.valid = false;
 	this.validateDate = null;
 	this.certificate = null;
 	this.signDate = null;
 
 	if (nodeRef) {
+		try{
+			var signData = JSON.parse(clientLocalSign);
+			this.signatureContent = signData.signature;
+		} catch(err){
+			this.signatureContent = clientLocalSign;
+		}
+		//this.certificate = new CertificateFromBase64(result.getCert());
 		try {
-			signatureRaw = signApplet.getService().getCertFromFileUI();
-			this.signatureContent = prepareBase64(signatureRaw);
 			if (this.signatureContent && this.signatureContent.length) {
-				contentURI = new Alfresco.util.NodeRef(this.contentAssociation).uri;
-				result = signApplet.check(Alfresco.constants.PROXY_URI + 'api/node/content/' + contentURI, 'URL', this.signatureContent);
-				this.valid = result.getResult();
-				this.certificate = new CertificateFromBase64(result.getCert());
 				now = Alfresco.util.toISO8601(new Date());
 				this.validateDate = now;
 				this.signDate = now;

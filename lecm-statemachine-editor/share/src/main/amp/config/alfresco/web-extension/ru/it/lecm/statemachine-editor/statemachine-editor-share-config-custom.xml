@@ -1035,10 +1035,10 @@
                         <control template="/ru/it/lecm/statemachine/editor/components/lecm-checkboxtable.ftl">
                             <control-param name="allowCreate">false</control-param>
                             <control-param name="showActions">false</control-param>
-                            <control-param name="height">400</control-param>
                             <control-param name="configURL">/lecm/statemachine/editor/datagrid/config</control-param>
                             <control-param name="repoDatasource">false</control-param>
                             <control-param name="ds">lecm/statemachine/editor/ds/fields</control-param>
+							<control-param name="fixedHeader">true</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1092,7 +1092,7 @@
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
+							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
 						</control>
 					</field>
 					<field id="lecm-stmeditor:isCreator" />
@@ -1110,7 +1110,7 @@
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
+							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
 						</control>
 					</field>
 					<field id="lecm-stmeditor:static-role-privilege">
@@ -1139,7 +1139,7 @@
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
+							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
 						</control>
 					</field>
 					<field id="lecm-stmeditor:isCreator" />
@@ -1163,7 +1163,7 @@
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
+							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
 						</control>
 					</field>
 					<field id="lecm-stmeditor:static-role-privilege">
@@ -1198,7 +1198,7 @@
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"true\"</control-param>
+                            <control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"true\"</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1218,7 +1218,7 @@
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"true\"</control-param>
+                            <control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"true\"</control-param>
                         </control>
                     </field>
                 </appearance>

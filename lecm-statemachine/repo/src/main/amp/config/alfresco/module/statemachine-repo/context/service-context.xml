@@ -379,6 +379,9 @@
         <property name="orgstructureService">
             <ref bean="serviceOrgstructure"/>
         </property>
+        <property name="defaultStatemachines">
+            <ref bean="defaultStatemachines"/>
+        </property>
     </bean>
 
     <bean id="defaultStatemachines" class="ru.it.lecm.statemachine.bean.DefaultStatemachinesImpl" init-method="register"/>

@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>ru.it.lecm.reports</groupId>
 		<artifactId>lecm-reports</artifactId>
-		<version>1.8.0</version>
+		<version>1.8.5</version>
 	</parent>
 
 	<artifactId>lecm-reports-repo</artifactId>
@@ -14,6 +14,9 @@
 	<name>Logic ECM Jasperforms Module Repo</name>
 	<description>jasperforms forms repo</description>
 
+	<properties>
+		<poi.version>3.10.1</poi.version>
+	</properties>
 	<!--
 	  need to list these as a provided so that Maven doesn't download them
 	  and include them in the AMP, they are provided by Alfresco
@@ -30,6 +33,21 @@
                 </exclusion>
             </exclusions> -->
         </dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
 
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>

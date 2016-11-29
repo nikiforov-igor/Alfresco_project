@@ -609,7 +609,7 @@ if (document != null) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/a24d7013-7a93-4552-afdb-d014ea43d88c</nodeRef>
                                         <properties>
                                             <property>
@@ -1296,6 +1296,38 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>f5bcc968-0936-47fb-8ad4-4f49b3d3026d
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/83a26798-71fa-4814-817c-4c62825dceda
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Согласование не может быть запущено, так как будут пропущены все этапы маршрута]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!@routesService.isRouteEmpty(doc.nodeRef)]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -1824,7 +1856,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/d79f841e-8d24-44f5-a029-5ea8874ff6f6</nodeRef>
                                         <properties>
                                             <property>
@@ -2319,7 +2351,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/700f2b94-ba5f-4c95-a339-2366b625521a</nodeRef>
                                         <properties>
                                             <property>
@@ -3184,7 +3216,7 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/eb2ade67-ee95-4f54-a836-7ac28cb54e8b</nodeRef>
                                         <properties>
                                             <property>
@@ -4166,7 +4198,7 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/335d5314-5b68-4046-9b75-3599c540656a</nodeRef>
                                         <properties>
                                             <property>
@@ -4834,6 +4866,38 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>ba6dd897-ca48-4742-aec2-34940aa8d093
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/b5efb575-cee3-4b3a-894f-bc77db79f898
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Согласование не может быть запущено, так как будут пропущены все этапы маршрута]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!@routesService.isRouteEmpty(doc.nodeRef)]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -5362,7 +5426,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/7ef25ec3-f2f0-4485-810a-3855ac7cb72a</nodeRef>
                                         <properties>
                                             <property>
@@ -6174,7 +6238,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/c00c55d2-14a8-4fbe-a6e1-fe9d043a8ec8</nodeRef>
                                         <properties>
                                             <property>
@@ -7024,7 +7088,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/3754f384-cb6b-42e7-8ee1-a432aa7d2284</nodeRef>
                                         <properties>
                                             <property>
@@ -7982,7 +8046,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/e2e6816f-62a8-460e-90e6-ec93e635210e</nodeRef>
                                         <properties>
                                             <property>
@@ -9040,7 +9104,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/474e1844-2e17-4178-9382-9ff717c6bcab</nodeRef>
                                         <properties>
                                             <property>
@@ -9475,7 +9539,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
                                         <nodeRef>workspace://SpacesStore/a3f54bec-ef60-4298-b328-bb94999a8f70</nodeRef>
                                         <properties>
                                             <property>

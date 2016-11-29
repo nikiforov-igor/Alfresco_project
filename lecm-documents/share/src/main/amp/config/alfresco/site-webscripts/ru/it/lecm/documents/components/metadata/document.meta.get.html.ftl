@@ -3,7 +3,6 @@
 <@markup id="css">
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/document-details/document-metadata.css" />
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata.css" />
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata-form.css" />
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata-form-edit.css" />
 </@>
 <@markup id="js">
@@ -14,8 +13,6 @@
 
 <@markup id="html">
 	<#if document??>
-		<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
-		<@view.viewForm />
 	    <!-- Parameters and libs -->
 	    <#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
 	    <#assign el=args.htmlid/>

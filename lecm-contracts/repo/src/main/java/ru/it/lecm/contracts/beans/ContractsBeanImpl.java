@@ -106,35 +106,10 @@ public class ContractsBeanImpl extends BaseBean {
     }
 
     public final void init() {
-        PropertyCheck.mandatory(this, "nodeService", nodeService);
-
-//        final NodeRef serviceRoot = getFolder(CONTRACTS_ROOT_ID);
-//        dashletSettings = null;//nodeService.getChildByName(serviceRoot, ContentModel.ASSOC_CONTAINS, CONTRACTS_DASHLET_SETTINGS_ID);
-//        if (dashletSettings == null) {
-//            dashletSettings = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-//                @Override
-//                public NodeRef doWork() {
-//                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-//                        @Override
-//                        public NodeRef execute() {
-//                        	try{
-//	                            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, CONTRACTS_DASHLET_SETTINGS_ID);
-//	                            Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-//	                            properties.put(ContentModel.PROP_NAME, CONTRACTS_DASHLET_SETTINGS_ID);
-//	                            ChildAssociationRef childAssoc = nodeService.createNode(serviceRoot, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_DASHLET_SETTINGS, properties);
-//	                            return childAssoc.getChildRef();
-//                        	} catch(Exception e) {
-//                        		return nodeService.getChildByName(serviceRoot, ContentModel.ASSOC_CONTAINS, CONTRACTS_DASHLET_SETTINGS_ID);
-//                        	}
-//                        	
-//                        }
-//
-//                    });
-//                }
-//            });
-//        }
+		PropertyCheck.mandatory(this, "nodeService", nodeService);
     }
     
+	@Override
 	protected void onBootstrap(ApplicationEvent event) {
 		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
@@ -224,7 +199,7 @@ public class ContractsBeanImpl extends BaseBean {
 
         // фильтр по сотрудниками-создателям
         if (initiatorsList != null && !initiatorsList.isEmpty()) {
-            String employeesFilter = "";
+            StringBuilder employeesFilter = new StringBuilder();
 
             boolean addOR = false;
 
@@ -232,7 +207,7 @@ public class ContractsBeanImpl extends BaseBean {
                 String authorProperty = documentService.getAuthorProperty(type);
                 authorProperty = authorProperty.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
                 for (NodeRef employeeRef : initList.get(type)) {
-                    employeesFilter += (addOR ? " OR " : "") + "@" + authorProperty + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
+                    employeesFilter.append(addOR ? " OR " : "").append("@").append(authorProperty).append(":\"").append(employeeRef.toString().replace(":", "\\:")).append("\"");
                     addOR = true;
                 }
             }
@@ -245,12 +220,12 @@ public class ContractsBeanImpl extends BaseBean {
         // фильтр по конкретным документам (например, тем в которых данный сотрудник - участник)
         if (docsList != null && !docsList.isEmpty()) {
             boolean addOR = false;
-            String docsFilter = "";
+            StringBuilder docsFilter = new StringBuilder();
             for (NodeRef docRef : docsList) {
-                docsFilter += (addOR ? " OR " : "") + "ID:" + docRef.toString().replace(":", "\\:");
+                docsFilter.append(addOR ? " OR " : "").append("ID:").append(docRef.toString().replace(":", "\\:"));
                 addOR = true;
             }
-            filterQuery += (filterQuery.length() > 0 ? " AND (" : "(") + docsFilter + ")";
+            filterQuery += (filterQuery.length() > 0 ? " AND (" : "(") + docsFilter.toString() + ")";
         }
 
         // Фильтр по датам

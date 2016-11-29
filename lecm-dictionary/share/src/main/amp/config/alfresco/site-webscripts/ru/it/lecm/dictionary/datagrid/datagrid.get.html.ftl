@@ -7,7 +7,7 @@
 <script type="text/javascript">//<![CDATA[
 (function(){
 	function createDatagrid(rootNode) {
-	    new LogicECM.module.Dictionary.DataGrid('${id}', rootNode.attributeForShow).setOptions(
+	    new LogicECM.module.Dictionary.DataGrid('${id}', rootNode).setOptions(
 	            {
 	                bubblingLabel: "${bubblingLabel}",
 	                usePagination: true,
@@ -20,6 +20,15 @@
 	                        permission: "edit",
 	                        label: "${msg("actions.edit")}"
 	                    },
+                        {
+                            type: "datagrid-action-link-${bubblingLabel}",
+                            id: "onActionMove",
+                            permission: "edit",
+                            label: "${msg("actions.move")}",
+                            evaluator: function () {
+                                return rootNode.plane == "false";
+                            }
+                        },
 	                    {
 	                        type: "datagrid-action-link-${bubblingLabel}",
 	                        id: "onActionVersion",
@@ -53,7 +62,7 @@
                 itemType: rootNode.itemType,
                 nodeRef: rootNode.nodeRef,
                 searchConfig: ('lecm-contractor:contractor-type' == rootNode.itemType) ? {
-                    filter: '-ASPECT:"lecm-orgstr-aspects:is-organization-aspect" and ISNOTNULL:"sys:node-dbid"'
+                    filter: 'NOT ASPECT:"lecm-orgstr-aspects:is-organization-aspect"'
                 } : null
 			};
 

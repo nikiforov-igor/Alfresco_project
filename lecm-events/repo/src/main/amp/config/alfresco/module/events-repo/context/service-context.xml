@@ -164,7 +164,6 @@
 				<value>alfresco/module/${artifactId}/actions/member-accept.xml</value>
 				<value>alfresco/module/${artifactId}/actions/member-decline.xml</value>
 				<value>alfresco/module/${artifactId}/actions/member-request-new-time.xml</value>
-				<value>alfresco/module/${artifactId}/actions/create-copy.xml</value>
 				<value>alfresco/module/${artifactId}/actions/ga-remove-event.xml</value>
 				<value>alfresco/module/${artifactId}/actions/ga-remove-repeatable-event.xml</value>
 				<value>alfresco/module/${artifactId}/actions/ga-event-send-notifications.xml</value>
@@ -372,24 +371,20 @@
 		</property>
 	</bean>
 	<bean id="eventCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
+		<property name="baseURL" value="event-create"/>
 		<property name="propsToCopy">
 			<list>
 				<value>lecm-events:title</value>
 				<value>lecm-events:description</value>
-				<value>lecm-events:temp-members-assoc-json</value>
 				<value>lecm-events:all-day</value>
-				<value>lecm-events:from-date</value>
-				<value>lecm-events:to-date</value>
 				<value>lecm-events:repeatable</value>
 				<value>lecm-events:repeatable-start-period</value>
 				<value>lecm-events:repeatable-end-period</value>
 				<value>lecm-events:repeatable-rule</value>
-				<value>lecm-events:description</value>
 			</list>
 		</property>
 		<property name="assocsToCopy">
 			<list>
-				<value>lecm-events:location-assoc</value>
 				<value>lecm-events:initiator-assoc</value>
 				<value>lecm-events:invited-members-assoc</value>
 				<value>lecm-events:subject-assoc</value>

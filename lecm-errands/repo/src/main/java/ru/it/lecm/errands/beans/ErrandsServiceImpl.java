@@ -60,6 +60,8 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     private NamespaceService namespaceService;
     private BusinessJournalService businessJournalService;
 	private LecmPermissionService lecmPermissionService;
+	private NodeRef settingsNode;
+	private NodeRef dashletSettingsNode;
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
@@ -92,34 +94,30 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
         this.documentConnectionService = documentConnectionService;
     }
-
-    public void init() {
-        //Думаю, самое подходящее место для проверки существования и создания глобальных настроек, это при инициализации бина
-//        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-//
-//            @Override
-//            public Void doWork() throws Exception {
-//                lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-//
-//                    @Override
-//                    public Void execute() throws Throwable {
-//                        if (null == getSettingsNode()) {
-//                            createSettingsNode();
-//                        }
-//                        if (null == getDashletSettingsNode()) {
-//                            createDashletSettingsNode();
-//                        }
-//                        return null;
-//                    }
-//                });
-//                return null;
-//            }
-//        });
-    }
     
     protected void onBootstrap(ApplicationEvent event)
 	{
-    	super.onBootstrap(event);
+//    	super.onBootstrap(event);
+			AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+
+            @Override
+            public Void doWork() throws Exception {
+                lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+
+                    @Override
+                    public Void execute() throws Throwable {
+                        if (null == getSettingsNode()) {
+                            settingsNode = createSettingsNode();
+                        }
+                        if (null == getDashletSettingsNode()) {
+                            dashletSettingsNode = createDashletSettingsNode();
+                        }
+                        return null;
+                    }
+                });
+                return null;
+            }
+        });
 	}
 
     @Override
@@ -135,15 +133,19 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     @Override
     public NodeRef getSettingsNode() {
 //		TODO: Метод разделён. Создание вынесено в метод createSettingsNode
-        final NodeRef rootFolder = this.getServiceRootFolder();
-
-        return nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
+		if (settingsNode == null) {
+			settingsNode = nodeService.getChildByName(this.getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
+		}
+		
+		return settingsNode;
     }
 
     @Override
     public NodeRef getDashletSettingsNode() {
-        final NodeRef rootFolder = this.getServiceRootFolder();
-        return nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_DASHLET_SETTINGS_NODE_NAME);
+		if (dashletSettingsNode == null) {
+			dashletSettingsNode = nodeService.getChildByName(this.getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, ERRANDS_DASHLET_SETTINGS_NODE_NAME);
+		}
+		return dashletSettingsNode;
     }
 
     @Override
@@ -325,7 +327,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
 
 
-        List<NodeRef> documentErrandsDocs = documentConnectionService.getConnectedDocuments(document, null, TYPE_ERRANDS, true);
+        List<NodeRef> documentErrandsDocs = documentConnectionService.getConnectedDocuments(document, "onBasis", TYPE_ERRANDS, true);
         for (NodeRef errand : documentErrandsDocs) {
 
 			boolean hasPermission = lecmPermissionService.hasPermission("_ReadProperties", errand);

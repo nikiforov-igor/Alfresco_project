@@ -27,6 +27,9 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.regex.Matcher;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * User: AIvkin
@@ -164,7 +167,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
     @Override
 	public NodeRef getServiceRootFolder() {
-            return getFolder(ARM_ROOT_ID);
+		return getFolder(ARM_ROOT_ID);
 	}
 
 	@Override
@@ -256,6 +259,45 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
             }
         }
         return result;
+    }
+
+    @Override
+    public List<NodeRef> getArmsForMenu() {
+        Set<QName> armTypeSet = new HashSet<>(1);
+        armTypeSet.add(TYPE_ARM);
+
+        List<NodeRef> filteredArms = new ArrayList<>();
+        List<ChildAssociationRef> arms = nodeService.getChildAssocs(getDictionaryArmSettings(), armTypeSet);
+        if (arms != null) {
+            Set<String> auth = authorityService.getAuthoritiesForUser(AuthenticationUtil.getFullyAuthenticatedUser());
+
+            for (ChildAssociationRef armAssoc : arms) {
+                NodeRef arm = armAssoc.getChildRef();
+                Boolean showInMenu = Boolean.TRUE.equals(nodeService.getProperty(arm, PROP_ARM_SHOW_IN_MENU));
+                if (showInMenu) {
+                    Set<String> roles = new HashSet<>();
+                    List<AssociationRef> associationRefs = nodeService.getTargetAssocs(arm, ASSOC_ARM_MENU_BUSINESS_ROLES);
+                    for (AssociationRef associationRef : associationRefs) {
+                        NodeRef role = associationRef.getTargetRef();
+                        String roleCode = getAutorityByBusinessRole(role);
+                        roles.add(roleCode);
+                    }
+                    if (!roles.isEmpty()) {
+                        for (String role : roles) {
+                            if (auth.contains(role)) {
+                                filteredArms.add(arm);
+                                break;
+                            }
+                        }
+                    } else {
+                        filteredArms.add(arm);
+                    }
+                }
+            }
+        }
+
+        Collections.sort(filteredArms, comparator);
+        return filteredArms;
     }
 
     public List<NodeRef> getArmRunAsBossAccordions(NodeRef accordion) {
@@ -633,11 +675,16 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 							if (query.length() > 0) {
 								query.append(" OR ");
 							}
-							query.append("(");
-							if (searchQuery.startsWith("NOT")) {
-								query.append("ISNOTNULL:\"cm:name\" AND ");
-							}
-							query.append(searchQuery).append(")");
+                            boolean useBrackets = true;
+                            if (searchQuery.startsWith("NOT")) {
+                                Matcher m = MULTIPLE_NOT_QUERY.matcher(searchQuery.toUpperCase());
+                                if (!m.find()) { //
+                                    useBrackets = false;
+                                }
+                            }
+                            query.append(useBrackets ? "(" : "");
+                            query.append(searchQuery);
+                            query.append(useBrackets ? ")" : "");
 						}
 					}
 					String oldQuery = (String) getCachedProperties(nodeRef).get(ArmService.PROP_SEARCH_QUERY);
@@ -769,6 +816,21 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     }
     public void setSecretaryService(SecretaryService secretaryService) {
         this.secretaryService = secretaryService;
-}
+	}
 
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		// TODO: Потенциально не нужно, т.к папка создаться при первом бутсрапе справочника
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+			@Override
+			public NodeRef execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+					@Override
+					public NodeRef doWork() throws Exception {
+						return getServiceRootFolder();
+					}
+				});
+			}
+		});
+	}
 }

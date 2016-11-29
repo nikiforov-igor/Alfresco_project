@@ -47,9 +47,12 @@
 	//]]></script>
 
     <div class="doc-preview-container">
-        <div class="preview-select">
+        <div id="${fieldHtmlId}-attachment-select-container" class="preview-select hidden1">
             <select id="${fieldHtmlId}-attachment-select"></select>
         </div>
+	    <div id="${fieldHtmlId}-attachment-select-empty-container" class="preview-select-empty hidden1">
+		    <h2>${msg("message.preview.attachments.empty")}</h2>
+	    </div>
         <div id="${fieldHtmlId}-preview-container" class="document-preview body"></div> <#-- не удалять! класс 'body' важен для расчета высоты области просмотра -->
 
         <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>

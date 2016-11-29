@@ -5,3 +5,11 @@
 .control.association-token-control .value-div div.cropped-item .ci-buttons-div img.members-status {
     margin: 0 0 -4px 5px;
 }
+
+.control.association-token-control.vertical .value-div {
+	line-height: 0;
+}
+
+.control.association-token-control.vertical .value-div div.cropped-item {
+	float: none;
+}

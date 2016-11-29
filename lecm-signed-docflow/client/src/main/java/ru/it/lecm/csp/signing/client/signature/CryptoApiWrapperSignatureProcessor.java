@@ -5,16 +5,18 @@
  */
 package ru.it.lecm.csp.signing.client.signature;
 
-import com.sun.jna.Function;
-import com.sun.jna.Library;
-import com.sun.jna.Memory;
-import com.sun.jna.Native;
-import com.sun.jna.Platform;
-import com.sun.jna.Pointer;
-import com.sun.jna.WString;
+import com.sun.jna.*;
 import com.sun.jna.platform.win32.WinDef.BOOLByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import org.apache.commons.lang.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.it.lecm.csp.signing.client.cryptoapiwrapper.CRYPT_DATA_BLOB;
+import ru.it.lecm.csp.signing.client.cryptoapiwrapper.JavaCryptoApiWrapper;
+import ru.it.lecm.csp.signing.client.cryptoapiwrapper.JavaCryptoApiWrapperMockImpl;
+import ru.it.lecm.csp.signing.client.exception.CryptoException;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.file.Paths;
@@ -26,13 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang.ArrayUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.it.lecm.csp.signing.client.cryptoapiwrapper.CRYPT_DATA_BLOB;
-import ru.it.lecm.csp.signing.client.cryptoapiwrapper.JavaCryptoApiWrapperMockImpl;
-import ru.it.lecm.csp.signing.client.exception.CryptoException;
-import ru.it.lecm.csp.signing.client.cryptoapiwrapper.JavaCryptoApiWrapper;
 
 /**
  *
@@ -71,8 +66,9 @@ public class CryptoApiWrapperSignatureProcessor implements SignatureProcessor {
     */
     private void initWrapper(String wrapperfolder) {
         try {
+            String libName;
             if (Platform.isWindows()) {
-                String libName = "CryptoApiWrapper.dll";
+                libName = "CryptoApiWrapper_x86.dll";
                 if (Platform.is64Bit()) {
                     libName = "CryptoApiWrapper_x64.dll";
                 }
@@ -82,8 +78,11 @@ public class CryptoApiWrapperSignatureProcessor implements SignatureProcessor {
                 _cryptoApiWrapper = (JavaCryptoApiWrapper) Native.loadLibrary(libPath,
                         JavaCryptoApiWrapper.class, options);
             } else if (Platform.isLinux()) {
-//                String libPath = Utils.getLoadLib("libCryptoApiWrapper.so", "/home/pechenko");
-                _cryptoApiWrapper = (JavaCryptoApiWrapper) Native.loadLibrary("libCryptoApiWrapper.so",
+                libName = "libCryptoApiWrapper_x86.so";
+                if (Platform.is64Bit()) {
+                    libName = "libCryptoApiWrapper_x64.so";
+                }
+                _cryptoApiWrapper = (JavaCryptoApiWrapper) Native.loadLibrary(Paths.get(wrapperfolder, libName).toString()/*"libCryptoApiWrapper.so"*/,
                         JavaCryptoApiWrapper.class);
             } else {
                 _cryptoApiWrapper = new JavaCryptoApiWrapperMockImpl();

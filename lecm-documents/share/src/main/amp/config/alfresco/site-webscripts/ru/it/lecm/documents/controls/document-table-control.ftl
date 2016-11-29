@@ -147,6 +147,7 @@
 				isTableSortable: ${isTableSortable?string},
                 sort: "${sort?string}",
                 externalCreateId: "${form.arguments.externalCreateId!""}",
+                itemId: "${form.arguments.itemId!""}",
                 refreshAfterCreate: ${refreshAfterCreate?string},
 				allowCreate: ${allowCreate},
 				allowDelete: ${allowDelete},

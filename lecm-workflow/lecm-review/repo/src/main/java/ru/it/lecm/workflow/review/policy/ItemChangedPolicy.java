@@ -68,8 +68,8 @@ public class ItemChangedPolicy implements NodeServicePolicies.OnUpdateProperties
 	@Override
 	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		if (null != nodeRef
-				&& null != before.get(ReviewService.PROP_REVIEW_TS_STATE)
-				&& !before.get(ReviewService.PROP_REVIEW_TS_STATE).equals(after.get(ReviewService.PROP_REVIEW_TS_STATE))) {
+				&& null != after.get(ReviewService.PROP_REVIEW_TS_STATE)
+				&& !after.get(ReviewService.PROP_REVIEW_TS_STATE).equals(before.get(ReviewService.PROP_REVIEW_TS_STATE))) {
 			NodeRef document = tableService.getDocumentByTableDataRow(nodeRef);
 			List<NodeRef> employees = reviewService.getActiveReviewersForDocument(document);
 			StringBuilder sb = new StringBuilder();

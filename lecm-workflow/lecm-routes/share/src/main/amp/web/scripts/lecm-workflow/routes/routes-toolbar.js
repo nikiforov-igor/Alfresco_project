@@ -6,19 +6,41 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.Routes = LogicECM.module.Routes || {};
 
 (function() {
+	var Dom = YAHOO.util.Dom;
 
 	LogicECM.module.Routes.Toolbar = function(containerId) {
-		LogicECM.module.Routes.Toolbar.superclass.constructor.call(this, 'LogicECM.module.Routes.Toolbar', containerId, ['button', 'container', 'connection', 'json', 'selector']);
+		LogicECM.module.Routes.Toolbar.superclass.constructor.call(this, 'LogicECM.module.Routes.Toolbar', containerId);
 		this.setOptions({
 			pageId: null,
-			datagridBubblingLabel: null,
 			inEngineer: false
 		});
+		YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
 		return this;
 	};
-
-	YAHOO.lang.extend(LogicECM.module.Routes.Toolbar, Alfresco.component.Base, {
-		_createNewRoute: function() {
+	YAHOO.lang.extend(LogicECM.module.Routes.Toolbar, LogicECM.module.Base.Toolbar, {
+		options: {
+			searchButtonsType: 'defaultActive',
+			newRowButtonType: 'defaultActive'
+		},
+		onInitDataGrid:function DataListToolbar_onInitDataGrid(layer, args) {
+			var datagrid = args[1].datagrid;
+			if (this.options.bubblingLabel && datagrid.options.bubblingLabel && datagrid.options.bubblingLabel==this.options.bubblingLabel ){
+					this.modules.dataGrid = args[1].datagrid;
+			}
+		},
+		_initButtons: function () {
+			if (this.options.inEngineer) {
+				this.toolbarButtons[this.options.newRowButtonType].newRowButton = Alfresco.util.createYUIButton(this, "btnCreateNewRoute", this._createNewRoute,{
+					label: this.msg('button.new-route')
+				});
+				Alfresco.logger.info('A new LogicECM.module.Routes.Toolbar has been created');
+			}
+			this.toolbarButtons[this.options.searchButtonsType].searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClickWithCheck);
+			this.toolbarButtons[this.options.searchButtonsType].exSearchButton = Alfresco.util.createYUIButton(this, "extendSearchButton", this.onExSearchClickWithCheck,{
+					title: this.msg('button.ex-search')
+				});
+		},
+		_createNewRoute: function(){
 			function onCreateRouteSuccess(r) {
 				var formId = 'createNewRouteForm';
 				var routeRef = r.json.nodeRef;
@@ -79,7 +101,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 
 							YAHOO.Bubbling.fire('dataItemCreated', {
 								nodeRef: r.json.persistedObject,
-								bubblingLabel: this.options.datagridBubblingLabel
+								bubblingLabel: this.options.bubblingLabel
 							});
 
 						},
@@ -97,14 +119,13 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 
 				newRouteForm.show();
 			}
-
 			// Для предотвращения открытия нескольких карточек (при многократном быстром нажатии на кнопку создания)
 			if (this.createDialogOpening) {
 				return;
 			}
 			this.createDialogOpening = true;
 
-			var dataGrid = LogicECM.module.Base.Util.findComponentByBubblingLabel('LogicECM.module.Base.DataGrid', this.options.datagridBubblingLabel);
+			var dataGrid = LogicECM.module.Base.Util.findComponentByBubblingLabel('LogicECM.module.Base.DataGrid', this.options.bubblingLabel);
 			var itemType = dataGrid.datagridMeta.itemType;
 			var destination = dataGrid.datagridMeta.nodeRef;
 
@@ -132,16 +153,25 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 				}
 			});
 		},
-		onReady: function() {
-			if (this.options.inEngineer) {
-				Alfresco.util.createYUIButton(this, 'btnCreateNewRoute', this._createNewRoute, {
-					label: this.msg('button.new-route')
-				});
+		// по нажатию на кнопку Поиск
+		onSearchClickWithCheck: function(e, obj) {
+			this.checkRoutesDataGrid();
+			this.onSearchClick(e,obj);
+		},
+		// клик на Атрибутивном Поиске
+		onExSearchClickWithCheck: function() {
+			this.checkRoutesDataGrid();
+			this.onExSearchClick();
+		},
+
+		checkRoutesDataGrid:function(){
+
+			if(!this.modules.dataGrid || this.modules.dataGrid.options.bubblingLabel!=this.options.bubblingLabel){
+				this.modules.dataGrid = LogicECM.module.Base.Util.findComponentByBubblingLabel('LogicECM.module.Base.DataGrid', this.options.bubblingLabel);
+
 			}
-
-			YAHOO.util.Dom.setStyle(this.id + '-body', 'visibility', 'visible');
-
-			Alfresco.logger.info('A new LogicECM.module.Routes.Toolbar has been created');
 		}
 	});
+
+
 })();

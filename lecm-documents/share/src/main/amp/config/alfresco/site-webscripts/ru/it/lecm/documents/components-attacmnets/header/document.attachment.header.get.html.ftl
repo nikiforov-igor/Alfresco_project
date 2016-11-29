@@ -4,7 +4,6 @@
 
 <#if item??>
 	<#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
-    <#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
 	<#assign id = args.htmlid?html>
 	<#assign fileExtIndex = item.fileName?last_index_of(".")>
 	<#assign fileExt = (fileExtIndex > -1)?string(item.fileName?substring(fileExtIndex + 1)?lower_case, "generic")>
@@ -43,7 +42,6 @@
 	</script>
 
 	<div class="document-header">
-        <@view.viewForm formId="${id}-view-modifier-header-form"/>
 		<div class="document-attachment-info">
 			<h1 class="thin dark breadcrumb">
 				<#if documentNodeRef??>

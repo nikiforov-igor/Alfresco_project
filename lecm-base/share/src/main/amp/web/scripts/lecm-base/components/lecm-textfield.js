@@ -32,7 +32,8 @@ LogicECM.module = LogicECM.module || {};
                 isUniqueValue: false,
                 checkInArchive: false,
                 validationType: 'keyup',
-                validationMessageId: "LogicECM.constraints.isUnique.message"
+                validationMessageId: "LogicECM.constraints.isUnique.message",
+                validationFn: null
             },
 
             onReady: function () {
@@ -44,9 +45,11 @@ LogicECM.module = LogicECM.module || {};
                     if (this.runtimeForm && this.runtimeForm.formsRuntime && !this.options.disabled) {
                         if (this.runtimeForm.formsRuntime.formId === this.options.formId + "-form") {
                             // добавляем валидацию на поле
+
                             this.runtimeForm.formsRuntime.addValidation(
                                 this.id, // fieldId
-                                LogicECM.constraints.isUnique, // validationHandler
+                                (this.options.validationFn != null && typeof this.options.validationFn == "function") ?
+                                    this.options.validationFn : LogicECM.constraints.isUnique, /*validationHandler*/
                                 {
                                     nodeRef: this.options.objectNodeRef,
                                     typeName: this.options.typeName,

@@ -1,4 +1,6 @@
-<#assign id = args.htmlid>
+<#assign aDateTime = .now?string["dd-MM-yyyy_HH-mm-ss"]>
+<#assign panelId = args.htmlid + aDateTime >
+<#assign id = args.htmlid >
 
 <script type="text/javascript">//<![CDATA[
 (function(){
@@ -7,7 +9,8 @@
 		    queryNodeRef: "${queryNodeRef!''}",
             editPath: "${editPath!''}",
             deletePath: "${deletePath!''}",
-            bubblingLabel: "query-view-in-arm"
+            bubblingLabel: "query-view-in-arm",
+            panelId: "${panelId}"
 	    }).setMessages(${messages});
 	}
 
@@ -32,30 +35,14 @@
 
 <@comp.baseToolbar id true false false>
 <div class="hidden1">
-    <div id="preferencesBlock" class="yui-panel">
-        <div id="${id}-preference-head" class="hd">${msg("label.preference-block")}</div>
-        <div id="${id}-preference-body" class="bd">
-            <div id="${id}-preference-content">
+    <div id="${panelId}-preferencesBlock" class="yui-panel">
+        <div id="${panelId}-preference-head" class="hd">${msg("label.preference-block")}</div>
+        <div id="${panelId}-preference-body" class="bd">
+            <div id="${panelId}-preference-content">
                 <div id="preferencesBlock-content" >
-                    <div id="${id}-preferenceContainer" class="prreference">
+                    <div id="${panelId}-preferenceContainer" class="prreference">
                     <#-- Контейнер для отрисовки формы -->
                         <div id="preferencesBlock-forms" class="forms-container form-fields"></div>
-                    </div>
-                </div>
-                <div class="bdft">
-                    <div class="yui-u align-right right">
-                            <span id="preferencesBlock-rollback-button" class="yui-button yui-push-button search-icon">
-                                <span class="first-child">
-                                    <button type="button">${msg('label.button.reset')}</button>
-                                </span>
-                            </span>
-                    </div>
-                    <div class="yui-u align-right">
-                                <span id="preferencesBlock-save-button" class="yui-button yui-push-button search-icon">
-                                    <span class="first-child">
-                                        <button type="button">${msg('label.button.save')}</button>
-                                    </span>
-                                </span>
                     </div>
                 </div>
             </div>

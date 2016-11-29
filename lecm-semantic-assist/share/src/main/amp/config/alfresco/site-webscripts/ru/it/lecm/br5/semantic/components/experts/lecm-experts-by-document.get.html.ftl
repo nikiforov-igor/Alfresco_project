@@ -1,11 +1,9 @@
-<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
 
 <#assign aDateTime = .now>
 <#assign el=args.htmlid + aDateTime?iso_utc/>
 <#assign docRef= nodeRef/>
 <div id="${el}" class="members-list">
     <hr>
-    <@view.viewForm formId="${el}-view-node-form"/>
     <div class="members-table body scrollableList">
 		<#if expertsList??>
 			<#assign keys = expertsList?keys>
@@ -17,7 +15,7 @@
 						</div>
 						<#assign fio = mapAttrs["lastName"] +" "+ mapAttrs["firstName"] +" "+ mapAttrs["middleName"]>
 						<div class="person">
-							<h3>${view.showViewLink(fio, mapAttrs["expertRef"], "logicecm.employee.view")}</h3>
+							<h3><a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.viewAttributes({itemId:'${mapAttrs["expertRef"]}', title: 'logicecm.employee.view'})">${fio}</a></h3>
 							<#if mapAttrs["staf"] != "">
 								<div>${mapAttrs["staf"]}</div>
 							</#if>

@@ -451,9 +451,6 @@ public class DocumentTablePolicy extends BaseBean {
 				objects.add(nodeRef.toString());
 				objects.add(tableData.toString());
 				businessJournalService.log(document, EventCategory.DELETE, "#initiator удалил запись #object1 в таблице #object2 документа #mainobject", objects);
-
-                objects.add(document.toString());
-				businessJournalService.log(nodeRef, EventCategory.REMOVE_FROM_REPORTING, "#initiator удалил запись в таблице #object2 документа #object3", objects);
 			}
 		}
 	}

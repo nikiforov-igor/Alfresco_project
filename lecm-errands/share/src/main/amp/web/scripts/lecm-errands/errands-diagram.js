@@ -214,8 +214,8 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         + "document?nodeRef="+ data.nodeRef + "'>"+ data.title + "</a> ";
                 }
                 if (oColumn.key =="executor") {
-                    desc = "<a href='javascript:void(0);' onclick=\"viewAttributes('"+
-                        data.executorRef + "', null, 'logicecm.employee.view')\">"+ data.executor_name + "</a> ";
+                    desc = "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes(" +
+                        "{itemId:\'" + data.executorRef + "\', title: \'logicecm.employee.view\' })\">" + data.executor_name + "</a> ";
                 }
                 if (oColumn.key =="startDate") {
                     if (data.startDate != undefined) {

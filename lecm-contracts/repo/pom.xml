@@ -6,7 +6,7 @@
     <parent>
         <groupId>ru.it.lecm.contracts</groupId>
         <artifactId>contracts</artifactId>
-        <version>1.8.0</version>
+        <version>1.8.5</version>
     </parent>
 
     <artifactId>contracts-repo</artifactId>
@@ -125,14 +125,19 @@
 			<version>${project.version}</version>
                         <scope>provided</scope>
 		</dependency>
-                <dependency>
-                    <groupId>ru.it.lecm.reports</groupId>
-                    <artifactId>lecm-reports-api</artifactId>
-                    <version>${project.version}</version>
-                    <scope>provided</scope>
-                </dependency>
-
-		<dependency>
+        <dependency>
+            <groupId>ru.it.lecm.reports</groupId>
+            <artifactId>lecm-reports-api</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>-->
+        <dependency>
+            <groupId>ru.it.lecm.contractors</groupId>
+            <artifactId>lecm-contractors-api</artifactId>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
+        </dependency>
+		<!--<dependency>
 			<groupId>ru.it.lecm.workflow</groupId>
 			<artifactId>workflow-repo-api</artifactId>
 			<version>${project.version}</version>

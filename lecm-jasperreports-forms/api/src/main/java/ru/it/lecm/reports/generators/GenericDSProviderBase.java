@@ -1,6 +1,7 @@
 package ru.it.lecm.reports.generators;
 
 import net.sf.jasperreports.engine.*;
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.search.EmptyResultSet;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -186,17 +187,36 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
                 // set limit ...
                 maxItems = this.reportDescriptor.getFlags().getLimit();
             }
-            if (skipCountOffset > 0) {
-                search.setSkipCount(skipCountOffset);
+
+            if (skipCountOffset < 0) {
+                skipCountOffset = 0;
             }
             if (maxItems != UNLIMITED) {
                 search.setMaxItems(maxItems);
             }
 
+            search.addSort("@" + ContentModel.PROP_NODE_DBID, true);
+
             /* (!) момент истины - выполнение ЗАПРОСА */
+            List<NodeRef> nodes = new ArrayList<>();
+
+            boolean hasNodes = true;
+
             if (!preparedQuery.isEmpty()) {
-                rs = getServices().getServiceRegistry().getSearchService().query(search);
+                while(hasNodes) {
+                    search.setSkipCount(skipCountOffset);
+
+                    rs = getServices().getServiceRegistry().getSearchService().query(search);
+
+                    for (ResultSetRow row : rs) {
+                        nodes.add(row.getNodeRef());
+                    }
+
+                    hasNodes = rs.length() > 0;
+                    skipCountOffset = skipCountOffset + rs.length();
+                }
             }
+            rs = new NodeRefsResultSet(getServices().getServiceRegistry().getNodeService(), nodes);
         } else if (parentContext != null) {
             NodeRef docId = parentContext.getCurNodeRef();
             List<NodeRef> children = getServices().getSubstitudeService().getObjectsByTitle(docId, preparedQuery.getQuery().toString());
@@ -212,7 +232,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
         final int foundCount = (rs != null) ? rs.length() : -1;
 
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Query to Alfresco:foundCount=" + foundCount));
+            logger.debug("Query to Alfresco:foundCount=" + foundCount);
         }
         return preparedQuery;
     }

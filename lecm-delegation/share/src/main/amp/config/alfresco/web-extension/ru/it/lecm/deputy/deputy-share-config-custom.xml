@@ -271,7 +271,7 @@
 							<control-param name="employeeAbsenceMarker">true</control-param>
 							<control-param name="useStrictFilterByOrg">true</control-param>
 							<control-param name="showSearch">true</control-param>
-							<control-param name="additionalFilter">(ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND @lecm-orgstr\\:employee-person-login:?*) AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 						</control>
 					</field>
 					<field id="lecm-deputy:deputy-assoc" label-id="label.deputy.search">
@@ -285,7 +285,7 @@
 							<control-param name="employeeAbsenceMarker">true</control-param>
 							<control-param name="useStrictFilterByOrg">true</control-param>
 							<control-param name="showSearch">true</control-param>
-							<control-param name="additionalFilter">(ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND @lecm-orgstr\\:employee-person-login:?*) AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 						</control>
 					</field>
 				</appearance>

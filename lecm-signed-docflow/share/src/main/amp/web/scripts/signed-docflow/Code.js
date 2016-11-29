@@ -1037,7 +1037,14 @@ function RetrieveCertificate_NPAPI()
     xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     var response;
     xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4) {
+
+		function isIE() {
+			var retVal = (("Microsoft Internet Explorer" == navigator.appName) || // IE < 11
+				navigator.userAgent.match(/Trident\/./i)); // IE 11
+			return retVal;
+		}
+
+		if (xmlhttp.readyState == 4) {
             if(xmlhttp.status == 200) {
                 response = xmlhttp.responseText;
                 var cert_data = "";
@@ -1215,12 +1222,6 @@ function Decrypt_NPAPI(certListBoxId) {
     }
 }
 
-function isIE() {
-    var retVal = (("Microsoft Internet Explorer" == navigator.appName) || // IE < 11
-        navigator.userAgent.match(/Trident\/./i)); // IE 11
-    return retVal;
-}
-
 function SignHashes_NPAPI(thumbprint, docs, sTSAAddress, signCallBack, context) {
 	var signedhashes = [];
     docs.forEach(function (doc) {
@@ -1300,7 +1301,7 @@ function SignHash_NPAPI(thumbprint, hash, hashNodeRef, sTSAAddress) {
             var oHashedData = cadesplugin.CreateObject("CAdESCOM.HashedData");
             oHashedData.Algorithm = hashAlg;
             oHashedData.SetHashValue(sHashValue);
-            var CADES = sTSAAddress ? (sTSAAddress !== "${enforced.url}" ? 0x5D : 1) : 1;
+            var CADES = sTSAAddress ? (sTSAAddress !== "${dsign.tsp.url}" ? 0x5D : 1) : 1;
 
             if (sHashValue) {
                 // Данные на подпись ввели
@@ -1324,6 +1325,87 @@ function SignHash_NPAPI(thumbprint, hash, hashNodeRef, sTSAAddress) {
 	}
     var result = {hash: hash, hashNodeRef: hashNodeRef, signature: Signature};
 	return { signature: result, errorString: "" };
+}
+
+function verifySignaturesSync (signs, callback) {
+    var results = signs.map(function (sign) {
+        return verifySignature(sign.hash, sign.signedMessage);
+    });
+
+    callback(results);
+}
+
+function verifySignature (hash, sSignedMessage){
+    var CADESCOM_HASH_ALGORITHM_CP_GOST_3411 = 100;
+    var oHashedData = cadesplugin.CreateObject("CAdESCOM.HashedData");
+    oHashedData.Algorithm = CADESCOM_HASH_ALGORITHM_CP_GOST_3411; 
+    oHashedData.SetHashValue(hash);
+    
+    var oSignedData = cadesplugin.CreateObject("CAdESCOM.CadesSignedData");
+    
+    try {
+        oSignedData.VerifyHash(oHashedData, sSignedMessage);
+    } catch (err) {
+        console.log("Failed to verify signature");
+        return {"certificate":oSignedData.Signers(1).Certificate, "valid": false};
+    }
+    return {"certificate":oSignedData.Signers(1).Certificate, "valid": true};
+}
+
+function GetCertificateInfo(cert, callback) {
+
+    function getNormalDate(d) {
+        return  ('0' + d.getDate()).slice(-2) + '.' + ('0' + (d.getMonth() + 1)).slice(-2) + '.' + d.getFullYear();
+    }
+
+    function getAttributeValue(str, attribute) {
+        var index = str.indexOf(attribute + "=");
+        if (index == -1) {
+            return str;
+        }
+        str = str.substring(index + attribute.length + 1);
+        index = str.indexOf(",");
+        if (index == -1) {
+            return str;
+        }
+        return str.substring(0, index);
+    }
+
+    var result;
+    try {
+        var Validator = cert.IsValid();
+        var IsValid = Validator.Result;
+        var ValidFromDate = new Date((cert.ValidFromDate));
+        var ValidToDate = new Date((cert.ValidToDate));
+        var version = cert.Version;
+        var thumbprint = cert.Thumbprint;
+        var subject = "";
+        var subject = cert.SubjectName;
+        var serialNumber = cert.SerialNumber;
+        var issuer = cert.IssuerName;
+        var hasPrivateKey = cert.HasPrivateKey();
+        var shortissuer = getAttributeValue(issuer, "CN");
+        var shortsubject = getAttributeValue(subject, "CN");
+        result = {
+            shortissuer: shortissuer,
+            shortsubject: shortsubject,
+            validTo: ValidToDate,
+            validFrom: ValidFromDate,
+            normalValidTo: getNormalDate(ValidToDate),
+            normalValidFrom: getNormalDate(ValidFromDate),
+            version: version,
+            thumbprint: thumbprint,
+            subject: subject,
+            serialNumber : serialNumber,
+            issuer: issuer,
+            hasPrivateKey: hasPrivateKey,
+            isValid: IsValid
+        };
+    }catch (ex) {
+        console.log("Ошибка при получении информации из объекта сертификата: " + GetErrorMessage(ex));
+    }
+
+    callback(result);
 }
 
 //-----------------------------------

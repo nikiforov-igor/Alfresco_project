@@ -235,15 +235,8 @@
                 <value>alfresco/module/documents-repo/dictionaries/lecm-document-stamps.xml</value>
                 <value>alfresco/module/documents-repo/models/lecm-document-br-items.xml</value>
                 <value>alfresco/module/documents-repo/dictionaries/lecm-document-nt-items.xml</value>
-		    </list>
-	    </property>
-    </bean>
-
-	<bean id="documents.LogicEcmConnectionTypesItemsBootstrap" parent="lecmDictionaryBootstrap"
-          depends-on="documents.LogicEcmConnectionTypesBootstrap">
-	    <property name="dictionaries">
-		    <list>
-			    <value>alfresco/module/documents-repo/dictionaries/lecm-connection-types-items.xml</value>
+                <value>alfresco/module/documents-repo/dictionaries/lecm-connection-types-items.xml</value>
+                <value>alfresco/module/documents-repo/dictionaries/lecm-connection-available-types-items.xml</value>
 		    </list>
 	    </property>
     </bean>
@@ -665,6 +658,7 @@
 
     <bean id="employeeExpression" class="ru.it.lecm.documents.expression.ExpressionEmployee">
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+        <property name="delegationService" ref="delegationService"/>
     </bean>
 
 	<bean id="documentsOnCreateAssocsPolicy" class="ru.it.lecm.documents.policy.DocumentsOnCreateAssocsPolicy"

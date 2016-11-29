@@ -18,17 +18,16 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
-import org.json.JSONObject;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.jms.core.JmsTemplate;
-import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.reporting.Constants;
 import ru.it.lecm.reporting.ReportLine;
 import ru.it.lecm.reporting.ReportingHelper;
 import ru.it.lecm.reporting.mybatis.AssocDefinition;
 import ru.it.lecm.reporting.mybatis.InsertInto;
+import ru.it.lecm.reporting.mybatis.ReportingDAO;
 import ru.it.lecm.reporting.mybatis.UpdateWhere;
 import ru.it.lecm.reporting.mybatis.impl.ReportingDAOImpl;
 
@@ -36,7 +35,6 @@ import javax.jms.*;
 import javax.jms.Queue;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -50,6 +48,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
     private ActiveMQConnectionFactory connectionFactory;
     private JmsTemplate templateProducer;
     private Integer batchSize = 100;
+    final long batchForDeleteSize = 500;
 
     private Map<QName, Set<String>> typeAssocsDefinitions = new HashMap<>();
 
@@ -95,7 +94,8 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
             this.getDbhb().createEmptyTypeTablesTable();
             this.getDbhb().createEmptyAssocsTable();
 
-            List<Message> messagesAboutDelete = getMessagesAboutDelete();
+            // до сбора - удаление. Если удалять после - возможно проблемы с восстановление данных из корзины
+            deleteRecordsFromDB(queries);
 
             while (keys.hasMoreElements()) {
                 String tableName = (String) keys.nextElement();
@@ -119,27 +119,27 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                 PreparedStatement stmt = null;
                 java.sql.Connection conn = null;
                 try {
-                    String typesQuery = "SELECT " +
+                    StringBuilder typesQuery = new StringBuilder("SELECT " +
                             "  alf_qname.id " +
                             "FROM " +
                             "  alf_qname, " +
                             "  alf_namespace " +
                             "WHERE " +
-                            "  alf_qname.ns_id = alf_namespace.id AND (";
+                            "  alf_qname.ns_id = alf_namespace.id AND (");
 
                     boolean first = true;
                     for (QName t : types) {
                         if (!first) {
-                            typesQuery += " OR ";
+                            typesQuery.append(" OR ");
                         }
-                        typesQuery += "(alf_namespace.uri = '" + t.getNamespaceURI() + "' AND alf_qname.local_name = '" + t.getLocalName() + "')";
+                        typesQuery.append("(alf_namespace.uri = '").append(t.getNamespaceURI()).append("' AND alf_qname.local_name = '").append(t.getLocalName()).append("')");
                         first = false;
                     }
 
-                    typesQuery += ");";
+                    typesQuery.append(");");
 
                     conn = getReportingHelper().getAlfrescoDataSource().getConnection();
-                    stmt = conn.prepareStatement(typesQuery);
+                    stmt = conn.prepareStatement(typesQuery.toString());
                     res = stmt.executeQuery();
                     List<Long> lTypes = new ArrayList<>();
                     while (res.next()) {
@@ -330,54 +330,122 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                 }
             }
 
-            if (!this.dbhb.tableIsRunning("refresh_deleted_rows")) {
-                Map<String, Set> typeTablesMap = new HashMap<>();
-                List<String> processedMessages = new ArrayList<>();
-                for (Message deleteMessage : messagesAboutDelete) {
-                    if (deleteMessage instanceof TextMessage) {
-                        String messageText = ((TextMessage) deleteMessage).getText();
-                        if (messageText != null) {
-                            JSONObject messagesObject = new JSONObject(messageText);
-                            String mainObjectRef = messagesObject.getString("mainObject");
-                            if (NodeRef.isNodeRef(mainObjectRef)) {
-                                NodeRef mainObject = new NodeRef(mainObjectRef);
-                                String shortTypeName;
-                                String objectType = messagesObject.getString("objectType");
-                                if (NodeRef.isNodeRef(objectType)) {
-                                    NodeRef type = new NodeRef(objectType);
-                                    shortTypeName = (String) nodeService.getProperty(type, BusinessJournalService.PROP_OBJ_TYPE_CLASS);
-
-                                    Set<String> tables;
-                                    if (typeTablesMap.containsKey(shortTypeName)) {
-                                        tables = typeTablesMap.get(shortTypeName);
-                                    } else {
-                                        tables = getTablesPerType(shortTypeName);
-                                        typeTablesMap.put(shortTypeName, tables);
-                                    }
-                                    for (String table : tables) {
-                                        UpdateWhere updateWhere =
-                                                new UpdateWhere(table,
-                                                        "",
-                                                        "sys_node_uuid LIKE \'" + mainObject.getId() + "\'");
-
-                                        getDbhb().getReportingDAO().deleteFromTable(updateWhere);
-                                    }
-                                    this.getDbhb().getReportingDAO().deleteFromAssocsTable(new AssocDefinition(mainObject.toString(),  null, null));
-                                    this.getDbhb().getReportingDAO().deleteFromAssocsTable(new AssocDefinition(null, mainObject.toString(), null));
-
-                                    processedMessages.add(deleteMessage.getJMSMessageID());
-                                } else {
-                                    logger.error("Message has no type!!! Message:" + messageText + "\n");
-                                    processedMessages.add(deleteMessage.getJMSMessageID());
-                                }
-                            }
-                        }
-                    }
-                }
-                this.consumeMessagesAboutDelete(processedMessages);
-            }
         } catch (Exception var36) {
             logger.error("Fatality: " + var36.getMessage());
+        }
+    }
+
+    private long getMaxTransactionId() throws SQLException {
+        long transactionId = 0L;
+
+        java.sql.ResultSet results = null;
+        java.sql.Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            String fullQuery = "select MAX(transaction_id) FROM alf_node";
+
+            connection = getReportingHelper().getAlfrescoDataSource().getConnection();
+            preparedStatement = connection.prepareStatement(fullQuery);
+
+            results = preparedStatement.executeQuery();
+
+            while (results.next()) {
+                transactionId = results.getLong(1);
+            }
+        } catch (SQLException e1) {
+            logger.error("Error while database request " + "\r\n" + preparedStatement + "\r\n" + e1.getMessage());
+        } finally {
+            if (results != null && !results.isClosed()) {
+                results.close();
+            }
+            if (preparedStatement != null && !preparedStatement.isClosed()) {
+                preparedStatement.close();
+            }
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        }
+        return transactionId;
+    }
+
+
+    private void deleteRecordsFromDB(Properties tables) throws Exception {
+        final String deletedTimestamp = this.dbhb.getLastTimestamp("deleted"); // для отсчета удаления
+
+        String[] lastSyncDate = null;
+        if (deletedTimestamp != null) {
+            lastSyncDate = deletedTimestamp.split("-");
+        }
+        if (lastSyncDate == null || lastSyncDate.length != 2) {
+            lastSyncDate = new String[]{"0", "0"};
+        }
+
+        final long minTransactionId = Long.parseLong(lastSyncDate[0]);
+        final long maxTransactionId = getMaxTransactionId();
+
+        if (!this.dbhb.tableIsRunning("deleted") && isRecordDeletionEnabled(getReportingConfigs())) {
+            this.dbhb.setLastTimestampStatusRunning("deleted");
+
+            Map<Long, NodeRef> toDelete = getRecordsToDelete(minTransactionId);
+            logger.debug("Found records to delete: " + toDelete.size());
+            final long max = toDelete.size();
+
+            try {
+                SqlSession sqlSession = ((SqlSessionTemplate) ((ReportingDAOImpl) this.dbhb.getReportingDAO()).getTemplate()).getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+                sqlSession.getConnection().setAutoCommit(false);
+                try {
+                    int cnt = 0;
+
+                    final StringBuilder nodeRefBuilder = new StringBuilder();
+                    final StringBuilder idsBuilder = new StringBuilder();
+                    for (Long dbId : toDelete.keySet()) {
+                        cnt++;
+                        nodeRefBuilder.append("\'").append(toDelete.get(dbId).toString()).append("\',");
+                        idsBuilder.append(dbId).append(",");
+
+                        if (cnt == batchForDeleteSize || cnt >= max) {
+                            final String nodesQuery = nodeRefBuilder.delete(nodeRefBuilder.length() - 1, nodeRefBuilder.length()).toString();
+                            final String idsQuery = idsBuilder.delete(idsBuilder.length() - 1, idsBuilder.length()).toString();
+
+                            // 1. удаление из таблиц
+                            Enumeration keys = tables.keys();
+                            while (keys.hasMoreElements()) {
+                                String tableName = (String) keys.nextElement();
+                                tableName = this.dbhb.fixTableColumnName(tableName);
+                                UpdateWhere updateWhere =
+                                        new UpdateWhere(tableName,
+                                                "",
+                                                "sys_node_dbid IN (" + idsQuery + ")");
+                                sqlSession.delete("reporting-delete-from-table", updateWhere);
+                            }
+                            // 2. удаление из таблицы associations
+                            UpdateWhere updateSources =
+                                    new UpdateWhere(ReportingDAO.ASSOCS, "", "source_ref IN (" + nodesQuery + ")");
+                            sqlSession.delete("reporting-delete-from-table", updateSources);
+
+                            UpdateWhere updateTargets =
+                                    new UpdateWhere(ReportingDAO.ASSOCS, "", "target_ref IN (" + nodesQuery + ")");
+                            sqlSession.delete("reporting-delete-from-table", updateTargets);
+
+                            sqlSession.commit();
+                            sqlSession.close();
+                            sqlSession = ((SqlSessionTemplate) ((ReportingDAOImpl) this.dbhb.getReportingDAO()).getTemplate()).getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+                            sqlSession.getConnection().setAutoCommit(false);
+
+                            cnt = 0;
+                            nodeRefBuilder.delete(0, nodeRefBuilder.length());
+                            idsBuilder.delete(0, idsBuilder.length());
+                        }
+                    }
+                    sqlSession.commit();
+                } finally {
+                    sqlSession.close();
+                }
+                this.dbhb.setLastTimestampAndStatus("deleted", "Done", "" + maxTransactionId + "-0");
+            } catch (Exception ex) {
+                logger.error("Fatality: " + ex.getMessage());
+                this.dbhb.setLastTimestampAndStatus("deleted", "Done", "" + minTransactionId + "-0"); // не обновляем
+            }
         }
     }
 
@@ -825,6 +893,20 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         return result;
     }
 
+    private boolean isRecordDeletionEnabled(Properties configs) {
+        boolean result = false;
+        if (configs.containsKey("reporting.records-delete.enabled")) {
+            String enabled = configs.getProperty("reporting.records-delete.enabled");
+            if ("true".equalsIgnoreCase(enabled)) {
+                logger.info("Reporting Delete Records is enabled!");
+                result = true;
+            }
+        } else {
+            result = true; // если нет в конфиге - сбор включен, как и работало до
+        }
+        return result;
+    }
+
     private boolean isReportingMustStop(Properties configs) {
         if (configs.containsKey("reporting.startHour") && configs.containsKey("reporting.endHour")) {
             Calendar cal = Calendar.getInstance();
@@ -881,49 +963,46 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         return p;
     }
 
-    protected List<Message> getMessagesAboutDelete() throws JMSException {
-        List<Message> messages = new ArrayList<>();
+    protected Map<Long,NodeRef> getRecordsToDelete(long minTxn) throws SQLException {
+        Map<Long,NodeRef> records = new HashMap<>();
 
-        // Create a Connection
-        Connection connection = null;
-        Session session = null;
+        java.sql.ResultSet results = null;
+        java.sql.Connection connection = null;
+        PreparedStatement preparedStatement = null;
         try {
-            connection = connectionFactory.createConnection();
-            connection.start();
+            String fullQuery = "SELECT np.long_value, node.uuid FROM alf_transaction txn " +
+                    "JOIN alf_node node  ON (txn.id = node.transaction_id) " +
+                    "JOIN alf_qname on (node.type_qname_id = alf_qname.id) " +
+                    "LEFT OUTER JOIN alf_node_properties np on (np.node_id = node.id and np.qname_id = (SELECT id from alf_qname WHERE local_name = 'originalId')) " +
+                    "WHERE alf_qname.local_name = 'deleted' AND " +
+                    "node.transaction_id > ? ";
 
-            // Create a Session
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            connection = getReportingHelper().getAlfrescoDataSource().getConnection();
+            preparedStatement = connection.prepareStatement(fullQuery);
+            preparedStatement.setLong(1, minTxn);
 
-            // Get a destination
-            Destination destination = templateProducer.getDefaultDestination();
+            results = preparedStatement.executeQuery();
 
-            QueueBrowser browser = session.createBrowser((javax.jms.Queue) destination);
-            Enumeration msgs = browser.getEnumeration();
-            if (msgs.hasMoreElements()) {
-                while (msgs.hasMoreElements()) {
-                    Message tempMsg = (Message) msgs.nextElement();
-                    messages.add(tempMsg);
-
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Get message. Message:" + tempMsg);
-                    }
-                }
-            } else {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("No messages in queue query! Query:" + ((Queue) destination).getQueueName());
-                }
+            while (results.next()) {
+                Long e1 = results.getLong(1);
+                String e2 = results.getString(2);
+                logger.debug("Delete node with id= " + e1);
+                records.put(e1, new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, e2));
             }
-        } catch (JMSException e) {
-            logger.error(e.getMessage(), e);
+        } catch (SQLException e1) {
+            logger.error("Error while database request " + "\r\n" + preparedStatement + "\r\n" + e1.getMessage());
         } finally {
-            if (session != null) {
-                session.close();
+            if (results != null && !results.isClosed()) {
+                results.close();
             }
-            if (connection != null) {
+            if (preparedStatement != null && !preparedStatement.isClosed()) {
+                preparedStatement.close();
+            }
+            if (connection != null && !connection.isClosed()) {
                 connection.close();
             }
         }
-        return messages;
+        return records;
     }
 
     protected void consumeMessagesAboutDelete(List<String> messagesIds) throws JMSException {
@@ -1126,17 +1205,17 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                     Integer.parseInt(this.getGlobalProperties().getProperty("reporting.harvest.treshold.child.assocs", "20")));
             long shortName = childAssocs.size();
             if (shortName > 0L && shortName <= min) {
-                String maxChildCount = "";
+                StringBuilder maxChildCount = new StringBuilder();
 
                 ChildAssociationRef numberOfChildCars;
-                for (Iterator iterator = childAssocs.iterator(); iterator.hasNext(); maxChildCount = maxChildCount + numberOfChildCars.getChildRef()) {
+                for (Iterator iterator = childAssocs.iterator(); iterator.hasNext(); maxChildCount.append(numberOfChildCars.getChildRef())) {
                     numberOfChildCars = (ChildAssociationRef) iterator.next();
                     if (maxChildCount.length() > 0) {
-                        maxChildCount = maxChildCount + ",";
+                        maxChildCount.append(",");
                     }
                 }
 
-                rl.setLine(Constants.COLUMN_CHILD_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), maxChildCount, this.getReplacementDataType());
+                rl.setLine(Constants.COLUMN_CHILD_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), maxChildCount.toString(), this.getReplacementDataType());
             } else if (shortName > 0L) { // достигли лимита - сообщение
                 logger.warn("Max limit reached for node:" + nodeRef + " ," +
                         "reporting.harvest.treshold.child.assocs = " + min + ", number assocs=" + shortName);
@@ -1168,7 +1247,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
 
         for (QName type : targetsByQName.keySet()) {
             String key;
-            String value;
+            StringBuilder value;
             long maxChildCount1;
             long numberOfChildCars1;
             try {
@@ -1181,14 +1260,14 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                         key = key.substring(0, 60);
                     }
                     if (!this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",") && !key.equals("-") && e.size() > 0) {
-                        value = "";
+                        value = new StringBuilder();
                         for (NodeRef node : e) {
-                            value += node.toString() + ",";
+                            value.append(node.toString()).append(",");
                             AssocDefinition definition = new AssocDefinition(nodeRef.toString(), node.toString(), key);
                             this.getAssocs().add(definition);
                         }
-                        value = value.substring(0, value.length() - 1);
-                        rl.setLine(key, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), value, this.getReplacementDataType());
+                        String strValue = value.substring(0, value.length() - 1);
+                        rl.setLine(key, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), strValue, this.getReplacementDataType());
                     }
                 } else if (numberOfChildCars1 > 0L) { //достигли лимита - сообщение
                     logger.warn("Max limit reached for node:" + nodeRef + " ,reporting.harvest.treshold.sourcetarget.assocs=" + maxChildCount1 + ", number assocs=" + numberOfChildCars1);

@@ -7,6 +7,7 @@
 	<imports>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.it.ru/logicECM/model/approval/workflow/decision/1.0" prefix="lecmApproveDecision"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 	</imports>
 
 	<namespaces>
@@ -49,6 +50,22 @@
 					<default>false</default>
 				</property>
 			</properties>
+		</aspect>
+		
+		<aspect name="lecmApproveAspects:approvalDataAspect">
+			<associations>
+				<association name="lecmApproveAspects:approvalFolderRef">
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>cm:folder</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
 		</aspect>
 	</aspects>
 </model>

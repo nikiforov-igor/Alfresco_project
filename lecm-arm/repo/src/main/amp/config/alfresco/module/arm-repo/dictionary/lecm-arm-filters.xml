@@ -21,7 +21,7 @@
                 <property name="lecm-arm:filter-code">DATE_FILTER</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
-                <property name="lecm-arm:filter-values">(@lecm\\-eds\\-document:execution\\-date:[MIN TO NOW]) OR (lecm\\-errands:is\\-expired:true)|Просроченные;@lecm\\-eds\\-document:execution\\-date:[NOW TO MAX]|В работе;@lecm\\-eds\\-document:execution\\-date:{{TIME_OFFSET({metricUnit:'DAY',value:2})}}|С приближающимся сроком; |Все</property>
+                <property name="lecm-arm:filter-values">(@lecm\\-eds\\-document:execution\\-date:[MIN TO NOW]) OR (@lecm\\-errands\\:limitation\\-date:[MIN TO NOW]) OR (lecm\\-errands:is\\-expired:true)|Просроченные;(@lecm\\-eds\\-document:execution\\-date:[NOW TO MAX]) OR (@lecm\\-errands\\:limitation\\-date:[NOW TO MAX])|В работе;(@lecm\\-eds\\-document:execution\\-date:{{TIME_OFFSET({metricUnit:'DAY',value:2})}}) OR (@lecm\\-errands\\:limitation\\-date:{{TIME_OFFSET({metricUnit:'DAY',value:2})}})|С приближающимся сроком; |Все</property>
                 <property name="lecm-arm:filter-query">#value</property>
             </item>
             <item name="cm:Контроль" type="lecm-arm:filter">

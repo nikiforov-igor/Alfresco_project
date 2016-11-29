@@ -50,6 +50,21 @@
    <#assign multiValued=true>
 </#if>
 
+<#assign currentValue = "" />
+<#assign minLimit = "" />
+<#assign maxLimit = "" />
+<#if field.control.params.currentValueArg?? && args[field.control.params.currentValueArg]??>
+	<#assign currentValue = args[field.control.params.currentValueArg] />
+</#if>
+
+<#if field.control.params.maxLimitArg?? && args[field.control.params.maxLimitArg]??>
+	<#assign maxLimit = args[field.control.params.maxLimitArg] />
+</#if>
+
+<#if field.control.params.minLimitArg?? && args[field.control.params.minLimitArg]??>
+	<#assign minLimit = args[field.control.params.minLimitArg] />
+</#if>
+
 <#if form.capabilities?? && form.capabilities.javascript?? && form.capabilities.javascript == false><#assign jsDisabled=true><#else><#assign jsDisabled=false></#if>
 
 <#if form.mode == "view">
@@ -115,11 +130,14 @@
            var picker = new LogicECM.module.WCalendar.Absence.DatePicker("${controlId}", "${fieldHtmlId}").setOptions(
            {
               <#if form.mode == "view" || disabled>disabled: true,</#if>
-              currentValue: "${field.value?js_string}",
+			  currentValue:"${currentValue}",
+		      minLimit: "${minLimit}",
+			  maxLimit: "${maxLimit}",
               showTime: ${showTime?string},
               mandatory: ${field.mandatory?string},
               validateHandler: <#if validateHandler??>${validateHandler}<#else>null</#if>,
               message: <#if errorMessage??>${errorMessage}<#else>"${msg('lecm.absence.msg.wrong.value')}"</#if>
+
            }).setMessages(
               ${messages}
            );

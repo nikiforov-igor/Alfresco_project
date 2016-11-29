@@ -144,7 +144,7 @@
 		  p:behaviourFilter-ref="policyBehaviourFilter"
 		  p:documentMembersService-ref="documentMembersService"
 		  p:meetingsService-ref="meetingsService"
-
+		  p:stateMachineService-ref="lifecycleStateMachineHelper"
 	/>
 
 	<bean id="protocolPolicy" class="ru.it.lecm.meetings.policy.ProtocolPolicy" parent="baseBean"
@@ -210,6 +210,7 @@
 				<value>alfresco/module/${artifactId}/actions/holding-meeting.xml</value>
 				<value>alfresco/module/${artifactId}/actions/create-protocol.xml</value>
 				<value>alfresco/module/${artifactId}/actions/approve-time.xml</value>
+				<value>alfresco/module/${artifactId}/actions/change-secretary.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -254,6 +255,7 @@
 	</util:list>
 
 	<bean id="meetings.copySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings"
+		  p:baseURL="event-create"
 		  p:propsToCopy-ref="meetings.copySettings.propsToCopy"
 		  p:assocsToCopy-ref="meetings.copySettings.assocsToCopy" />
 

@@ -39,7 +39,7 @@
 				<property name="cm:name"><![CDATA[Ознакамливающийся]]></property>
 				<property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
 				<property name="lecm-group-actions:field-id"><![CDATA[reviewers]]></property>
-				<property name="lecm-group-actions:field-is-mandatory"><![CDATA[true]]></property>
+				<property name="lecm-group-actions:field-is-mandatory"><![CDATA[false]]></property>
 				<property name="lecm-group-actions:field-type"><![CDATA[lecm-review-ts:reviewers]]></property>
 				<property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
 			</item>
@@ -50,6 +50,14 @@
 				<property name="lecm-group-actions:field-is-mandatory"><![CDATA[false]]></property>
 				<property name="lecm-group-actions:field-type"><![CDATA[lecm-review-ts:saveas]]></property>
 				<property name="lecm-group-actions:field-priority"><![CDATA[1]]></property>
+			</item>
+			<item name="cm:Скрипт Валидации" type="lecm-group-actions:form-field">
+				<property name="cm:name"><![CDATA[]]></property>
+				<property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
+				<property name="lecm-group-actions:field-id"><![CDATA[reviewers-mandatory-validator]]></property>
+				<property name="lecm-group-actions:field-is-mandatory"><![CDATA[false]]></property>
+				<property name="lecm-group-actions:field-type"><![CDATA[lecm-review-ts:load-script]]></property>
+				<property name="lecm-group-actions:field-priority"><![CDATA[2]]></property>
 			</item>
 		</items>
 	</item>

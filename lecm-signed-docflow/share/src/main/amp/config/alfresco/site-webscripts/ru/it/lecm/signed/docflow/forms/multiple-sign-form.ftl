@@ -9,7 +9,8 @@
 	<@formLib.renderFormsRuntime formId = formId />
 </#if>
 <#if t == '[]'>
-	<br/><strong>${msg('lecm.signdoc.lbl.no.sign.attachs')}</strong>
+	<br/>
+	<p class="title-label">${msg('lecm.signdoc.lbl.no.sign.attachs')}</p>
 </#if>
 <@formLib.renderFormContainer formId = formId>
 <#list data as group>
@@ -19,9 +20,16 @@
 	<#list group.content as content>
 		<input style="margin: 5px 0px 10px 10px;" type="checkbox" value="${content.nodeRef}" checked>
 			&nbsp;<a style="margin: 5px 0px 10px 10px;" href="${url.server}/share/page/document-attachment?nodeRef=${content.nodeRef}">${content.name}</a>
-	</input>
+		</input>
 	<br/>
 	</#list>
 </#list>
 </@>
 </div>
+<script type="text/javascript">
+    (function () {
+        LogicECM.module.Base.Util.loadCSS([
+            'css/signed-docflow/multiple-sign-form.css'
+        ])
+    })();
+</script>

@@ -45,7 +45,8 @@
 					</field>
 					<field id="lecmWorkflowRoutes:selectRouteAssoc">
 						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.Workflow.routeHasEmployeesValidator" event="keyup" message-id="approval.required.filled.route"/>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Workflow.routeIsEmptyValidator" event="keyup" message-id="approval.required.not.empty.route"/>
+							<constraint type="INVALID" validation-handler="LogicECM.module.Workflow.routeHasEmployeesValidator" event="keyup" message-id="approval.required.filled.route"/>
 						</constraint-handlers>
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_маршрутов</control-param>
@@ -77,6 +78,7 @@
 					<show id="lecmApprove3:commentAssoc"/>
 					<show id="lecmApprove3:approveTaskValidatorFake" force="true"/>
 					<!--<show id="bpm:reassignable"/>-->
+					<show id="transitions" force="true" />
 				</field-visibility>
 				<appearance>
 					<field id="lecmApprove3:presentString">
@@ -109,6 +111,11 @@
 					<!--<field id="bpm:reassignable" set="right-set">
 						<control template="/ru/it/lecm/base-share/components/controls/reassign-task-control.ftl"/>
 					</field>-->
+					<field id="transitions">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl">
+                            <control-param name="fieldValue">Next</control-param>
+                        </control>
+                    </field>
 				</appearance>
 			</form>
 		</forms>

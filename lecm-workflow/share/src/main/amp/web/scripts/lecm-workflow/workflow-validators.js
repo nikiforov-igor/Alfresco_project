@@ -153,8 +153,8 @@ LogicECM.module.Workflow.workflowListValidator = function(field, args, event, fo
 LogicECM.module.Workflow.routeHasEmployeesValidator =
 	function (field) {
 		var valid = false;
-		var docNodeRef = YAHOO.util.History.getQueryStringParameter('nodeRef');
-		if (field.value && field.value.length > 0) {
+		var docNodeRef = Alfresco.util.getQueryStringParameter('nodeRef');
+		if (field.value) {
 			jQuery.ajax({
 				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/routes/isHasEmployees?routeRef=" + field.value + "&documentRef=" + docNodeRef,
 				type: "GET",
@@ -168,7 +168,35 @@ LogicECM.module.Workflow.routeHasEmployeesValidator =
 				},
 				error: function() {
 					Alfresco.util.PopupManager.displayMessage({
-						text: "ERROR: can not perform field validation"
+						text: this.msg('message.field.validation.failed')
+					});
+					valid = false;
+				}
+			});
+		}
+
+		return valid;
+	};
+
+LogicECM.module.Workflow.routeIsEmptyValidator =
+	function (field) {
+		var valid = false;
+		var docNodeRef = Alfresco.util.getQueryStringParameter('nodeRef');
+		if (field.value) {
+			jQuery.ajax({
+				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/routes/isRouteEmpty?routeRef=" + field.value + "&documentRef=" + docNodeRef,
+				type: "GET",
+				timeout: 30000,
+				async: false,
+				dataType: "json",
+				contentType: "application/json",
+				processData: false,
+				success: function (result) {
+					valid = result && !result.isRouteEmpty;
+				},
+				error: function() {
+					Alfresco.util.PopupManager.displayMessage({
+						text: this.msg('message.field.validation.failed')
 					});
 					valid = false;
 				}

@@ -13,6 +13,16 @@
 </#if>
 
 <#if form.mode == "view" || field.disabled>
+    <script type="text/javascript">
+        (function() {
+            function init() {
+                LogicECM.module.Base.Util.loadCSS([
+                    'css/lecm-base/components/lecm-rich-text.css'
+                ]);
+            }
+            YAHOO.util.Event.onDOMReady(init);
+        })();
+    </script>
     <div class="control richtext viewmode">
         <div class="label-div">
             <#if field.mandatory && value == "">
@@ -52,7 +62,8 @@
 			            theme_advanced_statusbar_location: "bottom",
 			            theme_advanced_path: false,
 			            language: "${locale?substring(0, 2)?js_string}",
-			            plugins: "fullscreen,table",
+			            plugins: "fullscreen,table,paste",
+                        paste_remove_styles_if_webkit: false,
 			            theme_advanced_buttons1: "bold,italic,underline,strikethrough,separator,fontselect,fontsizeselect, separator, fullscreen",
 			            theme_advanced_buttons2: "justifyleft,justifycenter,justifyright,justifyfull,separator,bullist,numlist,table,separator,undo,redo,separator,forecolor,backcolor",
 			            theme_advanced_buttons3: null,

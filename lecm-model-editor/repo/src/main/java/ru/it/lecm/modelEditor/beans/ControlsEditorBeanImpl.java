@@ -11,6 +11,8 @@ import javax.xml.stream.XMLStreamWriter;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.version.VersionModel;
 import org.alfresco.service.cmr.coci.CheckOutCheckInService;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
@@ -30,6 +32,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import static ru.it.lecm.modelEditor.beans.FormsEditorBeanImpl.FORMS_EDITOR_MODELS_DEPLOY_UUID;
@@ -261,5 +264,21 @@ public class ControlsEditorBeanImpl extends BaseBean {
 		ciProps.put(VersionModel.PROP_VERSION_TYPE, VersionType.MINOR);
 		cociService.checkin(workingCopyConfigNode, ciProps);
 		return true;
+	}
+	
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+			@Override
+			public Void execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+					@Override
+					public Void doWork() throws Exception {
+						getServiceRootFolder();
+						return null;
+					}
+				});
+			}
+		});
 	}
 }

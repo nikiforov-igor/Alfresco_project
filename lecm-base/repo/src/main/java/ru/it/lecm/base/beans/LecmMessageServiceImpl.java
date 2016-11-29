@@ -28,7 +28,6 @@ import org.springframework.context.ApplicationEvent;
 public class LecmMessageServiceImpl extends BaseBean implements LecmMessageService {
 
 	private final static Locale[] DEFAULT_LOCALES = { LocaleUtils.toLocale("ru"), LocaleUtils.toLocale("ru_RU") };
-	public final static String LECM_MESSAGE_FOLDER_ID = "LECM_MESSAGE_FOLDER_ID";
 
 	private final static Logger logger = LoggerFactory.getLogger(LecmMessageServiceImpl.class);
 
@@ -42,12 +41,7 @@ public class LecmMessageServiceImpl extends BaseBean implements LecmMessageServi
 
 	@Override
 	public NodeRef getServiceRootFolder() {
-		return getFolder(LECM_MESSAGE_FOLDER_ID);
-	}
-
-	@Override
-	public NodeRef getDocumentMessageFolder() {
-		return getServiceRootFolder();
+		return null;
 	}
 
 	public void setMessageService(MessageService messageService) {
@@ -62,9 +56,22 @@ public class LecmMessageServiceImpl extends BaseBean implements LecmMessageServi
 		this.searchService = searchService;
 	}
 	
-	protected void onBootstrap(ApplicationEvent event)
-	{
-		super.onBootstrap(event);
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		StoreRef storeRef = repoMessagesLocation.getStoreRef();
+		NodeRef rootNode = nodeService.getRootNode(storeRef);
+		String path = repoMessagesLocation.getPath();
+		List<NodeRef> nodeRefs = searchService.selectNodes(rootNode, path + CRITERIA_ALL + "[" + defaultSubtypeOfContent + "]", null, namespaceService, false);
+		Set<String> resourceBundleBaseNames = new HashSet<>();
+		for (NodeRef nodeRef : nodeRefs) {
+			String resourceName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+			String bundleBaseName = messageService.getBaseBundleName(resourceName);
+
+			if(resourceBundleBaseNames.add(bundleBaseName)) {
+				String repoBundlePath = storeRef.toString() + path + "/cm:" + bundleBaseName;
+				messageService.registerResourceBundle(repoBundlePath);
+			}
+		}
 	}
 
 	private List<Locale> toLocales(String localesString) {
@@ -115,22 +122,5 @@ public class LecmMessageServiceImpl extends BaseBean implements LecmMessageServi
 
 	public void setRepoMessagesLocation(RepositoryLocation repoMessagesLocation) {
 		this.repoMessagesLocation = repoMessagesLocation;
-	}
-
-	public void init() {
-//		StoreRef storeRef = repoMessagesLocation.getStoreRef();
-//		NodeRef rootNode = nodeService.getRootNode(storeRef);
-//		String path = repoMessagesLocation.getPath();
-//		List<NodeRef> nodeRefs = searchService.selectNodes(rootNode, path + CRITERIA_ALL + "[" + defaultSubtypeOfContent + "]", null, namespaceService, false);
-//		Set<String> resourceBundleBaseNames = new HashSet<>();
-//		for (NodeRef nodeRef : nodeRefs) {
-//			String resourceName = (String)nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
-//			String bundleBaseName = messageService.getBaseBundleName(resourceName);
-//
-//			if(resourceBundleBaseNames.add(bundleBaseName)) {
-//				String repoBundlePath =storeRef.toString() + path + "/cm:" + bundleBaseName;
-//				messageService.registerResourceBundle(repoBundlePath);
-//			}
-//		}
 	}
 }

@@ -22,6 +22,18 @@
     </#if>
 </#if>
 
+<#if defaultValue?string == "" && field.control.params.selectedItemsFormArgs??>
+    <#assign selectedItemsFormArgs = field.control.params.selectedItemsFormArgs?split(",")>
+    <#list selectedItemsFormArgs as selectedItemsFormArg>
+        <#if form.arguments[selectedItemsFormArg]??>
+            <#if (defaultValue?length > 0)>
+                <#assign defaultValue = defaultValue + ","/>
+            </#if>
+            <#assign defaultValue = defaultValue + form.arguments[selectedItemsFormArg]/>
+        </#if>
+    </#list>
+</#if>
+
 <#assign multiValued=false>
 <#if defaultValue != "" && defaultValue?index_of(",") != -1>
     <#assign multiValued=true>
@@ -41,6 +53,12 @@
 <#assign maxLimit = ""/>
 <#if field.control.params.maxLimitArg??>
     <#assign maxLimit = form.arguments[field.control.params.maxLimitArg]!"" />
+<#elseif field.control.params.maxLimitCurrentDate?? && field.control.params.maxLimitCurrentDate == "true">
+    <#if showTime>
+        <#assign maxLimit = .now?string("yyyy-MM-dd'T'HH:mm:00.000")/>
+    <#else>
+        <#assign maxLimit = .now?string("yyyy-MM-dd")/>
+    </#if>
 </#if>
 
 <#assign controlId = fieldHtmlId + "-cntrl">
@@ -168,7 +186,6 @@
                         }).setMessages(
                 ${messages}
                 );
-                picker.draw();
             <#if showTime>
 
                 var zIndex = $('#${containerId}').zIndex(),
@@ -202,6 +219,7 @@
                     }
                 });
             </#if>
+                picker.draw();
             }
 
             YAHOO.util.Event.onAvailable('${fieldHtmlId}', init, this, true);

@@ -70,7 +70,7 @@ LogicECM.validation.uniquenessValidation = function() {
                 return;
             }
 
-            var sUrl = Alfresco.constants.PROXY_URI + '/lecm/base/validation/uniqueness?newValue=' + newValue
+            var sUrl = Alfresco.constants.PROXY_URI + '/lecm/base/validation/uniqueness?newValue=' + YAHOO.lang.trim(newValue)
                 + '&nodeRef=' + this.options.nodeRef + '&typeName=' + this.options.typeName + '&propertyName=' + this.options.propertyName;
 
             var callback = {

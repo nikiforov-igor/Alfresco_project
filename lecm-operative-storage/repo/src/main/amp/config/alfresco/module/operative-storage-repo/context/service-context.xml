@@ -152,7 +152,7 @@
 		  p:rootPath="/Business platform/LECM/Сервис Оперативное хранение"
 		  p:dictionaries-ref="operative.storage.customDictionaries" />
 
-	<bean id="lecmOperativeStorageService" parent="baseBean" class="ru.it.lecm.operativestorage.beans.OperativeStorageImpl" init-method="init"
+	<bean id="lecmOperativeStorageService" parent="baseBean" class="ru.it.lecm.operativestorage.beans.OperativeStorageImpl"
 		  depends-on="lecmPermissionServiceBean"
 		  p:folders-ref="lecmOperativeStorageFolders"
 		  p:lecmPermissionService-ref="lecmPermissionServiceBean"
@@ -174,14 +174,14 @@
 		  p:permissionService-ref="permissionService"
 		  p:repositoryStructureHelper-ref="repositoryStructureHelper"/>
 
-	<bean init-method="init"
+	<bean id="nomenclatureCasePolicy" init-method="init"
 		  class="ru.it.lecm.operativestorage.policies.NomenclatureCasePolicy"
 		  p:policyComponent-ref="policyComponent"
 		  p:nodeService-ref="nodeService"
 		  p:operativeStorageService-ref="lecmOperativeStorageService"
 		  p:orgstructureService-ref="serviceOrgstructure"/>
 
-	<bean init-method="init"
+	<bean id="storageVolumePolicy" init-method="init"
 		  class="ru.it.lecm.operativestorage.policies.StorageVolumePolicy"
 		  p:policyComponent-ref="policyComponent"
 		  p:nodeService-ref="nodeService"/>
@@ -195,7 +195,7 @@
 		  p:serviceBean-ref="lecmOperativeStorageService"
 		  p:permissionsList-ref="operative.storage.dir.permissions"/>
 
-	<bean class="ru.it.lecm.operativestorage.policies.CopyPolicy" init-method="init"
+	<bean id="operativeStorageCopyPolicy" class="ru.it.lecm.operativestorage.policies.CopyPolicy" init-method="init"
 		  p:policyComponent-ref="policyComponent"
 		  p:nodeService-ref="nodeService"
 		  p:dictionaryService-ref="dictionaryService"

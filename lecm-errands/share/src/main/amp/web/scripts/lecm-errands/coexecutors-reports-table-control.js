@@ -91,7 +91,7 @@ LogicECM.errands = LogicECM.errands || {};
 						sort: "lecm-document:indexTableRow",
 						useChildQuery: false,
 						searchConfig: {
-							filter: 'ISNOTNULL:"cm:name" AND NOT @lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"DECLINE"'
+							filter: 'NOT @lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"DECLINE"'
 						}
 					},
 					bubblingLabel: this.options.bubblingLabel,
@@ -118,7 +118,7 @@ LogicECM.errands = LogicECM.errands || {};
 			datagrid.draw();
 
 			YAHOO.util.Event.on(this.id + "-cntrl-show-declined", "change", function() {
-				var filter = 'ISNOTNULL:"cm:name" AND NOT @lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"DECLINE"';
+				var filter = 'NOT @lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"DECLINE"';
 				if (this.checked) {
 					filter = "";
 				}

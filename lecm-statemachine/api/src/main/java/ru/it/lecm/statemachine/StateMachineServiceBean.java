@@ -195,8 +195,8 @@ public interface StateMachineServiceBean {
 
 	void terminateWorkflowsByDefinitionId(NodeRef document, List<String> definitionIds, String variable, Object value);
 
-	List<NodeRef> getDocumentsWithActiveTasks(String employeeLogin, Set<String> workflowIds, Integer remainingDays);
-	List<NodeRef> getDocumentsWithFinishedTasks(String employeeLogin, Set<String> workflowIds);
+	List<NodeRef> getDocumentsWithActiveTasks(String employeeLogin, Set<String> tasksNames, Integer remainingDays);
+	List<NodeRef> getDocumentsWithFinishedTasks(List<NodeRef> documents, String employeeLogin, Set<String> tasksNames);
 
 	void sendSignal(String executionId);
 

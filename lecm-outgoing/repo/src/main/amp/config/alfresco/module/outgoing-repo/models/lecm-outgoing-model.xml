@@ -94,7 +94,7 @@
 			</properties>
 			<associations>
 				<association name="lecm-outgoing:contractor-assoc">
-					<title>Организация-получатель</title>
+					<title>Корреспондент</title>
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
@@ -106,7 +106,7 @@
 					</target>
 				</association>
 				<association name="lecm-outgoing:recipient-assoc">
-					<title>Получатель</title>
+					<title>Адресат корреспондента</title>
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>

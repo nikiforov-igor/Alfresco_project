@@ -86,6 +86,8 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 									this.attachmentsSelect.innerHTML = "";
 
 									if (result.items != null && result.items.length > 0) {
+                                        var attachmentsCount = 0;
+
 										for (var i = 0; i < result.items.length; i++) {
 											var item = result.items[i];
 
@@ -95,14 +97,17 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 											}
 
 											if (item.attachments != null && item.attachments.length > 0) {
+                                                attachmentsCount += item.attachments.length;
+
 												for (var j = 0; j < item.attachments.length; j++) {
 													var attachment = item.attachments[j];
 
 													if (attachment.nodeRef != null) {
 														var option = document.createElement("option");
 														option.value = attachment.nodeRef;
-                                                                                                                if(attachment.nodeRef == this.options.selectedAttachmentNodeRef)
-                                                                                                                    option.selected = true;
+                                                        if(attachment.nodeRef == this.options.selectedAttachmentNodeRef) {
+	                                                        option.selected = true;
+                                                        }
 														if (attachment.name != null) {
 															option.innerHTML = attachment.name;
 														}
@@ -114,6 +119,12 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 
 											this.attachmentsSelect.appendChild(optionGroup);
 										}
+
+                                        if (attachmentsCount > 0) {
+                                            Dom.removeClass(this.id + "-attachment-select-container", "hidden1");
+                                        } else {
+                                            Dom.removeClass(this.id + "-attachment-select-empty-container", "hidden1");
+                                        }
 									}
 
 

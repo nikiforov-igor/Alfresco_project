@@ -84,7 +84,6 @@
                 <value>lecm-eds-document:document-type-assoc</value>
                 <value>lecm-document:subject-assoc</value>
                 <value>lecm-eds-document:file-register-assoc</value>
-                <value>lecm-ord:registrar-assoc</value> <!--??-->
                 <value>lecm-ord:controller-assoc</value>
                 <value>lecm-ord:canceled-assoc</value>
                 <value>lecm-ord:accepted-assoc</value>

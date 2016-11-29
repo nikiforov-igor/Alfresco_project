@@ -83,7 +83,26 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
-                
+				<!-- Фактическая дата начала совещания-->
+				<property name="lecm-meetings:actual-from-date">
+					<type>d:datetime</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!--Фактическая дата окончания совещания-->
+				<property name="lecm-meetings:actual-to-date">
+					<type>d:datetime</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 				<property name="lecm-meetings:chairman-assoc-ref">
 					<type>d:text</type>
 					<index enabled="true">

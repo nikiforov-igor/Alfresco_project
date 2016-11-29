@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import ru.it.lecm.workflow.api.WorkflowFoldersService;
 
 /**
  *
@@ -30,15 +31,20 @@ import java.util.List;
 public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 
 	private WorkflowAssigneesListService workflowAssigneesListService;
+	private WorkflowFoldersService workflowFoldersService;
 	private OrgstructureBean orgstructureService;
 	private NodeService nodeService;
+
+	public void setWorkflowFoldersService(WorkflowFoldersService workflowFoldersService) {
+		this.workflowFoldersService = workflowFoldersService;
+	}
 
 	public void setWorkflowAssigneesListService(WorkflowAssigneesListService workflowAssigneesListService) {
 		this.workflowAssigneesListService = workflowAssigneesListService;
 	}
 
 	public NodeRef getAssigneesListsFolder() {
-		return workflowAssigneesListService.getAssigneesListsFolder();
+		return workflowFoldersService.getWorkflowFolder();
 	}
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
@@ -160,7 +166,7 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 
 			result.put("lists", listsJSONArray);
 			result.put("defaultList", defaultList);
-			result.put("listsFolder", workflowAssigneesListService.getAssigneesListsFolder());
+			result.put("listsFolder", workflowFoldersService.getWorkflowFolder());
 		} catch (JSONException ex) {
 			throw new WebScriptException("Error operating JSON", ex);
 		}
@@ -305,7 +311,7 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 		JSONObject result = new JSONObject();
 
 		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-		NodeRef currentListsFolder = workflowAssigneesListService.getAssigneesListsFolder();
+		NodeRef currentListsFolder = workflowFoldersService.getWorkflowFolder();
 
 		try {
 			result.put("currentEmployeeRef", currentEmployee);

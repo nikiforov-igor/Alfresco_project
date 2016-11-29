@@ -16,21 +16,30 @@ import ru.it.lecm.statemachine.SimpleDocumentRegistry;
 import ru.it.lecm.statemachine.SimpleDocumentRegistryItem;
 
 import java.util.*;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.extensions.surf.util.AbstractLifecycleBean;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
 
 /**
  * Created by pmelnikov on 14.04.2015.
  *
  * Объект для разворачивания реестра типов документов без жизненного цикла при старте приложении, либо при разворацивании в редакторе МС
  */
-public class SimpleDocumentDeployer {
+public class SimpleDocumentDeployer extends AbstractLifecycleBean {
 
     private NodeService nodeService;
     private SimpleDocumentRegistry simpleDocumentRegistry;
     private NamespaceService namespaceService;
     private RepositoryStructureHelper repositoryStructureHelper;
+	private LecmTransactionHelper lecmTransactionHelper;
 
     private static final transient Logger logger = LoggerFactory.getLogger(SimpleDocumentDeployer.class);
 
+	public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
+		this.lecmTransactionHelper = lecmTransactionHelper;
+	}
+	
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
@@ -116,4 +125,42 @@ public class SimpleDocumentDeployer {
         String typeName = nodeService.getProperty(statemachine, ContentModel.PROP_NAME).toString();
         simpleDocumentRegistry.registerDocument(typeName.replace("_",":"), item);
     }
+
+	@Override
+	protected void onBootstrap(ApplicationEvent ae) {
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+			@Override
+			public Void execute() throws Throwable {
+				NodeRef home = repositoryStructureHelper.getHomeRef();
+				if (home != null) {
+					NodeRef statemachinesRef = nodeService.getChildByName(home, ContentModel.ASSOC_CONTAINS, "statemachines");
+					if (statemachinesRef != null) {
+						Set<QName> childTypes = new HashSet<>();
+						childTypes.add(StatemachineEditorModel.TYPE_STATEMACHINE);
+						List<ChildAssociationRef> statemachines = nodeService.getChildAssocs(statemachinesRef, childTypes);
+						for (ChildAssociationRef statemachine : statemachines) {
+							Boolean isSimpleDocument = false;
+							Object isSimpleDocumentObj = nodeService.getProperty(statemachine.getChildRef(), StatemachineEditorModel.PROP_SIMPLE_DOCUMENT);
+							if (isSimpleDocumentObj != null) {
+								isSimpleDocument = (Boolean) isSimpleDocumentObj;
+							}
+							if (isSimpleDocument) {
+								try {
+									appendType(statemachine.getChildRef());
+								} catch (LecmBaseException e) {
+									String name = nodeService.getProperty(statemachine.getChildRef(), ContentModel.PROP_NAME).toString();
+									logger.error("Error while bootstrap statemachine for simple document " + name, e);
+								}
+							}
+						}
+					}
+				}
+				return null;
+			}
+		});        
+	}
+
+	@Override
+	protected void onShutdown(ApplicationEvent ae) {
+	}
 }

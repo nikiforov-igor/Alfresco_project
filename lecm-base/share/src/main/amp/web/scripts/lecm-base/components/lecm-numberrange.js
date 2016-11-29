@@ -23,11 +23,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
       Event = YAHOO.util.Event;
 
    /**
-    * Alfresco Slingshot aliases
-    */
-   var $html = Alfresco.util.encodeHTML;
-
-   /**
     * NumberRange constructor.
     *
     * @param {String} htmlId The HTML id of the control element
@@ -62,7 +57,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
        */
       currentMaxNumber: "",
 
-      /**
+       options: {
+           onlyPositive: false
+       },
+
+       /**
        * Fired by YUI when parent element is available for scripting.
        * Component initialisation, including instantiation of YUI widgets and event listener binding.
        *
@@ -110,23 +109,37 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
           var strMinValue = YAHOO.lang.trim(Dom.get(this.id + "-min").value),
               strMaxValue = YAHOO.lang.trim(Dom.get(this.id + "-max").value);
 
-          if (this._isNumber(strMinValue) || strMinValue.length == 0) {
+          /*MIN*/
+          this.currentMinNumber = '';
+
+          if (this._isNumber(strMinValue, this.options.onlyPositive) || strMinValue.length == 0) {
               Dom.removeClass(this.id + "-min", "invalid");
               this.currentMinNumber = strMinValue;
-          }
-          else {
+          } else {
               if (strMinValue.length > 0) {
                   Dom.addClass(this.id + "-min", "invalid");
               }
           }
 
-          if (this._isNumber(strMaxValue) || strMaxValue.length == 0) {
+          /*MAX*/
+          this.currentMaxNumber = '';
+
+          if (this._isNumber(strMaxValue, this.options.onlyPositive) || strMaxValue.length == 0) {
               Dom.removeClass(this.id + "-max", "invalid");
               this.currentMaxNumber = strMaxValue;
-          }
-          else {
+          } else {
               if (strMaxValue.length > 0) {
                   Dom.addClass(this.id + "-max", "invalid");
+              }
+          }
+
+          if (this.currentMinNumber != '' && this.currentMaxNumber != '') {
+              if (parseFloat(this.currentMinNumber) > parseFloat(this.currentMaxNumber)) {
+                  Dom.addClass(this.id + "-min", "invalid");
+                  Dom.addClass(this.id + "-max", "invalid");
+              } else {
+                  Dom.removeClass(this.id + "-min", "invalid");
+                  Dom.removeClass(this.id + "-max", "invalid");
               }
           }
 
@@ -138,13 +151,16 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
            return !YAHOO.util.Dom.hasClass(field, "invalid");
        },
 
-       _isNumber: function (value) {
+       _isNumber: function (value, onlyPositiveNumber) {
            var numberExp = /[-]?\d+(\.\d+|,\d+)?/ig;
 
            var valid = !isNaN(parseFloat(value)) && isFinite(value);
            if (valid) {
                var test = value.match(numberExp);
                valid = (test != null && test[0] == value);
+           }
+           if (valid && onlyPositiveNumber) {
+               valid = !(value < 0);
            }
            return valid;
        }

@@ -19,6 +19,8 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import ru.it.lecm.base.beans.LecmBaseException;
 import ru.it.lecm.base.beans.LecmBasePropertiesService;
+import ru.it.lecm.base.beans.RepositoryStructureHelper;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.editor.SimpleDocumentDeployer;
@@ -44,6 +46,7 @@ public class BPMNDiagramScript extends AbstractWebScript {
 	private Repository repositoryHelper;
 	private ContentService contentService;
 	private FileFolderService fileFolderService;
+	private RepositoryStructureHelper repositoryStructureHelper;
     private LecmBasePropertiesService propertiesService;
 	private ProcessEngine activitiProcessEngine;
 	private StateMachineServiceBean statemachineService;
@@ -52,6 +55,7 @@ public class BPMNDiagramScript extends AbstractWebScript {
 
 	public void setStatemachineService(StateMachineServiceBean statemachineService) {
 		this.statemachineService = statemachineService;
+
 	}
 
 	public void setActivitiProcessEngine(ProcessEngine activitiProcessEngine) {
@@ -68,6 +72,11 @@ public class BPMNDiagramScript extends AbstractWebScript {
 
 	public void setRepositoryHelper(Repository repositoryHelper) {
 		this.repositoryHelper = repositoryHelper;
+
+	}
+
+	public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
+		this.repositoryStructureHelper = repositoryStructureHelper;
 	}
 
 	public void setContentService(ContentService contentService) {
@@ -97,52 +106,36 @@ public class BPMNDiagramScript extends AbstractWebScript {
                     enabled = Boolean.valueOf((String) editorEnabled);
                 }
                 if (enabled) {
+
 					NodeRef statemachine = new NodeRef(statemachineNodeRef);
 					statemachine = nodeService.getPrimaryParent(statemachine).getParentRef();
 		            String machineName = nodeService.getProperty(statemachine, ContentModel.PROP_NAME).toString();
 		            logger.debug("Генерация процесса для машины состояний " + machineName);
-		            //Создаем результирующую диаграмму
-		            String fileName = machineName + ".bpmn20.xml";
-					NodeRef companyHome = repositoryHelper.getCompanyHome();
-					NodeRef workflowFolder = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, "workflowStore");
-					NodeRef file = nodeService.getChildByName(workflowFolder, ContentModel.ASSOC_CONTAINS, fileName);
-					if (file == null) {
-						Map<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
-						props.put(ContentModel.PROP_NAME, fileName);
-						ChildAssociationRef childAssocRef = nodeService.createNode(
-								workflowFolder,
-								ContentModel.ASSOC_CONTAINS,
-								QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(fileName)),
-								ContentModel.TYPE_CONTENT,
-								props);
-						file = childAssocRef.getChildRef();
-					}
-					ContentWriter writer = contentService.getWriter(file, ContentModel.PROP_CONTENT, true);
-					writer.setMimetype("text/xml");
-					ByteArrayInputStream is = (ByteArrayInputStream) new BPMNGenerator(statemachineNodeRef, nodeService).generate();
-					writer.putContent(is);
-					is.close();
 
+					String fileName = machineName + ".bpmn20.xml";
 
 					//Рвзворачиваем и создаем версию
-					NodeRef statemachines = nodeService.getPrimaryParent(statemachine).getParentRef();
-					NodeRef versions = nodeService.getChildByName(statemachines, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.FOLDER_VERSIONS);
-					NodeRef statemachineVersions = nodeService.getChildByName(versions, ContentModel.ASSOC_CONTAINS, machineName);
+					NodeRef statemachineVersions = checkVersions(statemachine);
 
+					NodeRef file = checkWorkflowStore(fileName);
+					ContentWriter writer = contentService.getWriter(file, ContentModel.PROP_CONTENT, true);
+					writer.setMimetype("text/xml");
+					ByteArrayInputStream bpmnIS = (ByteArrayInputStream) new BPMNGenerator(statemachineNodeRef, nodeService).generate();
+					writer.putContent(bpmnIS);
+					bpmnIS.close();
 
 					Boolean isSimpleDocument = false;
 					Object isSimpleDocumentObj = nodeService.getProperty(statemachine, StatemachineEditorModel.PROP_SIMPLE_DOCUMENT);
 					if (isSimpleDocumentObj != null) {
 						isSimpleDocument = (Boolean) isSimpleDocumentObj;
 					}
-
 					String lastVersion;
 					if (!isSimpleDocument) {
 						logger.debug("Деплой процесса для " + machineName);
-						is = (ByteArrayInputStream) new BPMNGenerator(statemachineNodeRef, nodeService).generate();
-						WorkflowDeployment wd = workflowService.deployDefinition("activiti", is, "text/xml", fileName);
+						bpmnIS = (ByteArrayInputStream) new BPMNGenerator(statemachineNodeRef, nodeService).generate();
+						WorkflowDeployment wd = workflowService.deployDefinition("activiti", bpmnIS, "text/xml", fileName);
 						lastVersion = wd.getDefinition().getVersion();
-						is.close();
+						bpmnIS.close();
 						//Сохраняем свойсвтва контейнера версий
 						nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION, lastVersion);
 					} else {
@@ -160,7 +153,6 @@ public class BPMNDiagramScript extends AbstractWebScript {
 					}
 
 					String versionFolderName = "version_" + (isSimpleDocument ? "NA_" + lastVersion : lastVersion);
-
 		            NodeRef version = nodeService.getChildByName(statemachineVersions, ContentModel.ASSOC_CONTAINS, versionFolderName);
 					if (version == null) {
 						Map<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
@@ -188,33 +180,10 @@ public class BPMNDiagramScript extends AbstractWebScript {
 			            }
 						nodeService.setProperties(version, props);
 					}
-		            //Добавляем в версию файл импорта
-		            ByteArrayOutputStream backupOut = new ByteArrayOutputStream();
-		            try {
-		                XMLExporter exporter = new XMLExporter(backupOut, nodeService);
-		                exporter.write(statemachineNodeRef);
-		            } catch (XMLStreamException e) {
-			            logger.error(e.getMessage(), e);
-		            }
+		        	//добавляем бэкап в контейнер версии
+					createVersionBackup(statemachineNodeRef,version);
 
-		            NodeRef backupFile = nodeService.getChildByName(version, ContentModel.ASSOC_CONTAINS, "backup.xml");
-					if (backupFile == null) {
-			            Map<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
-			            props.put(ContentModel.PROP_NAME, "backup.xml");
-	
-			            ChildAssociationRef childAssocRef = nodeService.createNode(
-			                    version,
-			                    ContentModel.ASSOC_CONTAINS,
-			                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName("backup.xml")),
-			                    ContentModel.TYPE_CONTENT,
-			                    props);
-			            backupFile = childAssocRef.getChildRef();
-					}
-		            writer = contentService.getWriter(backupFile, ContentModel.PROP_CONTENT, true);
-		            writer.setMimetype("text/xml");
-		            is = new ByteArrayInputStream(backupOut.toByteArray());
-		            writer.putContent(is);
-		            is.close();
+
 		            try {
 		            	NodeRef processFile = nodeService.getChildByName(version, ContentModel.ASSOC_CONTAINS, fileName);
 			            if(processFile!=null) {
@@ -294,6 +263,84 @@ public class BPMNDiagramScript extends AbstractWebScript {
 
 		BpmnModel model = activitiProcessEngine.getRepositoryService().getBpmnModel(definitionId);
 		return new BPMNGraphGenerator().generateByModel(model, history);
+	}
+
+	/**
+	 * Возвращает ноду версий МС, при необходомисоти создает
+	 * @param stateMachine
+	 * @return NodeRef stateMachineVersion
+	 */
+	private NodeRef checkVersions(NodeRef stateMachine){
+
+		NodeRef stateMachinesRoot = nodeService.getPrimaryParent(stateMachine).getParentRef();
+		String stateMachineId = nodeService.getProperty(stateMachine,ContentModel.PROP_NAME).toString();
+		//проверяем ноду версий
+		NodeRef versionsFolder = nodeService.getChildByName(stateMachinesRoot, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.FOLDER_VERSIONS);
+		if(versionsFolder==null) {
+			try {
+				versionsFolder=repositoryStructureHelper.createFolder(stateMachinesRoot, StatemachineEditorModel.FOLDER_VERSIONS);
+			} catch (WriteTransactionNeededException e) {
+				e.printStackTrace();
+			}
+		}
+		NodeRef stateMachineVersionsNodeRef = nodeService.getChildByName(versionsFolder, ContentModel.ASSOC_CONTAINS, stateMachineId);
+		if(stateMachineVersionsNodeRef==null) {
+			Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+			properties.put(ContentModel.PROP_NAME, stateMachineId);
+			properties.put(StatemachineEditorModel.PROP_LAST_VERSION,0);
+			ChildAssociationRef stateMachineVersionsChildAssoc = nodeService.createNode(versionsFolder, ContentModel.ASSOC_CONTAINS,
+					QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, stateMachineId), StatemachineEditorModel.TYPE_VERSION, properties);
+			stateMachineVersionsNodeRef = stateMachineVersionsChildAssoc.getChildRef();
+		}
+
+		return stateMachineVersionsNodeRef;
+	}
+
+	private NodeRef checkWorkflowStore(String fileName) throws IOException {
+		NodeRef companyHome = repositoryHelper.getCompanyHome();
+		NodeRef workflowFolder = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, "workflowStore");
+		NodeRef file = nodeService.getChildByName(workflowFolder, ContentModel.ASSOC_CONTAINS, fileName);
+		if (file == null) {
+			Map<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
+			props.put(ContentModel.PROP_NAME, fileName);
+			ChildAssociationRef childAssocRef = nodeService.createNode(
+					workflowFolder,
+					ContentModel.ASSOC_CONTAINS,
+					QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(fileName)),
+					ContentModel.TYPE_CONTENT,
+					props);
+			file = childAssocRef.getChildRef();
+		}
+		return file;
+	}
+
+	private void createVersionBackup(String statemachineNodeRef, NodeRef version) throws IOException {
+		//Добавляем в версию файл импорта
+		ByteArrayOutputStream backupOut = new ByteArrayOutputStream();
+		try {
+			XMLExporter exporter = new XMLExporter(backupOut, nodeService);
+			exporter.write(statemachineNodeRef);
+		} catch (XMLStreamException e) {
+			logger.error(e.getMessage(), e);
+		}
+		NodeRef backupFile = nodeService.getChildByName(version, ContentModel.ASSOC_CONTAINS, "backup.xml");
+		if (backupFile == null) {
+			Map<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
+			props.put(ContentModel.PROP_NAME, "backup.xml");
+
+			ChildAssociationRef childAssocRef = nodeService.createNode(
+					version,
+					ContentModel.ASSOC_CONTAINS,
+					QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName("backup.xml")),
+					ContentModel.TYPE_CONTENT,
+					props);
+			backupFile = childAssocRef.getChildRef();
+		}
+		ContentWriter writer = contentService.getWriter(backupFile, ContentModel.PROP_CONTENT, true);
+		writer.setMimetype("text/xml");
+		ByteArrayInputStream is = new ByteArrayInputStream(backupOut.toByteArray());
+		writer.putContent(is);
+		is.close();
 	}
 
 	public void setSimpleDocumentDeployer(SimpleDocumentDeployer simpleDocumentDeployer) {

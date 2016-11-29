@@ -7,6 +7,7 @@ import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * User: AIvkin
@@ -87,6 +88,12 @@ public interface ArmService {
 	QName PROP_ARM_ACCORDION_RUN_AS_PATH = QName.createQName(ARM_NAMESPACE_URI, "path-to-node");
 	QName PROP_ARM_ACCORDION_NAME_FORMAT_STRING = QName.createQName(ARM_NAMESPACE_URI, "name-format-string");
 	QName ASSOC_ARM_ACCORDION_RUN_AS_EMPLOYEE = QName.createQName(ARM_NAMESPACE_URI, "runAs-employee");
+
+	QName PROP_ARM_SHOW_IN_MENU = QName.createQName(ARM_NAMESPACE_URI, "show-in-menu");
+	QName ASSOC_ARM_MENU_BUSINESS_ROLES = QName.createQName(ARM_NAMESPACE_URI, "menu-business-roles-assoc");
+
+	Pattern MULTIPLE_NOT_QUERY = Pattern.compile("^NOT[\\s]+.*(?=\\sOR\\s|\\sAND\\s|\\s\\+|\\s\\-)");
+
 	/**
 	 * проверяет что объект является аккордионом
 	 */
@@ -129,6 +136,12 @@ public interface ArmService {
 	 * @return список аккордионов
 	 */
 	List<NodeRef> getArmAccordions(NodeRef arm);
+
+	/**
+	 * Получение АРМ-ов для меню
+	 * @return список АРМ-ов для меню
+	 */
+	List<NodeRef> getArmsForMenu();
 
 	/**
 	 * Получение вложенных узлов

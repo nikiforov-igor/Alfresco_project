@@ -18,6 +18,13 @@
         <namespace uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
     </namespaces>
 
+    <constraints>
+        <constraint name="lecm-eds-document:natural-number-constraint" type="REGEX">
+            <parameter name="expression"><value>^\+?(0|[1-9]\d*)$</value></parameter>
+            <parameter name="requiresMatch"><value>true</value></parameter>
+        </constraint>
+    </constraints>
+
     <types>
         <type name="lecm-eds-document:base">
             <title>Базовый СЭД документ</title>
@@ -53,6 +60,9 @@
                     <title>Количество листов</title>
                     <type>d:int</type>
                     <mandatory>false</mandatory>
+                    <constraints>
+                        <constraint ref="lecm-eds-document:natural-number-constraint" />
+                    </constraints>
                 </property>
 
                 <property name="lecm-eds-document:document-type-assoc-ref">

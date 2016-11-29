@@ -56,7 +56,7 @@
     <bean id="wsActionExecutorService" class="ru.it.lecm.mobile.services.formExecutor.WSActionExecutorPort">
         <property name="objectFactory" ref="objectFactory"/>
         <property name="workflowService" ref="workflowServiceImpl"/>
-        <property name="actionsService" ref="webscript.ru.it.lecm.statemachine.actions.get"/>
+        <property name="actionsService" ref="userActionsService"/>
         <property name="namespaceService" ref="namespaceService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="orgstructureService" ref="serviceOrgstructure" />
@@ -72,7 +72,7 @@
         <property name="namespaceService" ref="namespaceService"/>
         <property name="contentService" ref="contentService"/>
         <property name="transactionService" ref="transactionService"/>
-        <property name="actionsService" ref="webscript.ru.it.lecm.statemachine.actions.get"/>
+        <property name="actionsService" ref="userActionsService"/>
         <property name="sysAdminParams" ref="sysAdminParams"/>
         <property name="dictionaryService" ref="dictionaryService"/>
         <property name="secretaryService" ref="secretaryService"/>

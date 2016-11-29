@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>ru.it.lecm.outgoing</groupId>
 		<artifactId>outgoing</artifactId>
-		<version>1.8.0</version>
+		<version>1.8.5</version>
 	</parent>
 
 	<artifactId>outgoing-repo</artifactId>

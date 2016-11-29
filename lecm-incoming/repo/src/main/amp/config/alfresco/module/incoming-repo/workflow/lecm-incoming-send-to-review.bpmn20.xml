@@ -17,114 +17,84 @@
 							comment = (comment && comment != "null") ? comment : "Комментариев нет";
 							if (document != null) {
 								var existReviewersAssocs = document.assocs["lecm-eds-document:reviewers-assoc"];
-								if (existReviewersAssocs != null) {
-									for (var i = 0; i < existReviewersAssocs.length; i++) {
-								        lecmPermission.revokeDynamicRole(document, existReviewersAssocs[i], "INCOMING_REVIEWER_DYN");
-								        document.removeAssociation(existReviewersAssocs[i], "lecm-eds-document:reviewers-assoc");
-									}
-								}
-
 								var recipient = execution.getVariable("lecmIncomingWf_sendToReviewRecipient");
-								if (recipient != null) {
+								var recipients = [];
+								var logObjects = [];
+								var logText = "";
+								if (recipient) {
 								 	if (recipient.typeShort == "lecm-orgstr:employee") {
-								    	statemachine.grandDynamicRoleForEmployee(document, recipient, "INCOMING_REVIEWER_DYN");
-								    	statemachine.grandDynamicRoleForEmployee(document, recipient, "INCOMING_ALREADY_REVIEWED_DYN");
-								    	document.createAssociation(recipient, "lecm-eds-document:reviewers-assoc");
+										recipients.push(recipient);
 
-								    	notifications.sendNotificationFromCurrentUser({
-											recipients: [recipient],
-											templateCode: 'INCOMING_REVIEW',
-											templateConfig: {
-												mainObject: document,
-												sender: currentEmployee,
-												comment: comment
-											},
-											dontCheckAccessToObject: true
-										});
-
-	                                    var logObjects = [];
-				                        logObjects.push("" + recipient.nodeRef);
-				                        logObjects.push(comment);
-				                        var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение #object1.";
-							            logText += " " + base.wrapperTitle("Комментарий", "#object2") + ".";
-                                        logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
-				                        businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", logText, logObjects);
-								    } else if (recipient.typeShort == "lecm-orgstr:organization-unit") {
-								    	var recipients = [];
-                                        var employees = [];
-
-								    	var allEmployeeInUnit = orgstructure.getEmployeesInUnit(recipient);
+										logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение  #object1.";
+									} else if (recipient.typeShort == "lecm-orgstr:organization-unit") {
+										var allEmployeeInUnit = orgstructure.getEmployeesInUnit(recipient);
 								    	if (allEmployeeInUnit != null) {
 								    	    for (var i = 0; i < allEmployeeInUnit.length; i++) {
 								    	        var employee = allEmployeeInUnit[i];
 								            	if (orgstructure.hasBusinessRole(employee, "INCOMING_REVIEWERS_IN_UNIT")) {
-								                	employees.push(employee);
 								                	recipients.push(employee);
 								            	}
 								    	    }
 								    	}
-
                                         if (recipients.length == 0) {
                                             var boss = orgstructure.findUnitBoss(recipient.nodeRef.toString());
-                                            if (boss != null) {
-                                                employees.push(boss);
+                                            if (boss) {
 								                recipients.push(boss);
                                             }
                                         }
 
-								    	if (recipients.length > 0) {
-								    	    for (var i = 0; i < employees.length; i++) {
-								    	        statemachine.grandDynamicRoleForEmployee(document, employees[i], "INCOMING_REVIEWER_DYN");
-								    	        document.createAssociation(employees[i], "lecm-eds-document:reviewers-assoc");
-								    	    }
-
-											notifications.sendNotificationFromCurrentUser({
-												recipients: recipients,
-												templateCode: 'INCOMING_REVIEW',
-												templateConfig: {
-													mainObject: document,
-													sender: currentEmployee,
-													comment: comment
-												},
-												dontCheckAccessToObject: true
-											});
-								    	}
-
-								    	var logObjects = [];
-				                        logObjects.push("" + recipient.nodeRef);
-				                        logObjects.push(comment);
-				                        var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение в подразделение #object1.";
-										logText += " " + base.wrapperTitle("Комментарий", "#object2") + ".";
-                                        logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
-				                        businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", logText, logObjects);
-								    }
-								} else {
-									var recipients = orgstructure.getEmployeesByBusinessRoleId("INCOMING_REVIEWERS", true);
-
-									if (recipients.length > 0) {
-							            for (var i = 0; i < recipients.length; i++) {
-							                statemachine.grandDynamicRoleForEmployee(document, recipients[i], "INCOMING_REVIEWER_DYN");
-							                document.createAssociation(recipients[i], "lecm-eds-document:reviewers-assoc");
-							            }
-
-								    	notifications.sendNotificationFromCurrentUser({
-											recipients: recipients,
-											templateCode: 'INCOMING_REVIEW',
-											templateConfig: {
-												mainObject: document,
-												sender: currentEmployee,
-												comment: comment
-											},
-											dontCheckAccessToObject: true
-										});
-							        }
-
-			                        var logObjects = [];
+										logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение в подразделение #object1.";
+									}
+									logObjects.push("" + recipient.nodeRef);
 									logObjects.push(comment);
-				                    var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение рассматривающим.";
+									logText += " " + base.wrapperTitle("Комментарий", "#object2") + ".";
+								}else {
+									recipients = orgstructure.getEmployeesByBusinessRoleId("INCOMING_REVIEWERS", true);
+
+									logObjects.push(comment);
+									logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение рассматривающим.";
 									logText += " " + base.wrapperTitle("Комментарий", "#object1") + ".";
+								}
+								if (recipients.length) {
+
+									if (existReviewersAssocs && existReviewersAssocs.length){
+										existReviewersAssocs = existReviewersAssocs.filter(function(element){
+											for (var i = 0; i < recipients.length; i++) {
+												if(element.nodeRef.equals(recipients[i].nodeRef)){
+													recipients.splice(i,1);
+													return false;
+												}
+											}
+											return true;
+										});
+									}
+
+									for (var i = 0; i < recipients.length; i++) {
+										statemachine.grandDynamicRoleForEmployee(document, recipients[i], "INCOMING_REVIEWER_DYN");
+										document.createAssociation(recipients[i], "lecm-eds-document:reviewers-assoc");
+									}
+
+									notifications.sendNotificationFromCurrentUser({
+										recipients: recipients,
+										templateCode: 'INCOMING_REVIEW',
+										templateConfig: {
+											mainObject: document,
+											sender: currentEmployee,
+											comment: comment
+										},
+										dontCheckAccessToObject: true
+									});
+
 									logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
-				                    businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", logText, logObjects);
+									businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", logText, logObjects);
+
+								}
+
+								if (existReviewersAssocs && existReviewersAssocs.length) {
+									for (var i = 0; i < existReviewersAssocs.length; i++) {
+								        lecmPermission.revokeDynamicRole(document, existReviewersAssocs[i], "INCOMING_REVIEWER_DYN");
+								        document.removeAssociation(existReviewersAssocs[i], "lecm-eds-document:reviewers-assoc");
+									}
 								}
 							}
 						]]></activiti:string>

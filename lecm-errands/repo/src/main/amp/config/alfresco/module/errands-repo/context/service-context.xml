@@ -95,7 +95,7 @@
 	<util:constant id="ERRANDS_ROOT_NAME" static-field="ru.it.lecm.errands.ErrandsService.ERRANDS_ROOT_NAME"/>
 
 	<bean id="errandsService" class="ru.it.lecm.errands.beans.ErrandsServiceImpl" parent="baseBean"
-	      depends-on="nodeService, documentService, errands.LogicEcmModelsBootstrap" init-method="init">
+	      depends-on="nodeService, documentService, errands.LogicEcmModelsBootstrap">
 		<property name="documentService" ref="documentService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
         <!-- TODO: Разобраться с машиной состояний-->
@@ -477,11 +477,14 @@
     <bean id="errands.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
           reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
-          dataSourcePolicy,reportDescriptorPolicy">
+          dataSourcePolicy,reportDescriptorPolicy,reporting.LogicEcmDictionariesBootstrap">
         <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/reports/exec-doc-tree.xml</value>
+                <value>alfresco/module/${artifactId}/reports/exec-discipline-by-creator.xml</value>
+                <value>alfresco/module/${artifactId}/reports/exec-discipline-by-unit.xml</value>
+                <value>alfresco/module/${artifactId}/reports/exec-discipline-by-executor.xml</value>
             </list>
         </property>
         <property name="xmlImportListener" ref="errands.reportsDeployer"/>
@@ -491,6 +494,9 @@
         <property name="reportsForDeploy">
             <list>
                 <value>exec-doc-tree</value>
+                <value>exec-discipline-by-creator</value>
+                <value>exec-discipline-by-unit</value>
+                <value>exec-discipline-by-executor</value>
             </list>
         </property>
     </bean>

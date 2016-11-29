@@ -438,17 +438,6 @@
         </property>
     </bean>
 
-    <bean id="contracts.view.bootstrap" class="ru.it.lecm.base.dbviews.DBViewBootstrap"
-          parent="lecm.view.bootstrap" depends-on="contracts.LogicEcmContractsBootstrap">
-        <property name="models">
-            <list>
-                <value>lecm-contract:document</value>
-                <value>lecm-additional-document:additionalDocument</value>
-                <value>lecm-contract-table-structure:stage</value>
-            </list>
-        </property>
-    </bean>
-
     <bean id="contracts.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
           reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,

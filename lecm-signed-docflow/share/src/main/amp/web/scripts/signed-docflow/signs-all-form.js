@@ -111,7 +111,7 @@
 
 				signInfo = ko.mapping.toJS(signInfo);
 
-				return substitute("viewAttributes(\"{nodeRef}\");", signInfo);
+				return substitute("LogicECM.module.Base.Util.viewAttributes({itemId: \"{nodeRef}\" });", signInfo);
 			},
 			categoryIsNotEmpty: function($context) {
 				var i0 = $context.$index();
@@ -189,6 +189,7 @@
 			});
 		},
 		onReady: function() {
+            Alfresco.util.PopupManager.zIndex = YAHOO.util.Dom.get(this.htmlId + '-form-container_c').style['z-index'] + 1;
 			this._initViewModel();
 			this._initRefreshButton();
 

@@ -34,7 +34,7 @@ public class AuthorFilter extends DocumentFilter {
 
     @Override
     public String getQuery(Object[] args) {
-        String query = "";
+        StringBuilder query = new StringBuilder();
         if (args != null && args.length > 0) {
             String docType = (String) args[0];
             String filterValue = (String) args[1];
@@ -67,7 +67,7 @@ public class AuthorFilter extends DocumentFilter {
                                 String[] docsRefs = favouriteDocs.split(",");
                                 boolean addOR = false;
                                 for (String docsRef : docsRefs) {
-                                    query += (addOR ? " OR " : "") + "ID:" + docsRef.replace(":", "\\:");
+                                    query.append(addOR ? " OR " : "").append("ID:").append(docsRef.replace(":", "\\:"));
                                     addOR = true;
                                 }
                             }
@@ -87,7 +87,7 @@ public class AuthorFilter extends DocumentFilter {
                         authorProperty = authorProperty.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
 
                         for (NodeRef employeeRef : employees) {
-                            query += (addOR ? " OR " : "") + "@" + authorProperty + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
+                            query.append(addOR ? " OR " : "").append("@").append(authorProperty).append(":\"").append(employeeRef.toString().replace(":", "\\:")).append("\"");
                             addOR = true;
                         }
                     }
@@ -96,6 +96,6 @@ public class AuthorFilter extends DocumentFilter {
                 logger.warn("Incorrect filter! Filter args:" + StringUtils.arrayToCommaDelimitedString(args));
             }
         }
-        return query;
+        return query.toString();
     }
 }

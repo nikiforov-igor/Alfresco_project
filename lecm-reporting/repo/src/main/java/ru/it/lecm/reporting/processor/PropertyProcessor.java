@@ -374,7 +374,7 @@ abstract class PropertyProcessor {
             logger.debug("Enter getPropertyValue (4 params), qname=" + qname + ", noderef=" + nodeRef + ", dtype=" + dtype);
         }
 
-        String returnValue = "";
+        StringBuilder returnValue = new StringBuilder();
         if(logger.isDebugEnabled()) {
             logger.debug("getPropertyType Serialized=" + sValue);
         }
@@ -387,50 +387,49 @@ abstract class PropertyProcessor {
                     SimpleDateFormat var13 = this.getSimpleDateFormat();
 
                     for (Object aVar11 : var11) {
-                        returnValue = returnValue + var13.format((Date) aVar11) + ",";
+                        returnValue.append(var13.format((Date) aVar11)).append(",");
                     }
                 }
 
                 int var14;
-                if(dtype.equals("id") || dtype.equals("long")) {
-                    for(var14 = 0; var14 < var11.size(); ++var14) {
-                        returnValue = returnValue + Long.toString(((Long)var11.get(var14)).longValue()) + ",";
-                    }
+                switch (dtype) {
+                    case "id":
+                    case "long":
+                        for (var14 = 0; var14 < var11.size(); ++var14) {
+                            returnValue.append(Long.toString(((Long) var11.get(var14)).longValue())).append(",");
+                        }
+                        break;
+                    case "int":
+                        for (var14 = 0; var14 < var11.size(); ++var14) {
+                            returnValue.append(Integer.toString(((Integer) var11.get(var14)).intValue())).append(",");
+                        }
+                        break;
+                    case "float":
+                    case "double":
+                        for (var14 = 0; var14 < var11.size(); ++var14) {
+                            returnValue.append(Double.toString(((Double) var11.get(var14)).doubleValue())).append(",");
+                        }
+                        break;
+                    case "boolean":
+                        for (var14 = 0; var14 < var11.size(); ++var14) {
+                            returnValue.append(Boolean.toString(((Boolean) var11.get(var14)).booleanValue())).append(",");
+                        }
+                        break;
+                    case "text":
+                        for (var14 = 0; var14 < var11.size(); ++var14) {
+                            returnValue.append(var11.get(var14)).append(",");
+                        }
+                        break;
+                    case "noderef":
+                        for (var14 = 0; var14 < var11.size(); ++var14) {
+                            returnValue.append(var11.get(var14).toString()).append(",");
+                        }
+                        break;
                 }
 
-                if(dtype.equals("int")) {
+                if(returnValue.length() == 0) {
                     for(var14 = 0; var14 < var11.size(); ++var14) {
-                        returnValue = returnValue + Integer.toString(((Integer)var11.get(var14)).intValue()) + ",";
-                    }
-                }
-
-                if(dtype.equals("float") || dtype.equals("double")) {
-                    for(var14 = 0; var14 < var11.size(); ++var14) {
-                        returnValue = returnValue + Double.toString(((Double)var11.get(var14)).doubleValue()) + ",";
-                    }
-                }
-
-                if(dtype.equals("boolean")) {
-                    for(var14 = 0; var14 < var11.size(); ++var14) {
-                        returnValue = returnValue + Boolean.toString(((Boolean)var11.get(var14)).booleanValue()) + ",";
-                    }
-                }
-
-                if(dtype.equals("text")) {
-                    for(var14 = 0; var14 < var11.size(); ++var14) {
-                        returnValue = returnValue + var11.get(var14) + ",";
-                    }
-                }
-
-                if(dtype.equals("noderef")) {
-                    for(var14 = 0; var14 < var11.size(); ++var14) {
-                        returnValue = returnValue + var11.get(var14).toString() + ",";
-                    }
-                }
-
-                if(returnValue.equals("")) {
-                    for(var14 = 0; var14 < var11.size(); ++var14) {
-                        returnValue = returnValue + var11.get(var14) + ",";
+                        returnValue.append(var11.get(var14)).append(",");
                     }
                 }
             }
@@ -439,35 +438,34 @@ abstract class PropertyProcessor {
                 SimpleDateFormat categories = this.getSimpleDateFormat();
                 Calendar i$ = Calendar.getInstance();
                 i$.setTimeInMillis(((Date) sValue).getTime());
-                returnValue = categories.format((Date) sValue);
+                returnValue = new StringBuilder(categories.format((Date) sValue));
             }
 
-            if(dtype.equals("id") || dtype.equals("long")) {
-                returnValue = Long.toString(((Long) sValue).longValue());
+            switch (dtype) {
+                case "id":
+                case "long":
+                    returnValue = new StringBuilder(Long.toString(((Long) sValue).longValue()));
+                    break;
+                case "int":
+                    returnValue = new StringBuilder(Integer.toString(((Integer) sValue).intValue()));
+                    break;
+                case "float":
+                case "double":
+                    returnValue = new StringBuilder(Double.toString(((Double) sValue).doubleValue()));
+                    break;
+                case "boolean":
+                    returnValue = new StringBuilder(Boolean.toString(((Boolean) sValue).booleanValue()));
+                    break;
+                case "text":
+                    returnValue = new StringBuilder(sValue.toString());
+                    break;
+                case "noderef":
+                    returnValue = new StringBuilder(sValue.toString());
+                    break;
             }
 
-            if(dtype.equals("int")) {
-                returnValue = Integer.toString(((Integer) sValue).intValue());
-            }
-
-            if(dtype.equals("float") || dtype.equals("double")) {
-                returnValue = Double.toString(((Double) sValue).doubleValue());
-            }
-
-            if(dtype.equals("boolean")) {
-                returnValue = Boolean.toString(((Boolean) sValue).booleanValue());
-            }
-
-            if(dtype.equals("text")) {
-                returnValue =  sValue.toString();
-            }
-
-            if(dtype.equals("noderef")) {
-                returnValue =  sValue.toString();
-            }
-
-            if(returnValue.equals("")) {
-                returnValue = String.valueOf(sValue);
+            if(returnValue.length() == 0) {
+                returnValue = new StringBuilder(String.valueOf(sValue));
             }
         }
 
@@ -479,21 +477,21 @@ abstract class PropertyProcessor {
             List var12 = (ArrayList) sValue;
             String catName;
             if(var12 != null) {
-                for(Iterator var16 = var12.iterator(); var16.hasNext(); returnValue = returnValue + catName) {
+                for(Iterator var16 = var12.iterator(); var16.hasNext(); returnValue.append(catName)) {
                     NodeRef var15 = (NodeRef)var16.next();
                     catName = this.getCategoryDisplayPath(var15);
                     if(returnValue.length() > 0) {
-                        returnValue = returnValue + ",";
+                        returnValue.append(",");
                     }
                 }
             }
         }
 
         if(logger.isDebugEnabled()) {
-            logger.debug("Exit getPropertyValue, returning: " + returnValue);
+            logger.debug("Exit getPropertyValue, returning: " + returnValue.toString());
         }
 
-        return returnValue;
+        return returnValue.toString();
     }
 
     public ReportLine processPropertyValues(ReportLine rl, NodeRef nodeRef, boolean includeMeta) {

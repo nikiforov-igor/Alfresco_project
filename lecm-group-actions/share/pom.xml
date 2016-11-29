@@ -5,7 +5,7 @@
     <parent>
         <groupId>ru.it.lecm.group-actions</groupId>
         <artifactId>group-actions</artifactId>
-        <version>1.8.0</version>
+        <version>1.8.5</version>
     </parent>
 
     <artifactId>group-actions-share</artifactId>

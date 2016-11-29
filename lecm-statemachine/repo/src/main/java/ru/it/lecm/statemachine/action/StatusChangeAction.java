@@ -425,8 +425,8 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
     }
 
     private void execBuildInTransactDynamic(final NodeRef child, final Map<String, LecmPermissionGroup> permissions) {
-        //final LecmPermissionService permissionsBuilder = getLecmPermissionService();
-        //permissionsBuilder.rebuildACL(child, permissions);
+        final LecmPermissionService permissionsBuilder = getLecmPermissionService();
+        permissionsBuilder.rebuildACL(child, permissions);
     }
 
 }

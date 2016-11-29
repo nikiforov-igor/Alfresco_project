@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items updateMode="CreateOrUpdate">
-	<item name="cm:Создать протокол по шаблону" type="lecm-group-actions:script-action">
-		<property name="cm:name"><![CDATA[Создать протокол по шаблону]]></property>
+	<item name="cm:Сформировать протокол" type="lecm-group-actions:script-action">
+		<property name="cm:name"><![CDATA[Сформировать протокол]]></property>
 		<property name="lecm-group-actions:statuses"><![CDATA[]]></property>
 		<property name="lecm-group-actions:type"><![CDATA[[lecm-protocol:document]]]></property>
 		<property name="lecm-group-actions:order"><![CDATA[0]]></property>
-		<property name="lecm-group-actions:expression"><![CDATA[(doc.attr("lecm-statemachine-aspects:is-draft") == false) AND NOT ((doc.attr("lecm-statemachine:status") == "Удален") OR ((doc.attr("lecm-statemachine:status") == "На хранении")))]]></property>
+		<property name="lecm-group-actions:expression"><![CDATA[(doc.attr("lecm-statemachine-aspects:is-draft") == false) AND !doc.isReadOnlyCategory("Документ") AND NOT ((doc.attr("lecm-statemachine:status") == "Удален") OR ((doc.attr("lecm-statemachine:status") == "На хранении")))]]></property>
 		<property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
 		<property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
-		<property name="cm:title"><![CDATA[Создать протокол по шаблону]]></property>
+		<property name="cm:title"><![CDATA[Сформировать протокол]]></property>
 		<property name="lecm-group-actions:script"><![CDATA[//генерация отчёта
 (function() {
 	var details = rptmanager.buildReportAndAttachToDocument(document.nodeRef, "protocol-content", templateCode, "Документ");

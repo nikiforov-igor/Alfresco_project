@@ -33,11 +33,13 @@
 			<div id="${el}-signDocument" class="widget-button-grey text-cropped" href="javascript:void(0);">${msg("label.sign")}</div>
 			<div id="${el}-refreshSignatures" class="widget-button-grey text-cropped" href="javascript:void(0);">${msg("label.refresh.signature")}</div>
 			<div id="${el}-uploadSignature" class="widget-button-grey text-cropped" href="javascript:void(0);">${msg("label.upload.signature")}</div>
+            <div id="${el}-exportSignature" class="widget-button-grey text-cropped" href="javascript:void(0);">${msg("label.export.signature")}</div>
+            <input type="file" id="${el}-localSign" style="display:none">
 		</div>
     </div>
 </div>
 
-<div class="widget-bordered-panel <#if !isSignable>hidden1</#if>" id="${el}-exchange-container">
+<div class="widget-bordered-panel <#if !isSignable || !isExchangeEnabled>hidden1</#if>" id="${el}-exchange-container">
     <div class="document-metadata-header document-components-panel">
         <h2 id="${el}-exchange-heading" class="dark">
             ${msg("label.exchange")}
@@ -67,9 +69,10 @@
 		var isFunction = YAHOO.lang.isFunction;
 		if (isFunction(LogicECM.DocumentAttachmentSigning)) {
 			var signingComponent = new LogicECM.DocumentAttachmentSigning("${el}").setOptions({
-				nodeRef: "${nodeRef}",
-				title: "${msg('heading')}",
-				signable: ${isSignable?string}
+                nodeRef: "${nodeRef}",
+                title: "${msg('heading')}",
+                signable: ${isSignable?string},
+                isExchangeEnabled: ${isExchangeEnabled?string}
 			}).setMessages(${messages});
 		}
 		YAHOO.util.Event.on("${el}-signableSwitch", "click", signingComponent.onSignableSwitch, signingComponent, true);
@@ -77,9 +80,11 @@
 		YAHOO.util.Event.on("${el}-signDocument", "click", signingComponent.onSignDocument, signingComponent, true);
 		YAHOO.util.Event.on("${el}-refreshSignatures", "click", signingComponent.onRefreshSignatures, signingComponent, true);
 		YAHOO.util.Event.on("${el}-uploadSignature", "click", signingComponent.onUploadSignature, signingComponent, true);
+        YAHOO.util.Event.on("${el}-localSign", "change", signingComponent.handleClientLocalSign, signingComponent, true);
 		YAHOO.util.Event.on("${el}-refreshSentDocuments", "click", signingComponent.onRefreshSentDocuments, signingComponent, true);
 		YAHOO.util.Event.on("${el}-sendDocument", "click", signingComponent.onSendDocument, signingComponent, true);
 		YAHOO.util.Event.on("${el}-signaturesReceived", "click", signingComponent.onSignaturesReceived, signingComponent, true);
+        YAHOO.util.Event.on("${el}-exportSignature", "click", signingComponent.onExportSignature, signingComponent, true);
 	}
 	YAHOO.util.Event.onDOMReady(init);
 })();

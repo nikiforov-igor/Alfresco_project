@@ -30,9 +30,9 @@ LogicECM.module = LogicECM.module || {};
 
     var IDENT_CREATE_NEW = "~CREATE~NEW~";
 
-    LogicECM.module.MixAssociationTreeViewer = function(htmlId)
+    LogicECM.module.MixAssociationTreeViewer = function(htmlId, subName)
 	{
-        LogicECM.module.MixAssociationTreeViewer.superclass.constructor.call(this, "MixAssociationTreeViewer", htmlId);
+        LogicECM.module.MixAssociationTreeViewer.superclass.constructor.call(this, "MixAssociationTreeViewer" + (subName ? subName : ""), htmlId);
         YAHOO.Bubbling.on("refreshItemList", this.onRefreshItemList, this);
         YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemAdded, this);
 		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
@@ -159,6 +159,7 @@ LogicECM.module = LogicECM.module || {};
 			additionalFilter: "",
 
             useStrictFilterByOrg: false,
+            doNotCheckAccess: false,
 
             defaultValue: null,
 
@@ -1574,38 +1575,46 @@ LogicECM.module = LogicECM.module || {};
         {
 	        var additionalFilter = this.options.additionalFilter;
 			var allowedNodesFilter = "";
+            var notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i;
+            var singleNotQuery;
 
-			if (this.options.allowedNodes) {
-				if (this.options.allowedNodes.length) {
-					for (var i in this.options.allowedNodes) {
-						if (allowedNodesFilter.length > 0) {
-							allowedNodesFilter += " OR ";
-						}
-						allowedNodesFilter += "ID:\"" + this.options.allowedNodes[i] + "\"";
-					}
-				} else {
-					allowedNodesFilter = 'ISNULL:"sys:node-dbid"';
-				}
+            if (this.options.allowedNodes) {
+                if (this.options.allowedNodes.length) {
+                    for (var i in this.options.allowedNodes) {
+                        if (allowedNodesFilter.length > 0) {
+                            allowedNodesFilter += " OR ";
+                        }
+                        allowedNodesFilter += "ID:\"" + this.options.allowedNodes[i] + "\"";
+                    }
+                } else {
+                    allowedNodesFilter = '(ISNULL:"sys:node-dbid" OR NOT EXISTS:"sys:node-dbid")';
+                }
 
-				if (additionalFilter) {
-					additionalFilter = "(" + additionalFilter + ") AND (" + allowedNodesFilter + ")";
-				} else {
-					additionalFilter = allowedNodesFilter;
-				}
-			}
+                if (additionalFilter != null && additionalFilter.length > 0) {
+                    singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
+                    additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND (" + allowedNodesFilter + ")";
+                } else {
+                    additionalFilter = allowedNodesFilter;
+                }
+            }
 
-	        if (this.options.ignoreNodes != null && this.options.ignoreNodes.length > 0) {
-		        var ignoreNodesFilter = "ISNOTNULL:\"cm:name\"";
-		        for (var i = 0; i < this.options.ignoreNodes.length; i++) {
-			        ignoreNodesFilter += " AND NOT ID:\"" + this.options.ignoreNodes[i] + "\"";
-		        }
+            if (this.options.ignoreNodes != null && this.options.ignoreNodes.length > 0) {
+                var ignoreNodesFilter = "";
+                for (var i = 0; i < this.options.ignoreNodes.length; i++) {
+                    if (ignoreNodesFilter !== "") {
+                        ignoreNodesFilter += " AND ";
+                    }
+                    ignoreNodesFilter += "NOT ID:\"" + this.options.ignoreNodes[i] + "\"";
+                }
 
-		        if (additionalFilter != null && additionalFilter.length > 0) {
-			        additionalFilter = "(" + additionalFilter + ") AND (" + ignoreNodesFilter + ")";
-		        } else {
-			        additionalFilter = ignoreNodesFilter;
-		        }
-	        }
+                var addBrackets = this.options.ignoreNodes.length > 1;
+                if (additionalFilter != null && additionalFilter.length > 0) {
+                    singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
+                    additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND " + (addBrackets ? "(" : "") + ignoreNodesFilter + (addBrackets ? ")" : "");
+                } else {
+                    additionalFilter = ignoreNodesFilter;
+                }
+            }
 
             return "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
                 "&skipCount=" + this.skipItemsCount + "&size=" + this.getMaxSearchResult() +
@@ -1613,7 +1622,8 @@ LogicECM.module = LogicECM.module || {};
 	            "&sortProp=" + encodeURIComponent(this.options.sortProp) +
 	            "&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
 				"&additionalFilter=" + encodeURIComponent(additionalFilter) +
-                "&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg);
+                "&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg) +
+                "&doNotCheckAccess=" + encodeURIComponent("" + this.options.doNotCheckAccess);
         },
 
         onSelectedItemAdded: function MixAssociationTreeViewer_onSelectedItemAdded(layer, args)
@@ -1718,7 +1728,7 @@ LogicECM.module = LogicECM.module || {};
             var title = (this.options.showAssocViewForm && item.nodeRef != null) ? Alfresco.component.Base.prototype.msg("title.click.for.extend.info") : displayValue;
 	        var result = "<span class='not-person' title='" + title + "'>";
 	        if (this.options.showAssocViewForm && item.nodeRef != null) {
-		        result += "<a href='javascript:void(0);' " + " onclick=\"viewAttributes(\'" + item.nodeRef + "\', null, \'logicecm.view\')\">" + displayValue + "</a>";
+		        result += "<a href='javascript:void(0);' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + item.nodeRef + "\', title: \'logicecm.view\' })\">" + displayValue + "</a>";
 	        } else {
 		        result += displayValue;
 	        }

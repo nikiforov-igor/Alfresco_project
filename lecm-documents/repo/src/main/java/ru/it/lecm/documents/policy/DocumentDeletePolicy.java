@@ -54,7 +54,5 @@ public class DocumentDeletePolicy implements BeforeDeleteNodePolicy {
 		String defaultDescription = "Документ #mainobject полностью удален из системы";
 		BusinessJournalRecord record = businessJournalService.createBusinessJournalRecord(user, nodeRef, EventCategory.DELETE, defaultDescription);
 		businessJournalService.sendRecord(record);
-        record = businessJournalService.createBusinessJournalRecord(user, nodeRef, EventCategory.REMOVE_FROM_REPORTING, defaultDescription);
-		businessJournalService.sendRecord(record);
     }
 }

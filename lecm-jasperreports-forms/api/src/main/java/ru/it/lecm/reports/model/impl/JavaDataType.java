@@ -170,7 +170,7 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
 
             @Override
             public String getSQLPreparedValue(Object value) {
-                String resultedValue = "";
+                StringBuilder resultedValue = new StringBuilder();
                 for (Object val : (List) value) {
                     JavaDataType.SupportedTypes type;
                     String destClassName;
@@ -181,16 +181,15 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
                     }
                     type = JavaDataType.SupportedTypes.findType(destClassName);
 
-                    resultedValue = resultedValue +
-                            (resultedValue.length() > 0 ? "," : "") + (type != null ? type.getSQLPreparedValue(val) : "NULL");
+                    resultedValue.append(resultedValue.length() > 0 ? "," : "").append(type != null ? type.getSQLPreparedValue(val) : "NULL");
                 }
 
-                return resultedValue;
+                return resultedValue.toString();
             }
 
             @Override
             public String getFTSPreparedValue(Object value) {
-                String resultedValue = "";
+                StringBuilder resultedValue = new StringBuilder();
                 for (Object val : (List) value) {
                     JavaDataType.SupportedTypes type;
                     String destClassName;
@@ -201,11 +200,10 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
                     }
                     type = JavaDataType.SupportedTypes.findType(destClassName);
 
-                    resultedValue = resultedValue +
-                            (resultedValue.length() > 0 ? " OR " : "") + (type != null ? type.getSQLPreparedValue(val) : "*");
+                    resultedValue.append(resultedValue.length() > 0 ? " OR " : "").append(type != null ? type.getSQLPreparedValue(val) : "*");
                 }
 
-                return resultedValue;
+                return resultedValue.toString();
             }
         };
 
