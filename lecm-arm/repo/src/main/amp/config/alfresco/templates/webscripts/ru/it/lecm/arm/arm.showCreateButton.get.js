@@ -1,1 +1,0 @@
-model.showCreateButton = arm.checkShowCreateButton(args["code"]);

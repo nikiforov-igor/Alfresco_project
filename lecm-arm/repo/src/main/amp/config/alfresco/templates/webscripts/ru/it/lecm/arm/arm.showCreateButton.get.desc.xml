@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>ARM: Проверка показывать ли кнопку "Создать"</shortname>
-    <description>ARM: Проверка показывать ли кнопку "Создать"</description>
-    <url>/lecm/arm/checkShowCreateButton</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>
