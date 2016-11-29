@@ -22,7 +22,7 @@ import org.springframework.extensions.surf.util.AbstractLifecycleBean;
  */
 public class LecmServicesRegistryImpl extends AbstractLifecycleBean implements LecmServicesRegistry {
 	
-	Map<String, LecmService> services = new HashMap<>();
+	private final Map<String, LecmService> services = new HashMap<>();
 	
 	private static final Logger logger = LoggerFactory.getLogger(LecmServicesRegistryImpl.class);
 	private LecmTransactionHelper lecmTransactionHelper;
