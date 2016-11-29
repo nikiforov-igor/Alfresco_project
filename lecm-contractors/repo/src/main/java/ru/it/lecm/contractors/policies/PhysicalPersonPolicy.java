@@ -3,37 +3,29 @@ package ru.it.lecm.contractors.policies;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour.NotificationFrequency;
 import org.alfresco.repo.policy.JavaBehaviour;
-import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.PropertyCheck;
 import org.apache.commons.lang.StringUtils;
+import ru.it.lecm.base.policies.LogicECMAssociationPolicy;
 import ru.it.lecm.contractors.api.Contractors;
 
 import java.io.Serializable;
 import java.util.Map;
 
 
-public class PhysicalPersonPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy {
-    private PolicyComponent policyComponent;
-    private NodeService nodeService;
-
-    public void setPolicyComponent(PolicyComponent policyComponent) {
-        this.policyComponent = policyComponent;
-    }
-
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
-
-    }
+public class PhysicalPersonPolicy  extends LogicECMAssociationPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy{
 
     public final void init() {
-        PropertyCheck.mandatory(this, "policyComponent", policyComponent);
-        PropertyCheck.mandatory(this, "nodeService", nodeService);
+        super.init();
 
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 Contractors.TYPE_PHYSICAL_PERSON, new JavaBehaviour(this, "onUpdateProperties", NotificationFrequency.TRANSACTION_COMMIT));
+
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+                Contractors.TYPE_PHYSICAL_PERSON, new JavaBehaviour(this, "onDeleteAssociation"));
+
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+                Contractors.TYPE_PHYSICAL_PERSON, new JavaBehaviour(this, "onCreateAssociation"));
     }
 
     @Override

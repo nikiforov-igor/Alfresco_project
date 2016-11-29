@@ -501,6 +501,23 @@
                     </index>
                 </property>
 
+                <property name="lecm-contractor:region-association-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-contractor:region-association-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+
             </properties>
 
             <associations>
@@ -519,6 +536,19 @@
                     </target>
                 </association>
 
+                <association name="lecm-contractor:region-association">
+                    <title>Region</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-contractor:region-type</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+
             </associations>
 
             <mandatory-aspects>
@@ -527,6 +557,13 @@
             </mandatory-aspects>
         </type>
 
+        <type name="lecm-contractor:region-type">
+            <title>Region Type</title>
+            <parent>lecm-dic:plane_dictionary_values</parent>
+            <mandatory-aspects>
+                <aspect>cm:versionable</aspect>
+            </mandatory-aspects>
+        </type>
     </types>
 
     <aspects>
@@ -606,6 +643,26 @@
                         <atomic>true</atomic>
                         <stored>false</stored>
                         <tokenised>false</tokenised>
+                    </index>
+                </property>
+
+                <!-- Search props-->
+                <property name="lecm-contractor:shortname-search">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+
+                <property name="lecm-contractor:fullname-search">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
                     </index>
                 </property>
 

@@ -38,6 +38,7 @@
                 <value>alfresco/module/${artifactId}/models/dictionaries/legalform-dictionary-items.xml</value>
                 <value>alfresco/module/${artifactId}/models/dictionaries/lecm-contractors-roles-items.xml</value>
                 <value>alfresco/module/${artifactId}/models/dictionaries/lecm-bussiness-journal-objectType-items.xml</value>
+                <value>alfresco/module/${artifactId}/models/dictionaries/regions-dictionary.xml</value>
             </list>
         </property>
     </bean>
@@ -83,7 +84,7 @@
         <property name="nodeService" ref="nodeService"/>
     </bean>
 
-    <bean id="physicalPersonPolicy" class="ru.it.lecm.contractors.policies.PhysicalPersonPolicy" init-method="init">
+    <bean id="physicalPersonPolicy" class="ru.it.lecm.contractors.policies.PhysicalPersonPolicy" parent="logicEcmAssociationPolicy" init-method="init">
         <property name="policyComponent" ref="policyComponent"/>
         <property name="nodeService" ref="nodeService"/>
     </bean>
@@ -156,6 +157,11 @@
                         <value>lecm-specialization:description</value>
                     </list>
                 </entry>
+                <entry key="lecm-contractor:region-type">
+                    <list>
+                        <value>cm:title</value>
+                    </list>
+                </entry>
             </map>
         </constructor-arg>
     </bean>
@@ -208,4 +214,11 @@
 			</list>
 		</property>
 	</bean>
+
+    <bean id="contractorsUpdateSearchPropsPolicy" class="ru.it.lecm.contractors.policies.ContractorUpdateSearchPropsPolicy" init-method="init" depends-on="${groupId}.${artifactId}.contractors-model-bootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="contractorsBean" ref="contractorsBean" />
+    </bean>
+
 </beans>
