@@ -3,35 +3,68 @@
     <config>
         <forms>
             <default-controls>
-                <type name="association:lecm-contractor:contractor-type" template="/ru/it/lecm/base-share/components/controls/double-association-tree-picker.ftl">
-                    <control-param name="firstRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
-                    <control-param name="firstNameSubstituteString">{lecm-contractor:shortname}</control-param>
-                    <control-param name="firstTreeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
-                    <control-param name="firstTreeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-                    <control-param name="firstPlane">false</control-param>
-                    <control-param name="firstShowSearch">true</control-param>
-                    <control-param name="firstShowCreateNewLink">true</control-param>
-                    <control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
-                    <control-param name="firstPickerButtonTitleCode">title.contractor-external.select</control-param>
-                    <control-param name="firstChangeItemsFireAction">contractor.selected</control-param>
-                    <control-param name="firstAdditionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
-                    <control-param name="firstPickerItemsScript">/lecm/contractors/common/picker/items</control-param>
-                    <control-param name="firstPathNameSubstituteString">{lecm-contractor:shortname}</control-param>
-                    <control-param name="firstSortProp">lecm-contractor:shortname</control-param>
-
-                    <control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
-                    <control-param name="secondNameSubstituteString">{lecm-contractor:shortname}</control-param>
-                    <control-param name="secondTreeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
-                    <control-param name="secondTreeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
-                    <control-param name="secondPlane">true</control-param>
-                    <control-param name="secondShowSearch">true</control-param>
-                    <control-param name="secondShowCreateNewLink">false</control-param>
-                    <control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
-                    <control-param name="secondPickerButtonTitleCode">title.contractor-internal.select</control-param>
-                    <control-param name="secondChangeItemsFireAction">organization.selected</control-param>
-                    <control-param name="secondAdditionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
-                    <control-param name="secondPickerItemsScript">/lecm/contractors/organization/picker/items</control-param>
-                    <control-param name="secondSortProp">lecm-contractor:shortname</control-param>
+                <type name="association:lecm-contractor:contractor-type" template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                    <control-param name="changeItemsFireAction">contractor.selected</control-param>
+                    <control-param name="items">contractor,organisation,person</control-param>
+                    <control-param name="showAutocomplete">true</control-param>
+                    <control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
+                    <control-param name="cssClasses">with-ex-search</control-param>
+                    <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+                    <!-- lecm-contractor:contractor-type -->
+                    <control-param name="contractor_label">Внешний контрагент</control-param>
+                    <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
+                    <control-param name="contractor_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                    <control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+                    <control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
+                    <control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+                    <control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+                    <control-param name="contractor_plane">true</control-param>
+                    <control-param name="contractor_showSearch">false</control-param>
+                    <control-param name="contractor_showExSearch">true</control-param>
+                    <control-param name="contractor_showCreateNewLink">true</control-param>
+                    <control-param name="contractor_showEditButton">true</control-param>
+                    <control-param name="contractor_fillFormFromSearch">true</control-param>
+                    <control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
+                    <control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+                    <control-param name="contractor_showAssocViewForm">true</control-param>
+                    <control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
+                    <control-param name="contractor_hasNoAspects">lecm-orgstr-aspects:is-organization-aspect</control-param>
+                    <control-param name="contractor_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                    <control-param name="contractor_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
+                    <!-- lecm-contractor:contractor-type -->
+                    <control-param name="organisation_label">Внутренний контрагент</control-param>
+                    <control-param name="organisation_endpointType">lecm-contractor:contractor-type</control-param>
+                    <control-param name="organisation_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                    <control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+                    <control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
+                    <control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+                    <control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+                    <control-param name="organisation_plane">true</control-param>
+                    <control-param name="organisation_showSearch">false</control-param>
+                    <control-param name="organisation_showExSearch">true</control-param>
+                    <control-param name="organisation_showCreateNewLink">false</control-param>
+                    <control-param name="organisation_pickerItemsScript">lecm/contractors/organization/picker/items</control-param>
+                    <control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+                    <control-param name="organisation_showAssocViewForm">true</control-param>
+                    <control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
+                    <control-param name="organisation_getExtSearchQuery">LogicECM.getExtQueryForContractor</control-param>
+                    <control-param name="organisation_getArgumentsFromForm">LogicECM.getExtArgsForContractor</control-param>
+                    <!-- lecm-contractor:physical-person-type -->
+                    <control-param name="person_label">Физическое лицо</control-param>
+                    <control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
+                    <control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
+                    <control-param name="person_nameSubstituteString">{lecm-contractor:lastName} {lecm-contractor:firstName} {lecm-contractor:middleName}</control-param>
+                    <control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
+                    <control-param name="person_plane">true</control-param>
+                    <control-param name="person_showCreateNewLink">true</control-param>
+                    <control-param name="person_showEditButton">true</control-param>
+                    <control-param name="person_fillFormFromSearch">true</control-param>
+                    <control-param name="person_showSearch">false</control-param>
+                    <control-param name="person_showExSearch">true</control-param>
+                    <control-param name="person_showAssocViewForm">true</control-param>
+                    <control-param name="person_sortProp">lecm-contractor:shortname</control-param>
+                    <control-param name="person_getExtSearchQuery">LogicECM.getExtQueryForPerson</control-param>
+                    <control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
                 </type>
                 <type name="association:lecm-representative:representative-type" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
                     <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
@@ -39,6 +72,12 @@
                     <control-param name="showCreateNewButton">false</control-param>
                     <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
                     <control-param name="itemType">lecm-representative:representative-type</control-param>
+                </type>
+                <type name="association:lecm-contractor:region-type" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Регионы</control-param>
+                    <control-param name="nameSubstituteString">{cm:title}</control-param>
+                    <control-param name="plane">true</control-param>
+                    <control-param name="showSearch">true</control-param>
                 </type>
             </default-controls>
         </forms>
@@ -50,6 +89,7 @@
             <form>
                 <create-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
                 <field-visibility>
+                    <show id="submit-function"/>
                     <show id="lecm-contractor:fullname" force="true"/>
                     <!-- Полное наименование -->
                     <show id="lecm-contractor:shortname" force="true"/>
@@ -91,7 +131,6 @@
                     <show id="lecm-contractor:bank-location"/>
                     <!-- Местоположение банка -->
                     <show id="lecm-contractor:contractor-code"/>
-                    <show id="lecm-contractor:contractor-to-check-inn" force="true"/>
                     <!-- Код контрагента -->
                     <show id="lecm-contractor:contractor-to-specialization-association"/>
                     <!-- FK Специализация -->
@@ -102,6 +141,12 @@
                 <appearance>
                     <!-- Вкладка: Контактные данные -->
                     <set id="contacts" label-id="tabs.contractor.contacts" appearance=""/>
+                    <field id="submit-function" set="contacts">
+                        <control template="/ru/it/lecm/base-share/components/controls/submit-function-control.ftl">
+                            <control-param name="scripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+                            <control-param name="submitFunction">LogicECM.checkDuplicatesForContractor</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-contractor:fullname" set="contacts"/>
                     <!-- Полное наименование -->
                     <field id="lecm-contractor:shortname" set="contacts"/>
@@ -197,10 +242,6 @@
                                 {lecm-representative:firstname}
                             </control-param>
                         </control>
-                    </field>
-                    <field id="lecm-contractor:contractor-to-check-inn" set="contacts"
-                           mandatory="true">            <!-- FK Специализация -->
-                        <control template="/ru/it/lecm/contractors/contractors-check-inn.ftl"/>
                     </field>
                 </appearance>
             </form>
@@ -209,6 +250,7 @@
             <form id="contractorOrg" submission-url="/lecm/contractors/organization/type/lecm-contractor%3Acontractor-type/formprocessor">
                 <create-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
                 <field-visibility>
+                    <show id="submit-function"/>
                     <show id="lecm-contractor:fullname" force="true"/>
                     <!-- Полное наименование -->
                     <show id="lecm-contractor:shortname" force="true"/>
@@ -250,7 +292,6 @@
                     <show id="lecm-contractor:bank-location"/>
                     <!-- Местоположение банка -->
                     <show id="lecm-contractor:contractor-code"/>
-                    <show id="lecm-contractor:contractor-to-check-inn" force="true"/>
                     <!-- Код контрагента -->
                     <show id="lecm-contractor:contractor-to-specialization-association"/>
                     <!-- FK Специализация -->
@@ -261,6 +302,12 @@
                 <appearance>
                     <!-- Вкладка: Контактные данные -->
                     <set id="contacts" label-id="tabs.contractor.contacts" appearance=""/>
+                    <field id="submit-function" set="contacts">
+                        <control template="/ru/it/lecm/base-share/components/controls/submit-function-control.ftl">
+                            <control-param name="scripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+                            <control-param name="submitFunction">LogicECM.checkDuplicatesForContractor</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-contractor:fullname" set="contacts"/>
                     <!-- Полное наименование -->
                     <field id="lecm-contractor:shortname" set="contacts"/>
@@ -356,10 +403,6 @@
                                 {lecm-representative:firstname}
                             </control-param>
                         </control>
-                    </field>
-                    <field id="lecm-contractor:contractor-to-check-inn" set="contacts"
-                           mandatory="true">            <!-- FK Специализация -->
-                        <control template="/ru/it/lecm/contractors/contractors-check-inn.ftl"/>
                     </field>
                 </appearance>
             </form>
@@ -420,6 +463,63 @@
                     </field>
                 </appearance>
             </form>
+            <form id="ex-control-search">
+                <field-visibility>
+                    <show id="lecm-contractor:fullname"/>
+                    <show id="lecm-contractor:INN"/>
+                    <show id="lecm-contractor:KPP"/>
+                </field-visibility>
+                <appearance>
+                    <set id="common"/>
+                    <set id="one" appearance="" parent="common"/>
+                    <set id="two" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+
+                    <field id="lecm-contractor:fullname" label-id="label.contractor_name" set="one">
+                        <control>
+                            <control-param name="mandatory">false</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-contractor:INN" set="two"/>
+                    <field id="lecm-contractor:KPP" set="two"/>
+                </appearance>
+            </form>
+            <form id="datagrid-ext">
+                <field-visibility>
+                    <show id="lecm-contractor:shortname"/>
+                    <show id="lecm-contractor:fullname"/>
+                    <show id="lecm-contractor:INN"/>
+                    <show id="lecm-contractor:KPP"/>
+                </field-visibility>
+            </form>
+            <form id="show-duplicates">
+                <field-visibility>
+                    <show id="lecm-contractor:duplicates"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-contractor:duplicates">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-datagrid-control.ftl">
+                            <control-param name="itemType">lecm-contractor:contractor-type</control-param>
+                            <control-param name="showCreateButton">false</control-param>
+                            <control-param name="showActions">false</control-param>
+                            <control-param name="datagridFormId">datagrid-ext</control-param>
+                            <control-param name="showLabel">false</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="selectedItemsFormArgs">duplicates_str</control-param>
+                            <control-param name="prefixLabelId">label.dictionary.has.duplicates</control-param>
+                            <control-param name="postfixLabelId">label.continue.with.selected.data</control-param>
+                            <control-param name="usePagination">true</control-param>
+                            <control-param name="isTableSortable">false</control-param>
+                            <control-param name="datagridNoWrapValues">true</control-param>
+                            <control-param name="datagridStrippedCols">lecm-contractor:fullname</control-param>
+                            <control-param name="datagridMaxSColWidth">21</control-param>
+                            <control-param name="datagridStyles">middle-align max-height65</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 
@@ -431,6 +531,7 @@
                 <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
 
                 <field-visibility>
+                    <show id="submit-function"/>
                     <show id="lecm-contractor:computed-parent"/>
                     <!-- Наименование материнской компании -->
                     <show id="lecm-contractor:fullname" force="true"/>
@@ -480,8 +581,6 @@
                     <!-- FK Специализация -->
                     <show id="lecm-contractor:contractor-to-legalform-association"/>
                     <!-- FK ОПФ -->
-
-                    <show id="lecm-contractor:contractor-to-check-inn" force="true"/>
                     <show id="lecm-contractor:contractor-to-link-association"/>
                     <!-- FK Адресант (через ссылку) -->
                     <show id="lecm-contractor:interaction-type"/>
@@ -491,6 +590,12 @@
                 <appearance>
                     <!-- Вкладка: Контактные данные -->
                     <set id="contacts" label-id="tabs.contractor.contacts" appearance=""/>
+                    <field id="submit-function" set="contacts">
+                        <control template="/ru/it/lecm/base-share/components/controls/submit-function-control.ftl">
+                            <control-param name="scripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+                            <control-param name="submitFunction">LogicECM.checkDuplicatesForContractor</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-contractor:computed-parent"
                            set="contacts">                                     <!-- Наименование материнской компании -->
                         <control template="/ru/it/lecm/base-share/components/controls/view-link-control.ftl">
@@ -603,10 +708,6 @@
                                 {lecm-representative:firstname}
                             </control-param>
                         </control>
-                    </field>
-                    <field id="lecm-contractor:contractor-to-check-inn" set="contacts"
-                           mandatory="true">            <!-- FK Специализация -->
-                        <control template="/ru/it/lecm/contractors/contractors-check-inn.ftl"/>
                     </field>
                 </appearance>
             </form>
@@ -757,6 +858,30 @@
                     <field id="lecm-contractor:bank-location" set="bankinfo"/>
                     <!-- Местоположение банка -->
 
+                </appearance>
+            </form>
+            <form id="expand-info">
+                <field-visibility>
+                    <show id="lecm-contractor:legal-address"/>
+                    <show id="lecm-contractor:physical-address"/>
+                    <show id="lecm-contractor:phone"/>
+                    <show id="lecm-contractor:contractor-code"/>
+                    <show id="lecm-contractor:contractor-to-specialization-association"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-contractor:contractor-to-specialization-association">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                            <control-param name="rootLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации
+                            </control-param>
+                            <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="plane">false</control-param>
+                            <control-param name="showSelectedItemsPath">false</control-param>
+                            <control-param name="treeItemType">lecm-specialization:specialization-type</control-param>
+                            <control-param name="createNewMessageId">label.new-specialization</control-param>
+                        </control>
+                    </field>
                 </appearance>
             </form>
         </forms>
@@ -1012,6 +1137,7 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="submit-function"/>
                     <show id="lecm-contractor:lastName"/>
                     <show id="lecm-contractor:firstName"/>
                     <show id="lecm-contractor:middleName"/>
@@ -1034,8 +1160,15 @@
                     <show id="lecm-contractor:additional-contact-information"/>
                     <show id="lecm-contractor:contractor-to-specialization-association" force="true"/>
                     <show id="lecm-contractor:comment" force="true"/>
+                    <show id="lecm-contractor:region-association"/>
                 </field-visibility>
                 <appearance>
+                    <field id="submit-function">
+                        <control template="/ru/it/lecm/base-share/components/controls/submit-function-control.ftl">
+                            <control-param name="scripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+                            <control-param name="submitFunction">LogicECM.checkDuplicatesForPerson</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-contractor:is-sole-proprietor">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
                             <control-param name="disabledFieldsIfNotSelect">lecm-contractor:OGRN</control-param>
@@ -1072,13 +1205,85 @@
                     </field>
                 </appearance>
             </form>
+            <form id="ex-control-search">
+                <field-visibility>
+                    <show id="lecm-contractor:lastName"/>
+                    <show id="lecm-contractor:document-number"/>
+                    <show id="lecm-contractor:INN"/>
+                    <show id="lecm-contractor:physical-address"/>
+                    <show id="lecm-contractor:region-association"/>
+                </field-visibility>
+                <appearance>
+                    <set id="common"/>
+                    <set id="one" appearance="" parent="common"/>
+                    <set id="two" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 
+                    <field id="lecm-contractor:lastName" label-id="label.physical_person_fio" set="one">
+                        <control>
+                            <control-param name="mandatory">false</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-contractor:document-number" label-id="label.physical_person_doc_number" set="two"/>
+                    <field id="lecm-contractor:INN" set="two"/>
+                    <field id="lecm-contractor:physical-address" label-id="label.physical_person_address" set="two">
+                        <control>
+                            <control-param name="mandatory">false</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-contractor:region-association" set="two"/>
+                </appearance>
+            </form>
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-contractor:lastName"/>
                     <show id="lecm-contractor:firstName"/>
                     <show id="lecm-contractor:INN" force="true"/>
                 </field-visibility>
+            </form>
+            <form id="datagrid-ext">
+                <field-visibility>
+                    <show id="lecm-contractor:fullname"/>
+                    <show id="lecm-contractor:physical-address"/>
+                    <show id="lecm-contractor:is-sole-proprietor"/>
+                    <show id="lecm-contractor:INN"/>
+                    <show id="lecm-contractor:region-association"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-contractor:fullname" label="Имя"/>
+                    <field id="lecm-contractor:is-sole-proprietor" label="ИП"/>
+                </appearance>
+            </form>
+            <form id="show-duplicates">
+                <field-visibility>
+                    <show id="lecm-person:duplicates"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-person:duplicates">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-datagrid-control.ftl">
+                            <control-param name="itemType">lecm-contractor:physical-person-type</control-param>
+                            <control-param name="showCreateButton">false</control-param>
+                            <control-param name="showActions">false</control-param>
+                            <control-param name="datagridFormId">datagrid-ext</control-param>
+                            <control-param name="showLabel">false</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
+                            <control-param name="selectedItemsFormArgs">duplicates_str</control-param>
+                            <control-param name="prefixLabelId">label.dictionary.has.duplicates</control-param>
+                            <control-param name="postfixLabelId">label.continue.with.selected.data</control-param>
+                            <control-param name="usePagination">true</control-param>
+                            <control-param name="isTableSortable">false</control-param>
+                            <control-param name="datagridNoWrapValues">true</control-param>
+                            <control-param name="datagridStrippedCols">lecm-contractor:physical-address</control-param>
+                            <control-param name="datagridMaxSColWidth">21</control-param>
+                            <control-param name="datagridStyles">middle-align max-height65</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -1087,6 +1292,7 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="submit-function"/>
                     <show id="lecm-contractor:lastName"/>
                     <show id="lecm-contractor:firstName"/>
                     <show id="lecm-contractor:middleName"/>
@@ -1109,8 +1315,15 @@
                     <show id="lecm-contractor:additional-contact-information"/>
                     <show id="lecm-contractor:contractor-to-specialization-association" force="true"/>
                     <show id="lecm-contractor:comment" force="true"/>
+                    <show id="lecm-contractor:region-association"/>
                 </field-visibility>
                 <appearance>
+                    <field id="submit-function">
+                        <control template="/ru/it/lecm/base-share/components/controls/submit-function-control.ftl">
+                            <control-param name="scripts">scripts/contractors/contractors-ex-search-script.js</control-param>
+                            <control-param name="submitFunction">LogicECM.checkDuplicatesForPerson</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-contractor:is-sole-proprietor">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
                             <control-param name="disabledFieldsIfNotSelect">lecm-contractor:OGRN</control-param>
@@ -1132,7 +1345,52 @@
                     </field>
                 </appearance>
             </form>
+            <form id="expand-info">
+                <field-visibility>
+                    <show id="lecm-contractor:representative-to-certifying-document-association"/>
+                    <show id="lecm-contractor:legal-address"/>
+                    <show id="lecm-contractor:OGRN"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-contractor:representative-to-certifying-document-association">
+                        <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
+                            <control-param name="formatString">{lecm-contractor:representative-to-certifying-document-association/} {lecm-contractor:document-series} {lecm-contractor:document-number}</control-param>
+                            <control-param name="emptyValueKey">form.control.novalue</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contractor:legal-address" label-id="title.physical_person_legal_address"/>
+                </appearance>
+            </form>
         </forms>
     </config>
 
+    <!-- Регионы -->
+    <config evaluator="model-type" condition="lecm-contractor:region-type">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:title"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:title">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+    <config evaluator="node-type" condition="lecm-contractor:region-type">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:title"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:title">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>

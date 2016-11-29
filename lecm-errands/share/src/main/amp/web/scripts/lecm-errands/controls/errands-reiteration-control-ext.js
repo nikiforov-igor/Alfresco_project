@@ -62,31 +62,48 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
     YAHOO.extend(LogicECM.module.Errands.ReiterationExt, LogicECM.module.Base.ReiterationExt,
         {
             panel: null,
-            isPanelShown: false,
             currentType: "DAILY",
             currentPickerType: null,
-            pickerTypes: ['week-days', 'month-days'],
+            pickerTypes: ['none', 'week-days', 'month-days'],
             days: Alfresco.util.message('days.short').split(','),
             daysFull: Alfresco.util.message('days.long').split(','),
+            options: {
+                defaultType: null,
+                defaultDays: []
+            },
 
             onReady: function () {
                 var first = this.days.shift();
                 this.days.push(first);
                 first = this.daysFull.shift();
                 this.daysFull.push(first);
-
-                var select = Dom.get(this.id + '-type');
-                Event.addListener(select, 'click', this.onChangeType, this, true);
-                var value = this.getControlValue();
-                var message = this.getSummary(value);
-                if (value) {
-                    this.currentType = value.type;
-                    select.value = this.getControlValue().type;
+                if (!this.getControlValue()) {
+                    this.loadDefaultValue();
                 }
-
+                var el = Dom.get(this.id + '-displayValue');
+                //если поле не disabled - отображается как ссылка,
+                // иначе просто span
+                if (el.tagName === "A") {
+                    Event.addListener(el, 'click', function (e) {
+                        this.openDialog(e);
+                    }.bind(this));
+                }
                 LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
             },
+            loadDefaultValue: function loadDefaultValue_function() {
+                var value = {};
+                if (this.options.defaultType) {
+                    this.currentType = this.options.defaultType;
+                    value.type = this.currentType;
+                    if (this.options.defaultDays) {
+                        value.date = this.options.defaultDays;
+                    }
+                } else {
+                    value = null;
+                }
 
+                this.updateValue(value);
+            },
             getValue: function getValue_function() {
                 if (this.currentType != "DAILY") {
                     var nodes = YAHOO.util.Selector.query('.item.checked', this.typeContainerPrefix + this.currentPickerType);
@@ -154,16 +171,13 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                 return summary;
             },
 
-            openDialog: function openDialog_function() {
+            openDialog: function openDialog_function(e) {
                 if (!this.panel) {
-                    this.id + '-dialog-panel'
-                    this.panel = new YAHOO.widget.SimpleDialog("simpledialog1", {
-                        width: "100px",
-                        fixedcenter: true,
+                    this.panel = new YAHOO.widget.SimpleDialog(this.id + '-dialog-panel', {
+                        width: "150px",
                         visible: false,
                         draggable: true,
                         close: true,
-                        model: true,
                         constraintoviewport: true,
                         buttons: [
                             {
@@ -171,14 +185,17 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                                 handler: this.onOk.bind(this),
                                 isDefault: true
                             },
-                            {text: Alfresco.util.message("button.cancel"), handler: this.onCancel.bind(this)}
+                            {
+                                text: Alfresco.util.message("button.cancel"),
+                                handler: this.onCancel.bind(this)
+                            }
                         ]
                     });
 
                     this.panel.setHeader(Alfresco.util.message("label.reiteration.repeat"));
 
                     var html = '<div id="' + this.id + '-dialog-panel-container" class="reiteration">'
-                    html += '<div id="' + this.id + '-label-type" style="text-align: center"><span class="label"></span></div>';
+                    html += '<div id="' + this.id + '-switch-type-container" style="text-align: center"></div>';
                     html += '<div class="delim">&nbsp;</div>';
                     html += '<div id="' + this.typeContainerPrefix + 'week-days" class="container hidden1">';
                     html += '<div class="container-aligment">';
@@ -202,7 +219,15 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
 
                     this.panel.setBody(html);
                     this.panel.render(document.body);
-                    //this._switchType(null,"WEEKLY");
+                    var picker = Dom.get(this.id + '-dialog-panel');
+                    Dom.setStyle(picker, "width", "auto");
+                    Dom.setStyle(picker, "min-width", "15em");
+                    var select = Dom.get(this.id + "-type");
+                    Dom.get(this.id + '-switch-type-container').appendChild(select);
+                    Dom.setStyle(select, "display", "block");
+                    Dom.setStyle(select, "width", "100%");
+                    select.value = this.currentType;
+                    Event.addListener(select, 'change', this.onChangeType, this, true);
                     var items = YAHOO.util.Selector.query('.item', this.id + '-dialog-panel-container');
                     Event.addListener(items, 'click', this.onItemClick, {}, this);
                 }
@@ -210,22 +235,22 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                 this.updateSummary();
                 this.panel.show();
 
-            },
+                var clicked = Event.getTarget(e);
+                var pickerPanel = Dom.get(this.id + '-dialog-panel').parentNode;
 
+                var x = Dom.getX(clicked);
+                if (Dom.getX(pickerPanel) != x) {
+                    Dom.setX(pickerPanel, x);
+                }
+                var y = Dom.getY(clicked) + clicked.offsetHeight;
+                if (Dom.getY(pickerPanel) != y) {
+                    Dom.setY(pickerPanel, y);
+                }
+            },
             onChangeType: function onChangeType_function(ev, args) {
-                if (ev.detail == 0) {
-                    var to = ev.target.value;
-                    if (to && to != "DAILY") {
-                        if (!this.isPanelShown) {
-                            this.openDialog();
-                        }
-                        if (this.currentType != to) {
-                            this._switchType(this.currentType, to);
-                        }
-                    } else if (to == "DAILY") {
-                        this.currentType = to;
-                        this.updateValue(this.getValue());
-                    }
+                var to = ev.target.value;
+                if (to && this.currentType != to) {
+                    this._switchType(this.currentType, to);
                 }
             },
 
@@ -233,19 +258,24 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                 var toPickerType = this.getPickerTypeByRepeatType(to);
 
                 if (from) {
-                    if (this.currentPickerType != toPickerType) {
-                        Dom.addClass(this.typeContainerPrefix + this.currentPickerType, 'hidden1');
+                    if (from != "DAILY") {
+                        if (this.currentPickerType != toPickerType) {
+                            Dom.addClass(this.typeContainerPrefix + this.currentPickerType, 'hidden1');
+                        }
+                        var nodes = YAHOO.util.Selector.query('.item.checked', this.typeContainerPrefix + this.currentPickerType);
+                        Dom.removeClass(nodes, 'checked');
                     }
-                    var nodes = YAHOO.util.Selector.query('.item.checked', this.typeContainerPrefix + this.currentPickerType);
-                    Dom.removeClass(nodes, 'checked');
                 }
                 if (to) {
-                    YAHOO.util.Selector.query('span', this.id + '-label-type', true).innerHTML = this.msg('label.reiteration-control.options.' + to.toLowerCase());
                     this.currentType = to;
-
-                    if (this.currentPickerType != toPickerType) {
-                        Dom.removeClass(this.typeContainerPrefix + toPickerType, 'hidden1');
+                    if (to == "DAILY") {
+                        this.updateValue(this.getValue());
                         this.currentPickerType = toPickerType;
+                    } else {
+                        if (this.currentPickerType != toPickerType) {
+                            Dom.removeClass(this.typeContainerPrefix + toPickerType, 'hidden1');
+                            this.currentPickerType = toPickerType;
+                        }
                     }
                 }
                 this.updateSummary();
@@ -254,27 +284,15 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
             getPickerTypeByRepeatType: function (repeatType) {
                 var pickerType = null;
                 if (repeatType) {
-                    if (repeatType === "WEEKLY") {
+                    if (repeatType === "DAILY") {
                         pickerType = this.pickerTypes[0];
-                    } else {
+                    } else if (repeatType === "WEEKLY") {
                         pickerType = this.pickerTypes[1];
+                    } else {
+                        pickerType = this.pickerTypes[2];
                     }
                 }
                 return pickerType;
-            },
-
-            onHideControl: function (layer, args) {
-                if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-                    Dom.setStyle(this.id + "-parent", "display", "none");
-                    this.isPanelShown = false;
-                }
-            },
-
-            onShowControl: function (layer, args) {
-                if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-                    Dom.setStyle(this.id + "-parent", "display", "block");
-                    this.isPanelShown = true;
-                }
             }
         });
 })();

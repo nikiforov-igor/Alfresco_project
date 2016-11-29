@@ -213,7 +213,6 @@
 				<!--Повторять-->
 				<property name="lecm-errands:reiteration-rule">
 					<type>d:text</type>
-					<default>"{"type":"DAILY","data":[]}"</default>
 				</property>
 				<!--Дата начала периода-->
 				<property name="lecm-errands:period-start">

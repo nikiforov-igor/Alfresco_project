@@ -9,6 +9,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 
+import java.io.Serializable;
 import java.util.*;
 
 public class ContractorsBean extends BaseBean implements Contractors {
@@ -107,6 +108,18 @@ public class ContractorsBean extends BaseBean implements Contractors {
     }
 
     @Override
+    public String formatContractorName(final String originalName) {
+        //1. удалить спец символы
+        String updatedValue = delNoDigOrLet(originalName);
+        //2. удалить все коды из справочника ОПФ
+        NodeRef dicOPF = dictionaryService.getDictionaryByName(OPF_DIC_NAME);
+        if (dicOPF != null) {
+            updatedValue = delDicValuesFromString(updatedValue, dicOPF);
+        }
+        return updatedValue;
+    }
+
+    @Override
     public List<Object> getRepresentatives(NodeRef targetContractor) { // O(n^3)
         // Получить список всех ассоциаций на ссылку.
         List<AssociationRef> contractorToLinkAssocs = nodeService.getTargetAssocs(targetContractor, QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "contractor-to-link-association"));
@@ -158,5 +171,30 @@ public class ContractorsBean extends BaseBean implements Contractors {
     @Override
     public NodeRef getRepresentativeByEmail(String email) {
         return dictionaryService.getRecordByParamValue("Адресанты", PROP_REPRESENTATIVE_EMAIL, email);
+    }
+
+    private String delNoDigOrLet(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            if (Character.isLetterOrDigit(ch) || Character.isSpaceChar(ch)) {
+                sb.append(s.charAt(i));
+            }
+        }
+        return sb.toString().trim();
+    }
+
+    private String delDicValuesFromString(String str, NodeRef dictionary) {
+        List<NodeRef> children = dictionaryService.getChildren(dictionary);
+        for (NodeRef child : children) {
+            Map<QName, Serializable> recordProps = nodeService.getProperties(child);
+            for (QName dicProp : DIC_REPLACE_PROPERTIES) {
+                Object dicPropValue = recordProps.get(dicProp);
+                if (dicPropValue != null && dicPropValue.toString().length() > 0) {
+                    str = str.replaceAll(dicPropValue.toString(), "");
+                }
+            }
+        }
+        return str;
     }
 }

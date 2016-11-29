@@ -57,6 +57,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			nodeData: null,
 			skipItemsCount: null,
 			searchTerm: null,
+			exSearchFilter: null,
+			exSearchFormId: null,
 			loadingInProcess: false
 		},
 
@@ -83,13 +85,20 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			pickerItemsScript: 'lecm/forms/picker/items',
 			showCreateNewLink: false,
 			hasAspects: null,
-			hasNoAspects: null
+			hasNoAspects: null,
+			showExSearch: false,
+			fillFormFromSearch: false,
+			showEditButton: false
 		},
 
 		widgets: {
 			search: null,
+			exSearch: null,
 			searchButton: null,
+			exSearchButton: null,
+			exSearchClearButton: null,
 			searchListener: null,
+			exSearchListener: null,
 			treeView: null,
 			datatable: null,
 			datasource: null
@@ -166,6 +175,16 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 //				elCell.innerHTML = '<a href="javascript:void(0);" ' + style + ' class="add-item add-' + this.owner.eventGroup + '" title="' + this.owner.msg('form.control.object-picker.add-item') + '" tabindex="0"><span class="addIcon">&nbsp;</span></a>';
 //				elCell.innerHTML = '<a href="javascript:void(0);" ' + style + ' class="add-item" title="' + this.owner.msg('form.control.object-picker.add-item') + '" tabindex="0"><span class="addIcon">&nbsp;</span></a>';
 //				scope.addItemButtons[nodeRef] = containerId;
+			}
+		},
+
+		_editFormatter: function (elCell, record, column, data) {
+			var nodeRef, hidden;
+			if (record.getData('selectable') && record.getData("hasWritePermission")) {
+				nodeRef = record.getData('nodeRef');
+				hidden = ACUtils.canItemBeSelected(nodeRef, this.owner.options, this.owner.currentState.temporarySelected, this.owner.parentControl) ? '' : ' hidden ';
+
+				elCell.innerHTML = '<a href="javascript:void(0);"' + hidden + 'title="' + this.owner.msg('actions.edit') + '" tabindex="0"><i class="icon-edit"></i></a>';
 			}
 		},
 
@@ -256,7 +275,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				params.hasNoAspects = this.options.hasNoAspects;
 			}
 
-            Alfresco.util.Ajax.jsonGet({
+			Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.treeBranchesDatasource + '/' + node.data.nodeRef.replace("://", "/") + '/items',
 				dataObj: params,
 				successCallback: {
@@ -361,6 +380,9 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (this.options.showSearch) {
 				this.widgets.searchListener.enable();
 			}
+			if (this.options.showExSearch) {
+				this.widgets.exSearchListener.enable();
+			}
 			if (!this.options.plane) {
 				this.widgets.treeRoot.data = this.rootNodeData;
 				if (this.options.showParentNodeInTreeView) {
@@ -375,7 +397,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 		},
 
-		loadTableData: function (initializeTable, searchTerm) {
+		loadTableData: function (initializeTable, searchTerm, exSearchFilter) {
 			/* заполнение датагрида данными */
 			function onSuccess(sRequest, oResponse, oArgument) {
 				var initializeTable = oArgument.initializeTable,
@@ -414,7 +436,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			}
 			this.currentState.skipItemsCount = initializeTable ? 0 : this.currentState.skipItemsCount;
 			this.currentState.searchTerm = searchTerm;
-			params = ACUtils.generateChildrenUrlParams(this.options, this.currentState.searchTerm, this.currentState.skipItemsCount);
+			this.currentState.exSearchFilter = exSearchFilter;
+			params = ACUtils.generateChildrenUrlParams(this.options, this.currentState.searchTerm, this.currentState.skipItemsCount, false, this.currentState.exSearchFilter);
 			this.widgets.datatable.load({
 				request: this.currentState.nodeData.nodeRef.replace('://', '/') + '/children' + params,
 				callback: {
@@ -427,6 +450,46 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					failure: onFailure
 				}
 			});
+		},
+
+		onExSearch: function () {
+			var obj, strname, event;
+
+			if (arguments.length > 1) {
+				obj = arguments[1];
+				strname = Object.prototype.toString.call(obj);
+				if (strname.indexOf('Event') >= 0) {
+					event = obj;
+				}
+				if (strname.indexOf('Array') >= 0 && obj.length === 2) {
+					event = obj[1];
+				}
+			}
+
+			var exSearchFilter = '';
+			if (this.widgets.exSearch && this.currentState.exSearchFormId) {
+				var currentForm = Dom.get(this.currentState.exSearchFormId);
+				if (currentForm) {
+					exSearchFilter = this._fnGetExtSearchQuery(currentForm);
+				}
+			}
+
+			if (exSearchFilter) {
+				this.stateParams.isSearch = true;
+				this.loadTableData(true, this.currentState.searchTerm, exSearchFilter);
+			} else if ('' === exSearchFilter) {
+				this.stateParams.isSearch = !this.currentState.searchTerm;
+				this.loadTableData(true, this.currentState.searchTerm, '');
+			}
+
+			if (event) {
+				Event.stopEvent(event);
+			}
+		},
+
+		onExSearchClear: function() {
+			this._loadSearchForm();
+			this.loadTableData(true, this.currentState.searchTerm, '');
 		},
 
 		onSearch: function () {
@@ -454,10 +517,10 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					return prev + (prev.length ? '#' : '') + curr + ':' + searchData.replace(/#/g, '');
 				}, '');
 				searchTerm = searchTerm ? searchTerm : 'cm:name:' + searchData;
-				this.loadTableData(true, searchTerm);
+				this.loadTableData(true, searchTerm, this.currentState.exSearchFilter);
 			} else if ('' === searchData) {
-				this.stateParams.isSearch = false;
-				this.loadTableData(true, '');
+				this.stateParams.isSearch = !this.currentState.exSearchFilter;
+				this.loadTableData(true, '', this.currentState.exSearchFilter);
 			} else {
 				Alfresco.util.PopupManager.displayMessage({
 					text: this.msg('form.control.object-picker.search.enter-more', this.options.minSearchTermLength)
@@ -515,24 +578,28 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (oArgs.target.scrollTop + oArgs.target.clientHeight === oArgs.target.scrollHeight && !this.currentState.loadingInProcess) {
 				//подумать над тем, что если у нас вернулось 0 данных, то больше ничего не грузить
 				this.currentState.loadingInProcess = true;
-				this.loadTableData(false, this.currentState.searchTerm);
+				this.loadTableData(false, this.currentState.searchTerm, this.currentState.exSearchFilter);
 			}
 
 		},
 
-		onAdd: function (event) {
+		onClick: function (event) {
 			/* обработка добавления элемента в выбранные */
 			var column = this.widgets.datatable.getColumn(event.target),
 				record = this.widgets.datatable.getRecord(event.target);
-
-			if ('add' === column.key && !event.target.firstChild.firstChild.hidden) {
-				//просигналить пикеру что эту ноду надо нарисовать в selectedItems
-				this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
-					added: record.getData(),
-					options: this.options,
-					key: this.key
-				});
-				return false;
+			if (!event.target.firstChild.firstChild.hidden) {
+				if ('add' === column.key) {
+					//просигналить пикеру что эту ноду надо нарисовать в selectedItems
+					this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
+						added: record.getData(),
+						options: this.options,
+						key: this.key
+					});
+					return false;
+				} else if ('edit' === column.key) {
+					this._onRecordEdit(record);
+					return false;
+				}
 			}
 		},
 
@@ -543,25 +610,34 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				nodeData = args[1].added;
 				key = args[1].key;
 				if (!key || key === this.key) {
-                    if (this.widgets.datatable) {
-                        records = this.widgets.datatable.getRecordSet().getRecords();
-                        this.currentState.temporarySelected[nodeData.nodeRef] = nodeData;
-                        records.forEach(function (record) {
-                            var tdEl = this.widgets.datatable.getTdEl({
-                                column: this.widgets.datatable.getColumn('add'),
-                                record: record
-                            });
+					if (this.widgets.datatable) {
+						records = this.widgets.datatable.getRecordSet().getRecords();
+						this.currentState.temporarySelected[nodeData.nodeRef] = nodeData;
+						records.forEach(function (record) {
+							var tdEls = [];
+							tdEls.push(this.widgets.datatable.getTdEl({
+								column: this.widgets.datatable.getColumn('add'),
+								record: record
+							}));
+							if (this.options.showEditButton) {
+								tdEls.push(this.widgets.datatable.getTdEl({
+									column: this.widgets.datatable.getColumn('edit'),
+									record: record
+								}));
+							}
 							if (IDENT_CREATE_NEW !== record.getData('type')) {
-								if (tdEl.firstChild.firstChild) {
-									tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.temporarySelected, this.parentControl);
-								}
+								tdEls.forEach(function (tdEl) {
+									if (tdEl.firstChild.firstChild) {
+										tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.temporarySelected, this.parentControl);
+									}
+								}, this);
 							} else {
-								if (tdEl.parentElement)	{
-									tdEl.parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, options, this.currentState.temporarySelected, this.parentControl);
+								if (tdEls[0].parentElement)	{
+									tdEls[0].parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, options, this.currentState.temporarySelected, this.parentControl);
 								}
 							}
-                        }, this);
-                    }
+						}, this);
+					}
 				}
 			}
 		},
@@ -591,16 +667,27 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			}
 
 			records.forEach(function (record) {
-				var tdEl = this.widgets.datatable.getTdEl({
+				var tdEls = [];
+				tdEls.push(this.widgets.datatable.getTdEl({
 					column: this.widgets.datatable.getColumn('add'),
 					record: record
-				});
+				}));
+				if (this.options.showEditButton) {
+					tdEls.push(this.widgets.datatable.getTdEl({
+						column: this.widgets.datatable.getColumn('edit'),
+						record: record
+					}));
+				}
 				if (IDENT_CREATE_NEW !== record.getData('type')) {
-					if (tdEl.firstChild.firstChild) {
-						tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), this.options, this.currentState.temporarySelected, this.parentControl);
+					tdEls.forEach(function (tdEl) {
+						if (tdEl.firstChild.firstChild) {
+							tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), this.options, this.currentState.temporarySelected, this.parentControl);
+						}
+					}, this);
+				} else {
+					if (tdEls[0].parentElement)	{
+						tdEls[0].parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, this.options, this.currentState.temporarySelected, this.parentControl);
 					}
-				} else if (tdEl.parentElement)	{
-					tdEl.parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, this.options, this.currentState.temporarySelected, this.parentControl);
 				}
 			}, this);
 
@@ -679,6 +766,24 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					fn: this.onSearch
 				}, 'keydown');
 			}
+			if (this.options.showExSearch) {
+				this.widgets.exSearch = Dom.get(this.id + '-search-form');
+				this.widgets.exSearchButton = Alfresco.util.createYUIButton(this, 'ex-search', this.onExSearch, {
+					type: 'push'
+				});
+				this.widgets.exSearchClearButton = Alfresco.util.createYUIButton(this, 'ex-search-clear', this.onExSearchClear, {
+					type: 'push'
+				});
+				this.widgets.exSearchListener = new YAHOO.util.KeyListener(this.widgets.exSearch, {
+					keys: [ YAHOO.util.KeyListener.KEY.ENTER ]
+				}, {
+					scope: this,
+					correctScope:true,
+					fn: this.onExSearch
+				}, 'keydown');
+
+				this._loadSearchForm();
+			}
 			if (!this.options.plane) {
 				this.widgets.treeView = new YAHOO.widget.TreeView(this.id + '-tree');
 				this.widgets.treeView.singleNodeHighlight = true;
@@ -703,10 +808,22 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}
 			});
 			this.widgets.datasource.doBeforeParseData = this.bind(this.doBeforeParseData);
-			this.widgets.datatable = new YAHOO.widget.ScrollingDataTable(this.id + '-datatable', [
-				{ key: 'name', label: 'Item', sortable: false, formatter: this._nameFormatter, className: 'name-td' },
-				{ key: 'add', label: 'Add', sortable: false, minWidth: 16, width: 16, formatter: this._addFormatter, className: 'add-td' }
-			], this.widgets.datasource, {
+			var columnDefinitions =
+				[
+					{key: 'name', label: 'Item', sortable: false, formatter: this._nameFormatter, className: 'name-td'},
+					{key: 'add', label: 'Add', sortable: false, minWidth: 16, width: 16, formatter: this._addFormatter, className: 'add-td'}
+				];
+			if (this.options.showEditButton) {
+				columnDefinitions.push({
+					key: "edit",
+					label: "Edit",
+					sortable: false,
+					formatter: this._editFormatter,
+					width: 16,
+					className: 'edit-td'
+				});
+			}
+			this.widgets.datatable = new YAHOO.widget.ScrollingDataTable(this.id + '-datatable', columnDefinitions, this.widgets.datasource, {
 				height: '150px',
 				renderLoopSize: 100,
 				initialLoad: false,
@@ -714,13 +831,56 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			});
 			this.widgets.datatable.owner = this;
 //			this.widgets.datatable.on('renderEvent', this.onDatatableRendered, null, this);
-			this.widgets.datatable.on('cellClickEvent', this.onAdd, null, this);
+			this.widgets.datatable.on('cellClickEvent', this.onClick, null, this);
 			this.widgets.datatable.on('tableScrollEvent', this.onDatatableScroll, null, this);
 
 			this.loadHelper.fulfil('ready');
 		},
 
+		_loadSearchForm: function () {
+			if (this.options.showExSearch && this.widgets.exSearch) {
+				// load the form component for the appropriate type
+				var formUrl = Alfresco.constants.URL_SERVICECONTEXT + "/components/form";
+
+				var formData = {
+					htmlid: this.widgets.exSearch.id + "-" + Alfresco.util.generateDomId(),
+					itemKind: "type",
+					itemId: this.options.itemType,
+					formId: "ex-control-search",
+					mode: "edit",
+					showSubmitButton: false,
+					showCancelButton: false
+				};
+				this.currentState.exSearchFormId = formData.htmlid + "-form";
+
+				Alfresco.util.Ajax.request(
+					{
+						url: formUrl,
+						dataObj: formData,
+						successCallback: {
+							fn: function (response) {
+								var markupAndScripts = Alfresco.util.Ajax.sanitizeMarkup(response.serverResponse.responseText),
+									markup = markupAndScripts[0],
+									scripts = markupAndScripts[1];
+								this.widgets.exSearch.innerHTML = markup;
+								setTimeout(scripts, 0);
+							},
+							scope: this
+						},
+						scope: this,
+						execScripts: true
+					});
+			}
+		},
+
 		_generateCreateNewParams: function (nodeRef, itemType) {
+			var args = {};
+			if (this.options.fillFormFromSearch && this.widgets.exSearch && this.currentState.exSearchFormId) {
+				var currentForm = Dom.get(this.currentState.exSearchFormId);
+				if (currentForm) {
+					args = this._fnGetArgumentsFromForm(currentForm);
+				}
+			}
 			return {
 				itemKind: "type",
 				itemId: itemType,
@@ -728,7 +888,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				mode: "create",
 				submitType: "json",
 				formId: "association-create-new-node-form",
-				showCancelButton: true
+				showCancelButton: true,
+				args: JSON.stringify(args)
 			};
 		},
 
@@ -768,36 +929,36 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				onSuccess:{
 					fn:function (response) {
 
-                        Alfresco.util.Ajax.jsonPost({
-                            url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.pickerItemsScript,
-                            dataObj: {
-                                items: [response.json.persistedObject],
-                                itemValueType: 'nodeRef',
-                                itemNameSubstituteString: this.options.nameSubstituteString,
-                                selectedItemsNameSubstituteString: ACUtils.getSelectedItemsNameSubstituteString(this.options),
-                                pathRoot: this.options.rootLocation,
-                                pathNameSubstituteString: this.options.treeNodeSubstituteString,
-                                useObjectDescription: this.options.useObjectDescription
-                            },
-                            successCallback: {
-                                scope: this,
-                                fn: function (successResponse) {
-                                    var items =successResponse.json.data.items;
+						Alfresco.util.Ajax.jsonPost({
+							url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.pickerItemsScript,
+							dataObj: {
+								items: [response.json.persistedObject],
+								itemValueType: 'nodeRef',
+								itemNameSubstituteString: this.options.nameSubstituteString,
+								selectedItemsNameSubstituteString: ACUtils.getSelectedItemsNameSubstituteString(this.options),
+								pathRoot: this.options.rootLocation,
+								pathNameSubstituteString: this.options.treeNodeSubstituteString,
+								useObjectDescription: this.options.useObjectDescription
+							},
+							successCallback: {
+								scope: this,
+								fn: function (successResponse) {
+									var items =successResponse.json.data.items;
 
-                                    if (items && items[0]) {
-                                        this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
-                                            added: items[0],
-                                            options: this.options,
-                                            key: this.key
-                                        });
-                                    }
-                                }
-                            },
-                            failureCallback: {
-                                scope: this,
-                                fn: function () {}
-                            }
-                        });
+									if (items && items[0]) {
+										this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
+											added: items[0],
+											options: this.options,
+											key: this.key
+										});
+									}
+								}
+							},
+							failureCallback: {
+								scope: this,
+								fn: function () {}
+							}
+						});
 
 						this.stateParams.doubleClickLock = false;
 					},
@@ -811,6 +972,84 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}
 			}).show();
 			return true;
+		},
+
+		_onRecordEdit: function (record) {
+			if (this.doubleClickLock) return;
+			this.doubleClickLock = true;
+			if (record) {
+				var nodeRef = record.getData("nodeRef");
+
+				if (nodeRef) {
+					new Alfresco.module.SimpleDialog("edit-form-dialog-" + this.eventGroup).setOptions({
+						width: "50em",
+						templateUrl: "lecm/components/form",
+						templateRequestParams: {
+							itemKind: "node",
+							itemId: nodeRef,
+							mode: "edit",
+							submitType: "json",
+							showCancelButton: true
+						},
+						actionUrl: null,
+						destroyOnHide: true,
+						doBeforeDialogShow: {
+							fn: function (p_form, p_dialog) {
+								var message;
+								if (this.options.editMessage) {
+									message = this.options.editMessage;
+								} else {
+									message = this.msg("dialog.edit.title");
+								}
+								p_dialog.dialog.setHeader(message);
+
+								p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id,  force: true}, this);
+
+								Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
+								if (this.options.editDialogClass) {
+									Dom.addClass(p_dialog.id + "-form-container", this.options.editDialogClass);
+								}
+								this.doubleClickLock = false;
+							},
+							scope: this
+						},
+						onSuccess: {
+							fn: function (response) {
+								this.doubleClickLock = false;
+								this.loadTableData(true, this.currentState.searchTerm, this.currentState.exSearchFilter)
+							},
+							scope: this
+						},
+						onFailure: {
+							fn: function () {
+								this.doubleClickLock = false;
+							},
+							scope: this
+						}
+					}).show();
+				}
+			}
+			return true;
+		},
+
+		_fnGetExtSearchQuery: function (currentForm) {
+			return ACUtils.getQueryFromForm(currentForm);
+		},
+
+		_fnGetArgumentsFromForm: function (currentForm) {
+			var args = {};
+			for (var i = 0; i < currentForm.elements.length; i++) {
+				var element = currentForm.elements[i],
+					propName = element.name,
+					propValue = YAHOO.lang.trim(element.value);
+
+				if (propName && (propName.indexOf("prop_") == 0 || propName.indexOf("assoc_") == 0)) {
+					if (propValue) {
+						args[propName] = propValue;
+					}
+				}
+			}
+			return args;
 		}
 
 	}, true);

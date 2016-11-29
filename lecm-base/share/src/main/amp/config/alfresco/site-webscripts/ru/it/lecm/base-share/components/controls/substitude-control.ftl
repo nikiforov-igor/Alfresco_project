@@ -3,6 +3,8 @@
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign params = field.control.params>
 
+<#assign emptyValue = params.emptyValueKey!''>
+
 <script type="text/javascript">//<![CDATA[
 YAHOO.util.Event.onContentReady("${fieldHtmlId}-value", function () {
     Alfresco.util.Ajax.jsonRequest(
@@ -19,6 +21,9 @@ YAHOO.util.Event.onContentReady("${fieldHtmlId}-value", function () {
                             var result = response.json.formatString;
                             if (result.trim() == "true" || result.trim() == "false") {
                                 result = result.trim() == "true" ? "${msg("message.yes")}" : "${msg("message.no")}";
+                            }
+                            if (!result.trim()) {
+                                result = "${msg(emptyValue)}";
                             }
                             YAHOO.util.Dom.get("${fieldHtmlId}-value").innerHTML = result;
                         }

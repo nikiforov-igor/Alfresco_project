@@ -7,45 +7,44 @@
 <#assign containerId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
 <#assign objectId = field.name?replace("-", "_")>
 
-<#-- Datagrid -->
-<#assign allowCreate = true/>
-<#if field.control.params.allowCreate??>
-    <#assign allowCreate = field.control.params.allowCreate?lower_case/>
-</#if>
-
-<#assign allowDelete = "true"/>
+<#-- Datagrid Config Start-->
+<#assign allowDelete = true/>
 <#if field.control.params.allowDelete??>
-    <#assign allowDelete = field.control.params.allowDelete?lower_case/>
+    <#assign allowDelete = (field.control.params.allowDelete == "true")/>
 </#if>
 
-<#assign allowEdit = "true"/>
+<#assign allowEdit = true/>
 <#if field.control.params.allowEdit??>
-    <#assign allowEdit = field.control.params.allowEdit?lower_case/>
+    <#assign allowEdit = (field.control.params.allowEdit == "true")/>
 </#if>
 
-<#assign allowExpand = "true"/>
+<#assign allowExpand = true/>
 <#if field.control.params.allowExpand??>
-    <#assign allowExpand = field.control.params.allowExpand?lower_case/>
+    <#assign allowExpand = (field.control.params.allowExpand == "true")/>
 </#if>
 
 <#assign showActions = true/>
 <#if field.control.params.showActions??>
-    <#assign showActions = field.control.params.showActions/>
+    <#assign showActions = field.control.params.showActions = "true"/>
 </#if>
-<#if ((form.mode == "view") && (allowExpand == "false"))>
+<#if ((form.mode == "view") && !allowExpand)>
     <#assign showActions = false/>
 </#if>
 
 <#assign showLabel = true>
-<#if field.control.params.showLabel?? &&  field.control.params.showLabel == "false">
-    <#assign showLabel = false>
+<#if field.control.params.showLabel??>
+    <#assign showLabel = (field.control.params.showLabel == "true")>
 </#if>
 
 <#assign bubblingId = containerId/>
 
 <#assign usePagination = false/>
 <#if field.control.params.usePagination??>
-    <#assign usePagination = field.control.params.usePagination/>
+    <#assign usePagination = field.control.params.usePagination == "true"/>
+</#if>
+<#assign pageSize = 5/>
+<#if field.control.params.pageSize??>
+    <#assign pageSize = field.control.params.pageSize/>
 </#if>
 
 <#assign attributeForShow = ""/>
@@ -53,8 +52,31 @@
     <#assign attributeForShow = field.control.params.attributeForShow/>
 </#if>
 
-<#-- Toolbar -->
-<#assign showSearchControl = true/>
+<#assign collapseAllOnExpand = true/>
+<#if field.control.params.collapseAllOnExpand??>
+    <#assign collapseAllOnExpand = field.control.params.collapseAllOnExpand == "true"/>
+</#if>
+
+<#assign noWrapValues = true/>
+<#if field.control.params.datagridNoWrapValues??>
+    <#assign noWrapValues = field.control.params.datagridNoWrapValues == "true"/>
+</#if>
+<#-- Datagrid Config End-->
+
+<#-- Toolbar Config Start -->
+<#assign showCreateButton = true/>
+<#if field.control.params.showCreateButton??>
+    <#assign showCreateButton = (field.control.params.showCreateButton == "true")/>
+</#if>
+
+<#assign createBtnLabel = msg("label.create-row.title")/>
+<#if field.control.params.newRowButtonLabel??>
+    <#if msg(field.control.params.newRowButtonLabel) != field.control.params.newRowButtonLabel>
+        <#assign createBtnLabel = msg(field.control.params.newRowButtonLabel)/>
+    </#if>
+</#if>
+
+<#assign showSearchControl = false/>
 <#if field.control.params.showSearch??>
     <#assign showSearchControl = (field.control.params.showSearch == "true")/>
 </#if>
@@ -64,22 +86,22 @@
     <#assign exSearch = (field.control.params.showExSearchBtn == "true")/>
 </#if>
 
-<#assign showCreateButton = true/>
-<#if field.control.params.showCreateBtn??>
-    <#assign showCreateButton = field.control.params.showCreateBtn/>
-</#if>
+<#assign showToolbar=showCreateButton || showSearchControl || exSearch>
+<#-- Toolbar Config End -->
 
+<#-- Dialogs Config Start -->
 <#assign newRowTitle = "label.create-row.title"/>
 <#if field.control.params.newRowDialogTitle??>
     <#assign newRowTitle = field.control.params.newRowDialogTitle/>
 </#if>
+
 <#assign editRowTitle = "label.edit-row.title"/>
 <#if field.control.params.editRowDialogTitle??>
     <#assign editRowTitle = field.control.params.editRowDialogTitle/>
 </#if>
+<#-- Dialogs Config End -->
 
-<#assign createBtnLabel = msg("label.create-row.title")/>
-
+<#-- Commons Start-->
 <#assign isFieldMandatory = false>
 <#if field.control.params.mandatory??>
     <#if field.control.params.mandatory == "true">
@@ -91,9 +113,20 @@
     <#assign isFieldMandatory = field.endpointMandatory>
 </#if>
 
-<#if field.control.params.newRowButtonLabel??>
-    <#if msg(field.control.params.newRowButtonLabel) != field.control.params.newRowButtonLabel>
-        <#assign createBtnLabel = msg(field.control.params.newRowButtonLabel)/>
+<#assign defaultValue=field.value>
+<#if form.mode == "create" && defaultValue?string == "">
+    <#if field.control.params.selectedItemsFormArgs??>
+        <#assign selectedItemsFormArgs = field.control.params.selectedItemsFormArgs?split(",")>
+        <#list selectedItemsFormArgs as selectedItemsFormArg>
+            <#if form.arguments[selectedItemsFormArg]??>
+                <#if (defaultValue?length > 0)>
+                    <#assign defaultValue = defaultValue + ","/>
+                </#if>
+                <#assign defaultValue = defaultValue + form.arguments[selectedItemsFormArg]/>
+            </#if>
+        </#list>
+    <#elseif form.arguments[field.name]?has_content>
+        <#assign defaultValue=form.arguments[field.name]>
     </#if>
 </#if>
 
@@ -102,17 +135,22 @@
     <#assign jsObjectName = field.control.params.jsObjectName/>
 </#if>
 
+<#assign itemType=field.control.params.itemType!field.endpointType!"">
+<#-- Commons End-->
+
 <script type="text/javascript">//<![CDATA[
 (function () {
     var Dom = YAHOO.util.Dom;
 
     function createToolbar(nodeRef) {
+    <#if showToolbar>
         new LogicECM.module.Base.Toolbar(null, "${fieldHtmlId}").setMessages(${messages}).setOptions({
             bubblingLabel: "${bubblingId}",
-            itemType: "${field.control.params.itemType!""}",
+            itemType: "${itemType}",
             destination: nodeRef,
             newRowButtonType:<#if field.disabled == true>"inActive"<#else>"defaultActive"</#if>
         });
+    </#if>
     }
 
     function createDataGrid(nodeRef) {
@@ -122,27 +160,19 @@
         };
 
         YAHOO.extend(LogicECM.module.Base.DataGridControl_${objectId}, ${jsObjectName}, {
-            ${field.control.params.actionsHandler!""}
+        ${field.control.params.actionsHandler!""}
         });
 
         var datagrid = new LogicECM.module.Base.DataGridControl_${objectId}('${containerId}').setOptions({
             usePagination: ${usePagination?string},
-            showExtendSearchBlock: false,
+            showExtendSearchBlock: ${exSearch?string},
+            pageSize: ${pageSize},
             createFormTitleMsg: "${newRowTitle}",
             editFormTitleMsg: "${editRowTitle}",
             formMode: "${form.mode?string}",
-			editForm: "${field.control.params.editFormId!""}",
+            editForm: "${field.control.params.editFormId!""}",
             actions: [
-            <#if allowExpand = "true">
-                {
-                    type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>custom</#if>",
-                    id: "expandRow",
-                    permission: "edit",
-                    label: "${msg("addresser.expand")}"
-                }
-            </#if>
-            <#if ((allowExpand == "true") && (allowEdit == "true") && (field.disabled != true))>,</#if>
-            <#if ((allowEdit == "true") && (field.disabled != true))>
+            <#if allowEdit && !field.disabled>
                 {
                     type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>custom</#if>",
                     id: "onActionEdit",
@@ -150,8 +180,8 @@
                     label: "${msg("actions.edit")}"
                 }
             </#if>
-            <#if ((allowExpand == "true") && (allowDelete == "true") && (field.disabled != true)) || ((allowEdit == "true") && (allowDelete == "true"))>,</#if>
-            <#if ((allowDelete == "true") && (field.disabled != true))>
+            <#if allowEdit && allowDelete && !field.disabled>,</#if>
+            <#if allowDelete && !field.disabled>
                 {
                     type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>custom</#if>",
                     id: "onActionDelete",
@@ -160,19 +190,25 @@
                 }
             </#if>
             ],
+        <#if allowExpand>
+            expandDataObj: {
+                formId: "${field.control.params.expandFormId!"expand-info"}"
+            },
+        </#if>
             datagridMeta: {
-                itemType: "${field.control.params.itemType!""}",
+                itemType: "${itemType}",
                 datagridFormId: "${field.control.params.datagridFormId!"datagrid"}",
                 useChildQuery: false,
                 useFilterByOrg: false,
                 createFormId: "${field.control.params.createFormId!""}",
                 nodeRef: nodeRef,
                 actionsConfig: {
-                    fullDelete: "${field.control.params.fullDelete!"true"}"
+                    fullDelete: ${(field.control.params.fullDelete!"true")?string}
                 },
                 sort: "${field.control.params.sort!""}",
                 searchConfig: {}
             },
+            dataSource:"${field.control.params.ds!"lecm/search"}",
             bubblingLabel: "${bubblingId}",
         <#if field.control.params.height??>
             height: ${field.control.params.height},
@@ -186,42 +222,39 @@
         <#if field.control.params.fixedHeader??>
             fixedHeader: ${field.control.params.fixedHeader},
         </#if>
-		<#if field.control.params.isTableSortable?has_content>
-			overrideSortingWith: ${field.control.params.isTableSortable?string},
-		</#if>
-
-		    showActionColumn: ${showActions?string},
+        <#if field.control.params.isTableSortable?has_content>
+            overrideSortingWith: ${field.control.params.isTableSortable?string},
+        </#if>
+            showActionColumn: ${showActions?string},
             showCheckboxColumn: false,
             attributeForShow: "${attributeForShow?string}",
-            repeating: ${field.repeating?string}
+            repeating: ${field.repeating?string},
+            expandable:${allowExpand?string},
+            collapseAllOnExpand: ${collapseAllOnExpand?string},
+            noWrapValues:${noWrapValues?string}
         }).setMessages(${messages});
 
+        datagrid._setSearchConfigFilter('${defaultValue!''}');
+        <#if field.control.params.datagridMaxSColWidth?has_content>
+            datagrid._setMaxStripColumnWidth(${field.control.params.datagridMaxSColWidth});
+        </#if>
+        <#if field.control.params.datagridStrippedCols?has_content>
+            datagrid._setStrippedColumns("${field.control.params.datagridStrippedCols}");
+        </#if>
         var inputTag = Dom.get("${fieldHtmlId}");
         var inputAddedTag = Dom.get("${fieldHtmlId}-added");
         var inputRemovedTag = Dom.get("${fieldHtmlId}-removed");
         var selectItemsTag = Dom.get("${fieldHtmlId}-selectedItems");
-        var filter = "";
-        if (inputTag != null && inputTag.value != "") {
-            var items = inputTag.value.split(",");
-            selectItemsTag.value = inputTag.value;
-            for (var item in items) {
-                filter = filter + " ID:" + items[item].replace(":", "\\:");
-            }
-        }
-        if (filter == "") {
-            filter += "ID:NOT_REF";
-        }
-        datagrid.options.datagridMeta.searchConfig = {filter: (filter.length > 0 ? filter : "")};
-        datagrid.filterValues = inputTag.value;
         datagrid.input = inputTag;
         datagrid.inputAdded = inputAddedTag;
         datagrid.inputRemoved = inputRemovedTag;
         datagrid.selectItemsTag = selectItemsTag;
-        datagrid.itemType = "${field.endpointType}";
+
+        datagrid.itemType = "${itemType}";
         datagrid.assocType = "${field.configName}";
-        <#if form.mode != "create">
-            datagrid.documentRef = "${form.arguments.itemId}";
-        </#if>
+    <#if form.mode != "create">
+        datagrid.documentRef = "${form.arguments.itemId}";
+    </#if>
         datagrid.draw();
     }
 
@@ -248,7 +281,7 @@
     function loadRootNode() {
         var sUrl = "";
     <#if field.control.params.startLocation?? || field.control.params.rootNode??>
-        sUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/node/search" + "?titleProperty=" + encodeURIComponent("cm:name") +
+            sUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/node/search" + "?titleProperty=" + encodeURIComponent("cm:name") +
         <#if field.control.params.startLocation??>"&xpath=" + encodeURIComponent("${field.control.params.startLocation}")<#else>""</#if> +
         <#if field.control.params.rootNode??>"&rootNode=" + encodeURIComponent(getRootUrlParams("${field.control.params.rootNode}"))<#else>""</#if>;
     <#elseif (field.control.params.startLocationScriptUrl?? && (form.mode != "create"))>
@@ -271,72 +304,82 @@
                         },
                         failureCallback: {
                             fn: function (oResponse) {
-                                var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-                                this.widgets.dataTable.set("MSG_ERROR", response.message);
-                                this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
+                                Alfresco.util.PopupManager.displayMessage({
+                                    text: oResponse.responseText
+                                });
                             },
                             scope: this
                         }
                     });
         }
     }
+
     function init() {
         LogicECM.module.Base.Util.loadResources([
-            'scripts/lecm-base/components/advsearch.js',
-            'scripts/lecm-base/components/lecm-toolbar.js',
-            'modules/simple-dialog.js',
-            'scripts/lecm-base/components/lecm-datagrid.js',
-            'scripts/lecm-base/components/lecm-association-datagrid-control.js'
-            <#if field.control.params.jsDependencies??>
-                <#list field.control.params.jsDependencies?split(",") as js>
-                    ,'${js}'
-                </#list>
-            </#if>
-        ],
-        [
-            'css/lecm-base/components/association-datagrid-control.css'
-            <#if field.control.params.cssDependencies??>
-                <#list field.control.params.cssDependencies?split(",") as css>
-                    ,'${css}'
-                </#list>
-            </#if>
-        ],loadRootNode);
+                    'scripts/lecm-base/components/advsearch.js',
+                    'scripts/lecm-base/components/lecm-toolbar.js',
+                    'modules/simple-dialog.js',
+                    'scripts/lecm-base/components/lecm-datagrid.js',
+                    'scripts/lecm-base/components/lecm-association-datagrid-control.js'
+                <#if field.control.params.jsDependencies??>
+                    <#list field.control.params.jsDependencies?split(",") as js>
+                        ,'${js}'
+                    </#list>
+                </#if>
+                ],
+                [
+                    'css/lecm-base/components/association-datagrid-control.css'
+                <#if field.control.params.cssDependencies??>
+                    <#list field.control.params.cssDependencies?split(",") as css>
+                        ,'${css}'
+                    </#list>
+                </#if>
+                ],loadRootNode);
     }
 
     YAHOO.util.Event.onDOMReady(init);
 })();
 //]]></script>
 
-<div class="control association-datagrid with-grid">
+<div class="control association-datagrid <#if field.control.params.datagridStyles??>${field.control.params.datagridStyles}</#if> with-grid">
+<#if showLabel>
     <div class="label-div">
-    <#if showLabel>
         <label for="${fieldHtmlId}">
         ${field.label?html}:
             <#if isFieldMandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if>
         </label>
-    </#if>
+    </div>
+</#if>
+    <div>
         <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
-        <input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
-        <input type="hidden" id="${fieldHtmlId}-selectedItems"/>
+        <input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added" <#if form.mode == "create">value="${defaultValue?html}"</#if>/>
+        <input type="hidden" id="${fieldHtmlId}-selectedItems" <#if form.mode == "create">value="${defaultValue?html}"</#if>/>
     </div>
 
     <div class="container">
+    <#if field.control.params.prefixLabelId?has_content>
+        <div class="grid-prefix-str">${msg(field.control.params.prefixLabelId)}:</div>
+    </#if>
         <div class="value-div">
-        <@comp.baseToolbar fieldHtmlId true showSearchControl exSearch>
-            <#if showCreateButton>
-                <div class="new-row">
-                <span id="${fieldHtmlId}-newRowButton" class="yui-button yui-push-button">
-                   <span class="first-child">
-                      <button type="button" title="${createBtnLabel}">${createBtnLabel}</button>
-                   </span>
-                </span>
-                </div>
-            </#if>
-        </@comp.baseToolbar>
-
+            <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${defaultValue?html}"/>
+        <#if showToolbar>
+            <@comp.baseToolbar fieldHtmlId true showSearchControl exSearch>
+                <#if showCreateButton>
+                    <div class="new-row">
+                    <span id="${fieldHtmlId}-newRowButton" class="yui-button yui-push-button">
+                       <span class="first-child">
+                          <button type="button" title="${createBtnLabel}">${createBtnLabel}</button>
+                       </span>
+                    </span>
+                    </div>
+                </#if>
+            </@comp.baseToolbar>
+        </#if>
         <@grid.datagrid containerId false/>
-        <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>
         </div>
+    <#if field.control.params.postfixLabelId?has_content>
+        <div class="grid-prefix-str">${msg(field.control.params.postfixLabelId)}</div>
+    </#if>
     </div>
 </div>
 
