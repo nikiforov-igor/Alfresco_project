@@ -648,8 +648,8 @@
                                     <exclude>**/*.lib.js</exclude>
                                     <exclude>**/*.css</exclude>
                                 </excludes>
-                                <sourceDirectory>src/main/amp</sourceDirectory>
-                                <outputDirectory>${project.build.directory}/amp</outputDirectory>
+                                <sourceDirectory>src/main/amp/web</sourceDirectory>
+                                <outputDirectory>${project.build.directory}/amp/web</outputDirectory>
                                 <!-- Exclude resources so we don't get an extra dir structure with -min.js files -->
                                 <excludeResources>true</excludeResources>
                                 <jswarn>false</jswarn>
