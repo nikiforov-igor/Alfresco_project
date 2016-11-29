@@ -29,6 +29,9 @@ import ru.it.lecm.workflow.api.WorkflowFoldersService;
 
 import java.io.Serializable;
 import java.util.*;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 /**
  *
@@ -425,7 +428,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	@Override
 	public NodeRef getServiceRootFolder() {
-		return getAssigneesListsFolder();
+		return null;
 	}
 
 	private NodeRef createEmptyAssigneesList(final NodeRef parentRef, final NodeRef employeeRef, final String name, final boolean isAnonymous) {
@@ -612,4 +615,5 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		Integer daysToComplete = (Integer) nodeService.getProperty(assigneesListRef, LecmWorkflowModel.PROP_ASSIGNEE_DAYS_TO_COMPLETE);
 		return (daysToComplete != null) ? daysToComplete : 0;
 	}
+	
 }

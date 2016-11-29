@@ -108,30 +108,36 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		this.namespaceService = namespaceService;
 	}
 
-	public void init() {
-//		PropertyCheck.mandatory(this, "nodeService", nodeService);
-//		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
-//		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
-//		PropertyCheck.mandatory(this, "dictionaryService", dictionaryService);
-//		PropertyCheck.mandatory(this, "transactionService", transactionService);
-//		PropertyCheck.mandatory(this, "personService", personService);
-//		PropertyCheck.mandatory(this, "authService", authService);
-//		PropertyCheck.mandatory(this, "behaviourFilter", behaviourFilter);
-//		PropertyCheck.mandatory(this, "searchService", searchService);
-//		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
-//
-//		authenticationService = (MutableAuthenticationService) authService;
-//
-//		positionsRoot = dictionaryService.getDictionaryByName(POSITIONS_DICTIONARY_NAME);
-//		businessRolesRoot = dictionaryService.getDictionaryByName(OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME);
-//
-//		helper = new ExportImportHelper(nodeService, namespaceService, searchService, orgstructureService);
-	}
-	
-	protected void onBootstrap(ApplicationEvent event)
-	{
+	public NodeRef getPositionsRoot() {
+		if (positionsRoot == null) {
+			positionsRoot = dictionaryService.getDictionaryByName(POSITIONS_DICTIONARY_NAME);
+		}
+		return positionsRoot;
 	}
 
+	public NodeRef getBusinessRolesRoot() {
+		if (businessRolesRoot == null) {
+			businessRolesRoot = dictionaryService.getDictionaryByName(OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME);
+		}
+		return businessRolesRoot;
+	}
+
+	public void init() {
+		PropertyCheck.mandatory(this, "nodeService", nodeService);
+		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
+		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
+		PropertyCheck.mandatory(this, "dictionaryService", dictionaryService);
+		PropertyCheck.mandatory(this, "transactionService", transactionService);
+		PropertyCheck.mandatory(this, "personService", personService);
+		PropertyCheck.mandatory(this, "authService", authService);
+		PropertyCheck.mandatory(this, "behaviourFilter", behaviourFilter);
+		PropertyCheck.mandatory(this, "searchService", searchService);
+		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
+
+		authenticationService = (MutableAuthenticationService) authService;
+		helper = new ExportImportHelper(nodeService, namespaceService, searchService, orgstructureService);
+	}
+	
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
@@ -215,7 +221,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 						if (positionNode != null) {
 							positionNode = updatePosition(positionNode, position);
 						} else {
-							positionNode = nodeService.getChildByName(positionsRoot, ContentModel.ASSOC_CONTAINS, positionName);
+							positionNode = nodeService.getChildByName(getPositionsRoot(), ContentModel.ASSOC_CONTAINS, positionName);
 							if (positionNode == null) {
 								positionNode = createPosition(id, position);
 							} else {
@@ -253,7 +259,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		props.put(OrgstructureBean.PROP_STAFF_POSITION_NAME_G, StringUtils.trim(position.getNameGenitive()));
 		props.put(OrgstructureBean.PROP_STAFF_POSITION_CODE, StringUtils.trim(position.getCode()));
 
-		NodeRef createdStaffPosition = nodeService.createNode(positionsRoot, ContentModel.ASSOC_CONTAINS, generateRandomQName(), OrgstructureBean.TYPE_STAFF_POSITION, props).getChildRef();
+		NodeRef createdStaffPosition = nodeService.createNode(getPositionsRoot(), ContentModel.ASSOC_CONTAINS, generateRandomQName(), OrgstructureBean.TYPE_STAFF_POSITION, props).getChildRef();
 
 		helper.addID(createdStaffPosition, id);
 
@@ -941,7 +947,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 
 		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
 
-		NodeRef businessRoleNode = nodeService.createNode(businessRolesRoot, ContentModel.ASSOC_CONTAINS, assocQName, OrgstructureBean.TYPE_BUSINESS_ROLE, props).getChildRef();
+		NodeRef businessRoleNode = nodeService.createNode(getBusinessRolesRoot(), ContentModel.ASSOC_CONTAINS, assocQName, OrgstructureBean.TYPE_BUSINESS_ROLE, props).getChildRef();
 
 		for (NodeRef employee : employeeNodes) {
 			orgstructureService.includeEmployeeIntoBusinessRole(businessRoleNode, employee);

@@ -54,7 +54,7 @@
 	<util:map id="eds.global-settings.folders">
 		<entry key="#{EDS_GLOBAL_SETTINGS_FOLDER_ID}" value="#{EDS_GLOBAL_SETTINGS_FOLDER_NAME}"/>
 	</util:map>
-	<bean id="eds.global-settings.service" init-method="init" parent="baseBean"
+	<bean id="eds.global-settings.service" parent="baseBean"
             depends-on="eds.other.models.bootstrap"
 		  class="ru.it.lecm.eds.EDSGlobalSettingsServiceImpl"
 		  p:orgstructureService-ref="serviceOrgstructure"

@@ -33,6 +33,7 @@ import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
 import java.util.*;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * User: AIvkin Date: 25.03.2015 Time: 14:44
@@ -885,6 +886,21 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		}
 	}
 
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+			@Override
+			public NodeRef execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+					@Override
+					public NodeRef doWork() throws Exception {
+						return getServiceRootFolder();
+					}
+				});
+			}
+		});
+	}
+
 	private class EventsTransactionListener implements TransactionListener {
 
 		@Override
@@ -905,18 +921,26 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		@Override
 		public void afterCommit() {
 			logger.debug("AfterCommit start");
-			HashMap<NodeRef, Action> actions = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
-			if (actions != null) {
-				List<NodeRef> nodes = new LinkedList<>(actions.keySet());
-				while (!nodes.isEmpty()) {
-					NodeRef node = nodes.remove(0);
-					final Action action = actions.remove(node);
-					if (action.created) {
-						createRepeated(action.event);
+			// TODO: Совсем плохо падает без обёртки в транзакцию.
+			// Надо отсмотреть на предмет потенциальных блокировок
+			transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+				@Override
+				public Void execute() throws Throwable {
+					HashMap<NodeRef, Action> actions = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
+					if (actions != null) {
+						List<NodeRef> nodes = new LinkedList<>(actions.keySet());
+						while (!nodes.isEmpty()) {
+							NodeRef node = nodes.remove(0);
+							final Action action = actions.remove(node);
+							if (action.created) {
+								createRepeated(action.event);
+							}
+							sendNotifications(action);
+						}
 					}
-					sendNotifications(action);
+					return null;
 				}
-			}
+			}, true, true);
 			logger.debug("AfterCommit finished");
 		}
 

@@ -33,6 +33,9 @@ import ru.it.lecm.workflow.routes.api.RoutesService;
 import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.util.*;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 /**
  *
@@ -796,6 +799,22 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		}
 
 		return resultList;
+	}
+	
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+			@Override
+			public Void execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+					@Override
+					public Void doWork() throws Exception {
+						getServiceRootFolder();
+						return null;
+					}
+				});
+			}
+		});
 	}
 
 }

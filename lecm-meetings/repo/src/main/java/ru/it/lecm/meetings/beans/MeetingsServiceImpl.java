@@ -41,6 +41,7 @@ import ru.it.lecm.workflow.routes.api.RoutesService;
 import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Level;
+import org.springframework.context.ApplicationEvent;
 
 /**
  *
@@ -678,6 +679,20 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
         return sb.toString();
     }
 	
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+			@Override
+			public NodeRef execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+					@Override
+					public NodeRef doWork() throws Exception {
+						return getServiceRootFolder();
+					}
+				});
+			}
+		});
+	}
+	
 }
-
 

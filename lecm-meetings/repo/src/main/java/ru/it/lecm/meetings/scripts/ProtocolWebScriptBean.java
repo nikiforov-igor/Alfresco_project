@@ -35,35 +35,35 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 	private DocumentEventService documentEventService;
 	private BusinessJournalService businessJournalService;
 	private ProtocolReportsService protocolReportsService;
-	
+
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
-	
+
 	public void setProtocolService(ProtocolService protocolService) {
 		this.protocolService = protocolService;
 	}
-	
+
 	public void setDocumentService(final DocumentService documentService) {
 		this.documentService = documentService;
 	}
-	
+
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
 		this.lecmPermissionService = lecmPermissionService;
 	}
-	
+
 	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
 		this.documentConnectionService = documentConnectionService;
 	}
-	
+
 	public void setDocumentEventService(DocumentEventService documentEventService) {
 		this.documentEventService = documentEventService;
 	}
-	
+
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;
 	}
-	
+
 	public void setProtocolReportsService(ProtocolReportsService protocolReportsService) {
 		this.protocolReportsService = protocolReportsService;
 	}
@@ -145,42 +145,32 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 		}
 	}
 
-	public Boolean checkPointExecutedStatus(String sPointRef){
-		if (null != sPointRef && !sPointRef.isEmpty()){
-			NodeRef point = new NodeRef(sPointRef);
-			if (nodeService.exists(point)){
-				return protocolService.checkPointStatus(point, ProtocolService.P_STATUSES.EXECUTED_STATUS);
-			}
-		}
-		return false;
+	private Boolean checkPointStatus(String sPointRef, ProtocolService.P_STATUSES statusKey) {
+		return null != sPointRef && !sPointRef.isEmpty() && checkPointStatus(new NodeRef(sPointRef), statusKey);
 	}
-	
+
+	private Boolean checkPointStatus(NodeRef pointRef, ProtocolService.P_STATUSES statusKey) {
+		return null != pointRef && nodeService.exists(pointRef) && protocolService.checkPointStatus(pointRef, statusKey);
+	}
+
+	public Boolean checkPointExecutedStatus(String sPointRef){
+		return checkPointStatus(sPointRef, ProtocolService.P_STATUSES.EXECUTED_STATUS);
+	}
+
 	public Boolean checkPointExecutedStatus(NodeRef point){
-		if (null != point){
-			if (nodeService.exists(point)){
-				return protocolService.checkPointStatus(point, ProtocolService.P_STATUSES.EXECUTED_STATUS);
-			}
-		}
-		return false;
+		return checkPointStatus(point, ProtocolService.P_STATUSES.EXECUTED_STATUS);
 	}
 
 	public Boolean checkPointRemovedStatus(String sPointRef){
-		if (null != sPointRef && !sPointRef.isEmpty()){
-			NodeRef point = new NodeRef(sPointRef);
-			if (nodeService.exists(point)){
-				return protocolService.checkPointStatus(point, ProtocolService.P_STATUSES.REMOVED_STATUS);
-			}
-		}
-		return false;
+		return checkPointStatus(sPointRef, ProtocolService.P_STATUSES.REMOVED_STATUS);
 	}
 
 	public Boolean checkPointRemovedStatus(NodeRef point){
-		if (null != point){
-			if (nodeService.exists(point)){
-				return protocolService.checkPointStatus(point, ProtocolService.P_STATUSES.REMOVED_STATUS);
-			}
-		}
-		return false;
+		return checkPointStatus(point, ProtocolService.P_STATUSES.REMOVED_STATUS);
+	}
+
+	public Boolean checkPointExpiredStatus(ScriptNode point) {
+		return point != null && checkPointStatus(point.getNodeRef(), ProtocolService.P_STATUSES.EXPIRED_STATUS);
 	}
 
 	@Deprecated

@@ -92,15 +92,15 @@ public class RepositoryStructureHelperJavascriptExtension extends BaseScopablePr
         try {
 			NodeRef userTemp = repositoryStructureHelper.getUserTemp(true);
 			if(userTemp == null) {
-//				userTemp = lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>(){
-//
-//					@Override
-//					public NodeRef execute() throws Throwable {
-//						return 
-								userTemp = repositoryStructureHelper.createUserTemp();
-//					}
-//
-//				});
+				userTemp = lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>(){
+
+					@Override
+					public NodeRef execute() throws Throwable {
+						// TODO: Зачем убрали транзакцию?
+						return repositoryStructureHelper.createUserTemp();
+					}
+
+				});
 			}
             return new ScriptNode(userTemp, serviceRegistry, getScope());
         } catch (WriteTransactionNeededException ex) {

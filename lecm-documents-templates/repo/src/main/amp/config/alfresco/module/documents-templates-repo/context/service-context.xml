@@ -38,8 +38,7 @@
 	<util:constant id="documentTemplateFolderId" static-field="ru.it.lecm.documents.templates.DocumentTemplateServiceImpl.DOCUMENT_TEMPLATE_FOLDER_ID"/>
 	<bean id="documentTemplateService" class="ru.it.lecm.documents.templates.DocumentTemplateServiceImpl"
 		  depends-on="documents.templates.model.bootstrap, serviceOrgstructure"
-		  parent="baseBean"
-		  init-method="init">
+		  parent="baseBean">
 		<property name="folders">
 			<map>
 				<entry key="#{documentTemplateFolderId}" value="Сервис шаблоны создания документов"/>

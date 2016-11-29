@@ -2,12 +2,8 @@ package ru.it.lecm.notifications.dashlet.schedule;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.error.AlfrescoRuntimeException;
-import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
-import org.alfresco.repo.action.scheduled.InvalidCronExpression;
-import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
@@ -16,9 +12,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.quartz.CronTrigger;
-import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.notifications.beans.NotificationsService;
@@ -28,148 +22,30 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.transaction.UserTransaction;
+import ru.it.lecm.base.beans.BaseTransactionalSchedule;
 
 /**
  * User: AIvkin
  * Date: 25.01.13
  * Time: 9:22
  */
-public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction {
+public class NotificationsDashletDeleteSchedule extends BaseTransactionalSchedule {
 	private final static Logger logger = LoggerFactory.getLogger(NotificationsDashletDeleteSchedule.class);
 
 	private static final int MAX_COUNT_RECORDS = 500;
 
-	/*
- * The cron expression
- */
-	private String cronExpression;
-
-	private String firstStartExpression = "0 */15 * * * ?";
-
-	private boolean onServerStart = false;
-
-	/*
-	 * The name of the job
-	 */
-	private String jobName = "notificationa-dashlet-cleaner";
-
-	/*
-	 * The job group
-	 */
-	private String jobGroup = "notifications-dashlet";
-
-	/*
-	 * The name of the trigger
-	 */
-	private String triggerName = "notifications-dashlet-delete-trigger";
-
-	/*
-	 * The name of the trigger group
-	 */
-	private String triggerGroup = "notifications-dashlet-trigger";
-
-	/*
-	 * The scheduler
-	 */
-	private Scheduler scheduler;
-
-	private SearchService searchService;
-	private NodeService nodeService;
 	private NamespaceService namespaceService;
 	private NotificationsDashletChannel notificationsDashletChannel;
 
 	public NotificationsDashletDeleteSchedule() {
 	}
 
-	public void setNodeService(NodeService nodeService) {
-		this.nodeService = nodeService;
-	}
-
-	public void setSearchService(SearchService searchService) {
-		this.searchService = searchService;
-	}
-
 	public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
 	}
 
-	public Scheduler getScheduler() {
-		return scheduler;
-	}
-
-	public void setScheduler(Scheduler scheduler) {
-		this.scheduler = scheduler;
-	}
-
-	public void setCronExpression(String cronExpression) {
-		this.cronExpression = cronExpression;
-	}
-
-	public void setFirstStartExpression(String firstStartExpression) {
-		this.firstStartExpression = firstStartExpression;
-	}
-
-	public void setOnServerStart(boolean onServerStart) {
-		this.onServerStart = onServerStart;
-	}
-
 	public void setNotificationsDashletChannel(NotificationsDashletChannel notificationsDashletChannel) {
 		this.notificationsDashletChannel = notificationsDashletChannel;
-	}
-
-	public String getCronExpression() {
-		return cronExpression;
-	}
-
-	public void setJobName(String jobName) {
-		this.jobName = jobName;
-	}
-
-	public String getJobName() {
-		return jobName;
-	}
-
-	public void setJobGroup(String jobGroup) {
-		this.jobGroup = jobGroup;
-	}
-
-	public String getJobGroup() {
-		return jobGroup;
-	}
-
-	public void setTriggerName(String triggerName) {
-		this.triggerName = triggerName;
-	}
-
-	public String getTriggerName() {
-		return triggerName;
-	}
-
-	public void setTriggerGroup(String triggerGroup) {
-		this.triggerGroup = triggerGroup;
-	}
-
-	public String getTriggerGroup() {
-		return this.triggerGroup;
-	}
-
-	public void afterPropertiesSet() throws Exception {
-		register(getScheduler());
-	}
-
-	/* (non-Javadoc)
- * @see org.alfresco.repo.action.scheduled.AbstractScheduledAction#getTrigger()
- */
-	@Override
-	public Trigger getTrigger() {
-		try {
-			CronTrigger trigger = new CronTrigger(getTriggerName(), getTriggerGroup(), onServerStart ? firstStartExpression : cronExpression);
-			trigger.setJobName(getJobName());
-			trigger.setJobGroup(getJobGroup());
-			return trigger;
-		} catch (final ParseException e) {
-			throw new InvalidCronExpression("Invalid chron expression: n" + getCronExpression());
-		}
 	}
 
 	/**
@@ -177,18 +53,7 @@ public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction 
 	 * @return список ссылок на элементы для удаления
 	 */
 	@Override
-	public List<NodeRef> getNodes() {
-		if (onServerStart) { // если был запуск на старте - подменяем триггер на основной
-			CronTrigger trigger = (CronTrigger) getTrigger();
-			try {
-				trigger.setCronExpression(cronExpression);
-				getScheduler().rescheduleJob(getTriggerName(), getTriggerGroup(), trigger);
-				onServerStart = false; // включаем основной триггер
-			} catch (final ParseException | SchedulerException ex) {
-				logger.error("Error rescheduleJob" + ex);
-			}
-		}
-		
+	public List<NodeRef> getNodesInTx() {		
 		Set<NodeRef> nodes = new HashSet<>();
 		
 		UserTransaction userTransaction = getTransactionService().getUserTransaction();
@@ -299,13 +164,5 @@ public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction 
 			}
 		}
 		return result;
-	}
-
-	/* (non-Javadoc)
- * @see org.alfresco.repo.action.scheduled.AbstractScheduledAction#getAction(org.alfresco.service.cmr.repository.NodeRef)
- */
-	@Override
-	public Action getAction(NodeRef nodeRef) {
-		return getActionService().createAction("deleteAction");
 	}
 }

@@ -77,13 +77,14 @@
 
 	<util:constant id="ORGANIZATION_ROOT_ID" static-field="ru.it.lecm.orgstructure.beans.OrgstructureBeanImpl.ORGANIZATION_ROOT_ID"/>
 
-	<bean id="serviceOrgstructure" class="ru.it.lecm.orgstructure.beans.OrgstructureBeanImpl" init-method="init" parent="baseBean"
+	<bean id="serviceOrgstructure" class="ru.it.lecm.orgstructure.beans.OrgstructureBeanImpl" parent="baseBean"
 		  depends-on="${groupId}.${artifactId}.orgStructureBootstrap, auditModel.extractor.simpleValue, auditModel.extractor.nullValue, auditModel.generator.user, CMISChangeLogDataExtractor">
 		<property name="personService" ref="personService"/>
 		<property name="dictionaryService" ref="serviceDictionary"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="authorityService" ref="authorityService" />
 		<property name="userOrganizationsCache" ref="userOrganizationsCache"/>
+		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean"/>
 		<property name="folders">
 			<map>
 				<entry key="#{ORGANIZATION_ROOT_ID}" value="Сервис Структура организации и сотрудников"/>
