@@ -634,22 +634,27 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 
 	@Override
 	public boolean hasEmployeesInRoute(final NodeRef nodeRef) {
-		return !isRouteEmpty(nodeRef, null);
+		return !isRouteEmpty(nodeRef, null, true, true);
 	}
 
 	@Override
 	public boolean hasEmployeesInRoute(NodeRef route, NodeRef docForExpression) {
-		return !isRouteEmpty(route, docForExpression);
+		return !isRouteEmpty(route, docForExpression, true, true);
 	}
 
 	@Override
 	public boolean isRouteEmpty(final NodeRef nodeRef) {
-		return isRouteEmpty(nodeRef, null);
+		return isRouteEmpty(nodeRef, null, true, false);
 	}
 
 	@Override
-	public boolean isRouteEmpty(NodeRef nodeRef, NodeRef document) {
-		boolean isEmpty = true;
+	public boolean isRouteEmpty(NodeRef route, NodeRef docForExpression) {
+		return isRouteEmpty(route, docForExpression, true, false);
+	}
+
+	private boolean isRouteEmpty(NodeRef nodeRef, NodeRef document, boolean checkExpressions, boolean checkEmployees) {
+		boolean isEmptyByEmployees = true;
+		boolean isEmptyByExpressions = false;/* По постановке - не пусто, если этапов нет*/
 
 		NodeRef currentIterationRef = null;
 		NodeRef documentForExpression = document;
@@ -677,7 +682,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 			int skippedCount = 0;
 
 			for (NodeRef stage : stages) {
-				if (documentForExpression != null) {
+				if (checkExpressions && documentForExpression != null) {
 					Object stageExpression = nodeService.getProperty(stage, RoutesModel.PROP_STAGE_EXPRESSION);
 					if (stageExpression != null && !documentService.execExpression(documentForExpression, stageExpression.toString())) {
 						skippedCount++;
@@ -685,35 +690,38 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 					}
 				}
 
-				List<NodeRef> stageItems = getAllStageItemsOfStage(stage);
-				for (NodeRef stageItem : stageItems) {
-					List<AssociationRef> assocs = nodeService.getTargetAssocs(stageItem, RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
-					if (assocs.size() > 0) {
-						break;
-					}
+				if (checkEmployees) {
+					List<NodeRef> stageItems = getAllStageItemsOfStage(stage);
+					for (NodeRef stageItem : stageItems) {
+						List<AssociationRef> assocs = nodeService.getTargetAssocs(stageItem, RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
+						if (assocs.size() > 0) {
+							isEmptyByEmployees = false;
+							break;
+						}
 
-					if (documentForExpression != null) {
-						NodeRef employee = null;
-						NodeRef macrosNode = findNodeByAssociationRef(stageItem, RoutesModel.ASSOC_STAGE_ITEM_MACROS, RoutesMacrosModel.TYPE_MACROS, ASSOCIATION_TYPE.TARGET);
-						if (macrosNode != null && nodeService.exists(macrosNode)) {
-							String macrosString = (String) nodeService.getProperty(macrosNode, RoutesMacrosModel.PROP_MACROS_STRING);
-							try {
-								employee = evaluateMacrosString(macrosString, documentForExpression, orgstructureService.getCurrentEmployee());
-							} catch (ScriptException ex) {
-								logger.warn("Error executing script {}. Macros node: {}", macrosString, macrosNode);
-							}
-							if (employee != null) {
-								break;
+						if (documentForExpression != null) {
+							NodeRef employee = null;
+							NodeRef macrosNode = findNodeByAssociationRef(stageItem, RoutesModel.ASSOC_STAGE_ITEM_MACROS, RoutesMacrosModel.TYPE_MACROS, ASSOCIATION_TYPE.TARGET);
+							if (macrosNode != null && nodeService.exists(macrosNode)) {
+								String macrosString = (String) nodeService.getProperty(macrosNode, RoutesMacrosModel.PROP_MACROS_STRING);
+								try {
+									employee = evaluateMacrosString(macrosString, documentForExpression, orgstructureService.getCurrentEmployee());
+								} catch (ScriptException ex) {
+									logger.warn("Error executing script {}. Macros node: {}", macrosString, macrosNode);
+								}
+								if (employee != null) {
+									isEmptyByEmployees = false;
+									break;
+								}
 							}
 						}
 					}
-					skippedCount++;
 				}
-			}
 
-			isEmpty = (skippedCount == stagesCount);
+			}
+			isEmptyByExpressions = stagesCount > 0 && (skippedCount == stagesCount);
 		}
-		return isEmpty;
+		return (checkExpressions && isEmptyByExpressions) || (checkEmployees && isEmptyByEmployees);
 	}
 
 	@Override
