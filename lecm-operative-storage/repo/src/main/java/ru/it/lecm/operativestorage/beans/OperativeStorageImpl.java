@@ -56,6 +56,8 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	private DocumentMembersService documentMembersService;
 	private DocumentAttachmentsService documentAttachmentsService;
 	private BusinessJournalService businessJournalService;
+	
+	private NodeRef settingsNode;
 
 
 	private final static String DOCUMENT_TEMPLATE = "Документ #mainobject полностью удален из системы";
@@ -95,29 +97,6 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	public void setPermissionService(PermissionService permissionService) {
 		this.permissionService = permissionService;
 	}
-
-	public void init() {
-//		if (getSettings() == null) {
-//			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-//			transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-//
-//				@Override
-//				public Object execute() throws Throwable {
-//					AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-//
-//						@Override
-//						public Object doWork() throws Exception {
-//							PropertyMap props = new PropertyMap();
-//							props.put(PROP_OPERATIVE_STORAGE_CENRALIZED, true);
-//							createNode(getOperativeStorageFolder(), TYPE_OPERATIVE_STORAGE_SETTING, OPERATIVE_STORAGE_GLOBAL_SETTING_NAME, props);
-//							return null;
-//						}
-//					});
-//					return null;
-//				}
-//			}, false, true);
-//		}
-	}
 	
 	protected void onBootstrap(ApplicationEvent event)
 	{
@@ -131,7 +110,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 						if (getSettings() == null) {
 							PropertyMap props = new PropertyMap();
 							props.put(PROP_OPERATIVE_STORAGE_CENRALIZED, true);
-							createNode(getOperativeStorageFolder(), TYPE_OPERATIVE_STORAGE_SETTING, OPERATIVE_STORAGE_GLOBAL_SETTING_NAME, props);
+							settingsNode = createNode(getOperativeStorageFolder(), TYPE_OPERATIVE_STORAGE_SETTING, OPERATIVE_STORAGE_GLOBAL_SETTING_NAME, props);
 							return null;
 						}
 						return null;
@@ -429,7 +408,10 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 	@Override
 	public NodeRef getSettings() {
-		return nodeService.getChildByName(getOperativeStorageFolder(), ContentModel.ASSOC_CONTAINS, OPERATIVE_STORAGE_GLOBAL_SETTING_NAME);
+		if (settingsNode == null) {
+			settingsNode = nodeService.getChildByName(getOperativeStorageFolder(), ContentModel.ASSOC_CONTAINS, OPERATIVE_STORAGE_GLOBAL_SETTING_NAME);
+		}
+		return settingsNode;
 	}
 
 	@Override

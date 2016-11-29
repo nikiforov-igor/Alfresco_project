@@ -106,35 +106,10 @@ public class ContractsBeanImpl extends BaseBean {
     }
 
     public final void init() {
-        PropertyCheck.mandatory(this, "nodeService", nodeService);
-
-//        final NodeRef serviceRoot = getFolder(CONTRACTS_ROOT_ID);
-//        dashletSettings = null;//nodeService.getChildByName(serviceRoot, ContentModel.ASSOC_CONTAINS, CONTRACTS_DASHLET_SETTINGS_ID);
-//        if (dashletSettings == null) {
-//            dashletSettings = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-//                @Override
-//                public NodeRef doWork() {
-//                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-//                        @Override
-//                        public NodeRef execute() {
-//                        	try{
-//	                            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, CONTRACTS_DASHLET_SETTINGS_ID);
-//	                            Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-//	                            properties.put(ContentModel.PROP_NAME, CONTRACTS_DASHLET_SETTINGS_ID);
-//	                            ChildAssociationRef childAssoc = nodeService.createNode(serviceRoot, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_DASHLET_SETTINGS, properties);
-//	                            return childAssoc.getChildRef();
-//                        	} catch(Exception e) {
-//                        		return nodeService.getChildByName(serviceRoot, ContentModel.ASSOC_CONTAINS, CONTRACTS_DASHLET_SETTINGS_ID);
-//                        	}
-//                        	
-//                        }
-//
-//                    });
-//                }
-//            });
-//        }
+		PropertyCheck.mandatory(this, "nodeService", nodeService);
     }
     
+	@Override
 	protected void onBootstrap(ApplicationEvent event) {
 		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override

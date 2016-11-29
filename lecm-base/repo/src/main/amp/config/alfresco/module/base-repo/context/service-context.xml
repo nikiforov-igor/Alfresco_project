@@ -358,13 +358,6 @@
 		<property name="nameSpaceService" ref="NamespaceService" />
 	</bean>
 
-	<bean id="lecm.view.bootstrap" class="ru.it.lecm.base.dbviews.DBViewBootstrap"
-		  abstract="true" init-method="bootstrapViews">
-		<property name="dataSource" ref="dataSource"/>
-		<property name="dictionaryService" ref="DictionaryService" />
-		<property name="namespaceService" ref="NamespaceService" />
-	</bean>
-
 	<bean id="propertiesImpl" class="ru.it.lecm.base.beans.LecmBasePropertiesServiceImpl"></bean>
 
 	<bean id="propertiesService"  class="org.springframework.aop.framework.ProxyFactoryBean">
@@ -501,7 +494,6 @@
 
 	<bean id="lecmMessageService"
 	      parent="baseBean"
-	      init-method="init"
 	      depends-on="dictionaryBootstrap"
 	      class="ru.it.lecm.base.beans.LecmMessageServiceImpl">
 		<property name="messageService" ref="messageService"/>

@@ -80,12 +80,10 @@ public class LecmDictionaryBootstrap extends BaseBean {
 	public NodeRef getServiceRootFolder() {
 		return null;
 	}
-
-	public void bootstrap() {
-	}
 	
 	private NodeRef rootDir;
 	
+	@Override
 	protected void onBootstrap(ApplicationEvent event)
 	{
 		if (!bootstrapOnStart) {
@@ -177,6 +175,7 @@ public class LecmDictionaryBootstrap extends BaseBean {
         return result;
     }
     
+	@Override
     public NodeRef createPath(String nameSpace, NodeRef root, List<String> directoryPaths) throws WriteTransactionNeededException {
 
             NodeRef directoryRef = root;

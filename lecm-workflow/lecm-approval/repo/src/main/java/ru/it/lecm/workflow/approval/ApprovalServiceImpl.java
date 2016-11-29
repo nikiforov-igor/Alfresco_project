@@ -45,6 +45,7 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 	private DocumentService documentService;
 	private DocumentAttachmentsService attachmentsService;
     private ContentService contentService;
+	private NodeRef settingsNode;
 
 	public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
@@ -61,12 +62,6 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
     public void setContentService(ContentService contentService) {
         this.contentService = contentService;
     }
-
-    public void init() {
-//		if (null == getSettings()) {
-//			AuthenticationUtil.runAsSystem(this);
-//		}
-	}
     
     protected void onBootstrap(ApplicationEvent event)
 	{
@@ -103,7 +98,11 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 
 	@Override
 	public NodeRef getSettings() {
-		return nodeService.getChildByName(getApprovalFolder(), ContentModel.ASSOC_CONTAINS, APPROVAL_GLOBAL_SETTINGS_NAME);
+		if (settingsNode == null) {
+			settingsNode = nodeService.getChildByName(getApprovalFolder(), ContentModel.ASSOC_CONTAINS, APPROVAL_GLOBAL_SETTINGS_NAME);
+		}
+		
+		return settingsNode;
 	}
 
 	@Override

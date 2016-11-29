@@ -33,6 +33,7 @@ import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
 import java.util.*;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * User: AIvkin Date: 25.03.2015 Time: 14:44
@@ -883,6 +884,21 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 			pendingActions = new HashMap<>();
 			AlfrescoTransactionSupport.bindResource(EVENTS_TRANSACTION_LISTENER, pendingActions);
 		}
+	}
+
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+			@Override
+			public NodeRef execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+					@Override
+					public NodeRef doWork() throws Exception {
+						return getServiceRootFolder();
+					}
+				});
+			}
+		});
 	}
 
 	private class EventsTransactionListener implements TransactionListener {

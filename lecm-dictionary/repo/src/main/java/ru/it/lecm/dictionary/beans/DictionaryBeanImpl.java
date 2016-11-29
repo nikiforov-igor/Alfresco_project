@@ -22,6 +22,9 @@ import ru.it.lecm.base.beans.BaseBean;
 
 import java.io.Serializable;
 import java.util.*;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * User: ORakovskaya
@@ -325,5 +328,21 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		// TODO: Потенциально может быть и не нужно
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+			@Override
+			public NodeRef execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+					@Override
+					public NodeRef doWork() throws Exception {
+						return getServiceRootFolder();
+					}
+				});
+			}
+		});
 	}
 }
