@@ -5,7 +5,7 @@ package ru.it.lecm.base.beans;
  *
  * @author vkuprin
  */
-public class TransactionNeededException extends RuntimeException {
+public class TransactionNeededException extends LecmBaseException {
 
     public TransactionNeededException() {
     }
