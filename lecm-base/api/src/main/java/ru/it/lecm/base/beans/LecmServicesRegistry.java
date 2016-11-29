@@ -16,6 +16,6 @@ public interface LecmServicesRegistry {
 	 * Регистрация сервиса в списке
 	 * @param service 
 	 */
-	public void register(LecmService service);		
+	void register(LecmService service);		
 	
 }
