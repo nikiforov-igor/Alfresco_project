@@ -194,20 +194,28 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
 //        } catch (TransactionNeededException ex) {
 //            throw new WriteTransactionNeededException("Can't create \"" + folder + "\" in " + parentRef.toString());
 //        }
-        QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, folder);
-        Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-        properties.put(ContentModel.PROP_NAME, folder);
-        ChildAssociationRef childAssoc;
-        NodeRef childRef;
-        try {
-            childAssoc = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
-            childRef = childAssoc.getChildRef();
-        } catch (DuplicateChildNodeNameException e) {
-            //есть вероятность, что папка уже существует или создана другим потоком/транзакцией
-            childRef = nodeService.getChildByName(parentRef, ContentModel.ASSOC_CONTAINS, folder);
-            logger.debug("!!!!!!!!!!! Получил директорию без создания " + folder, e);
-        }
-        return childRef;
+		
+		return lecmTransactionHelper.doInNotGuaranteedTransaction(new RetryingTransactionCallback<NodeRef>() {
+			@Override
+			public NodeRef execute() throws Throwable {
+				QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, folder);
+				Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+				properties.put(ContentModel.PROP_NAME, folder);
+				ChildAssociationRef childAssoc;
+				NodeRef childRef;
+				try {
+					childAssoc = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
+					childRef = childAssoc.getChildRef();
+				} catch (DuplicateChildNodeNameException e) {
+					//есть вероятность, что папка уже существует или создана другим потоком/транзакцией
+					childRef = nodeService.getChildByName(parentRef, ContentModel.ASSOC_CONTAINS, folder);
+					logger.debug("!!!!!!!!!!! Получил директорию без создания " + folder, e);
+				}
+				return childRef;
+			}
+		}, false);
+
+//        return childRef;
     }
 
     /**
@@ -238,11 +246,19 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
 //        return folderRef;
 //    }
     @Override
-    public NodeRef getFolder(NodeRef parentRef, String folder) {
+    public NodeRef getFolder(final NodeRef parentRef, final String folder) {
         ParameterCheck.mandatory("parentRef", parentRef);
         ParameterCheck.mandatory("folder", folder);
-        NodeRef folderRef = nodeService.getChildByName(parentRef, ContentModel.ASSOC_CONTAINS, folder);
-        return folderRef;
+		
+		return lecmTransactionHelper.doInNotGuaranteedTransaction(new RetryingTransactionCallback<NodeRef>() {
+			@Override
+			public NodeRef execute() throws Throwable {
+				return nodeService.getChildByName(parentRef, ContentModel.ASSOC_CONTAINS, folder);
+			}
+		}, true);
+		
+//        NodeRef folderRef = nodeService.getChildByName(parentRef, ContentModel.ASSOC_CONTAINS, folder);
+//        return folderRef;
     }
 
     /**

@@ -4,5 +4,5 @@
 	<url>/lecm/statemachine/editor/datagrid/fields</url>
 	<format default="json">extension</format>
 	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
+    <transaction>required</transaction>
 </webscript>

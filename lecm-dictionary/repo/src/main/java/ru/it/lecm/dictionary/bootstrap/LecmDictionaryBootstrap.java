@@ -90,9 +90,9 @@ public class LecmDictionaryBootstrap extends BaseBean {
             logger.warn("Bootstrap disabled. Use 'lecm.dictionaries.bootstrapOnStart=true' in alfresco-global.properties file to enable it.");
             return; //пропускаем
         }
-//		AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
-//			@Override
-//			public Object doWork() throws Exception {
+		AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
+			@Override
+			public Object doWork() throws Exception {
 				if (dictionaries != null) {
 					logger.info("!!!!!!!!! dictionaries: "+dictionaries);
 					RetryingTransactionHelper rth1 = transactionService.getRetryingTransactionHelper();
@@ -135,10 +135,10 @@ public class LecmDictionaryBootstrap extends BaseBean {
                 if (xmlImportListener != null) {
                 	xmlImportListener.execute(); // оповещаем о завершении импорта
                 }				
-//			return null;
-//			}
-//		};
-//		AuthenticationUtil.runAsSystem(raw);
+			return null;
+			}
+		};
+		AuthenticationUtil.runAsSystem(raw);
 
 	}
 

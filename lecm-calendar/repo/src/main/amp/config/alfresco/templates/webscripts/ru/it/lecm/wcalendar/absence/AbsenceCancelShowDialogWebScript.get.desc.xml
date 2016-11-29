@@ -5,5 +5,5 @@
 	<url>/lecm/wcalendar/absence/get/AbsenceCancelShowDialog</url>
 	<authentication>user</authentication>
 	<format default="json"/>
-	<transaction>none</transaction><transaction allow="readonly">required</transaction>
+	<transaction allow="readonly">required</transaction>
 </webscript>

@@ -77,6 +77,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import ru.it.lecm.base.beans.BaseBean;
 
 //import org.joda.time.Days;
 
@@ -91,37 +92,28 @@ import java.util.concurrent.locks.ReentrantLock;
  * 1. Запускать пользовательские процессы из машины состояний
  * 2. Передавать сигнал о завершении пользовательского процесс машине состояний с передачей переменных из пользовательского процесса
  */
-public class LifecycleStateMachineHelper implements StateMachineServiceBean, InitializingBean {
+public class LifecycleStateMachineHelper extends BaseBean implements StateMachineServiceBean, InitializingBean {
 	private final static Logger logger = LoggerFactory.getLogger(LifecycleStateMachineHelper.class);
 
     public static String ACTIVITI_PREFIX = "activiti$";
 
-    private ServiceRegistry serviceRegistry;
-    private Repository repositoryHelper;
-    private AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
-    private OrgstructureBean orgstructureBean;
-    private DocumentMembersService documentMembersService;
-    private BusinessJournalService businessJournalService;
-    private TransactionService transactionService;
-    private DocumentConnectionService documentConnectionService;
-    private LecmPermissionService lecmPermissionService;
-    private IWorkCalendar workCalendarService;
-    private NodeService nodeService;
+    protected Repository repositoryHelper;
+    protected AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
+    protected OrgstructureBean orgstructureBean;
+    protected DocumentMembersService documentMembersService;
+    protected BusinessJournalService businessJournalService;
+    protected DocumentConnectionService documentConnectionService;
+    protected LecmPermissionService lecmPermissionService;
+    protected IWorkCalendar workCalendarService;
+	protected NamespaceService namespaceService;
+
 
     Lock lock = new ReentrantLock();
     
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
-
-    public void setTransactionService(TransactionService transactionService) {
-    	this.transactionService = transactionService;
-    }
-
-    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-    	this.serviceRegistry = serviceRegistry;
-    }
-
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
+	}
+	
     public void setRepositoryHelper(Repository repositoryHelper) {
         this.repositoryHelper = repositoryHelper;
     }
@@ -247,6 +239,11 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         return isStarter(type, employee);
     }
 
+	@Override
+	public boolean isStarter(QName type) {
+		return isStarter(type.toPrefixString(namespaceService));
+	}
+
     /*
      * Выборка статусов для всех экземпляров процессов для определенного типа документа
      * @param documentType - тип документа
@@ -268,6 +265,11 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         Collections.sort(statusesList);
         return statusesList;
     }
+
+	@Override
+	public List<String> getStatuses(QName documentType, boolean includeActive, boolean includeFinal) {
+		return getStatuses(documentType.toPrefixString(namespaceService), includeActive, includeFinal);
+	}
 
     @Override
     public List<String> getAllDynamicRoles(NodeRef document) {
@@ -304,6 +306,12 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         accessRoles.addAll(getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().getStarterRoles());
         return accessRoles;
     }
+
+	@Override
+	public Set<String> getStarterRoles(QName documentType) {
+		return getStarterRoles(documentType.toPrefixString(namespaceService));
+	}
+	
     /*
      * Возвращает текущий Task процесса по processInstanceId
      * Если процесс на переходе, то вернет предидущую Task-у
@@ -840,6 +848,24 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         return folders;
     }
 
+	@Override
+	public Set<String> getArchiveFolders(QName documentType) {
+		return getArchiveFolders(documentType.toPrefixString(namespaceService));
+	}
+	
+	
+
+	@Override
+	public String getArchiveFolder(String documentType) {
+		String statmachene = documentType.replace(":", "_");
+        return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().getArchiveFolder();
+	}
+
+	@Override
+	public String getArchiveFolder(QName documentType) {
+		return getArchiveFolder(documentType.toPrefixString(namespaceService));
+	}
+	
     private NodeRef serviceRoot = null;
     private NodeRef versionsRoot = null;
     //TODO Передеалть в Map?
@@ -1037,7 +1063,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     	private List<String> staticRoles = new ArrayList<String>();
     	private List<String> dinamicRoles = new ArrayList<String>();
     	private List<String> starterRoles = new ArrayList<String>();
+		private Map<String, String> permissions = new HashMap<>();
     	private boolean notArmCreate = false;
+		private boolean simpleDocument = false;
 
         private boolean initialized = false;
         private Lock lock = new ReentrantLock();
@@ -1088,6 +1116,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 									    if("name".equals(stateMachineProp.getFirstChild().getLocalName())&&"notArmCreate".equals(stateMachineProp.getFirstChild().getTextContent())){
 										    notArmCreate = Boolean.valueOf(stateMachineProp.getLastChild().getTextContent());
 			    						}
+									    if("name".equals(stateMachineProp.getFirstChild().getLocalName())&&"simple-document".equals(stateMachineProp.getFirstChild().getTextContent())){
+										    simpleDocument = Boolean.valueOf(stateMachineProp.getLastChild().getTextContent());
+			    						}
 			    					}
 			    				}
 			    				if("subFolders".equals(stateMachineNode.getLocalName())){
@@ -1104,6 +1135,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 			    									Boolean isCreator = false;
 			    									Boolean isStatic = false;
 			    									String roleName = "";
+													String rolePrivilege = "";
 			    									for(int l=0;l<rolesListProps.getLength();l++) {
 			    										Node rolesListProp = rolesListProps.item(l);
 			    										if("type".equals(rolesListProp.getLocalName())&&"static-role-item".equals(rolesListProp.getTextContent())) {
@@ -1116,6 +1148,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
                                                                 if("name".equals(n11.getFirstChild().getLocalName())&&"isCreator".equals(n11.getFirstChild().getTextContent())){
                                                                     isCreator = Boolean.parseBoolean(n11.getLastChild().getTextContent());
                                                                 }
+                                                                if("name".equals(n11.getFirstChild().getLocalName())&&"static-role-privilege".equals(n11.getFirstChild().getTextContent())){
+                                                                    rolePrivilege = n11.getLastChild().getTextContent();
+                                                                }
                                                             }
 			    										}
 			    										if("roleAssociations".equals(rolesListProp.getLocalName())&&rolesListProp.getFirstChild()!=null) {
@@ -1127,6 +1162,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 			    									if(isStatic)staticRoles.add(roleName);
 			    									if(!isStatic)dinamicRoles.add(roleName);
 			    									if(isCreator)starterRoles.add(roleName);
+													permissions.put(roleName, rolePrivilege);
 			    								}
 			    							}
 			    						}
@@ -1651,6 +1687,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     	public List<String>  getStarterRoles() {
     		return starterRoles;
     	}
+    	public Map getPermissions() {
+    		return permissions;
+    	}
     	public String getArchiveFolder() {
     		return archiveFolder;
     	}
@@ -1659,6 +1698,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     	}
         public boolean isNotArmCreate() {
 		    return notArmCreate;
+	    }
+        public boolean isSimpleDocument() {
+		    return simpleDocument;
 	    }
 
 	    public StateMachineStatus getStatusByName(String name) {
@@ -2683,7 +2725,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         }
 		return false;
 	}
-
+	
 	/**
      * Возвращает можно ли создавать документ из АРМ-а
      * @param type - тип документа
@@ -2693,6 +2735,11 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 	public boolean isNotArmCreate(String type) {
     	String statmachene = type.replace(":", "_");
         return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().isNotArmCreate();
+    }
+	
+	@Override
+	public boolean isNotArmCreate(QName type) {
+        return isNotArmCreate(type.toPrefixString(namespaceService));
     }
 
 
@@ -2756,6 +2803,47 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 	public void disconnectFromStatemachine(final NodeRef documentRef, final String processInstanceID) {
 		new DocumentWorkflowUtil().removeWorkflow(documentRef, processInstanceID);
 	}
+	
+	@Override
+	public Map<String, String> getPermissions(String type) {
+		String statmachene = type.replace(":", "_");
+        return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().getPermissions();
+	}
+
+	@Override
+	public Map<String, String> getPermissions(QName type) {
+		return getPermissions(type.toPrefixString(namespaceService));
+	}
+	
+	@Override
+	public boolean isSimpleDocument(String type) {
+		String statmachene = type.replace(":", "_");
+        return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().isSimpleDocument();
+	}
+
+	@Override
+	public boolean isSimpleDocument(QName type) {
+		return isSimpleDocument(type.toPrefixString(namespaceService));
+	}
+	
+	@Override
+	public void checkArchiveFolder(String type, boolean forceRebuildACL) {
+		// Не реализовано, т.к такой функционал пока что нужен только для документов без ЖЦ
+	}
+
+	@Override
+	public void checkArchiveFolder(QName type, boolean forceRebuildACL) {
+		checkArchiveFolder(type.toPrefixString(namespaceService), forceRebuildACL);
+	}
+	
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
+	}
+	
+
 ///////////////////////////////////////////////////////// Statemachine Structure start ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////// Statemachine Structure end ////////////////////////////////////////////////////////////////
+
+
 }

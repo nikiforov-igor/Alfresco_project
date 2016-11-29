@@ -142,13 +142,7 @@
 		</property>
                 <property name="publicAction" value="false" />
     </bean>
-	<bean id="absenceStartSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceStartSchedule" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
-		<property name="transactionMode">
-			<value>ISOLATED_TRANSACTIONS</value>
-		</property>
-		<property name="compensatingActionMode">
-			<value>IGNORE</value>
-		</property>
+	<bean id="absenceStartSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceStartSchedule" depends-on="${groupId}.${artifactId}.wCalendarBootstrap"  parent="baseTransactionalSchedule">
 		<property name="jobName">
 			<value>absence-start</value>
 		</property>
@@ -161,17 +155,13 @@
 		<property name="triggerGroup">
 			<value>absence-trigger</value>
 		</property>
+		<property name="actionName">
+			<value>absenceStartScheduleExecutor</value>
+		</property>
 		<property name="cronExpression">
 			<value>0 1 * * * ? *</value> <!-- каждый час в xx:01 -->
 		</property>
-		<property name="scheduler" ref="schedulerFactory"/>
-		<property name="actionService" ref="ActionService"/>
 		<property name="absenceService" ref="AbsenceService"/>
-		<property name="transactionService" ref="TransactionService"/>
-		<property name="searchService" ref="searchService"/>
-		<property name="runAsUser">
-			<value>System</value>
-		</property>
 	</bean>
 	<!-- Бины шедулера для отсутствий (окончание отсутствия) -->
 	<bean id="absenceEndScheduleExecutor" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceEndScheduleExecutor" parent="action-executer">
@@ -183,13 +173,7 @@
 		</property>
         <property name="publicAction" value="false" />
     </bean>
-	<bean id="absenceEndSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceEndSchedule" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
-		<property name="transactionMode">
-			<value>ISOLATED_TRANSACTIONS</value>
-		</property>
-		<property name="compensatingActionMode">
-			<value>IGNORE</value>
-		</property>
+	<bean id="absenceEndSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceEndSchedule" depends-on="${groupId}.${artifactId}.wCalendarBootstrap" parent="baseTransactionalSchedule">
 		<property name="jobName">
 			<value>absence-end</value>
 		</property>
@@ -202,17 +186,13 @@
 		<property name="triggerGroup">
 			<value>absence-trigger</value>
 		</property>
+		<property name="actionName">
+			<value>absenceEndScheduleExecutor</value>
+		</property>
 		<property name="cronExpression">
 			<value>0 59 * * * ? *</value> <!-- каждый час в xx:59 -->
 		</property>
-		<property name="scheduler" ref="schedulerFactory"/>
-		<property name="actionService" ref="ActionService"/>
 		<property name="absenceService" ref="AbsenceService"/>
-		<property name="transactionService" ref="TransactionService"/>
-		<property name="searchService" ref="searchService"/>
-		<property name="runAsUser">
-			<value>System</value>
-		</property>
 	</bean>
 	<!-- Бины шедулера для отсутствий (продление бессрочных отсутствий) -->
 	<bean id="absenceProlongationScheduleExecutor" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceProlongationScheduleExecutor" parent="action-executer">
@@ -224,13 +204,7 @@
 		</property>
         <property name="publicAction" value="false" />
     </bean>
-	<bean id="absenceProlongationSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceProlongationSchedule" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
-		<property name="transactionMode">
-			<value>ISOLATED_TRANSACTIONS</value>
-		</property>
-		<property name="compensatingActionMode">
-			<value>IGNORE</value>
-		</property>
+	<bean id="absenceProlongationSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceProlongationSchedule" depends-on="${groupId}.${artifactId}.wCalendarBootstrap" parent="baseTransactionalSchedule">
 		<property name="jobName">
 			<value>absence-prolongation</value>
 		</property>
@@ -243,17 +217,13 @@
 		<property name="triggerGroup">
 			<value>absence-trigger</value>
 		</property>
+		<property name="actionName">
+			<value>absenceProlongationScheduleExecutor</value>
+		</property>
 		<property name="cronExpression">
 			<value>0 1 * * * ? *</value> <!-- каждый час в xx:01 -->
 		</property>
-		<property name="scheduler" ref="schedulerFactory"/>
-		<property name="actionService" ref="ActionService"/>
 		<property name="absenceService" ref="AbsenceService"/>
-		<property name="transactionService" ref="TransactionService"/>
-		<property name="searchService" ref="searchService"/>
-		<property name="runAsUser">
-			<value>System</value>
-		</property>
 	</bean>
 	<!-- Полиси для сервиса календарей -->
 	<bean id="calendarModifyPolicy" class="ru.it.lecm.wcalendar.calendar.policy.CalendarModifyPolicy" init-method="init">

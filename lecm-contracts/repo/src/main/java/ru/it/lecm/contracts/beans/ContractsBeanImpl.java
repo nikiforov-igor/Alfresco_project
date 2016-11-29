@@ -104,8 +104,10 @@ public class ContractsBeanImpl extends BaseBean {
     public NodeRef getDashletSettings() {
         return dashletSettings;
     }
-	
-	
+
+    public final void init() {
+		PropertyCheck.mandatory(this, "nodeService", nodeService);
+    }
     
 	@Override
 	public void initService() {

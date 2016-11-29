@@ -5,4 +5,5 @@
    </description>
    <url>/lecm/jshelper/completions</url>
    <format default="json"></format>
+   <transaction allow="readonly">required</transaction>
 </webscript>
