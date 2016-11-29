@@ -18,7 +18,6 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.logging.Level;
 
 /**
  *
