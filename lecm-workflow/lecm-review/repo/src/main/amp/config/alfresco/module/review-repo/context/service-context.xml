@@ -106,7 +106,7 @@
 	</util:list>
 	<bean id="review.admin.arm.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
-		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ"
+		  p:rootPath="/Business platform/LECM/Сервис АРМ"
 		  p:dictionaries-ref="review.admin.arm.dictionaries"/>
 
 	<util:list id="review.my-profile.arm.dictionaries">
@@ -114,7 +114,7 @@
 	</util:list>
 	<bean id="review.my-profile.arm.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap"
-		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Логика ECM. Мой профиль/Настройки"
+		  p:rootPath="/Business platform/LECM/Сервис АРМ"
 		  p:dictionaries-ref="review.my-profile.arm.dictionaries"/>
 
 	<bean id="reviewNotificationExecutor" class="ru.it.lecm.workflow.review.schedule.ReviewNotificationExecutor" parent="action-executer"
