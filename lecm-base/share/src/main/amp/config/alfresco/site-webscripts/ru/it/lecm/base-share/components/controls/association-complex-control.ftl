@@ -101,6 +101,12 @@
 							<#else>
 								ignoreNodes: [],
 							</#if>
+							<#if params[itemKey + '_getExtSearchQuery']??>
+                                getExtSearchQueryFunction: ${params[itemKey + '_getExtSearchQuery']},
+							</#if>
+							<#if params[itemKey + '_getArgumentsFromForm']??>
+                                getArgumentsFromFormFunction: ${params[itemKey + '_getArgumentsFromForm']},
+							</#if>
 							<#list params?keys as key>
 								<#assign isNotBoolean = 'true' != params[key] && 'false' != params[key]>
 								<#if isComplex && key?starts_with(itemKey)>
@@ -123,6 +129,11 @@
 			'scripts/lecm-base/components/controls/association-control.lib.js',
 			'scripts/lecm-base/components/controls/association-control.picker.js',
 			'scripts/lecm-base/components/controls/association-control.item.js'
+			<#if params.additionalScripts?has_content>
+				<#list params.additionalScripts?split(",") as js>
+					,'${js}'
+				</#list>
+			</#if>
 		], [
 			'css/lecm-base/components/controls/association-control.css',
 			'css/lecm-base/components/controls/association-control.picker.css'
