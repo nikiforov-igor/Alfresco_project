@@ -1,250 +1,246 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-	<item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary">
+	<item name="cm:АРМ Архивариуса" type="lecm-arm:arm">
+		<property name="cm:name"><![CDATA[АРМ Архивариуса]]></property>
+		<property name="lecm-arm:code"><![CDATA[archive]]></property>
+		<property name="lecm-arm:show-calendar"><![CDATA[false]]></property>
 		<items>
-			<item name="cm:АРМ Архивариуса" type="lecm-arm:arm">
-				<property name="cm:name"><![CDATA[АРМ Архивариуса]]></property>
-				<property name="lecm-arm:code"><![CDATA[archive]]></property>
-				<property name="lecm-arm:show-calendar"><![CDATA[false]]></property>
+			<item name="cm:Номенклатурные дела" type="lecm-arm:accordion">
+				<property name="cm:name"><![CDATA[Номенклатурные дела]]></property>
+				<property name="lecm-arm:order"><![CDATA[0]]></property>
+				<property name="lecm-arm:search-type"><![CDATA[]]></property>
+				<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+				<property name="lecm-arm:types"><![CDATA[]]></property>
+				<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+				<property name="lecm-arm:search-query"><![CDATA[]]></property>
 				<items>
-					<item name="cm:Номенклатурные дела" type="lecm-arm:accordion">
-						<property name="cm:name"><![CDATA[Номенклатурные дела]]></property>
+					<item name="cm:Узлы" type="lecm-arm:node">
+						<property name="cm:name"><![CDATA[Узлы]]></property>
 						<property name="lecm-arm:order"><![CDATA[0]]></property>
 						<property name="lecm-arm:search-type"><![CDATA[]]></property>
 						<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
 						<property name="lecm-arm:types"><![CDATA[]]></property>
 						<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-						<property name="lecm-arm:search-query"><![CDATA[]]></property>
+						<property name="lecm-arm:search-query"><![CDATA[@lecm\-os\:nomenclature\-case\-assoc\-ref:"#value-ref"]]></property>
+						<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
 						<items>
-							<item name="cm:Узлы" type="lecm-arm:node">
-								<property name="cm:name"><![CDATA[Узлы]]></property>
-								<property name="lecm-arm:order"><![CDATA[0]]></property>
-								<property name="lecm-arm:search-type"><![CDATA[]]></property>
-								<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-								<property name="lecm-arm:types"><![CDATA[]]></property>
-								<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-								<property name="lecm-arm:search-query"><![CDATA[@lecm\-os\:nomenclature\-case\-assoc\-ref:"#value-ref"]]></property>
-								<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
-								<items>
-									<item name="cm:32a78050-b068-46b0-8390-3339540344f6" type="lecm-arm:xpath-child-rule">
-										<property name="cm:name"><![CDATA[32a78050-b068-46b0-8390-3339540344f6]]></property>
-										<property name="lecm-arm:xpath-child-rule-root-xpath"><![CDATA[/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел/*]]></property>
-										<property name="lecm-arm:xpath-child-rule-types"><![CDATA[lecm-os:nomenclature-year-section, lecm-os:nomenclature-unit-section, lecm-os:nomenclature-case]]></property>
-										<property name="lecm-arm:xpath-child-rule-filter"><![CDATA[{{FILTER_YEARS_BY_ORG({allowAdmin: true})}}]]></property>
-									</item>
-									<item name="cm:995511ec-296b-4abe-9195-1dbf55b708f5" type="lecm-arm:field">
-										<property name="lecm-arm:field-title"><![CDATA[Регистрационный номер]]></property>
-										<property name="cm:name"><![CDATA[7bfe007d-308c-485a-8e30-2488b8712908]]></property>
-										<property name="lecm-arm:field-name"><![CDATA[lecm-document:regnum]]></property>
-									</item>
-									<item name="cm:762974b3-ad91-4d10-95b5-d5439c8fff51" type="lecm-arm:field">
-										<property name="lecm-arm:field-title"><![CDATA[Дата регистрации]]></property>
-										<property name="cm:name"><![CDATA[716868d8-1bcc-4437-b111-867b51c01cbb]]></property>
-										<property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
-									</item>
-									<item name="cm:bf0475a6-52bc-48c4-96b5-dfd4296a1aa0" type="lecm-arm:field">
-										<property name="cm:name"><![CDATA[bf0475a6-52bc-48c4-96b5-dfd4296a1aa0]]></property>
-										<property name="lecm-arm:field-title"><![CDATA[Вид документа]]></property>
-										<property name="lecm-arm:field-name"><![CDATA[lecm-eds-document:document-type-assoc-text-content]]></property>
-										<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-										<property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
-										<property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
-									</item>
-									<item name="cm:ca4fe58d-93a8-4084-8b73-5282fd49c645" type="lecm-arm:field">
-										<property name="lecm-arm:field-title"><![CDATA[Содержание]]></property>
-										<property name="cm:name"><![CDATA[5bb6aeb4-cb99-40cd-b11e-4e911770a6b3]]></property>
-										<property name="lecm-arm:field-name"><![CDATA[lecm-eds-document:summaryContent]]></property>
-										<property name="lecm-arm:field-format-string"><![CDATA[<ignoreHtml>{lecm-eds-document:summaryContent}]]></property>
-									</item>
-								</items>
-								<assocs>
-									<assoc type="lecm-arm:node-child-rule-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/Номенклатурные дела/Узлы/32a78050-b068-46b0-8390-3339540344f6"/>
-									<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/Номенклатурные дела/Узлы/7bfe007d-308c-485a-8e30-2488b8712908"/>
-									<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/Номенклатурные дела/Узлы/716868d8-1bcc-4437-b111-867b51c01cbb"/>
-									<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/Номенклатурные дела/Узлы/5bb6aeb4-cb99-40cd-b11e-4e911770a6b3"/>
-									<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/Номенклатурные дела/Узлы/bf0475a6-52bc-48c4-96b5-dfd4296a1aa0"/>
-								</assocs>
+							<item name="cm:32a78050-b068-46b0-8390-3339540344f6" type="lecm-arm:xpath-child-rule">
+								<property name="cm:name"><![CDATA[32a78050-b068-46b0-8390-3339540344f6]]></property>
+								<property name="lecm-arm:xpath-child-rule-root-xpath"><![CDATA[/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел/*]]></property>
+								<property name="lecm-arm:xpath-child-rule-types"><![CDATA[lecm-os:nomenclature-year-section, lecm-os:nomenclature-unit-section, lecm-os:nomenclature-case]]></property>
+								<property name="lecm-arm:xpath-child-rule-filter"><![CDATA[{{FILTER_YEARS_BY_ORG({allowAdmin: true})}}]]></property>
 							</item>
-						</items>
-						<assocs>
-							<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/СЭД. Архивариус"/>
-						</assocs>
-					</item>
-					<item name="cm:Управление номенклатурой дел" type="lecm-arm:accordion">
-						<property name="cm:name"><![CDATA[Управление номенклатурой дел]]></property>
-						<property name="lecm-arm:order"><![CDATA[1]]></property>
-						<property name="lecm-arm:search-type"><![CDATA[]]></property>
-						<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-						<property name="lecm-arm:types"><![CDATA[]]></property>
-						<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-						<property name="lecm-arm:search-query"><![CDATA[]]></property>
-						<items>
-							<item name="cm:Номенклатура" type="lecm-arm:html-node">
-								<property name="cm:name"><![CDATA[Номенклатура]]></property>
-								<property name="lecm-arm:order"><![CDATA[0]]></property>
-								<property name="lecm-arm:html-url"><![CDATA[page/nomenclature?root=true]]></property>
-								<items>
-									<item name="cm:Узлы" type="lecm-arm:html-node">
-										<property name="cm:name"><![CDATA[Узлы]]></property>
-										<property name="lecm-arm:order"><![CDATA[0]]></property>
-										<property name="lecm-arm:html-url"><![CDATA[page/nomenclature]]></property>
-										<items>
-											<item name="cm:1234b73a-7573-4b76-a0eb-da861db670c3" type="lecm-arm:xpath-child-rule">
-												<property name="cm:name"><![CDATA[1234b73a-7573-4b76-a0eb-da861db670c3]]></property>
-												<property name="lecm-arm:xpath-child-rule-root-xpath"><![CDATA[/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел/*]]></property>
-												<property name="lecm-arm:xpath-child-rule-types"><![CDATA[lecm-os:nomenclature-year-section, lecm-os:nomenclature-unit-section]]></property>
-											</item>
-											<item name="cm:8f9893a9-5d7c-49eb-a96e-d3d9ebebbbb3" type="lecm-arm:dictionary-child-rule">
-												<property name="cm:name"><![CDATA[8f9893a9-5d7c-49eb-a96e-d3d9ebebbbb3]]></property>
-												<assocs>
-													<assoc type="lecm-arm:child-rule-dictionary-assoc" path="/Business platform/LECM/Сервис Справочники/Номенклатура дел"/>
-												</assocs>
-											</item>
-											<item name="cm:95b938ee-b62b-463f-9108-5442e30e571c" type="lecm-arm:xpath-child-rule">
-												<property name="cm:name"><![CDATA[95b938ee-b62b-463f-9108-5442e30e571c]]></property>
-												<property name="lecm-arm:xpath-child-rule-root-xpath"><![CDATA[/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел/*]]></property>
-												<property name="lecm-arm:xpath-child-rule-types"><![CDATA[]]></property>
-											</item>
-											<item name="cm:1bdeb918-ba25-42c7-af93-2a2eca024985" type="lecm-arm:xpath-child-rule">
-												<property name="cm:name"><![CDATA[1bdeb918-ba25-42c7-af93-2a2eca024985]]></property>
-												<property name="lecm-arm:xpath-child-rule-root-xpath"><![CDATA[/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел/*]]></property>
-												<property name="lecm-arm:xpath-child-rule-types"><![CDATA[lecm-os:nomenclature-year-section, lecm-os:nomenclature-unit-section]]></property>
-												<property name="lecm-arm:xpath-child-rule-filter"><![CDATA[{{FILTER_YEARS_BY_ORG({allowAdmin: true})}}]]></property>
-											</item>
-										</items>
-										<assocs>
-											<assoc type="lecm-arm:node-child-rule-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/Управление номенклатурой дел/Номенклатура/Узлы/1bdeb918-ba25-42c7-af93-2a2eca024985"/>
-										</assocs>
-									</item>
-								</items>
+							<item name="cm:995511ec-296b-4abe-9195-1dbf55b708f5" type="lecm-arm:field">
+								<property name="lecm-arm:field-title"><![CDATA[Регистрационный номер]]></property>
+								<property name="cm:name"><![CDATA[7bfe007d-308c-485a-8e30-2488b8712908]]></property>
+								<property name="lecm-arm:field-name"><![CDATA[lecm-document:regnum]]></property>
 							</item>
-						</items>
-						<assocs>
-							<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/СЭД. Архивариус"/>
-						</assocs>
-					</item>
-					<item name="cm:На указание дела" type="lecm-arm:accordion">
-						<property name="cm:name"><![CDATA[На указание дела]]></property>
-						<property name="lecm-arm:order"><![CDATA[0]]></property>
-						<property name="lecm-arm:search-type"><![CDATA[]]></property>
-						<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-						<property name="lecm-arm:types"><![CDATA[lecm-nd:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document]]></property>
-						<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-						<property name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\-aspects\:is\-final:true AND NOT ASPECT:"lecm-document-aspects:dont-move-to-archive-folder"]]></property>
-						<items>
-							<item name="cm:bdd25dd3-ca35-4183-8a0c-b1b562a55ab5" type="lecm-arm:field">
-								<property name="lecm-arm:field-title"><![CDATA[Тип]]></property>
-								<property name="cm:name"><![CDATA[7cca2794-fcc8-4867-ba3e-c62d17755123]]></property>
-								<property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-type]]></property>
+							<item name="cm:762974b3-ad91-4d10-95b5-d5439c8fff51" type="lecm-arm:field">
+								<property name="lecm-arm:field-title"><![CDATA[Дата регистрации]]></property>
+								<property name="cm:name"><![CDATA[716868d8-1bcc-4437-b111-867b51c01cbb]]></property>
+								<property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
 							</item>
-							<item name="cm:5c13641c-f45a-4fcf-ac91-620f273447fe" type="lecm-arm:field">
+							<item name="cm:bf0475a6-52bc-48c4-96b5-dfd4296a1aa0" type="lecm-arm:field">
+								<property name="cm:name"><![CDATA[bf0475a6-52bc-48c4-96b5-dfd4296a1aa0]]></property>
+								<property name="lecm-arm:field-title"><![CDATA[Вид документа]]></property>
+								<property name="lecm-arm:field-name"><![CDATA[lecm-eds-document:document-type-assoc-text-content]]></property>
+								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+								<property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+								<property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
+							</item>
+							<item name="cm:ca4fe58d-93a8-4084-8b73-5282fd49c645" type="lecm-arm:field">
 								<property name="lecm-arm:field-title"><![CDATA[Содержание]]></property>
-								<property name="cm:name"><![CDATA[de662da4-308e-4968-91e0-54c0bf7dc1d6]]></property>
+								<property name="cm:name"><![CDATA[5bb6aeb4-cb99-40cd-b11e-4e911770a6b3]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-eds-document:summaryContent]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[<ignoreHtml>{lecm-eds-document:summaryContent}]]></property>
 							</item>
-							<item name="cm:c391d4db-39b2-47da-91b6-51cae04389e5" type="lecm-arm:field">
-								<property name="lecm-arm:field-title"><![CDATA[Дата регистрации]]></property>
-								<property name="cm:name"><![CDATA[1c3624d8-5c8b-41bb-a3cd-45a2984133ac]]></property>
-								<property name="lecm-arm:field-name"><![CDATA[lecm-document-aspects:reg-data-date]]></property>
-							</item>
-							<item name="cm:b1ce383d-2c0d-4e14-aaa3-2da4b7c0fb8a" type="lecm-arm:field">
-								<property name="lecm-arm:field-title"><![CDATA[Регистрационный номер]]></property>
-								<property name="cm:name"><![CDATA[d2dbb653-2a5e-4613-9b7d-3d9c43e509bb]]></property>
-								<property name="lecm-arm:field-name"><![CDATA[lecm-document-aspects:reg-data-number]]></property>
-							</item>
-							<item name="cm:Все" type="lecm-arm:node">
-								<property name="cm:name"><![CDATA[Все]]></property>
-								<property name="lecm-arm:order"><![CDATA[0]]></property>
-								<property name="lecm-arm:search-type"><![CDATA[]]></property>
-								<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-								<property name="lecm-arm:types"><![CDATA[]]></property>
-								<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-								<property name="lecm-arm:search-query"><![CDATA[]]></property>
-								<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
-								<items>
-									<item name="cm:Входящие" type="lecm-arm:node">
-										<property name="cm:name"><![CDATA[Входящие]]></property>
-										<property name="lecm-arm:order"><![CDATA[0]]></property>
-										<property name="lecm-arm:search-type"><![CDATA[]]></property>
-										<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-										<property name="lecm-arm:types"><![CDATA[lecm-incoming:document]]></property>
-										<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-										<property name="lecm-arm:search-query"><![CDATA[]]></property>
-										<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
-									</item>
-									<item name="cm:ОРД" type="lecm-arm:node">
-										<property name="cm:name"><![CDATA[ОРД]]></property>
-										<property name="lecm-arm:order"><![CDATA[0]]></property>
-										<property name="lecm-arm:search-type"><![CDATA[]]></property>
-										<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-										<property name="lecm-arm:types"><![CDATA[lecm-ord:document]]></property>
-										<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-										<property name="lecm-arm:search-query"><![CDATA[]]></property>
-										<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
-									</item>
-									<item name="cm:Исходящие" type="lecm-arm:node">
-										<property name="cm:name"><![CDATA[Исходящие]]></property>
-										<property name="lecm-arm:order"><![CDATA[0]]></property>
-										<property name="lecm-arm:search-type"><![CDATA[]]></property>
-										<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-										<property name="lecm-arm:types"><![CDATA[lecm-outgoing:document]]></property>
-										<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-										<property name="lecm-arm:search-query"><![CDATA[]]></property>
-										<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
-									</item>
-									<item name="cm:Внутренние" type="lecm-arm:node">
-										<property name="cm:name"><![CDATA[Внутренние]]></property>
-										<property name="lecm-arm:order"><![CDATA[0]]></property>
-										<property name="lecm-arm:search-type"><![CDATA[]]></property>
-										<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-										<property name="lecm-arm:types"><![CDATA[lecm-internal:document]]></property>
-										<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-										<property name="lecm-arm:search-query"><![CDATA[]]></property>
-										<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
-									</item>
-									<item name="cm:НД" type="lecm-arm:node">
-										<property name="cm:name"><![CDATA[НД]]></property>
-										<property name="lecm-arm:order"><![CDATA[0]]></property>
-										<property name="lecm-arm:search-type"><![CDATA[]]></property>
-										<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-										<property name="lecm-arm:types"><![CDATA[lecm-nd:document]]></property>
-										<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-										<property name="lecm-arm:search-query"><![CDATA[]]></property>
-										<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
-									</item>
-								</items>
-							</item>
 						</items>
 						<assocs>
-							<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/СЭД. Архивариус"/>
-							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/7cca2794-fcc8-4867-ba3e-c62d17755123"/>
-							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/de662da4-308e-4968-91e0-54c0bf7dc1d6"/>
-							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/1c3624d8-5c8b-41bb-a3cd-45a2984133ac"/>
-							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/d2dbb653-2a5e-4613-9b7d-3d9c43e509bb"/>
+							<assoc type="lecm-arm:node-child-rule-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/Номенклатурные дела/Узлы/32a78050-b068-46b0-8390-3339540344f6"/>
+							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/Номенклатурные дела/Узлы/7bfe007d-308c-485a-8e30-2488b8712908"/>
+							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/Номенклатурные дела/Узлы/716868d8-1bcc-4437-b111-867b51c01cbb"/>
+							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/Номенклатурные дела/Узлы/5bb6aeb4-cb99-40cd-b11e-4e911770a6b3"/>
+							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/Номенклатурные дела/Узлы/bf0475a6-52bc-48c4-96b5-dfd4296a1aa0"/>
 						</assocs>
 					</item>
-					<item name="cm:Отчёты" type="lecm-arm:accordion">
-						<property name="cm:name"><![CDATA[Отчёты]]></property>
+				</items>
+				<assocs>
+					<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/СЭД. Архивариус"/>
+				</assocs>
+			</item>
+			<item name="cm:Управление номенклатурой дел" type="lecm-arm:accordion">
+				<property name="cm:name"><![CDATA[Управление номенклатурой дел]]></property>
+				<property name="lecm-arm:order"><![CDATA[1]]></property>
+				<property name="lecm-arm:search-type"><![CDATA[]]></property>
+				<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+				<property name="lecm-arm:types"><![CDATA[]]></property>
+				<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+				<property name="lecm-arm:search-query"><![CDATA[]]></property>
+				<items>
+					<item name="cm:Номенклатура" type="lecm-arm:html-node">
+						<property name="cm:name"><![CDATA[Номенклатура]]></property>
+						<property name="lecm-arm:order"><![CDATA[0]]></property>
+						<property name="lecm-arm:html-url"><![CDATA[page/nomenclature?root=true]]></property>
+						<items>
+							<item name="cm:Узлы" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Узлы]]></property>
+								<property name="lecm-arm:order"><![CDATA[0]]></property>
+								<property name="lecm-arm:html-url"><![CDATA[page/nomenclature]]></property>
+								<items>
+									<item name="cm:1234b73a-7573-4b76-a0eb-da861db670c3" type="lecm-arm:xpath-child-rule">
+										<property name="cm:name"><![CDATA[1234b73a-7573-4b76-a0eb-da861db670c3]]></property>
+										<property name="lecm-arm:xpath-child-rule-root-xpath"><![CDATA[/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел/*]]></property>
+										<property name="lecm-arm:xpath-child-rule-types"><![CDATA[lecm-os:nomenclature-year-section, lecm-os:nomenclature-unit-section]]></property>
+									</item>
+									<item name="cm:8f9893a9-5d7c-49eb-a96e-d3d9ebebbbb3" type="lecm-arm:dictionary-child-rule">
+										<property name="cm:name"><![CDATA[8f9893a9-5d7c-49eb-a96e-d3d9ebebbbb3]]></property>
+										<assocs>
+											<assoc type="lecm-arm:child-rule-dictionary-assoc" path="/Business platform/LECM/Сервис Справочники/Номенклатура дел"/>
+										</assocs>
+									</item>
+									<item name="cm:95b938ee-b62b-463f-9108-5442e30e571c" type="lecm-arm:xpath-child-rule">
+										<property name="cm:name"><![CDATA[95b938ee-b62b-463f-9108-5442e30e571c]]></property>
+										<property name="lecm-arm:xpath-child-rule-root-xpath"><![CDATA[/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел/*]]></property>
+										<property name="lecm-arm:xpath-child-rule-types"><![CDATA[]]></property>
+									</item>
+									<item name="cm:1bdeb918-ba25-42c7-af93-2a2eca024985" type="lecm-arm:xpath-child-rule">
+										<property name="cm:name"><![CDATA[1bdeb918-ba25-42c7-af93-2a2eca024985]]></property>
+										<property name="lecm-arm:xpath-child-rule-root-xpath"><![CDATA[/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел/*]]></property>
+										<property name="lecm-arm:xpath-child-rule-types"><![CDATA[lecm-os:nomenclature-year-section, lecm-os:nomenclature-unit-section]]></property>
+										<property name="lecm-arm:xpath-child-rule-filter"><![CDATA[{{FILTER_YEARS_BY_ORG({allowAdmin: true})}}]]></property>
+									</item>
+								</items>
+								<assocs>
+									<assoc type="lecm-arm:node-child-rule-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/Управление номенклатурой дел/Номенклатура/Узлы/1bdeb918-ba25-42c7-af93-2a2eca024985"/>
+								</assocs>
+							</item>
+						</items>
+					</item>
+				</items>
+				<assocs>
+					<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/СЭД. Архивариус"/>
+				</assocs>
+			</item>
+			<item name="cm:На указание дела" type="lecm-arm:accordion">
+				<property name="cm:name"><![CDATA[На указание дела]]></property>
+				<property name="lecm-arm:order"><![CDATA[0]]></property>
+				<property name="lecm-arm:search-type"><![CDATA[]]></property>
+				<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+				<property name="lecm-arm:types"><![CDATA[lecm-nd:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document]]></property>
+				<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+				<property name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\-aspects\:is\-final:true AND NOT ASPECT:"lecm-document-aspects:dont-move-to-archive-folder"]]></property>
+				<items>
+					<item name="cm:bdd25dd3-ca35-4183-8a0c-b1b562a55ab5" type="lecm-arm:field">
+						<property name="lecm-arm:field-title"><![CDATA[Тип]]></property>
+						<property name="cm:name"><![CDATA[7cca2794-fcc8-4867-ba3e-c62d17755123]]></property>
+						<property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-type]]></property>
+					</item>
+					<item name="cm:5c13641c-f45a-4fcf-ac91-620f273447fe" type="lecm-arm:field">
+						<property name="lecm-arm:field-title"><![CDATA[Содержание]]></property>
+						<property name="cm:name"><![CDATA[de662da4-308e-4968-91e0-54c0bf7dc1d6]]></property>
+						<property name="lecm-arm:field-name"><![CDATA[lecm-eds-document:summaryContent]]></property>
+						<property name="lecm-arm:field-format-string"><![CDATA[<ignoreHtml>{lecm-eds-document:summaryContent}]]></property>
+					</item>
+					<item name="cm:c391d4db-39b2-47da-91b6-51cae04389e5" type="lecm-arm:field">
+						<property name="lecm-arm:field-title"><![CDATA[Дата регистрации]]></property>
+						<property name="cm:name"><![CDATA[1c3624d8-5c8b-41bb-a3cd-45a2984133ac]]></property>
+						<property name="lecm-arm:field-name"><![CDATA[lecm-document-aspects:reg-data-date]]></property>
+					</item>
+					<item name="cm:b1ce383d-2c0d-4e14-aaa3-2da4b7c0fb8a" type="lecm-arm:field">
+						<property name="lecm-arm:field-title"><![CDATA[Регистрационный номер]]></property>
+						<property name="cm:name"><![CDATA[d2dbb653-2a5e-4613-9b7d-3d9c43e509bb]]></property>
+						<property name="lecm-arm:field-name"><![CDATA[lecm-document-aspects:reg-data-number]]></property>
+					</item>
+					<item name="cm:Все" type="lecm-arm:node">
+						<property name="cm:name"><![CDATA[Все]]></property>
 						<property name="lecm-arm:order"><![CDATA[0]]></property>
 						<property name="lecm-arm:search-type"><![CDATA[]]></property>
 						<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
 						<property name="lecm-arm:types"><![CDATA[]]></property>
 						<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 						<property name="lecm-arm:search-query"><![CDATA[]]></property>
+						<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
 						<items>
-							<item name="cm:Отчёты" type="lecm-arm:reports-node">
-								<property name="cm:name"><![CDATA[Отчёты]]></property>
+							<item name="cm:Входящие" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[Входящие]]></property>
 								<property name="lecm-arm:order"><![CDATA[0]]></property>
-								<property name="lecm-arm:reportCodes"><![CDATA[destroy-act,year-nomenclature,volumes-card,case-inventory]]></property>
-								<property name="lecm-arm:types"><![CDATA[]]></property>
+								<property name="lecm-arm:search-type"><![CDATA[]]></property>
+								<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+								<property name="lecm-arm:types"><![CDATA[lecm-incoming:document]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+								<property name="lecm-arm:search-query"><![CDATA[]]></property>
+								<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+							</item>
+							<item name="cm:ОРД" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[ОРД]]></property>
+								<property name="lecm-arm:order"><![CDATA[0]]></property>
+								<property name="lecm-arm:search-type"><![CDATA[]]></property>
+								<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+								<property name="lecm-arm:types"><![CDATA[lecm-ord:document]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+								<property name="lecm-arm:search-query"><![CDATA[]]></property>
+								<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+							</item>
+							<item name="cm:Исходящие" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[Исходящие]]></property>
+								<property name="lecm-arm:order"><![CDATA[0]]></property>
+								<property name="lecm-arm:search-type"><![CDATA[]]></property>
+								<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+								<property name="lecm-arm:types"><![CDATA[lecm-outgoing:document]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+								<property name="lecm-arm:search-query"><![CDATA[]]></property>
+								<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+							</item>
+							<item name="cm:Внутренние" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[Внутренние]]></property>
+								<property name="lecm-arm:order"><![CDATA[0]]></property>
+								<property name="lecm-arm:search-type"><![CDATA[]]></property>
+								<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+								<property name="lecm-arm:types"><![CDATA[lecm-internal:document]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+								<property name="lecm-arm:search-query"><![CDATA[]]></property>
+								<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+							</item>
+							<item name="cm:НД" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[НД]]></property>
+								<property name="lecm-arm:order"><![CDATA[0]]></property>
+								<property name="lecm-arm:search-type"><![CDATA[]]></property>
+								<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+								<property name="lecm-arm:types"><![CDATA[lecm-nd:document]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+								<property name="lecm-arm:search-query"><![CDATA[]]></property>
+								<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
 							</item>
 						</items>
-						<assocs>
-							<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/СЭД. Архивариус"/>
-						</assocs>
 					</item>
 				</items>
+				<assocs>
+					<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/СЭД. Архивариус"/>
+					<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/7cca2794-fcc8-4867-ba3e-c62d17755123"/>
+					<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/de662da4-308e-4968-91e0-54c0bf7dc1d6"/>
+					<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/1c3624d8-5c8b-41bb-a3cd-45a2984133ac"/>
+					<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/d2dbb653-2a5e-4613-9b7d-3d9c43e509bb"/>
+				</assocs>
+			</item>
+			<item name="cm:Отчёты" type="lecm-arm:accordion">
+				<property name="cm:name"><![CDATA[Отчёты]]></property>
+				<property name="lecm-arm:order"><![CDATA[0]]></property>
+				<property name="lecm-arm:search-type"><![CDATA[]]></property>
+				<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+				<property name="lecm-arm:types"><![CDATA[]]></property>
+				<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+				<property name="lecm-arm:search-query"><![CDATA[]]></property>
+				<items>
+					<item name="cm:Отчёты" type="lecm-arm:reports-node">
+						<property name="cm:name"><![CDATA[Отчёты]]></property>
+						<property name="lecm-arm:order"><![CDATA[0]]></property>
+						<property name="lecm-arm:reportCodes"><![CDATA[destroy-act,year-nomenclature,volumes-card,case-inventory]]></property>
+						<property name="lecm-arm:types"><![CDATA[]]></property>
+					</item>
+				</items>
+				<assocs>
+					<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/СЭД. Архивариус"/>
+				</assocs>
 			</item>
 		</items>
 	</item>

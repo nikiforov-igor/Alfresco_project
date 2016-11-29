@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<items updateMode="CreateOrUpdate">
+<items>
 	<item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary">
 		<property name="cm:name">Настройки АРМ</property>
 		<property name="lecm-dic:attributeForShow">cm:name</property>

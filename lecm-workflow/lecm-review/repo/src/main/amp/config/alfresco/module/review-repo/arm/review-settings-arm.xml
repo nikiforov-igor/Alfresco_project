@@ -1,53 +1,49 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-	<item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary">
-		<items>
-		    <item name="cm:Администрирование" type="lecm-arm:arm">
-		        <property name="cm:name"><![CDATA[Администрирование]]></property>
-		        <property name="lecm-arm:code"><![CDATA[ADMIN]]></property>
-		        <items>
-		            <item name="cm:Другие настройки" type="lecm-arm:accordion">
-		                <property name="cm:name"><![CDATA[Другие настройки]]></property>
-		                <property name="lecm-arm:order"><![CDATA[200]]></property>
-		                <property name="lecm-arm:search-type"><![CDATA[]]></property>
-		                <property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
-		                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-		                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+    <item name="cm:Администрирование" type="lecm-arm:arm">
+        <property name="cm:name"><![CDATA[Администрирование]]></property>
+        <property name="lecm-arm:code"><![CDATA[ADMIN]]></property>
+        <items>
+            <item name="cm:Другие настройки" type="lecm-arm:accordion">
+                <property name="cm:name"><![CDATA[Другие настройки]]></property>
+                <property name="lecm-arm:order"><![CDATA[200]]></property>
+                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                <property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
+                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+				<items>
+					<item name="cm:Настройки СЭД" type="lecm-arm:html-node">
+				        <property name="cm:name"><![CDATA[Настройки СЭД]]></property>
+				        <property name="lecm-arm:order"><![CDATA[60]]></property>
+				        <property name="lecm-arm:html-url"><![CDATA[page/lecm/arm/blank?title=Настройки СЭД&description=Общие настройки СЭД и настройки маршрутов]]></property>
 						<items>
-							<item name="cm:Настройки СЭД" type="lecm-arm:html-node">
-						        <property name="cm:name"><![CDATA[Настройки СЭД]]></property>
-						        <property name="lecm-arm:order"><![CDATA[60]]></property>
-						        <property name="lecm-arm:html-url"><![CDATA[page/lecm/arm/blank?title=Настройки СЭД&description=Общие настройки СЭД и настройки маршрутов]]></property>
+							<item name="cm:Настройки ознакомления" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Настройки ознакомления]]></property>
+								<property name="lecm-arm:order"><![CDATA[30]]></property>
+								<property name="lecm-arm:html-url"><![CDATA[page/review-settings]]></property>
 								<items>
-									<item name="cm:Настройки ознакомления" type="lecm-arm:html-node">
-										<property name="cm:name"><![CDATA[Настройки ознакомления]]></property>
-										<property name="lecm-arm:order"><![CDATA[30]]></property>
-										<property name="lecm-arm:html-url"><![CDATA[page/review-settings]]></property>
+									<item name="cm:Списки ознакомления" type="lecm-arm:node">
+										<property name="cm:name"><![CDATA[Списки ознакомления]]></property>
+										<property name="lecm-arm:order"><![CDATA[20]]></property>
+										<property name="lecm-arm:search-type"><![CDATA[]]></property>
+										<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+										<property name="lecm-arm:types"><![CDATA[]]></property>
+										<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+										<property name="lecm-arm:search-query"><![CDATA[]]></property>
+										<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
 										<items>
-											<item name="cm:Списки ознакомления" type="lecm-arm:node">
-												<property name="cm:name"><![CDATA[Списки ознакомления]]></property>
-												<property name="lecm-arm:order"><![CDATA[20]]></property>
-												<property name="lecm-arm:search-type"><![CDATA[]]></property>
-												<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-												<property name="lecm-arm:types"><![CDATA[]]></property>
-												<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-												<property name="lecm-arm:search-query"><![CDATA[]]></property>
-												<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
-												<items>
-													<item name="cm:1845e402-f1f7-4074-b7e6-05133ef07aef"
-														  type="lecm-arm:query-child-rule">
-														<property name="cm:name">
-															<![CDATA[1845e402-f1f7-4074-b7e6-05133ef07aef]]></property>
-														<property name="lecm-arm:list-query-child-rule">
-															<![CDATA[TYPE: "lecm-dic:dictionary" AND PATH:"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/*" AND @lecm\-dic\:type:("lecm-review-list:review-list-item")]]></property>
-													</item>
-												</items>
-												<assocs>
-													<assoc type="lecm-arm:node-child-rule-assoc"
-														   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки/Настройки СЭД/Настройки ознакомления/Списки ознакомления/1845e402-f1f7-4074-b7e6-05133ef07aef"/>
-												</assocs>
+											<item name="cm:1845e402-f1f7-4074-b7e6-05133ef07aef"
+												  type="lecm-arm:query-child-rule">
+												<property name="cm:name">
+													<![CDATA[1845e402-f1f7-4074-b7e6-05133ef07aef]]></property>
+												<property name="lecm-arm:list-query-child-rule">
+													<![CDATA[TYPE: "lecm-dic:dictionary" AND PATH:"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/*" AND @lecm\-dic\:type:("lecm-review-list:review-list-item")]]></property>
 											</item>
 										</items>
+										<assocs>
+											<assoc type="lecm-arm:node-child-rule-assoc"
+												   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки/Настройки СЭД/Настройки ознакомления/Списки ознакомления/1845e402-f1f7-4074-b7e6-05133ef07aef"/>
+										</assocs>
 									</item>
 								</items>
 							</item>
