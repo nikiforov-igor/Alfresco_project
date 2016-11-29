@@ -50,6 +50,11 @@
 <#assign isComplex = items?size gt 1>
 <#assign showAutocomplete = !disabled && (!params.showAutocomplete?? || 'true' == params.showAutocomplete?lower_case)>
 
+<#assign sortSelected = false>
+<#if params.sortSelected?? && params.sortSelected == "true">
+	<#assign  sortSelected = true>
+</#if>
+
 <#if 'view' == form.mode>
 	<#assign value>
 		<input type='hidden' id='${fieldHtmlId}' name='${field.name}' value='${fieldValue?html}'>
@@ -84,6 +89,7 @@
 				</#if>
                 multipleSelectMode: ${endpointMany?string},
                 showAssocViewForm: ${showAssocViewForm?string},
+                sortSelected: ${sortSelected?string},
 				itemsOptions: [
 					<#list items as i>
 						<#assign itemKey = i?replace(":", "_")>

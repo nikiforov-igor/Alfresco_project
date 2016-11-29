@@ -163,7 +163,10 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		
 		sortByIndex: function (a, b) {
 			return a.index - b.index;
-		}
+		},
 
+		sortByName: function (a, b) {
+			return a.selectedName.localeCompare(b.selectedName);
+		}
 	};
 })();
