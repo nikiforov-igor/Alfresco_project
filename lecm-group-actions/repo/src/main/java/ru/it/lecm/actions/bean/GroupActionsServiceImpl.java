@@ -276,18 +276,4 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
         return result;
     }
 	
-	@Override
-	protected void onBootstrap(ApplicationEvent event) {
-		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-			@Override
-			public NodeRef execute() throws Throwable {
-				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-					@Override
-					public NodeRef doWork() throws Exception {
-						return getServiceRootFolder();
-					}
-				});
-			}
-		});
-	}
 }

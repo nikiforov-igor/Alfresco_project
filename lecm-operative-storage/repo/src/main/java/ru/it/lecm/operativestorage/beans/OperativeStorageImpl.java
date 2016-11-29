@@ -39,6 +39,7 @@ import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  *
@@ -98,27 +99,14 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		this.permissionService = permissionService;
 	}
 	
-	protected void onBootstrap(ApplicationEvent event)
-	{
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-		transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-			@Override
-			public Object execute() throws Throwable {
-				AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-					@Override
-					public Object doWork() throws Exception {
-						if (getSettings() == null) {
-							PropertyMap props = new PropertyMap();
-							props.put(PROP_OPERATIVE_STORAGE_CENRALIZED, true);
-							settingsNode = createNode(getOperativeStorageFolder(), TYPE_OPERATIVE_STORAGE_SETTING, OPERATIVE_STORAGE_GLOBAL_SETTING_NAME, props);
-							return null;
-						}
-						return null;
-					}
-				});
-				return null;
-			}
-		}, false, true);
+	@Override
+	public void initService() {
+		super.initService();
+		if (getSettings() == null) {
+			PropertyMap props = new PropertyMap();
+			props.put(PROP_OPERATIVE_STORAGE_CENRALIZED, true);
+			settingsNode = createNode(getOperativeStorageFolder(), TYPE_OPERATIVE_STORAGE_SETTING, OPERATIVE_STORAGE_GLOBAL_SETTING_NAME, props);				
+		}
 	}
 
 	@Override

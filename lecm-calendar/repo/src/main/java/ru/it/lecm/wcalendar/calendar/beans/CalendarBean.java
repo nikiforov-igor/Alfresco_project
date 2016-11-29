@@ -97,34 +97,18 @@ public class CalendarBean extends AbstractCommonWCalendarBean implements ICalend
 	}
 	
 	@Override
-	protected void onBootstrap(ApplicationEvent event)
+	public void initService()
 	{
-		// Создание контейнера (если не существует).
-		// Обертка для эскалации прав.
-		AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
-			@Override
-			public Object doWork() throws Exception {
-				// Транзакция.
-				transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-					@Override
-					public Object execute() throws Throwable {
-						// Создание контейнера (если не существует).
-						if(getWCalendarContainer() == null){
-							createWCalendarContainer();
-						}
-						// Собственно генерация
-						int yearsCreated = generateYearsList(yearsNumberToCreate);
-						logger.info(String.format("Created %d calendars", yearsCreated));
-						return "ok";
-					}
-				}, false, true);
-				return null;
-			}
-		};
-
+		// TODO: Надо привести сервис календарей к обычной системе папок и избавиться это этой странной логики
 		// Генерация календарей на yearsAmountToCreate вперед.
 		if (yearsNumberToCreate > 0) {
-			AuthenticationUtil.runAsSystem(raw);
+			// Создание контейнера (если не существует).
+			if(getWCalendarContainer() == null){
+				createWCalendarContainer();
+			}
+			// Собственно генерация
+			int yearsCreated = generateYearsList(yearsNumberToCreate);
+			logger.info(String.format("Created %d calendars", yearsCreated));
 		}
 	}
 

@@ -266,19 +266,4 @@ public class ControlsEditorBeanImpl extends BaseBean {
 		return true;
 	}
 	
-	@Override
-	protected void onBootstrap(ApplicationEvent event) {
-		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-			@Override
-			public Void execute() throws Throwable {
-				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-					@Override
-					public Void doWork() throws Exception {
-						getServiceRootFolder();
-						return null;
-					}
-				});
-			}
-		});
-	}
 }

@@ -886,21 +886,6 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		}
 	}
 
-	@Override
-	protected void onBootstrap(ApplicationEvent event) {
-		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-			@Override
-			public NodeRef execute() throws Throwable {
-				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-					@Override
-					public NodeRef doWork() throws Exception {
-						return getServiceRootFolder();
-					}
-				});
-			}
-		});
-	}
-
 	private class EventsTransactionListener implements TransactionListener {
 
 		@Override

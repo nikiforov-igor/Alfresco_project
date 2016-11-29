@@ -24,11 +24,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 
 /**
  * User: AIvkin Date: 27.12.12 Time: 15:12
  */
-public abstract class BaseBean extends AbstractLifecycleBean implements InitializingBean {
+public abstract class BaseBean extends AbstractLifecycleBean implements InitializingBean, LecmService {
 
     public static final String DICTIONARY_NAMESPACE = "http://www.it.ru/lecm/dictionary/1.0";
     public static final String LINKS_NAMESPACE = "http://www.it.ru/logicECM/links/1.0";
@@ -68,7 +69,12 @@ public abstract class BaseBean extends AbstractLifecycleBean implements Initiali
     protected ServiceRegistry serviceRegistry;
     protected AuthenticationService authService;
     protected LecmTransactionHelper lecmTransactionHelper;
+	protected LecmServicesRegistry lecmServicesRegistry;
 
+	public void setLecmServicesRegistry(LecmServicesRegistry lecmServicesRegistry) {
+		this.lecmServicesRegistry = lecmServicesRegistry;
+	}
+	
     public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
         this.lecmTransactionHelper = lecmTransactionHelper;
     }
@@ -117,6 +123,8 @@ public abstract class BaseBean extends AbstractLifecycleBean implements Initiali
     
     @Override
     public void afterPropertiesSet() throws Exception {
+		lecmServicesRegistry.register(this);
+		
     	if (folders != null) {
 	    	for (Entry<String, String> entry : folders.entrySet()) {
 				String relativePath = entry.getValue();
@@ -490,5 +498,50 @@ public abstract class BaseBean extends AbstractLifecycleBean implements Initiali
 	protected QName generateRandomQName() {
 		return QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate());
 	}
+	
+	// "Свой" метод для создания сервисных папок. 
+	// Цель - избавиться от цепочки транзакций и ненужных вызовов
+	// TODO: Попытаться как-то отрефакторить метод, ибо страшный получился
+	private void createServiceFolders() {
+		ServiceFolderStructureHelper serviceFolderStructureHelper = (ServiceFolderStructureHelper) repositoryStructureHelper;
+		for (Entry<String, ServiceFolder> serviceFolder : serviceFolders.entrySet()) {
+			ServiceFolder folder = serviceFolder.getValue();
+			String relativePath = folder.getRelativePath();
+			String[] folders = StringUtils.split(relativePath, '/');
+			NodeRef parent = repositoryStructureHelper.getHomeRef();
+			
+			for (String repoFolder : folders) {
+				NodeRef pathDir = nodeService.getChildByName(parent, ContentModel.ASSOC_CONTAINS, repoFolder);
+				if (pathDir == null) {
+					if (StringUtils.isEmpty(repoFolder)) {
+						logger.error("Folder name can't be empty. Folder won't be created.");
+						break;
+					} else {
+						QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, repoFolder);
+						Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+						properties.put(ContentModel.PROP_NAME, repoFolder);
+						ChildAssociationRef childAssoc;
+						NodeRef childRef;
+						try {
+							childAssoc = nodeService.createNode(parent, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
+							childRef = childAssoc.getChildRef();
+						} catch (DuplicateChildNodeNameException e) {
+							//есть вероятность, что папка уже существует или создана другим потоком/транзакцией
+							childRef = nodeService.getChildByName(parent, ContentModel.ASSOC_CONTAINS, repoFolder);
+							logger.debug("!!!!!!!!!!! Получил директорию без создания " + folder, e);
+						}
+						pathDir = childRef;
+					}
+				}
+				
+				parent = pathDir;
+			}
+		}
+	}
 
+	@Override
+	public void initService() {
+		createServiceFolders();		
+	}
+	
 }

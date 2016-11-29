@@ -18,6 +18,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  *
@@ -67,19 +68,11 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	}
 	
 	@Override
-	protected void onBootstrap(ApplicationEvent event)
-	{
-		//TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
-		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-			@Override
-			public Void execute() throws Throwable {
-				if (null == getSettingsNode()) {
-					settingsNode = createSettingsNode();
-				}				
-				
-				return null;
-			}
-		});
+	public void initService() {
+		super.initService();
+		if (null == getSettingsNode()) {
+			settingsNode = createSettingsNode();
+		}
 	}
 
 	private void updatePotentialRolesMap(String businessRoleId, String organizationElementStrRef, NodeRef potentialRoleRef) {

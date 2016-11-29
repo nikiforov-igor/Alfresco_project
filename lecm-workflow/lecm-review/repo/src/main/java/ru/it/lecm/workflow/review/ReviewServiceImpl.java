@@ -23,6 +23,8 @@ import ru.it.lecm.workflow.review.api.ReviewService;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -74,28 +76,16 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 	}
 	
 	@Override
-	protected void onBootstrap(ApplicationEvent event)
-	{
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-		transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-			@Override
-			public NodeRef execute() throws Throwable {
-				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-					@Override
-					public NodeRef doWork() throws Exception {
-						if (null == getSettings()) {
-							PropertyMap props = new PropertyMap();
-							if (defaultReviewTerm != null) {
-								props.put(PROP_REVIEW_GLOBAL_SETTINGS_DEFAULT_REVIEW_TERM, defaultReviewTerm);
-								props.put(PROP_REVIEW_GLOBAL_SETTINGS_TERM_TO_NOTIFY_BEFORE_DEADLINE, defaultTermToNotify);
-							}
-							return createNode(getServiceRootFolder(), TYPE_REVIEW_GLOBAL_SETTINGS, REVIEW_GLOBAL_SETTINGS_NAME, props);
-						}
-						return null;
-					}
-				});
+	public void initService() {
+		super.initService();
+		if (null == getSettings()) {
+			PropertyMap props = new PropertyMap();
+			if (defaultReviewTerm != null) {
+				props.put(PROP_REVIEW_GLOBAL_SETTINGS_DEFAULT_REVIEW_TERM, defaultReviewTerm);
+				props.put(PROP_REVIEW_GLOBAL_SETTINGS_TERM_TO_NOTIFY_BEFORE_DEADLINE, defaultTermToNotify);
 			}
-		}, false, true);
+			createNode(getServiceRootFolder(), TYPE_REVIEW_GLOBAL_SETTINGS, REVIEW_GLOBAL_SETTINGS_NAME, props);
+		}
 	}
 
 	@Override

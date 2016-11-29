@@ -139,93 +139,82 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
     }
 	
 	@Override
-	protected void onBootstrap(ApplicationEvent event)
-	{
-		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-			@Override
-			public NodeRef doWork() throws Exception {
-				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-					@Override
-					public NodeRef execute() throws Throwable {
-						final String rootName = ORGANIZATION_ROOT_NAME;
-						final NodeRef rootDir = getServiceRootFolder();
-						
-						/**
-						 * Структура директорий Организация ---Структура
-						 * ---Сотрудники ---Персональные данные
-						 */
-						NodeRef organizationRef = nodeService.getChildByName(rootDir, ContentModel.ASSOC_CONTAINS, rootName);
+	public void initService() {
+		super.initService();
+		final String rootName = ORGANIZATION_ROOT_NAME;
+		final NodeRef rootDir = getServiceRootFolder();
 
-						final QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-						if (organizationRef == null) { // create ROOT
-							final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);
-							final ChildAssociationRef associationRef = nodeService.createNode(rootDir, assocTypeQName, assocQName, TYPE_ORGANIZATION, getNamedProps(rootName));
-							organizationRef = associationRef.getChildRef();
-							logger.info(String.format("OU Root '%s' created as %s", rootName, organizationRef));
-						}
-						
-						organizationRootRef = organizationRef;
+		/**
+		 * Структура директорий Организация ---Структура
+		 * ---Сотрудники ---Персональные данные
+		 */
+		NodeRef organizationRef = nodeService.getChildByName(rootDir, ContentModel.ASSOC_CONTAINS, rootName);
 
-						// Структура
-						NodeRef structureRef = nodeService.getChildByName(organizationRef, ContentModel.ASSOC_CONTAINS, STRUCTURE_ROOT_NAME);
-						if (structureRef == null) {
-							final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, STRUCTURE_ROOT_NAME);
-							final QName nodeTypeQName = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, TYPE_DIRECTORY_STRUCTURE);
-							final ChildAssociationRef ref = nodeService.createNode(organizationRef, assocTypeQName, assocQName, nodeTypeQName, getNamedProps(STRUCTURE_ROOT_NAME));
-							structureRef = ref.getChildRef();
-							logger.info(String.format("OU Structure '%s' created as %s", STRUCTURE_ROOT_NAME, structureRef));
-						}
-						//Холдинг
-						if (nodeService.getChildByName(structureRef, ContentModel.ASSOC_CONTAINS, HOLDING_ROOT_NAME) == null) {
-							final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, HOLDING_ROOT_NAME);
-							final QName nodeTypeQName = TYPE_ORGANIZATION_UNIT;
-							Map<QName, Serializable> props = getNamedProps(HOLDING_ROOT_NAME);
-							props.put(PROP_ORG_ELEMENT_FULL_NAME, HOLDING_ROOT_NAME);
-							props.put(PROP_ORG_ELEMENT_SHORT_NAME, HOLDING_ROOT_NAME);
-							props.put(PROP_UNIT_CODE, HOLDING_ROOT_NAME);
-							props.put(PROP_UNIT_TYPE, "SEGREGATED");
-							final ChildAssociationRef ref = nodeService.createNode(structureRef, assocTypeQName, assocQName, nodeTypeQName, props);
-							logger.info(String.format("OU Holding '%s' created as %s", HOLDING_ROOT_NAME, ref.getChildRef()));
-						}
+		final QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+		if (organizationRef == null) { // create ROOT
+			final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);
+			final ChildAssociationRef associationRef = nodeService.createNode(rootDir, assocTypeQName, assocQName, TYPE_ORGANIZATION, getNamedProps(rootName));
+			organizationRef = associationRef.getChildRef();
+			logger.info(String.format("OU Root '%s' created as %s", rootName, organizationRef));
+		}
 
-						// Сотрудники
-						if (nodeService.getChildByName(organizationRef, ContentModel.ASSOC_CONTAINS, EMPLOYEES_ROOT_NAME) == null) {
-							final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, EMPLOYEES_ROOT_NAME);
-							final QName nodeTypeQName = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, TYPE_DIRECTORY_EMPLOYEES);
-							final ChildAssociationRef ref = nodeService.createNode(organizationRef, assocTypeQName, assocQName, nodeTypeQName, getNamedProps(EMPLOYEES_ROOT_NAME));
-							logger.info(String.format("OU Employees '%s' created as %s", EMPLOYEES_ROOT_NAME, ref.getChildRef()));
-						}
+		organizationRootRef = organizationRef;
 
-						// Персональные данные
-						if (nodeService.getChildByName(organizationRef, ContentModel.ASSOC_CONTAINS, PERSONAL_DATA_ROOT_NAME) == null) {
-							final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, PERSONAL_DATA_ROOT_NAME);
-							final QName nodeTypeQName = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, TYPE_DIRECTORY_PERSONAL_DATA);
-							final ChildAssociationRef ref = nodeService.createNode(organizationRef, assocTypeQName, assocQName, nodeTypeQName, getNamedProps(PERSONAL_DATA_ROOT_NAME));
-							logger.info(String.format("OU Personal Data '%s' created as %s", PERSONAL_DATA_ROOT_NAME, ref.getChildRef()));
-						}
+		// Структура
+		NodeRef structureRef = nodeService.getChildByName(organizationRef, ContentModel.ASSOC_CONTAINS, STRUCTURE_ROOT_NAME);
+		if (structureRef == null) {
+			final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, STRUCTURE_ROOT_NAME);
+			final QName nodeTypeQName = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, TYPE_DIRECTORY_STRUCTURE);
+			final ChildAssociationRef ref = nodeService.createNode(organizationRef, assocTypeQName, assocQName, nodeTypeQName, getNamedProps(STRUCTURE_ROOT_NAME));
+			structureRef = ref.getChildRef();
+			logger.info(String.format("OU Structure '%s' created as %s", STRUCTURE_ROOT_NAME, structureRef));
+		}
+		//Холдинг
+		if (nodeService.getChildByName(structureRef, ContentModel.ASSOC_CONTAINS, HOLDING_ROOT_NAME) == null) {
+			final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, HOLDING_ROOT_NAME);
+			final QName nodeTypeQName = TYPE_ORGANIZATION_UNIT;
+			Map<QName, Serializable> props = getNamedProps(HOLDING_ROOT_NAME);
+			props.put(PROP_ORG_ELEMENT_FULL_NAME, HOLDING_ROOT_NAME);
+			props.put(PROP_ORG_ELEMENT_SHORT_NAME, HOLDING_ROOT_NAME);
+			props.put(PROP_UNIT_CODE, HOLDING_ROOT_NAME);
+			props.put(PROP_UNIT_TYPE, "SEGREGATED");
+			final ChildAssociationRef ref = nodeService.createNode(structureRef, assocTypeQName, assocQName, nodeTypeQName, props);
+			logger.info(String.format("OU Holding '%s' created as %s", HOLDING_ROOT_NAME, ref.getChildRef()));
+		}
 
-						//Основная папка с документами
-						NodeRef companyHome = repositoryHelper.getCompanyHome();
-						if (nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, DOCUMENT_ROOT_NAME) == null) {
-							final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, DOCUMENT_ROOT_NAME);
-							final ChildAssociationRef ref = nodeService.createNode(companyHome, assocTypeQName, assocQName, ContentModel.TYPE_FOLDER, getNamedProps(DOCUMENT_ROOT_NAME));
-							serviceRegistry.getPermissionService().setInheritParentPermissions(ref.getChildRef(), false);
-							serviceRegistry.getPermissionService().setPermission(ref.getChildRef(), PermissionService.ALL_AUTHORITIES, PermissionService.CONSUMER, true);
-							logger.info(String.format("OU Document Data '%s' created as %s", DOCUMENT_ROOT_NAME, ref.getChildRef()));
-						}
+		// Сотрудники
+		if (nodeService.getChildByName(organizationRef, ContentModel.ASSOC_CONTAINS, EMPLOYEES_ROOT_NAME) == null) {
+			final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, EMPLOYEES_ROOT_NAME);
+			final QName nodeTypeQName = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, TYPE_DIRECTORY_EMPLOYEES);
+			final ChildAssociationRef ref = nodeService.createNode(organizationRef, assocTypeQName, assocQName, nodeTypeQName, getNamedProps(EMPLOYEES_ROOT_NAME));
+			logger.info(String.format("OU Employees '%s' created as %s", EMPLOYEES_ROOT_NAME, ref.getChildRef()));
+		}
 
-						return organizationRef;
-					}
+		// Персональные данные
+		if (nodeService.getChildByName(organizationRef, ContentModel.ASSOC_CONTAINS, PERSONAL_DATA_ROOT_NAME) == null) {
+			final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, PERSONAL_DATA_ROOT_NAME);
+			final QName nodeTypeQName = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, TYPE_DIRECTORY_PERSONAL_DATA);
+			final ChildAssociationRef ref = nodeService.createNode(organizationRef, assocTypeQName, assocQName, nodeTypeQName, getNamedProps(PERSONAL_DATA_ROOT_NAME));
+			logger.info(String.format("OU Personal Data '%s' created as %s", PERSONAL_DATA_ROOT_NAME, ref.getChildRef()));
+		}
 
-					private Map<QName, Serializable> getNamedProps(String name) {
-						final Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1); //optional map of properties to keyed by their qualified names
-						properties.put(ContentModel.PROP_NAME, name);
-						return properties;
-					}
-				},false,true);
-			}
-		};
-		organizationRootRef = AuthenticationUtil.runAsSystem(raw);
+		//Основная папка с документами
+		NodeRef companyHome = repositoryHelper.getCompanyHome();
+		if (nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, DOCUMENT_ROOT_NAME) == null) {
+			final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, DOCUMENT_ROOT_NAME);
+			final ChildAssociationRef ref = nodeService.createNode(companyHome, assocTypeQName, assocQName, ContentModel.TYPE_FOLDER, getNamedProps(DOCUMENT_ROOT_NAME));
+			serviceRegistry.getPermissionService().setInheritParentPermissions(ref.getChildRef(), false);
+			serviceRegistry.getPermissionService().setPermission(ref.getChildRef(), PermissionService.ALL_AUTHORITIES, PermissionService.CONSUMER, true);
+			logger.info(String.format("OU Document Data '%s' created as %s", DOCUMENT_ROOT_NAME, ref.getChildRef()));
+		}
+		
+		organizationRootRef = organizationRef;
+	}
+	
+	private Map<QName, Serializable> getNamedProps(String name) {
+		final Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1); //optional map of properties to keyed by their qualified names
+		properties.put(ContentModel.PROP_NAME, name);
+		return properties;
 	}
 
 	@Override

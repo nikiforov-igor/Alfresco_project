@@ -28,6 +28,8 @@ import ru.it.lecm.workflow.approval.api.ApprovalService;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -63,10 +65,14 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
         this.contentService = contentService;
     }
     
-    protected void onBootstrap(ApplicationEvent event)
-	{
-    	RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-		transactionHelper.doInTransaction(this, false, true);
+    @Override
+	public void initService() {
+		super.initService();
+		// TODO: Нужно либо добавлять throws везде, либо разворачивать логику
+		try {
+			doWork();
+		} catch (Exception ex) {
+		}
 	}
 
 	@Override
