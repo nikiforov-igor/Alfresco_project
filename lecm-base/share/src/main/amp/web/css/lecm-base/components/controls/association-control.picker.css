@@ -10,6 +10,11 @@
 	margin: 0 0 10px 0;
 }
 
+.association-picker .with-ex-search .button-select,
+.association-picker .with-ex-search .button-select button{
+	width: 100%
+}
+
 .association-picker .button-select button {
 	text-align: left;
 	width: 250px;
@@ -66,21 +71,48 @@
 }
 
 .association-picker .panel-right .datatable .add-td,
-.association-picker .panel-datatable .datatable .add-td {
+.association-picker .panel-datatable .datatable .add-td,
+.association-picker .panel-right .datatable .edit-td,
+.association-picker .panel-datatable .datatable .edit-td {
 	width: 1px;
 }
 
 .association-picker .panel-right .datatable .add-td .yui-dt-liner,
-.association-picker .panel-datatable .datatable .add-td .yui-dt-liner {
+.association-picker .panel-datatable .datatable .add-td .yui-dt-liner,
+.association-picker .panel-right .datatable .edit-td .yui-dt-liner,
+.association-picker .panel-datatable .datatable .edit-td .yui-dt-liner {
 	text-align: center;
+	padding: 4px 6px;
 }
 
 .association-picker .panel-right .datatable .add-td .yui-dt-liner a,
-.association-picker .panel-datatable .datatable .add-td .yui-dt-liner a {
+.association-picker .panel-datatable .datatable .add-td .yui-dt-liner a,
+.association-picker .panel-right .datatable .edit-td .yui-dt-liner a,
+.association-picker .panel-datatable .datatable .edit-td .yui-dt-liner a{
 	color: #565553;
 	text-decoration: none;
 }
 
 .association-picker .currentValueDisplay {
 	margin-top: 3px;
+}
+
+.association-picker .bd .control-ex-search div.form-buttons,
+.association-picker .control .label-div{
+	display: none;
+}
+
+.association-picker .bd .control-ex-search div.form-fields {
+	padding: 5px 0 0;
+}
+
+.association-picker .bd .control-ex-search .buttons-div {
+	float: right;
+}
+
+.association-picker .with-ex-search .control .label-div,
+.association-picker .bd .control-ex-search .control .label-div{
+	display: block;
+	width: 100px;
+	text-align: right;
 }

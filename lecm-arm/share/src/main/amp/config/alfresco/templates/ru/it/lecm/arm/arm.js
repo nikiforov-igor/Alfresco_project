@@ -6,12 +6,13 @@ if (page.url.args["code"] != null && page.url.args["code"] != "") {
         }
     }
 
-    var jsonStr = remote.connect("alfresco").get("/lecm/arm/checkShowCalendar?code=" + encodeURI(page.url.args["code"]));
+    var jsonStr = remote.connect("alfresco").get("/lecm/arm/get?code=" + encodeURI(page.url.args["code"]));
     var obj = {};
     if (jsonStr.status == 200) {
         obj = eval("(" + jsonStr + ")");
     }
     model.showCalendar = obj.showCalendar;
+    model.showCreateButton = obj.showCreateButton;
 }
 
 model.currentUser = user.id;

@@ -151,6 +151,14 @@ LogicECM.module = LogicECM.module || {};
 			this.options.itemsOptions.forEach(function (obj) {
 				this.widgets[obj.itemKey] = new LogicECM.module.AssociationComplexControl.Item(this.id + '-picker-' + obj.itemKey, obj.itemKey, obj.options, this.fieldValues, this);
 				this.widgets[obj.itemKey].eventGroup = this.eventGroup;
+
+				//переопределение методов из options
+				if(YAHOO.lang.isFunction(obj.options.getExtSearchQueryFunction)) {
+					this.widgets[obj.itemKey]['_fnGetExtSearchQuery'] = obj.options.getExtSearchQueryFunction;
+				}
+				if(YAHOO.lang.isFunction(obj.options.getArgumentsFromFormFunction)) {
+					this.widgets[obj.itemKey]['_fnGetArgumentsFromForm'] = obj.options.getArgumentsFromFormFunction;
+				}
 			}, this);
 			for (i in this.widgets) {
 				this.widgets[i].setMessages(messages);

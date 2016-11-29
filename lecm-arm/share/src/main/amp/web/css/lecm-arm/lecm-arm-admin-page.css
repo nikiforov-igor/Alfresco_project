@@ -1,3 +1,4 @@
+/* Страница Администрирование */
 .admin-page #doc3 {
     margin: auto;
 }
@@ -26,4 +27,7 @@
 }
 .yui-skin-lecmTheme .admin-page .form-container .form-buttons{
     padding-top: 1em;
+}
+.admin-page #arm-documents-toolbar{
+    display: none;
 }

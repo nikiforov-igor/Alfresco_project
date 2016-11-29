@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Обновить поля для поиска дубликатов для контрагентов</shortname>
+	<description>Обновить поля для поиска дубликатов для контрагентов</description>
+	<url>/lecm/contractors/updateSearchProperties</url>
+	<format default="json">extension</format>
+	<authentication>admin</authentication>
+	<transaction allow="readwrite">required</transaction>
+</webscript>
