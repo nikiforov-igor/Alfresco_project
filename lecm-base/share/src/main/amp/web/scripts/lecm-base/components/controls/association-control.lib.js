@@ -13,11 +13,13 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 	LogicECM.module.AssociationComplexControl.Utils = {
 
-		generateChildrenUrlParams: function (options, searchTerm, skipItemsCount, forAutocomplete) {
+		generateChildrenUrlParams: function (options, searchTerm, skipItemsCount, forAutocomplete, exSearchFilter) {
 			/* построение параметров для запроса данных датагрида */
 			var additionalFilter = options.additionalFilter,
 				allowedNodesFilter,
-				ignoreNodesFilter;
+				ignoreNodesFilter,
+				notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i,
+				singleNotQuery;
 
 			if (options.allowedNodes) {
 				allowedNodesFilter = options.allowedNodes.reduce(function (prev, curr) {
@@ -25,7 +27,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}, options.allowedNodes.length ? '' : '(ISNULL:"sys:node-dbid" OR NOT EXISTS:"sys:node-dbid")');
 
 				if (additionalFilter) {
-					additionalFilter = '(' + additionalFilter + ') AND (' + allowedNodesFilter + ')';
+					singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
+					additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND (" + allowedNodesFilter + ")";
 				} else {
 					additionalFilter = allowedNodesFilter;
 				}
@@ -37,12 +40,20 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}, '(ISNOTNULL:\"cm:name\" AND  @cm\\:name:\"?*\")');
 
 				if (additionalFilter) {
-					additionalFilter = '(' + additionalFilter + ') AND (' + ignoreNodesFilter + ')';
+					singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
+					additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND (" + ignoreNodesFilter + ")";
 				} else {
 					additionalFilter = ignoreNodesFilter;
 				}
 			}
-
+			if (exSearchFilter && exSearchFilter.length) {
+				if (additionalFilter) {
+					singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
+					additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND (" + exSearchFilter + ")";
+				} else {
+					additionalFilter = exSearchFilter;
+				}
+			}
 			return Alfresco.util.toQueryString({
 				selectableType: options.itemType,
 				searchTerm: searchTerm ? searchTerm : '',
@@ -163,7 +174,63 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		
 		sortByIndex: function (a, b) {
 			return a.index - b.index;
-		}
+		},
 
+		getQueryFromForm: function (currentForm) {
+			var exSearchFilter = '',
+				propNamePrefix = '@',
+				first = true;
+
+			for (var i = 0; i < currentForm.elements.length; i++) {
+				var element = currentForm.elements[i],
+					propName = element.name,
+					propValue = YAHOO.lang.trim(element.value);
+
+				if (propName && propValue && propValue.length) {
+					if (propName.indexOf("prop_") == 0) {
+						propName = propName.substr(5);
+						if (propName.indexOf("_") !== -1) {
+							propName = propName.replace("_", ":");
+							if (propName.match("-range$") == "-range") {
+								var from, to, sepindex = propValue.indexOf("|");
+								if (propName.match("-date-range$") == "-date-range") {
+									propName = propName.substr(0, propName.length - "-date-range".length);
+									from = (sepindex === 0 ? "MIN" : propValue.substr(0, 10));
+									to = (sepindex === propValue.length - 1 ? "MAX" : propValue.substr(sepindex + 1, 10));
+								} else {
+									propName = propName.substr(0, propName.length - "-number-range".length);
+									from = (sepindex === 0 ? "MIN" : propValue.substr(0, sepindex));
+									to = (sepindex === propValue.length - 1 ? "MAX" : propValue.substr(sepindex + 1));
+								}
+								exSearchFilter += (first ? '' : ' AND ') + propNamePrefix + this.escape(propName) + ':"' + from + '".."' + to + '"';
+								first = false;
+							} else {
+								exSearchFilter += (first ? '' : ' AND ') + propNamePrefix + this.escape(propName) + ':' + this.applySearchSettingsToTerm(this.escape(propValue), 'MATCHES');
+								first = false;
+							}
+						}
+					} else if (propName.indexOf("assoc_") == 0) {
+						var assocName = propName.substring(6);
+						if (assocName.indexOf("_") !== -1) {
+							assocName = assocName.replace("_", ":") + "-ref";
+							exSearchFilter += (first ? '(' : ' AND (');
+							var assocValues = propValue.split(",");
+							var firstAssoc = true;
+							for (var k = 0; k < assocValues.length; k++) {
+								var assocValue = assocValues[k];
+								if (!firstAssoc) {
+									exSearchFilter += " OR ";
+								}
+								exSearchFilter += this.escape(assocName) + ':"' + this.applySearchSettingsToTerm(this.escape(assocValue), 'CONTAINS') + '"';
+								firstAssoc = false;
+							}
+							exSearchFilter += ") ";
+							first = false;
+						}
+					}
+				}
+			}
+			return exSearchFilter;
+		}
 	};
 })();
