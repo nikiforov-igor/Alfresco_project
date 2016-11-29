@@ -6,18 +6,12 @@ if (page.url.args["code"] != null && page.url.args["code"] != "") {
         }
     }
 
-    var jsonStr = remote.connect("alfresco").get("/lecm/arm/checkShowCalendar?code=" + encodeURI(page.url.args["code"]));
+    var jsonStr = remote.connect("alfresco").get("/lecm/arm/get?code=" + encodeURI(page.url.args["code"]));
     var obj = {};
     if (jsonStr.status == 200) {
         obj = eval("(" + jsonStr + ")");
     }
     model.showCalendar = obj.showCalendar;
-
-    jsonStr = remote.connect("alfresco").get("/lecm/arm/checkShowCreateButton?code=" + encodeURI(page.url.args["code"]));
-    obj = {};
-    if (jsonStr.status == 200) {
-        obj = eval("(" + jsonStr + ")");
-    }
     model.showCreateButton = obj.showCreateButton;
 }
 
