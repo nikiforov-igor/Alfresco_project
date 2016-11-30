@@ -63,6 +63,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         this.switchTypePrefix = this.id +'-swith-type-button-';
         this.typeContainerPrefix = this.id +'-type-container-';
 
+        YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
         YAHOO.Bubbling.on("hideControl", this.onHideControl, this);
         YAHOO.Bubbling.on("showControl", this.onShowControl, this);
 
@@ -76,6 +77,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             switchTypePrefix: "",
             typeContainerPrefix: "",
             currentType: null,
+			readonly: false,
             days: Alfresco.util.message('days.short').split(','),
             daysFull: Alfresco.util.message('days.long').split(','),
 
@@ -90,7 +92,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 el.innerHTML = message;
                 if (el.tagName === "A") {
                     Event.addListener(el, 'click', function () {
-                        this.openDialog();
+						if (!this.readonly) {
+							this.openDialog();
+						}
                     }.bind(this));
                 }
 
@@ -274,6 +278,23 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
                 this.updateSummary();
             },
+
+			onReadonlyControl: function (layer, args) {
+				var ahref, input, fn;
+				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+					this.readonly = args[1].readonly;
+					ahref = Dom.get(this.id + '-displayValue');
+					input = Dom.get(this.id);
+					if (ahref) {
+						fn = args[1].readonly ? Dom.addClass : Dom.removeClass;
+						fn.call(Dom, ahref, "disabled");
+					}
+					if (input) {
+						fn = args[1].readonly ? input.setAttribute : input.removeAttribute;
+						fn.call(input, "readonly", "");
+					}
+				}
+			},
 
             onHideControl: function (layer, args) {
                 if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
