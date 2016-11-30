@@ -25,8 +25,7 @@ LogicECM.module = LogicECM.module || {};
         LogicECM.module.Checkbox.superclass.constructor.call(this, "LogicECM.module.Checkbox", fieldHtmlId, ["container", "datasource"]);
         this.checkboxId = fieldHtmlId + "-entry";
         this.attentionId = fieldHtmlId + "-attention";
-	    YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
-	    YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
+		YAHOO.Bubbling.on("readonlyContol", this.onReadonlyControl, this);
 	    YAHOO.Bubbling.on("disableRelatedFields", this.onDisableRelatedFields, this);
         return this;
     };
@@ -53,6 +52,7 @@ LogicECM.module = LogicECM.module || {};
                 attentionId: null,
                 checkbox: null,
                 initValue: null,
+				readonly: false,
                 setOptions: function(obj)
                 {
                     LogicECM.module.Checkbox.superclass.setOptions.call(this, obj);
@@ -192,23 +192,21 @@ LogicECM.module = LogicECM.module || {};
 		            }
 	            },
 
-	            onDisableControl: function (layer, args) {
-		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-			            if (this.checkbox != null) {
-				            this.checkbox.disabled = true;
-				            Dom.get(this.id).disabled = true;
-			            }
-		            }
-	            },
-
-	            onEnableControl: function (layer, args) {
-		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-			            if (!this.options.disabled && this.checkbox != null) {
-				            this.checkbox.disabled = false;
-				            Dom.get(this.id).disabled = false;
-			            }
-		            }
-	            },
+				onReadonlyControl: function (layer, args) {
+					var input, fn;
+					if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+						this.readonly = args[1].readonly;
+						input = Dom.get(this.id);
+						if (input) {
+							fn = args[1].readonly ? input.setAttribute : input.removeAttribute;
+							fn.call(input, "readonly", "");
+						}
+						if (this.checkbox) {
+							fn = args[1].readonly ? this.checkbox.setAttribute : this.checkbox.removeAttribute;
+							fn.call(this.checkbox, "readonly", "");
+						}
+					}
+				},
 
 	            onDisableRelatedFields: function (layer, args) {
 		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
