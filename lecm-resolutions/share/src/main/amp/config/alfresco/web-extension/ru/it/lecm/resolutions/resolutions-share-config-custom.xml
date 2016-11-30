@@ -11,7 +11,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="resolution-create-form-binding-script" force="true"/>
+                    <show id="view-base-doc" force="true"/>
 
                     <show id="lecm-resolutions:control"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -41,9 +41,10 @@
                     <show id="save-draft-button" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <set id="start" template="/ru/it/lecm/eds/controls/2-column-parent-set.ftl"/>
-                    <set id="start-left" parent="start"/>
-                    <set id="start-right" parent="start"/>
+                    <set id="start"/>
+                    <set id="start-2-column" template="/ru/it/lecm/eds/controls/2-column-parent-set.ftl"/>
+                    <set id="start-left" parent="start-2-column"/>
+                    <set id="start-right" parent="start-2-column"/>
                     <set id="start-right-start" parent="start-right"/>
                     <set id="limitation-date" parent="start-right" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="errands"/>
@@ -51,6 +52,14 @@
                     <set id="reviewers" parent="reviewers-fieldset" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="end"/>
 
+                    <field id="view-base-doc" set="start">
+                        <control template="/ru/it/lecm/resolutions/controls/resolution-base-doc-control.ftl">
+                            <control-param name="documentArgName">assoc_lecm-resolutions_base-assoc</control-param>
+                            <control-param name="formatString">
+                                <![CDATA[На основании документа <a target='_blank' href='/share/page/document?nodeRef={nodeRef}'>{lecm-document:present-string}</a>]]>
+                            </control-param>
+                        </control>
+                    </field>
                     <field id="lecm-document:subject-assoc" set="start-left"/>
                     <field id="lecm-resolutions:author-assoc" set="start-left">
                         <control>

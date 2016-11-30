@@ -45,3 +45,7 @@
 .resolution-create-form fieldset .errands-limitation-date-set .errands-limitation-date-set-date {
     width: calc(100% - 210px);
 }
+
+.resolution-create-form .control.resolution-base-doc-control {
+    font-size: 14px;
+}
