@@ -10,9 +10,13 @@
     <#assign plane = false>
 </#if>
 
+<#assign readonly = false>
 <#assign defaultValue=field.control.params.defaultValue!"">
 <#if form.arguments[field.name]?has_content>
     <#assign defaultValue=form.arguments[field.name]>
+<#elseif form.arguments['readonly_' + field.name]?has_content>
+	<#assign defaultValue=form.arguments['readonly_' + field.name]>
+	<#assign readonly = true>
 </#if>
 
 
@@ -246,6 +250,9 @@
 			formId: "${args.htmlid}"
 		</#if>
     }).setMessages( ${messages} );
+	<#if readonly>
+		LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+	</#if>
  	}
  	YAHOO.util.Event.onDOMReady(init);
 })();
