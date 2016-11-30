@@ -11,8 +11,8 @@
        fromISO8601 = Alfresco.util.fromISO8601,
        toISO8601 = Alfresco.util.toISO8601,
        dateFormat = Alfresco.thirdparty.dateFormat,
-       $jCalendar = ""; // Cache the jQuery selector. Populated in renderEvents after DOM has rendered.
-	   document.jquery = $; // Скоро загрузится dojo'вский jQuery и перекроет fullCalendar, так что сохраним
+       $jCalendar = "", // Cache the jQuery selector. Populated in renderEvents after DOM has rendered.
+	   thatJQuery = $; // Скоро загрузится dojo'вский jQuery и перекроет fullCalendar, так что сохраним
 
    LogicECM.module.Calendar.FullView = function (htmlId)
    {
@@ -61,7 +61,7 @@
 
           renderEvents: function () {
              // Prevent unnecessary DOM lookups and cache the jQuery object for the calendar container.
-             $jCalendar = document.jquery('#' + this.options.id);
+             $jCalendar = thatJQuery('#' + this.options.id);
 
              // invoke Full Calendar
              this.initFullCalendar();
