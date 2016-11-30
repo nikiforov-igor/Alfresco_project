@@ -33,8 +33,7 @@ LogicECM.module = LogicECM.module || {};
 	{
 		LogicECM.module.AssociationSearchViewer.superclass.constructor.call(this, "AssociationSearchViewer", htmlId);
 		YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemAdded, this);
-		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
-		YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
+		YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
 
 		this.eventGroup = htmlId;
 		this.selectedItems = {};
@@ -64,6 +63,8 @@ LogicECM.module = LogicECM.module || {};
 			searchProperties: null,
 
 			isSearch: false,
+
+			readonly: false,
 
 			options:
 			{
@@ -134,7 +135,7 @@ LogicECM.module = LogicECM.module || {};
 				viewUrl: null,
 
 				checkSearchColumnDataType: true,
-				
+
 				fieldId: null,
 
 				formId: false
@@ -1278,48 +1279,29 @@ LogicECM.module = LogicECM.module || {};
                     this.widgets.searchButton.set("disabled", false);
                 }
             },
-			
-			onDisableControl: function (layer, args) {
+
+			onReadonlyControl: function (layer, args) {
+				var addedInput, removedInput;
 				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-					if (this.widgets.pickerButton != null) {
-						this.widgets.pickerButton.set('disabled', true);
+					this.readonly = args[1].readonly;
+					if (this.widgets.pickerButton) {
+						this.widgets.pickerButton.set('disabled', args[1].readonly);
 					}
-
-					this.tempDisabled = true;
-
-					var added = Dom.get(this.options.controlId + "-added");
-					if (added != null) {
-						added.disabled = true;
-					}
-					var removed = Dom.get(this.options.controlId + "-removed");
-					if (removed != null) {
-						removed.disabled = true;
+					//непонятно зачем скрывать диалог и активировать поля, которые не были деактивированы...
+					if (!args[1].readonly) {
+						addedInput = Dom.get(this.options.controlId + '-added');
+						removedInput = Dom.get(this.options.controlId + '-removed');
+						if (this.widgets.dialog) {
+							this.widgets.dialog.hide();
+						}
+						if (addedInput) {
+							addedInput.disabled = false;
+						}
+						if (removedInput) {
+							removedInput.disabled = false;
+						}
 					}
 				}
-			},
-
-			onEnableControl: function (layer, args) {
-				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-					if (!this.options.disabled) {
-						if (this.widgets.pickerButton != null) {
-							this.widgets.pickerButton.set('disabled', false);
-
-							if (this.widgets.dialog != null) {
-								this.widgets.dialog.hide();
-							}
-						}
-
-						var added = Dom.get(this.options.controlId + "-added");
-						if (added != null) {
-							added.disabled = false;
-						}
-						var removed = Dom.get(this.options.controlId + "-removed");
-						if (removed != null) {
-							removed.disabled = false;
-						}
-					}
-					this.tempDisabled = false;
-				}
-			},
+			}
 		});
 })();
