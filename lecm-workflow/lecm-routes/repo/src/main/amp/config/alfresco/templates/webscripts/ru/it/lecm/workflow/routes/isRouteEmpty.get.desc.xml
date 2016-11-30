@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Checks if route has empty stages</shortname>
-	<description>Checks if route has empty stages</description>
-	<url>/lecm/workflow/routes/isRouteEmpty</url>
-	<format default="json"/>
-	<authentication>user</authentication>
-	<transaction>none</transaction>
-</webscript>
