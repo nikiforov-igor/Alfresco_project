@@ -60,7 +60,8 @@ LogicECM.module = LogicECM.module || {};
 			pickerButtonTitle: null,
 			pickerButtonLabel: null,
             multipleSelectMode: false,
-			itemsOptions: []
+			itemsOptions: [],
+			sortSelected: false
 		},
 
 		widgets: {
@@ -80,6 +81,9 @@ LogicECM.module = LogicECM.module || {};
 				Event.on(params.id, 'click', this.onRemove, params, this);
 			}
 
+			if (this.options.sortSelected) {
+				selectedItems.sort(LogicECM.module.AssociationComplexControl.Utils.sortByName);
+			}
 			selectedItems.forEach(function(selected) {
                 if (selected) {
                     var displayName,

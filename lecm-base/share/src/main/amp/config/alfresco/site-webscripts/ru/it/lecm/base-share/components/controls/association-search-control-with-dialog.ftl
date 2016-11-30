@@ -27,6 +27,11 @@
 	<#assign defaultValue=form.arguments[field.name]>
 </#if>
 
+<#assign sortSelected = false>
+<#if params.sortSelected?? && params.sortSelected == "true">
+	<#assign  sortSelected = true>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")) || (field.control.params.readOnly?? && field.control.params.readOnly == "true") >
 
 <#if disabled>
@@ -182,6 +187,7 @@
 				fieldId: "${field.configName}",
 				formId: "${args.htmlid}",
 				showSelectedItems: ${showSelectedItems?string},
+                sortSelected: ${sortSelected?string},
 				<#if field.control.params.itemType??>
 					itemType: "${field.control.params.itemType}"
 				<#else>

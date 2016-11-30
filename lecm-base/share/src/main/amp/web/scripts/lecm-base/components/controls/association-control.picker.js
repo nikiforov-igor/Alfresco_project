@@ -62,7 +62,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			pickerCustom: {
 				render: true,
 				type: YAHOO.widget.Panel
-			}
+			},
+			sortSelected: false
 		},
 
 		widgets: {
@@ -78,7 +79,9 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			function onAddListener(params) {
 				Event.on(params.id, 'click', this.onRemove, params, this);
 			}
-
+			if (this.options.sortSelected) {
+				selectedItems.sort(LogicECM.module.AssociationComplexControl.Utils.sortByName);
+			}
 			selectedItems.forEach(function (selected) {
 				var displayName,
 					elementName,
