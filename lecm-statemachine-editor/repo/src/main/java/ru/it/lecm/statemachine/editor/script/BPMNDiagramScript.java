@@ -270,26 +270,25 @@ public class BPMNDiagramScript extends AbstractWebScript {
 	 * @param stateMachine
 	 * @return NodeRef stateMachineVersion
 	 */
-	private NodeRef checkVersions(NodeRef stateMachine){
-
+	private NodeRef checkVersions(NodeRef stateMachine) {
 		NodeRef stateMachinesRoot = nodeService.getPrimaryParent(stateMachine).getParentRef();
-		String stateMachineId = nodeService.getProperty(stateMachine,ContentModel.PROP_NAME).toString();
+		String stateMachineId = nodeService.getProperty(stateMachine, ContentModel.PROP_NAME).toString();
 		//проверяем ноду версий
 		NodeRef versionsFolder = nodeService.getChildByName(stateMachinesRoot, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.FOLDER_VERSIONS);
-		if(versionsFolder==null) {
+		if (versionsFolder == null) {
 			try {
-				versionsFolder=repositoryStructureHelper.createFolder(stateMachinesRoot, StatemachineEditorModel.FOLDER_VERSIONS);
+				versionsFolder = repositoryStructureHelper.createFolder(stateMachinesRoot, StatemachineEditorModel.FOLDER_VERSIONS);
 			} catch (WriteTransactionNeededException e) {
 				e.printStackTrace();
 			}
 		}
 		NodeRef stateMachineVersionsNodeRef = nodeService.getChildByName(versionsFolder, ContentModel.ASSOC_CONTAINS, stateMachineId);
-		if(stateMachineVersionsNodeRef==null) {
-			Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+		if (stateMachineVersionsNodeRef == null) {
+			Map<QName, Serializable> properties = new HashMap<>();
 			properties.put(ContentModel.PROP_NAME, stateMachineId);
-			properties.put(StatemachineEditorModel.PROP_LAST_VERSION,0);
+			properties.put(StatemachineEditorModel.PROP_LAST_VERSION, 0);
 			ChildAssociationRef stateMachineVersionsChildAssoc = nodeService.createNode(versionsFolder, ContentModel.ASSOC_CONTAINS,
-					QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, stateMachineId), StatemachineEditorModel.TYPE_VERSION, properties);
+					QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, stateMachineId), StatemachineEditorModel.TYPE_VERSIONS, properties);
 			stateMachineVersionsNodeRef = stateMachineVersionsChildAssoc.getChildRef();
 		}
 
