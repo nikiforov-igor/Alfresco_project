@@ -75,10 +75,6 @@
 		<value>alfresco/module/${artifactId}/permissions/directories-permissions.xml</value>
 	</util:list>
 
-	<util:list id="operative.storage.arm.dictionaries">
-		<value>alfresco/module/${artifactId}/arm/os-settings-arm.xml</value>
-	</util:list>
-
 	<util:list id="operative.storage.reports">
 		<value>alfresco/module/${artifactId}/reports/organization-nomenclature.xml</value>
 		<value>alfresco/module/${artifactId}/reports/volumes-card.xml</value>
@@ -115,11 +111,6 @@
 		  p:configs-ref="operative.storage.reports.config"
 	/>
 
-	<bean id="operative.storage.arm.bootstrap" parent="lecmDictionaryBootstrap"
-		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
-		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ"
-		  p:dictionaries-ref="operative.storage.arm.dictionaries"/>
-
 	<bean id="operative.storage.reports.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
           reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
@@ -133,7 +124,7 @@
 
 	<bean id="operative.storage.arm.bootstrap.main" parent="lecmDictionaryBootstrap"
 		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
-		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ"
+		  p:rootPath="/Business platform/LECM/Сервис АРМ"
 		  p:dictionaries-ref="operative.storage.arm.os"/>
 
 	<bean id="operative.storage.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
