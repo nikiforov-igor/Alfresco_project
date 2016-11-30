@@ -167,7 +167,7 @@ public class BPMNDiagramScript extends AbstractWebScript {
 		                    statemachineVersions,
 		                    ContentModel.ASSOC_CONTAINS,
 		                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(versionFolderName)),
-		                    StatemachineEditorModel.TYPE_VERSION,
+		                    StatemachineEditorModel.TYPE_VERSION_CONTAINER,
 		                    props);
 		            	version = childAssocRef.getChildRef();
 					} else {
