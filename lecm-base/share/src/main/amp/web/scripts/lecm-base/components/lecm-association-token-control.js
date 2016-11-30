@@ -35,8 +35,7 @@ LogicECM.module = LogicECM.module || {};
 		LogicECM.module.AssociationTokenControl.superclass.constructor.call(this, "AssociationTokenControl", htmlId);
 		YAHOO.Bubbling.on("refreshItemList", this.onRefreshItemList, this);
 		YAHOO.Bubbling.on("addSelectedItems", this.onAddSelectedItems, this);
-		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
-		YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
+		YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
 		YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
 
 		this.selectedItems = {};
@@ -86,7 +85,7 @@ LogicECM.module = LogicECM.module || {};
 
 			cancelSingleSelectedItem: null,
 
-			tempDisabled: false,
+			readonly: false,
 
 			controlAutoComplete: null,
 
@@ -1907,7 +1906,7 @@ LogicECM.module = LogicECM.module || {};
 
 			removeNode: function (event, params)
 			{
-				if (!this.tempDisabled) {
+				if (!this.readonly) {
 					delete this.selectedItems[params.node.nodeRef];
 					this.singleSelectedItem = null;
 					this.updateSelectedItems();
@@ -2349,54 +2348,31 @@ LogicECM.module = LogicECM.module || {};
 				return 20;
 			},
 
-			onDisableControl: function (layer, args) {
+			onReadonlyControl: function (layer, args) {
+				var autocompleteInput, addedInput, removedInput;
 				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-					if (this.widgets.pickerButton != null) {
-						this.widgets.pickerButton.set('disabled', true);
+					this.readonly = args[1].readonly;
+					if (this.widgets.pickerButton) {
+						this.widgets.pickerButton.set('disabled', args[1].readonly);
 					}
-
-					var input = Dom.get(this.options.controlId + "-autocomplete-input");
-					if (input != null) {
-						input.disabled = true;
+					autocompleteInput = Dom.get(this.options.controlId + '-autocomplete-input');
+					if (autocompleteInput) {
+						autocompleteInput.disabled = args[1].readonly;
 					}
-					this.tempDisabled = true;
-
-					var added = Dom.get(this.options.controlId + "-added");
-					if (added != null) {
-						added.disabled = true;
-					}
-					var removed = Dom.get(this.options.controlId + "-removed");
-					if (removed != null) {
-						removed.disabled = true;
-					}
-				}
-			},
-
-			onEnableControl: function (layer, args) {
-				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-					if (!this.options.disabled) {
-						if (this.widgets.pickerButton != null) {
-							this.widgets.pickerButton.set('disabled', false);
-
-							if (this.widgets.dialog != null) {
-								this.widgets.dialog.hide();
-							}
+					//непонятно зачем скрывать диалог и активировать поля, которые не были деактивированы...
+					if (!args[1].readonly) {
+						addedInput = Dom.get(this.options.controlId + '-added');
+						removedInput = Dom.get(this.options.controlId + '-removed');
+						if (this.widgets.dialog) {
+							this.widgets.dialog.hide();
 						}
-
-						var input = Dom.get(this.options.controlId + "-autocomplete-input");
-						if (input != null) {
-							input.disabled = false;
+						if (addedInput) {
+							addedInput.disabled = false;
 						}
-						var added = Dom.get(this.options.controlId + "-added");
-						if (added != null) {
-							added.disabled = false;
-						}
-						var removed = Dom.get(this.options.controlId + "-removed");
-						if (removed != null) {
-							removed.disabled = false;
+						if (removedInput) {
+							removedInput.disabled = false;
 						}
 					}
-					this.tempDisabled = false;
 				}
 			},
 
