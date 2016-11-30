@@ -19,6 +19,15 @@
 				<property name="lecm-base-dummy-aspects:script2">
 					<type>d:text</type>
 				</property>
+				<property name="lecm-base-dummy-aspects:script3">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-base-dummy-aspects:script4">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-base-dummy-aspects:script5">
+					<type>d:text</type>
+				</property>
             </properties>
         </aspect>
     </aspects>

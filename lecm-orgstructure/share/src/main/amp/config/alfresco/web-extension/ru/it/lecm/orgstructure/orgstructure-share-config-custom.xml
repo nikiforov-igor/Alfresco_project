@@ -18,12 +18,17 @@
                     <show id="lecm-orgstr:employee-fio-d" for-mode="edit"/>
                     <show id="lecm-orgstr:employee-person-assoc" for-mode="edit"/>
                     <show id="lecm-orgstr:employee-person-data-assoc"/>
+					<!--Позиции-->
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-orgstr:employee-roles"/>
-	                <show id="lecm-busjournal-aspects:history-list"/>
-	                <show id="lecm-orgstr:employee-only-business-roles"/>
-	                <show id="lecm-orgstr:employee-delegated-business-roles"/>
-                    <show id="lecm-base-dummy-aspects:script2" force="true" for-mode="view"/>
+					<!--Штатное расписание-->
+	                <show id="lecm-base-dummy-aspects:script2" force="true" for-mode="view"/>
+					<!--Свои БР-->
+	                <show id="lecm-base-dummy-aspects:script3" force="true"/>
+					<!--Делегированные БР-->
+	                <show id="lecm-base-dummy-aspects:script4" force="true"/>
+					<!--История-->
+                    <show id="lecm-base-dummy-aspects:script5" force="true"/>
 					<show id="lecm-subscr-aspects"/>
                 </field-visibility>
                 <appearance>
@@ -103,7 +108,7 @@
                             <control-param name="ds">lecm/orgstructure/ds/employee-roles</control-param>
                         </control>
                     </field>
-	                <field id="lecm-orgstr:employee-only-business-roles" set="businessRolesInner"
+	                <field id="lecm-base-dummy-aspects:script3" set="businessRolesInner"
                            label-id="lecm-orgstr_employee-business-roles">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
                             <control-param name="itemType">lecm-orgstr:business-role</control-param>
@@ -114,7 +119,7 @@
                             <control-param name="fixedHeader">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-orgstr:employee-delegated-business-roles" set="businessRolesInner"
+                    <field id="lecm-base-dummy-aspects:script4" set="businessRolesInner"
                            label-id="lecm-orgstr_employee-delegated-business-roles">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
                             <control-param name="itemType">lecm-orgstr:business-role</control-param>
@@ -125,7 +130,7 @@
                             <control-param name="fixedHeader">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-busjournal-aspects:history-list" set="busjournalHistoryInner" label-id="label.history-control">
+                    <field id="lecm-base-dummy-aspects:script5" set="busjournalHistoryInner" label-id="label.history-control">
                         <control template="/ru/it/lecm/business-journal/components/controls/bjHistory-datagrid-control.ftl">
                             <control-param name="fixedHeader">true</control-param>
                         </control>
