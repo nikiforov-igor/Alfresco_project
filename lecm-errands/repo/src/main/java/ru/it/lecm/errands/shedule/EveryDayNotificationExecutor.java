@@ -58,10 +58,22 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
             }
         }
 
+        // Уведомление о истечении половины срока исполнения поручения.
+        Date halfLimitDate = (Date) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_HALF_LIMIT_DATE);
+        if(halfLimitDate != null && halfLimitDate.equals(now)){
+            notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_HALF_DEADLINE");
+        }
+
         // Уведомление о приближении срока исполнения поручения.
         Date limitDate = (Date)nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
-
-        calendar.add(Calendar.DAY_OF_MONTH, 5);
+        boolean isLimitShort = (boolean) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_IS_LIMIT_SHORT_DATE);
+        if(isLimitShort) {
+            // Уведомление о приближении срока исполнения карткосрочного поручения.
+            calendar.add(Calendar.DAY_OF_MONTH, notificationsService.getSettingsShortNDays());
+        }else{
+            // Уведомление о приближении срока исполнения долгосрочного поручения.
+            calendar.add(Calendar.DAY_OF_MONTH, notificationsService.getSettingsNDays());
+        }
         now = calendar.getTime();
         if (limitDate != null && limitDate.before(now)) {
             notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_APPROACHING_DEADLINE");

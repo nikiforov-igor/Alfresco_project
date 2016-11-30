@@ -141,6 +141,10 @@
 					<default>false</default>
 				</property>
 				<!-- Срок поручения-->
+				<property name="lecm-errands:limitation-date-text">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
 				<property name="lecm-errands:limitation-date">
 					<type>d:date</type>
 					<mandatory>false</mandatory>
@@ -195,6 +199,16 @@
 				<property name="lecm-errands:end-date">
 					<type>d:date</type>
 				</property>
+				<!-- краткосрочное -->
+				<property name="lecm-errands:is-limit-short">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<!-- Закрывать автоматически -->
+				<property name="lecm-errands:auto-close">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
 
 				<!-- Направлять периодически -->
 				<property name="lecm-errands:periodically">
@@ -244,6 +258,9 @@
 				</property>
 
 				<!-- Атрибуты исполнения поручения-->
+				<property name="lecm-errands:half-limit-date">
+					<type>d:date</type>
+				</property>
 				<!-- Отчет об исполнении -->
 				<property name="lecm-errands:execution-report">
 					<type>d:text</type>
@@ -407,6 +424,16 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+				<!--Есть дочерние поручения на исполнении -->
+				<property name="lecm-errands:has-child-executing-by-executor">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<!--Все подчиненные поручения в финальных статусах -->
+				<property name="lecm-errands:is-all-child-on-final">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
 			</properties>
 			<associations>
 				<!-- Автор -->

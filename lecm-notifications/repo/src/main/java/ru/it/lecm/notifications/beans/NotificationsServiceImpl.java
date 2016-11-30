@@ -47,6 +47,8 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
     final private static Logger logger = LoggerFactory.getLogger(NotificationsServiceImpl.class);
     private static final int DEFAULT_N_DAYS = 5;
+    private static final int DEFAULT_SHORT_N_DAYS = 1;
+    private static final int DEFAULT_SHORT_LIMIT_DAYS = 1;
     private static final String DOCUMENT_LINK = "Документ {#mainObject.wrapAsLink(#mainObject.attribute(\"lecm-document:present-string\"))}";
     private static final String DEFAULT_NOTIFICATION_TEMPLATE = "При формировании уведомления произошла ошибка. За дополнительной информацией обратитесь к администратору. %s Ошибка: %s";
 
@@ -583,6 +585,26 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
             return (Integer) nodeService.getProperty(globalSettingsNode, PROP_N_DAYS);
         } else {
             return DEFAULT_N_DAYS;
+        }
+    }
+
+    @Override
+    public int getSettingsShortNDays() {
+        NodeRef globalSettingsNode = getGlobalSettingsNode();
+        if (globalSettingsNode != null && nodeService.getProperty(globalSettingsNode, PROP_SHORT_N_DAYS) != null) {
+            return (Integer) nodeService.getProperty(globalSettingsNode, PROP_SHORT_N_DAYS);
+        } else {
+            return DEFAULT_SHORT_N_DAYS;
+        }
+    }
+
+    @Override
+    public int getSettingsShortLimitDays() {
+        NodeRef globalSettingsNode = getGlobalSettingsNode();
+        if (globalSettingsNode != null &&  nodeService.getProperty(globalSettingsNode, PROP_SHORT_LIMIT_DAYS) != null) {
+           return (Integer) nodeService.getProperty(globalSettingsNode, PROP_SHORT_LIMIT_DAYS);
+        } else {
+            return DEFAULT_SHORT_LIMIT_DAYS;
         }
     }
 

@@ -19,18 +19,21 @@ public interface ErrandsService {
     String ERRANDS_DASHLET_SETTINGS_NODE_NAME = "Dashlet Settings";
 
     String ERRANDS_NAMESPACE_URI = "http://www.it.ru/logicECM/errands/1.0";
+    String ERRANDS_NAMESPACE_DIC_URI = "http://www.it.ru/logicECM/errands/dictionaries/1.0";
+    String ERRANDS_ASPECT_NAMESPACE_URI = "http://www.it.ru/logicECM/errands-aspects/1.0";
 
     QName TYPE_ERRANDS = QName.createQName(ERRANDS_NAMESPACE_URI, "document");
     QName TYPE_ERRANDS_SETTINGS = QName.createQName(ERRANDS_NAMESPACE_URI, "settings");
     QName TYPE_ERRANDS_DASHLET_SETTINGS = QName.createQName(ERRANDS_NAMESPACE_URI, "dashlet-settings");
     QName TYPE_ERRANDS_USER_SETTINGS = QName.createQName(ERRANDS_NAMESPACE_URI, "user-settings");
+    QName TYPE_ERRANDS_DIC_TITLES = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-titles");
+    QName TYPE_ERRANDS_DIC_TYPE = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-type");
     QName PROP_ERRANDS_INITIATOR_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "initiator-assoc-ref");
     QName PROP_ERRANDS_EXECUTOR_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "executor-assoc-ref");
     QName PROP_ERRANDS_CONTROLLER_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "controller-assoc-ref");
     QName PROP_ERRANDS_ADDITIONAL_DOCUMENT_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "additional-document-assoc-ref");
 
     QName PROP_ERRANDS_IS_IMPORTANT = QName.createQName(ERRANDS_NAMESPACE_URI, "is-important");
-    QName PROP_ERRANDS_LIMITATION_DATE = QName.createQName(ERRANDS_NAMESPACE_URI, "limitation-date");
     QName PROP_ERRANDS_EXECUTION_DATE = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-date");
     QName PROP_ERRANDS_IS_EXPIRED = QName.createQName(ERRANDS_NAMESPACE_URI, "is-expired");
     QName PROP_ERRANDS_IS_REJECTED = QName.createQName(ERRANDS_NAMESPACE_URI, "was-rejected");
@@ -44,6 +47,23 @@ public interface ErrandsService {
     QName PROP_ERRANDS_CONTENT = QName.createQName(ERRANDS_NAMESPACE_URI, "content");
     QName PROP_ERRANDS_WITHOUT_INITIATOR_APPROVAL = QName.createQName(ERRANDS_NAMESPACE_URI, "without-initiator-approval");
 
+    QName PROP_ERRANDS_REPORT_REQUIRED = QName.createQName(ERRANDS_NAMESPACE_URI,"report-required");
+    QName PROP_ERRANDS_REPORT_RECIPIENT_TYPE = QName.createQName(ERRANDS_NAMESPACE_URI,"report-recipient-type");
+    QName PROP_ERRANDS_LIMITATION_DATE = QName.createQName(ERRANDS_NAMESPACE_URI, "limitation-date");
+    QName PROP_ERRANDS_LIMITATION_DATE_TEXT = QName.createQName(ERRANDS_NAMESPACE_URI,"limitation-date-text");
+    QName PROP_ERRANDS_LIMITATION_DATE_RADIO = QName.createQName(ERRANDS_NAMESPACE_URI,"limitation-date-radio");
+    QName PROP_ERRANDS_LIMITATION_DATE_DAYS = QName.createQName(ERRANDS_NAMESPACE_URI,"limitation-date-days");
+    QName PROP_ERRANDS_LIMITATION_DATE_TYPE = QName.createQName(ERRANDS_NAMESPACE_URI,"limitation-date-type");
+    QName PROP_ERRANDS_HALF_LIMIT_DATE = QName.createQName(ERRANDS_NAMESPACE_URI,"half-limit-date");
+    QName PROP_ERRANDS_IS_LIMIT_SHORT_DATE = QName.createQName(ERRANDS_NAMESPACE_URI,"is-limit-short");
+
+    QName PROP_ERRANDS_DIC_TITLE_CODE = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-title-code");
+    QName PROP_ERRANDS_DIC_TYPE_DEFAULT_TITLE = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-type-default-title");
+    QName PROP_ERRANDS_DIC_TYPE_LIMITLESS = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-type-limitless");
+    QName PROP_ERRANDS_DIC_TYPE_REPORT_REQUIRED = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-type-report-required");
+    QName PROP_ERRANDS_DIC_TYPE_LAUNCH_REVIEW = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-type-launch-review");
+
+
     QName SETTINGS_PROP_MODE_CHOOSING_EXECUTORS = QName.createQName(ERRANDS_NAMESPACE_URI, "settings-mode-choosing-executors");
     String SETTINGS_PROP_MODE_CHOOSING_EXECUTORS_ORGANIZATION = "ORGANIZATION";
     String SETTINGS_PROP_MODE_CHOOSING_EXECUTORS_UNIT = "UNIT";
@@ -55,7 +75,8 @@ public interface ErrandsService {
     QName USER_SETTINGS_ASSOC_DEFAULT_SUBJECT = QName.createQName(ERRANDS_NAMESPACE_URI, "user-settings-default-subject-assoc");
 
     QName ASSOC_ADDITIONAL_ERRANDS_DOCUMENT = QName.createQName(ERRANDS_NAMESPACE_URI, "additional-document-assoc");
-    QName PROP_BASE_DOC_NUMBER = QName.createQName(ERRANDS_NAMESPACE_URI, "base-doc-number");
+    QName PROP_BASE_DOC_NUMBER = QName.createQName(ERRANDS_NAMESPACE_URI, "base-doc-number");//!!переделать
+    QName ASSOC_BASE_DOCUMENT = QName.createQName(ERRANDS_NAMESPACE_URI, "base-assoc");
     QName ASSOC_ERRANDS_INITIATOR = QName.createQName(ERRANDS_NAMESPACE_URI, "initiator-assoc");
     QName ASSOC_ERRANDS_CONTROLLER = QName.createQName(ERRANDS_NAMESPACE_URI, "controller-assoc");
     QName ASSOC_ERRANDS_EXECUTOR = QName.createQName(ERRANDS_NAMESPACE_URI, "executor-assoc");

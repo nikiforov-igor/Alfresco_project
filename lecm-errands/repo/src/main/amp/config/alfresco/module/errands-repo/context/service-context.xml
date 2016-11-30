@@ -307,6 +307,12 @@
                     <prop key="mimetype">text/xml</prop>
                     <prop key="redeploy">${redeploy.process.definitions}</prop>
                 </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-change-due-date.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
             </list>
         </property>
         <property name="models">
@@ -441,11 +447,13 @@
                 <value>lecm-errands:is-important</value>
                 <value>lecm-errands:just-in-time</value>
                 <value>lecm-errands:is-short</value>
-                <value>lecm-errands:limitation-date</value>
+                <value>lecm-errands:report-required</value>
+                <value>lecm-errands:report-recipient-type</value>
             </list>
         </property>
         <property name="assocsToCopy">
             <list>
+                <value>lecm-errands:type-assoc</value>
                 <value>lecm-errands:initiator-assoc</value>
                 <value>lecm-errands:executor-assoc</value>
                 <value>lecm-errands:controller-assoc</value>
