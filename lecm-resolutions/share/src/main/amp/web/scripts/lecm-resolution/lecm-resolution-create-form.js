@@ -9,20 +9,110 @@
     var formId, formButtons;
 
     Bubbling.on('saveDraftResolutionButtonClick', saveDraft);
+    Bubbling.on('sendResolutionButtonClick', sendResolutionClick);
     Bubbling.on('sendResolution', sendResolution);
     Bubbling.on('resolutionCreateFormScriptLoaded', init);
 
     function saveDraft(layer, args) {
+        var form;
         if (args[1] && args[1].formId) {
-            var form = Dom.get(args[1].formId + "-form");
+            form = Dom.get(args[1].formId + "-form");
             if (form && form["prop_lecm-resolutions_is-draft"]) {
                 form["prop_lecm-resolutions_is-draft"].value = true;
             }
         }
-        submitResolutionForm();
+        submitResolutionForm(true, form);
     }
 
-    function submitResolutionForm() {
+    function sendResolutionClick(layer, args) {
+        var form;
+        if (args[1] && args[1].formId) {
+            form = Dom.get(args[1].formId + "-form");
+            if (form && form["prop_lecm-resolutions_is-draft"]) {
+                form["prop_lecm-resolutions_is-draft"].value = false;
+            }
+        }
+        submitResolutionForm(true, form);
+    }
+
+    function submitResolutionForm(checkExecutionDate, form) {
+        if (checkExecutionDate && form && form["base-doc-execution-date"] && form["base-doc-execution-date"].value) {
+            var parentExecutionDate = Alfresco.util.fromISO8601(form["base-doc-execution-date"].value);
+
+            var executionDateRadio = form["prop_lecm-resolutions_limitation-date-radio"];
+            if (executionDateRadio && executionDateRadio.value) {
+                if (executionDateRadio.value == "DATE") {
+                    var executionDateDate = form["prop_lecm-resolutions_limitation-date"];
+                    compareExecutionDate(parentExecutionDate, Alfresco.util.fromISO8601(executionDateDate.value));
+                } else if (executionDateRadio.value == "DAYS") {
+                    var executionDateDays = form["prop_lecm-resolutions_limitation-date-days"];
+                    var executionDateType = form["prop_lecm-resolutions_limitation-date-type"];
+                    if (executionDateDays && executionDateDays.value && executionDateType && executionDateType.value) {
+                        var days = parseInt(executionDateDays.value);
+
+                        executionDateDate = new Date();
+                        executionDateDate.setHours(12);
+                        executionDateDate.setMinutes(0);
+                        executionDateDate.setSeconds(0);
+                        executionDateDate.setMilliseconds(0);
+
+                        if (executionDateType.value == "CALENDAR") {
+                            executionDateDate.setDate(executionDateDate.getDate() + days);
+                            compareExecutionDate(parentExecutionDate, executionDateDate);
+                        } else if (executionDateType.value == "WORK") {
+                            Alfresco.util.Ajax.jsonPost(
+                                {
+                                    url: Alfresco.constants.PROXY_URI + "lecm/wcalendar/workCalendar/getNextWorkingDate",
+                                    dataObj: {
+                                        startDate: Alfresco.util.toISO8601(executionDateDate, {"milliseconds": true}),
+                                        offset: days,
+                                        type: "hours"
+                                    },
+                                    successCallback: {
+                                        fn: function (response) {
+                                            if (response.json && response.json.date) {
+                                                compareExecutionDate(parentExecutionDate, new Date(response.json.date));
+                                            }
+                                        }
+                                    }
+                                });
+                        }
+                    }
+                }
+            }
+        } else {
+            doSubmitResolutionForm();
+        }
+    }
+
+    function compareExecutionDate(parentDocExecutionDate, resolutionExecutionDate) {
+        if (parentDocExecutionDate && resolutionExecutionDate && (resolutionExecutionDate > parentDocExecutionDate)) {
+            Alfresco.util.PopupManager.displayPrompt({
+                title: Alfresco.util.message('title.resolution.executionDate.later.baseDoc'),
+                text: Alfresco.util.message('message.resolution.executionDate.later.baseDoc'),
+                close: false,
+                modal: true,
+                buttons: [
+                    {
+                        text: Alfresco.util.message('button.yes'),
+                        handler: function () {
+                            doSubmitResolutionForm();
+                            this.destroy();
+                        }
+                    }, {
+                        text: Alfresco.util.message('button.no'),
+                        handler: function () {
+                            this.destroy();
+                        },
+                        isDefault: true
+                    }]
+            });
+        } else {
+            doSubmitResolutionForm();
+        }
+    }
+
+    function doSubmitResolutionForm() {
         var routeButton = Selector.query(".yui-submit-button", formButtons, true);
         routeButton.click();
     }
@@ -85,7 +175,7 @@
                                             }
                                         }
                                         if (hasInvalidErrands) {
-                                            submitResolutionForm();
+                                            submitResolutionForm(false);
                                         }
                                     }
                                 }
@@ -99,7 +189,6 @@
     function init(layer, args) {
         formId = args[1].formId;
         formButtons = Dom.get(formId + "-form-buttons");
-        var submitButtonElement = Dom.get(formId + "-form-submit-button");
-        submitButtonElement.innerHTML = Alfresco.util.message("label.route-errand");
+        Dom.setStyle(formId + "-form-submit", "display", "none");
     }
 })();

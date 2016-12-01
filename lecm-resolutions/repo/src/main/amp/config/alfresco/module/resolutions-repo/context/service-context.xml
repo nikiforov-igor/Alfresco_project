@@ -34,4 +34,13 @@
         </property>
     </bean>
 
+    <bean id="resolutionsGroupActionBootstrap" parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/actions/create-resolution-from-incoming.xml</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>
