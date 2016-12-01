@@ -7,7 +7,8 @@ if (typeof LogicECM == 'undefined' || !LogicECM) {
 LogicECM.module = LogicECM.module || {};
 
 (function () {
-	var BaseUtil = LogicECM.module.Base.Util,
+	var ACUtils = LogicECM.module.AssociationComplexControl.Utils,
+		BaseUtil = LogicECM.module.Base.Util,
 		Bubbling = YAHOO.Bubbling,
 		Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
@@ -35,11 +36,14 @@ LogicECM.module = LogicECM.module || {};
 		Bubbling.on('removeSelectedItem', this.onRemoveSelectedItem, this);
 		Bubbling.on('pickerClosed', this.onPickerClosed, this);
         Bubbling.on('loadAllOriginalItems', this.onLoadAllOriginalItems, this);
+        Bubbling.on('readonlyControl', this.onReadonlyControl, this);
 
 		return this;
 	};
 
 	YAHOO.extend(LogicECM.module.AssociationComplexControl, Alfresco.component.Base, {
+
+		readonly: null,
 
 		fieldValues: [],
 
@@ -50,6 +54,8 @@ LogicECM.module = LogicECM.module || {};
 		autocompleteHelper: null,
 
 		options: {
+			fieldId: null,
+			formId: null,
 			disabled: null,
 			changeItemsFireAction: null,
 			additionalFilter: '',
@@ -72,58 +78,52 @@ LogicECM.module = LogicECM.module || {};
         optionsMap: {},
 
 		_renderSelectedItems: function (selectedItems) {
-
-			var ACUtils = LogicECM.module.AssociationComplexControl.Utils,
-				count;
-
 			function onAddListener(params) {
 				Event.on(params.id, 'click', this.onRemove, params, this);
 			}
 
-			selectedItems.forEach(function(selected) {
-                if (selected) {
-                    var displayName,
-                        elementName,
-                        elem = document.createElement('div'),
-                        id = selected.nodeRef.replace(/:|\//g, '_'),
-                        itemId = this.id + '-' + id,
-                        notSelected = !Selector.query('[id="' + itemId + '"]', this.widgets.selected, true),
-                        options = this.optionsMap[selected.key] || this.options;
+			function existing(item) {
+				var itemId, notSelected;
+				if (item) {
+					itemId = this.id + '-' + item.nodeRef.replace(/:|\//g, '_');
+					notSelected = !Selector.query('[id="' + itemId + '"]', this.widgets.selected, true);
+				}
+				return !!item && notSelected;
+			}
 
-                    if (notSelected) {
-                        if (options.plane || !options.showPath) {
-                            displayName = selected.selectedName;
-                        } else {
-                            displayName = selected.simplePath + selected.selectedName;
-                        }
+			function render(item) {
+				var elem = document.createElement('div'),
+					options = this.optionsMap[item.key] || this.options,
+					itemId = this.id + '-' + item.nodeRef.replace(/:|\//g, '_'),
+					displayName = (options.plane || !options.showPath) ? item.selectedName : item.simplePath + item.selectedName,
+					elementName;
 
-                        if (this.options.disabled) {
-                            if ('lecm-orgstr:employee' === options.itemType) {
-                                elem.innerHTML = BaseUtil.getCroppedItem(BaseUtil.getControlEmployeeView(selected.nodeRef, displayName));
-                            } else {
-                                elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected));
-                            }
-                            elem.firstChild.id = itemId;
-                        } else {
-                            Event.onAvailable(itemId, onAddListener, {id: itemId, nodeData: selected}, this);
-                            if ('lecm-orgstr:employee' === options.itemType) {
-                                elementName = ACUtils.getEmployeeAbsenceMarkeredHTML(selected.nodeRef, displayName, true, options.employeeAbsenceMarker, []);
-                                elem.innerHTML = BaseUtil.getCroppedItem(elementName, ACUtils.getRemoveButtonHTML(this.id, selected));
-                            } else {
-                                elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected), ACUtils.getRemoveButtonHTML(this.id, selected));
-                            }
-                        }
-                        this.widgets.selected.appendChild(elem.firstChild);
-                    }
-                }
-			}, this);
+				if (this.options.disabled || this.readonly) {
+					if ('lecm-orgstr:employee' === options.itemType) {
+						elem.innerHTML = BaseUtil.getCroppedItem(BaseUtil.getControlEmployeeView(item.nodeRef, displayName));
+					} else {
+						elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, item));
+					}
+					elem.firstChild.id = itemId;
+				} else {
+					Event.onAvailable(itemId, onAddListener, {id: itemId, nodeData: item}, this);
+					if ('lecm-orgstr:employee' === options.itemType) {
+						elementName = ACUtils.getEmployeeAbsenceMarkeredHTML(item.nodeRef, displayName, true, options.employeeAbsenceMarker, []);
+						elem.innerHTML = BaseUtil.getCroppedItem(elementName, ACUtils.getRemoveButtonHTML(this.id, item));
+					} else {
+						elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, item), ACUtils.getRemoveButtonHTML(this.id, item));
+					}
+				}
+				this.widgets.selected.appendChild(elem.firstChild);
+			}
+
+			var count, fn;
+
+			selectedItems.filter(existing, this).forEach(render, this);
 			count = this.widgets.selected.childElementCount;
 			if (this.widgets.autocomplete) {
-				if (!this.options.endpointMany && count) {
-					Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
-				} else {
-					Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
-				}
+				fn = (!this.options.endpointMany && count) ? Dom.addClass : Dom.removeClass;
+				fn.call(Dom, this.widgets.autocomplete.getInputEl(), 'hidden');
 			}
 			return count;
 		},
@@ -150,6 +150,19 @@ LogicECM.module = LogicECM.module || {};
 			}, this);
 			for (i in this.widgets) {
 				this.widgets[i].setMessages(messages);
+			}
+		},
+
+		onReadonlyControl: function(layer, args) {
+			var autocompleteInput, fn;
+			if (!this.options.disabled && this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+				this.readonly = args[1].readonly;
+				this.widgets.pickerButton.set('disabled', args[1].readonly);
+				if (this.widgets.autocomplete) {
+					autocompleteInput = this.widgets.autocomplete.getInputEl();
+					fn = args[1].readonly ? autocompleteInput.setAttribute : autocompleteInput.removeAttribute;
+					fn.call(autocompleteInput, 'disabled', '');
+				}
 			}
 		},
 
@@ -434,6 +447,8 @@ LogicECM.module = LogicECM.module || {};
 					fn: this.onAutocomplete
 				}, 'keydown');
 			}
+
+			BaseUtil.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
 		}
 	}, true);
 })();
