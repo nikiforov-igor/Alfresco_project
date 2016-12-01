@@ -6,7 +6,7 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.Resolutions = LogicECM.module.Resolutions || {};
 
 LogicECM.module.Resolutions.limitationDateValidation =
-    function (field, args, event, form, silent, message) {
+    function (field) {
         if (field.form) {
             var radio = field.form["prop_lecm-resolutions_limitation-date-radio"];
             var days = field.form["prop_lecm-resolutions_limitation-date-days"];
@@ -28,6 +28,16 @@ LogicECM.module.Resolutions.limitationDateValidation =
             } else {
                 return (limitationDate && limitationDate.value.length) || (field.name != "prop_lecm-resolutions_limitation-date");
             }
+        }
+        return true;
+    };
+
+LogicECM.module.Resolutions.controllerValidation =
+    function (field) {
+        if (field.form) {
+            var control = field.form["prop_lecm-resolutions_control"];
+
+            return (control && control.value == "false") || (field.value && field.value.length);
         }
         return true;
     };

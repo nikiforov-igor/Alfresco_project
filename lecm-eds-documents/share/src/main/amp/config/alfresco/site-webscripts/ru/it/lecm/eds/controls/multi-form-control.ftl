@@ -16,6 +16,9 @@
     function createControl() {
         new LogicECM.module.eds.MultiFormControl("${fieldHtmlId}").setOptions({
             disabled: ${disabled?string},
+         <#if field.value?has_content>
+             currentValue: ${field.value},
+         </#if>
         <#if params.availableRemoveDefault??>
             availableRemoveDefault: ${params.availableRemoveDefault},
         </#if>
@@ -33,6 +36,9 @@
         </#if>
         <#if params.fixSimpleDialogId??>
             fixSimpleDialogId: "${params.fixSimpleDialogId}",
+        </#if>
+        <#if params.argsConfig??>
+            argsConfig: ${params.argsConfig},
         </#if>
 
         <#if form.arguments??>

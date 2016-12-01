@@ -22,6 +22,7 @@
 
 <@markup id="css">
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata.css" group="document-create"/>
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-resolution/resolution-create-form.css" group="document-create"/>
 </@>
 
 <@markup id="widgets">
@@ -32,7 +33,7 @@
 	<@uniqueIdDiv>
 		<#if hasPermission>
 			<div class="container">
-				<div id="${el}-body" class="document-metadata without-preview"></div>
+				<div id="${el}-body" class="document-metadata without-preview resolution-create-form"></div>
 			</div>
 		<#else>
 			<div class="document-header">

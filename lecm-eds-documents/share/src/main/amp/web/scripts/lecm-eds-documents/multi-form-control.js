@@ -30,6 +30,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
         {
             options: {
                 disabled: false,
+                currentValue: [],
                 rootForm: null,
                 documentFromId: null,
                 defaultValueFromId: null,
@@ -37,6 +38,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 defaultValueDataSource: null,
                 availableRemoveDefault: true,
                 fixSimpleDialogId: null,
+                argsConfig: null,
                 args: null
             },
             currentLine: 0,
@@ -45,6 +47,8 @@ LogicECM.module.eds = LogicECM.module.eds || {};
             forms: [],
 
             onReady: function () {
+                this.loadCurrentValue();
+
                 if (this.options.documentType && !this.options.disabled) {
                     this.loadDefaultValue();
 
@@ -76,6 +80,14 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                         var simpleDialog = simpleDialogComponents[0];
                         YAHOO.Bubbling.unsubscribe("beforeFormRuntimeInit", simpleDialog.onBeforeFormRuntimeInit)
                     }
+                }
+            },
+
+            loadCurrentValue: function () {
+                if (this.options.currentValue && this.options.currentValue.length) {
+                    this.options.currentValue.forEach(function (item) {
+                        this.onAdd(null, null, item)
+                    }, this);
                 }
             },
 
@@ -160,10 +172,33 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 }
             },
 
+            buildArgsByForm: function () {
+                var result = {};
+                if (this.options.rootForm && this.options.argsConfig && Object.keys(this.options.argsConfig).length) {
+                    var rootFormData = this.options.rootForm.getFormData();
+
+                    if (rootFormData) {
+                        for (var key in this.options.argsConfig) {
+                            if (this.options.argsConfig.hasOwnProperty(key)) {
+                                if (rootFormData[key]) {
+                                    result[this.options.argsConfig[key]] = rootFormData[key];
+                                }
+                            }
+                        }
+                    }
+                }
+                return result;
+            },
+
             onAdd: function (e, target, args) {
                 this.currentLine++;
                 var num = this.currentLine;
                 var formId = this.id + "-line-" + this.currentLine;
+
+                var sendArgs = args;
+                if (!sendArgs) {
+                    sendArgs = this.buildArgsByForm();
+                }
 
                 var dataObj = {
                     htmlid: formId,
@@ -172,7 +207,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                     mode: "create",
                     submitType: "json",
                     formUI: true,
-                    args: JSON.stringify(args ? YAHOO.lang.merge(this.options.args, args) : this.options.args),
+                    args: JSON.stringify(sendArgs ? YAHOO.lang.merge(this.options.args, sendArgs) : this.options.args),
                     showCancelButton: false,
                     showSubmitButton: false
                 };
@@ -242,7 +277,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 });
             },
 
-            calcActionsHeight: function(num) {
+            calcActionsHeight: function (num) {
                 var li = Dom.get(this.id + "_" + num + "_item");
                 var removeItem = Dom.get(this.id + "_" + num + "_remove");
                 if (li && removeItem) {

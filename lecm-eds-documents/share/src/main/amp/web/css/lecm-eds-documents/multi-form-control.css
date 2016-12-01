@@ -3,12 +3,6 @@
     float: none;
 }
 
-.control.multi-form fieldset.fieldset {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-}
-
 .yui-panel .control.multi-form ul.multi-form-documents-list {
     max-height: 70vh;
     overflow-y: auto;

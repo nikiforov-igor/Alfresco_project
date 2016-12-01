@@ -11,6 +11,221 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="resolution-create-form-binding-script" force="true"/>
+
+                    <show id="lecm-resolutions:control"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-resolutions:author-assoc"/>
+                    <show id="lecm-resolutions:controller-assoc"/>
+                    <show id="lecm-resolutions:closers"/>
+
+                    <show id="limitation-date-script" force="true"/>
+                    <show id="lecm-resolutions:limitation-date-radio"/>
+                    <show id="resolutions-limitless" force="true"/>
+                    <show id="lecm-resolutions:limitation-date-days"/>
+                    <show id="lecm-resolutions:limitation-date-type"/>
+                    <show id="lecm-resolutions:limitation-date"/>
+
+                    <show id="lecm-resolutions:errands-json"/>
+                    <show id="change-errand-type-script" force="true"/>
+                    <show id="errands-limitation-date-script" force="true"/>
+
+                    <show id="lecm-resolutions:reviewers-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <set id="start" template="/ru/it/lecm/eds/controls/2-column-parent-set.ftl"/>
+                    <set id="start-left" parent="start"/>
+                    <set id="start-right" parent="start"/>
+                    <set id="start-right-start" parent="start-right"/>
+                    <set id="limitation-date" parent="start-right" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
+                    <set id="end"/>
+                    <set id="reviewers-fieldset" appearance="fieldset" label-id="label.review"/>
+                    <set id="reviewers" parent="reviewers-fieldset" template="/org/alfresco/components/form/2-column-set.ftl"/>
+
+                    <field id="lecm-document:subject-assoc" set="start-left"/>
+                    <field id="lecm-resolutions:author-assoc" set="start-left">
+                        <control>
+                            <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-resolutions:controller-assoc" set="start-left">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.controllerValidation" event="change" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-resolutions:closers" set="start-left">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+
+                    <field id="lecm-resolutions:control" set="start-right-start">
+                        <control>
+                            <control-param name="fireMandatoryByChange">true</control-param>
+                        </control>
+                    </field>
+                    <field id="limitation-date-script" set="start-right-start" >
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-resolution/resolutions-change-limitation-date.js</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-resolutions:limitation-date-radio" set="limitation-date" mandatory="true">
+                        <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
+                            <control-param name="defaultValue">DAYS</control-param>
+                            <control-param name="fireChangeEventName">changeResolutionLimitationDateRadio</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="resolutions-limitless" set="limitation-date">
+                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                            <control-param name="textCode">label.errand.limitless</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-resolutions:limitation-date-days" set="limitation-date" mandatory="true">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-resolutions:limitation-date-type" set="limitation-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                    <field id="lecm-resolutions:limitation-date" set="limitation-date"  mandatory="true">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
+                        </constraint-handlers>
+                    </field>
+
+                    <field id="lecm-resolutions:errands-json" label-id="field.primaryRouting.errands.title" set="end">
+                        <control template="/ru/it/lecm/eds/controls/multi-form-control.ftl">
+                            <control-param name="availableRemoveDefault">false</control-param>
+                            <control-param name="documentType">lecm-errands:document</control-param>
+                            <control-param name="documentFromId">from-resolution</control-param>
+                            <control-param name="argsConfig"><![CDATA[{
+                                    "assoc_lecm-resolutions_controller-assoc": "assoc_lecm-errands_controller-assoc",
+                                    "prop_lecm-resolutions_limitation-date-radio": "prop_lecm-errands_limitation-date-radio",
+                                    "prop_lecm-resolutions_limitation-date-days": "prop_lecm-errands_limitation-date-days",
+                                    "prop_lecm-resolutions_limitation-date-type": "prop_lecm-errands_limitation-date-type",
+                                    "prop_lecm-resolutions_limitation-date": "prop_lecm-errands_limitation-date"
+                                }]]></control-param>
+                        </control>
+                    </field>
+                    <field id="change-errand-type-script" set="end">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-reinit-title-by-type.js</control-param>
+                        </control>
+                    </field>
+                    <field id="errands-limitation-date-script" set="end">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-resolutions:reviewers-assoc" set="reviewers">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="items">employee,organization</control-param>
+                            <!-- lecm-orgstr:employee -->
+                            <control-param name="employee_label">Сотрудник</control-param>
+                            <control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
+                            <control-param name="employee_endpointMany">true</control-param>
+                            <control-param name="employee_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+                            <control-param name="employee_nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+                            <control-param name="employee_plane">true</control-param>
+                            <control-param name="employee_showSearch">true</control-param>
+                            <control-param name="employee_useStrictFilterByOrg">true</control-param>
+                            <control-param name="employee_showAssocViewForm">true</control-param>
+                            <control-param name="employee_sortProp">lecm-orgstr:employee-short-name</control-param>
+                            <!-- lecm-orgstr:organization-unit -->
+                            <control-param name="organization_label">Организация</control-param>
+                            <control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
+                            <control-param name="organization_endpointMany">true</control-param>
+                            <control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
+                            <control-param name="organization_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
+                            <control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
+                            <control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
+                            <control-param name="organization_plane">false</control-param>
+                            <control-param name="organization_showSearch">true</control-param>
+                            <control-param name="organization_showAssocViewForm">true</control-param>
+                            <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="document-template-fields">
+                <field-visibility>
+                    <show id="lecm-resolutions:number"/>
+                    <show id="lecm-resolutions:control"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-resolutions:author-assoc"/>
+                    <show id="lecm-resolutions:controller-assoc"/>
+                    <show id="lecm-resolutions:limitation-date"/>
+                    <show id="lecm-resolutions:reviewers-assoc"/>
+                </field-visibility>
+            </form>
+
+            <!-- Форма с набором полей, редактируемых в машине состояний -->
+            <form id="statemachine-editable-fields">
+                <field-visibility>
+                    <show id="lecm-resolutions:control"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-resolutions:author-assoc"/>
+                    <show id="lecm-resolutions:controller-assoc"/>
+                    <show id="lecm-resolutions:closers"/>
+
+                    <show id="limitation-date-script" force="true"/>
+                    <show id="lecm-resolutions:limitation-date-radio"/>
+                    <show id="resolutions-limitless" force="true"/>
+                    <show id="lecm-resolutions:limitation-date-days"/>
+                    <show id="lecm-resolutions:limitation-date-type"/>
+                    <show id="lecm-resolutions:limitation-date"/>
+
+                    <show id="lecm-resolutions:errands-json"/>
+
+                    <show id="lecm-resolutions:reviewers-assoc"/>
+                </field-visibility>
+            </form>
+
+            <!-- Форма атрибутивного поиска -->
+            <form id="search">
+                <field-visibility>
+                    <show id="lecm-resolutions:number"/>
+                    <show id="lecm-resolutions:control"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-resolutions:author-assoc"/>
+                    <show id="lecm-resolutions:controller-assoc"/>
+                    <show id="lecm-resolutions:limitation-date"/>
+                    <show id="lecm-resolutions:reviewers-assoc"/>																<!-- Подписанты -->
+                </field-visibility>
+            </form>
+
+            <form id="searchQueryGrid">
+                <field-visibility>
+                    <show id="lecm-resolutions:number"/>
+                    <show id="lecm-resolutions:control"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-resolutions:author-assoc"/>
+                    <show id="lecm-resolutions:controller-assoc"/>
+                    <show id="lecm-resolutions:limitation-date"/>
+                    <show id="lecm-resolutions:reviewers-assoc"/>
+                </field-visibility>
+            </form>
+            <form id="search-editor-fields">
+                <field-visibility>
+                    <show id="lecm-resolutions:number"/>
+                    <show id="lecm-resolutions:control"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-resolutions:author-assoc"/>
+                    <show id="lecm-resolutions:controller-assoc"/>
+                    <show id="lecm-resolutions:limitation-date"/>
+                    <show id="lecm-resolutions:reviewers-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-resolutions:document">
+        <forms>
+            <form>
+                <field-visibility>
                     <show id="lecm-resolutions:control"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
@@ -54,7 +269,6 @@
                     </field>
                     <field id="lecm-resolutions:limitation-date-radio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
-                            <control-param name="defaultValue">DAYS</control-param>
                             <control-param name="fireChangeEventName">changeResolutionLimitationDateRadio</control-param>
                         </control>
                         <constraint-handlers>
@@ -127,85 +341,6 @@
                         </control>
                     </field>
                 </appearance>
-            </form>
-            <form id="document-template-fields">
-                <field-visibility>
-                    <show id="lecm-resolutions:number"/>
-                    <show id="lecm-resolutions:control"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-resolutions:author-assoc"/>
-                    <show id="lecm-resolutions:controller-assoc"/>
-                    <show id="lecm-resolutions:limitation-date"/>
-                    <show id="lecm-resolutions:reviewers-assoc"/>
-                </field-visibility>
-            </form>
-
-            <!-- Форма с набором полей, редактируемых в машине состояний -->
-            <form id="statemachine-editable-fields">
-                <field-visibility>
-                    <show id="lecm-resolutions:number"/>
-                    <show id="lecm-resolutions:control"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-resolutions:author-assoc"/>
-                    <show id="lecm-resolutions:controller-assoc"/>
-                    <show id="lecm-resolutions:limitation-date"/>
-                    <show id="lecm-resolutions:limitation-date-radio"/>
-                    <show id="lecm-resolutions:limitation-date-days"/>
-                    <show id="lecm-resolutions:limitation-date-type"/>
-                    <show id="lecm-resolutions:reviewers-assoc"/>
-                </field-visibility>
-            </form>
-
-            <!-- Форма атрибутивного поиска -->
-            <form id="search">
-                <field-visibility>
-                    <show id="lecm-resolutions:number"/>
-                    <show id="lecm-resolutions:control"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-resolutions:author-assoc"/>
-                    <show id="lecm-resolutions:controller-assoc"/>
-                    <show id="lecm-resolutions:limitation-date"/>
-                    <show id="lecm-resolutions:reviewers-assoc"/>																<!-- Подписанты -->
-                </field-visibility>
-            </form>
-
-            <form id="searchQueryGrid">
-                <field-visibility>
-                    <show id="lecm-resolutions:number"/>
-                    <show id="lecm-resolutions:control"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-resolutions:author-assoc"/>
-                    <show id="lecm-resolutions:controller-assoc"/>
-                    <show id="lecm-resolutions:limitation-date"/>
-                    <show id="lecm-resolutions:reviewers-assoc"/>
-                </field-visibility>
-            </form>
-            <form id="search-editor-fields">
-                <field-visibility>
-                    <show id="lecm-resolutions:number"/>
-                    <show id="lecm-resolutions:control"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-resolutions:author-assoc"/>
-                    <show id="lecm-resolutions:controller-assoc"/>
-                    <show id="lecm-resolutions:limitation-date"/>
-                    <show id="lecm-resolutions:reviewers-assoc"/>
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
-
-    <config evaluator="node-type" condition="lecm-ord:document">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="lecm-resolutions:number"/>
-                    <show id="lecm-resolutions:control"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-resolutions:author-assoc"/>
-                    <show id="lecm-resolutions:controller-assoc"/>
-                    <show id="lecm-resolutions:limitation-date"/>
-                    <show id="lecm-resolutions:reviewers-assoc"/>
-                </field-visibility>
             </form>
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
             <form id="document">
