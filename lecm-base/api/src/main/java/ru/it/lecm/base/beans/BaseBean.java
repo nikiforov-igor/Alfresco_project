@@ -551,7 +551,7 @@ public abstract class BaseBean extends AbstractLifecycleBean implements Initiali
 		initServiceImpl();
 	}
 	
-	public void initServiceImpl() {
+	protected void initServiceImpl() {
 		// DO NOTHING
 	};
 	
