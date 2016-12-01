@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Resolution check execution dates</shortname>
+    <description>Resolution check execution dates</description>
+    <url>/lecm/resolutions/checkExecutionDates</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+</webscript>

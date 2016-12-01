@@ -50,7 +50,8 @@
                 <#if row.selectable?exists>
                     "selectable" : ${row.selectable?string},
                 </#if>
-				"nodeRef": "${row.item.nodeRef}"
+				"nodeRef": "${row.item.nodeRef}",
+        		"hasWritePermission": <#if row.item.hasPermission??>${row.item.hasPermission("Write")?string}<#else>false</#if>
                 }<#if row_has_next>,</#if>
 		</#list>
 		]
