@@ -1815,7 +1815,7 @@ if (document) {
     var limitationDate = document.properties["lecm-errands:limitation-date"];
     var dateString;
     if(limitationDateRadio) {
-        if(limitationDateDaysType == "LIMITLESS"){
+        if(limitationDateRadio == "LIMITLESS"){
             limitationDate = null;
             dateString = "Без срока";
           	document.properties["lecm-errands:limitation-date"]=limitationDate;
@@ -1833,7 +1833,7 @@ if (document) {
             }
             if(limitationDate){
                 var jsLimitDate = new Date(limitationDate);
-                var dateFormat = new Packages.java.text.SimpleDateFormat("dd.MM.yyyy")
+                var dateFormat = new Packages.java.text.SimpleDateFormat("dd.MM.yyyy");
                 dateString = dateFormat.format(jsLimitDate).toString();
               	document.properties["lecm-errands:limitation-date"] = jsLimitDate;
               	var date = document.properties["lecm-errands:wait-for-execution-date"];
@@ -2072,13 +2072,13 @@ if (document) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие недоступно, т.к. есть незаконченные дочерние поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -2529,13 +2529,13 @@ if (document) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только Создателю,Автору и Контроллеру поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -3840,13 +3840,13 @@ if(doc){
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие недоступно, т.к. есть незаконченные дочерние поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -4671,13 +4671,13 @@ if(doc){
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только Создателю, Автору и Контроллеру поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -5852,13 +5852,13 @@ if (document != null) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие недоступно, т.к. есть незаконченные дочерние поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -6679,13 +6679,13 @@ if (document != null) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только Создателю, Автору и Контроллеру поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -7795,13 +7795,13 @@ if (document != null) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие недоступно, т.к. есть незаконченные дочерние поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -8236,13 +8236,13 @@ if (document != null) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только Создателю, Автору и Контроллеру поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
