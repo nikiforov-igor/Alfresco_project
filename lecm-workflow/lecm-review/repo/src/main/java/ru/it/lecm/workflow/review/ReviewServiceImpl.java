@@ -72,8 +72,7 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 	}
 	
 	@Override
-	public void initService() {
-		super.initService();
+	public void initServiceImpl() {
 		if (null == getSettings()) {
 			PropertyMap props = new PropertyMap();
 			if (defaultReviewTerm != null) {

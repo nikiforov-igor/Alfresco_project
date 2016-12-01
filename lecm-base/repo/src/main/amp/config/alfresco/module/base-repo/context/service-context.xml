@@ -45,7 +45,8 @@
 		  p:transactionService-ref="transactionService"
 		  p:lecmTransactionHelper-ref="lecmTransactionHelper"
 		  p:authService-ref="authenticationService"
-		  p:lecmServicesRegistry-ref="lecmServicesRegistry"/>
+		  p:lecmServicesRegistry-ref="lecmServicesRegistry"
+		  p:repository-ref="repositoryHelper"/>
 
 	<bean id="baseScript" class="ru.it.lecm.base.beans.BaseWebScript" abstract="true" parent="baseJavaScriptExtension">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>

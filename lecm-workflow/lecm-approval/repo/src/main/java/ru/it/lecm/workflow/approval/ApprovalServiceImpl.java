@@ -62,8 +62,7 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
     }
     
     @Override
-	public void initService() {
-		super.initService();
+	public void initServiceImpl() {
 		// TODO: Нужно либо добавлять throws везде, либо разворачивать логику
 		try {
 			doWork();

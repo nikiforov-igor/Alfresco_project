@@ -139,8 +139,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
     }
 	
 	@Override
-	public void initService() {
-		super.initService();
+	public void initServiceImpl() {
 		final String rootName = ORGANIZATION_ROOT_NAME;
 		final NodeRef rootDir = getServiceRootFolder();
 

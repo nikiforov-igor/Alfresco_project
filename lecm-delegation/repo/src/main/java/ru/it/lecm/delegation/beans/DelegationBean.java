@@ -136,8 +136,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 	}
 	
 	@Override
-	public void initService() {
-		super.initService();
+	public void initServiceImpl() {		
 		//создание контейнера для хранения параметров делегирования
 		if (null == getDelegationOptsContainer()) {
 			createDelegationOptsContainer();

@@ -5,8 +5,8 @@
  */
 package ru.it.lecm.base.beans;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ import org.springframework.extensions.surf.util.AbstractLifecycleBean;
  */
 public class LecmServicesRegistryImpl extends AbstractLifecycleBean implements LecmServicesRegistry {
 	
-	private final Map<String, LecmService> services = new HashMap<>();
+	private final List<LecmService> services = new ArrayList<>();
 	
 	private static final Logger logger = LoggerFactory.getLogger(LecmServicesRegistryImpl.class);
 	private LecmTransactionHelper lecmTransactionHelper;
@@ -37,7 +37,7 @@ public class LecmServicesRegistryImpl extends AbstractLifecycleBean implements L
 	 */
 	@Override
 	public void register(LecmService service) {
-		services.put(service.getClass().getName(), service);
+		services.add(service);
 	}
 	
 	/**
@@ -52,15 +52,13 @@ public class LecmServicesRegistryImpl extends AbstractLifecycleBean implements L
 				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
 					@Override
 					public Void doWork() throws Exception {
-						for (Map.Entry<String, LecmService> entry : services.entrySet()) {
-							String name = entry.getKey();
-							final LecmService service = entry.getValue();
-
+						for (LecmService service : services) {
 							if (logger.isTraceEnabled()) {
-								logger.trace("Going to bootstrap service {}", name);
+								logger.trace("Going to bootstrap service {}", service);
 							}
 							service.initService();
 						}
+						
 						return null;
 					}
 				});

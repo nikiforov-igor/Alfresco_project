@@ -124,7 +124,7 @@ public abstract class AbstractCommonWCalendarBean extends BaseBean implements IC
 	}
 
 	@Override
-	public void initService() {
+	public void initServiceImpl() {
 		// TODO: Надо привести сервис календарей к обычной системе папок и избавиться это этой странной логики
 		if(getWCalendarContainer() == null){
 			createWCalendarContainer();

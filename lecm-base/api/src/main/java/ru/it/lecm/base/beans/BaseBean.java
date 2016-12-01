@@ -24,6 +24,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
+import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 
 /**
@@ -70,6 +71,11 @@ public abstract class BaseBean extends AbstractLifecycleBean implements Initiali
     protected AuthenticationService authService;
     protected LecmTransactionHelper lecmTransactionHelper;
 	protected LecmServicesRegistry lecmServicesRegistry;
+	protected Repository repository;
+
+	public void setRepository(Repository repository) {
+		this.repository = repository;
+	}
 
 	public void setLecmServicesRegistry(LecmServicesRegistry lecmServicesRegistry) {
 		this.lecmServicesRegistry = lecmServicesRegistry;
@@ -503,12 +509,12 @@ public abstract class BaseBean extends AbstractLifecycleBean implements Initiali
 	// Цель - избавиться от цепочки транзакций и ненужных вызовов
 	// TODO: Попытаться как-то отрефакторить метод, ибо страшный получился
 	private void createServiceFolders() {
-		ServiceFolderStructureHelper serviceFolderStructureHelper = (ServiceFolderStructureHelper) repositoryStructureHelper;
+		String rootPath = repositoryStructureHelper.getServicesHomePath();
 		for (Entry<String, ServiceFolder> serviceFolder : serviceFolders.entrySet()) {
 			ServiceFolder folder = serviceFolder.getValue();
-			String relativePath = folder.getRelativePath();
+			String relativePath = new StringBuilder(rootPath).append('/').append(folder.getRelativePath()).toString();
 			String[] folders = StringUtils.split(relativePath, '/');
-			NodeRef parent = repositoryStructureHelper.getHomeRef();
+			NodeRef parent = repository.getCompanyHome();
 			
 			for (String repoFolder : folders) {
 				NodeRef pathDir = nodeService.getChildByName(parent, ContentModel.ASSOC_CONTAINS, repoFolder);
@@ -541,7 +547,12 @@ public abstract class BaseBean extends AbstractLifecycleBean implements Initiali
 
 	@Override
 	public void initService() {
-		createServiceFolders();		
+		createServiceFolders();	
+		initServiceImpl();
 	}
+	
+	protected void initServiceImpl() {
+		// DO NOTHING
+	};
 	
 }

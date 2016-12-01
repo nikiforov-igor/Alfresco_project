@@ -2,7 +2,6 @@ package ru.it.lecm.modelEditor.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
-import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
@@ -29,13 +28,11 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.*;
 import org.alfresco.error.AlfrescoRuntimeException;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.dictionary.ChildAssociationDefinition;
 import org.alfresco.service.cmr.dictionary.ClassAttributeDefinition;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.util.PropertyMap;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
@@ -73,7 +70,6 @@ public class FormsEditorBeanImpl extends BaseBean {
 
 	protected NamespaceService namespaceService;
 	protected DictionaryService dictionaryService;
-	protected Repository repository;
 
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -86,10 +82,6 @@ public class FormsEditorBeanImpl extends BaseBean {
 
 	public void setDictionaryService(DictionaryService dictionaryService) {
 		this.dictionaryService = dictionaryService;
-	}
-
-	public void setRepository(Repository repository) {
-		this.repository = repository;
 	}
 
 	/**

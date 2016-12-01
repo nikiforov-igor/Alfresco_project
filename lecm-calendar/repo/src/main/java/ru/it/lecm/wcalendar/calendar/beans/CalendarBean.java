@@ -97,7 +97,7 @@ public class CalendarBean extends AbstractCommonWCalendarBean implements ICalend
 	}
 	
 	@Override
-	public void initService()
+	public void initServiceImpl()
 	{
 		// TODO: Надо привести сервис календарей к обычной системе папок и избавиться это этой странной логики
 		// Генерация календарей на yearsAmountToCreate вперед.
