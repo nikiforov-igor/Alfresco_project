@@ -48,7 +48,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     final private static Logger logger = LoggerFactory.getLogger(NotificationsServiceImpl.class);
     private static final int DEFAULT_N_DAYS = 5;
     private static final int DEFAULT_SHORT_N_DAYS = 1;
-    private static final int DEFAULT_SHORT_LIMIT_DAYS = 1;
+    private static final int DEFAULT_SHORT_LIMIT_DAYS = 10;
     private static final String DOCUMENT_LINK = "Документ {#mainObject.wrapAsLink(#mainObject.attribute(\"lecm-document:present-string\"))}";
     private static final String DEFAULT_NOTIFICATION_TEMPLATE = "При формировании уведомления произошла ошибка. За дополнительной информацией обратитесь к администратору. %s Ошибка: %s";
 

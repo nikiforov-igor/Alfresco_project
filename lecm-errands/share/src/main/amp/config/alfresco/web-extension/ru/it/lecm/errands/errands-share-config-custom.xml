@@ -1771,7 +1771,50 @@
             </form>
         </forms>
     </config>
-
+    <config evaluator="string-compare" condition="activiti$errandsChangeExecutor_1">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmErrandWf:changeExecutorCurrentExecutor" />
+                    <show id="lecmErrandWf:changeExecutorNewExecutor"/>
+                    <show id="lecmErrandWf:changeExecutorReason"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:changeExecutorCurrentExecutor" label-id="field.changeExecutorCurrentExecutor.title">
+                        <control template="/ru/it/lecm/documents/controls/workflow/format-packageItems-document.ftl">
+                            <control-param name="substituteString">
+                                <![CDATA[
+					                <a href='/share/page/view-metadata?nodeRef={lecm-errands:executor-assoc/nodeRef}'>
+					                    {lecm-errands:executor-assoc/lecm-orgstr:employee-short-name} {lecm-errands:executor-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}
+					                </a>
+				                ]]>
+                            </control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:changeExecutorNewExecutor">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+                            <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="employeeAbsenceMarker">true</control-param>
+                            <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+                            <control-param name="useStrictFilterByOrg">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:changeExecutorReason">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">7</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
     <config evaluator="string-compare" condition="activiti$errandsChangeController">
         <forms>
             <form>
@@ -2001,6 +2044,27 @@
 		</forms>
 	</config>
 
+    <config evaluator="string-compare" condition="activiti$errandsExecute_1">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmErrandWf:errandExecuteMessage" />
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:errandExecuteMessage">
+                        <control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+                            <control-param name="msg">ru.it.errand.execute.message</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
     <config evaluator="string-compare" condition="activiti$errandsCoexecutorReport">
         <forms>
             <form>
@@ -2185,10 +2249,12 @@
             <workflow name="activiti$errandsInitiatorApprove"/>
             <workflow name="activiti$errandsInitiatorDecline"/>
             <workflow name="activiti$errandsExecute"/>
+            <workflow name="activiti$errandsExecute_1"/>
             <workflow name="activiti$errandsControllerDecline"/>
             <workflow name="activiti$errandsControllerApprove"/>
             <workflow name="activiti$errandsCancel"/>
             <workflow name="activiti$errandsChangeExecutor"/>
+            <workflow name="activiti$errandsChangeExecutor_1"/>
             <workflow name="activiti$errandsChangeController"/>
             <workflow name="activiti$errandsCreateChildErrand"/>
             <workflow name="activiti$errandsRemoveDraft"/>

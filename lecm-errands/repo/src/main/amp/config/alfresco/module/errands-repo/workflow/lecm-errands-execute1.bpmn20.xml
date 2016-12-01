@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/errands/workflow/execute_1/1.0">
+    <process id="errandsExecute_1" name="Исполнить поручение(1)">
+        <startEvent id="startExecute" name="Start" activiti:formKey="lecmErrandWf:execute"></startEvent>
+        <endEvent id="endExecute" name="End"></endEvent>
+        <scriptTask id="executeErrand" name="Errand execute" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            var document = bpm_package.children[0];
+                            if (document != null) {
+                            document.properties["lecm-errands:execution-date"] = new Date();
+                            var report_required  = document.properties["lecm-errands:report-required"];
+                            if(report_required){
+
+                            var initiator = null;
+                            var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
+                            if (initiatorAssoc != null &amp;&amp; initiatorAssoc.length == 1) {
+                            initiator = initiatorAssoc[0];
+                            }
+                            var controller = null;
+                            var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
+                            if (controllerAssoc != null &amp;&amp; controllerAssoc.length == 1) {
+                            controller = controllerAssoc[0];
+                            }
+                            var executor = null;
+                            var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
+                            if (executorAssoc != null &amp;&amp; executorAssoc.length == 1) {
+                            executor = executorAssoc[0];
+                            }
+
+                            var report_recipient_type = document.properties["lecm-errands:report-recipient-type"];
+                            if (report_recipient_type == "AUTHOR"){
+                            if(initiator){
+                            notifications.sendNotificationFromCurrentUser({
+                            recipients: [initiator],
+                            templateCode: 'ERRANDS_EXECUTED_TO_INITIATOR',
+                            templateConfig: {
+                            mainObject: document,
+                            eventExecutor: executor
+                            }
+                            });
+                            }
+                            }else if (report_recipient_type == "CONTROLLER"){
+                            if(controller){
+                            notifications.sendNotificationFromCurrentUser({
+                            recipients: [controller],
+                            templateCode: 'ERRANDS_EXECUTED_TO_CONTROLLER',
+                            templateConfig: {
+                            mainObject: document,
+                            eventExecutor: executor
+                            }
+                            });
+                            }
+                            }else if(report_recipient_type == "AUTHOR_AND_CONTROLLER"){
+                            if(controller){
+                            notifications.sendNotificationFromCurrentUser({
+                            recipients: [controller],
+                            templateCode: 'ERRANDS_EXECUTED_TO_CONTROLLER',
+                            templateConfig: {
+                            mainObject: document,
+                            eventExecutor: executor
+                            }
+                            });
+                            }
+                            if(initiator){
+                            notifications.sendNotificationFromCurrentUser({
+                            recipients: [initiator],
+                            templateCode: 'ERRANDS_EXECUTED_TO_INITIATOR',
+                            templateConfig: {
+                            mainObject: document,
+                            eventExecutor: executor
+                            }
+                            });
+                            }
+                            }
+                            execution.setVariable("executeResult","onControl");
+                            document.properties["lecm-errands:execute-result"] = "onControl";
+                            }else{
+                            execution.setVariable("executeResult","executed");
+                            document.properties["lecm-errands:execute-result"] = "executed";
+                            }
+                            document.save();
+                            }
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script></script>
+        </scriptTask>
+        <receiveTask id="errandReceiveTask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startExecute" targetRef="executeErrand"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="executeErrand" targetRef="errandReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="errandReceiveTask" targetRef="endExecute"></sequenceFlow>
+    </process>
+</definitions>

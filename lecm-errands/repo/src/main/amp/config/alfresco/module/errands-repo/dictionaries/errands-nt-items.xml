@@ -1,11 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
     <item name="lecm-dic:Шаблоны уведомлений" type="lecm-dic:dictionary">
-        <property name="cm:name"><![CDATA[Шаблоны уведомлений]]></property>
-        <property name="lecm-dic:attributeForShow"><![CDATA[cm:name]]></property>
-        <property name="lecm-dic:type"><![CDATA[lecm-notification-template:template]]></property>
-        <property name="lecm-dic:plane"><![CDATA[true]]></property>
-        <property name="lecm-dic:description"><![CDATA[Шаблоны уведомлений]]></property>
         <items updateMode="CreateOrUpdate">
             <item name="cm:ERRANDS_EXCEEDED_DEADLINE" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">

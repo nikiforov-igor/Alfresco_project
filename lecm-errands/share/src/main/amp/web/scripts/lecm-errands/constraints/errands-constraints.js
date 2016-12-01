@@ -33,6 +33,9 @@ LogicECM.module.Errands.limitationDateValidation =
     };
 LogicECM.module.Errands.WFChangeDueDateValidation =
     function (field, args, event, form, silent, message) {
+        if (field.name != "prop_lecmErrandWf_changeDueDateNewDueDate") {
+            return true;
+        }
         if (field.form) {
             var radio = field.form["prop_lecmErrandWf_changeDueDateNewDueDateRadio"];
             var limitationDate = field.form["prop_lecmErrandWf_changeDueDateNewDueDate"];
@@ -47,7 +50,7 @@ LogicECM.module.Errands.WFChangeDueDateValidation =
             if (radioValue == "LIMITLESS") {
                 return true;
             }else{
-                return (limitationDate && limitationDate.value.length) || (field.name != "prop_lecmErrandWf_changeDueDateNewDueDate");
+                return (limitationDate && limitationDate.value.length);
             }
         }
         return true;
