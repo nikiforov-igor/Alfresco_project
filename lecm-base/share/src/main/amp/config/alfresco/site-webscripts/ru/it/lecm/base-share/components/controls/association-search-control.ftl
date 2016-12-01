@@ -15,6 +15,7 @@
 	<#assign showSelectedItems = true>
 </#if>
 
+<#assign readonly = false>
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <#if disabled>
@@ -70,11 +71,19 @@
 			<#assign renderPickerJSSelectedValue = context.properties[field.control.params.selectedValueContextProperty]>
 		</#if>
 	</#if>
+	<#if !(renderPickerJSSelectedValue??)>
+		<#if form.arguments[field.name]?has_content>
+			<#assign renderPickerJSSelectedValue = form.arguments[field.name]/>
+		<#elseif form.arguments['readonly_' + field.name]?has_content>
+			<#assign renderPickerJSSelectedValue=form.arguments['readonly_' + field.name]>
+			<#assign readonly = true>
+		</#if>
+	</#if>
 	<#assign optionSeparator="|">
 	<#assign labelSeparator=":">
 
 	(function () {
-		
+
 		function init() {
             LogicECM.module.Base.Util.loadScripts([
                 'scripts/lecm-base/components/lecm-association-search.js'
@@ -157,15 +166,20 @@
 					doNotCheckAccess: ${field.control.params.doNotCheckAccess?string},
 				</#if>
 				<#if field.control.params.itemType??>
-					itemType: "${field.control.params.itemType}"
+					itemType: "${field.control.params.itemType}",
 				<#else>
-				itemType: "${field.endpointType}"
+				itemType: "${field.endpointType}",
 				</#if>
+				fieldId: "${field.configName}",
+				formId: "${args.htmlid}"
 			}).setMessages( ${messages} );
+		<#if readonly>
+			LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+		</#if>
 		}
 
 		YAHOO.util.Event.onDOMReady(init);
-		
+
 	})();
 
 
