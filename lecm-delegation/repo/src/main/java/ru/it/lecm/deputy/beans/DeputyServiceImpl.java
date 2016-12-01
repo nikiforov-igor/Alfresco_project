@@ -65,9 +65,8 @@ public class DeputyServiceImpl extends BaseBean implements DeputyService {
 	}
 	
 	@Override
-	public void initService()
+	public void initServiceImpl()
 	{
-		super.initService();
 		if (getDeputySettingsNode() == null) {
 			createDeputySettingsNode();
 		}

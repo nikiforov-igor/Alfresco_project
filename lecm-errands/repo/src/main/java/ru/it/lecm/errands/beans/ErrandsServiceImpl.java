@@ -96,8 +96,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     }
     
     @Override
-	public void initService() {
-		super.initService();
+	public void initServiceImpl() {
 		if (null == getSettingsNode()) {
 			settingsNode = createSettingsNode();
 		}

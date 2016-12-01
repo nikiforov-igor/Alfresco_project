@@ -84,62 +84,43 @@ public class LecmDictionaryBootstrap extends BaseBean {
 	private NodeRef rootDir;
 	
 	@Override
-	protected void onBootstrap(ApplicationEvent event)
+	public void initServiceImpl()
 	{
 		if (!bootstrapOnStart) {
             logger.warn("Bootstrap disabled. Use 'lecm.dictionaries.bootstrapOnStart=true' in alfresco-global.properties file to enable it.");
             return; //пропускаем
         }
-		AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
-			@Override
-			public Object doWork() throws Exception {
-				if (dictionaries != null) {
-					logger.info("!!!!!!!!! dictionaries: "+dictionaries);
-					RetryingTransactionHelper rth1 = transactionService.getRetryingTransactionHelper();
-					rth1.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-						@Override
-						public Object execute() throws Throwable {
-			                if (rootPath != null) {
-			                	logger.info("!!!!!!!!! rootPath: "+rootPath);
-							    rootDir = getNodeByPath(rootPath);
-			                } else {
-			                	logger.info("!!!!!!!!! dictionariesRoot");
-			                    rootDir = dictionaryBean.getDictionariesRoot();
-			                }
-			                return null;
-						}
-					},false,true);
-					
-					for (final String dictionary : dictionaries) {
-						RetryingTransactionHelper rth2 = transactionService.getRetryingTransactionHelper();
-						rth2.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-							@Override
-							public Object execute() throws Throwable {
-								logger.debug("Importing dictionary: {}", dictionary);
-								final InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dictionary);
-								try {
-									XMLImportBean.XMLImporter importer = xmlImportBean.getXMLImporter(inputStream);
-									XMLImporterInfo info = importer.readItems(rootDir);
-									logger.trace("{} import finished. {}", dictionary, info);
-								} catch (Exception e) {
-									logger.error("Can not import dictionary: " + dictionary, e);
-								} finally {
-									IOUtils.closeQuietly(inputStream);
-								}
-								return null;
-							}
-						},false,true);
-					}
-				
-				}
-                if (xmlImportListener != null) {
-                	xmlImportListener.execute(); // оповещаем о завершении импорта
-                }				
-			return null;
+		
+		if (dictionaries != null) {
+			logger.info("!!!!!!!!! dictionaries: "+dictionaries);
+			if (rootPath != null) {
+				logger.info("!!!!!!!!! rootPath: "+rootPath);
+				rootDir = getNodeByPath(rootPath);
+			} else {
+				logger.info("!!!!!!!!! dictionariesRoot");
+				rootDir = dictionaryBean.getDictionariesRoot();
 			}
-		};
-		AuthenticationUtil.runAsSystem(raw);
 
+			for (final String dictionary : dictionaries) {
+				logger.debug("Importing dictionary: {}", dictionary);
+				final InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dictionary);
+				try {
+					XMLImportBean.XMLImporter importer = xmlImportBean.getXMLImporter(inputStream);
+					XMLImporterInfo info = importer.readItems(rootDir);
+					logger.trace("{} import finished. {}", dictionary, info);
+				} catch (Exception e) {
+					logger.error("Can not import dictionary: " + dictionary, e);
+				} finally {
+					IOUtils.closeQuietly(inputStream);
+				}
+			}
+
+		}
+		
+		if (xmlImportListener != null) {
+			xmlImportListener.execute(); // оповещаем о завершении импорта
+		}
+		
 	}
 
     private NodeRef getNodeByPath(String path) {

@@ -65,8 +65,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	}
 	
 	@Override
-	public void initService() {
-		super.initService();
+	public void initServiceImpl() {
 		if (null == getSettingsNode()) {
 			settingsNode = createSettingsNode();
 		}

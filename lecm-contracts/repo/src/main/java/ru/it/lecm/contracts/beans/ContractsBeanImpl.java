@@ -110,8 +110,7 @@ public class ContractsBeanImpl extends BaseBean {
     }
     
 	@Override
-	public void initService() {
-		super.initService();
+	public void initServiceImpl() {
 		final NodeRef serviceRoot = getFolder(CONTRACTS_ROOT_ID);
 		dashletSettings = nodeService.getChildByName(serviceRoot, ContentModel.ASSOC_CONTAINS, CONTRACTS_DASHLET_SETTINGS_ID);
 		if (dashletSettings == null) {

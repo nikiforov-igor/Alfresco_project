@@ -124,8 +124,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     }
     
     @Override
-	public void initService() {
-		super.initService();
+	public void initServiceImpl() {
 		if (null == getGlobalSettingsNode()) {
 			settingsNode = createGlobalSettingsNode();
 		}

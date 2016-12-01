@@ -97,8 +97,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	}
 	
 	@Override
-	public void initService() {
-		super.initService();
+	public void initServiceImpl() {
 		if (getSettings() == null) {
 			PropertyMap props = new PropertyMap();
 			props.put(PROP_OPERATIVE_STORAGE_CENRALIZED, true);

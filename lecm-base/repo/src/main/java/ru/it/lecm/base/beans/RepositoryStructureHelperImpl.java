@@ -505,4 +505,11 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
         result.add(FolderNameFormatDay.format(date));
         return result;
     }
+	
+	@Override
+	public String getServicesHomePath() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(root).append(FOLDER_SEPARATOR).append(home);
+		return sb.toString();
+	}
 }
