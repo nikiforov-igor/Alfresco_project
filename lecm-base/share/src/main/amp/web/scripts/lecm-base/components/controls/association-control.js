@@ -66,7 +66,8 @@ LogicECM.module = LogicECM.module || {};
 			pickerButtonTitle: null,
 			pickerButtonLabel: null,
             multipleSelectMode: false,
-			itemsOptions: []
+			itemsOptions: [],
+			sortSelected: false
 		},
 
 		widgets: {
@@ -119,7 +120,11 @@ LogicECM.module = LogicECM.module || {};
 
 			var count, fn;
 
-			selectedItems.filter(existing, this).forEach(render, this);
+			if (this.options.sortSelected) {
+				selectedItems.filter(existing, this).sort(ACUtils.sortByName).forEach(render, this);
+			} else {
+				selectedItems.filter(existing, this).forEach(render, this);
+			}
 			count = this.widgets.selected.childElementCount;
 			if (this.widgets.autocomplete) {
 				fn = (!this.options.endpointMany && count) ? Dom.addClass : Dom.removeClass;
@@ -130,7 +135,7 @@ LogicECM.module = LogicECM.module || {};
 
 		createAssociationControlAutocompleteHelper: function () {
 			if (this.options.showAutocomplete) {
-				this.autocompleteHelper = new Alfresco.util.Deferred(LogicECM.module.AssociationComplexControl.Utils.getItemKeys(this.options.itemsOptions), {
+				this.autocompleteHelper = new Alfresco.util.Deferred(ACUtils.getItemKeys(this.options.itemsOptions), {
 					scope: this,
 					fn: this.enableAutocomplete
 				});
@@ -147,6 +152,14 @@ LogicECM.module = LogicECM.module || {};
 			this.options.itemsOptions.forEach(function (obj) {
 				this.widgets[obj.itemKey] = new LogicECM.module.AssociationComplexControl.Item(this.id + '-picker-' + obj.itemKey, obj.itemKey, obj.options, this.fieldValues, this);
 				this.widgets[obj.itemKey].eventGroup = this.eventGroup;
+
+				//переопределение методов из options
+				if(YAHOO.lang.isFunction(obj.options.getExtSearchQueryFunction)) {
+					this.widgets[obj.itemKey]['_fnGetExtSearchQuery'] = obj.options.getExtSearchQueryFunction;
+				}
+				if(YAHOO.lang.isFunction(obj.options.getArgumentsFromFormFunction)) {
+					this.widgets[obj.itemKey]['_fnGetArgumentsFromForm'] = obj.options.getArgumentsFromFormFunction;
+				}
 			}, this);
 			for (i in this.widgets) {
 				this.widgets[i].setMessages(messages);
@@ -255,7 +268,7 @@ LogicECM.module = LogicECM.module || {};
 
                 selectedValues = selectedKeys.map(function(key) {
 					return this[key];
-				}, args[1].selected).sort(LogicECM.module.AssociationComplexControl.Utils.sortByIndex);
+				}, args[1].selected).sort(ACUtils.sortByIndex);
 
 				this.widgets.selected.innerHTML = '';
 				this._renderSelectedItems(selectedValues);
@@ -324,7 +337,7 @@ LogicECM.module = LogicECM.module || {};
 			Dom.addClass(this.widgets.autocomplete.getInputEl(), 'wait-for-load');
 			searchTerm = searchTerm ? searchTerm : 'cm:name:' + decodedQuery;
 
-			return LogicECM.module.AssociationComplexControl.Utils.generateChildrenUrlParams(this.options, searchTerm, 0, true);
+			return ACUtils.generateChildrenUrlParams(this.options, searchTerm, 0, true);
 		},
 
 		formatResult: function (oResultData, sQuery, sResultMatch) {

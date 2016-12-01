@@ -535,14 +535,16 @@ LogicECM.module = LogicECM.module || {};
 					// if disabled show the (None) message
 					this.selectedItems = {};
 					this.singleSelectedItem = null;
+					var clear = clearCurrentDisplayValue;
 					if (!this.options.disabled) {
 						this.updateSelectedItems();
 						this.updateAddButtons();
 					} else if (Dom.get(this.options.controlId + "-currentValueDisplay") != null && Dom.get(this.options.controlId + "-currentValueDisplay").innerHTML.trim() === "") {
 						Dom.get(this.options.controlId + "-currentValueDisplay").innerHTML = this.msg("form.control.novalue");
+						clear = false;
 					}
 					if (updateForms) {
-						this.updateFormFields(clearCurrentDisplayValue);
+						this.updateFormFields(clear);
 					}
 				}
 			},

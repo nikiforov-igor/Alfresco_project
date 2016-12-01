@@ -1149,38 +1149,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>137025e0-5ab8-480e-bbbd-5d942c0a41d8
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/f5bdfd12-5d02-4af9-805a-f8c288eb2477
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Согласование не может быть запущено, так как будут пропущены все этапы маршрута]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!@routesService.isRouteEmpty(doc.nodeRef)]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -3078,38 +3046,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>5a441921-5645-437f-b5f7-4dd145f34371
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/2267a80e-f089-45d0-8b6b-6710cdc82b56
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Согласование не может быть запущено, так как будут пропущены все этапы маршрута]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!@routesService.isRouteEmpty(doc.nodeRef)]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -4675,7 +4611,32 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                             </property>
                                                             <property>
                                                                 <name>transition-script</name>
-                                                                <value><![CDATA[]]></value>
+                                                                <value><![CDATA[(function () {
+    var protocol = stm_document,
+        tableAssocs = protocol.assocs['lecm-protocol-ts:points-assoc'],
+        tableData, protocolPoints, i, point, currentDate, executionDate;
+
+    if (tableAssocs && tableAssocs.length) {
+        tableData = tableAssocs[0];
+        protocolPoints = documentTables.getTableDataRows(tableData.nodeRef.toString());
+        currentDate = new Date();
+        currentDate.setHours(0);
+        currentDate.setMinutes(0);
+        currentDate.setSeconds(0);
+        currentDate.setMilliseconds(0);
+        for (i in protocolPoints) {
+            point = protocolPoints[i];
+            executionDate = new Date(point.properties['lecm-protocol-ts:execution-date'].getTime());
+            executionDate.setHours(0);
+            executionDate.setMinutes(0);
+            executionDate.setSeconds(0);
+            executionDate.setMilliseconds(0);
+            if (executionDate.getTime() < currentDate.getTime()) {
+                protocolService.changePointStatus(point.nodeRef.toString(), 'EXPIRED_STATUS');
+            }
+        }
+    }
+})();]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
@@ -6274,35 +6235,38 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                         <properties>
                                                             <property>
                                                                 <name>actionScript</name>
-                                                                <value><![CDATA[(function(){
-    var protocol = stm_document;
-    var auto = protocol.properties["lecm-protocol:errands-autocreation"];
-    if (!auto) {
-        var tableAssocs = protocol.assocs["lecm-protocol-ts:points-assoc"];
-        if (tableAssocs!==null && tableAssocs.length > 0){
-            var table = tableAssocs[0];
-            var  pointAssocs = table.childAssocs["cm:contains"];
-			if (pointAssocs){
-				var length = pointAssocs.length;
-				for (var i = 0; i < length; i++ ){
-					var pointExecutorAssoc = pointAssocs[i].assocs["lecm-protocol-ts:executor-assoc"];
-					if (pointExecutorAssoc && pointExecutorAssoc.length > 0){
-						var pointExecutor = pointExecutorAssoc[0];
-						statemachine.grandDynamicRoleForEmployee(protocol, pointExecutor, "PROTOCOL_POINT_EXECUTOR", task);
+                                                                <value><![CDATA[(function() {
+    var protocol = stm_document,
+        auto = !!protocol.properties['lecm-protocol:errands-autocreation'],
+        tableAssocs = protocol.assocs['lecm-protocol-ts:points-assoc'],
+        msg = 'Просрочено исполнение пункта #mainobject протокола #object1',
+        tableData, protocolPoints, i, point, isExpired, pointExecutors;
 
-						var pointNumber = pointAssocs[i].properties["lecm-document:indexTableRow"];
-
-						notifications.sendNotification({
-							recipients: [pointExecutor],
-							templateCode: 'PROTOCOL_POINT_EXECUTOR',
-							templateConfig: {
-								mainObject: protocol,
-								pointNumber: pointNumber
-							}
-						});
-					}
-				}
-			}
+    if (tableAssocs && tableAssocs.length) {
+        tableData = tableAssocs[0];
+        protocolPoints = documentTables.getTableDataRows(tableData.nodeRef.toString());
+        for (i in protocolPoints) {
+            point = protocolPoints[i];
+            isExpired = !!protocolService.checkPointExpiredStatus(point);
+            if (isExpired) {
+                businessJournal.log(point.nodeRef.toString(), 'PROTOCOL_POINT_EXPIRED', msg, [protocol.nodeRef.toString()]);
+            } else {
+                protocolService.changePointStatus(point.nodeRef.toString(), 'PERFORMANCE_STATUS');
+            }
+            if (auto) {
+                pointExecutors = point.assocs['lecm-protocol-ts:executor-assoc'];
+                if (pointExecutors && pointExecutors.length) {
+                    statemachine.grandDynamicRoleForEmployee(protocol, pointExecutors[0], 'PROTOCOL_POINT_EXECUTOR', task);
+                    notifications.sendNotification({
+                        recipients: pointExecutors,
+                        templateCode: 'PROTOCOL_POINT_EXECUTOR',
+                        templateConfig: {
+                            mainObject: protocol,
+                            pointNumber: point.properties['lecm-document:indexTableRow']
+                        }
+                    });
+                }
+            }
         }
     }
 })();]]></value>

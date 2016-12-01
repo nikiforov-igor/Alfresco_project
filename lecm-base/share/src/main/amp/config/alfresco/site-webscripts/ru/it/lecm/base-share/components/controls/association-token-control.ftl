@@ -91,7 +91,7 @@
         </div>
     </div>
 <#else>
-    <div id="${controlId}" class="control association-token-control ${verticalListClass} editmode">
+    <div class="control association-token-control ${verticalListClass} editmode">
         <div class="label-div">
             <label for="${controlId}">
             ${field.label?html}:
@@ -100,7 +100,7 @@
                 </#if>
             </label>
         </div>
-        <div id="${controlId}" class="container collapse-width">
+        <div id="${controlId}" class="container">
             <#if field.disabled == false>
                 <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
                 <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>

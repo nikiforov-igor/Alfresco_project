@@ -6,6 +6,10 @@
                 <property name="cm:name">Смена статуса пункта протокола</property>
                 <property name="lecm-busjournal:eventCategory-code">PROTOCOL_POINT_STATUS_CHANGE</property>
             </item>
+            <item name="cm:Просрочено  исполнение пункта протокола" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Просрочено  исполнение пункта протокола</property>
+                <property name="lecm-busjournal:eventCategory-code">PROTOCOL_POINT_EXPIRED</property>
+            </item>
         </items>
     </item>
 </items>

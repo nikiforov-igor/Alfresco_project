@@ -57,6 +57,11 @@
 <#assign isComplex = items?size gt 1>
 <#assign showAutocomplete = !disabled && (!params.showAutocomplete?? || 'true' == params.showAutocomplete?lower_case)>
 
+<#assign sortSelected = false>
+<#if params.sortSelected?? && params.sortSelected == "true">
+	<#assign  sortSelected = true>
+</#if>
+
 <#if 'view' == form.mode>
 	<#assign value>
 		<input type='hidden' id='${fieldHtmlId}' name='${field.name}' value='${fieldValue?html}'>
@@ -93,6 +98,7 @@
 				</#if>
                 multipleSelectMode: ${endpointMany?string},
                 showAssocViewForm: ${showAssocViewForm?string},
+                sortSelected: ${sortSelected?string},
 				itemsOptions: [
 					<#list items as i>
 						<#assign itemKey = i?replace(":", "_")>
@@ -109,6 +115,12 @@
 								ignoreNodes: '${args.ignoreNodes?split(',')}',
 							<#else>
 								ignoreNodes: [],
+							</#if>
+							<#if params[itemKey + '_getExtSearchQuery']??>
+                                getExtSearchQueryFunction: ${params[itemKey + '_getExtSearchQuery']},
+							</#if>
+							<#if params[itemKey + '_getArgumentsFromForm']??>
+                                getArgumentsFromFormFunction: ${params[itemKey + '_getArgumentsFromForm']},
 							</#if>
 							<#list params?keys as key>
 								<#assign isNotBoolean = 'true' != params[key] && 'false' != params[key]>
@@ -135,6 +147,11 @@
 			'scripts/lecm-base/components/controls/association-control.lib.js',
 			'scripts/lecm-base/components/controls/association-control.picker.js',
 			'scripts/lecm-base/components/controls/association-control.item.js'
+			<#if params.additionalScripts?has_content>
+				<#list params.additionalScripts?split(",") as js>
+					,'${js}'
+				</#list>
+			</#if>
 		], [
 			'css/lecm-base/components/controls/association-control.css',
 			'css/lecm-base/components/controls/association-control.picker.css'

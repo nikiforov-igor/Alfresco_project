@@ -1692,7 +1692,46 @@ if (document !== null) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
-                                                </nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>f4efce13-ccab-4d0d-8a82-8562d6133b93</name>
+                                                        <nodeRef>workspace://SpacesStore/8e06b64b-63c0-4a53-b0ca-5171a3e3bc8d</nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function() {
+var errand = stm_document,
+    isExpired = !!errand.properties['lecm-errands:is-expired'],
+    initiators = errand.assocs['lecm-errands:initiator-assoc'],
+    executors =  errand.assocs['lecm-errands:executor-assoc'],
+    controllers = errand.assocs['lecm-errands:controller-assoc'],
+    recipients = initiators.concat(executors);
+
+    if (controllers && controllers.length) {
+        Array.prototype.push.apply(recipients, controllers);
+    }
+
+    notifications.sendNotification({
+        recipients: recipients,
+        templateCode: 'ERRANDS_EXPIRED',
+        templateConfig: {
+            mainObject: errand
+        },
+        dontCheckAccessToObject: true
+    });
+})();]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Уведомить о просроченном поручении]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+												</nodes>
                                             </subFolder>
                                         </subFolders>
                                     </node>

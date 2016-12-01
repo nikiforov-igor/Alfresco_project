@@ -11,6 +11,8 @@ public interface Contractors {
 
     String CONTRACTOR_NAMESPACE = "http://www.it.ru/lecm/contractors/model/contractor/1.0";
     String REPRESENTATIVE_NAMESPACE = "http://www.it.ru/lecm/contractors/model/representative/1.0";
+    String LEGALFORM_NAMESPACE = "http://www.it.ru/lecm/contractors/model/legalform/1.0";
+
     QName TYPE_CONTRACTOR = QName.createQName(CONTRACTOR_NAMESPACE, "contractor-type");
     QName TYPE_PHYSICAL_PERSON = QName.createQName(CONTRACTOR_NAMESPACE, "physical-person-type");
     QName TYPE_REPRESENTATIVE = QName.createQName(REPRESENTATIVE_NAMESPACE, "representative-type");
@@ -32,6 +34,12 @@ public interface Contractors {
     QName PROP_PHYSICAL_PERSON_LAST_NAME = QName.createQName(CONTRACTOR_NAMESPACE, "lastName");
     QName PROP_PHYSICAL_PERSON_FIST_NAME = QName.createQName(CONTRACTOR_NAMESPACE, "firstName");
     QName PROP_PHYSICAL_PERSON_MIDDLE_NAME = QName.createQName(CONTRACTOR_NAMESPACE, "middleName");
+
+    QName PROP_LEGALFORM_SHORT_TITLE = QName.createQName(LEGALFORM_NAMESPACE, "short-title");
+    QName PROP_LEGALFORM_FULL_TITLE = QName.createQName(LEGALFORM_NAMESPACE, "full-title");
+
+    String OPF_DIC_NAME = "Контрагенты Организационно-правовые формы";
+    QName[] DIC_REPLACE_PROPERTIES = {Contractors.PROP_LEGALFORM_FULL_TITLE, Contractors.PROP_LEGALFORM_SHORT_TITLE};
 
     void assignAsPrimaryRepresentative(NodeRef representativeToAssignAsPrimary);
 
@@ -56,5 +64,12 @@ public interface Contractors {
      * @return
      */
     NodeRef getContractor(NodeRef representative);
+
+    /**
+     * Возвращает обработанное название контрагента
+     * @param originalName название контрагента
+     * @return String обработанная строка
+     */
+    String formatContractorName(String originalName);
 
 }

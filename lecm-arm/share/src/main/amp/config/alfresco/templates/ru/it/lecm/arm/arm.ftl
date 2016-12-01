@@ -35,6 +35,7 @@
         LogicECM.module.ARM.SETTINGS.ARM_PATH = ${path!'{}'};
         LogicECM.module.ARM.SETTINGS.ARM_TYPE = "USER";
         LogicECM.module.ARM.SETTINGS.ARM_SHOW_CALENDAR = ${showCalendar?string};
+        LogicECM.module.ARM.SETTINGS.ARM_SHOW_CREATE_BUTTON = ${showCreateButton?string};
     //]]></script>
 </@>
 
@@ -43,11 +44,14 @@
 
 <div id="no_menu_page" class="sticky-wrapper">
 <@bpage.basePage showHeader=true showTitle=true showToolbar=false showMenu=false>
-        <div class="yui-t1" id="arm-with-tree">
-            <#if showCalendar>
-                <#assign leftRegions = ["accordion-toolbar","documents-tree","mini-calendar"]>
-            <#else>
+        <div class="yui-t1 ${(page.url.args.code!'arm')?lower_case}-page" id="arm-with-tree">
+            <#if showCreateButton>
                 <#assign leftRegions = ["accordion-toolbar","documents-tree"]>
+            <#else>
+                <#assign leftRegions = ["documents-tree"]>
+            </#if>
+            <#if showCalendar>
+                <#assign leftRegions = leftRegions + ["mini-calendar"]>
             </#if>
 
             <@panels.twoPanels initialWidth=300 leftRegions=leftRegions>
