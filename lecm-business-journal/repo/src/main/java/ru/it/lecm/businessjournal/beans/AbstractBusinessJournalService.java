@@ -322,11 +322,11 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
         return "<a href=\"" + serverUrl + WORKFLOW_LINK_URL + "?workflowId=" + executionId + "\">" + description + "</a>";
     }
 
-    public void log(final Date date, final NodeRef initiator, final NodeRef mainObject, final String eventCategory, final String defaultDescription, final List<String> objects) {
+    public void log(final Date date, final NodeRef initiator, NodeRef mainObject, final String eventCategory, final String defaultDescription, final List<String> objects) {
         try {
             if (mainObject == null) {
-                logger.warn("Main Object not set!");
-                return;
+                logger.warn("Main Object not set! Setting default one");
+                mainObject = repository.getCompanyHome();
             }
             IgnoredCounter counter = threadSettings.get();
             if (counter != null) {
