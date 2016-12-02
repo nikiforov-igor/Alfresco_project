@@ -425,22 +425,17 @@
                     </index>
                 </property>
 				<!-- служебный атрибут для всплытия событий-->
-				<property name="lecm-errands:children-counter">
+				<property name="lecm-errands:event-counter">
 					<type>d:int</type>
 					<default>0</default>
 				</property>
-				<!--Есть дочерние поручения на исполнении -->
-				<property name="lecm-errands:has-child-executing-by-executor">
+				<!--Флаг для перехода на статус "На исполнении"-->
+				<property name="lecm-errands:transit-to-on-execution">
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
-				<!--Все подчиненные поручения в финальных статусах -->
-				<property name="lecm-errands:is-all-child-on-final">
-					<type>d:boolean</type>
-					<default>false</default>
-				</property>
-				<!--есть дочернее поручение не в финальном статусе -->
-				<property name="lecm-errands:has-not-final-child-by-executor">
+				<!--Флаг для перехода на статус "Исполнено"-->
+				<property name="lecm-errands:transit-to-executed">
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>

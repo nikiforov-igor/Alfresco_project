@@ -288,6 +288,8 @@ public interface ErrandsService {
 
     NodeRef getBaseDocument(NodeRef errand);
 
+    boolean hasChildNotFinalByExecutor(NodeRef errand);
+
     enum ModeChoosingExecutors {
         ORGANIZATION,
         UNIT
