@@ -231,6 +231,19 @@
                 <version>${spring.surf.version}</version>
                 <scope>provided</scope>
             </dependency>
+			<!--https://github.com/Alfresco/alfresco-sdk/issues/375
+				Alfresco забыли про версию для surf'а, поэтому определим сами
+			-->
+			<dependency>
+                <groupId>org.alfresco.surf</groupId>
+                <artifactId>spring-surf</artifactId>
+                <version>${spring.surf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.alfresco.surf</groupId>
+                <artifactId>spring-surf-api</artifactId>
+                <version>${spring.surf.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.alfresco</groupId>
                 <artifactId>share</artifactId>
