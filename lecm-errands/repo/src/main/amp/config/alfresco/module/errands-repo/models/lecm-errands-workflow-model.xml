@@ -16,7 +16,16 @@
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/errand/workflow/1.0" prefix="lecmErrandWf"/>
 	</namespaces>
-
+	<constraints>
+		<constraint name="lecmErrandWf:dueDateRadioConst" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>DATE</value>
+					<value>LIMITLESS</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
 	<types>
 		<type name="lecmErrandWf:removeDraft">
 			<parent>bpm:startTask</parent>
@@ -80,6 +89,23 @@
 
         <type name="lecmErrandWf:changeDueDate">
 			<parent>bpm:startTask</parent>
+			<properties>
+				<property name="lecmErrandWf:changeDueDateNewDueDateRadio">
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="lecmErrandWf:dueDateRadioConst"/>
+					</constraints>
+				</property>
+				<property name="lecmErrandWf:changeDueDateNewDueDate">
+					<type>d:date</type>
+				</property>
+
+				<property name="lecmErrandWf:changeDueDateReason">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+
+			</properties>
 			<mandatory-aspects>
 				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
 			</mandatory-aspects>

@@ -11,7 +11,81 @@
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
-                    		var emptyServiceTask = "Service task";
+                            var document = bpm_package.children[0];
+                            var currentUser =  orgstructure.getCurrentEmployee();
+	                        if (document) {
+	                            var changed = false;
+                                var logObjects = [];
+                                var logText;
+                                var dueDateString = "";
+                                if (lecmErrandWf_changeDueDateNewDueDateRadio == "DATE"){
+                                    if(document.properties["lecm-errands:limitation-date"] != lecmErrandWf_changeDueDateNewDueDate){
+                                        document.properties["lecm-errands:limitation-date"] = lecmErrandWf_changeDueDateNewDueDate;
+                                        document.properties["lecm-errands:limitation-date-radio"] = lecmErrandWf_changeDueDateNewDueDateRadio;
+                                        var jsLimitDate = new Date(lecmErrandWf_changeDueDateNewDueDate);
+                                        var dateFormat = new Packages.java.text.SimpleDateFormat("dd.MM.yyyy");
+                                        var dueDateString = dateFormat.format(jsLimitDate).toString();
+                                        var curDate = new Date();
+                                        var limitDays = Math.round((jsLimitDate - curDate) / (1000 * 60 * 60 * 24));
+                                        var threeWorkDaysDateLimit = new Date(workCalendar.getNextWorkingDate(utils.toISO8601(curDate), 3));
+                                        if(threeWorkDaysDateLimit < jsLimitDate){
+                                            var halfLimitDays = Math.round(limitDays/2);
+                                            curDate.setDate(curDate.getDate()+ halfLimitDays);
+                                            document.properties["lecm-errands:half-limit-date"] = curDate;
+                                        }
+                                        var wfeDate = new Date(document.properties["lecm-errands:wait-for-execution-date"]);
+                                        var fromWFELimitDays = Math.round((jsLimitDate - wfeDate) / (1000 * 60 * 60 * 24));
+                                        var shortLimitDays = notifications.getSettingsShortLimitDays();
+                                        if (fromWFELimitDays <= shortLimitDays){
+                                          document.properties["lecm-errands:is-limit-short"] = true;
+                                        }else{
+                                          document.properties["lecm-errands:is-limit-short"] = false;
+                                          }
+                                        changed = true;
+                                    }
+                                }else if (lecmErrandWf_changeDueDateNewDueDateRadio == "LIMITLESS" && document.properties["lecm-errands:limitation-date-radio"] != lecmErrandWf_changeDueDateNewDueDateRadio ){
+                                    document.properties["lecm-errands:limitation-date-radio"] = lecmErrandWf_changeDueDateNewDueDateRadio;
+                                    document.properties["lecm-errands:limitation-date"] = null;
+                                    document.properties["lecm-errands:is-limit-short"] = false;
+                                    document.properties["lecm-errands:half-limit-date"] = null;
+                                    dueDateString = "Без срока";
+                                    changed = true;
+                                }
+                                if(changed){
+                                    document.properties["lecm-errands:limitation-date-text"] = dueDateString;
+                                    document.save();
+                                    var recipients = [];
+                                    var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
+                                    var coexecutorsAssoc = document.assocs["lecm-errands:coexecutors-assoc"];
+                                    var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
+                                    if (executorAssoc && executorAssoc.length == 1) {
+                                        recipients.push(executorAssoc[0]);
+                                    }
+                                    if (coexecutorsAssoc && coexecutorsAssoc.length) {
+                                        for(i = 0; i < coexecutorsAssoc.length; i++){
+                                            recipients.push(coexecutorsAssoc[i]);
+                                        }
+                                    }
+                                    if (controllerAssoc != null && controllerAssoc.length == 1) {
+                                        recipients.push(controllerAssoc[0]);
+                                    }
+                                    notifications.sendNotificationFromCurrentUser({
+                                       recipients: recipients,
+                                       templateCode: 'ERRANDS_CHANGE_DUE_DATE',
+                                       templateConfig: {
+                                           mainObject: document,
+                                           eventExecutor: currentUser,
+                                           dueDate: dueDateString
+                                       }
+                                    });
+                                    logObjects.push(dueDateString);
+                                    logText = "#initiator ";
+                                    logText += documentScript.wrapperTitle("изменил", lecmErrandWf_changeDueDateReason);
+                                    logText += " срок исполнения поручения #mainobject на  #object1";
+			                        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, logObjects);
+
+                                }
+	                        }
                    		]]></activiti:string>
                     </activiti:field>
                 </activiti:executionListener>

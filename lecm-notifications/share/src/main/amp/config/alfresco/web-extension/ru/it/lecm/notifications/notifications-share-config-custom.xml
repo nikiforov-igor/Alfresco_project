@@ -206,7 +206,16 @@
 				<field-visibility>
 					<show id="lecm-notf-settings:enable-passive"/>
 					<show id="lecm-notf-settings:n-days"/>
+					<show id="lecm-notf-settings:short-n-days"/>
+					<show id="lecm-notf-settings:short-limit-days"/>
 				</field-visibility>
+				<appearance>
+					<set id="nt" appearance="fieldset" label-id="label.set.ntdays"/>
+					<field id="lecm-notf-settings:enable-passive"/>
+					<field id="lecm-notf-settings:short-limit-days"/>
+					<field id="lecm-notf-settings:n-days" set="nt"/>
+					<field id="lecm-notf-settings:short-n-days" set="nt"/>
+				</appearance>
 			</form>
 		</forms>
 	</config>
@@ -217,7 +226,16 @@
 				<field-visibility>
 					<show id="lecm-notf-settings:enable-passive"/>
 					<show id="lecm-notf-settings:n-days"/>
+					<show id="lecm-notf-settings:short-n-days"/>
+					<show id="lecm-notf-settings:short-limit-days"/>
 				</field-visibility>
+				<appearance>
+					<set id="nt" appearance="fieldset" label-id="label.set.ntdays"/>
+					<field id="lecm-notf-settings:enable-passive"/>
+					<field id="lecm-notf-settings:short-limit-days"/>
+					<field id="lecm-notf-settings:n-days" set="nt"/>
+					<field id="lecm-notf-settings:short-n-days" set="nt"/>
+				</appearance>
 			</form>
 		</forms>
 	</config>
