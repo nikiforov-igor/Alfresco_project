@@ -614,6 +614,7 @@
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
+                    <show id="lecm-statemachine:status"/>
                 </field-visibility>
             </form>
             <!-- Форма просмотра на главной странице-->

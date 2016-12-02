@@ -131,7 +131,7 @@
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                 </property>
-                <!-- Короткое -->
+                <!-- Создание в черновик -->
                 <property name="lecm-resolutions:is-draft">
                     <type>d:boolean</type>
                     <default>false</default>

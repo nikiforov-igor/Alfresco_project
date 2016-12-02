@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+	<item name="lecm-dic:Бизнес роли" type="lecm-dic:dictionary">
+		<items updateMode="CreateOrUpdate">
+            <item name="cm:Резолюции. Создатели" type="lecm-orgstr:business-role">
+				<property name="cm:name">Резолюции. Создатели</property>
+				<property name="lecm-orgstr:business-role-identifier">RESOLUTION_CREATORS</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+				<property name="lecm-orgstr:business-role-description">Cотрудник, отвечающий за создание резолюций</property>
+			</item>
+		</items>
+	</item>
+</items>
