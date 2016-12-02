@@ -2,6 +2,10 @@
 <#include '/ru/it/lecm/base-share/components/controls/association-control-picker.inc.ftl'>
 <#import '/ru/it/lecm/base-share/components/base-components.ftl' as components>
 
+<#assign formId = args.htmlid>
+
+<#assign fieldId = field.configName>
+
 <#assign params = field.control.params>
 
 <#assign endpointType = params.endpointType!field.endpointType>
@@ -21,6 +25,7 @@
     <#assign showAssocViewForm = false>
 </#if>
 
+<#assign readonly = false>
 <#assign defaultValue = "">
 <#if form.mode == "create" && !field.disabled>
 	<#if params.selectedItemsFormArgs??>
@@ -33,9 +38,11 @@
 				<#assign defaultValue = defaultValue + form.arguments[selectedItemsFormArg]/>
 			</#if>
 		</#list>
-
 	<#elseif form.arguments[field.name]?has_content>
 		<#assign defaultValue=form.arguments[field.name]>
+	<#elseif form.arguments['readonly_' + field.name]?has_content>
+		<#assign defaultValue=form.arguments['readonly_' + field.name]>
+		<#assign readonly = true>
 	<#elseif params.defaultValue??>
 		<#assign defaultValue=params.defaultValue>
 	</#if>
@@ -78,6 +85,8 @@
 	(function () {
 		function initAssociationControl() {
 			new LogicECM.module.AssociationComplexControl('${fieldHtmlId}', '${fieldValue}', {
+				fieldId: '${fieldId}',
+				formId: '${formId}',
 				disabled: ${disabled?string},
 				isComplex: ${isComplex?string},
 				showAutocomplete: ${showAutocomplete?string},
@@ -128,6 +137,9 @@
 					</#list>
 				]
 			}, ${messages});
+		<#if readonly>
+			LogicECM.module.Base.Util.readonlyControl('${formId}', '${fieldId}', true);
+		</#if>
 		}
 
 		LogicECM.module.Base.Util.loadResources([

@@ -1,6 +1,7 @@
 <#include "/org/alfresco/components/component.head.inc">
 <#include "association-search-control-dialog.inc.ftl">
 
+<#assign readonly = false>
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign selectedValue = "">
 <#assign params = field.control.params>
@@ -25,6 +26,8 @@
 <#assign defaultValue=field.control.params.defaultValue!"">
 <#if form.arguments[field.name]?has_content>
 	<#assign defaultValue=form.arguments[field.name]>
+<#elseif form.arguments['readonly_' + field.name]?has_content>
+	<#assign defaultValue=form.arguments['readonly_' + field.name]>
 </#if>
 
 <#assign sortSelected = false>
@@ -194,6 +197,9 @@
 					itemType: "${field.endpointType}"
 				</#if>
 			}).setMessages( ${messages} );
+			<#if readonly>
+				LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+			</#if>
 		}
 		YAHOO.util.Event.onDOMReady(init);
 	})();

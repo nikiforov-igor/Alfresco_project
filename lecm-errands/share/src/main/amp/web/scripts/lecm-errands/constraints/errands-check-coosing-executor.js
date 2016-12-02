@@ -12,11 +12,7 @@ LogicECM.module.Errands.checkChoosingInitiatorValidation =
 	function (field, args,  event, form, silent, message) {
 		var formId = form.formId.replace("-form", "");
 
-		if (LogicECM.module.Errands.hasRoleChoosingExecutor) {
-			LogicECM.module.Base.Util.enableControl(formId, "lecm-errands:initiator-assoc");
-		} else {
-			LogicECM.module.Base.Util.disableControl(formId, "lecm-errands:initiator-assoc");
-		}
+		LogicECM.module.Base.Util.readonlyControl(formId, 'lecm-errands:initiator-assoc', !LogicECM.module.Errands.hasRoleChoosingExecutor);
 
 		if (!LogicECM.module.Errands.hasRoleChoosingExecutorRequestSend) {
 			LogicECM.module.Errands.hasRoleChoosingExecutorRequestSend = true;
@@ -31,7 +27,7 @@ LogicECM.module.Errands.checkChoosingInitiatorValidation =
 						fn: function (response) {
 							LogicECM.module.Errands.hasRoleChoosingExecutor = response.json;
 							if (LogicECM.module.Errands.hasRoleChoosingExecutor) {
-								LogicECM.module.Base.Util.enableControl(formId, "lecm-errands:initiator-assoc");
+								LogicECM.module.Base.Util.readonlyControl(formId, "lecm-errands:initiator-assoc", false);
 							}
 						}
 					},

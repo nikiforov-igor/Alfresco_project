@@ -151,7 +151,7 @@ LogicECM.module = LogicECM.module || {};
 					}
 					this.checkDisableRelatedFields();
 					this.hideRelatedFields();
-					
+
 					if (this.options.fireMandatoryByChange) {
 						YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
 					}
@@ -198,11 +198,7 @@ LogicECM.module = LogicECM.module || {};
 								}
 
 								var fieldId = this.options.disabledFieldsIfNotSelect[i];
-								if (!selected) {
-									LogicECM.module.Base.Util.disableControl(me.options.formId, fieldId);
-								} else {
-									LogicECM.module.Base.Util.enableControl(me.options.formId, fieldId);
-								}
+								LogicECM.module.Base.Util.readonlyControl(me.options.formId, fieldId, !selected);
 							}
 						}
 					}
@@ -215,11 +211,7 @@ LogicECM.module = LogicECM.module || {};
 								}
 
 								fieldId = this.options.disabledFieldsIfSelect[i];
-								if (selected) {
-									LogicECM.module.Base.Util.disableControl(me.options.formId, fieldId);
-								} else {
-									LogicECM.module.Base.Util.enableControl(me.options.formId, fieldId);
-								}
+								LogicECM.module.Base.Util.readonlyControl(me.options.formId, fieldId, selected);
 							}
 						}
 					}

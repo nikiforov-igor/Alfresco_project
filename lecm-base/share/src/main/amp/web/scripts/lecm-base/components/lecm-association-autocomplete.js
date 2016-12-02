@@ -27,8 +27,7 @@ LogicECM.module = LogicECM.module || {};
     LogicECM.module.AssociationAutoComplete = function LogicECM_module_AssociationAutoComplete(fieldHtmlId) {
         LogicECM.module.AssociationAutoComplete.superclass.constructor.call(this, "LogicECM.module.AssociationAutoComplete", fieldHtmlId);
         YAHOO.Bubbling.on("refreshAutocompleteItemList_" + fieldHtmlId, this.onRefreshAutocompleteItemList, this);
-	    YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
-	    YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
+	    YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
 	    YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
 
         this.controlId = fieldHtmlId + "-cntrl";
@@ -124,7 +123,7 @@ LogicECM.module = LogicECM.module || {};
 
 	        searchProperties: null,
 
-	        tempDisabled: false,
+	        readonly: false,
 
             setMessages:function AssociationAutoComplete_setMessages(obj) {
                 LogicECM.module.AssociationAutoComplete.superclass.setMessages.call(this, obj);
@@ -621,7 +620,7 @@ LogicECM.module = LogicECM.module || {};
 
             removeSelectedElement: function AssociationAutoComplete_removeSelectedElement(event, node)
             {
-	            if (!this.tempDisabled) {
+	            if (!this.readonly) {
 		            delete this.selectedItems[node.nodeRef];
 		            this.singleSelectedItem = null;
 		            this.updateSelectedItems();
@@ -856,44 +855,27 @@ LogicECM.module = LogicECM.module || {};
 			        });
 	        },
 
-	        onDisableControl: function (layer, args) {
-		        if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-			        var input = Dom.get(this.controlId + "-autocomplete-input");
-			        if (input != null) {
-				        input.disabled = true;
-			        }
-			        this.tempDisabled = true;
-
-			        var added = Dom.get(this.controlId + "-added");
-			        if (added != null) {
-				        added.disabled = true;
-			        }
-			        var removed = Dom.get(this.controlId + "-removed");
-			        if (removed != null) {
-				        removed.disabled = true;
-			        }
-		        }
-	        },
-
-	        onEnableControl: function (layer, args) {
-		        if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-			        if (!this.options.disabled) {
-				        var input = Dom.get(this.controlId + "-autocomplete-input");
-				        if (input != null) {
-					        input.disabled = false;
-				        }
-				        var added = Dom.get(this.controlId + "-added");
-				        if (added != null) {
-					        added.disabled = false;
-				        }
-				        var removed = Dom.get(this.controlId + "-removed");
-				        if (removed != null) {
-					        removed.disabled = false;
-				        }
-			        }
-			        this.tempDisabled = false;
-		        }
-	        },
+			onReadonlyControl: function (layer, args) {
+				var autocompleteInput, addedInput, removedInput;
+				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+					this.readonly = args[1].readonly;
+					autocompleteInput = Dom.get(this.controlId + '-autocomplete-input');
+					if (autocompleteInput) {
+						autocompleteInput.disabled = args[1].readonly;
+					}
+					//непонятно зачем активировать поля, которые не были деактивированы...
+					if (!args[1].readonly) {
+						addedInput = Dom.get(this.controlId + '-added');
+						removedInput = Dom.get(this.controlId + '-removed');
+						if (addedInput) {
+							addedInput.disabled = false;
+						}
+						if (removedInput) {
+							removedInput.disabled = false;
+						}
+					}
+				}
+			},
 
 	        onReInitializeControl: function (layer, args) {
 		        if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
