@@ -10,7 +10,7 @@
             <extensionElements>
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
-                        <activiti:string>
+                        <activiti:string><![CDATA[
                             var document = bpm_package.children[0];
                             if (document) {
                                 document.properties["lecm-errands:execution-date"] = new Date();
@@ -86,7 +86,7 @@
                                 }
                                 document.save();
                             }
-                        </activiti:string>
+                        ]]></activiti:string>
                     </activiti:field>
                 </activiti:executionListener>
             </extensionElements>
