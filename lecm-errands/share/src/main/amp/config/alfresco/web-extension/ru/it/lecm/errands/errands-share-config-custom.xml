@@ -9,15 +9,14 @@
             </dependencies>
 
            <default-controls>
-                <type name="association:lecm-errands-dic:errand-titles" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
-                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
-                    <control-param name="endpointType">lecm-errands-dic:errand-titles</control-param>
+                <type name="association:lecm-errands-dic:errand-titles" template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
+                    <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
+                    <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
                     <control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <control-param name="notSelectedOptionShow">true</control-param>
+                    <control-param name="notSelectedOptionLabel"> </control-param>
                     <control-param name="showCreateNewLink">false</control-param>
                     <control-param name="showCreateNewButton">false</control-param>
-                    <control-param name="plane">true</control-param>
-                    <control-param name="showPath">false</control-param>
-                    <control-param name="showSearch">true</control-param>
                 </type>
             </default-controls>
         </forms>
@@ -90,15 +89,14 @@
                         </control>
                     </field>
                     <field id="lecm-errands:title" set="common">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
-                            <control-param name="endpointType">lecm-errands-dic:errand-titles</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
+                            <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
-							<control-param name="plane">true</control-param>
-							<control-param name="showPath">false</control-param>
-							<control-param name="showSearch">true</control-param>
                         </control>
                     </field>
 	                <field id="lecm-errands:executor-assoc" set="common">
@@ -284,15 +282,14 @@
                     <set id="static2"/>
 
                     <field id="lecm-errands:title">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
-                            <control-param name="endpointType">lecm-errands-dic:errand-titles</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
+                            <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
-							<control-param name="plane">true</control-param>
-							<control-param name="showPath">false</control-param>
-							<control-param name="showSearch">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:executor-assoc">
@@ -414,15 +411,14 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-errands:title">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
-                            <control-param name="endpointType">lecm-errands-dic:errand-titles</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
+                            <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
-							<control-param name="plane">true</control-param>
-							<control-param name="showPath">false</control-param>
-							<control-param name="showSearch">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:executor-assoc">
@@ -609,15 +605,14 @@
                     <set id="static2"/>
 
                     <field id="lecm-errands:title">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
-                            <control-param name="endpointType">lecm-errands-dic:errand-titles</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
+                            <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
-							<control-param name="plane">true</control-param>
-							<control-param name="showPath">false</control-param>
-							<control-param name="showSearch">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:executor-assoc">
@@ -1407,15 +1402,14 @@
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
                     <field id="lecmErrandWf:title">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
-                            <control-param name="endpointType">lecm-errands-dic:errand-titles</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
+                            <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
-							<control-param name="plane">true</control-param>
-							<control-param name="showPath">false</control-param>
-							<control-param name="showSearch">true</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:content">
