@@ -7,7 +7,7 @@
 		<property name="lecm-dic:active">true</property>
 		<property name="lecm-dic:plane">false</property>
 		<property name="lecm-dic:description">Настройки АРМ</property>
-		<items>
+		<items updateMode="CreateOrUpdate">
 			<item name="cm:Логика ECM. Мой профиль" type="lecm-arm:arm">
 				<property name="cm:name"><![CDATA[Логика ECM. Мой профиль]]></property>
 				<property name="lecm-arm:code"><![CDATA[lecm_my_profile]]></property>
