@@ -43,4 +43,19 @@
         </property>
     </bean>
 
+    <bean id="resolutionsDictionaryBootstrap"
+          parent="lecmDictionaryBootstrap"
+          depends-on="dictionaryBootstrap, documents.LogicEcmModelsStampsBootstrap,
+                        documents.dictionaries.LogicEcmModelsBootstrap,">
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-resolutions-br-items.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="resolutions.defaultStatemachine" parent="defaultStatemachines">
+        <property name="statemachineName" value="lecm-resolutions:document"/>
+        <property name="path" value="alfresco/module/${artifactId}/models/lecm-resolution-statemachine-default.xml"/>
+    </bean>
 </beans>
