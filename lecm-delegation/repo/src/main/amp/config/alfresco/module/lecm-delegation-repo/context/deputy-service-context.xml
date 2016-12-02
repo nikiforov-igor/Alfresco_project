@@ -25,8 +25,7 @@
 	</bean>
 
 	<bean id="deputyService" class="ru.it.lecm.deputy.beans.DeputyServiceImpl" parent="baseBean"
-		  depends-on="deputyModelBootstrap"
-		  init-method="init">
+		  depends-on="deputyModelBootstrap">
 		<property name="folders">
 			<map>
 				<entry key="#{deputyFolder}" value="Сервис Заместители"/>
