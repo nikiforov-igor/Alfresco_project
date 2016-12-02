@@ -24,7 +24,7 @@
         <xalan.version>2.5.1</xalan.version>
         <xerces.version>2.8.0</xerces.version>
         <alfproject.version>4.0</alfproject.version>
-        <ooffice.version>3.2.0</ooffice.version>
+        <ooffice.version>4.1.2</ooffice.version>
         <ooffice-jooConverter.version>2.1.0-alfresco-patched</ooffice-jooConverter.version>
     </properties>
 
