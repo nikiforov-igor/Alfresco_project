@@ -532,6 +532,19 @@
 							<overWriteSnapshots>true</overWriteSnapshots>
 						</configuration>
 					</execution>
+					<execution> 
+						<id>unpack</id> 
+							<phase>generate-sources</phase> 
+						<goals> 
+							<goal>unpack-dependencies</goal> 
+						</goals> 
+						<configuration> 
+							<includeTypes>war</includeTypes> 
+							<includeGroupIds>org.alfresco</includeGroupIds> 
+							<includeArtifactIds>alfresco</includeArtifactIds> 
+							<includes>META-INF/MANIFEST.MF</includes> 
+						</configuration> 
+					</execution>
 				</executions>
 				<dependencies>
 
@@ -806,6 +819,10 @@
 							<type>amp</type>
 						</overlay>-->
 					</overlays>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+						<manifestFile>${project.build.directory}/dependency/META-INF/MANIFEST.MF</manifestFile>
+					</archive>
 				</configuration>
 				<dependencies>
 					<dependency>
@@ -1246,6 +1263,10 @@
 		                            <type>amp</type>
 	                            </overlay>
                             </overlays>
+							<archive>
+								<addMavenDescriptor>false</addMavenDescriptor>
+								<manifestFile>${project.build.directory}/dependency/META-INF/MANIFEST.MF</manifestFile>
+							</archive>
                         </configuration>
                         <dependencies>
                             <dependency>
