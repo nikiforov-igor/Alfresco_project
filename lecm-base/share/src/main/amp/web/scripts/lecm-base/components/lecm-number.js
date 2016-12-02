@@ -48,8 +48,6 @@ LogicECM.module = LogicECM.module || {};
 
 		this.controlId = htmlId;
 		YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
-		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
-	    YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
 		return this;
 	};
 

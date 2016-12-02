@@ -71,7 +71,7 @@
 			<#assign renderPickerJSSelectedValue = context.properties[field.control.params.selectedValueContextProperty]>
 		</#if>
 	</#if>
-	<#if !(renderPickerJSSelectedValue??)>
+	<#if !(renderPickerJSSelectedValue)?has_content>
 		<#if form.arguments[field.name]?has_content>
 			<#assign renderPickerJSSelectedValue = form.arguments[field.name]/>
 		<#elseif form.arguments['readonly_' + field.name]?has_content>
