@@ -21,7 +21,7 @@
                 // Срок исполнения
                 value = document.properties["lecm-eds-document:execution-date"];
                 if (value != null) {
-                    params += "&formId=exist-execution-date";
+                    params += "&prop_lecm-resolutions_limitation-date-radio=DATE";
                     params += "&prop_lecm-resolutions_limitation-date=" + utils.toISO8601(value);
                 }
                 // Контроль
