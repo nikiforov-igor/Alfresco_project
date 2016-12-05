@@ -1540,7 +1540,6 @@ LogicECM.module = LogicECM.module || {};
 				{
 					try
 					{
-                        this.isSearch = false;
 						var response = YAHOO.lang.JSON.parse(oResponse.responseText);
 						this.widgets.dataTable.set("MSG_ERROR", response.message);
 						this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
@@ -1562,7 +1561,6 @@ LogicECM.module = LogicECM.module || {};
 			// call the pickerchildren data webscript
             //if widget is active and not destroyed!!!
             if (this.widgets.dataSource) {
-                this.isSearch = true;
                 this.widgets.dataSource.sendRequest(url,
                     {
                         success: successHandler,
@@ -2141,7 +2139,7 @@ LogicECM.module = LogicECM.module || {};
 				this.allowedNodes = null;
 				this.allowedNodesScript = null;
 
-				this.onReady();
+				this.init();
 			}
 		}
 	});
