@@ -7,8 +7,7 @@ if (typeof LogicECM == 'undefined' || !LogicECM) {
 LogicECM.module = LogicECM.module || {};
 
 (function () {
-	var ACUtils = LogicECM.module.AssociationComplexControl.Utils,
-		BaseUtil = LogicECM.module.Base.Util,
+	var BaseUtil = LogicECM.module.Base.Util,
 		Bubbling = YAHOO.Bubbling,
 		Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
@@ -79,6 +78,8 @@ LogicECM.module = LogicECM.module || {};
         optionsMap: {},
 
 		_renderSelectedItems: function (selectedItems) {
+			var ACUtils = LogicECM.module.AssociationComplexControl.Utils;
+
 			function onAddListener(params) {
 				Event.on(params.id, 'click', this.onRemove, params, this);
 			}
@@ -134,6 +135,7 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		createAssociationControlAutocompleteHelper: function () {
+			var ACUtils = LogicECM.module.AssociationComplexControl.Utils;
 			if (this.options.showAutocomplete) {
 				this.autocompleteHelper = new Alfresco.util.Deferred(ACUtils.getItemKeys(this.options.itemsOptions), {
 					scope: this,
@@ -261,7 +263,8 @@ LogicECM.module = LogicECM.module || {};
 
 		onPickerClosed: function (layer, args) {
 			if (Alfresco.util.hasEventInterest(this, args)) {
-                var selectedValues = [],
+                var ACUtils = LogicECM.module.AssociationComplexControl.Utils,
+					selectedValues = [],
                     selectedKeys = Object.keys(args[1].selected),
                     removedKeys = Object.keys(args[1].removed),
                     addedKeys = Object.keys(args[1].added);
@@ -330,7 +333,8 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		generateRequest: function (sQuery) {
-			var decodedQuery = decodeURIComponent(sQuery),
+			var ACUtils = LogicECM.module.AssociationComplexControl.Utils,
+				decodedQuery = decodeURIComponent(sQuery),
 				searchTerm = this.searchProperties.reduce(function (prev, curr) {
 				return prev + (prev.length ? '#' : '') + curr + ':' + decodedQuery;
 			}, '');
