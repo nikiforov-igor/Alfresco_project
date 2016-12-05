@@ -238,84 +238,84 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                         Runnable runnable = new Runnable() {
                             public void run() {
                             	//TODO transaction in loop!!!
-                            	serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-                            		@Override
-                            		public Void execute() throws Throwable {
-                            			return AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
-                                            @Override
-                                            public Void doWork() throws Exception {
-                                            	logger.debug("!!!!!!!! afterCommit execute");
-                                                PersonService personService = serviceRegistry.getPersonService();
-                                                NodeRef assigneeNodeRef = personService.getPerson("workflow");
+								AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
+									@Override
+									public Void doWork() throws Exception {
+										return serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+											@Override
+											public Void execute() throws Throwable {
+												logger.debug("!!!!!!!! afterCommit execute");
+												PersonService personService = serviceRegistry.getPersonService();
+												NodeRef assigneeNodeRef = personService.getPerson("workflow");
 
-                                                Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
+												Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
 
-                                                final WorkflowService workflowService = serviceRegistry.getWorkflowService();
-                                                logger.debug("!!!!!!!! afterCommit createPackage");
-                                                NodeRef stateProcessPackage = workflowService.createPackage(null);
-                                                nodeService.addChild(stateProcessPackage, docRef, WorkflowModel.ASSOC_PACKAGE_CONTAINS, type);
+												final WorkflowService workflowService = serviceRegistry.getWorkflowService();
+												logger.debug("!!!!!!!! afterCommit createPackage");
+												NodeRef stateProcessPackage = workflowService.createPackage(null);
+												nodeService.addChild(stateProcessPackage, docRef, WorkflowModel.ASSOC_PACKAGE_CONTAINS, type);
 
-                                                workflowProps.put(WorkflowModel.ASSOC_PACKAGE, stateProcessPackage);
-                                                workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, assigneeNodeRef);
+												workflowProps.put(WorkflowModel.ASSOC_PACKAGE, stateProcessPackage);
+												workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, assigneeNodeRef);
 
-                                                workflowProps.put(QName.createQName("{}stm_document"), docRef);
-                                                serviceRegistry.getPermissionService().setPermission(docRef, "workflow",
-                                                        PermissionService.ALL_PERMISSIONS, true);
+												workflowProps.put(QName.createQName("{}stm_document"), docRef);
+												serviceRegistry.getPermissionService().setPermission(docRef, "workflow",
+														PermissionService.ALL_PERMISSIONS, true);
 
-                                                // get the moderated workflow
-                                                WorkflowDefinition wfDefinition = workflowService.getDefinitionByName("activiti$" + stateMashineId);
-                                                if (wfDefinition == null) {
-                                                    wfDefinition = workflowService.getDefinitionByName("activiti$default_statemachine");
-                                                }
-                                                if (wfDefinition == null) {
-                                                    throw new IllegalStateException("no workflow: " + stateMashineId);
-                                                }
-                                                // start the workflow
+												// get the moderated workflow
+												WorkflowDefinition wfDefinition = workflowService.getDefinitionByName("activiti$" + stateMashineId);
+												if (wfDefinition == null) {
+													wfDefinition = workflowService.getDefinitionByName("activiti$default_statemachine");
+												}
+												if (wfDefinition == null) {
+													throw new IllegalStateException("no workflow: " + stateMashineId);
+												}
+												// start the workflow
 
-                                                //AuthenticationUtil.setFullyAuthenticatedUser("workflow");
-                                                WorkflowPath path = null;
-                                                try {
-                                                	logger.debug("!!!!!!!! afterCommit startWorkflow");
-                                                    path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
-                                                } catch (Exception e) {
-                                                    logger.error("Error while start statemachine", e);
-                                                } finally {
-                                                    AuthenticationUtil.setFullyAuthenticatedUser(currentUser);
-                                                }
-                                                logger.debug("!!!!!!!! afterCommit addAspect");
-                                                HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
-                                                aspectProps.put(StatemachineModel.PROP_STATEMACHINE_ID, path.getInstance().getId());
-                                                nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATEMACHINE, aspectProps);
+												//AuthenticationUtil.setFullyAuthenticatedUser("workflow");
+												WorkflowPath path = null;
+												try {
+													logger.debug("!!!!!!!! afterCommit startWorkflow");
+													path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
+												} catch (Exception e) {
+													logger.error("Error while start statemachine", e);
+												} finally {
+													AuthenticationUtil.setFullyAuthenticatedUser(currentUser);
+												}
+												logger.debug("!!!!!!!! afterCommit addAspect");
+												HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
+												aspectProps.put(StatemachineModel.PROP_STATEMACHINE_ID, path.getInstance().getId());
+												nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATEMACHINE, aspectProps);
 
-                                                HashMap<QName, Serializable> properties = new HashMap<QName, Serializable>(1, 1.0f);
-                                                properties.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
-                                                nodeService.addAspect(docRef, ContentModel.ASPECT_OWNABLE, properties);
+												HashMap<QName, Serializable> properties = new HashMap<QName, Serializable>(1, 1.0f);
+												properties.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
+												nodeService.addAspect(docRef, ContentModel.ASPECT_OWNABLE, properties);
 
-                                                final String pathId = path.getId();
-                                                AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-                                                    @Override
-                                                    public Void doWork() throws Exception {
-		                                                List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(pathId);
-		                                                for (WorkflowTask task : tasks) {
-		                                                	logger.debug("!!!!!!!! afterCommit endTask");
-		                                                    workflowService.endTask(task.getId(), null);
-		                                                }
-		                                                return null;
-                                                    }
-                                                });
-                                                //stateMachineHelper.executePostponedActions(path.getInstance().getId());
+												final String pathId = path.getId();
+												AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+													@Override
+													public Void doWork() throws Exception {
+														List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(pathId);
+														for (WorkflowTask task : tasks) {
+															logger.debug("!!!!!!!! afterCommit endTask");
+															workflowService.endTask(task.getId(), null);
+														}
+														return null;
+													}
+												});
+												//stateMachineHelper.executePostponedActions(path.getInstance().getId());
 
-                                                String status = (String) nodeService.getProperty(docRef, StatemachineModel.PROP_STATUS);
-                                                List<String> objects = new ArrayList<String>(1);
-                                                if (status != null) {
-                                                    objects.add(status);
-                                                }
-                                                businessJournalService.log(docRef, EventCategory.ADD, "#initiator создал(а) новый документ \"#mainobject\" в статусе \"#object1\"", objects);
-                                                return null;
-                                            }
-                                        }, currentUser);
-                            		}
-                            	}, false, true);
+												String status = (String) nodeService.getProperty(docRef, StatemachineModel.PROP_STATUS);
+												List<String> objects = new ArrayList<String>(1);
+												if (status != null) {
+													objects.add(status);
+												}
+												businessJournalService.log(docRef, EventCategory.ADD, "#initiator создал(а) новый документ \"#mainobject\" в статусе \"#object1\"", objects);
+												return null;
+											}
+										}, false, true);
+									}
+								}, currentUser);
                             }
                         };
 
