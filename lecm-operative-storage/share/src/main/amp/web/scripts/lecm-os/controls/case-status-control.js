@@ -29,7 +29,7 @@ LogicECM.module.OS = LogicECM.module.OS || {};
 		buttons: [],
 		updateArchiveCheckBox: function () {
 			if (this.options.value != 'CLOSED') {
-				LogicECM.module.Base.Util.disableControl(this.options.formId, "lecm-os:nomenclature-case-to-archive");
+				LogicECM.module.Base.Util.readonlyControl(this.options.formId, "lecm-os:nomenclature-case-to-archive", true);
 			}
 		},
 		prepare: function() {

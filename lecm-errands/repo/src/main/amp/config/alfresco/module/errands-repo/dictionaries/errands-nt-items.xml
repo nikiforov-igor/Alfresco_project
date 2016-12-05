@@ -1,12 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
     <item name="lecm-dic:Шаблоны уведомлений" type="lecm-dic:dictionary">
-        <property name="cm:name"><![CDATA[Шаблоны уведомлений]]></property>
-        <property name="lecm-dic:attributeForShow"><![CDATA[cm:name]]></property>
-        <property name="lecm-dic:type"><![CDATA[lecm-notification-template:template]]></property>
-        <property name="lecm-dic:plane"><![CDATA[true]]></property>
-        <property name="lecm-dic:description"><![CDATA[Шаблоны уведомлений]]></property>
-        <items>
+        <items updateMode="CreateOrUpdate">
             <item name="cm:ERRANDS_EXCEEDED_DEADLINE" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
                     <![CDATA[{#mainObject.attribute("lecm-errands:just-in-time") ? "" : "Обратите внимание: поручение "} {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} не исполнено в установленный срок. {#mainObject.attribute("lecm-errands:just-in-time") ? "Работа с ним завершена, поручение переходит в статус 'Не исполнено'" : ""}]]></property>
@@ -33,9 +28,21 @@
             <item name="cm:ERRANDS_APPROACHING_DEADLINE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_APPROACHING_DEADLINE]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Приближается срок выполнения поручения: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-errands:title"))}]]></property>
+                    <![CDATA[Приближается срок выполнения поручения: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Приближается срок исполнения]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:ERRANDS_HALF_DEADLINE" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ERRANDS_HALF_DEADLINE]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Истекла половина срока исполнения поручения {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Поручение. Истекла половина срока исполнения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
@@ -288,6 +295,54 @@
                     <assoc type="lecm-notification-template:template-assoc" xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
                 </assocs>
 			</item>
+            <item name="cm:ERRANDS_CHANGE_EXECUTOR_NEW" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ERRANDS_CHANGE_EXECUTOR_NEW]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} назначил вас исполнителем поручения {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Поручение. Назначен на исполнение]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:ERRANDS_CHANGE_EXECUTOR_OLD" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ERRANDS_CHANGE_EXECUTOR_OLD]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {wrapTitle("изменил", #reason)} исполнителя по вашему поручению: {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))}.]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Поручение. Снят с исполнения]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:ERRANDS_CHANGE_EXECUTOR" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ERRANDS_CHANGE_EXECUTOR]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {wrapTitle("изменил", #reason)} исполнителя по поручению: {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))}.]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Поручение. Смена исполнителя]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:ERRANDS_CHANGE_DUE_DATE" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ERRANDS_CHANGE_DUE_DATE]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} изменил срок исполнения поручения {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))} на {#dueDate}.]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Поручение. Изменен срок поручения]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
         </items>
     </item>
 </items>

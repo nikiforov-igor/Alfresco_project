@@ -24,6 +24,7 @@ LogicECM.module = LogicECM.module || {};
 	LogicECM.module.AssociationAutoCompleteText = function (fieldHtmlId) {
 		LogicECM.module.AssociationAutoCompleteText.superclass.constructor.call(this, "LogicECM.module.AssociationAutoCompleteText", fieldHtmlId, [ "container", "datasource"]);
 		YAHOO.Bubbling.on("refreshAutocompleteItemList_" + fieldHtmlId, this.onRefreshAutocompleteItemList, this);
+		YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
 
 		this.controlId = fieldHtmlId + "-cntrl";
 		this.currentValueHtmlId = fieldHtmlId;
@@ -68,7 +69,15 @@ LogicECM.module = LogicECM.module || {};
 
                 allowedNodesScript: null,
 
-				useDynamicLoading: false
+				useDynamicLoading: false,
+
+				formId: null,
+
+				fieldId: null
+			},
+
+			widgets: {
+				autocomplete: null
 			},
 
 			dataArray: null,
@@ -81,11 +90,30 @@ LogicECM.module = LogicECM.module || {};
 
 			searchProperties: null,
 
+			readonly: false,
+
 			onReady:function () {
 				if (!this.options.disabled) {
 					this.populateDataWithAllowedScript();
 					if (this.options.useDynamicLoading) {
 						this._loadSearchProperties();
+					}
+				}
+			},
+
+			onReadonlyControl: function (layer, args) {
+				var input, fn, autocompleteInput;
+				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+					this.readonly = args[1].readonly;
+					input = Dom.get(this.id);
+					if (input) {
+						fn = args[1].readonly ? input.setAttribute : input.removeAttribute;
+						fn.call(input, 'readonly', '');
+					}
+					if (this.widgets.autocomplete) {
+						autocompleteInput = this.widgets.autocomplete.getInputEl();
+						fn = args[1].readonly ? autocompleteInput.setAttribute : autocompleteInput.removeAttribute;
+						fn.call(autocompleteInput, 'disabled', '');
 					}
 				}
 			},
@@ -125,9 +153,9 @@ LogicECM.module = LogicECM.module || {};
 					oDS.responseSchema = {fields:["name", "nodeRef"]};
 				}
 
-				var oAC = new YAHOO.widget.AutoComplete(this.currentValueHtmlId, this.controlId + "-autocomplete-container", oDS);
+				this.widgets.autocomplete = new YAHOO.widget.AutoComplete(this.currentValueHtmlId, this.controlId + "-autocomplete-container", oDS);
 				if (me.options.useDynamicLoading) {
-					oAC.generateRequest = function(sQuery) {
+					this.widgets.autocomplete.generateRequest = function(sQuery) {
 						var searchData = "";
 
 						Dom.addClass(me.controlId + "-autocomplete-input", "wait-for-load");
@@ -141,27 +169,27 @@ LogicECM.module = LogicECM.module || {};
 
 						return me._generateChildrenUrlParams(searchData);
 					};
-					oAC.doBeforeLoadData = function(sQuery , oResponse , oPayload) {
+					this.widgets.autocomplete.doBeforeLoadData = function(sQuery , oResponse , oPayload) {
 						Dom.removeClass(me.controlId + "-autocomplete-input", "wait-for-load");
 						return true;
 					};
 
-					oAC.queryDelay = 1;
+					this.widgets.autocomplete.queryDelay = 1;
 
 				}
 
-				oAC.minQueryLength = 3;
-				oAC.prehighlightClassName = "yui-ac-prehighlight";
-				oAC.useShadow = true;
-				oAC.forceSelection = false;
-				oAC._bFocused = true;
+				this.widgets.autocomplete.minQueryLength = 3;
+				this.widgets.autocomplete.prehighlightClassName = "yui-ac-prehighlight";
+				this.widgets.autocomplete.useShadow = true;
+				this.widgets.autocomplete.forceSelection = false;
+				this.widgets.autocomplete._bFocused = true;
 
 				var selectItemHandler = function (sType, aArgs) {
 					if (this.options.mandatory) {
 						YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
 					}
 				}.bind(this);
-				oAC.itemSelectEvent.subscribe(selectItemHandler);
+				this.widgets.autocomplete.itemSelectEvent.subscribe(selectItemHandler);
 			},
 
 			populateData: function () {

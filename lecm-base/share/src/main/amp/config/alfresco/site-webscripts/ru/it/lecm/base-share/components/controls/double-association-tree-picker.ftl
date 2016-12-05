@@ -75,6 +75,7 @@
 </#if>
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
+<#assign readonly = false>
 
 <#if disabled>
     <div id="${controlId}" class="control association-tree-picker viewmode">
@@ -151,6 +152,9 @@
 	    </#list>
     <#elseif form.arguments[field.name]?has_content>
         <#assign renderPickerJSSelectedValue = form.arguments[field.name]/>
+	<#elseif form.arguments['readonly_' + field.name]?has_content>
+		<#assign renderPickerJSSelectedValue=form.arguments['readonly_' + field.name]>
+		<#assign readonly = true>
     </#if>
 
 (function() {
@@ -357,6 +361,10 @@
 			checkType: ${(!mixTypes)?string}
 	    });
 	    secondControl.setMessages(${messages});
+		<#if readonly>
+			LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}-first', true);
+			LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}-second', true);
+		</#if>
 	}
 	YAHOO.util.Event.onDOMReady(init);
 })();

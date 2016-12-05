@@ -663,20 +663,13 @@ LogicECM.module.Base.Util = {
 			}
 		}
 	},
-	disableControl: function(formId, fieldId) {
-		YAHOO.util.Event.onAvailable(this.getComponentReadyElementId(formId, fieldId), function() {
-			YAHOO.Bubbling.fire("disableControl", {
+	readonlyControl: function (formId, fieldId, readonly) {
+		YAHOO.util.Event.onAvailable(this.getComponentReadyElementId(formId, fieldId), function (params) {
+			YAHOO.Bubbling.fire("readonlyControl", params);
+		},{
 				formId: formId,
-				fieldId: fieldId
-			});
-		});
-	},
-	enableControl: function(formId, fieldId) {
-		YAHOO.util.Event.onAvailable(this.getComponentReadyElementId(formId, fieldId), function() {
-			YAHOO.Bubbling.fire("enableControl", {
-				formId: formId,
-				fieldId: fieldId
-			});
+				fieldId: fieldId,
+				readonly: readonly
 		});
 	},
 	hideControl: function(formId, fieldId) {

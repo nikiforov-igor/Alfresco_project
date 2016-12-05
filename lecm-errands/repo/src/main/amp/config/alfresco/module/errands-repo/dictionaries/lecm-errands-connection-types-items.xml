@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Типы связи" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Отчетный документ" type="lecm-connect-types:connection-type">
+                <property name="cm:name">Отчетный документ</property>
+                <property name="lecm-connect-types:reverse-name">Отчет об исполнении</property>
+                <property name="lecm-connect-types:code">docReport</property>
+                <property name="lecm-connect-types:for-auto-create">false</property>
+            </item>
+        </items>
+    </item>
+</items>

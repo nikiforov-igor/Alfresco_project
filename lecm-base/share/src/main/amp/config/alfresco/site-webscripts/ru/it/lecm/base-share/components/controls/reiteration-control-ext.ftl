@@ -1,9 +1,13 @@
 <#assign formId=args.htmlid?js_string + "-form">
 <#assign params = field.control.params>
 
+<#assign readonly = false>
 <#assign defaultValue = "">
 <#if form.arguments[field.name]?has_content>
     <#assign defaultValue = form.arguments[field.name]>
+<#elseif form.arguments['readonly_' + field.name]?has_content>
+	<#assign defaultValue=form.arguments['readonly_' + field.name]>
+	<#assign readonly = true>
 </#if>
 
 <#assign value = field.value>
@@ -34,6 +38,9 @@
             reiteration.setMessages(
                 ${messages}
             );
+		<#if readonly>
+			LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+		</#if>
         }
 
         YAHOO.util.Event.onDOMReady(init);

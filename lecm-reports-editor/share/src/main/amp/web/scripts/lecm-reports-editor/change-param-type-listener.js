@@ -9,22 +9,15 @@
             var selectedItems = args[1].selectedItems;
             if (selectedItems !== null) {
                 var keys = Object.keys(selectedItems);
-                if (keys !== null && keys.length > 0) {
-                    LogicECM.module.Base.Util.enableControl(formId, "lecm-rpeditor:dataColumnClass");
-                    LogicECM.module.Base.Util.enableControl(formId, "lecm-rpeditor:dataColumnOrder");
-                    LogicECM.module.Base.Util.enableControl(formId, "lecm-rpeditor:dataColumnMandatory");
-                    LogicECM.module.Base.Util.enableControl(formId, "lecm-rpeditor:dataColumnControlParams");
-                } else {
-                    LogicECM.module.Base.Util.disableControl(formId, "lecm-rpeditor:dataColumnClass");
-                    LogicECM.module.Base.Util.disableControl(formId, "lecm-rpeditor:dataColumnOrder");
-                    LogicECM.module.Base.Util.disableControl(formId, "lecm-rpeditor:dataColumnMandatory");
-                    LogicECM.module.Base.Util.disableControl(formId, "lecm-rpeditor:dataColumnControlParams");
-                }
+				LogicECM.module.Base.Util.readonlyControl(formId, "lecm-rpeditor:dataColumnClass", !keys || !keys.length);
+				LogicECM.module.Base.Util.readonlyControl(formId, "lecm-rpeditor:dataColumnOrder", !keys || !keys.length);
+				LogicECM.module.Base.Util.readonlyControl(formId, "lecm-rpeditor:dataColumnMandatory", !keys || !keys.length);
+				LogicECM.module.Base.Util.readonlyControl(formId, "lecm-rpeditor:dataColumnControlParams", !keys || !keys.length);
             } else {
-                LogicECM.module.Base.Util.disableControl(formId, "lecm-rpeditor:dataColumnClass");
-                LogicECM.module.Base.Util.disableControl(formId, "lecm-rpeditor:dataColumnOrder");
-                LogicECM.module.Base.Util.disableControl(formId, "lecm-rpeditor:dataColumnMandatory");
-                LogicECM.module.Base.Util.disableControl(formId, "lecm-rpeditor:dataColumnControlParams");
+                LogicECM.module.Base.Util.readonlyControl(formId, "lecm-rpeditor:dataColumnClass", true);
+                LogicECM.module.Base.Util.readonlyControl(formId, "lecm-rpeditor:dataColumnOrder", true);
+                LogicECM.module.Base.Util.readonlyControl(formId, "lecm-rpeditor:dataColumnMandatory", true);
+                LogicECM.module.Base.Util.readonlyControl(formId, "lecm-rpeditor:dataColumnControlParams", true);
             }
         }
     }

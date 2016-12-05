@@ -613,4 +613,26 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 		}
 		return null;
 	}
+
+    /**
+     * Проверяет наличие незавершенных дочерних поручений исполнителя
+     * @param errand NodeRef поручения
+     * @return наличие незавершенных дочерних поручений исполнителя
+     */
+    @Override
+    public boolean hasChildNotFinalByExecutor(NodeRef errand) {
+        if (nodeService.exists(errand)) {
+            String errandExecutorRefString = (String) nodeService.getProperty(errand, ErrandsService.PROP_ERRANDS_EXECUTOR_REF);
+            List<NodeRef> childErrands = documentConnectionService.getConnectedDocuments(errand, DocumentConnectionService.DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE, ErrandsService.TYPE_ERRANDS);
+            for (NodeRef child : childErrands) {
+                String childInitiatorRefString = (String) nodeService.getProperty(child, ErrandsService.PROP_ERRANDS_INITIATOR_REF);
+                if (childInitiatorRefString != null && errandExecutorRefString != null && childInitiatorRefString.equals(errandExecutorRefString)) {
+                    if (!stateMachineService.isFinal(child)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

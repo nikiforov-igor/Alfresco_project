@@ -948,12 +948,17 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="cm:name" force="true"/>
-					<show id="lecm-doc-dic:subject-code" force="true"/>
-					<show id="lecm-doc-dic:subject-description" force="true"/>
+					<show id="cm:name"/>
+					<show id="lecm-doc-dic:subject-code"/>
+					<show id="lecm-doc-dic:subject-description"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-doc-dic:subject-code" read-only="true"/>
+					<field id="lecm-doc-dic:subject-code">
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<constraint-handlers>
+							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+						</constraint-handlers>
+					</field>
 				</appearance>
 			</form>
 		</forms>
@@ -963,9 +968,9 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="cm:name" force="true"/>
-					<show id="lecm-doc-dic:subject-code" force="true"/>
-					<show id="lecm-doc-dic:subject-description" force="true"/>
+					<show id="cm:name"/>
+					<show id="lecm-doc-dic:subject-code"/>
+					<show id="lecm-doc-dic:subject-description"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-doc-dic:subject-code">
@@ -978,9 +983,9 @@
 			</form>
 			<form id="search">
 				<field-visibility>
-					<show id="cm:name" force="true"/>
-					<show id="lecm-doc-dic:subject-code" force="true"/>
-					<show id="lecm-doc-dic:subject-description" force="true"/>
+					<show id="cm:name"/>
+					<show id="lecm-doc-dic:subject-code"/>
+					<show id="lecm-doc-dic:subject-description"/>
 				</field-visibility>
 				<appearance>
                     <field id="cm:name" mandatory="false">
@@ -998,9 +1003,9 @@
 			</form>
 			<form id="datagrid">
 				<field-visibility>
-					<show id="cm:name" force="true"/>
-					<show id="lecm-doc-dic:subject-code" force="true"/>
-					<show id="lecm-doc-dic:subject-description" force="true"/>
+					<show id="cm:name"/>
+					<show id="lecm-doc-dic:subject-code"/>
+					<show id="lecm-doc-dic:subject-description"/>
 				</field-visibility>
 			</form>
 		</forms>

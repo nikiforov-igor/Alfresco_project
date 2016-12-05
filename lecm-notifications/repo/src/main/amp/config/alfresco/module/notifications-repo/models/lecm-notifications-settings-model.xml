@@ -35,7 +35,7 @@
 				</association>
 			</associations>
 		</type>
-			<type name="lecm-notf-settings:global">
+		<type name="lecm-notf-settings:global">
 			<title>Notifications global settings</title>
 			<parent>cm:cmobject</parent>
 			<properties>
@@ -44,10 +44,23 @@
 					<mandatory>true</mandatory>
 					<default>false</default>
 				</property>
+				<!--Срок уведомления о приближении исполнения-->
+				<!--Для краткосрочного исполнения-->
+				<property name="lecm-notf-settings:short-n-days">
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+					<default>1</default>
+				</property>
+				<!--Для долгосрочного исполнения-->
 				<property name="lecm-notf-settings:n-days">
 					<type>d:int</type>
 					<mandatory>true</mandatory>
 					<default>5</default>
+				</property>
+				<!--Краткий срок исполнения-->
+				<property name="lecm-notf-settings:short-limit-days">
+					<type>d:int</type>
+					<default>10</default>
 				</property>
 			</properties>
 		</type>

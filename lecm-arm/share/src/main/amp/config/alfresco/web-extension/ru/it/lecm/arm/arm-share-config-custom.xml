@@ -25,13 +25,14 @@
 					<show id="cm:name" force="true"/>
 					<show id="lecm-arm:code" force="true"/>
 					<show id="lecm-arm:show-calendar" force="true"/>
+					<show id="lecm-arm:show-create-button"/>
 					<show id="lecm-arm:show-in-menu" force="true"/>
 					<show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:menu-business-roles-assoc" force="true"/>
 				</field-visibility>
 				<appearance>
 					<set id="base"/>
-					<set id="menu-config" appearance="bordered-panel" label-id="label.arm.menu.config"/>
+					<set id="menu-config" appearance="panel" label-id="label.arm.menu.config"/>
 
 					<field id="cm:name" set="base"/>
 					<field id="lecm-arm:code" set="base">
@@ -41,6 +42,7 @@
 						</constraint-handlers>
 					</field>
 					<field id="lecm-arm:show-calendar" set="base"/>
+					<field id="lecm-arm:show-create-button" set="base"/>
 
 					<field id="lecm-arm:show-in-menu" set="menu-config"/>
 					<field id="lecm-arm:order" set="menu-config"/>
@@ -66,6 +68,7 @@
 					<show id="cm:name" force="true"/>
 					<show id="lecm-arm:code" force="true"/>
 					<show id="lecm-arm:show-calendar" force="true"/>
+					<show id="lecm-arm:show-create-button"/>
 					<show id="lecm-arm:show-in-menu"/>
 					<show id="lecm-arm:order"/>
 					<show id="lecm-arm:menu-business-roles-assoc"/>
@@ -82,6 +85,7 @@
 						</constraint-handlers>
 					</field>
 					<field id="lecm-arm:show-calendar" set="base"/>
+					<field id="lecm-arm:show-create-button" set="base"/>
 
 					<field id="lecm-arm:show-in-menu" set="menu-config"/>
 					<field id="lecm-arm:order" set="menu-config"/>

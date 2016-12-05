@@ -634,12 +634,12 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 
 	@Override
 	public boolean hasEmployeesInRoute(final NodeRef nodeRef) {
-		return !isRouteEmpty(nodeRef, null, false, true);
+		return !isRouteEmpty(nodeRef, null, true, true);
 	}
 
 	@Override
 	public boolean hasEmployeesInRoute(NodeRef route, NodeRef docForExpression) {
-		return !isRouteEmpty(route, docForExpression, false, true);
+		return !isRouteEmpty(route, docForExpression, true, true);
 	}
 
 	@Override

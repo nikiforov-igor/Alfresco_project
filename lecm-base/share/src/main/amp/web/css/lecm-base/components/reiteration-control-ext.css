@@ -53,3 +53,8 @@
     padding: 5px;
     text-align: center;
 }
+
+.reiteration .container .value-div a.disabled {
+	pointer-events: none;
+	cursor: default;
+}

@@ -31,3 +31,27 @@ LogicECM.module.Errands.limitationDateValidation =
         }
         return true;
     };
+LogicECM.module.Errands.WFChangeDueDateValidation =
+    function (field, args, event, form, silent, message) {
+        if (field.name != "prop_lecmErrandWf_changeDueDateNewDueDate") {
+            return true;
+        }
+        if (field.form) {
+            var radio = field.form["prop_lecmErrandWf_changeDueDateNewDueDateRadio"];
+            var limitationDate = field.form["prop_lecmErrandWf_changeDueDateNewDueDate"];
+            var radioValue = null;
+            if (radio) {
+                for (var i = 0; i < radio.length; i++) {
+                    if (radio[i].checked == true) {
+                        radioValue = radio[i].value;
+                    }
+                }
+            }
+            if (radioValue == "LIMITLESS") {
+                return true;
+            }else{
+                return (limitationDate && limitationDate.value.length);
+            }
+        }
+        return true;
+    };

@@ -32,7 +32,8 @@
             <title>Logic Ecm Dictionary Errands Types</title>
             <parent>lecm-dic:plane_dictionary_values</parent>
             <properties>
-                <property name="lecm-errands-dic:errand-type-default-type">
+				<!-- Заголовок по умолчанию -->
+                <property name="lecm-errands-dic:errand-type-default-title">
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                     <index enabled="true">
@@ -41,6 +42,19 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+				<!-- Требуется отчет -->
+				<property name="lecm-errands-dic:errand-type-report-required">
+					<type>d:boolean</type>
+				</property>
+				<!-- Без срока -->
+				<property name="lecm-errands-dic:errand-type-limitless">
+					<type>d:boolean</type>
+				</property>
+				<!-- Запускает рассмотрение -->
+				<property name="lecm-errands-dic:errand-type-launch-review">
+					<type>d:boolean</type>
+				</property>
+
             </properties>
         </type>
 	</types>

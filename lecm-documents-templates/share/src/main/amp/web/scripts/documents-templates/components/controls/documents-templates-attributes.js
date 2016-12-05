@@ -460,25 +460,24 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		onBeforeSubmitTemplate: function (layer, args) {
 			/* this === LogicECM.module.DocumentsTemplates.Attributes */
 			var records = this.widgets.datatable.getRecordSet().getRecords();
-			var templateData = records.reduce(function (prev, curr) {
-				var obj = {
+			var templateData = records.map(function (record) {
+				return {
+					readonly: "true" === this.widgets.readonlyValue.value,
 					initial: {
-						dataType: curr.getData('attribute').dataType,
-						formsName: curr.getData('attribute').formsName,
-						attribute: curr.getData('attribute').name,
-						type: curr.getData('attribute').type,
-						value: Dom.get(curr.getData('value')) ? Dom.get(curr.getData('value')).value : null
+						dataType: record.getData('attribute').dataType,
+						formsName: record.getData('attribute').formsName,
+						attribute: record.getData('attribute').name,
+						type: record.getData('attribute').type,
+						value: Dom.get(record.getData('value')) ? Dom.get(record.getData('value')).value : null
 					}
 				};
-				curr.setData('initial', obj.initial);
-				prev.push(obj);
-				return prev;
-			}, []);
+			}, this);
 			this.widgets.hiddenValue.value = JSON.stringify(templateData);
 		},
 
 		onReady: function () {
 			this.widgets.hiddenValue = Dom.get(this.id + '-value');
+			this.widgets.readonlyValue = Selector.query('input[name="prop_lecm-template_readonly"]', Dom.get(this.options.formId), true);
 			this.templates.deleteTemplate = Dom.get(this.id  + '-delete-template').innerHTML;
 			this.templates.attributeTemplate = Dom.get(this.id  + '-attribute-template').innerHTML;
 			this.templates.valueTemplate = Dom.get(this.id + '-value-template').innerHTML;

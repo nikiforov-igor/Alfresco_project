@@ -1,6 +1,7 @@
 <#include "/org/alfresco/components/component.head.inc">
 <#include "association-search-control-dialog.inc.ftl">
 
+<#assign readonly = false>
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign selectedValue = "">
 <#assign params = field.control.params>
@@ -25,6 +26,13 @@
 <#assign defaultValue=field.control.params.defaultValue!"">
 <#if form.arguments[field.name]?has_content>
 	<#assign defaultValue=form.arguments[field.name]>
+<#elseif form.arguments['readonly_' + field.name]?has_content>
+	<#assign defaultValue=form.arguments['readonly_' + field.name]>
+</#if>
+
+<#assign sortSelected = false>
+<#if params.sortSelected?? && params.sortSelected == "true">
+	<#assign  sortSelected = true>
 </#if>
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")) || (field.control.params.readOnly?? && field.control.params.readOnly == "true") >
@@ -182,12 +190,16 @@
 				fieldId: "${field.configName}",
 				formId: "${args.htmlid}",
 				showSelectedItems: ${showSelectedItems?string},
+                sortSelected: ${sortSelected?string},
 				<#if field.control.params.itemType??>
 					itemType: "${field.control.params.itemType}"
 				<#else>
 					itemType: "${field.endpointType}"
 				</#if>
 			}).setMessages( ${messages} );
+			<#if readonly>
+				LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+			</#if>
 		}
 		YAHOO.util.Event.onDOMReady(init);
 	})();

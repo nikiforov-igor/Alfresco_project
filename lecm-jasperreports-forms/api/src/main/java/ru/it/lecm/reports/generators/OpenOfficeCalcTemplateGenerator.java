@@ -1,9 +1,8 @@
 package ru.it.lecm.reports.generators;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertyContainer;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.document.XDocumentInfo;
-import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.document.XDocumentProperties;
 import com.sun.star.document.XDocumentPropertiesSupplier;
 import com.sun.star.frame.XComponentLoader;
@@ -100,10 +99,9 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
 
             final XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xCompDoc);
             final XDocumentProperties xDocProps = xDocPropsSuppl.getDocumentProperties();
+            final XPropertyContainer userProperties = xDocProps.getUserDefinedProperties();
 
-            final XDocumentInfoSupplier xDocInfoSuppl = UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xCompDoc);
-            final XDocumentInfo docInfo = xDocInfoSuppl.getDocumentInfo();
-            final XPropertySet docProperties = UnoRuntime.queryInterface(XPropertySet.class, docInfo);
+            final XPropertySet docProperties = UnoRuntime.queryInterface(XPropertySet.class, userProperties);
 
             if (author != null) {
                 stage = String.format("Set openOffice property Author='%s'\n\t of document '%s'", author, srcOODocUrl);

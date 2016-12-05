@@ -2221,38 +2221,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>501cfd22-d562-4772-98a0-cc42454e556d
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/46c4c9e3-bc90-4e88-80be-fd78e110d209
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Согласование не может быть запущено, так как будут пропущены все этапы маршрута]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!@routesService.isRouteEmpty(doc.nodeRef)]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -6162,38 +6130,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                                 <name>condition</name>
                                                                                 <value>
                                                                                     <![CDATA[@routesService.hasEmployeesInRoute(doc.nodeRef) and @routesService.getApprovalState(doc.nodeRef) == "NEW"]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>fb96c1ea-a426-4dc0-9306-58aadd8bddca
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/67affcc6-6ca1-47d0-a4da-34fde1ed8121
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Согласование не может быть запущено, так как будут пропущены все этапы маршрута]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!@routesService.isRouteEmpty(doc.nodeRef)]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>

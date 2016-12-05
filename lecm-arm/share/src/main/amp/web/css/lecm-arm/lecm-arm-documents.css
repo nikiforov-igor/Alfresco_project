@@ -1,3 +1,6 @@
+@import "/share/res/css/lecm-arm/lecm-arm-admin-page.css";
+@import "/share/res/css/lecm-arm/lecm-arm-orgstructure-page.css";
+
 #bd #lecm-content-main #arm-tree {
     margin: 0 5px;
 }
