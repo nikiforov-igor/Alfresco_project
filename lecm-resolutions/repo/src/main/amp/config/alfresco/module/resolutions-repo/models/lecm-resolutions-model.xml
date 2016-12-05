@@ -69,6 +69,7 @@
                 <list>
                     <value>AUTHOR</value>
                     <value>CONTROLLER</value>
+                    <value>AUTHOR_AND_CONTROLLER</value>
                 </list>
             </parameter>
         </constraint>
