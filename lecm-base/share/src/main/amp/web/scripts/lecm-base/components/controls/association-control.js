@@ -206,6 +206,8 @@ LogicECM.module = LogicECM.module || {};
 				if (this.widgets.added) {
 					this.widgets.added.value = Alfresco.util.encodeHTML(Object.keys(this.widgets.picker.added).join(','));
 				}
+				
+				this.fire('afterChange', {});
 			}
 		},
 
