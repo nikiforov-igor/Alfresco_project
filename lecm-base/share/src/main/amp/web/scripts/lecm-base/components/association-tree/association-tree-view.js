@@ -1495,7 +1495,7 @@ LogicECM.module = LogicECM.module || {};
 
 		onPickerItemsContainerScroll: function(event) {
 			var container = event.currentTarget;
-			if (container.scrollTop + container.clientHeight == container.scrollHeight && !this.isSearch) {
+			if (container.scrollTop + container.clientHeight == container.scrollHeight) {
                 Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "visible");
 				this._loadItems(this.currentNode.data.nodeRef, this.searchData, false);
 			}
