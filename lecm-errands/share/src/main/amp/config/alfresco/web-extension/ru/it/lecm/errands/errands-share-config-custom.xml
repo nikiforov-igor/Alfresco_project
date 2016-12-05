@@ -1193,6 +1193,7 @@
                     <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="INVALID" validation-handler="LogicECM.module.Resolutions.ErrandsExecutionDateValidation" message-id="message.errandExecutionDate.laterResolution" event="keyup"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
@@ -1204,9 +1205,14 @@
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="INVALID" validation-handler="LogicECM.module.Resolutions.ErrandsExecutionDateValidation" message-id="message.errandExecutionDate.laterResolution" event="keyup"/>
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-errands:report-required" set="right-end"/>
+                    <field id="lecm-errands:report-required" set="right-end">
+                        <control>
+                            <control-param name="hideFieldsIfNotSelect">lecm-errands:report-recipient-type</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-errands:report-recipient-type" set="right-end">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
