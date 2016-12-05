@@ -154,6 +154,21 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 //				}
 //			}
 		}
+		
+		/**
+		 * Безопасный (с точки зрения доступа к БД) метод для получения пользователя,
+		 * изменнившего документ. Нужно для корректной обёртки в runAs
+		 * @param documentNodeRef
+		 * @return 
+		 */
+		private String getModifier(final NodeRef documentNodeRef) {
+			return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<String>() {
+				@Override
+				public String execute() throws Throwable {
+					return (String) nodeService.getProperty(documentNodeRef, ContentModel.PROP_MODIFIER);
+				}
+			}, true);
+		}
 
 		@Override
 		public void afterCommit() {
@@ -172,21 +187,21 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 //									if (logger.isDebugEnabled()) {
 //										logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " пользователем " + modifier);
 //									}
-									transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+									final String modifier = getModifier(nodeRef);
+									AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
 										@Override
-										public Void execute() throws Throwable {
-											if (nodeService.exists(nodeRef)) {
-												Serializable state = nodeService.getProperty(nodeRef, QName.createQName("http://www.it.ru/logicECM/model/signing/aspects/1.0", "signingState"));
-												if (logger.isDebugEnabled()) {
-													logger.debug("МАШИНА СОСТОЯНИЙ. state полученный в методе afterCommit равен {}", state);
-												}
-												String modifier = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
-												if (logger.isDebugEnabled()) {
-													logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " пользователем " + modifier);
-												}
-												AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
-													@Override
-													public Void doWork() throws Exception {
+										public Void doWork() throws Exception {
+											return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+												@Override
+												public Void execute() throws Throwable {
+													if (nodeService.exists(nodeRef)) {
+														Serializable state = nodeService.getProperty(nodeRef, QName.createQName("http://www.it.ru/logicECM/model/signing/aspects/1.0", "signingState"));
+														if (logger.isDebugEnabled()) {
+															logger.debug("МАШИНА СОСТОЯНИЙ. state полученный в методе afterCommit равен {}", state);
+														}
+														if (logger.isDebugEnabled()) {
+															logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " пользователем " + modifier);
+														}
 														//TODO transaction in loop!!!
 														if (nodeService.hasAspect(nodeRef, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
 															final String taskId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS);
@@ -223,7 +238,7 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 																	break;
 																}
 															}
-			
+
 															if (result != null) {
 																if (logger.isDebugEnabled()) {
 																	logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " выражение: " + result.getExpression());
@@ -234,13 +249,13 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 																	if (logger.isDebugEnabled()) {
 																		logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа " + nodeRef + " скрипт: " + script);
 																	}
-	//   			                                           		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-	//                                                      		@Override
-	//                                                      		public Object doWork() throws Exception {
+		//   			                                           		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+		//                                                      		@Override
+		//                                                      		public Object doWork() throws Exception {
 																	stateMachineHelper.executeScript(script, executionId);
-	//                                                      		return null;
-	//                                                     			}
-	//                                                  			});
+		//                                                      		return null;
+		//                                                     			}
+		//                                                  			});
 																}
 																if (result.getOutputValue() != null && !"".equals(result.getOutputValue())) {
 																	//HashMap<String, Object> parameters = new HashMap<String, Object>();
@@ -267,13 +282,12 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 															}
 															logger.debug("МАШИНА СОСТОЯНИЙ. Конец");
 														}
-														return null;
 													}
-												}, modifier);
-											}
-											return null;
+													return null;
+												}
+											}, false, true);
 										}
-									}, false, true);
+									}, modifier);
 								} catch (Exception e) {
 									logger.error("Error while execution change document action", e);
 								}
