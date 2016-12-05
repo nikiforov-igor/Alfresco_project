@@ -3,6 +3,7 @@
 
 <#assign fieldValue=field.value!"">
 <#assign controlId = fieldHtmlId + "-cntrl">
+<#assign readonly = false>
 
 <#assign autoCompleteJsName = field.control.params.autoCompleteJsName ! "${args.htmlid}-${fieldHtmlId}-auto-complete">
 <#assign treeViewJsName = field.control.params.treeViewJsName ! "${args.htmlid}-${fieldHtmlId}-tree-view">
@@ -12,6 +13,14 @@
 		<#assign fieldValue = context.properties[field.control.params.defaultValueContextProperty]>
 	<#elseif args[field.control.params.defaultValueContextProperty]??>
 		<#assign fieldValue = args[field.control.params.defaultValueContextProperty]>
+	</#if>
+</#if>
+<#if !(fieldValue)?has_content>
+	<#if form.arguments[field.name]?has_content>
+		<#assign fieldValue = form.arguments[field.name]/>
+	<#elseif form.arguments['readonly_' + field.name]?has_content>
+		<#assign fieldValue=form.arguments['readonly_' + field.name]>
+		<#assign readonly = true>
 	</#if>
 </#if>
 
@@ -98,7 +107,9 @@
 			nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
 			sortProp: "${field.control.params.sortProp!'cm:name'}",
 			additionalFilter: "${field.control.params.additionalFilter!''}",
-			useDynamicLoading: ${useDynamicLoading?string}
+			useDynamicLoading: ${useDynamicLoading?string},
+			fieldId: "${field.configName}",
+			formId: "${args.htmlid}"
 		});
 
 		LogicECM.CurrentModules["${treeViewJsName}"] = new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" );
@@ -132,7 +143,7 @@
 		<#if field.control.params.employeeAbsenceMarker??>
 			employeeAbsenceMarker: "${field.control.params.employeeAbsenceMarker}",
 		</#if>
-		<#if args.ignoreNodes??>                                    
+		<#if args.ignoreNodes??>
 			ignoreNodes: "${args.ignoreNodes}".split(","),
 		</#if>
 	    <#if args.allowedNodes??>
@@ -149,11 +160,16 @@
 			changeItemsFireAction: "refreshAutocompleteItemList_${fieldHtmlId}",
 			plane: true,
 			setCurrentValue: false,
-			currentValue: "${field.value!''}",
+			currentValue: "${fieldValue!''}",
 			itemType:"${field.control.params.itemType!field.endpointType}",
 			additionalFilter: "${field.control.params.additionalFilter!''}",
-            clearFormsOnStart: false
+            clearFormsOnStart: false,
+			fieldId: "${field.configName}",
+			formId: "${args.htmlid}"
 		}).setMessages( ${messages} );
+	<#if readonly>
+		LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+	</#if>
 	}
 	YAHOO.util.Event.onDOMReady(init);
 })();
@@ -169,8 +185,8 @@
 		</div>
 		<div class="container">
 			<div class="value-div">
-				<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
-				<span id="${controlId}-Dom.get(this.currentValueHtmlId).value" class="mandatory-highlightable">${field.value?html}</span>
+				<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${fieldValue?html}" />
+				<span id="${controlId}-Dom.get(this.currentValueHtmlId).value" class="mandatory-highlightable">${fieldValue?html}</span>
 			</div>
 		</div>
 	</div>
@@ -192,7 +208,7 @@
 				</#if>
 			</div>
 			<div class="value-div">
-				<input id="${fieldHtmlId}" type="text" class="autocomplete-input" name="${field.name}" value="${field.value?html}"/>
+				<input id="${fieldHtmlId}" type="text" class="autocomplete-input" name="${field.name}" value="${fieldValue?html}"/>
 			</div>
 		</div>
 		<div id="${controlId}-autocomplete-container"></div>

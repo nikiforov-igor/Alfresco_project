@@ -1,4 +1,5 @@
 <#assign isTrue=false>
+<#assign readonly = false>
 <#assign defaultValue="">
 <#if field.control.params.defaultValue?has_content>
     <#assign defaultValue=false>
@@ -14,6 +15,9 @@
 		<#assign defaultValue=form.arguments[field.name]>
 	<#elseif form.arguments[field.name]?is_string && form.arguments[field.name] == "true">
 		<#assign defaultValue=true>
+	<#elseif form.arguments['readonly_' + field.name]?has_content && form.arguments['readonly_' + field.name] == "true">
+		<#assign defaultValue=true>
+		<#assign readonly=true>
 	</#if>
 </#if>
 
@@ -78,6 +82,9 @@
 				fieldId: "${field.configName}",
 				formId: "${args.htmlid}"
 			});
+	<#if readonly>
+		LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+	</#if>
 	}
 	YAHOO.util.Event.onDOMReady(init);
 })();

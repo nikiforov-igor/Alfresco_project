@@ -6,6 +6,7 @@
 
 <#assign fieldValue=field.value!"">
 <#assign controlId = fieldHtmlId + "-cntrl">
+<#assign readonly = false>
 
 <#assign autoCompleteJsName = field.control.params.autoCompleteJsName ! "${args.htmlid}-${fieldHtmlId}-auto-complete">
 <#assign treeViewJsName = field.control.params.treeViewJsName ! "${args.htmlid}-${fieldHtmlId}-tree-view">
@@ -31,6 +32,9 @@
         </#list>
     <#elseif form.arguments[field.name]?has_content>
         <#assign fieldValue = form.arguments[field.name]/>
+	<#elseif form.arguments['readonly_' + field.name]?has_content>
+		<#assign fieldValue=form.arguments['readonly_' + field.name]>
+		<#assign readonly = true>
     </#if>
 </#if>
 
@@ -272,6 +276,9 @@
 	    fieldId: "${field.configName}",
 	    formId: "${args.htmlid}"
     }).setMessages( ${messages} );
+	<#if readonly>
+		LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+	</#if>
 	}
 	YAHOO.util.Event.onDOMReady(init);
 })();

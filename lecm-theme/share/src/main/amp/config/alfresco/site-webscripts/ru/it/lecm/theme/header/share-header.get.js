@@ -36,28 +36,6 @@ for (var i = 0; i < arms.length; i++) {
 	});
 }
 
-logicECMWidgets.push({
-	id: "ORGSTRUCTURE_DICTIONARY_MENU_ITEM",
-	name: "alfresco/header/AlfMenuItem",
-	config: {
-		id: "ORGSTRUCTURE_DICTIONARY_MENU_ITEM",
-		label: msg.get("label.orgstructure-dictionary"),
-		targetUrl: "orgstructure-dictionary",
-		iconImage: imagesRoot + "orgstructure_light.png"
-	}
-});
-
-logicECMWidgets.push({
-	id: "ADMINISTRATION_MENU_ITEM",
-	name: "alfresco/header/AlfMenuItem",
-	config: {
-		id: "ADMINISTRATION_MENU_ITEM",
-		label: msg.get("label.admin.page"),
-		targetUrl: "admin",
-		iconImage: imagesRoot + "settings_16_light.png"
-	}
-});
-
 var standartWidgets = [
 	{
 	    id: "PEOPLE_MENU_ITEM",

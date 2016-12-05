@@ -2114,6 +2114,10 @@ span.person a div.description:empty {
     text-decoration: underline;
 }
 
+.yui-skin-lecmTheme .set-panel-body {
+    padding-left: 0;
+}
+
 .set-bordered-panel-body {
     overflow: hidden;
 }
@@ -2492,6 +2496,12 @@ div#lightbox {
 /* arm menu : start */
 .yui-skin-lecmDarkTheme .arm-menu-item {
     background-image: url("/share/components/images/header/docs_16_light.png");
+}
+.yui-skin-lecmDarkTheme .arm-menu-item.orgstructure {
+    background-image: url("/share/components/images/header/orgstructure_light.png");
+}
+.yui-skin-lecmDarkTheme .arm-menu-item.ADMIN {
+    background-image: url("/share/components/images/header/settings_16_light.png");
 }
 /* arm menu : end */
 
