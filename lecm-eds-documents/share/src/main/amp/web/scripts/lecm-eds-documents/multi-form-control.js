@@ -53,6 +53,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
 
             onReady: function () {
                 this.loadCurrentValue();
+                this.updateFromCount();
 
                 if (this.options.documentType && !this.options.disabled) {
                     this.loadDefaultValue();
@@ -121,6 +122,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
             onBeforeFormRuntimeInit: function (layer, args) {
                 if (args[1] && args[1].runtime && args[1].runtime.formId.indexOf(this.id + "-line-") == 0) {
                     this.forms[args[1].runtime.formId] = args[1].runtime;
+                    this.updateFromCount();
                 }
             },
 
@@ -275,6 +277,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 var element = document.getElementById(this.id + "_" + args.num + "_item");
                 element.parentNode.removeChild(element);
                 delete this.forms[this.id + "-line-" + args.num + "-form"];
+                this.updateFromCount();
             },
 
             getActionsDivHTML: function (num) {
@@ -315,6 +318,13 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                             }
                         }
                     }
+                }
+            },
+
+            updateFromCount: function() {
+                var countElement = Dom.get(this.id + "-count");
+                if (countElement) {
+                    countElement.value = Object.keys(this.forms).length;
                 }
             }
         });
