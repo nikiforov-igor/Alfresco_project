@@ -117,10 +117,10 @@
 					<artifactId>jcommon</artifactId>
     				<groupId>org.jfree</groupId>
     			</exclusion>
-				<exclusion>
+				<!--<exclusion>
 					<artifactId>jfreechart</artifactId>
     				<groupId>org.jfree</groupId>
-    			</exclusion>
+    			</exclusion>-->
     			<exclusion>
     				<groupId>com.lowagie</groupId>
     				<artifactId>itext</artifactId>

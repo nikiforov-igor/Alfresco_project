@@ -48,37 +48,37 @@ public class SQLReportingBootstrap {
             logger.warn("SQL Bootstrap disabled. Use 'lecm.reporting.bootstrapOnStart=true' in alfresco-global.properties file to enable it.");
             return; //пропускаем
         }
-//        AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
-//            @Override
-//            public Object doWork() throws Exception {
-//                if (sqlFiles != null) {
-//                    transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-//                        @Override
-//                        public Object execute() throws Throwable {
-//                            for (final String sql : sqlFiles) {
-//                                InputStreamReader reader = null;
-//                                InputStream inputStream = null;
-//                                try {
-//                                    logger.debug("Execute SQL: {}", sql);
-//                                    inputStream = getClass().getClassLoader().getResourceAsStream(sql);
-//                                    reader = new InputStreamReader(inputStream);
-//                                    ScriptRunner runner = new ScriptRunner(reportingDAO.getConnection());
-//                                    runner.runScript(reader);
-//                                    logger.debug("{} execute finished.", sql);
-//                                } catch (Exception e) {
-//                                    logger.error("Can not execute sql: " + sql, e);
-//                                } finally {
-//                                    IOUtils.closeQuietly(reader);
-//                                    IOUtils.closeQuietly(inputStream);
-//                                }
-//                            }
-//                            return null;
-//                        }
-//                    });
-//                }
-//                return null;
-//            }
-//        };
-//        AuthenticationUtil.runAsSystem(raw);
+        AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
+            @Override
+            public Object doWork() throws Exception {
+                if (sqlFiles != null) {
+                    transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+                        @Override
+                        public Object execute() throws Throwable {
+                            for (final String sql : sqlFiles) {
+                                InputStreamReader reader = null;
+                                InputStream inputStream = null;
+                                try {
+                                    logger.debug("Execute SQL: {}", sql);
+                                    inputStream = getClass().getClassLoader().getResourceAsStream(sql);
+                                    reader = new InputStreamReader(inputStream);
+                                    ScriptRunner runner = new ScriptRunner(reportingDAO.getConnection());
+                                    runner.runScript(reader);
+                                    logger.debug("{} execute finished.", sql);
+                                } catch (Exception e) {
+                                    logger.error("Can not execute sql: " + sql, e);
+                                } finally {
+                                    IOUtils.closeQuietly(reader);
+                                    IOUtils.closeQuietly(inputStream);
+                                }
+                            }
+                            return null;
+                        }
+                    });
+                }
+                return null;
+            }
+        };
+        AuthenticationUtil.runAsSystem(raw);
     }
 }

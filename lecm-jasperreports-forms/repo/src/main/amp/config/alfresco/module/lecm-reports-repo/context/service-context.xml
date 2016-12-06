@@ -279,9 +279,8 @@
     <!--
             Менеджер шаблонов отчёта
       -->
-    <bean id="reportsManager" class="ru.it.lecm.reports.api.ReportsManager"
-          depends-on="repositoryReportContentBean, fileReportContentBean, reportEditorDAOBean, jasperReportGenerator"
-          init-method="init">
+    <bean id="reportsManager" class="ru.it.lecm.reports.api.ReportsManager" parent="baseBean"
+          depends-on="repositoryReportContentBean, fileReportContentBean, reportEditorDAOBean, jasperReportGenerator">
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="substitudeService" ref="substitudeService"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
@@ -291,7 +290,7 @@
         <property name="reportEditorDAO" ref="reportEditorDAOBean"/>
 
         <!-- файлы создаваемых шаблонов отчётов как "cm:content" в репозитории -->
-        <!--<property name="contentRepositoryDAO" ref="repositoryReportContentBean"/>-->
+        <property name="contentRepositoryDAO" ref="repositoryReportContentBean"/>
         <property name="subreportFileDAO" ref="fileSubreportContentBean"/>
 
         <!-- файлы готовых отчётов (поставка) в файловой системе -->
