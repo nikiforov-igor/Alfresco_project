@@ -56,6 +56,6 @@
 
     <bean id="resolutions.defaultStatemachine" parent="defaultStatemachines">
         <property name="statemachineName" value="lecm-resolutions:document"/>
-        <property name="path" value="alfresco/module/${artifactId}/models/lecm-resolution-statemachine-default.xml"/>
+        <property name="path" value="alfresco/module/${artifactId}/statemachine/lecm-resolution-statemachine-default.xml"/>
     </bean>
 </beans>
