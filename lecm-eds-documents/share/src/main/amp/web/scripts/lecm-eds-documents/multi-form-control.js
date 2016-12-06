@@ -23,6 +23,8 @@ LogicECM.module.eds = LogicECM.module.eds || {};
 
     LogicECM.module.eds.MultiFormControl = function (htmlId) {
         LogicECM.module.eds.MultiFormControl.superclass.constructor.call(this, "LogicECM.module.eds.MultiFormControl", htmlId, ["container", "json"]);
+
+        YAHOO.Bubbling.on("reInitializeSubFormsControls", this.onRenitializeSubFormsControls, this);
         return this;
     };
 
@@ -40,7 +42,9 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 fixSimpleDialogId: null,
                 argsConfig: null,
                 args: null,
-                submitFireEvent: null
+                submitFireEvent: null,
+                formId: null,
+                fieldId: null
             },
             currentLine: 0,
             rootSubmitElement: null,
@@ -49,6 +53,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
 
             onReady: function () {
                 this.loadCurrentValue();
+                this.updateFormCount();
 
                 if (this.options.documentType && !this.options.disabled) {
                     this.loadDefaultValue();
@@ -117,6 +122,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
             onBeforeFormRuntimeInit: function (layer, args) {
                 if (args[1] && args[1].runtime && args[1].runtime.formId.indexOf(this.id + "-line-") == 0) {
                     this.forms[args[1].runtime.formId] = args[1].runtime;
+                    this.updateFormCount();
                 }
             },
 
@@ -271,6 +277,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 var element = document.getElementById(this.id + "_" + args.num + "_item");
                 element.parentNode.removeChild(element);
                 delete this.forms[this.id + "-line-" + args.num + "-form"];
+                this.updateFormCount();
             },
 
             getActionsDivHTML: function (num) {
@@ -297,6 +304,28 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 YAHOO.util.Event.on(this.id + "_" + num + "_remove", 'click', this.onRemove, {
                     num: num
                 }, this);
+            },
+
+            onRenitializeSubFormsControls: function (layer, args) {
+                if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+                    if (args[1].subFieldId && args[1].options) {
+                        for (var i in this.forms) {
+                            if (this.forms.hasOwnProperty(i)) {
+                                var formId= this.forms[i].formId;
+                                formId = formId.substring(0, formId.length - "-form".length);
+
+                                LogicECM.module.Base.Util.reInitializeControl(formId, args[1].subFieldId, args[1].options);
+                            }
+                        }
+                    }
+                }
+            },
+
+            updateFormCount: function() {
+                var countElement = Dom.get(this.id + "-count");
+                if (countElement) {
+                    countElement.value = Object.keys(this.forms).length;
+                }
             }
         });
 })();

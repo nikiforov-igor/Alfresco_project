@@ -43,6 +43,12 @@
         <#if params.submitFireEvent??>
             submitFireEvent: "${params.submitFireEvent}",
         </#if>
+        <#if field.configName??>
+            fieldId: "${field.configName}",
+        </#if>
+        <#if args.htmlid??>
+            formId: "${args.htmlid}",
+        </#if>
 
         <#if form.arguments??>
             args: {
@@ -70,6 +76,7 @@
 
 <div class="control multi-form">
     <input type="hidden" name="${field.name}" id="${fieldHtmlId}" value=""/>
+    <input type="hidden" name="${field.name}-count" id="${fieldHtmlId}-count" value=""/>
     <fieldset class="fieldset">
         <legend>${field.label?html}</legend>
         <ul id="${fieldHtmlId}-multi-form-documents-list" class="multi-form-documents-list"></ul>
