@@ -1934,10 +1934,12 @@ div.orgchart-picker-menu .search-input {
 .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel,
 .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:link,
 .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:visited,
-.tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:hover
-{
-  background-color:#C9EBF6;
-  color:black;
+.tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:hover,
+.yui-skin-lecmTheme .ygtv-highlight .ygtv-highlight1,
+.yui-skin-lecmTheme .ygtv-highlight .ygtv-highlight1 .ygtvlabel {
+    background-color: #C9EBF6;
+    color: black;
+    font-weight: bold;
 }
 
 /*datagrid control*/
