@@ -337,6 +337,7 @@ LogicECM.module = LogicECM.module || {};
 						}
 					}
 
+					Event.removeListener(this.options.pickerId + "-picker-items", "scroll", this.onPickerItemsContainerScroll);
 					Event.addListener(this.options.pickerId + "-picker-items", "scroll", this.onPickerItemsContainerScroll, this, true);
 
 					if (!this.options.lazyLoading) {
