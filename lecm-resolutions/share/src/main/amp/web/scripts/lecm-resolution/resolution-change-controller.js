@@ -33,7 +33,7 @@
                                 }
                             }
 
-                            YAHOO.Bubbling.fire("reInitializeSubFromsControls", {
+                            YAHOO.Bubbling.fire("reInitializeSubFormsControls", {
                                 formId: args[1].formId,
                                 fieldId: "lecm-resolutions:errands-json",
                                 subFieldId: "lecm-errands:controller-assoc",
