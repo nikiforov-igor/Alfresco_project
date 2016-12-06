@@ -10,17 +10,17 @@
 
         if (formId) {
             if ("DAYS" == value) {
-                LogicECM.module.Base.Util.enableControl(formId, "lecm-errands:limitation-date-days");
-                LogicECM.module.Base.Util.enableControl(formId, "lecm-errands:limitation-date-type");
-                LogicECM.module.Base.Util.disableControl(formId, "lecm-errands:limitation-date");
+                LogicECM.module.Base.Util.readonlyControl(formId, "lecm-errands:limitation-date-days", false);
+                LogicECM.module.Base.Util.readonlyControl(formId, "lecm-errands:limitation-date-type", false);
+                LogicECM.module.Base.Util.readonlyControl(formId, "lecm-errands:limitation-date", true);
             } else if ("DATE" == value) {
-                LogicECM.module.Base.Util.disableControl(formId, "lecm-errands:limitation-date-days");
-                LogicECM.module.Base.Util.disableControl(formId, "lecm-errands:limitation-date-type");
-                LogicECM.module.Base.Util.enableControl(formId, "lecm-errands:limitation-date");
+                LogicECM.module.Base.Util.readonlyControl(formId, "lecm-errands:limitation-date-days", true);
+                LogicECM.module.Base.Util.readonlyControl(formId, "lecm-errands:limitation-date-type", true);
+                LogicECM.module.Base.Util.readonlyControl(formId, "lecm-errands:limitation-date", false);
             } else {
-                LogicECM.module.Base.Util.disableControl(formId, "lecm-errands:limitation-date-days");
-                LogicECM.module.Base.Util.disableControl(formId, "lecm-errands:limitation-date-type");
-                LogicECM.module.Base.Util.disableControl(formId, "lecm-errands:limitation-date");
+                LogicECM.module.Base.Util.readonlyControl(formId, "lecm-errands:limitation-date-days", true);
+                LogicECM.module.Base.Util.readonlyControl(formId, "lecm-errands:limitation-date-type", true);
+                LogicECM.module.Base.Util.readonlyControl(formId, "lecm-errands:limitation-date", true);
             }
         }
     }
