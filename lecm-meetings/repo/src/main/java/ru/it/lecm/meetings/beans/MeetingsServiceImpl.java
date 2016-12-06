@@ -405,135 +405,141 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 
 		@Override
 		public void afterCommit() {
-			List<NodeRef> pendingDocs = AlfrescoTransactionSupport.getResource(MEETINGS_TRANSACTION_LISTENER);
+			final List<NodeRef> pendingDocs = AlfrescoTransactionSupport.getResource(MEETINGS_TRANSACTION_LISTENER);
 			if (pendingDocs != null) {
-				while (!pendingDocs.isEmpty()) {
-					final NodeRef meeting = pendingDocs.remove(0);
+				transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+					@Override
+					public Void execute() throws Throwable {
+						while (!pendingDocs.isEmpty()) {
+							final NodeRef meeting = pendingDocs.remove(0);
 
-					Boolean repeatable = (Boolean) nodeService.getProperty(meeting, EventsService.PROP_EVENT_REPEATABLE);
-					Boolean isRepeated = (Boolean) nodeService.getProperty(meeting, EventsService.PROP_EVENT_IS_REPEATED);
-					if (repeatable != null && repeatable && (isRepeated == null || !isRepeated)) {
+							Boolean repeatable = (Boolean) nodeService.getProperty(meeting, EventsService.PROP_EVENT_REPEATABLE);
+							Boolean isRepeated = (Boolean) nodeService.getProperty(meeting, EventsService.PROP_EVENT_IS_REPEATED);
+							if (repeatable != null && repeatable && (isRepeated == null || !isRepeated)) {
 
-						final String ruleContent = (String) nodeService.getProperty(meeting, EventsService.PROP_EVENT_REPEATABLE_RULE);
-						final Date startPeriod = (Date) nodeService.getProperty(meeting, EventsService.PROP_EVENT_REPEATABLE_START_PERIOD);
-						final Date endPeriod = (Date) nodeService.getProperty(meeting, EventsService.PROP_EVENT_REPEATABLE_END_PERIOD);
+								final String ruleContent = (String) nodeService.getProperty(meeting, EventsService.PROP_EVENT_REPEATABLE_RULE);
+								final Date startPeriod = (Date) nodeService.getProperty(meeting, EventsService.PROP_EVENT_REPEATABLE_START_PERIOD);
+								final Date endPeriod = (Date) nodeService.getProperty(meeting, EventsService.PROP_EVENT_REPEATABLE_END_PERIOD);
 
-						final Date startEventDate = (Date) nodeService.getProperty(meeting, EventsService.PROP_EVENT_FROM_DATE);
-						final Date endEvenDate = (Date) nodeService.getProperty(meeting, EventsService.PROP_EVENT_TO_DATE);
+								final Date startEventDate = (Date) nodeService.getProperty(meeting, EventsService.PROP_EVENT_FROM_DATE);
+								final Date endEvenDate = (Date) nodeService.getProperty(meeting, EventsService.PROP_EVENT_TO_DATE);
 
-						if (ruleContent != null && startPeriod != null && endPeriod != null) {
-							try {
-								JSONObject rule = new JSONObject(ruleContent);
-								String type = rule.getString("type");
-								JSONArray data = rule.getJSONArray("data");
+								if (ruleContent != null && startPeriod != null && endPeriod != null) {
+									try {
+										JSONObject rule = new JSONObject(ruleContent);
+										String type = rule.getString("type");
+										JSONArray data = rule.getJSONArray("data");
 
-								List<Integer> weekDays = new ArrayList<>();
-								List<Integer> monthDays = new ArrayList<>();
+										List<Integer> weekDays = new ArrayList<>();
+										List<Integer> monthDays = new ArrayList<>();
 
-								if (type.equals(WEEK_DAYS)) {
-									for (int i = 0; i < data.length(); i++) {
-										if (data.getInt(i) == 7) {
-											weekDays.add(Calendar.SUNDAY);
-										} else {
-											weekDays.add(data.getInt(i) + 1);
-										}
-									}
-								} else if (type.equals(MONTH_DAYS)) {
-									for (int i = 0; i < data.length(); i++) {
-										monthDays.add(data.getInt(i));
-									}
-								}
-
-								final List<Integer> weekDaysFinal = weekDays;
-								final List<Integer> monthDaysFinal = monthDays;
-
-								final Date eventFromDate = (Date) nodeService.getProperty(meeting, EventsService.PROP_EVENT_FROM_DATE);
-
-								transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-									@Override
-									public Void execute() throws Throwable {
-										NodeRef lastCreatedEvent = null;
-
-										final Calendar calStart = Calendar.getInstance();
-										calStart.setTime(startPeriod);
-
-										Calendar fromCal = Calendar.getInstance();
-										fromCal.setTime(startEventDate);
-										calStart.set(Calendar.HOUR_OF_DAY, fromCal.get(Calendar.HOUR_OF_DAY));
-										calStart.set(Calendar.MINUTE, fromCal.get(Calendar.HOUR_OF_DAY));
-
-										Calendar calEnd = Calendar.getInstance();
-										calEnd.setTime(endPeriod);
-
-										Calendar toCal = Calendar.getInstance();
-										toCal.setTime(endEvenDate);
-										calEnd.set(Calendar.HOUR_OF_DAY, toCal.get(Calendar.HOUR_OF_DAY));
-										calEnd.set(Calendar.MINUTE, toCal.get(Calendar.HOUR_OF_DAY));
-
-										boolean createdEventConnection = false;
-
-										while (calStart.before(calEnd)) {
-											int weekDay = calStart.get(Calendar.DAY_OF_WEEK);
-											int monthDay = calStart.get(Calendar.DAY_OF_MONTH);
-											if (weekDaysFinal.contains(weekDay) || monthDaysFinal.contains(monthDay)) {
-
-												QName docType = nodeService.getType(meeting);
-												NodeRef parentRef = documentService.getDraftRootByType(docType);
-												QName assocQname = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate());
-												Map<QName, Serializable> properties = copyProperties(meeting, calStart.getTime());
-
-												if (properties != null) {
-													// создаем ноду
-													ChildAssociationRef createdNodeAssoc = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQname, docType, properties);
-													NodeRef createdEvent = createdNodeAssoc.getChildRef();
-													documentConnectionService.createRootFolder(createdEvent);
-													copyAssocs(meeting, createdEvent);
-
-													nodeService.createAssociation(meeting, createdEvent, EventsService.ASSOC_EVENT_REPEATED_EVENTS);
-
-													Date createdFromDate = (Date) nodeService.getProperty(createdEvent, EventsService.PROP_EVENT_FROM_DATE);
-													Date lastCreatedFromDate = null;
-													if (lastCreatedEvent != null) {
-														lastCreatedFromDate = (Date) nodeService.getProperty(lastCreatedEvent, EventsService.PROP_EVENT_FROM_DATE);
-													}
-
-													if ((lastCreatedFromDate == null || lastCreatedFromDate.before(eventFromDate)) && createdFromDate.after(eventFromDate)) {
-														if (lastCreatedEvent != null) {
-															documentConnectionService.createConnection(lastCreatedEvent, meeting, "hasRepeated", true);
-															nodeService.createAssociation(lastCreatedEvent, meeting, EventsService.ASSOC_NEXT_REPEATED_EVENT);
-														}
-														documentConnectionService.createConnection(meeting, createdEvent, "hasRepeated", true);
-														nodeService.createAssociation(meeting, createdEvent, EventsService.ASSOC_NEXT_REPEATED_EVENT);
-
-														createdEventConnection = true;
-													} else if (lastCreatedEvent != null) {
-														documentConnectionService.createConnection(lastCreatedEvent, createdEvent, "hasRepeated", true);
-														nodeService.createAssociation(lastCreatedEvent, createdEvent, EventsService.ASSOC_NEXT_REPEATED_EVENT);
-													}
-
-													lastCreatedEvent = createdEvent;
+										if (type.equals(WEEK_DAYS)) {
+											for (int i = 0; i < data.length(); i++) {
+												if (data.getInt(i) == 7) {
+													weekDays.add(Calendar.SUNDAY);
+												} else {
+													weekDays.add(data.getInt(i) + 1);
 												}
 											}
-
-											calStart.add(Calendar.DAY_OF_YEAR, 1);
+										} else if (type.equals(MONTH_DAYS)) {
+											for (int i = 0; i < data.length(); i++) {
+												monthDays.add(data.getInt(i));
+											}
 										}
 
-										if (!createdEventConnection && lastCreatedEvent != null) {
-											documentConnectionService.createConnection(lastCreatedEvent, meeting, "hasRepeated", true);
-											nodeService.createAssociation(lastCreatedEvent, meeting, EventsService.ASSOC_NEXT_REPEATED_EVENT);
-										}
+										final List<Integer> weekDaysFinal = weekDays;
+										final List<Integer> monthDaysFinal = monthDays;
 
-										return null;
+										final Date eventFromDate = (Date) nodeService.getProperty(meeting, EventsService.PROP_EVENT_FROM_DATE);
+
+										transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+											@Override
+											public Void execute() throws Throwable {
+												NodeRef lastCreatedEvent = null;
+
+												final Calendar calStart = Calendar.getInstance();
+												calStart.setTime(startPeriod);
+
+												Calendar fromCal = Calendar.getInstance();
+												fromCal.setTime(startEventDate);
+												calStart.set(Calendar.HOUR_OF_DAY, fromCal.get(Calendar.HOUR_OF_DAY));
+												calStart.set(Calendar.MINUTE, fromCal.get(Calendar.HOUR_OF_DAY));
+
+												Calendar calEnd = Calendar.getInstance();
+												calEnd.setTime(endPeriod);
+
+												Calendar toCal = Calendar.getInstance();
+												toCal.setTime(endEvenDate);
+												calEnd.set(Calendar.HOUR_OF_DAY, toCal.get(Calendar.HOUR_OF_DAY));
+												calEnd.set(Calendar.MINUTE, toCal.get(Calendar.HOUR_OF_DAY));
+
+												boolean createdEventConnection = false;
+
+												while (calStart.before(calEnd)) {
+													int weekDay = calStart.get(Calendar.DAY_OF_WEEK);
+													int monthDay = calStart.get(Calendar.DAY_OF_MONTH);
+													if (weekDaysFinal.contains(weekDay) || monthDaysFinal.contains(monthDay)) {
+
+														QName docType = nodeService.getType(meeting);
+														NodeRef parentRef = documentService.getDraftRootByType(docType);
+														QName assocQname = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate());
+														Map<QName, Serializable> properties = copyProperties(meeting, calStart.getTime());
+
+														if (properties != null) {
+															// создаем ноду
+															ChildAssociationRef createdNodeAssoc = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQname, docType, properties);
+															NodeRef createdEvent = createdNodeAssoc.getChildRef();
+															documentConnectionService.createRootFolder(createdEvent);
+															copyAssocs(meeting, createdEvent);
+
+															nodeService.createAssociation(meeting, createdEvent, EventsService.ASSOC_EVENT_REPEATED_EVENTS);
+
+															Date createdFromDate = (Date) nodeService.getProperty(createdEvent, EventsService.PROP_EVENT_FROM_DATE);
+															Date lastCreatedFromDate = null;
+															if (lastCreatedEvent != null) {
+																lastCreatedFromDate = (Date) nodeService.getProperty(lastCreatedEvent, EventsService.PROP_EVENT_FROM_DATE);
+															}
+
+															if ((lastCreatedFromDate == null || lastCreatedFromDate.before(eventFromDate)) && createdFromDate.after(eventFromDate)) {
+																if (lastCreatedEvent != null) {
+																	documentConnectionService.createConnection(lastCreatedEvent, meeting, "hasRepeated", true);
+																	nodeService.createAssociation(lastCreatedEvent, meeting, EventsService.ASSOC_NEXT_REPEATED_EVENT);
+																}
+																documentConnectionService.createConnection(meeting, createdEvent, "hasRepeated", true);
+																nodeService.createAssociation(meeting, createdEvent, EventsService.ASSOC_NEXT_REPEATED_EVENT);
+
+																createdEventConnection = true;
+															} else if (lastCreatedEvent != null) {
+																documentConnectionService.createConnection(lastCreatedEvent, createdEvent, "hasRepeated", true);
+																nodeService.createAssociation(lastCreatedEvent, createdEvent, EventsService.ASSOC_NEXT_REPEATED_EVENT);
+															}
+
+															lastCreatedEvent = createdEvent;
+														}
+													}
+
+													calStart.add(Calendar.DAY_OF_YEAR, 1);
+												}
+
+												if (!createdEventConnection && lastCreatedEvent != null) {
+													documentConnectionService.createConnection(lastCreatedEvent, meeting, "hasRepeated", true);
+													nodeService.createAssociation(lastCreatedEvent, meeting, EventsService.ASSOC_NEXT_REPEATED_EVENT);
+												}
+
+												return null;
+											}
+										}, false, true);
+
+									} catch (JSONException e) {
+										logger.error("Error parse repeatable rule", e);
 									}
-								}, false, true);
-
-							} catch (JSONException e) {
-								logger.error("Error parse repeatable rule", e);
+								}
 							}
-						}
-					}
 
-				}
+						}
+						return null;
+					}
+				}, true, true);
 			}
 		}
 
