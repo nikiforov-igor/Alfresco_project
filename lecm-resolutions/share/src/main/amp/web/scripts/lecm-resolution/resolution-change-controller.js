@@ -13,5 +13,22 @@
                 recipientField.selectedIndex = 0;
             }
         }
+
+        var controllerValue = "";
+        if (args[1].selectedItems) {
+            var keys = Object.keys(args[1].selectedItems);
+            if (keys.length == 1) {
+                controllerValue = keys[0];
+            }
+        }
+
+        YAHOO.Bubbling.fire("reInitializeSubFromsControls", {
+            formId: args[1].formId,
+            fieldId: "lecm-resolutions:errands-json",
+            subFieldId: "lecm-errands:controller-assoc",
+            options: {
+                currentValue: controllerValue
+            }
+        });
     }
 })();

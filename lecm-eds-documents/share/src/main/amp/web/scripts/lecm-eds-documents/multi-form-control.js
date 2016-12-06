@@ -23,6 +23,8 @@ LogicECM.module.eds = LogicECM.module.eds || {};
 
     LogicECM.module.eds.MultiFormControl = function (htmlId) {
         LogicECM.module.eds.MultiFormControl.superclass.constructor.call(this, "LogicECM.module.eds.MultiFormControl", htmlId, ["container", "json"]);
+
+        YAHOO.Bubbling.on("reInitializeSubFromsControls", this.onRenitializeSubFromsControls, this);
         return this;
     };
 
@@ -40,7 +42,9 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 fixSimpleDialogId: null,
                 argsConfig: null,
                 args: null,
-                submitFireEvent: null
+                submitFireEvent: null,
+                formId: null,
+                fieldId: null
             },
             currentLine: 0,
             rootSubmitElement: null,
@@ -297,6 +301,21 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 YAHOO.util.Event.on(this.id + "_" + num + "_remove", 'click', this.onRemove, {
                     num: num
                 }, this);
+            },
+
+            onRenitializeSubFromsControls: function (layer, args) {
+                if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+                    if (args[1].subFieldId && args[1].options) {
+                        for (var i in this.forms) {
+                            if (this.forms.hasOwnProperty(i)) {
+                                var formId= this.forms[i].formId;
+                                formId = formId.substring(0, formId.length - 5);
+
+                                LogicECM.module.Base.Util.reInitializeControl(formId, args[1].subFieldId, args[1].options);
+                            }
+                        }
+                    }
+                }
             }
         });
 })();

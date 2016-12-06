@@ -43,6 +43,12 @@
         <#if params.submitFireEvent??>
             submitFireEvent: "${params.submitFireEvent}",
         </#if>
+        <#if field.configName??>
+            fieldId: "${field.configName}",
+        </#if>
+        <#if args.htmlid??>
+            formId: "${args.htmlid}",
+        </#if>
 
         <#if form.arguments??>
             args: {
