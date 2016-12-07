@@ -11,6 +11,7 @@
    <#assign labelSeparator="|">
 </#if>
 
+<#assign readonly = false>
 <#assign fieldValue=field.value>
 <#if form.mode == "create">
     <#if form.arguments[field.name]?has_content>
@@ -24,6 +25,14 @@
    <#elseif args[field.control.params.defaultValueContextProperty]??>
       <#assign fieldValue = args[field.control.params.defaultValueContextProperty]>
    </#if>
+</#if>
+<#if !(fieldValue)?has_content>
+	<#if form.arguments[field.name]?has_content>
+		<#assign fieldValue = form.arguments[field.name]/>
+	<#elseif form.arguments['readonly_' + field.name]?has_content>
+		<#assign fieldValue=form.arguments['readonly_' + field.name]>
+		<#assign readonly = true>
+	</#if>
 </#if>
 
 <#assign disabled = field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>
@@ -128,6 +137,9 @@
         </#if>
             disabled: ${disabled?string},
         });
+	<#if readonly>
+		LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+	</#if>
     }
 
     YAHOO.util.Event.onDOMReady(init);

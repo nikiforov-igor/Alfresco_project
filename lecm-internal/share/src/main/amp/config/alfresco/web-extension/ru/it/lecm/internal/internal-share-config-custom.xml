@@ -533,16 +533,14 @@
                             <control-param name="firstAdditionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 
                             <control-param name="secondItemType">lecm-orgstr:organization-unit</control-param>
-							<control-param name="secondXPathLocation">{currentLocation}</control-param>
-							<control-param name="secondXPathLocationRoot">{lecmMyOrganization}</control-param>
+							<control-param name="secondRootLocation">{organization}</control-param>
                             <control-param name="secondNameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
                             <control-param name="secondTreeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
-                            <control-param name="secondTreeNodeTitleSubstituteString">{cm:name}</control-param>
+                            <control-param name="secondTreeNodeTitleSubstituteString">{lecm-orgstr:element-full-name}</control-param>
                             <control-param name="secondPlane">false</control-param>
                             <control-param name="secondShowSearch">true</control-param>
                             <control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
                             <control-param name="secondPickerButtonTitleCode">title.organizationUnit.select</control-param>
-                            <control-param name="selectedItemsFormArgs">lecm-internal:recipients-assoc</control-param>
                             <control-param name="secondSortProp">lecm-orgstr:element-short-name</control-param>
                             <control-param name="secondAdditionalFilter">ISNOTNULL:\"sys:node-dbid\"</control-param>
                         </control>

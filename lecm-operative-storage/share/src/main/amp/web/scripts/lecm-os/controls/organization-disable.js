@@ -24,7 +24,7 @@
 						}
 					});
 				} else {
-					LogicECM.module.Base.Util.readonlyControl(formId, fieldId, true);
+					LogicECM.module.Base.Util.disableControl(formId, fieldId);
 				}
 			}
 			subscribed = true;

@@ -128,7 +128,9 @@
                  */
                 datePickerVerticalIndent: 5,
 
-                readonly: false,
+                tempDisabled: false,
+
+				readonly: false,
 
                 /**
                  * Object container for storing YUI widget instances.
@@ -350,7 +352,7 @@
                     // При открытии календаря посылаем событие, чтобы закрыть все другие открытые календари
                     Bubbling.fire("showDatePicker", {datepicker : this});
 
-	                if (!this.readonly) {
+	                if (!this.tempDisabled || !this.readonly) {
 		                var me = this;
 		                var picker = Dom.get(me.id);
 		                var parent = picker.parentNode;
@@ -586,6 +588,23 @@
 						}
 					}
 				},
+
+	            onDisableControl: function (layer, args) {
+		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+			            this.widgets.calendar.hide();
+			            this.tempDisabled = true;
+			            Dom.get(this.id + "-date").disabled = true;
+		            }
+	            },
+
+	            onEnableControl: function (layer, args) {
+		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+			            this.tempDisabled = false;
+			            if (!this.options.disabled) {
+				            Dom.get(this.id + "-date").disabled = false;
+			            }
+		            }
+	            },
 
                 onHideControl: function (layer, args) {
                     if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
