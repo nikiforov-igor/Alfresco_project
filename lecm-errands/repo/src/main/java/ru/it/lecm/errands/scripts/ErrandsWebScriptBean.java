@@ -730,27 +730,27 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                         nodeService.createAssociation(errand, ((ScriptNode) value).getNodeRef(), ErrandsService.ASSOC_ERRANDS_EXECUTOR);
                                     }
 
-                                    value = properties.get("lecmErrandWf_coexecutors_assoc");
+                                    value = properties.get("lecmErrandWf_coexecutorsAssoc");
                                     if (value != null) {
-                                        if (value instanceof org.mozilla.javascript.NativeArray) {
-                                            final NativeArray nativeArray = (NativeArray) value;
-                                            final Collection<ScriptNode> arrayResult = new ArrayList<>();
-                                            for (int i = 0; i < (int) nativeArray.getLength(); i++) {
-                                                if (nativeArray.get(i, null) instanceof ScriptNode) {
-                                                    arrayResult.add((ScriptNode) nativeArray.get(i, null));
-                                                }
-                                            }
-                                            value = arrayResult;
-                                        }
+                                        value = getObjectsArray(value);
                                         Collection<ScriptNode> coexecutors = (Collection<ScriptNode>) value;
                                         for (ScriptNode coexecutor : coexecutors) {
                                             nodeService.createAssociation(errand, coexecutor.getNodeRef(), ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS);
                                         }
                                     }
 
-                                    value = properties.get("lecmErrandWf_controller_assoc");
+                                    value = properties.get("lecmErrandWf_controllerAssoc");
                                     if (value != null) {
                                         nodeService.createAssociation(errand, ((ScriptNode) value).getNodeRef(), ErrandsService.ASSOC_ERRANDS_CONTROLLER);
+                                    }
+
+                                    value = properties.get("lecmErrandWf_attachmentsAssoc");
+                                    if (value != null) {
+                                        value = getObjectsArray(value);
+                                        Collection<ScriptNode> attachments = (Collection<ScriptNode>) value;
+                                        for (ScriptNode attachment : attachments) {
+                                            nodeService.createAssociation(errand, attachment.getNodeRef(), DocumentService.ASSOC_TEMP_ATTACHMENTS);
+                                        }
                                     }
 
                                     nodeService.createAssociation(errand, parentErrand, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
@@ -765,6 +765,20 @@ public class ErrandsWebScriptBean extends BaseWebScript {
             }
         };
         threadPoolExecutor.execute(runnable);
+    }
+
+    private Object getObjectsArray(Object value) {
+        if (value instanceof NativeArray) {
+            final NativeArray nativeArray = (NativeArray) value;
+            final Collection<ScriptNode> arrayResult = new ArrayList<>();
+            for (int i = 0; i < (int) nativeArray.getLength(); i++) {
+                if (nativeArray.get(i, null) instanceof ScriptNode) {
+                    arrayResult.add((ScriptNode) nativeArray.get(i, null));
+                }
+            }
+            value = arrayResult;
+        }
+        return value;
     }
 
     public void changeStatusDocumentByExecution(ScriptNode doc) {
