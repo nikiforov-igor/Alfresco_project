@@ -30,6 +30,7 @@
 								<control-param name="changeItemsFireAction">templateOrganizationSelect</control-param>
 								<control-param name="sortProp">lecm-contractor:shortname</control-param>
 								<control-param name="childrenDataSource">/lecm/orgstructure/getOrganizations/picker</control-param>
+								<control-param name="pickerItemsScript">/lecm/orgstructure/getOrganizations/items</control-param>
 								<control-param name="defaultValueDataSource">/lecm/documents-templates/defaultOrganization</control-param>
 							</control>
 						</field>
@@ -80,6 +81,7 @@
 								<control-param name="changeItemsFireAction">templateOrganizationSelect</control-param>
 								<control-param name="sortProp">lecm-contractor:shortname</control-param>
 								<control-param name="childrenDataSource">/lecm/orgstructure/getOrganizations/picker</control-param>
+								<control-param name="pickerItemsScript">/lecm/orgstructure/getOrganizations/items</control-param>
 								<control-param name="defaultValueDataSource">/lecm/documents-templates/defaultOrganization</control-param>
 							</control>
 						</field>

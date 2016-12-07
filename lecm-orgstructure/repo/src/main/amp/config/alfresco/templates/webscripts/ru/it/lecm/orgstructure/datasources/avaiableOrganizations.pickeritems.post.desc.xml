@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Organizations PickerItems</shortname>
+    <description>Organizations PickerItems</description>
+    <url>/lecm/orgstructure/getOrganizations/items</url>
+    <format default="json"/>
+    <authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+</webscript>

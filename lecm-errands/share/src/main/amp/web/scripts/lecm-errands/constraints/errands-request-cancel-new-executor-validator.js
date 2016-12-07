@@ -17,7 +17,7 @@ LogicECM.module.Errands.requestCancelTaskNewExecutorValidation =
 
 				if (result != null && result.value == "CHANGE_EXECUTOR") {
 					isChangeExecutor = true;
-					LogicECM.module.Base.Util.readonlyControl(formId, "lecmErrandWf:requestCancelTaskNewExecutor", false);
+					LogicECM.module.Base.Util.enableControl(formId, "lecmErrandWf:requestCancelTaskNewExecutor");
 				} else {
 					isChangeExecutor = false;
 					if (newExecutor.value != '') {
@@ -26,7 +26,7 @@ LogicECM.module.Errands.requestCancelTaskNewExecutorValidation =
 							currentValue:""
 						});
 					}
-					LogicECM.module.Base.Util.readonlyControl(formId, "lecmErrandWf:requestCancelTaskNewExecutor", true);
+					LogicECM.module.Base.Util.disableControl(formId, "lecmErrandWf:requestCancelTaskNewExecutor");
 				}
 
 				return !isChangeExecutor || newExecutor.value.length > 0;

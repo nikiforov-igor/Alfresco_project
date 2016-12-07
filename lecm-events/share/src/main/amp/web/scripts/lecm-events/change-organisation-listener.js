@@ -42,14 +42,14 @@
 				}
 
 				if (organization && organization.nodeRef) {
-					LogicECM.module.Base.Util.readonlyControl(formId, "lecm-events-dic:resources-responsible-assoc", false);
+                LogicECM.module.Base.Util.enableControl(formId, "lecm-events-dic:resources-responsible-assoc");
 					YAHOO.Bubbling.fire("refreshItemList", {
 						formId: formId,
 						fieldId: "lecm-events-dic:resources-responsible-assoc",
 						childrenDataSource: 'lecm/employees/EVENTS_RESPONSIBLE_FOR_RESOURCES/byOrg/' + organization.nodeRef.replace('://', '/') + '/picker'
 					});
 				} else {
-					LogicECM.module.Base.Util.readonlyControl(formId, "lecm-events-dic:resources-responsible-assoc", true);
+					LogicECM.module.Base.Util.disableControl(formId, "lecm-events-dic:resources-responsible-assoc");
 				}
 			}
 		});

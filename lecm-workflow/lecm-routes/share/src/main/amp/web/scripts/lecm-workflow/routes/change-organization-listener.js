@@ -27,7 +27,7 @@
                 if (currentOrganization == null) {
                     currentOrganization = organization.nodeRef;
                 }
-
+                
                 Alfresco.util.Ajax.jsonGet({
                     url: Alfresco.constants.PROXY_URI + '/lecm/orgstructure/api/getUnitByOrg',
                     dataObj: {
@@ -37,7 +37,7 @@
                         scope: this,
                         fn: function (response) {
                             var unit = new Alfresco.util.NodeRef(response.json.nodeRef);
-                            LogicECM.module.Base.Util.readonlyControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc", false);
+                            LogicECM.module.Base.Util.enableControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc");
                             YAHOO.util.Event.onAvailable(LogicECM.module.Base.Util.getComponentReadyElementId(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc"), function() {
                                 YAHOO.Bubbling.fire("refreshItemList", {
                                     formId: formId,
@@ -51,13 +51,13 @@
                                 organization: currentOrganization
                             });
                         }
-
+                        
                     },
                     failureMessage: Alfresco.util.message('message.failure')
                 });
             } else {
                 currentOrganization = null;
-                LogicECM.module.Base.Util.readonlyControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc", true);
+                LogicECM.module.Base.Util.disableControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc");
                 YAHOO.Bubbling.fire("routeOrganizationSelected", {
                     organization: currentOrganization
                 });
@@ -109,6 +109,10 @@
     }
 
     function checkSelected(formId) {
-		LogicECM.module.Base.Util.readonlyControl(formId, "lecmWorkflowRoutes:routeOrganizationAssoc", currentState.unit || currentState.stages);
+        if (currentState.unit || currentState.stages) {
+            LogicECM.module.Base.Util.disableControl(formId, "lecmWorkflowRoutes:routeOrganizationAssoc");
+        } else {
+            LogicECM.module.Base.Util.enableControl(formId, "lecmWorkflowRoutes:routeOrganizationAssoc");
+        }
     }
 })();

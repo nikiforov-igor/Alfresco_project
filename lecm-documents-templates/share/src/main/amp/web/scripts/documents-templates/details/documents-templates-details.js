@@ -95,12 +95,13 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				return true;
 			}
 
-			var obj = args[1],
-				form = Dom.get(obj.component.id),
-				fieldId = Selector.query('input[name="prop_lecm-template_attributes"]', form, true).id,
-				message = this.msg('template-details-successfull-form-submit.title');
-			switch (obj.component.options.mode) {
-				case 'create': case 'edit':
+			if (!this.widgets.formsRuntime || args[1].eventGroup == this.widgets.formsRuntime.formId) {
+				var obj = args[1],
+					form = Dom.get(obj.component.id),
+					fieldId = Selector.query('input[name="prop_lecm-template_attributes"]', form, true).id,
+					message = this.msg('template-details-successfull-form-submit.title');
+				switch (obj.component.options.mode) {
+					case 'create': case 'edit':
 					if (!this.widgets.formsRuntime) {
 						// doBeforeFOrmSubmit; doBeforeAjaxRequest;
 						this.widgets.formsRuntime = obj.component.formsRuntime;
@@ -111,17 +112,17 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 						console.warn('formsRuntime already exists for LogicECM.module.DocumentsTemplates.DetailsView[' + this.id + '] mode ' + obj.component.options.mode);
 					}
 					break;
-				default: throw obj.component.options.mode + ' mode is not implemented for LogicECM.module.DocumentsTemplates.DetailsView';
+					default: throw obj.component.options.mode + ' mode is not implemented for LogicECM.module.DocumentsTemplates.DetailsView';
+				}
+				Bubbling.fire('registerValidationHandler', {
+					fieldId: fieldId,
+					handler: this.validateTemplateDataHandler,
+					args: {
+						scope: this
+					},
+					message: this.msg('template-details-invalid-attributes.title')
+				});
 			}
-			Bubbling.fire('registerValidationHandler', {
-				fieldId: fieldId,
-				handler: this.validateTemplateDataHandler,
-				args: {
-					scope: this
-				},
-				message: this.msg('template-details-invalid-attributes.title')
-			});
-
 		},
 
 		validateTemplateDataHandler: function (field, args, event, formsRuntime, silent, message) {
