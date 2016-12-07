@@ -979,12 +979,12 @@
                 <edit-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl" />
 
                 <field-visibility>
+                    <!-- Получатель -->
+                    <show id="lecm-errands:executor-assoc"/>
                     <!--  Типы поручений -->
                     <show id="lecm-errands:type-assoc"/>
                     <!--  Заголовок поручения -->
                     <show id="lecm-errands:title"/>
-                    <!-- Исполнитель -->
-                    <show id="lecm-errands:executor-assoc"/>
                     <!-- Срок исполнения -->
                     <show id="lecm-errands:limitation-date-radio"/>
                     <show id="errand-limitless" force="true"/>
@@ -997,6 +997,7 @@
                     <set id="right"/>
                     <set id="limitation-date" parent="right" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
 
+                    <field id="lecm-errands:executor-assoc" set="left" label-id="label.primaryRouting.recipient"/>
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
@@ -1013,7 +1014,6 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:executor-assoc" set="left" label-id="label.primaryRouting.recipient"/>
 
                     <field id="lecm-errands:limitation-date-radio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
@@ -1049,12 +1049,12 @@
                 <edit-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl" />
 
                 <field-visibility>
+                    <!-- Получатель -->
+                    <show id="lecm-errands:executor-assoc"/>
                     <!--  Типы поручений -->
                     <show id="lecm-errands:type-assoc"/>
                     <!--  Заголовок поручения -->
                     <show id="lecm-errands:title"/>
-                    <!-- Исполнитель -->
-                    <show id="lecm-errands:executor-assoc"/>
                     <!-- Срок исполнения -->
                     <show id="lecm-errands:limitation-date-radio"/>
                     <show id="errand-limitless" force="true"/>
@@ -1067,6 +1067,7 @@
                     <set id="right"/>
                     <set id="limitation-date" parent="right" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
 
+                    <field id="lecm-errands:executor-assoc" set="left" label-id="label.primaryRouting.recipient"/>
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
@@ -1083,7 +1084,6 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:executor-assoc" set="left" label-id="label.primaryRouting.recipient"/>
 
                     <field id="lecm-errands:limitation-date-radio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
