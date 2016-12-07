@@ -182,7 +182,11 @@
 					<show id="lecm-review-ts:review-start-date"/>
 					<show id="lecm-review-ts:review-finish-date"/>
 					<show id="lecm-review-ts:initiator-assoc"/>
+					<show id="lecm-review-ts:initiator-username"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-review-ts:initiator-username" substituteString="{lecm-review-ts:initiator-assoc/lecm-orgstr:employee-person-assoc/cm:userName}"/>
+				</appearance>
 			</form>
 		</forms>
 	</config>
