@@ -123,6 +123,7 @@
                     <field id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true">
                         <control>
                             <control-param name="useStrictFilterByOrg">true</control-param>
+                            <control-param name="rootLocation">{organization}</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent" >
