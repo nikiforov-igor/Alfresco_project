@@ -263,6 +263,9 @@
 			<#if params.childrenDataSource??>
 				childrenDataSource: "${params.childrenDataSource}",
 			</#if>
+			<#if params.pickerItemsScript??>
+                pickerItemsScript: "${params.pickerItemsScript}",
+			</#if>
 			<#if params.treeBranchesDatasource??>
 				treeBranchesDatasource: "${params.treeBranchesDatasource}",
 			</#if>
