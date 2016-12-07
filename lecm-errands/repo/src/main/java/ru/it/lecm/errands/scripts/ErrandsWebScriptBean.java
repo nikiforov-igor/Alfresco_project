@@ -59,6 +59,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     private RepositoryStructureHelper repositoryStructureHelper;
     private CopyService copyService;
     private NamespaceService namespaceService;
+    private DocumentAttachmentsService documentAttachmentsService;
 
     public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
 		this.lecmTransactionHelper = lecmTransactionHelper;
@@ -96,6 +97,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         this.repositoryStructureHelper = repositoryStructureHelper;
     }
 
+    public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
+        this.documentAttachmentsService = documentAttachmentsService;
+    }
     public void setCopyService(CopyService copyService) {
         this.copyService = copyService;
     }
@@ -730,27 +734,42 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                         nodeService.createAssociation(errand, ((ScriptNode) value).getNodeRef(), ErrandsService.ASSOC_ERRANDS_EXECUTOR);
                                     }
 
-                                    value = properties.get("lecmErrandWf_coexecutors_assoc");
+                                    value = properties.get("lecmErrandWf_coexecutorsAssoc");
                                     if (value != null) {
-                                        if (value instanceof org.mozilla.javascript.NativeArray) {
-                                            final NativeArray nativeArray = (NativeArray) value;
-                                            final Collection<ScriptNode> arrayResult = new ArrayList<>();
-                                            for (int i = 0; i < (int) nativeArray.getLength(); i++) {
-                                                if (nativeArray.get(i, null) instanceof ScriptNode) {
-                                                    arrayResult.add((ScriptNode) nativeArray.get(i, null));
-                                                }
-                                            }
-                                            value = arrayResult;
-                                        }
+                                        value = getObjectsArray(value);
                                         Collection<ScriptNode> coexecutors = (Collection<ScriptNode>) value;
                                         for (ScriptNode coexecutor : coexecutors) {
                                             nodeService.createAssociation(errand, coexecutor.getNodeRef(), ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS);
                                         }
                                     }
 
-                                    value = properties.get("lecmErrandWf_controller_assoc");
+                                    value = properties.get("lecmErrandWf_controllerAssoc");
                                     if (value != null) {
                                         nodeService.createAssociation(errand, ((ScriptNode) value).getNodeRef(), ErrandsService.ASSOC_ERRANDS_CONTROLLER);
+                                    }
+
+                                    value = properties.get("lecmErrandWf_attachmentsAssoc");
+                                    if (value != null) {
+                                        value = getObjectsArray(value);
+                                        NodeRef categoryRef = null;
+                                        List<NodeRef> categories = documentAttachmentsService.getCategories(errand);
+                                        if (categories != null) {
+                                            for (NodeRef category : categories) {
+                                                if (!documentAttachmentsService.isReadonlyCategory(category)) {
+                                                    categoryRef = category;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        Collection<ScriptNode> attachments = (Collection<ScriptNode>) value;
+
+                                        if (categoryRef != null) {
+                                            for (ScriptNode attachment : attachments) {
+                                                String attachName = nodeService.getProperty(attachment.getNodeRef(), ContentModel.PROP_NAME).toString();
+                                                QName assocQname = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, attachName);
+                                                copyService.copyAndRename(attachment.getNodeRef(), categoryRef, ContentModel.ASSOC_CONTAINS, assocQname, false);
+                                            }
+                                        }
                                     }
 
                                     nodeService.createAssociation(errand, parentErrand, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
@@ -765,6 +784,20 @@ public class ErrandsWebScriptBean extends BaseWebScript {
             }
         };
         threadPoolExecutor.execute(runnable);
+    }
+
+    private Object getObjectsArray(Object value) {
+        if (value instanceof NativeArray) {
+            final NativeArray nativeArray = (NativeArray) value;
+            final Collection<ScriptNode> arrayResult = new ArrayList<>();
+            for (int i = 0; i < (int) nativeArray.getLength(); i++) {
+                if (nativeArray.get(i, null) instanceof ScriptNode) {
+                    arrayResult.add((ScriptNode) nativeArray.get(i, null));
+                }
+            }
+            value = arrayResult;
+        }
+        return value;
     }
 
     public void changeStatusDocumentByExecution(ScriptNode doc) {
