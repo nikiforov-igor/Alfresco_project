@@ -672,6 +672,22 @@ LogicECM.module.Base.Util = {
 				readonly: readonly
 		});
 	},
+	disableControl: function(formId, fieldId) {
+		YAHOO.util.Event.onAvailable(this.getComponentReadyElementId(formId, fieldId), function() {
+			YAHOO.Bubbling.fire("disableControl", {
+				formId: formId,
+				fieldId: fieldId
+			});
+		});
+	},
+	enableControl: function(formId, fieldId) {
+		YAHOO.util.Event.onAvailable(this.getComponentReadyElementId(formId, fieldId), function() {
+			YAHOO.Bubbling.fire("enableControl", {
+				formId: formId,
+				fieldId: fieldId
+			});
+		});
+	},
 	hideControl: function(formId, fieldId) {
 		YAHOO.util.Event.onAvailable(this.getComponentReadyElementId(formId, fieldId), function() {
 			YAHOO.Bubbling.fire("hideControl", {

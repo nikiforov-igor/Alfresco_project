@@ -36,6 +36,8 @@ LogicECM.module = LogicECM.module || {};
         YAHOO.Bubbling.on("refreshItemList", this.onRefreshItemList, this);
         YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemAdded, this);
 		YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
+		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
+		YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
 		YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
 
         this.selectedItems = {};
@@ -79,6 +81,10 @@ LogicECM.module = LogicECM.module || {};
 		skipItemsCount: 0,
 
 		alreadyShowCreateNewLink: false,
+
+		tempDisabled: false,
+
+		readsonly: false,
 
 		options:
 		{
@@ -1657,13 +1663,15 @@ LogicECM.module = LogicECM.module || {};
 
         removeNode: function AssociationTreeViewer_removeNode(event, params)
         {
-            delete this.selectedItems[params.node.nodeRef];
-            this.singleSelectedItem = null;
-            this.updateSelectedItems();
-            this.updateAddButtons();
-	        if (params.updateForms) {
-		        this.updateFormFields();
-	        }
+			if (!this.tempDisabled || !this.readonly) {
+				delete this.selectedItems[params.node.nodeRef];
+				this.singleSelectedItem = null;
+				this.updateSelectedItems();
+				this.updateAddButtons();
+				if (params.updateForms) {
+					this.updateFormFields();
+				}
+			}
         },
 
         updateSelectedItems: function AssociationTreeViewer_updateSelectedItems() {
@@ -2118,6 +2126,53 @@ LogicECM.module = LogicECM.module || {};
 				}
 				if (!args[1].readonly && this.widgets.dialog) {
 					this.widgets.dialog.hide();
+				}
+			}
+		},
+
+		onDisableControl: function (layer, args) {
+			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+				if (this.widgets.pickerButton) {
+					this.widgets.pickerButton.set('disabled', true);
+				}
+				var input = Dom.get(this.id);
+				if (input) {
+					input.disabled = true;
+				}
+				var added = Dom.get(this.options.controlId + "-added");
+				if (added) {
+					added.disabled = true;
+				}
+				var removed = Dom.get(this.options.controlId + "-removed");
+				if (removed) {
+					removed.disabled = true;
+				}
+				this.tempDisabled = true;
+			}
+		},
+
+		onEnableControl: function (layer, args) {
+			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+				if (!this.options.disabled) {
+					if (this.widgets.pickerButton) {
+						this.widgets.pickerButton.set('disabled', false);
+					}
+					if (this.widgets.dialog) {
+						this.widgets.dialog.hide();
+					}
+					var input = Dom.get(this.id);
+					if (input) {
+						input.disabled = false;
+					}
+					var added = Dom.get(this.options.controlId + "-added");
+					if (added) {
+						added.disabled = false;
+					}
+					var removed = Dom.get(this.options.controlId + "-removed");
+					if (removed) {
+						removed.disabled = false;
+					}
+					this.tempDisabled = false;
 				}
 			}
 		},

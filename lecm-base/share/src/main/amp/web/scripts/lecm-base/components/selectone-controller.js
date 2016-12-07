@@ -9,6 +9,7 @@ LogicECM.module = LogicECM.module || {};
     LogicECM.module.SelectOneController = function (htmlId) {
         LogicECM.module.SelectOneController.superclass.constructor.call(this, "LogicECM.module.SelectOneController", htmlId);
 
+        YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
         YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
         YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
         YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
@@ -43,6 +44,16 @@ LogicECM.module = LogicECM.module || {};
                 });
             }
         },
+
+		onReadonlyControl: function (layer, args) {
+			var fn;
+            if (this.options.formId === args[1].formId && this.options.fieldId === args[1].fieldId) {
+				if (this.widgets.inputEl) {
+					fn = args[1].readonly ? this.widgets.inputEl.setAttribute : this.widgets.inputEl.removeAttribute;
+					fn.call(this.widgets.inputEl, "readonly", "");
+				}
+			}
+		},
 
         onDisableControl: function (layer, args) {
             if (this.options.formId === args[1].formId && this.options.fieldId === args[1].fieldId) {
