@@ -3,7 +3,8 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-template:actions"/>
+					<!-- Действия -->
+					<show id="lecm-base-dummy-aspects:script" force="true"/>
 					<show id="cm:title"/>
 					<show id="lecm-template:organizationAssoc"/>
 					<show id="lecm-template:doc-type"/>
@@ -32,7 +33,7 @@
 								<control-param name="defaultValueDataSource">/lecm/documents-templates/defaultOrganization</control-param>
 							</control>
 						</field>
-						<field id="lecm-template:actions" set="top">
+						<field id="lecm-base-dummy-aspects:script" set="top">
 							<control template="/ru/it/lecm/documents-templates/components/controls/actions.ftl"/>
 						</field>
 						<field id="lecm-template:doc-type" set="bottom">
@@ -49,7 +50,8 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-template:actions"/>
+					<!-- Действия -->
+					<show id="lecm-base-dummy-aspects:script" force="true"/>
 					<show id="cm:title"/>
 					<show id="lecm-template:organizationAssoc"/>
 					<show id="lecm-template:doc-type"/>
@@ -78,7 +80,7 @@
 								<control-param name="defaultValueDataSource">/lecm/documents-templates/defaultOrganization</control-param>
 							</control>
 						</field>
-						<field id="lecm-template:actions" set="top">
+						<field id="lecm-base-dummy-aspects:script" set="top">
 							<control template="/ru/it/lecm/documents-templates/components/controls/actions.ftl"/>
 						</field>
 						<field id="lecm-template:doc-type" set="bottom">
