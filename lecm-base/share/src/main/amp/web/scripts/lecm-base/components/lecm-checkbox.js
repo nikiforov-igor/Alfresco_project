@@ -26,6 +26,8 @@ LogicECM.module = LogicECM.module || {};
         this.checkboxId = fieldHtmlId + "-entry";
         this.attentionId = fieldHtmlId + "-attention";
 		YAHOO.Bubbling.on("readonlyContol", this.onReadonlyControl, this);
+	    YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
+	    YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
 	    YAHOO.Bubbling.on("disableRelatedFields", this.onDisableRelatedFields, this);
         return this;
     };
@@ -215,6 +217,24 @@ LogicECM.module = LogicECM.module || {};
 						}
 					}
 				},
+				
+	            onDisableControl: function (layer, args) {
+		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+			            if (this.checkbox != null) {
+				            this.checkbox.disabled = true;
+				            Dom.get(this.id).disabled = true;
+			            }
+		            }
+	            },
+
+	            onEnableControl: function (layer, args) {
+		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+			            if (!this.options.disabled && this.checkbox != null) {
+				            this.checkbox.disabled = false;
+				            Dom.get(this.id).disabled = false;
+			            }
+		            }
+	            },
 
 	            onDisableRelatedFields: function (layer, args) {
 		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
