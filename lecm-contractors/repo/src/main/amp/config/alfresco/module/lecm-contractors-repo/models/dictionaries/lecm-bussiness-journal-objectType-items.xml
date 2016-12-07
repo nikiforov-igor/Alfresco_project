@@ -16,6 +16,13 @@
                 <property name="lecm-busjournal:objectType-class"><![CDATA[lecm-contractor:physical-person-type]]></property>
                 <property name="lecm-busjournal:objectType-list-template"><![CDATA[{lecm-contractor:shortname}]]></property>
             </item>
+            <item name="cm:Регион" type="lecm-busjournal:objectType">
+                <property name="cm:name"><![CDATA[Регион]]></property>
+                <property name="lecm-busjournal:objectType-code"><![CDATA[REGION]]></property>
+                <property name="lecm-busjournal:objectType-template"><![CDATA[{cm:title}]]></property>
+                <property name="lecm-busjournal:objectType-class"><![CDATA[lecm-contractor:region-type]]></property>
+                <property name="lecm-busjournal:objectType-list-template"><![CDATA[{cm:title}]]></property>
+            </item>
         </items>
     </item>
 </items>
