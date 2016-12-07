@@ -78,7 +78,6 @@ LogicECM.module = LogicECM.module || {};
 						var input = Dom.get(this.controlId);
 						if (input) {
 							input.disabled = true;
-							input.value = "";
 						}
 					}
 				},
