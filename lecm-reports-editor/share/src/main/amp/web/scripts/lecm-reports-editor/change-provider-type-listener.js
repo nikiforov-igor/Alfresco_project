@@ -13,7 +13,11 @@
         }
 
         if (formId != null) {
-			LogicECM.module.Base.Util.readonlyControl(formId, 'lecm-rpeditor:loadColumnsFromSQL', selectProviderName != "SQLProvider");
+            if (selectProviderName == "SQLProvider") {
+                LogicECM.module.Base.Util.enableControl(formId, "lecm-rpeditor:loadColumnsFromSQL");
+            } else {
+                LogicECM.module.Base.Util.disableControl(formId, "lecm-rpeditor:loadColumnsFromSQL");
+            }
         }
     }
 })();

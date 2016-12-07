@@ -133,14 +133,22 @@ LogicECM.module = LogicECM.module || {};
 			            for (var i = 0; i < this.options.disabledFieldsIfNotSelect.length; i++) {
 
 							var fieldId = this.options.disabledFieldsIfNotSelect[i];
-							LogicECM.module.Base.Util.readonlyControl(me.options.formId, fieldId, !selected);
+							if (!selected) {
+								LogicECM.module.Base.Util.disableControl(me.options.formId, fieldId);
+							} else {
+								LogicECM.module.Base.Util.enableControl(me.options.formId, fieldId);
+							}
 			            }
 		            }
 		            if (this.options.disabledFieldsIfSelect != null) {
 			            for (i = 0; i < this.options.disabledFieldsIfSelect.length; i++) {
 
 							var fieldId = this.options.disabledFieldsIfSelect[i];
-							LogicECM.module.Base.Util.readonlyControl(me.options.formId, fieldId, selected);
+							if (selected) {
+								LogicECM.module.Base.Util.disableControl(me.options.formId, fieldId);
+							} else {
+								LogicECM.module.Base.Util.enableControl(me.options.formId, fieldId);
+							}
 			            }
 		            }
 	            },
