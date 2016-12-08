@@ -24,10 +24,10 @@
 		var nodeRef;
 
 		if(obj.selectedItems) {
-			for (var prop in obj.selectedItems) {
-				nodeRef = obj.selectedItems[prop];
-				break;
-			}
+            var keys = Object.keys(obj.selectedItems);
+            if (keys.length == 1) {
+                nodeRef = keys[0];
+            }
 		}
 
 		if(nodeRef) {
