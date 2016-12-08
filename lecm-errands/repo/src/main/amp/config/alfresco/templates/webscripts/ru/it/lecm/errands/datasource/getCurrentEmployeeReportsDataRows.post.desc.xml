@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Получить табличные данные доступные текущему пользователю</shortname>
+    <description>Получить табличные данные доступные текущему пользователю</description>
+    <url>/lecm/errands/ds/getCurrentEmployeeReportsDataRows</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+</webscript>

@@ -68,7 +68,7 @@
 									    	var connectDocs = documentConnection.getConnectedDocuments(document,'docReport',"lecm-document:base");
 									    	var i,connectExist;
 									    	for(i=0;i<connectDocs.length;i++){
-									    		if(connectDocs[i].nodeRef == connectedDocument.nodeRef){
+									    		if(connectDocs[i].nodeRef.equals(connectedDocument.nodeRef)){
 									    			connectExist = true;
 									    		}
 											}

@@ -108,7 +108,6 @@ LogicECM.errands = LogicECM.errands || {};
 
 		realCreateDatagrid: function(actions,currentUser) {
 			if (this.tableData != null && this.tableData.rowType != null) {
-
 				var datagrid = new LogicECM.errands.CoexecutorsReportsDatagrid(this.options.containerId).setOptions({
 					usePagination: true,
 					showExtendSearchBlock: false,
@@ -127,9 +126,10 @@ LogicECM.errands = LogicECM.errands || {};
 						sort: "lecm-document:indexTableRow",
 						useChildQuery: false,
 						searchConfig: {
-							filter: 'NOT @lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"DECLINE" AND NOT (@lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"PROJECT" AND NOT @lecm\\-errands\\-ts\\:coexecutor\\-assoc\\-ref:"'+currentUser+'")'
+							showDecline: false
 						}
 					},
+					dataSource: 'lecm/errands/ds/getCurrentEmployeeReportsDataRows',
 					bubblingLabel: this.options.bubblingLabel,
 					showActionColumn: this.options.showActions,
 					showOtherActionColumn: true,
@@ -154,14 +154,12 @@ LogicECM.errands = LogicECM.errands || {};
 			datagrid.draw();
 
 			YAHOO.util.Event.on(this.id + "-cntrl-show-declined", "change", function() {
-				var filter = 'NOT @lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"DECLINE" AND NOT (@lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"PROJECT" AND NOT @lecm\\-errands\\-ts\\:coexecutor\\-assoc\\-ref:"'+currentUser+'")';
-				if (this.checked) {
-					filter = '@lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"DECLINE" OR @lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"ACCEPT" OR (@lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"PROJECT" AND @lecm\\-errands\\-ts\\:coexecutor\\-assoc\\-ref:"'+currentUser+'")' +
-						'OR @lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"ONCONTROL"';
-
-				}
 				var datagridMeta = datagrid.datagridMeta;
-				datagridMeta.searchConfig.filter = filter;
+				var showDecline = false;
+				if (this.checked) {
+					showDecline = true;
+				}
+				datagridMeta.searchConfig.showDecline = showDecline;
 				datagrid.search.performSearch(datagridMeta);
 			});
 

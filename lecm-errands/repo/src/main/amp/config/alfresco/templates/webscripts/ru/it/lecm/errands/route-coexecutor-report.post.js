@@ -23,7 +23,7 @@
         //удаляем старые ассоциации если не равны новым
         if (connectedDocument) {
             //если документы отличаются
-            if (oldConnectedDocumentRef != connectedDocumentRef) {
+            if (!connectedDocumentRef.equals(oldConnectedDocumentRef)) {
                 if (oldConnectedDocumentLinkAssoc && oldConnectedDocumentLinkAssoc.length) {
                     report.removeAssociation(oldConnectedDocumentLinkAssoc[0], "lecm-errands-ts:coexecutor-report-connected-document-link-assoc");
                     oldConnectedDocumentLinkAssoc[0].remove();
@@ -59,7 +59,7 @@
                     allReports.forEach(function (report) {
                         var linkAssoc = report.assocs["lecm-errands-ts:coexecutor-report-connected-document-link-assoc"];
                         if (linkAssoc && linkAssoc.length) {
-                            if (linkAssoc[0] == oldConnectedDocumentLinkAssoc[0]) {
+                            if (linkAssoc[0].nodeRef.equals(oldConnectedDocumentLinkAssoc[0].nodeRef)) {
                                 linkIsUsed = true;
                             }
                         }
@@ -73,7 +73,7 @@
             report.properties["lecm-errands-ts:connected-document-ref"] = null;
         }
         if (attachment) {
-            if ((oldAttachment && oldAttachment.length && oldAttachment[0] != attachment) || (!oldAttachment || oldAttachment.length)) {
+            if ((oldAttachment && oldAttachment.length && !oldAttachment[0].nodeRef.equals(attachment.nodeRef)) || (!oldAttachment || !oldAttachment.length)) {
                 var dateFormat = new Packages.java.text.SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
                 var dateString = dateFormat.format(new java.util.Date());
                 attachment.properties["cm:name"] = "Отчет соисполнителя " + currentUser.properties["lecm-orgstr:employee-short-name"] + ", от " + dateString;
@@ -85,7 +85,7 @@
                 }
                 report.createAssociation(attachment, "lecm-errands-ts:coexecutor-report-attachment-assoc");
 
-                if (oldAttachment && oldAttachment.length && oldAttachment[0] != attachment) {
+                if (oldAttachment && oldAttachment.length && !oldAttachment[0].nodeRef.equals(attachment.nodeRef)) {
                     report.removeAssociation(oldAttachment[0], "lecm-errands-ts:coexecutor-report-attachment-assoc");
                     documentAttachments.deleteAttachment(oldAttachment[0].nodeRef);
                 }
@@ -110,7 +110,7 @@
                 var connectDocs = documentConnection.getConnectedDocuments(document, 'docReport', "lecm-document:base");
                 var i, connectExist;
                 for (i = 0; i < connectDocs.length; i++) {
-                    if (connectDocs[i].nodeRef == connectedDocument.nodeRef) {
+                    if (connectDocs[i].nodeRef.equals(connectedDocument.nodeRef)) {
                         connectExist = true;
                     }
                 }
