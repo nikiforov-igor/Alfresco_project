@@ -44,7 +44,7 @@
 										var linkExist = false;
 										if(links && links.length){
 											for(i=0;i<links.length;i++){
-												if(links[i].name == connectedDocument.name){
+												if(links[i].name.equals(connectedDocument.name)){
 													linkExist = true;
 													break;
 												}
