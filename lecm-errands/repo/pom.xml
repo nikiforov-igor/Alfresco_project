@@ -113,14 +113,6 @@
 					<groupId>org.apache.lucene</groupId>
 					<artifactId>lucene-queryparser</artifactId>
 				</exclusion>
-				<exclusion>
-					<artifactId>jcommon</artifactId>
-    				<groupId>org.jfree</groupId>
-    			</exclusion>
-				<!--<exclusion>
-					<artifactId>jfreechart</artifactId>
-    				<groupId>org.jfree</groupId>
-    			</exclusion>-->
     			<exclusion>
     				<groupId>com.lowagie</groupId>
     				<artifactId>itext</artifactId>
