@@ -1,0 +1,1 @@
+model.hasRole = orgstructure.hasBusinessRole(search.findNode(args['employeeNodeRef']), args['roleId']);
