@@ -27,14 +27,7 @@
 			url: Alfresco.constants.PROXY_URI + "/lecm/operative-storage/canCopyUnits?" + "items=" + items + "&dest=" + field.value,
 			context: this,
 			success: function (response) {
-					var oResults = response;
-					if (oResults && oResults.canCopy) {
-						valid = true;
-						this.balloon.hide();
-					} else {
-						valid = false;
-						this.balloon.show();
-					}
+					valid = response && response.canCopy;
 				},
 			async: false
 		});
