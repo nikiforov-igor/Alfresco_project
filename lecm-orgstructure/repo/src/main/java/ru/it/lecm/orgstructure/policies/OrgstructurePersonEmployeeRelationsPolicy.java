@@ -158,6 +158,9 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
         // Создаем ассоциацию сотруднику на персональные данные
         nodeService.createAssociation(employeeNode, personalDataRef.getChildRef(), OrgstructureBean.ASSOC_EMPLOYEE_PERSON_DATA);
 
+		// Ручное добавление аспекта cm:versionable
+		addVersionableAspect(employeeNode);
+		
         // сообщить 1) создание Сотрудника 2) связывание Сотрудника с Person/User.
         notifyEmploeeTie(employeeNode);
 
@@ -422,6 +425,15 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
      */
     public void onDeletePersonNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
     }
+
+	private void addVersionableAspect(NodeRef nodeRef) {
+		if (!nodeService.hasAspect(nodeRef, ContentModel.ASPECT_VERSIONABLE)) {
+			Map<QName, Serializable> versionProps = new HashMap<>();
+			versionProps.put(ContentModel.PROP_AUTO_VERSION_PROPS, true);
+			
+			nodeService.addAspect(nodeRef, ContentModel.ASPECT_VERSIONABLE, versionProps);
+		}
+	}
 
     /**
      * Изменение атрибутивного состава cm:person. Необходимо обновить атрибуты

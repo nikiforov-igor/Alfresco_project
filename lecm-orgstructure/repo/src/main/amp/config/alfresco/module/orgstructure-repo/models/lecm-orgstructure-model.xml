@@ -529,7 +529,6 @@
             </associations>
             <mandatory-aspects>
                 <aspect>lecm-dic:aspect_active</aspect>
-                <aspect>cm:versionable</aspect>
                 <aspect>lecm-subscr-aspects:subscribed</aspect>
             </mandatory-aspects>
         </type>
