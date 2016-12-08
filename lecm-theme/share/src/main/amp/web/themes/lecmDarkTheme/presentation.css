@@ -2600,6 +2600,17 @@ div#lightbox {
     background-position: center center;
 }
 
+.yui-skin-lecmDarkTheme .dnd-uploader-with-preview .label-div {
+	padding-right: 12px;
+}
+.yui-skin-lecmDarkTheme .dnd-uploader-with-preview .container {
+	border: 1px solid #636363;
+	margin: 2px;
+	padding: 0 2px 0 2px;
+}
+.yui-skin-lecmDarkTheme .dnd-uploader-with-preview .buttons-div {
+	margin-top: 10px;
+}
 .yui-skin-lecmDarkTheme .dnd-uploader-with-preview .buttons-div .show-preview-button button {
     background: url('images/LECM_C-style-icons-5-16.png') no-repeat center center;
 }
