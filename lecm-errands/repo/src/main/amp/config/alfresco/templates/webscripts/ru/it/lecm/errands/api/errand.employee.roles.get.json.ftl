@@ -2,6 +2,7 @@
 	{
 		"isInitiator": ${isInitiator?string},
 		"isExecutor": ${isExecutor?string},
-		"isController": ${isController?string}
+		"isController": ${isController?string},
+		"isCoexecutor": ${isCoexecutor?string}
 	}
 </#escape>

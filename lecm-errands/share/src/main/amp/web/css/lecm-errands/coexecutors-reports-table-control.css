@@ -12,3 +12,9 @@
 .datagrid .action-set .onActionDeclineCoexecutorReport a {
 	background-image: url(/share/res/images/lecm-errands/decline.png);
 }
+.datagrid .action-set .onActionEditCoexecutorReport a {
+	background-image: url(/share/res/components/images/edit-16.png);
+}
+.datagrid .grid {
+	overflow: hidden;
+}

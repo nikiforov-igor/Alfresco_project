@@ -8,6 +8,7 @@
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+        <import uri="http://www.it.ru/logicECM/links/1.0" prefix="lecm-links"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/errands/table-structure/1.0" prefix="lecm-errands-ts"/>
@@ -20,6 +21,7 @@
 					<value>ACCEPT</value>
 					<value>DECLINE</value>
 					<value>ONCONTROL</value>
+                    <value>PROJECT</value>
 				</list>
 			</parameter>
 		</constraint>
@@ -39,7 +41,15 @@
 			            <tokenised>both</tokenised>
 		            </index>
 	            </property>
-
+                <!--Дата создания/отправки на проверку отчёта-->
+                <property name="lecm-errands-ts:coexecutor-report-route-date">
+                    <type>d:date</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
                 <!-- Статус -->
                 <property name="lecm-errands-ts:coexecutor-report-status">
                     <type>d:text</type>
@@ -63,6 +73,19 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+                <!-- атрибут для хранения рефы связанного документа-->
+                <property name="lecm-errands-ts:connected-document-ref">
+                    <type>d:text</type>
+                </property>
+                <!-- направить отчет -->
+                <property name="lecm-errands-ts:coexecutor-report-is-route">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+
+                <property name="lecm-errands-ts:coexecutor-assoc-ref">
+                    <type>d:text</type>
+                </property>
             </properties>
             <associations>
 	            <!--Соисполнитель-->
@@ -85,6 +108,17 @@
                     </source>
                     <target>
                         <class>cm:content</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <association name="lecm-errands-ts:coexecutor-report-connected-document-link-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-links:link</class>
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </target>

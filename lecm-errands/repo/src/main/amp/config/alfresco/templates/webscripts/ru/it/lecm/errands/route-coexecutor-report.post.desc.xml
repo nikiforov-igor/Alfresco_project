@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Направить отчёт соисполнителя</shortname>
+    <description>Направить отчёт соисполнителя</description>
+    <url>/lecm/errands/coexecutorReport/route?nodeRef={nodeRef}</url>
+    <authentication>user</authentication>
+    <transaction allow="readwrite">required</transaction>
+    <format default="json">extension</format>
+</webscript>

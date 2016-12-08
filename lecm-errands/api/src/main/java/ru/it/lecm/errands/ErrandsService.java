@@ -62,7 +62,7 @@ public interface ErrandsService {
     QName PROP_ERRANDS_DIC_TYPE_LIMITLESS = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-type-limitless");
     QName PROP_ERRANDS_DIC_TYPE_REPORT_REQUIRED = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-type-report-required");
     QName PROP_ERRANDS_DIC_TYPE_LAUNCH_REVIEW = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-type-launch-review");
-
+    QName PROP_ERRANDS_CHILD_INDEX = QName.createQName(ERRANDS_NAMESPACE_URI,"child-index-counter");
 
     QName SETTINGS_PROP_MODE_CHOOSING_EXECUTORS = QName.createQName(ERRANDS_NAMESPACE_URI, "settings-mode-choosing-executors");
     String SETTINGS_PROP_MODE_CHOOSING_EXECUTORS_ORGANIZATION = "ORGANIZATION";
@@ -75,8 +75,8 @@ public interface ErrandsService {
     QName USER_SETTINGS_ASSOC_DEFAULT_SUBJECT = QName.createQName(ERRANDS_NAMESPACE_URI, "user-settings-default-subject-assoc");
 
     QName ASSOC_ADDITIONAL_ERRANDS_DOCUMENT = QName.createQName(ERRANDS_NAMESPACE_URI, "additional-document-assoc");
-    //TODO base-doc-number переименовать в additional-document-number или заполнять номером base-assoc
-    QName PROP_BASE_DOC_NUMBER = QName.createQName(ERRANDS_NAMESPACE_URI, "base-doc-number");
+    QName PROP_ADDITIONAL_DOC_NUMBER = QName.createQName(ERRANDS_NAMESPACE_URI, "additional-doc-number");
+    QName PROP_BASE_DOC_NUMBER = QName.createQName(ERRANDS_NAMESPACE_URI, "base-number");
     QName ASSOC_BASE_DOCUMENT = QName.createQName(ERRANDS_NAMESPACE_URI, "base-assoc");
     QName ASSOC_ERRANDS_INITIATOR = QName.createQName(ERRANDS_NAMESPACE_URI, "initiator-assoc");
     QName ASSOC_ERRANDS_CONTROLLER = QName.createQName(ERRANDS_NAMESPACE_URI, "controller-assoc");
@@ -289,6 +289,8 @@ public interface ErrandsService {
     NodeRef getBaseDocument(NodeRef errand);
 
     boolean hasChildNotFinalByExecutor(NodeRef errand);
+
+    NodeRef createCoexecutorReportLink(NodeRef document, String name, NodeRef linkedRef);
 
     enum ModeChoosingExecutors {
         ORGANIZATION,

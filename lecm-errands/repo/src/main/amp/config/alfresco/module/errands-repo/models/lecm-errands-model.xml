@@ -21,7 +21,7 @@
     <constraints>
         <constraint name="lecm-errands:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
             <parameter name="presentString">
-                <value><![CDATA[№ {lecm-errands:number}, {lecm-errands:title}, исполнитель {lecm-errands:executor-assoc/lecm-orgstr:employee-short-name}, срок {lecm-errands:limitation-date?dd.MM.yyyy}]]></value>
+                <value><![CDATA[№{~REGNUM}, {lecm-errands:title}, исполнитель {lecm-errands:executor-assoc/lecm-orgstr:employee-short-name}, срок {lecm-errands:limitation-date?dd.MM.yyyy}]]></value>
             </parameter>
         </constraint>
         <constraint name="lecm-errands:attachment-categories" type="LIST">
@@ -415,8 +415,8 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
-                <!-- Номер документа основания - поле для атрибутивного поиска-->
-                <property name="lecm-errands:base-doc-number">
+                <!-- Номер документа основания-->
+                <property name="lecm-errands:base-number">
                     <type>d:text</type>
                     <index enabled="true">
                         <atomic>true</atomic>
@@ -424,6 +424,21 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+				<!-- Номер родительского документа-->
+				<!-- Поле для атрибутивного поиска -->
+				<property name="lecm-errands:additional-doc-number">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!-- атрибут индекса поручения в родительском документе -->
+				<property name="lecm-errands:child-index-counter">
+					<type>d:int</type>
+					<default>0</default>
+				</property>
 				<!-- служебный атрибут для всплытия событий-->
 				<property name="lecm-errands:event-counter">
 					<type>d:int</type>

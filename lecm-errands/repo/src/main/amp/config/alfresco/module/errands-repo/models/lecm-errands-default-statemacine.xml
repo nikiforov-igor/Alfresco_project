@@ -126,6 +126,21 @@
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>Отчеты соисполнителей</name>
+                                        <nodeRef>workspace://SpacesStore/b019ce73-1460-40f4-af8f-fee3338c06d0</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -969,6 +984,21 @@
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>Отчеты соисполнителей</name>
+                                        <nodeRef>workspace://SpacesStore/ec3f976e-8e54-4175-a8f2-703d4f109bc7</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -1430,6 +1460,21 @@
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>Отчеты соисполнителей</name>
+                                        <nodeRef>workspace://SpacesStore/2355cde3-fd99-454c-92c6-cb80435ac163</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -1739,8 +1784,15 @@ if(doc){
 if(document){
   var prevStatus = statemachine.getPreviousStatusName(document);
   if(!prevStatus || prevStatus == "Черновик"){
-    if (document.properties["lecm-errands:number"] == null || document.properties["lecm-errands:number"] == "Не присвоено") {
-        regnumbers.setDocumentNumber("ERRAND_NUMBER", document, "lecm-errands:number");
+    if (!regnumbers.isDocumentRegistered(document)) {
+      var regNumberCode;
+      var parentDoc = errands.getAdditionalDocument(document.nodeRef.toString());
+      if(!parentDoc){ 
+      	regNumberCode = "ERRAND_FREE_NUMBER";
+      }else{    
+        regNumberCode = "ERRAND_ON_BASIS_NUMBER";
+      }
+       regnumbers.registerDocument(document, regNumberCode);
     }
 
     var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
@@ -2694,6 +2746,68 @@ if (doc) {
                                                             </subFolder>
                                                         </subFolders>
                                                     </node>
+                                                    <node>
+                                                        <type>UserWorkflowEntity</type>
+                                                        <name>6eae5b80-fd8b-43a9-b226-084cddba3308</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/37d32f75-9ada-4a31-97fc-989d668fc84c
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>workflowId</name>
+                                                                <value>
+                                                                    <![CDATA[activiti$errandsCoexecutorReport_1]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>workflowLabel</name>
+                                                                <value><![CDATA[Создать отчет соисполнителя]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <workflowAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>72fe02bf-a98a-452c-bef8-5a4bedaacf31
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/22a6aada-3f77-4bd0-86a8-5a6d974a52f0
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно только соисполнителю поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(),"ERRANDS_COEXECUTOR")  AND NOT user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -3301,7 +3415,7 @@ if (doc) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_Employee]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -3401,6 +3515,21 @@ if (doc) {
                                         <type>documentField</type>
                                         <name>Исполнение</name>
                                         <nodeRef>workspace://SpacesStore/b57b1f46-774e-40ea-8c8d-4a91d4693f2f</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>Отчеты соисполнителей</name>
+                                        <nodeRef>workspace://SpacesStore/7019c872-cf0e-4595-90b4-d194dd048456</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4798,7 +4927,7 @@ if(doc){
                                                             <property>
                                                                 <name>workflowId</name>
                                                                 <value>
-                                                                    <![CDATA[activiti$errandsCoexecutorReport]]></value>
+                                                                    <![CDATA[activiti$errandsCoexecutorReport_1]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>workflowLabel</name>
@@ -5618,6 +5747,21 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                         <type>documentField</type>
                                         <name>Исполнение</name>
                                         <nodeRef>workspace://SpacesStore/b829654e-1c36-4f61-8383-bf9e1a1fbfdd</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>Отчеты соисполнителей</name>
+                                        <nodeRef>workspace://SpacesStore/72fb8dd6-7231-49ca-9349-5953e0b3aace</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -6841,7 +6985,7 @@ if (document != null) {
                                                             <property>
                                                                 <name>workflowId</name>
                                                                 <value>
-                                                                    <![CDATA[activiti$errandsCoexecutorReport]]></value>
+                                                                    <![CDATA[activiti$errandsCoexecutorReport_1]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>workflowLabel</name>
@@ -7661,6 +7805,21 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                         <type>documentField</type>
                                         <name>Исполнение</name>
                                         <nodeRef>workspace://SpacesStore/c8440e8f-289a-41a5-8973-d232aedd13ec</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>Отчеты соисполнителей</name>
+                                        <nodeRef>workspace://SpacesStore/b3ff3cde-4ee6-453e-9734-039d469e8af0</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -9177,6 +9336,21 @@ if (document != null) {
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>Отчеты соисполнителей</name>
+                                        <nodeRef>workspace://SpacesStore/75a4baf1-f86b-4ef4-9174-dc9521ba7793</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -9713,6 +9887,21 @@ if (doc) {
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>Отчеты соисполнителей</name>
+                                        <nodeRef>workspace://SpacesStore/95f51ac0-84b5-4ab8-9d67-2d377bf60c36</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -10214,6 +10403,21 @@ if (doc) {
                                         <type>documentField</type>
                                         <name>Исполнение</name>
                                         <nodeRef>workspace://SpacesStore/8ed4962c-08a0-4edb-b70f-d2c0083f3219</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>Отчеты соисполнителей</name>
+                                        <nodeRef>workspace://SpacesStore/5361a7e0-2ade-4739-9e84-b39e7a43aca7</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>

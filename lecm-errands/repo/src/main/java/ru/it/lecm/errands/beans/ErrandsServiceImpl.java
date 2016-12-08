@@ -3,6 +3,7 @@ package ru.it.lecm.errands.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
+import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.node.getchildren.FilterProp;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -590,6 +591,21 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         if (childAssoc != null) {
             businessJournalService.log(document, DocumentEventCategory.LINK_ADDED, "#initiator добавил(а) ссылку #object1 к документу \"#mainobject\"", Arrays.asList(childAssoc.getChildRef().toString()));
         }
+
+        return childAssoc.getChildRef();
+    }
+    @Override
+    public NodeRef createCoexecutorReportLink(NodeRef document, String name, NodeRef linked) {
+        NodeRef linkFolder = getLinksFolderRef(document);
+        QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
+        Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+        SysAdminParams params = serviceRegistry.getSysAdminParams();
+        String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+        String url = serverUrl + documentService.getDocumentUrl(linked) + "?nodeRef=" + linked.toString();
+        properties.put(ContentModel.PROP_NAME, name);
+        properties.put(BaseBean.PROP_BASE_LINK_URL, url);
+
+        ChildAssociationRef childAssoc = nodeService.createNode(linkFolder, ContentModel.ASSOC_CONTAINS, assocQName, BaseBean.TYPE_BASE_LINK, properties);
 
         return childAssoc.getChildRef();
     }
