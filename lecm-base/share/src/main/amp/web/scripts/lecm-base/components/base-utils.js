@@ -992,6 +992,23 @@ LogicECM.module.Base.Util = {
 		errorMessageDialog.hideEvent.subscribe(function (event, args, params) {
 			LogicECM.module.Base.Util.formDestructor(event, args, params);
 		}, {moduleId: errorMessageDialog.id, force: true}, this);
+	},
+	
+	// Возвращает функцию, которая не выполняется, пока её вызывают чаще, чем
+	// раз в wait мс. Если передан аргумент immediate, то исходня функция будет вызвана сразу
+	debounceWrap: function logicECMDebounceWrap(func, wait, immediate) {
+		var timeout;
+		return function() {
+			var context = this, args = arguments;
+			var later = function() {
+				timeout = null;
+				if (!immediate) func.apply(context, args);
+			};
+			var callNow = immediate && !timeout;
+			clearTimeout(timeout);
+			timeout = setTimeout(later, wait);
+			if (callNow) func.apply(context, args);
+		};
 	}
 
 };

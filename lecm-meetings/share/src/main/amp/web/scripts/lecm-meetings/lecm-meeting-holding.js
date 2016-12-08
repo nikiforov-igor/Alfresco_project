@@ -38,7 +38,9 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 			this.loadItems();
 
 			Alfresco.util.createYUIButton(this, "create-new-item-button", this.onCreateItem);
-
+			
+			this.debouncedSave = LogicECM.module.Base.Util.debounceWrap(this.saveForm, 1000);
+			
 			var me = this;
 			setInterval(function() {
 				me.saveForm();
@@ -93,7 +95,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 				}
 			}
 		},
-
+		
 		onSubmit: function() {
 			this.saveDates();
 		},
@@ -188,7 +190,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 		},
 
 		onChangeTechnicalMembers: function () {
-			this.saveForm();
+			this.debouncedSave();
 			for (var i = 0; i < this.submitElements.length; i++) {
 				var formId = this.submitElements[i].getForm().id.replace("-form", "");
 				LogicECM.module.Base.Util.reInitializeControl(formId, "lecm-meetings-ts:holding-reporter-assoc", {});
