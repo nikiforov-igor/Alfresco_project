@@ -62,6 +62,8 @@
         this.widgets = {};
 
 		Bubbling.on("readonlyControl", this.onReadonlyControl, this);
+	    Bubbling.on("disableControl", this.onDisableControl, this);
+	    Bubbling.on("enableControl", this.onEnableControl, this);
         Bubbling.on("hideControl", this.onHideControl, this);
         Bubbling.on("showControl", this.onShowControl, this);
 	    Bubbling.on("handleFieldChange", this.onHandleFieldChange, this);
