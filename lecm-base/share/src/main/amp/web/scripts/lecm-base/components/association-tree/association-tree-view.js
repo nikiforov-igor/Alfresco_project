@@ -1663,7 +1663,7 @@ LogicECM.module = LogicECM.module || {};
 
         removeNode: function AssociationTreeViewer_removeNode(event, params)
         {
-			if (!this.tempDisabled || !this.readonly) {
+			if (!this.tempDisabled && !this.readonly) {
 				delete this.selectedItems[params.node.nodeRef];
 				this.singleSelectedItem = null;
 				this.updateSelectedItems();
