@@ -624,7 +624,7 @@ LogicECM.module = LogicECM.module || {};
 
             removeSelectedElement: function AssociationAutoComplete_removeSelectedElement(event, node)
             {
-	            if (!this.tempDisabled || !this.readonly) {
+	            if (!this.tempDisabled && !this.readonly) {
 		            delete this.selectedItems[node.nodeRef];
 		            this.singleSelectedItem = null;
 		            this.updateSelectedItems();
