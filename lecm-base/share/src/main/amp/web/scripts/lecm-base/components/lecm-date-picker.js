@@ -354,7 +354,7 @@
                     // При открытии календаря посылаем событие, чтобы закрыть все другие открытые календари
                     Bubbling.fire("showDatePicker", {datepicker : this});
 
-	                if (!this.tempDisabled || !this.readonly) {
+	                if (!this.tempDisabled && !this.readonly) {
 		                var me = this;
 		                var picker = Dom.get(me.id);
 		                var parent = picker.parentNode;
