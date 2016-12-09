@@ -28,7 +28,7 @@
                     <node>
                         <type>alternative</type>
                         <name>cd606954-e12a-4ca0-b03c-b70871b5e52f</name>
-                        <nodeRef>workspace://SpacesStore/34d9bc46-ffd2-4176-a7ab-64a5394e8a85</nodeRef>
+                        <nodeRef>workspace://SpacesStore/4bc657b7-0ecb-456b-85d3-86eabb27f22f</nodeRef>
                         <properties>
                             <property>
                                 <name>alternativeExpression</name>
@@ -40,7 +40,7 @@
                         <associations>
                             <association>
                                 <type>alternativeStatus</type>
-                                <reference>workspace://SpacesStore/f2862b13-faef-404d-ac53-8acc8a293973</reference>
+                                <reference>workspace://SpacesStore/61dbdc2d-fb0a-4068-abb2-34b25fd41c8e</reference>
                             </association>
                         </associations>
                         <roleAssociations/>
@@ -49,7 +49,7 @@
                     <node>
                         <type>alternative</type>
                         <name>6c4b4ff1-fcbc-450d-96cd-227c15600ab2</name>
-                        <nodeRef>workspace://SpacesStore/9ca1b441-01f1-4352-a488-f7587d4d716f</nodeRef>
+                        <nodeRef>workspace://SpacesStore/f35b5739-a955-41aa-a752-f2a5c490c2dc</nodeRef>
                         <properties>
                             <property>
                                 <name>alternativeExpression</name>
@@ -61,7 +61,7 @@
                         <associations>
                             <association>
                                 <type>alternativeStatus</type>
-                                <reference>workspace://SpacesStore/99fb21fc-e4c7-4820-857b-a2c88aacb9c5</reference>
+                                <reference>workspace://SpacesStore/0e3dd34b-f71d-48fb-ad12-4bc5748fe5dc</reference>
                             </association>
                         </associations>
                         <roleAssociations/>
@@ -75,7 +75,7 @@
                     <node>
                         <type>taskStatus</type>
                         <name>Черновик</name>
-                        <nodeRef>workspace://SpacesStore/adeab429-2308-482f-81b7-5bc72ece4ab8</nodeRef>
+                        <nodeRef>workspace://SpacesStore/8acdc717-322e-4573-8bd9-f0c81fd59979</nodeRef>
                         <properties>
                             <property>
                                 <name>forDraft</name>
@@ -102,7 +102,7 @@
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>5256d969-2d82-4365-bb96-5bc4a8e6d790</name>
-                                        <nodeRef>workspace://SpacesStore/5256d969-2d82-4365-bb96-5bc4a8e6d790</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/51449375-2ba8-4eec-a190-a7f46ba7df0c</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -121,7 +121,7 @@
                                     <node>
                                         <type>WaitForDocumentChange</type>
                                         <name>d957edd8-1877-440c-9697-5db55511a666</name>
-                                        <nodeRef>workspace://SpacesStore/d957edd8-1877-440c-9697-5db55511a666</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/11e5f653-5674-437f-8ab8-07ae489bd77a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -140,7 +140,7 @@
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>52609e83-0353-4378-80f2-73024508ba17</name>
-                                        <nodeRef>workspace://SpacesStore/52609e83-0353-4378-80f2-73024508ba17</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/e72f5b02-12b7-4608-9e2f-7a0ff9b6c640</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -159,7 +159,7 @@
                                     <node>
                                         <type>TimerAction</type>
                                         <name>aff7c918-9158-4c92-96b5-725ee4286791</name>
-                                        <nodeRef>workspace://SpacesStore/aff7c918-9158-4c92-96b5-725ee4286791</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/609d8c8f-3594-4e90-a0dd-442fab3d8673</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -178,7 +178,7 @@
                                     <node>
                                         <type>FinishStateWithTransition</type>
                                         <name>1b7ace9d-e865-4f47-bf78-ae787a9e00d4</name>
-                                        <nodeRef>workspace://SpacesStore/1b7ace9d-e865-4f47-bf78-ae787a9e00d4</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/0d7a9e2a-851a-4b16-b884-1735b37886b6</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -197,7 +197,7 @@
                                     <node>
                                         <type>UserWorkflow</type>
                                         <name>60a8d986-9162-4301-9eac-5b95463402df</name>
-                                        <nodeRef>workspace://SpacesStore/60a8d986-9162-4301-9eac-5b95463402df</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/86a459db-9e7d-4479-85d5-4ff5b3754bcf</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -216,7 +216,7 @@
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>e2448e6e-5e9d-4a79-94de-5df7adb503e6</name>
-                                        <nodeRef>workspace://SpacesStore/e2448e6e-5e9d-4a79-94de-5df7adb503e6</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/6fd6b9fa-449f-4acf-9467-d4603caf731b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -235,7 +235,7 @@
                                     <node>
                                         <type>TransitionAction</type>
                                         <name>9ed9c834-9feb-4228-bcb6-35627eeb16f5</name>
-                                        <nodeRef>workspace://SpacesStore/9ed9c834-9feb-4228-bcb6-35627eeb16f5</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/113a2c04-4d8a-4d19-bb31-7f9fb336ba34</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -254,7 +254,7 @@
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>1115144d-d977-4a5b-a2cb-0782562f5938</name>
-                                        <nodeRef>workspace://SpacesStore/1115144d-d977-4a5b-a2cb-0782562f5938</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/f1713e1b-5c99-4317-a809-e6f7b182876a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -273,7 +273,7 @@
                                     <node>
                                         <type>TimerAction</type>
                                         <name>f326d045-17d6-4676-91ea-129728154b70</name>
-                                        <nodeRef>workspace://SpacesStore/f326d045-17d6-4676-91ea-129728154b70</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/b9e4b597-cdbd-42e4-a75e-b640069aaad6</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -297,7 +297,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_number</name>
-                                        <nodeRef>workspace://SpacesStore/3a3408f4-ce2b-4c71-adbd-096c5f94ee9e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/38876232-2df0-43fb-864d-8b29e7c4843e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -312,11 +312,11 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_control</name>
-                                        <nodeRef>workspace://SpacesStore/4f081059-05aa-4c75-8d45-af71972a9d04</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/27a95bd3-7f01-4722-968a-750bbb67ebf6</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -327,11 +327,11 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document_subject-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/2c9e979c-8cde-47d4-be97-f2321a869ad5</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/d8101dd4-76c7-49a7-8b53-79a20414e7e8</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -342,11 +342,11 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_author-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/4a17cf14-e35f-4657-9785-c1625f9d3ac4</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/beda9cc1-c8fd-4a84-b493-effb58d81fa3</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -357,11 +357,11 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_controller-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/a5eda548-c08b-4249-8516-5c242c6223de</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/e79b0eea-fedc-402e-9f3b-2bfdee3d6d6e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -372,11 +372,11 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date</name>
-                                        <nodeRef>workspace://SpacesStore/76506388-24f9-45f7-8e9b-41858aa8031d</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/6c92be53-e88b-4878-9786-6d47d9418598</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -387,11 +387,11 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-radio</name>
-                                        <nodeRef>workspace://SpacesStore/ab49fc16-30da-4369-926f-b25159234193</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/cf1e5c51-d0aa-48ea-ae12-4029149ea61a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -402,11 +402,11 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-days</name>
-                                        <nodeRef>workspace://SpacesStore/e03c9c4d-9044-48b2-8e64-85c5f59675e5</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/af38a65b-4ca3-4709-91e9-f51db05a1b8b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -417,7 +417,52 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-type</name>
-                                        <nodeRef>workspace://SpacesStore/830625c4-c1ad-472f-b13f-8733669de42e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/27e45c0e-7dd2-44fe-a061-99997e4f59f0</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_reviewers-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/74d1ac84-ae4e-44ba-b7ef-89b267e34b14</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_closers</name>
+                                        <nodeRef>workspace://SpacesStore/f8e831a7-645c-49c4-b6fc-0100240dbf19</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>limitation-date-script</name>
+                                        <nodeRef>workspace://SpacesStore/fff0f4f6-79a3-47ee-9c54-4e40ac764cff</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -431,8 +476,53 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-resolutions_reviewers-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/5db828ab-6c27-454f-b257-0b0bdc3a6434</nodeRef>
+                                        <name>resolutions-limitless</name>
+                                        <nodeRef>workspace://SpacesStore/b6dffc45-833a-4f0f-a8bd-1d8acbbdd053</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_errands-json</name>
+                                        <nodeRef>workspace://SpacesStore/5b7052a8-e10c-4566-8dca-7645b61f33ab</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_base-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/767ea405-cd2f-42b2-af39-b45801a1a2da</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_base-document-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/77caff31-f441-46bf-a5ea-906586f177d5</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -451,7 +541,7 @@
                     <node>
                         <type>taskStatus</type>
                         <name>На исполнении</name>
-                        <nodeRef>workspace://SpacesStore/f2862b13-faef-404d-ac53-8acc8a293973</nodeRef>
+                        <nodeRef>workspace://SpacesStore/61dbdc2d-fb0a-4068-abb2-34b25fd41c8e</nodeRef>
                         <properties>
                             <property>
                                 <name>do-not-ask-for-confirmation</name>
@@ -470,7 +560,7 @@
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>a4c63c4d-a965-4ac4-81c6-22767f5f8527</name>
-                                        <nodeRef>workspace://SpacesStore/a4c63c4d-a965-4ac4-81c6-22767f5f8527</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/491b81cf-c656-415b-9130-1527f882b10a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -489,7 +579,7 @@
                                     <node>
                                         <type>WaitForDocumentChange</type>
                                         <name>a695606b-ecc3-4d84-9f75-b0c48d9d1956</name>
-                                        <nodeRef>workspace://SpacesStore/a695606b-ecc3-4d84-9f75-b0c48d9d1956</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/05a6e405-6c06-47ef-a961-3c6f4ce10481</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -508,7 +598,7 @@
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>380966c4-e59c-4c15-b61a-9b4e992d106f</name>
-                                        <nodeRef>workspace://SpacesStore/380966c4-e59c-4c15-b61a-9b4e992d106f</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/4c1228ca-4ab8-41e6-bdf2-16bdf0ca6153</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -527,7 +617,7 @@
                                     <node>
                                         <type>TimerAction</type>
                                         <name>7ee0098c-e86f-48bb-a028-e0314c2d163a</name>
-                                        <nodeRef>workspace://SpacesStore/7ee0098c-e86f-48bb-a028-e0314c2d163a</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/1e27f568-efe3-40b0-bda9-6e1500cb6c4d</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -546,7 +636,7 @@
                                     <node>
                                         <type>FinishStateWithTransition</type>
                                         <name>dc7c2e54-ac74-4aac-a6b1-0bce1e36d1f9</name>
-                                        <nodeRef>workspace://SpacesStore/dc7c2e54-ac74-4aac-a6b1-0bce1e36d1f9</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/bf322f62-0fa4-43bd-b6d6-811cdbe4a8cc</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -565,7 +655,7 @@
                                     <node>
                                         <type>UserWorkflow</type>
                                         <name>86d84b4c-33a3-4ddc-b658-0240379ba689</name>
-                                        <nodeRef>workspace://SpacesStore/86d84b4c-33a3-4ddc-b658-0240379ba689</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/04c2585f-c988-4e7e-85ec-50e55312e856</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -584,7 +674,7 @@
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>d96c29a5-45d0-482c-a6e5-39ca1ad1f5ee</name>
-                                        <nodeRef>workspace://SpacesStore/d96c29a5-45d0-482c-a6e5-39ca1ad1f5ee</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/2723e843-e369-4e93-94cf-9392755482c8</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -603,7 +693,7 @@
                                     <node>
                                         <type>TransitionAction</type>
                                         <name>d0d06343-9b02-4908-9074-86bbf507b9c9</name>
-                                        <nodeRef>workspace://SpacesStore/d0d06343-9b02-4908-9074-86bbf507b9c9</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/42ca79d8-adbb-4b44-82b5-4419598830e7</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -622,7 +712,7 @@
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>d20c2b2e-7eea-44df-87f0-decf20c6e014</name>
-                                        <nodeRef>workspace://SpacesStore/d20c2b2e-7eea-44df-87f0-decf20c6e014</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/452f5145-fc1b-4c09-92a9-87641a74f813</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -641,7 +731,7 @@
                                     <node>
                                         <type>TimerAction</type>
                                         <name>d8c6a064-e87f-4cfb-8619-27bff4ea23b5</name>
-                                        <nodeRef>workspace://SpacesStore/d8c6a064-e87f-4cfb-8619-27bff4ea23b5</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/2df1aca8-b868-466f-b44a-8db7b986eb7b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -659,12 +749,242 @@
                                     </node>
                                 </nodes>
                             </subFolder>
+                            <subFolder>
+                                <name>fields</name>
+                                <nodes>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_control</name>
+                                        <nodeRef>workspace://SpacesStore/6929e594-2710-47d0-b2c9-0ffb333876cc</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-document_subject-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/a3e737e7-21a2-4d70-b467-aa1234e4db97</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_author-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/3578f140-4ce1-48ee-aec0-a0c270045cc9</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_controller-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/67b6e80a-81b3-48b5-992e-1e40f03c5bc9</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_closers</name>
+                                        <nodeRef>workspace://SpacesStore/27c88fa0-16b2-410f-ab4c-59db244ebc48</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>limitation-date-script</name>
+                                        <nodeRef>workspace://SpacesStore/cda18d1e-c97a-4ef3-8be2-ddb0712beedd</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date-radio</name>
+                                        <nodeRef>workspace://SpacesStore/111ff3f9-ad89-4bd3-b464-475e4c4cd45b</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>resolutions-limitless</name>
+                                        <nodeRef>workspace://SpacesStore/bc223819-0c0f-4d3d-b6e6-8c1d58879ec7</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date-days</name>
+                                        <nodeRef>workspace://SpacesStore/34401095-021b-43e3-92bb-1dc0e8c9e91b</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date-type</name>
+                                        <nodeRef>workspace://SpacesStore/14ffb11a-6db1-40d2-9ccb-39dd23a03730</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date</name>
+                                        <nodeRef>workspace://SpacesStore/649869b5-4f9a-4da3-a9cb-ed65ecc87729</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_errands-json</name>
+                                        <nodeRef>workspace://SpacesStore/8224ed13-90c0-427c-86c1-9e8a44cb76ea</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_reviewers-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/37543463-1f55-4ab0-ab90-e81b07d7bef3</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_base-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/d2c138e7-9a85-4cb1-8d96-c55b098766c3</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_base-document-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/b1be7b28-7dc4-4291-8850-fbfef4af6210</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                </nodes>
+                            </subFolder>
                         </subFolders>
                     </node>
                     <node>
                         <type>taskStatus</type>
                         <name>На утверждении</name>
-                        <nodeRef>workspace://SpacesStore/99fb21fc-e4c7-4820-857b-a2c88aacb9c5</nodeRef>
+                        <nodeRef>workspace://SpacesStore/0e3dd34b-f71d-48fb-ad12-4bc5748fe5dc</nodeRef>
                         <properties>
                             <property>
                                 <name>do-not-ask-for-confirmation</name>
@@ -683,7 +1003,7 @@
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>004074df-6cd1-483a-90e8-350a48b67d73</name>
-                                        <nodeRef>workspace://SpacesStore/004074df-6cd1-483a-90e8-350a48b67d73</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/9387fde3-ec2d-4356-aeb6-1f3aeb01f9eb</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -702,7 +1022,7 @@
                                     <node>
                                         <type>WaitForDocumentChange</type>
                                         <name>b0ef5b71-72f2-4547-83ac-3b8d0ced39e0</name>
-                                        <nodeRef>workspace://SpacesStore/b0ef5b71-72f2-4547-83ac-3b8d0ced39e0</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/fac6d90a-453e-4f3d-910e-1c4a3c12b1a1</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -721,7 +1041,7 @@
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>37cf412b-88dd-4eda-a8b4-4b445323fb65</name>
-                                        <nodeRef>workspace://SpacesStore/37cf412b-88dd-4eda-a8b4-4b445323fb65</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/d3bfa2a3-70f3-49e7-9f3c-a67189931127</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -740,7 +1060,7 @@
                                     <node>
                                         <type>TimerAction</type>
                                         <name>8c066639-f56c-446e-9d21-434045df8bad</name>
-                                        <nodeRef>workspace://SpacesStore/8c066639-f56c-446e-9d21-434045df8bad</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/bbe2392d-ffdc-498c-b774-7c483b2155e6</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -759,7 +1079,7 @@
                                     <node>
                                         <type>FinishStateWithTransition</type>
                                         <name>4247de9d-68f7-40bb-9d3c-a8307a207492</name>
-                                        <nodeRef>workspace://SpacesStore/4247de9d-68f7-40bb-9d3c-a8307a207492</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/c44f3fcd-32bb-4b65-814d-bb2bacebce62</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -778,7 +1098,7 @@
                                     <node>
                                         <type>UserWorkflow</type>
                                         <name>58774b6b-caff-42d0-8aec-7ef333157871</name>
-                                        <nodeRef>workspace://SpacesStore/58774b6b-caff-42d0-8aec-7ef333157871</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/b1b9eff4-1bfa-4063-beef-4168a151c2d5</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -797,7 +1117,7 @@
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>3ce464a6-d082-4b39-8005-039e533df53b</name>
-                                        <nodeRef>workspace://SpacesStore/3ce464a6-d082-4b39-8005-039e533df53b</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/87099954-77b8-4825-a9f9-66e854fc69b7</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -816,7 +1136,7 @@
                                     <node>
                                         <type>TransitionAction</type>
                                         <name>7b240a2c-9089-4151-bfd9-36136d920395</name>
-                                        <nodeRef>workspace://SpacesStore/7b240a2c-9089-4151-bfd9-36136d920395</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/783a6616-2146-4c13-89fe-8e37234aec3d</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -835,7 +1155,7 @@
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>c2b9e10d-9a53-4df1-8180-3fee70f8316b</name>
-                                        <nodeRef>workspace://SpacesStore/c2b9e10d-9a53-4df1-8180-3fee70f8316b</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/0cf16a5c-4676-45ed-b0dd-f07e1a129bd0</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -854,7 +1174,7 @@
                                     <node>
                                         <type>TimerAction</type>
                                         <name>85325c18-c029-4974-aa42-a5faa190eeb4</name>
-                                        <nodeRef>workspace://SpacesStore/85325c18-c029-4974-aa42-a5faa190eeb4</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/21a30c10-c456-48a5-885d-4e24f9a48186</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -872,12 +1192,242 @@
                                     </node>
                                 </nodes>
                             </subFolder>
+                            <subFolder>
+                                <name>fields</name>
+                                <nodes>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_control</name>
+                                        <nodeRef>workspace://SpacesStore/b37e2cf7-1856-4379-95ca-dfa7f4976d06</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-document_subject-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/abb294e7-eb20-4a98-8497-f93ed6106520</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_author-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/321c386b-e2f6-4012-9aa4-dbbf12432bf8</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_controller-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/aaf8044a-eaec-4d85-977a-a921f9e14d52</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_closers</name>
+                                        <nodeRef>workspace://SpacesStore/57222cbe-05bb-47be-b51b-662959b8e105</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>limitation-date-script</name>
+                                        <nodeRef>workspace://SpacesStore/737fead6-cbc4-4d70-8863-42f4e2775e44</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date-radio</name>
+                                        <nodeRef>workspace://SpacesStore/cb60b96d-e60a-47e9-8d8b-ce780e9ec11d</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>resolutions-limitless</name>
+                                        <nodeRef>workspace://SpacesStore/72114ec3-a784-4263-ae1a-615483bc4218</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date-days</name>
+                                        <nodeRef>workspace://SpacesStore/83ff8cf2-ea78-4933-89e6-18e24e5e2c6e</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date-type</name>
+                                        <nodeRef>workspace://SpacesStore/c6d84ee2-3096-421f-9623-ad6785fc23d8</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date</name>
+                                        <nodeRef>workspace://SpacesStore/0f446e23-6b70-44cd-9763-184049b32569</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_errands-json</name>
+                                        <nodeRef>workspace://SpacesStore/3d6137fa-8469-418e-bbb1-2ae4e7f4e08f</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_reviewers-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/7415fadb-2da5-4394-85b8-f9b887a4e1f3</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_base-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/4b2d223a-5ea9-4eec-ac7f-570ee113d8e9</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_base-document-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/8b54455a-69cb-4339-a043-9cb43fb3b1e6</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                </nodes>
+                            </subFolder>
                         </subFolders>
                     </node>
                     <node>
                         <type>taskStatus</type>
                         <name>На доработке</name>
-                        <nodeRef>workspace://SpacesStore/e2b25062-d2d2-4351-8ecb-b79fec31d19e</nodeRef>
+                        <nodeRef>workspace://SpacesStore/de0faa7e-a11f-4ae0-bcf9-ea2b4742334b</nodeRef>
                         <properties>
                             <property>
                                 <name>do-not-ask-for-confirmation</name>
@@ -896,7 +1446,7 @@
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>a8f36e45-3eae-4af2-97e7-b1e3c1b5a209</name>
-                                        <nodeRef>workspace://SpacesStore/a8f36e45-3eae-4af2-97e7-b1e3c1b5a209</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/0fbf31a8-e9ed-4212-9111-ca77c6709ef0</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -915,7 +1465,7 @@
                                     <node>
                                         <type>WaitForDocumentChange</type>
                                         <name>3ad0c069-0132-47b0-8016-2d05724d4d00</name>
-                                        <nodeRef>workspace://SpacesStore/3ad0c069-0132-47b0-8016-2d05724d4d00</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/c6144cb3-0b32-4d73-bc0a-03063d28f4b4</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -934,7 +1484,7 @@
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>462f8e47-73ed-4acf-9d90-2f3e1a58bd3b</name>
-                                        <nodeRef>workspace://SpacesStore/462f8e47-73ed-4acf-9d90-2f3e1a58bd3b</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ace6f895-ce2e-4d7f-ad6b-ee5bda2e87b4</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -953,7 +1503,7 @@
                                     <node>
                                         <type>TimerAction</type>
                                         <name>e7db4b17-7ab1-476f-8b82-bf27fd196a3f</name>
-                                        <nodeRef>workspace://SpacesStore/e7db4b17-7ab1-476f-8b82-bf27fd196a3f</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/caeca268-5769-44d2-8762-d02ddf1daaff</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -972,7 +1522,7 @@
                                     <node>
                                         <type>FinishStateWithTransition</type>
                                         <name>d7e1c136-15c5-4602-b461-9c141be55f74</name>
-                                        <nodeRef>workspace://SpacesStore/d7e1c136-15c5-4602-b461-9c141be55f74</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/51ccaee5-f5c2-4bff-940c-d250a4940cc6</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -991,7 +1541,7 @@
                                     <node>
                                         <type>UserWorkflow</type>
                                         <name>53f5c032-11e6-45c3-b9f9-d7c2977ee748</name>
-                                        <nodeRef>workspace://SpacesStore/53f5c032-11e6-45c3-b9f9-d7c2977ee748</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a59d6cf6-7965-48eb-b634-56536cd66077</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1010,7 +1560,7 @@
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>328cafac-9fbc-48ad-a9ff-5f964aad00d8</name>
-                                        <nodeRef>workspace://SpacesStore/328cafac-9fbc-48ad-a9ff-5f964aad00d8</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/b2eab658-836e-4177-b8e2-979bbe6fe7b5</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1029,7 +1579,7 @@
                                     <node>
                                         <type>TransitionAction</type>
                                         <name>998ac57d-da77-4174-882d-e4ff38729c08</name>
-                                        <nodeRef>workspace://SpacesStore/998ac57d-da77-4174-882d-e4ff38729c08</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/0e5de27b-65c5-4dde-a610-8a661d4b99da</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1048,7 +1598,7 @@
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>dcfbf819-61fd-4a91-83cd-cefa3928988e</name>
-                                        <nodeRef>workspace://SpacesStore/dcfbf819-61fd-4a91-83cd-cefa3928988e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/0c0264e3-74cf-4f65-aafe-1568fa9c6ed0</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1067,7 +1617,7 @@
                                     <node>
                                         <type>TimerAction</type>
                                         <name>84da60ee-24ef-44b8-8724-7e5ed967c1a5</name>
-                                        <nodeRef>workspace://SpacesStore/84da60ee-24ef-44b8-8724-7e5ed967c1a5</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/801c6482-ea3a-49e7-8e08-d7c28b96cf00</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1085,12 +1635,242 @@
                                     </node>
                                 </nodes>
                             </subFolder>
+                            <subFolder>
+                                <name>fields</name>
+                                <nodes>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_control</name>
+                                        <nodeRef>workspace://SpacesStore/263344f5-bcb3-4733-99f9-c34e54ad1e36</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-document_subject-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/c9094484-73bc-4c5b-9c4b-d9a37faaacb3</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_author-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/0d35074e-1a7f-4b7c-8a47-ba05d6026726</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_controller-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/0d7af2f2-2a5f-4d4d-895e-9e6cac8da56e</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_closers</name>
+                                        <nodeRef>workspace://SpacesStore/7ee41e27-8a14-42fc-8013-9a9ab55807c3</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>limitation-date-script</name>
+                                        <nodeRef>workspace://SpacesStore/2d3bd81e-593f-4599-918a-6f941eab6673</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date-radio</name>
+                                        <nodeRef>workspace://SpacesStore/9f507455-55e4-4319-bd1d-388f403070ed</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>resolutions-limitless</name>
+                                        <nodeRef>workspace://SpacesStore/2bad9dd4-59b9-4fcb-b2b0-7add03761a84</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date-days</name>
+                                        <nodeRef>workspace://SpacesStore/572efe43-30d3-47ea-9a09-cb016f30de80</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date-type</name>
+                                        <nodeRef>workspace://SpacesStore/a69a5498-7a9d-4630-bd26-c688a15e510f</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date</name>
+                                        <nodeRef>workspace://SpacesStore/d257150d-8b1a-46b1-be22-a63d9330b2d2</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_errands-json</name>
+                                        <nodeRef>workspace://SpacesStore/377cf423-e8c2-477c-94ac-7d360440c68a</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_reviewers-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/1cdabda5-80be-4ff5-b6d8-5148250bc554</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_base-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/2c4c3d33-3082-425a-b44d-b8c2f5bfd1be</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_base-document-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/97308f1c-d72f-4e05-939e-57ac0363797b</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                </nodes>
+                            </subFolder>
                         </subFolders>
                     </node>
                     <node>
                         <type>endEvent</type>
                         <name>Исполнено</name>
-                        <nodeRef>workspace://SpacesStore/d2b888c7-653a-48eb-aaa4-332e854e2b0f</nodeRef>
+                        <nodeRef>workspace://SpacesStore/9df87e0f-7ab3-4004-bd5b-1711e707a9df</nodeRef>
                         <properties/>
                         <aspects/>
                         <associations/>
@@ -1102,7 +1882,7 @@
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>8dde59d1-741d-4b00-b56d-9ca1edaf88a2</name>
-                                        <nodeRef>workspace://SpacesStore/8dde59d1-741d-4b00-b56d-9ca1edaf88a2</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ed499685-4a4c-46b2-bd90-03b0243dc203</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1120,12 +1900,242 @@
                                     </node>
                                 </nodes>
                             </subFolder>
+                            <subFolder>
+                                <name>fields</name>
+                                <nodes>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_control</name>
+                                        <nodeRef>workspace://SpacesStore/bcaf573d-7fbf-40bd-83d3-d046eb7fdad3</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-document_subject-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/10cbba8f-8e4a-4e2f-9b38-065882972cae</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_author-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/44b4fa11-2ba5-4804-96a4-ba95a0dccaef</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_controller-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/a00abfd8-a389-4336-b5a2-5b6efc1462ea</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_closers</name>
+                                        <nodeRef>workspace://SpacesStore/8f9a798d-9f30-4e54-8bff-e9ae4e877054</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>limitation-date-script</name>
+                                        <nodeRef>workspace://SpacesStore/37774ede-5828-4a81-9e78-2fcf7d1fa6fa</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date-radio</name>
+                                        <nodeRef>workspace://SpacesStore/b967e224-37ff-4a8c-a471-1563c9647b87</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>resolutions-limitless</name>
+                                        <nodeRef>workspace://SpacesStore/34fb16b8-b46a-434e-98c7-152df4ad29e5</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date-days</name>
+                                        <nodeRef>workspace://SpacesStore/2730e84d-ab37-41dd-b245-2b6a376ad3b3</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date-type</name>
+                                        <nodeRef>workspace://SpacesStore/579babf8-574b-4122-9680-dd8e294dc3ce</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date</name>
+                                        <nodeRef>workspace://SpacesStore/2ce8190b-d629-4f40-a2c8-6ccb4e2b18ba</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_errands-json</name>
+                                        <nodeRef>workspace://SpacesStore/592639eb-94b0-4859-92f4-b7b32affeb6e</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_reviewers-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/078a2528-bb65-46bf-b37d-2ee20cdbebf3</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_base-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/f6214bd1-bed6-440a-bc91-8e23c2c0bab1</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_base-document-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/a6c6c021-e3c8-4c3d-92ab-d1a774bed36f</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                </nodes>
+                            </subFolder>
                         </subFolders>
                     </node>
                     <node>
                         <type>endEvent</type>
                         <name>Аннлировано</name>
-                        <nodeRef>workspace://SpacesStore/b16345de-0d55-453e-8485-3e1395f6fd5b</nodeRef>
+                        <nodeRef>workspace://SpacesStore/85b7cdf4-63ee-4738-a261-03e7cb7c80af</nodeRef>
                         <properties/>
                         <aspects/>
                         <associations/>
@@ -1137,7 +2147,7 @@
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>4945b39c-7035-45d6-ad77-3a7700afa000</name>
-                                        <nodeRef>workspace://SpacesStore/4945b39c-7035-45d6-ad77-3a7700afa000</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a4ad2fcb-2713-47b9-8737-29cd92be9033</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1146,6 +2156,236 @@
                                             <property>
                                                 <name>actionExecution</name>
                                                 <value><![CDATA[end]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                </nodes>
+                            </subFolder>
+                            <subFolder>
+                                <name>fields</name>
+                                <nodes>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_control</name>
+                                        <nodeRef>workspace://SpacesStore/d4788e71-108d-4231-89b0-1b0b649c1a2b</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-document_subject-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/bc646e90-225c-4e5d-89d0-df7f346bb07d</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_author-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/f18014fa-d71b-4323-9bae-90453b162b1e</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_controller-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/d84d0544-ede9-4292-aab7-2e35623c419e</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_closers</name>
+                                        <nodeRef>workspace://SpacesStore/267b8372-7ef2-4174-ad06-832bf06f95ca</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>limitation-date-script</name>
+                                        <nodeRef>workspace://SpacesStore/a6b39dbe-e187-481f-b6e2-d252b5b7f34c</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date-radio</name>
+                                        <nodeRef>workspace://SpacesStore/3f2360f7-3760-483e-be87-f970c826e216</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>resolutions-limitless</name>
+                                        <nodeRef>workspace://SpacesStore/6364c05d-022d-42de-8283-e4337aabdcda</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date-days</name>
+                                        <nodeRef>workspace://SpacesStore/d245c830-a119-47a3-82d8-887cf70cd810</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date-type</name>
+                                        <nodeRef>workspace://SpacesStore/d9ca2e79-9aa3-4232-b6c7-700aa6029ae0</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_limitation-date</name>
+                                        <nodeRef>workspace://SpacesStore/ebf62feb-9745-4b55-99fd-c657ab2f99bb</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_errands-json</name>
+                                        <nodeRef>workspace://SpacesStore/cca091ca-95c0-4d95-9c7c-68dcf12413d3</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_reviewers-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/af943251-dce1-4e9e-8327-5fbb16927d8d</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_base-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/70afbaec-a162-4a67-9612-e2535e82938e</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_base-document-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/705d58f8-79ec-4ab7-9f24-f3d007d6b9b5</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -1165,7 +2405,7 @@
                     <node>
                         <type>static-role-item</type>
                         <name>8f268f4d-6474-456d-b5a6-9cb83ad55b08</name>
-                        <nodeRef>workspace://SpacesStore/f52674d7-b7f3-4dc4-bee7-ebc8417aec1c</nodeRef>
+                        <nodeRef>workspace://SpacesStore/f3bccb0e-1347-429e-97b0-3219231c6069</nodeRef>
                         <properties>
                             <property>
                                 <name>isCreator</name>
@@ -1191,7 +2431,7 @@
                     <node>
                         <type>static-role-item</type>
                         <name>6be0e71c-89ee-435c-ba22-17270b5af37c</name>
-                        <nodeRef>workspace://SpacesStore/8f1f27c6-ae0d-4906-8ddc-3c035266bee2</nodeRef>
+                        <nodeRef>workspace://SpacesStore/47e73f9b-3cdb-43cd-86ff-30c8bd07cc93</nodeRef>
                         <properties>
                             <property>
                                 <name>isCreator</name>
