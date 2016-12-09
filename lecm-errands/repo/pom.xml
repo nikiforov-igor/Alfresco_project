@@ -239,15 +239,15 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
+            </plugin>-->
             <plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jasperreports-maven-plugin</artifactId>
                 <configuration>
                     <sourceDirectory>src/main/amp/reportdefinitions</sourceDirectory>
-                    <outputDirectory>${project.build.directory}/${project.build.finalName}/reportdefinitions</outputDirectory>
+                    <outputDirectory>${app.amp.output.folder}/reportdefinitions</outputDirectory>
                 </configuration>
-			</plugin> -->
+			</plugin>
 			<plugin>
                 <groupId>org.alfresco.maven.plugin</groupId>
                 <artifactId>alfresco-maven-plugin</artifactId>
