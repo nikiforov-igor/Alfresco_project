@@ -10,8 +10,8 @@
 			var keyWord = filterData.match(/.*:(.*)$/)[1];
 
 			if(keyWord) {
-				columns.push('lecm-os:nomenclature-year-section-year:' + keyWord);
-				columns.push('lecm-os:nomenclature-unit-section-index:' + keyWord);
+				columns.push('lecm\\-os:nomenclature\\-year\\-section\\-year:' + keyWord);
+				columns.push('lecm\\-os:nomenclature\\-unit\\-section\\-index:' + keyWord);
 				columns.push('cm:title:' + keyWord);
 			}
 		}
@@ -30,7 +30,7 @@
 			var searchArray = searchTerm.split(" ");
 			var filter = "";
 			for (var j = 0; j < searchArray.length; j++) {
-				var asterisk = namespace[1] == 'nomenclature-year-section-year' ? '' : '*'
+				var asterisk = namespace[1] == 'nomenclature\\-year\\-section\\-year' ? '' : '*'
 				filter += '"' + asterisk + searchArray[j] + asterisk + '"';
 				if (j < searchArray.length - 1) {
 					filter += " OR ";
