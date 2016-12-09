@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>resolutions-edit-content</shortname>
+    <description>resolutions-edit-content</description>
+	<url>/lecm/resolutions/edit/content</url>
+	<format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

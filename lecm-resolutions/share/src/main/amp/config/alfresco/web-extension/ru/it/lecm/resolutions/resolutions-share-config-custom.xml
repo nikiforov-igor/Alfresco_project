@@ -230,9 +230,7 @@
                     <show id="lecm-resolutions:controller-assoc"/>
                     <show id="lecm-resolutions:closers"/>
 
-                    <show id="limitation-date-script" force="true"/>
                     <show id="lecm-resolutions:limitation-date-radio"/>
-                    <show id="resolutions-limitless" force="true"/>
                     <show id="lecm-resolutions:limitation-date-days"/>
                     <show id="lecm-resolutions:limitation-date-type"/>
                     <show id="lecm-resolutions:limitation-date"/>
@@ -240,6 +238,9 @@
                     <show id="lecm-resolutions:errands-json"/>
 
                     <show id="lecm-resolutions:reviewers-assoc"/>
+
+                    <show id="lecm-resolutions:base-assoc"/>
+                    <show id="lecm-resolutions:base-document-assoc"/>
                 </field-visibility>
             </form>
 
@@ -419,7 +420,7 @@
                 </field-visibility>
                 <appearance>
                     <field id="viewMetadata">
-                        <control template="/ru/it/lecm/documents/controls/document-view-metadata-control.ftl"/>
+                        <control template="/ru/it/lecm/resolutions/controls/resolution-view-metadata-control.ftl"/>
                     </field>
                 </appearance>
             </form>
