@@ -37,7 +37,8 @@
                     <show id="lecm-resolutions:is-draft"/>
                     <show id="lecm-resolutions:base-assoc"/>
                     <show id="lecm-resolutions:base-document-assoc"/>
-                    <show id="resolution-create-form" force="true"/>
+                    <show id="base-doc-execution-date" force="true"/>
+                    <show id="resolution-form" force="true"/>
                     <show id="send-button" force="true"/>
                     <show id="save-draft-button" force="true"/>
                 </field-visibility>
@@ -191,10 +192,15 @@
                     <field id="lecm-resolutions:base-document-assoc" set="end">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
                     </field>
-                    <field id="resolution-create-form" set="end">
+                    <field id="base-doc-execution-date" set="end">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl">
+                            <control-param name="selectedItemsFormArgs">prop_lecm-resolutions_limitation-date</control-param>
+                        </control>
+                    </field>
+                    <field id="resolution-form" set="end">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-resolution/lecm-resolution-create-form.js</control-param>
-                            <control-param name="scriptLoadedFireAction">resolutionCreateFormScriptLoaded</control-param>
+                            <control-param name="scripts">scripts/lecm-resolution/lecm-resolution-form.js</control-param>
+                            <control-param name="scriptLoadedFireAction">resolutionFormScriptLoaded</control-param>
                         </control>
                     </field>
                     <field id="send-button" label-id="label.route-errand" set="end">
@@ -286,10 +292,13 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="lecm-resolutions:base-document-assoc"/>
+
                     <show id="lecm-resolutions:control"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
+                    <show id="resolution-change-controller-script" force="true"/>
                     <show id="lecm-resolutions:closers"/>
 
                     <show id="limitation-date-script" force="true"/>
@@ -302,26 +311,54 @@
                     <show id="lecm-resolutions:errands-json"/>
                     <show id="change-errand-type-script" force="true"/>
                     <show id="errands-limitation-date-script" force="true"/>
+                    <show id="errands-change-controller-handler-script" force="true"/>
 
                     <show id="lecm-resolutions:reviewers-assoc"/>
+
+                    <show id="resolution-form" force="true"/>
+                    <show id="save-button" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <set id="start" template="/ru/it/lecm/eds/controls/2-column-parent-set.ftl"/>
-                    <set id="start-left" parent="start"/>
-                    <set id="start-right" parent="start"/>
+                    <set id="start"/>
+                    <set id="start-2-column" template="/ru/it/lecm/eds/controls/2-column-parent-set.ftl"/>
+                    <set id="start-left" parent="start-2-column"/>
+                    <set id="start-right" parent="start-2-column"/>
                     <set id="start-right-start" parent="start-right"/>
                     <set id="limitation-date" parent="start-right" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
+                    <set id="errands"/>
+                    <set id="reviewers-fieldset" appearance="fieldset" label-id="label.review"/>
+                    <set id="reviewers" parent="reviewers-fieldset" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="end"/>
-                    <set id="reviewers" appearance="fieldset" label-id="label.review"/>
 
+                    <field id="lecm-resolutions:base-document-assoc" read-only="true" set="start">
+                        <control>
+                            <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-document:subject-assoc" set="start-left"/>
                     <field id="lecm-resolutions:author-assoc" set="start-left"/>
-                    <field id="lecm-resolutions:controller-assoc" set="start-left"/>
+                    <field id="lecm-resolutions:controller-assoc" set="start-left">
+                        <control>
+                            <control-param name="changeItemsFireAction">resolutionControllerChanged</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.controllerValidation" event="change" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="resolution-change-controller-script" set="start-left" >
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-resolution/resolution-change-controller.js</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-resolutions:closers" set="start-left">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
 
-                    <field id="lecm-resolutions:control" set="start-right-start"/>
+                    <field id="lecm-resolutions:control" set="start-right-start">
+                        <control>
+                            <control-param name="fireMandatoryByChange">true</control-param>
+                        </control>
+                    </field>
                     <field id="limitation-date-script" set="start-right-start" >
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-resolution/resolutions-change-limitation-date.js</control-param>
@@ -354,21 +391,34 @@
                         </constraint-handlers>
                     </field>
 
-                    <field id="lecm-resolutions:errands-json" label-id="field.primaryRouting.errands.title" set="end">
+                    <field id="lecm-resolutions:errands-json" label-id="field.primaryRouting.errands.title" set="errands">
                         <control template="/ru/it/lecm/eds/controls/multi-form-control.ftl">
                             <control-param name="availableRemoveDefault">false</control-param>
                             <control-param name="documentType">lecm-errands:document</control-param>
                             <control-param name="documentFromId">from-resolution</control-param>
+                            <control-param name="submitFireEvent">sendResolution</control-param>
+                            <control-param name="argsConfig"><![CDATA[{
+                                    "assoc_lecm-resolutions_controller-assoc": "assoc_lecm-errands_controller-assoc",
+                                    "prop_lecm-resolutions_limitation-date-radio": "prop_lecm-errands_limitation-date-radio",
+                                    "prop_lecm-resolutions_limitation-date-days": "prop_lecm-errands_limitation-date-days",
+                                    "prop_lecm-resolutions_limitation-date-type": "prop_lecm-errands_limitation-date-type",
+                                    "prop_lecm-resolutions_limitation-date": "prop_lecm-errands_limitation-date"
+                                }]]></control-param>
                         </control>
                     </field>
-                    <field id="change-errand-type-script">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl" set="end">
+                    <field id="change-errand-type-script" set="errands">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-reinit-title-by-type.js</control-param>
                         </control>
                     </field>
-                    <field id="errands-limitation-date-script">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl" set="end">
+                    <field id="errands-limitation-date-script" set="errands">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
+                        </control>
+                    </field>
+                    <field id="errands-change-controller-handler-script" set="errands">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-change-controller-handler.js</control-param>
                         </control>
                     </field>
 
@@ -398,6 +448,18 @@
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_showAssocViewForm">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                        </control>
+                    </field>
+
+                    <field id="resolution-form" set="end">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-resolution/lecm-resolution-form.js</control-param>
+                            <control-param name="scriptLoadedFireAction">resolutionFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                    <field id="save-button" label-id="label.resolution.edit.save" set="end">
+                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
+                            <control-param name="clickFireAction">sendResolutionButtonClick</control-param>
                         </control>
                     </field>
                 </appearance>

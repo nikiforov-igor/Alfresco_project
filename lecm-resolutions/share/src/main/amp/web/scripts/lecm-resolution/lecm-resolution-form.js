@@ -11,7 +11,7 @@
     Bubbling.on('saveDraftResolutionButtonClick', saveDraft);
     Bubbling.on('sendResolutionButtonClick', sendResolutionClick);
     Bubbling.on('sendResolution', sendResolution);
-    Bubbling.on('resolutionCreateFormScriptLoaded', init);
+    Bubbling.on('resolutionFormScriptLoaded', init);
 
     function saveDraft(layer, args) {
         var form;
