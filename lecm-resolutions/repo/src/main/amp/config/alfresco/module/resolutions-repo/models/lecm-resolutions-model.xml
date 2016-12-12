@@ -138,6 +138,13 @@
                     <default>false</default>
                 </property>
 
+                <!-- Служебные -->
+                <!-- Имя атрибута документа основания для срока исполнения -->
+                <property name="lecm-resolutions:base-doc-execution-date-attr-name">
+                    <type>d:text</type>
+                    <default>false</default>
+                </property>
+
                 <!-- Поиск/сортировка ассоциаций-->
                 <property name="lecm-resolutions:author-assoc-ref">
                     <type>d:text</type>
