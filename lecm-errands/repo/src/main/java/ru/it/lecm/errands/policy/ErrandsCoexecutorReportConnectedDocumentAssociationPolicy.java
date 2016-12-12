@@ -110,10 +110,10 @@ public class ErrandsCoexecutorReportConnectedDocumentAssociationPolicy implement
         boolean docIsUsed = false;
         for (NodeRef report : allReports) {
             if (!report.equals(reportNodeRef)) {
-                List<AssociationRef> rCDAssoc = nodeService.getTargetAssocs(report, ErrandsService.ASSOC_ERRANDS_TS_CONNECTED_DOCUMENT);
-                for (AssociationRef rcdar : rCDAssoc) {
-                    NodeRef rcd = rcdar.getTargetRef();
-                    if (rcd.equals(connectedDoc)) {
+                List<AssociationRef> reportConnectedDocumentAssoc = nodeService.getTargetAssocs(report, ErrandsService.ASSOC_ERRANDS_TS_CONNECTED_DOCUMENT);
+                for (AssociationRef reportConnectedDocumentAssocRef : reportConnectedDocumentAssoc) {
+                    NodeRef reportConnectedDocument = reportConnectedDocumentAssocRef.getTargetRef();
+                    if (reportConnectedDocument.equals(connectedDoc)) {
                         docIsUsed = true;
                     }
                 }

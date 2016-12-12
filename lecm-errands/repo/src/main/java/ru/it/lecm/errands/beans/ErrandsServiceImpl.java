@@ -3,7 +3,6 @@ package ru.it.lecm.errands.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
-import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.node.getchildren.FilterProp;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
