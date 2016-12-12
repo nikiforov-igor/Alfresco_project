@@ -10,7 +10,7 @@
             </item>
             <item name="cm:Номер поручения на основании сущности" type="lecm-regnum:template">
                 <property name="cm:name">Номер поручения на основании сущности</property>
-                <property name="lecm-regnum:template-string">{doc.attribute('lecm-errands:additional-doc-number').substring(0,doc.attribute('lecm-errands:additional-doc-number').length()-3)}-{doc.attribute("lecm-errands:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-string">{doc.attribute('lecm-errands:additional-doc-number').substring(0, doc.attribute('lecm-errands:additional-doc-number').length() - 3)}-{doc.attribute("lecm-errands:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
                 <property name="lecm-regnum:template-comment">Шаблон для номера поручения, созданного на основании сущности</property>
                 <property name="lecm-regnum:template-service-id">ERRAND_ON_BASIS_NUMBER</property>
             </item>
