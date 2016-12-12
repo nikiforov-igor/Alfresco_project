@@ -83,26 +83,30 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
     public void onCreateAssociation(AssociationRef associationRef) {
         documentConnectionService.createConnection(associationRef.getTargetRef(), associationRef.getSourceRef(), DocumentConnectionService.DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE, true, true);
 
-        //обновление номера документа-основания в поручении
-        NodeRef baseDoc = associationRef.getTargetRef();
+        //обновление номеров родительского и документа-основания в поручении
+        NodeRef additionalDoc = associationRef.getTargetRef();
         NodeRef errandDoc = associationRef.getSourceRef();
 
-        Date regDate = documentService.getDocumentActualDate(baseDoc);
+        Date regDate = documentService.getDocumentActualDate(additionalDoc);
         String regDateString = "";
         if (regDate != null) {
             DateFormat dFormat = new SimpleDateFormat("dd.MM.yyyy");
             regDateString = dFormat.format(regDate);
         }
 
-        businessJournalService.log(baseDoc, "CREATE_ERRAND_BASED_ON_DOC", "#initiator создал(а) поручение по документу " + wrapperLink(baseDoc, documentService.getDocumentActualNumber(baseDoc) + " от " + regDateString, documentService.getDocumentUrl(baseDoc)), null);
+        businessJournalService.log(additionalDoc, "CREATE_ERRAND_BASED_ON_DOC", "#initiator создал(а) поручение по документу " + wrapperLink(additionalDoc, documentService.getDocumentActualNumber(additionalDoc) + " от " + regDateString, documentService.getDocumentUrl(additionalDoc)), null);
+        //установка индекса поручения по сурс ассоциации
+        Integer childCount = nodeService.getSourceAssocs(additionalDoc, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT).size();
+        nodeService.setProperty(errandDoc, ErrandsService.PROP_ERRANDS_CHILD_INDEX, childCount);
+
 
         //TODO ALF-2843
         //	   После рефакторинга транзакций валится добавление участника
         //     т.к. у дочернего поручение в этот момент еще нет папки с участниками
         //     Узнать нужно ли еще это условие в принципе
-        QName type = nodeService.getType(baseDoc);
+        QName type = nodeService.getType(additionalDoc);
         if (type.equals(ErrandsService.TYPE_ERRANDS)){
-            NodeRef initiatorRef = nodeService.getTargetAssocs(baseDoc, ErrandsService.ASSOC_ERRANDS_INITIATOR).get(0).getTargetRef();
+            NodeRef initiatorRef = nodeService.getTargetAssocs(additionalDoc, ErrandsService.ASSOC_ERRANDS_INITIATOR).get(0).getTargetRef();
             try {
                 documentMembersService.addMemberWithoutCheckPermission(errandDoc, initiatorRef, new HashMap<QName, Serializable>());
             } catch (WriteTransactionNeededException ex) {
@@ -110,16 +114,28 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
             }
         }
 
-        String regNum = documentService.getDocumentRegNumber(baseDoc);
+        String regNum = documentService.getDocumentActualNumber(additionalDoc);
 
         if (regNum == null) {
-            regNum = documentService.getProjectRegNumber(baseDoc);
+            regNum = documentService.getProjectRegNumber(additionalDoc);
         }
 
         if (regNum != null && !regNum.isEmpty()) {
-            nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, regNum);
+            nodeService.setProperty(errandDoc, ErrandsService.PROP_ADDITIONAL_DOC_NUMBER, regNum);
         }
 
+        //установка ассоциации документа-основания
+        List<AssociationRef> baseDocAssocRefs = nodeService.getTargetAssocs(additionalDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
+        //если документа-основания нет, то родительский документ  является документом основанием.
+        NodeRef baseDoc = null;
+        if (baseDocAssocRefs == null || baseDocAssocRefs.size() == 0) {
+            baseDoc = additionalDoc;
+        } else {
+            baseDoc = baseDocAssocRefs.get(0).getTargetRef();
+        }
+        nodeService.createAssociation(errandDoc, baseDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
+        String baseRegNum = (String) nodeService.getProperty(baseDoc, ErrandsService.PROP_BASE_DOC_NUMBER);
+        nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, baseRegNum);
 
         //		TODO: Метод transferRightToBaseDocument в итоге использует метод erransService.getSettingsNode,
 //		который ранее был типа getOrCreate, поэтому здесь надо бы проверить ноду на

@@ -1,14 +1,23 @@
 .form-container .coexecutors-report .show-declined-block label {
-	display: inline;
+    display: inline;
 }
 
 .form-container .coexecutors-report .show-declined-block {
-	text-align: right;
+    text-align: right;
 }
 
 .datagrid .action-set .onActionAcceptCoexecutorReport a {
-	background-image: url(/share/res/images/lecm-errands/accept.png);
+    background-image: url(/share/res/images/lecm-errands/accept.png);
 }
+
 .datagrid .action-set .onActionDeclineCoexecutorReport a {
-	background-image: url(/share/res/images/lecm-errands/decline.png);
+    background-image: url(/share/res/images/lecm-errands/decline.png);
+}
+
+.datagrid .action-set .onActionEditCoexecutorReport a {
+    background-image: url(/share/res/components/images/edit-16.png);
+}
+
+.datagrid .grid {
+    overflow: hidden;
 }

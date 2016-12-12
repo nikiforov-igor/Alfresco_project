@@ -2,11 +2,17 @@
 <items>
     <item name="lecm-dic:Шаблоны регистрационных номеров" type="lecm-dic:dictionary">
         <items updateMode="CreateOrUpdate">
-            <item name="cm:Номер поручения" type="lecm-regnum:template">
-                <property name="cm:name">Номер поручения</property>
+            <item name="cm:Номер свободного поручения" type="lecm-regnum:template">
+                <property name="cm:name">Номер свободного поручения</property>
                 <property name="lecm-regnum:template-string">{#formatNumber('00000', doc.counterYearDoctype)}-{#formatDate('yy', doc.creationDate)}</property>
-                <property name="lecm-regnum:template-comment">Шаблон для номера поручения</property>
-                <property name="lecm-regnum:template-service-id">ERRAND_NUMBER</property>
+                <property name="lecm-regnum:template-comment">Шаблон для номера свободного поручения</property>
+                <property name="lecm-regnum:template-service-id">ERRAND_FREE_NUMBER</property>
+            </item>
+            <item name="cm:Номер поручения на основании сущности" type="lecm-regnum:template">
+                <property name="cm:name">Номер поручения на основании сущности</property>
+                <property name="lecm-regnum:template-string">{doc.attribute('lecm-errands:additional-doc-number').substring(0, doc.attribute('lecm-errands:additional-doc-number').length() - 3)}-{doc.attribute("lecm-errands:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для номера поручения, созданного на основании сущности</property>
+                <property name="lecm-regnum:template-service-id">ERRAND_ON_BASIS_NUMBER</property>
             </item>
         </items>
     </item>

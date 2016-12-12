@@ -4,7 +4,7 @@
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.it.ru/logicECM/errands/workflow/execute_1/1.0">
     <process id="errandsExecute_1" name="Исполнить поручение(1)">
-        <startEvent id="startExecute" name="Start" activiti:formKey="lecmErrandWf:execute"></startEvent>
+        <startEvent id="startExecute" name="Start" activiti:formKey="lecmErrandWf:execute_1"></startEvent>
         <endEvent id="endExecute" name="End"></endEvent>
         <scriptTask id="executeErrand" name="Errand execute" scriptFormat="javascript">
             <extensionElements>

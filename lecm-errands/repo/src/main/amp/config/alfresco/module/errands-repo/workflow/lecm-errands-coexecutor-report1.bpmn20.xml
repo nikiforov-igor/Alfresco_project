@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/errands/workflow/coexecutorReport_1/1.0">
+    <process id="errandsCoexecutorReport_1" name="Поручения. Отчёт соисполнителя(1)">
+        <startEvent id="startCoexecutorReport" name="Start" activiti:formKey="lecmErrandWf:coexecutorReport_1"></startEvent>
+        <endEvent id="endCoexecutorReport" name="End"></endEvent>
+        <scriptTask id="coexecutorReport" name="Coexecutor report" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+							var document = bpm_package.children[0];
+							var currentUser = orgstructure.getCurrentEmployee();
+							if (document && lecmErrandWf_coexecutorReport_1Text && currentUser) {
+								var table = document.assocs["lecm-errands-ts:coexecutor-reports-assoc"][0];
+								if (table) {
+
+									var props = [];
+									props["lecm-errands-ts:coexecutor-report-text"] = lecmErrandWf_coexecutorReport_1Text;
+									var report = table.createNode(null, "lecm-errands-ts:coexecutor-report", props);
+									report.createAssociation(currentUser, "lecm-errands-ts:coexecutor-assoc");
+
+									var attachments = execution.getVariable("lecmErrandWf_coexecutorReport_1Attachment")
+									if (attachments) {
+										for (var i = 0; i < attachments.size(); i++) {
+											report.createAssociation(attachments.get(i), "lecm-errands-ts:coexecutor-report-attachment-assoc");
+										}
+									}
+									var connectedDocuments = execution.getVariable("lecmErrandWf_coexecutorReport_1ConnectedDocument");
+									if (connectedDocuments) {
+										for (var i = 0; i < connectedDocuments.size(); i++) {
+											report.createAssociation(connectedDocuments.get(i), "lecm-errands-ts:coexecutor-report-connected-document-assoc");
+										}
+									}
+									if (lecmErrandWf_coexecutorReport_1RouteReport == false) {
+										report.properties["lecm-errands-ts:coexecutor-report-status"] = "PROJECT";
+									} else {
+										report.properties["lecm-errands-ts:coexecutor-report-is-route"] = true;
+									}
+									report.save();
+								}
+							}
+                        ]]></activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script></script>
+        </scriptTask>
+        <receiveTask id="errandCoexecutorReport" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startCoexecutorReport" targetRef="coexecutorReport"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="coexecutorReport" targetRef="errandCoexecutorReport"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="errandCoexecutorReport" targetRef="endCoexecutorReport"></sequenceFlow>
+    </process>
+</definitions>
