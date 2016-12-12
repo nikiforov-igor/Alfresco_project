@@ -7,7 +7,6 @@
                 <!--<js src="/scripts/lecm-errands/constraints/errands-limitation-date-validator.js"/>-->
                 <js src="/scripts/lecm-errands/constraints/errands-check-coosing-executor.js"/>
                 <js src="/scripts/lecm-errands/constraints/errands-constraints.js"/>
-                <css src="/css/lecm-errands/errands-coexecutor-report-form.css"/>
             </dependencies>
 
            <default-controls>
@@ -924,16 +923,6 @@
                             <control-param name="parentDocArg">parentDoc</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:base-document-assoc">
-                        <control template="/ru/it/lecm/errands/controls/additional-document-assoc.ftl">
-                            <control-param name="parentDocArg">baseDoc</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-errands:base-number">
-                        <control template="/org/alfresco/components/form/controls/hidden.ftl">
-                            <control-param name="contextProperty">baseDocNumber</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-errands:is-short" >
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
@@ -982,8 +971,8 @@
                 </appearance>
             </form>
             <form id="primary-routing">
-                <create-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl" />
-                <edit-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl" />
+                <create-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl"/>
+                <edit-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl"/>
 
                 <field-visibility>
                     <!-- Получатель -->
@@ -1039,7 +1028,7 @@
                     </field>
                     <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
@@ -1050,14 +1039,14 @@
                             <control-param name="maxLimitArg">parentDocLimitationDate</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                 </appearance>
             </form>
             <form id="incoming-default-primary-routing">
-                <create-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl" />
-                <edit-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl" />
+                <create-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl"/>
+                <edit-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl"/>
 
                 <field-visibility>
                     <!-- Получатель -->
@@ -1106,7 +1095,7 @@
                             <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                     <field id="errand-limitless" set="limitation-date">
@@ -1116,7 +1105,7 @@
                     </field>
                     <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
@@ -1127,7 +1116,7 @@
                             <control-param name="maxLimitArg">parentDocLimitationDate</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                 </appearance>
@@ -1197,7 +1186,7 @@
                             <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                     <field id="errand-limitless" set="limitation-date">
@@ -1207,7 +1196,7 @@
                     </field>
                     <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Resolutions.ErrandsExecutionDateValidation" message-id="message.errandExecutionDate.laterResolution" event="keyup"/>
                         </constraint-handlers>
                     </field>
@@ -1219,7 +1208,7 @@
                             <control-param name="maxLimitArg">parentDocLimitationDate</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Resolutions.ErrandsExecutionDateValidation" message-id="message.errandExecutionDate.laterResolution" event="keyup"/>
                         </constraint-handlers>
                     </field>
@@ -1331,10 +1320,10 @@
         <forms>
             <form id="coexecutors-reports-datagrid">
                 <field-visibility>
-                    <show id="lecm-errands-ts:coexecutor-assoc" />
-                    <show id="lecm-errands-ts:coexecutor-report-status" />
-                    <show id="lecm-errands-ts:coexecutor-report-route-date" />
-                    <show id="lecm-errands-ts:coexecutor-report-attachment-assoc" />
+                    <show id="lecm-errands-ts:coexecutor-assoc"/>
+                    <show id="lecm-errands-ts:coexecutor-report-status"/>
+                    <show id="lecm-errands-ts:coexecutor-report-route-date"/>
+                    <show id="lecm-errands-ts:coexecutor-report-attachment-assoc"/>
                 </field-visibility>
             </form>
         </forms>
@@ -1358,11 +1347,12 @@
             </form>
             <form>
                 <field-visibility>
-                    <show id="lecm-errands-ts:coexecutor-report-text" />
+                    <show id="lecm-errands-ts:coexecutor-report-text"/>
                     <show id="lecm-errands-ts:coexecutor-report-attachment-assoc"/>
-                    <show id="lecm-errands-ts:connected-document-ref"/>
+                    <show id="lecm-errands-ts:coexecutor-report-connected-document-assoc"/>
                     <show id="route-report-button" force="true"/>
                     <show id="lecm-errands-ts:coexecutor-report-is-route"/>
+                    <show id="coexecutor-report-form-script" force="true"/>
 
                 </field-visibility>
                 <appearance>
@@ -1373,7 +1363,7 @@
                             <control-param name="suppressRefreshEvent">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands-ts:connected-document-ref">
+                    <field id="lecm-errands-ts:coexecutor-report-connected-document-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
                             <control-param name="multipleSelectMode">true</control-param>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
@@ -1383,10 +1373,18 @@
                         </control>
                     </field>
                     <field id="route-report-button" label-id="button.route-report">
-                        <control template="/ru/it/lecm/eds/controls/button-control.ftl"/>
+                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
+                                <control-param name="clickFireAction">routeReportButtonClick</control-param>
+                        </control>
                     </field>
                     <field id="lecm-errands-ts:coexecutor-report-is-route">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+                    </field>
+                    <field id="coexecutor-report-form-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-coexecutor-report-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">errandsEFCoexecutorReportScriptLoaded</control-param>
+                        </control>
                     </field>
 
                 </appearance>
@@ -1429,7 +1427,7 @@
 					<field id="lecm-errands-dic:errand-title-code">
 						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
 						<constraint-handlers>
-							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup"/>
 						</constraint-handlers>
 					</field>
 				</appearance>
@@ -1442,13 +1440,13 @@
 				<appearance>
                     <field id="cm:name" mandatory="false">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
                         </constraint-handlers>
                     </field>
 					<field id="lecm-errands-dic:errand-title-code" mandatory="false">
 						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
 						<constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
 						</constraint-handlers>
 					</field>
 				</appearance>
@@ -1468,6 +1466,9 @@
                 <field-visibility>
                     <show id="cm:name" force="true"/>
                     <show id="lecm-errands-dic:errand-type-default-title"/>
+                    <show id="lecm-errands-dic:errand-type-report-required"/>
+                    <show id="lecm-errands-dic:errand-type-limitless"/>
+                    <show id="lecm-errands-dic:errand-type-launch-review"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-errands-dic:errand-type-default-title">
@@ -1492,6 +1493,9 @@
                 <field-visibility>
                     <show id="cm:name" force="true"/>
                     <show id="lecm-errands-dic:errand-type-default-title"/>
+                    <show id="lecm-errands-dic:errand-type-report-required"/>
+                    <show id="lecm-errands-dic:errand-type-limitless"/>
+                    <show id="lecm-errands-dic:errand-type-launch-review"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-errands-dic:errand-type-default-title">
@@ -1515,7 +1519,7 @@
                 <appearance>
                     <field id="cm:name" mandatory="false">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands-dic:errand-type-default-title" mandatory="false">
@@ -1529,7 +1533,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
                         </constraint-handlers>
                     </field>
                 </appearance>
@@ -1711,7 +1715,7 @@
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestChangeDueDateTaskNewDateValidation" event="change"/>
 						</constraint-handlers>
-						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl" />
+						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl"/>
 					</field>
 				</appearance>
 			</form>
@@ -1779,7 +1783,7 @@
             <form>
                 <field-visibility>
                     <show id="packageItems"/>
-	                <show id="lecmErrandWf:changeExecutorCurrentExecutor" />
+	                <show id="lecmErrandWf:changeExecutorCurrentExecutor"/>
 	                <show id="lecmErrandWf:changeExecutorNewExecutor"/>
 	                <show id="lecmErrandWf:changeExecutorReason"/>
                 </field-visibility>
@@ -1823,15 +1827,15 @@
             <form>
                 <field-visibility>
                     <show id="packageItems"/>
-                    <show id="lecmErrandWf:changeExecutorCurrentExecutor" />
-                    <show id="lecmErrandWf:changeExecutorNewExecutor"/>
-                    <show id="lecmErrandWf:changeExecutorReason"/>
+                    <show id="lecmErrandWf:changeExecutor_1CurrentExecutor"/>
+                    <show id="lecmErrandWf:changeExecutor_1NewExecutor"/>
+                    <show id="lecmErrandWf:changeExecutor_1Reason"/>
                 </field-visibility>
                 <appearance>
                     <field id="packageItems">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
                     </field>
-                    <field id="lecmErrandWf:changeExecutorCurrentExecutor" label-id="field.changeExecutorCurrentExecutor.title">
+                    <field id="lecmErrandWf:changeExecutor_1CurrentExecutor" label-id="field.changeExecutorCurrentExecutor.title">
                         <control template="/ru/it/lecm/documents/controls/workflow/format-packageItems-document.ftl">
                             <control-param name="substituteString">
                                 <![CDATA[
@@ -1842,7 +1846,7 @@
                             </control-param>
                         </control>
                     </field>
-                    <field id="lecmErrandWf:changeExecutorNewExecutor">
+                    <field id="lecmErrandWf:changeExecutor_1NewExecutor">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
                             <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
@@ -1853,7 +1857,7 @@
                             <control-param name="useStrictFilterByOrg">true</control-param>
                         </control>
                     </field>
-                    <field id="lecmErrandWf:changeExecutorReason">
+                    <field id="lecmErrandWf:changeExecutor_1Reason">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">7</control-param>
                         </control>
@@ -1867,7 +1871,7 @@
             <form>
                 <field-visibility>
                     <show id="packageItems"/>
-                    <show id="lecmErrandWf:changeControllerCurrentController" />
+                    <show id="lecmErrandWf:changeControllerCurrentController"/>
                     <show id="lecmErrandWf:changeControllerNewController"/>
                     <show id="lecmErrandWf:changeControllerReason"/>
                 </field-visibility>
@@ -1900,7 +1904,7 @@
         <forms>
             <form>
                 <field-visibility>
-	                <show id="bpm:workflowDescription" />
+	                <show id="bpm:workflowDescription"/>
                     <show id="packageItems"/>
 	                <show id="lecmErrandWf:requestCancelReason"/>
                 </field-visibility>
@@ -1927,10 +1931,10 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecmErrandWf:requestCancelTaskTitle" />
-					<show id="lecmErrandWf:requestCancelTaskReason" />
-					<show id="lecmErrandWf:requestCancelTaskResult" />
-					<show id="lecmErrandWf:requestCancelTaskNewExecutor" />
+					<show id="lecmErrandWf:requestCancelTaskTitle"/>
+					<show id="lecmErrandWf:requestCancelTaskReason"/>
+					<show id="lecmErrandWf:requestCancelTaskResult"/>
+					<show id="lecmErrandWf:requestCancelTaskNewExecutor"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecmErrandWf:requestCancelTaskTitle">
@@ -1944,7 +1948,7 @@
 						</control>
 					</field>
 					<field id="lecmErrandWf:requestCancelTaskResult" mandatory="true">
-						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl" />
+						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl"/>
 					</field>
 					<field id="lecmErrandWf:requestCancelTaskNewExecutor">
                         <constraint-handlers>
@@ -1991,7 +1995,7 @@
 			<form>
 				<field-visibility>
 					<show id="packageItems"/>
-					<show id="lecmErrandWf:errandInitiatorApproveMessage" />
+					<show id="lecmErrandWf:errandInitiatorApproveMessage"/>
 				</field-visibility>
 				<appearance>
 					<field id="packageItems">
@@ -2033,7 +2037,7 @@
 			<form>
 				<field-visibility>
 					<show id="packageItems"/>
-					<show id="lecmErrandWf:errandControllerApproveMessage" />
+					<show id="lecmErrandWf:errandControllerApproveMessage"/>
 				</field-visibility>
 				<appearance>
 					<field id="packageItems">
@@ -2075,7 +2079,7 @@
 			<form>
 				<field-visibility>
 					<show id="packageItems"/>
-					<show id="lecmErrandWf:errandExecuteMessage" />
+					<show id="lecmErrandWf:errandExecuteMessage"/>
 				</field-visibility>
 				<appearance>
 					<field id="packageItems">
@@ -2096,7 +2100,7 @@
             <form>
                 <field-visibility>
                     <show id="packageItems"/>
-                    <show id="lecmErrandWf:errandExecuteMessage" />
+                    <show id="lecmErrandWf:errandExecuteMessage"/>
                 </field-visibility>
                 <appearance>
                     <field id="packageItems">
@@ -2117,7 +2121,7 @@
             <form>
                 <field-visibility>
                     <show id="packageItems"/>
-                    <show id="lecmErrandWf:coexecutorReportText" />
+                    <show id="lecmErrandWf:coexecutorReportText"/>
                     <show id="lecmErrandWf:coexecutorReportAttachment"/>
                 </field-visibility>
                 <appearance>
@@ -2144,28 +2148,28 @@
             <form>
                 <field-visibility>
                     <show id="packageItems"/>
-                    <show id="lecmErrandWf:coexecutorReportText" />
-                    <show id="lecmErrandWf:coexecutorReportAttachment"/>
-                    <show id="lecmErrandWf:coexecutorReportConnectedDocument"/>
-                    <show id="lecmErrandWf:coexecutorReportWFScript"/>
-                    <show id="lecmErrandWf:coexecutorReportRouteReport"/>
+                    <show id="lecmErrandWf:coexecutorReport_1Text"/>
+                    <show id="lecmErrandWf:coexecutorReport_1Attachment"/>
+                    <show id="lecmErrandWf:coexecutorReport_1ConnectedDocument"/>
+                    <show id="coexecutorReport_WFScript" force="true"/>
+                    <show id="lecmErrandWf:coexecutorReport_1RouteReport"/>
                     <show id="route-report-button" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="packageItems">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
                     </field>
-                    <field id="lecmErrandWf:coexecutorReportText">
+                    <field id="lecmErrandWf:coexecutorReport_1Text">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
-                    <field id="lecmErrandWf:coexecutorReportAttachment">
+                    <field id="lecmErrandWf:coexecutorReport_1Attachment">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">Отчёты соисполнителей</control-param>
                             <control-param name="suppressRefreshEvent">true</control-param>
                         </control>
                     </field>
-                    <field id="lecmErrandWf:coexecutorReportConnectedDocument">
+                    <field id="lecmErrandWf:coexecutorReport_1ConnectedDocument">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
                             <control-param name="multipleSelectMode">true</control-param>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
@@ -2179,14 +2183,14 @@
                             <control-param name="clickFireAction">routeReportButtonClick</control-param>
                         </control>
                     </field>
-                    <field id="lecmErrandWf:coexecutorReportWFScript">
+                    <field id="coexecutorReport_WFScript">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-coexecutor-report-form-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">errandsWFCoexecutorReportScriptLoaded</control-param>
                         </control>
                     </field>
-                    <field id="lecmErrandWf:coexecutorReportRouteReport">
-                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    <field id="lecmErrandWf:coexecutorReport_1RouteReport">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
                 </appearance>
             </form>
@@ -2366,6 +2370,7 @@
             <workflow name="activiti$errandsCreateChildErrand"/>
             <workflow name="activiti$errandsRemoveDraft"/>
             <workflow name="activiti$errandsCoexecutorReport"/>
+            <workflow name="activiti$errandsCoexecutorReport_1"/>
         </hidden-workflows>
     </config>
 

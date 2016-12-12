@@ -4,7 +4,7 @@
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.it.ru/logicECM/errands/workflow/changeExecutor_1/1.0">
     <process id="errandsChangeExecutor_1" name="Сменить исполнителя(1)">
-        <startEvent id="startChangeExecutor" name="Start" activiti:formKey="lecmErrandWf:changeExecutor"></startEvent>
+        <startEvent id="startChangeExecutor" name="Start" activiti:formKey="lecmErrandWf:changeExecutor_1"></startEvent>
         <endEvent id="endChangeExecutor" name="End"></endEvent>
         <scriptTask id="changeExecutor" name="Change Executor" scriptFormat="javascript">
             <extensionElements>
@@ -19,15 +19,15 @@
                                 if (executorAssoc && executorAssoc.length == 1) {
                                     executor = executorAssoc[0];
                                 }
-                                if (executor && lecmErrandWf_changeExecutorNewExecutor && executor != lecmErrandWf_changeExecutorNewExecutor) {
+                                if (executor && lecmErrandWf_changeExecutor_1NewExecutor && executor != lecmErrandWf_changeExecutor_1NewExecutor) {
 
                                     document.removeAssociation(executor, "lecm-errands:executor-assoc");
-                                    document.createAssociation(lecmErrandWf_changeExecutorNewExecutor, "lecm-errands:executor-assoc");
+                                    document.createAssociation(lecmErrandWf_changeExecutor_1NewExecutor, "lecm-errands:executor-assoc");
                                     documentMembers.addMember(document, executor, "ERRANDS_READER");
                                     lecmPermission.revokeDynamicRole(document, executor, "ERRANDS_EXECUTOR");
 
                                     notifications.sendNotificationFromCurrentUser({
-                                        recipients: [lecmErrandWf_changeExecutorNewExecutor],
+                                        recipients: [lecmErrandWf_changeExecutor_1NewExecutor],
                                         templateCode: 'ERRANDS_CHANGE_EXECUTOR_NEW',
                                         templateConfig: {
                                             mainObject: document,
@@ -40,7 +40,7 @@
                                         templateConfig: {
                                         mainObject: document,
                                             eventExecutor: currentUser,
-                                            reason: lecmErrandWf_changeExecutorReason
+                                            reason: lecmErrandWf_changeExecutor_1Reason
                                         }
                                     });
                                     var recipients = [];
@@ -60,14 +60,14 @@
                                         templateConfig: {
                                         mainObject: document,
                                             eventExecutor: currentUser,
-                                            reason: lecmErrandWf_changeExecutorReason
+                                            reason: lecmErrandWf_changeExecutor_1Reason
                                         }
                                     });
 
                                     var logObjects = [];
-                                    logObjects.push("" + lecmErrandWf_changeExecutorNewExecutor.nodeRef);
+                                    logObjects.push("" + lecmErrandWf_changeExecutor_1NewExecutor.nodeRef);
                                     var logText = "#initiator ";
-                                    logText += documentScript.wrapperTitle("изменил", lecmErrandWf_changeExecutorReason);
+                                    logText += documentScript.wrapperTitle("изменил", lecmErrandWf_changeExecutor_1Reason);
                                     logText += " исполнителя поручения #mainobject на #object1";
                                     businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_EXECUTOR", logText, logObjects);
 

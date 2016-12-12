@@ -12,7 +12,6 @@
 		<import uri="http://www.it.ru/logicECM/statemachine/aspects/1.0" prefix="lecm-statemachine-aspects"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
-		<import uri="http://www.it.ru/logicECM/links/1.0" prefix="lecm-links"/>
 	</imports>
 
 	<namespaces>
@@ -123,6 +122,31 @@
 			</properties>
 			<associations>
 				<association name="lecmErrandWf:changeExecutorNewExecutor">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="lecmErrandWf:changeExecutor_1">
+			<parent>bpm:startTask</parent>
+			<properties>
+				<property name="lecmErrandWf:changeExecutor_1Reason">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecmErrandWf:changeExecutor_1NewExecutor">
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
@@ -277,6 +301,12 @@
 				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
 			</mandatory-aspects>
 		</type>
+		<type name="lecmErrandWf:execute_1">
+			<parent>bpm:startTask</parent>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
 
 		<!--Отчёт соисполнителя-->
 		<type name="lecmErrandWf:coexecutorReport">
@@ -285,10 +315,6 @@
 				<property name="lecmErrandWf:coexecutorReportText">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
-				</property>
-				<property name="lecmErrandWf:coexecutorReportRouteReport">
-					<type>d:boolean</type>
-					<default>false</default>
 				</property>
 			</properties>
 			<associations>
@@ -303,8 +329,38 @@
 						<many>false</many>
 					</target>
 				</association>
+			</associations>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+		<!--Отчёт соисполнителя-->
+		<type name="lecmErrandWf:coexecutorReport_1">
+			<parent>bpm:startTask</parent>
+			<properties>
+				<property name="lecmErrandWf:coexecutorReport_1Text">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecmErrandWf:coexecutorReport_1RouteReport">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecmErrandWf:coexecutorReport_1Attachment">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:content</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
 				<!-- Связанные документы -->
-				<association name="lecmErrandWf:coexecutorReportConnectedDocument">
+				<association name="lecmErrandWf:coexecutorReport_1ConnectedDocument">
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
@@ -312,7 +368,7 @@
 					<target>
 						<class>lecm-document:base</class>
 						<mandatory>false</mandatory>
-						<many>false</many>
+						<many>true</many>
 					</target>
 				</association>
 			</associations>
@@ -320,7 +376,6 @@
 				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
 			</mandatory-aspects>
 		</type>
-
 		<type name="lecmErrandWf:createErrands">
 			<title>Поручение</title>
 			<parent>bpm:startTask</parent>

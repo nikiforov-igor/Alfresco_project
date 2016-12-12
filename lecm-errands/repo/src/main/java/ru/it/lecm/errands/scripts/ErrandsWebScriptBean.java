@@ -641,25 +641,6 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return errandsService.createLinks(document, name, url, isExecute);
     }
 
-    /**
-     * Создает ссылку на связываемый документ
-     * @param nodeRef
-     * @param name
-     * @param linkedRef
-     * @return
-     */
-    public ScriptNode createCoexecutorReportLink(String nodeRef, String name, String linkedRef){
-        NodeRef document = new NodeRef(nodeRef);
-        NodeRef linked = new NodeRef(linkedRef);
-        if(errandsService.getLinksFolderRef(document) == null) {
-            try {
-                errandsService.createLinksFolderRef(document);
-            } catch (WriteTransactionNeededException ex) {
-                throw new RuntimeException("Can't create links folder", ex);
-            }
-        }
-        return new ScriptNode(errandsService.createCoexecutorReportLink(document, name, linked), serviceRegistry, getScope());
-    }
 	/**
 	 * Сохранение отчёта об исполнении
 	 *

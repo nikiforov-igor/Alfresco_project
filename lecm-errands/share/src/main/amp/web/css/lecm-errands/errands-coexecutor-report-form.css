@@ -1,15 +1,7 @@
-.yui-panel-container .errands-coexecutor-report-form .control.association-search .label-div {
-    display: none;
-}
 .yui-panel-container .errands-coexecutor-report-form .control > .label-div {
     width: 100px;
 }
-.yui-panel-container .errands-coexecutor-report-form .control.association-search .container .buttons-div {
-    float: left;
-}
-.yui-panel-container .errands-coexecutor-report-form .control.association-search .container .buttons-div button {
-    padding:0 10px;
-}
+
 .yui-panel-container .errands-coexecutor-report-form .form-buttons > span:hover {
     background: rgba(0, 0, 0, 0.02);
     border-color: #bdbdbd;

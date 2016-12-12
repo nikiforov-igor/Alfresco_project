@@ -4,102 +4,44 @@
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.it.ru/logicECM/errands/workflow/coexecutorReport_1/1.0">
     <process id="errandsCoexecutorReport_1" name="Поручения. Отчёт соисполнителя(1)">
-        <startEvent id="startCoexecutorReport" name="Start" activiti:formKey="lecmErrandWf:coexecutorReport"></startEvent>
+        <startEvent id="startCoexecutorReport" name="Start" activiti:formKey="lecmErrandWf:coexecutorReport_1"></startEvent>
         <endEvent id="endCoexecutorReport" name="End"></endEvent>
         <scriptTask id="coexecutorReport" name="Coexecutor report" scriptFormat="javascript">
             <extensionElements>
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
-	                        var document = bpm_package.children[0];
-	                        var currentUser = orgstructure.getCurrentEmployee();
-	                        if (document != null && lecmErrandWf_coexecutorReportText != null && currentUser != null) {
-		                        var table = document.assocs["lecm-errands-ts:coexecutor-reports-assoc"][0];
-		                        if (table != null) {
+							var document = bpm_package.children[0];
+							var currentUser = orgstructure.getCurrentEmployee();
+							if (document && lecmErrandWf_coexecutorReport_1Text && currentUser) {
+								var table = document.assocs["lecm-errands-ts:coexecutor-reports-assoc"][0];
+								if (table) {
 
-		                        	var props = [];
-		                        	props["lecm-errands-ts:coexecutor-report-text"] = lecmErrandWf_coexecutorReportText;
-		                            var report = table.createNode(null, "lecm-errands-ts:coexecutor-report", props);
-	                                report.createAssociation(currentUser, "lecm-errands-ts:coexecutor-assoc");
-	                                report.properties["lecm-errands-ts:coexecutor-assoc-ref"] = currentUser.nodeRef.toString();
+									var props = [];
+									props["lecm-errands-ts:coexecutor-report-text"] = lecmErrandWf_coexecutorReport_1Text;
+									var report = table.createNode(null, "lecm-errands-ts:coexecutor-report", props);
+									report.createAssociation(currentUser, "lecm-errands-ts:coexecutor-assoc");
 
-	                                var attachment = execution.getVariable("lecmErrandWf_coexecutorReportAttachment")
-	                                if (attachment != null) {
-	                                    var dateFormat = new Packages.java.text.SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
-										var dateString = dateFormat.format(new java.util.Date());
-	                                    attachment.properties["cm:name"] = "Отчет соисполнителя " + currentUser.properties["lecm-orgstr:employee-short-name"] + ", от " + dateString;
-	                                    attachment.save();
-
-	                                    var category = documentAttachments.getCategoryByName("Отчеты соисполнителей", document);
-	                                    if (category != null) {
-	                                        attachment.move(category);
-	                                    }
-                                        report.createAssociation(attachment, "lecm-errands-ts:coexecutor-report-attachment-assoc");
-	                                }
-									var connectedDocument = execution.getVariable("lecmErrandWf_coexecutorReportConnectedDocument");
-	                                if(connectedDocument){
-	                                	var links = errands.getLinks(document.nodeRef);
-										var i;
-										var link;
-										var linkExist = false;
-										if(links && links.length){
-											for(i=0;i<links.length;i++){
-												if(links[i].name.equals(connectedDocument.name)){
-													linkExist = true;
-													break;
-												}
-											}
+									var attachments = execution.getVariable("lecmErrandWf_coexecutorReport_1Attachment")
+									if (attachments) {
+										for (var i = 0; i < attachments.size(); i++) {
+											report.createAssociation(attachments.get(i), "lecm-errands-ts:coexecutor-report-attachment-assoc");
 										}
-										if(!linkExist) {
-											link = errands.createCoexecutorReportLink(document.nodeRef,connectedDocument.name, connectedDocument.nodeRef);
-										}else{
-											link = links[i];
+									}
+									var connectedDocuments = execution.getVariable("lecmErrandWf_coexecutorReport_1ConnectedDocument");
+									if (connectedDocuments) {
+										for (var i = 0; i < connectedDocuments.size(); i++) {
+											report.createAssociation(connectedDocuments.get(i), "lecm-errands-ts:coexecutor-report-connected-document-assoc");
 										}
-	                                	report.createAssociation(link,"lecm-errands-ts:coexecutor-report-connected-document-link-assoc");
-	                                	report.properties["lecm-errands-ts:connected-document-ref"] = connectedDocument.nodeRef;
-	                                }
-									if(lecmErrandWf_coexecutorReportRouteReport == false){
+									}
+									if (lecmErrandWf_coexecutorReport_1RouteReport == false) {
 										report.properties["lecm-errands-ts:coexecutor-report-status"] = "PROJECT";
-									}else{
-									    report.properties["lecm-errands-ts:coexecutor-report-status"] = "ONCONTROL";
-									    report.properties["lecm-errands-ts:coexecutor-report-route-date"] = new Date();
-									    //создаем связь.
-									    if(connectedDocument){
-									    	var connectDocs = documentConnection.getConnectedDocuments(document,'docReport',"lecm-document:base");
-									    	var i,connectExist;
-									    	for(i=0;i<connectDocs.length;i++){
-									    		if(connectDocs[i].nodeRef.equals(connectedDocument.nodeRef)){
-									    			connectExist = true;
-									    		}
-											}
-											if(!connectExist){
-												documentConnection.createConnection(document,connectedDocument ,'docReport',false);
-											}
-	                                	}
-
-										var recipients = [];
-										var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
-										if (executorAssoc != null && executorAssoc.length > 0) {
-											recipients.push(executorAssoc[0]);
-										}
-
-										notifications.sendNotificationFromCurrentUser({
-											recipients: recipients,
-											templateCode: 'ERRANDS_COEXEC_REPORT',
-											templateConfig: {
-												mainObject: document,
-												eventExecutor: currentUser
-											},
-											dontCheckAccessToObject: true
-										});
-                                        var logObjects = [];
-                                        var logText = "Соисполнитель #initiator создал";
-                                        logText += "отчет о выполнении поручения #mainobject";
-                                        businessJournal.log(document.nodeRef.toString(), "ERRAND_СOEXECUTOR_REPORT", logText, logObjects);
+									} else {
+										report.properties["lecm-errands-ts:coexecutor-report-is-route"] = true;
 									}
 									report.save();
-		                        }
-	                        }
+								}
+							}
                         ]]></activiti:string>
                     </activiti:field>
                 </activiti:executionListener>

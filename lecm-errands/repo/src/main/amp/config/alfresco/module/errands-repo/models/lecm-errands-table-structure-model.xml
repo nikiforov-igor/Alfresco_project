@@ -73,10 +73,6 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
-                <!-- атрибут для хранения рефы связанного документа-->
-                <property name="lecm-errands-ts:connected-document-ref">
-                    <type>d:text</type>
-                </property>
                 <!-- направить отчет -->
                 <property name="lecm-errands-ts:coexecutor-report-is-route">
                     <type>d:boolean</type>
@@ -88,7 +84,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
             </properties>
@@ -114,7 +110,7 @@
                     <target>
                         <class>cm:content</class>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </target>
                 </association>
                 <association name="lecm-errands-ts:coexecutor-report-connected-document-link-assoc">
@@ -125,7 +121,18 @@
                     <target>
                         <class>lecm-links:link</class>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
+                    </target>
+                </association>
+                <association name="lecm-errands-ts:coexecutor-report-connected-document-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-document:base</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
                     </target>
                 </association>
             </associations>

@@ -18,9 +18,16 @@ public interface ErrandsService {
     String ERRANDS_SETTINGS_NODE_NAME = "Settings";
     String ERRANDS_DASHLET_SETTINGS_NODE_NAME = "Dashlet Settings";
 
+    enum ERRANDS_TS_COEXECUTOR_REPORT_STATUS{
+        PROJECT,ONCONTROL,APPROVE,DECLINE
+    }
+
+    String ERRANDS_COEXECUTOR_REPORT_CONNECTION_TYPE = "docReport";
+
     String ERRANDS_NAMESPACE_URI = "http://www.it.ru/logicECM/errands/1.0";
     String ERRANDS_NAMESPACE_DIC_URI = "http://www.it.ru/logicECM/errands/dictionaries/1.0";
     String ERRANDS_ASPECT_NAMESPACE_URI = "http://www.it.ru/logicECM/errands-aspects/1.0";
+    String ERRANDS_TS_NAMESPACE_URI = "http://www.it.ru/logicECM/errands/table-structure/1.0";
 
     QName TYPE_ERRANDS = QName.createQName(ERRANDS_NAMESPACE_URI, "document");
     QName TYPE_ERRANDS_SETTINGS = QName.createQName(ERRANDS_NAMESPACE_URI, "settings");
@@ -28,6 +35,7 @@ public interface ErrandsService {
     QName TYPE_ERRANDS_USER_SETTINGS = QName.createQName(ERRANDS_NAMESPACE_URI, "user-settings");
     QName TYPE_ERRANDS_DIC_TITLES = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-titles");
     QName TYPE_ERRANDS_DIC_TYPE = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-type");
+    QName TYPE_ERRANDS_TS_COEXECUTOR_REPORT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report");
     QName PROP_ERRANDS_INITIATOR_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "initiator-assoc-ref");
     QName PROP_ERRANDS_EXECUTOR_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "executor-assoc-ref");
     QName PROP_ERRANDS_CONTROLLER_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "controller-assoc-ref");
@@ -57,6 +65,17 @@ public interface ErrandsService {
     QName PROP_ERRANDS_HALF_LIMIT_DATE = QName.createQName(ERRANDS_NAMESPACE_URI,"half-limit-date");
     QName PROP_ERRANDS_IS_LIMIT_SHORT_DATE = QName.createQName(ERRANDS_NAMESPACE_URI,"is-limit-short");
 
+    QName PROP_ERRANDS_TS_COEXECUTOR_REPORT_ACCEPT_DATE = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-accept-date");
+    QName PROP_ERRANDS_TS_COEXECUTOR_REPORT_ROUTE_DATE = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-route-date");
+    QName PROP_ERRANDS_TS_COEXECUTOR_REPORT_STATUS = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-status");
+    QName PROP_ERRANDS_TS_COEXECUTOR_REPORT_TEXT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-text");
+    QName PROP_ERRANDS_TS_COEXECUTOR_REPORT_IS_ROUTE = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-is-route");
+
+    QName ASSOC_ERRANDS_TS_COEXECUTOR = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-assoc");
+    QName ASSOC_ERRANDS_TS_ATTACHMENT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-attachment-assoc");
+    QName ASSOC_ERRANDS_TS_CONNECTED_DOCUMENT_LINK = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-connected-document-link-assoc");
+    QName ASSOC_ERRANDS_TS_CONNECTED_DOCUMENT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-connected-document-assoc");
+
     QName PROP_ERRANDS_DIC_TITLE_CODE = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-title-code");
     QName PROP_ERRANDS_DIC_TYPE_DEFAULT_TITLE = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-type-default-title");
     QName PROP_ERRANDS_DIC_TYPE_LIMITLESS = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-type-limitless");
@@ -76,7 +95,7 @@ public interface ErrandsService {
 
     QName ASSOC_ADDITIONAL_ERRANDS_DOCUMENT = QName.createQName(ERRANDS_NAMESPACE_URI, "additional-document-assoc");
     QName PROP_ADDITIONAL_DOC_NUMBER = QName.createQName(ERRANDS_NAMESPACE_URI, "additional-doc-number");
-    QName PROP_BASE_DOC_NUMBER = QName.createQName(ERRANDS_NAMESPACE_URI, "base-number");
+    QName PROP_BASE_DOC_NUMBER = QName.createQName(ERRANDS_NAMESPACE_URI, "base-doc-number");
     QName ASSOC_BASE_DOCUMENT = QName.createQName(ERRANDS_NAMESPACE_URI, "base-assoc");
     QName ASSOC_ERRANDS_INITIATOR = QName.createQName(ERRANDS_NAMESPACE_URI, "initiator-assoc");
     QName ASSOC_ERRANDS_CONTROLLER = QName.createQName(ERRANDS_NAMESPACE_URI, "controller-assoc");
@@ -288,9 +307,21 @@ public interface ErrandsService {
 
     NodeRef getBaseDocument(NodeRef errand);
 
+    /**
+     * Проверяет наличие незавершенных дочерних поручений исполнителя
+     * @param errand NodeRef поручения
+     * @return наличие незавершенных дочерних поручений исполнителя
+     */
     boolean hasChildNotFinalByExecutor(NodeRef errand);
 
-    NodeRef createCoexecutorReportLink(NodeRef document, String name, NodeRef linkedRef);
+    /**
+     * Возарщает ссылку на связываемый с отчетом соисполнителя документ
+     * @param document поручение
+     * @param name назавние ссылки
+     * @param linkedRef связываемый документ
+     * @return Возарщает ссылку на связываемый с отчетом соисполнителя документ
+     */
+    NodeRef getCoexecutorReportLink(NodeRef document, String name, NodeRef linkedRef);
 
     enum ModeChoosingExecutors {
         ORGANIZATION,

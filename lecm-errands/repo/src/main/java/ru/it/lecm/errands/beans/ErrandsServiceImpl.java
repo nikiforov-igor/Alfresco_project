@@ -594,20 +594,41 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
         return childAssoc.getChildRef();
     }
+
     @Override
-    public NodeRef createCoexecutorReportLink(NodeRef document, String name, NodeRef linked) {
+    public NodeRef getCoexecutorReportLink(NodeRef document, String name, NodeRef linked) {
         NodeRef linkFolder = getLinksFolderRef(document);
-        QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
-        Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
         SysAdminParams params = serviceRegistry.getSysAdminParams();
-        String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
-        String url = serverUrl + documentService.getDocumentUrl(linked) + "?nodeRef=" + linked.toString();
-        properties.put(ContentModel.PROP_NAME, name);
-        properties.put(BaseBean.PROP_BASE_LINK_URL, url);
+        if(linkFolder == null) {
+            try {
+                linkFolder = createLinksFolderRef(document);
+            } catch (WriteTransactionNeededException ex) {
+                throw new RuntimeException("Can't create links folder", ex);
+            }
+        }
 
-        ChildAssociationRef childAssoc = nodeService.createNode(linkFolder, ContentModel.ASSOC_CONTAINS, assocQName, BaseBean.TYPE_BASE_LINK, properties);
+        List<NodeRef> links = getLinks(document);
+        //получаем ссылку
+        NodeRef link = null;
+        for (NodeRef l : links) {
+            String linkName = (String) nodeService.getProperty(l, ContentModel.PROP_NAME);
+            if (linkName.equals(name)) {
+                link = l;
+                break;
+            }
+        }
+        if(link == null) {
+            String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+            String url = serverUrl + documentService.getDocumentUrl(linked) + "?nodeRef=" + linked.toString();
+            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
+            Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+            properties.put(ContentModel.PROP_NAME, name);
+            properties.put(BaseBean.PROP_BASE_LINK_URL, url);
+            ChildAssociationRef childAssoc = nodeService.createNode(linkFolder, ContentModel.ASSOC_CONTAINS, assocQName, BaseBean.TYPE_BASE_LINK, properties);
+            link = childAssoc.getChildRef();
+        }
 
-        return childAssoc.getChildRef();
+        return link;
     }
 
     public NodeRef getAdditionalDocumentNode(NodeRef errand) {
@@ -630,11 +651,6 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 		return null;
 	}
 
-    /**
-     * Проверяет наличие незавершенных дочерних поручений исполнителя
-     * @param errand NodeRef поручения
-     * @return наличие незавершенных дочерних поручений исполнителя
-     */
     @Override
     public boolean hasChildNotFinalByExecutor(NodeRef errand) {
         if (nodeService.exists(errand)) {

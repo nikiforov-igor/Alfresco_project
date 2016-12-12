@@ -124,14 +124,14 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
         }
 
         //установка ассоциации документа-основания
-        List<AssociationRef> baseDocAssocRefs  = nodeService.getTargetAssocs(additionalDoc,ErrandsService.ASSOC_BASE_DOCUMENT);
+        List<AssociationRef> baseDocAssocRefs = nodeService.getTargetAssocs(additionalDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
         //если документа-основания нет, то родительский документ  является документом основанием.
-        if (baseDocAssocRefs == null || baseDocAssocRefs.size() == 0){
-            nodeService.createAssociation(errandDoc,additionalDoc,ErrandsService.ASSOC_BASE_DOCUMENT);
+        if (baseDocAssocRefs == null || baseDocAssocRefs.size() == 0) {
+            nodeService.createAssociation(errandDoc, additionalDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
             nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, regNum);
-        }else{
+        } else {
             NodeRef baseDoc = baseDocAssocRefs.get(0).getTargetRef();
-            nodeService.createAssociation(errandDoc,baseDoc,ErrandsService.ASSOC_BASE_DOCUMENT);
+            nodeService.createAssociation(errandDoc, baseDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
             String baseRegNum = (String) nodeService.getProperty(additionalDoc, ErrandsService.PROP_BASE_DOC_NUMBER);
             nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, baseRegNum);
 
