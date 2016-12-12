@@ -37,7 +37,7 @@
                     <show id="lecm-resolutions:is-draft"/>
                     <show id="lecm-resolutions:base-assoc"/>
                     <show id="lecm-resolutions:base-document-assoc"/>
-                    <show id="base-doc-execution-date" force="true"/>
+                    <show id="lecm-resolutions:base-doc-execution-date-attr-name"/>
                     <show id="resolution-form" force="true"/>
                     <show id="send-button" force="true"/>
                     <show id="save-draft-button" force="true"/>
@@ -192,10 +192,8 @@
                     <field id="lecm-resolutions:base-document-assoc" set="end">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
                     </field>
-                    <field id="base-doc-execution-date" set="end">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl">
-                            <control-param name="selectedItemsFormArgs">prop_lecm-resolutions_limitation-date</control-param>
-                        </control>
+                    <field id="lecm-resolutions:base-doc-execution-date-attr-name" set="end">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
                     <field id="resolution-form" set="end">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
@@ -315,6 +313,7 @@
 
                     <show id="lecm-resolutions:reviewers-assoc"/>
 
+                    <show id="lecm-resolutions:base-doc-execution-date-attr-name"/>
                     <show id="resolution-form" force="true"/>
                     <show id="save-button" force="true"/>
                 </field-visibility>
@@ -451,6 +450,9 @@
                         </control>
                     </field>
 
+                    <field id="lecm-resolutions:base-doc-execution-date-attr-name" set="end">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+                    </field>
                     <field id="resolution-form" set="end">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-resolution/lecm-resolution-form.js</control-param>

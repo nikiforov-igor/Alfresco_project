@@ -7,6 +7,7 @@
         Selector = YAHOO.util.Selector,
         Bubbling = YAHOO.Bubbling;
     var formId, formButtons;
+    var baseDocExecutionDate = null;
 
     Bubbling.on('saveDraftResolutionButtonClick', saveDraft);
     Bubbling.on('sendResolutionButtonClick', sendResolutionClick);
@@ -36,52 +37,84 @@
     }
 
     function submitResolutionForm(checkExecutionDate, form) {
-        if (checkExecutionDate && form && form["base-doc-execution-date"] && form["base-doc-execution-date"].value) {
-            var parentExecutionDate = Alfresco.util.fromISO8601(form["base-doc-execution-date"].value);
+        if (checkExecutionDate && form) {
+            if (baseDocExecutionDate) {
+                checkBaseDocExecutionDate(form);
+            } else if (form["prop_lecm-resolutions_base-doc-execution-date-attr-name"]
+                && form["prop_lecm-resolutions_base-doc-execution-date-attr-name"].value
+                && form["assoc_lecm-resolutions_base-document-assoc"]
+                && form["assoc_lecm-resolutions_base-document-assoc"].value) {
 
-            var executionDateRadio = form["prop_lecm-resolutions_limitation-date-radio"];
-            if (executionDateRadio && executionDateRadio.value) {
-                if (executionDateRadio.value == "DATE") {
-                    var executionDateDate = form["prop_lecm-resolutions_limitation-date"];
-                    compareExecutionDate(parentExecutionDate, Alfresco.util.fromISO8601(executionDateDate.value));
-                } else if (executionDateRadio.value == "DAYS") {
-                    var executionDateDays = form["prop_lecm-resolutions_limitation-date-days"];
-                    var executionDateType = form["prop_lecm-resolutions_limitation-date-type"];
-                    if (executionDateDays && executionDateDays.value && executionDateType && executionDateType.value) {
-                        var days = parseInt(executionDateDays.value);
-
-                        executionDateDate = new Date();
-                        executionDateDate.setHours(12);
-                        executionDateDate.setMinutes(0);
-                        executionDateDate.setSeconds(0);
-                        executionDateDate.setMilliseconds(0);
-
-                        if (executionDateType.value == "CALENDAR") {
-                            executionDateDate.setDate(executionDateDate.getDate() + days);
-                            compareExecutionDate(parentExecutionDate, executionDateDate);
-                        } else if (executionDateType.value == "WORK") {
-                            Alfresco.util.Ajax.jsonPost(
-                                {
-                                    url: Alfresco.constants.PROXY_URI + "lecm/wcalendar/workCalendar/getNextWorkingDate",
-                                    dataObj: {
-                                        startDate: Alfresco.util.toISO8601(executionDateDate, {"milliseconds": true}),
-                                        offset: days,
-                                        type: "hours"
-                                    },
-                                    successCallback: {
-                                        fn: function (response) {
-                                            if (response.json && response.json.date) {
-                                                compareExecutionDate(parentExecutionDate, new Date(response.json.date));
-                                            }
-                                        }
-                                    }
-                                });
+                Alfresco.util.Ajax.jsonPost(
+                    {
+                        url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                        dataObj: {
+                            nodeRef: form["assoc_lecm-resolutions_base-document-assoc"].value,
+                            substituteString: "{" + form["prop_lecm-resolutions_base-doc-execution-date-attr-name"].value + "?yyyy-MM-dd'T'HH:mm:ss}"
+                        },
+                        successCallback: {
+                            fn: function (response) {
+                                if (response.json != null && response.json.formatString != null) {
+                                    baseDocExecutionDate = response.json.formatString;
+                                    checkBaseDocExecutionDate(form);
+                                } else {
+                                    doSubmitResolutionForm();
+                                }
+                            },
+                            scope: this
                         }
-                    }
-                }
+                    });
+            } else {
+                doSubmitResolutionForm();
             }
         } else {
             doSubmitResolutionForm();
+        }
+    }
+
+    function checkBaseDocExecutionDate(form) {
+        var parentExecutionDate = Alfresco.util.fromISO8601(baseDocExecutionDate);
+
+        var executionDateRadio = form["prop_lecm-resolutions_limitation-date-radio"];
+        if (executionDateRadio && executionDateRadio.value) {
+            if (executionDateRadio.value == "DATE") {
+                var executionDateDate = form["prop_lecm-resolutions_limitation-date"];
+                compareExecutionDate(parentExecutionDate, Alfresco.util.fromISO8601(executionDateDate.value));
+            } else if (executionDateRadio.value == "DAYS") {
+                var executionDateDays = form["prop_lecm-resolutions_limitation-date-days"];
+                var executionDateType = form["prop_lecm-resolutions_limitation-date-type"];
+                if (executionDateDays && executionDateDays.value && executionDateType && executionDateType.value) {
+                    var days = parseInt(executionDateDays.value);
+
+                    executionDateDate = new Date();
+                    executionDateDate.setHours(12);
+                    executionDateDate.setMinutes(0);
+                    executionDateDate.setSeconds(0);
+                    executionDateDate.setMilliseconds(0);
+
+                    if (executionDateType.value == "CALENDAR") {
+                        executionDateDate.setDate(executionDateDate.getDate() + days);
+                        compareExecutionDate(parentExecutionDate, executionDateDate);
+                    } else if (executionDateType.value == "WORK") {
+                        Alfresco.util.Ajax.jsonPost(
+                            {
+                                url: Alfresco.constants.PROXY_URI + "lecm/wcalendar/workCalendar/getNextWorkingDate",
+                                dataObj: {
+                                    startDate: Alfresco.util.toISO8601(executionDateDate, {"milliseconds": true}),
+                                    offset: days,
+                                    type: "hours"
+                                },
+                                successCallback: {
+                                    fn: function (response) {
+                                        if (response.json && response.json.date) {
+                                            compareExecutionDate(parentExecutionDate, new Date(response.json.date));
+                                        }
+                                    }
+                                }
+                            });
+                    }
+                }
+            }
         }
     }
 
