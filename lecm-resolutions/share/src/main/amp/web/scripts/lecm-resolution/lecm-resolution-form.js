@@ -5,8 +5,10 @@
 
     var Dom = YAHOO.util.Dom,
         Selector = YAHOO.util.Selector,
-        Bubbling = YAHOO.Bubbling;
-    var formId, formButtons;
+        Bubbling = YAHOO.Bubbling,
+        Substitute = YAHOO.lang.substitute;
+
+    var formButtons;
     var baseDocExecutionDate = null;
 
     Bubbling.on('saveDraftResolutionButtonClick', saveDraft);
@@ -220,8 +222,21 @@
     }
 
     function init(layer, args) {
-        formId = args[1].formId;
+        var formId = args[1].formId;
         formButtons = Dom.get(formId + "-form-buttons");
         Dom.setStyle(formId + "-form-submit", "display", "none");
+
+        var form = Dom.get(formId + "-form");
+        if (form && form["assoc_lecm-resolutions_base-document-assoc"] && form["assoc_lecm-resolutions_base-document-assoc"].value) {
+            var queryTemplate = 'div[class^=\"{formId}-form-panel {targetClass}\"]';
+            var sets = Selector.query(Substitute(queryTemplate, {
+                targetClass: 'reviewers-hidden',
+                formId: formId
+            }));
+
+            if (sets && sets.length) {
+                Dom.removeClass(sets[0], 'hidden1');
+            }
+        }
     }
 })();

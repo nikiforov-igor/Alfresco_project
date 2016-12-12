@@ -50,7 +50,8 @@
                     <set id="start-right-start" parent="start-right"/>
                     <set id="limitation-date" parent="start-right" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="errands"/>
-                    <set id="reviewers-fieldset" appearance="fieldset" label-id="label.review"/>
+                    <set id="reviewers-hidden" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="reviewers-fieldset" parent="reviewers-hidden" appearance="fieldset" label-id="label.review"/>
                     <set id="reviewers" parent="reviewers-fieldset" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="end"/>
 
@@ -325,7 +326,8 @@
                     <set id="start-right-start" parent="start-right"/>
                     <set id="limitation-date" parent="start-right" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="errands"/>
-                    <set id="reviewers-fieldset" appearance="fieldset" label-id="label.review"/>
+                    <set id="reviewers-hidden" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="reviewers-fieldset" parent="reviewers-hidden" appearance="fieldset" label-id="label.review"/>
                     <set id="reviewers" parent="reviewers-fieldset" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="end"/>
 
