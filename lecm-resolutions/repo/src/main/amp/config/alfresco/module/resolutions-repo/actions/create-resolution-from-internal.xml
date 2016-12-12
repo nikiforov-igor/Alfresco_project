@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items updateMode="CreateOrUpdate">
+    <item name="cm:Создание резолюции из внутреннего" type="lecm-group-actions:script-action">
+        <property name="cm:name"><![CDATA[Создание резолюции из внутреннего]]></property>
+        <property name="cm:title"><![CDATA[Создать резолюцию]]></property>
+        <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
+        <property name="lecm-group-actions:type"><![CDATA[[lecm-internal:document]]]></property>
+        <property name="lecm-group-actions:order"><![CDATA[0]]></property>
+        <property name="lecm-group-actions:expression"><![CDATA[]]></property>
+        <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
+        <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
+        <property name="lecm-group-actions:script"><![CDATA[
+            if (document != null) {
+                var params = 'documentType=lecm-resolutions:document';
+
+                // Основание
+                params += "&assoc_lecm-resolutions_base-assoc=" + document.nodeRef.toString();
+                // Документ-основание
+                params += "&assoc_lecm-resolutions_base-document-assoc=" + document.nodeRef.toString();
+
+                // Срок исполнения
+                value = document.properties["lecm-internal:response-date"];
+                if (value != null) {
+                    params += "&prop_lecm-resolutions_base-doc-execution-date-attr-name=lecm-internal:response-date";
+                    params += "&prop_lecm-resolutions_limitation-date-radio=DATE";
+                    params += "&prop_lecm-resolutions_limitation-date=" + utils.toISO8601(value);
+                }
+                // Тематика
+                value = document.properties["lecm-document:subject-assoc-ref"];
+                if (value != null) {
+                    params += "&assoc_lecm-document_subject-assoc=" + value;
+                }
+
+                var encodeParams = Packages.org.apache.commons.codec.binary.Base64.encodeBase64String(new java.lang.String(params).getBytes());
+                model.redirect = 'resolution-create?documentType=lecm-resolutions:document&p1=' + encodeURIComponent(encodeParams) + '&p2=' + encodeURIComponent(hashCode(params));
+            }
+
+            function hashCode(str) {
+                var hash = 0, i, chr, len;
+                if (str.length == 0) return hash;
+                for (i = 0, len = str.length; i < len; i++) {
+                    chr   = str.charCodeAt(i);
+                    hash  = ((hash << 5) - hash) + chr;
+                    hash |= 0; // Convert to 32bit integer
+                }
+                return hash;
+            }
+]]></property>
+    </item>
+</items>
