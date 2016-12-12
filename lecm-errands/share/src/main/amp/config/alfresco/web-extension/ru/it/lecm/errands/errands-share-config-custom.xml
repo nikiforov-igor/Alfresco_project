@@ -1333,17 +1333,8 @@
             <form id="table-structure-expand">
                 <field-visibility>
                     <show id="lecm-errands-ts:coexecutor-report-text" force="true"/>
-                    <show id="lecm-errands-ts:coexecutor-report-connected-document-link-assoc"/>
+                    <show id="lecm-errands-ts:coexecutor-report-connected-document-assoc"/>
                 </field-visibility>
-                <appearance>
-                    <field id="lecm-errands-ts:coexecutor-report-connected-document-link-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-                            <control-param name="formatString">
-                                <![CDATA[Отчет об исполнении: <a href='{lecm-errands-ts:coexecutor-report-connected-document-link-assoc/lecm-links:url}'>{lecm-errands-ts:coexecutor-report-connected-document-link-assoc/cm:name}</a>]]>
-                            </control-param>
-                        </control>
-                    </field>
-                </appearance>
             </form>
             <form>
                 <field-visibility>

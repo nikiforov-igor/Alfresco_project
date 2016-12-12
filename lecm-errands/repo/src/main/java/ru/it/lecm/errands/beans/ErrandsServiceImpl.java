@@ -595,42 +595,6 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return childAssoc.getChildRef();
     }
 
-    @Override
-    public NodeRef getCoexecutorReportLink(NodeRef document, String name, NodeRef linked) {
-        NodeRef linkFolder = getLinksFolderRef(document);
-        SysAdminParams params = serviceRegistry.getSysAdminParams();
-        if(linkFolder == null) {
-            try {
-                linkFolder = createLinksFolderRef(document);
-            } catch (WriteTransactionNeededException ex) {
-                throw new RuntimeException("Can't create links folder", ex);
-            }
-        }
-
-        List<NodeRef> links = getLinks(document);
-        //получаем ссылку
-        NodeRef link = null;
-        for (NodeRef l : links) {
-            String linkName = (String) nodeService.getProperty(l, ContentModel.PROP_NAME);
-            if (linkName.equals(name)) {
-                link = l;
-                break;
-            }
-        }
-        if(link == null) {
-            String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
-            String url = serverUrl + documentService.getDocumentUrl(linked) + "?nodeRef=" + linked.toString();
-            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
-            Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-            properties.put(ContentModel.PROP_NAME, name);
-            properties.put(BaseBean.PROP_BASE_LINK_URL, url);
-            ChildAssociationRef childAssoc = nodeService.createNode(linkFolder, ContentModel.ASSOC_CONTAINS, assocQName, BaseBean.TYPE_BASE_LINK, properties);
-            link = childAssoc.getChildRef();
-        }
-
-        return link;
-    }
-
     public NodeRef getAdditionalDocumentNode(NodeRef errand) {
         return findNodeByAssociationRef(errand, ASSOC_ADDITIONAL_ERRANDS_DOCUMENT, null, BaseBean.ASSOCIATION_TYPE.TARGET);
     }

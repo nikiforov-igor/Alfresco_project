@@ -73,7 +73,6 @@ public interface ErrandsService {
 
     QName ASSOC_ERRANDS_TS_COEXECUTOR = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-assoc");
     QName ASSOC_ERRANDS_TS_ATTACHMENT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-attachment-assoc");
-    QName ASSOC_ERRANDS_TS_CONNECTED_DOCUMENT_LINK = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-connected-document-link-assoc");
     QName ASSOC_ERRANDS_TS_CONNECTED_DOCUMENT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-connected-document-assoc");
 
     QName PROP_ERRANDS_DIC_TITLE_CODE = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-title-code");
@@ -313,15 +312,6 @@ public interface ErrandsService {
      * @return наличие незавершенных дочерних поручений исполнителя
      */
     boolean hasChildNotFinalByExecutor(NodeRef errand);
-
-    /**
-     * Возарщает ссылку на связываемый с отчетом соисполнителя документ
-     * @param document поручение
-     * @param name назавние ссылки
-     * @param linkedRef связываемый документ
-     * @return Возарщает ссылку на связываемый с отчетом соисполнителя документ
-     */
-    NodeRef getCoexecutorReportLink(NodeRef document, String name, NodeRef linkedRef);
 
     enum ModeChoosingExecutors {
         ORGANIZATION,

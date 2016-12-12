@@ -221,7 +221,6 @@
         <property name="policyComponent" ref="policyComponent"/>
         <property name="documentTableService" ref="documentTableService"/>
         <property name="nodeService" ref="nodeService"/>
-        <property name="errandsService" ref="errandsService"/>
         <property name="documentConnectionService" ref="documentConnectionService"/>
     </bean>
     <bean id="errandsCoexecutorReportAttachmentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsCoexecutorReportAttachmentAssociationPolicy"

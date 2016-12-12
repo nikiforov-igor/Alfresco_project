@@ -8,7 +8,6 @@
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
-        <import uri="http://www.it.ru/logicECM/links/1.0" prefix="lecm-links"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/errands/table-structure/1.0" prefix="lecm-errands-ts"/>
@@ -109,17 +108,6 @@
                     </source>
                     <target>
                         <class>cm:content</class>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </target>
-                </association>
-                <association name="lecm-errands-ts:coexecutor-report-connected-document-link-assoc">
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </source>
-                    <target>
-                        <class>lecm-links:link</class>
                         <mandatory>false</mandatory>
                         <many>true</many>
                     </target>

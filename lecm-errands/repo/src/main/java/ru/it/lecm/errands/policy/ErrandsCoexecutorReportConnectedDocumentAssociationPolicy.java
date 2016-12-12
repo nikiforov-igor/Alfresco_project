@@ -30,15 +30,6 @@ public class ErrandsCoexecutorReportConnectedDocumentAssociationPolicy implement
     private DocumentConnectionService documentConnectionService;
     private NodeService nodeService;
     private DocumentTableService documentTableService;
-    private ErrandsService errandsService;
-
-    public ErrandsService getErrandsService() {
-        return errandsService;
-    }
-
-    public void setErrandsService(ErrandsService errandsService) {
-        this.errandsService = errandsService;
-    }
 
     public DocumentTableService getDocumentTableService() {
         return documentTableService;
@@ -77,7 +68,6 @@ public class ErrandsCoexecutorReportConnectedDocumentAssociationPolicy implement
         PropertyCheck.mandatory(this, "documentTableService", documentTableService);
         PropertyCheck.mandatory(this, "documentConnectionService", documentConnectionService);
         PropertyCheck.mandatory(this, "nodeService", nodeService);
-        PropertyCheck.mandatory(this, "errandsService", errandsService);
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
                 ErrandsService.TYPE_ERRANDS_TS_COEXECUTOR_REPORT, ErrandsService.ASSOC_ERRANDS_TS_CONNECTED_DOCUMENT, new JavaBehaviour(this, "onCreateAssociation"));
@@ -94,12 +84,7 @@ public class ErrandsCoexecutorReportConnectedDocumentAssociationPolicy implement
         NodeRef errandNodeRef = documentTableService.getDocumentByTableDataRow(reportNodeRef);
         String connectedDocName = (String) nodeService.getProperty(connectedDoc, ContentModel.PROP_NAME);
 
-
-        NodeRef link = errandsService.getCoexecutorReportLink(errandNodeRef, connectedDocName, connectedDoc);
-        //добавляем ассоциацию
-        nodeService.createAssociation(reportNodeRef, link, ErrandsService.ASSOC_ERRANDS_TS_CONNECTED_DOCUMENT_LINK);
-
-        //создаем связь не было.
+        //создаем связь если не было.
         boolean conExist = false;
         List<NodeRef> connections = documentConnectionService.getConnectionsWithDocument(errandNodeRef, ErrandsService.ERRANDS_COEXECUTOR_REPORT_CONNECTION_TYPE);
         for (NodeRef con : connections) {
@@ -118,39 +103,25 @@ public class ErrandsCoexecutorReportConnectedDocumentAssociationPolicy implement
         NodeRef reportNodeRef = associationRef.getSourceRef();
         NodeRef connectedDoc = associationRef.getTargetRef();
         NodeRef errandNodeRef = documentTableService.getDocumentByTableDataRow(reportNodeRef);
-        String connectedDocName = (String) nodeService.getProperty(connectedDoc, ContentModel.PROP_NAME);
 
-        //получаем ссылку на документ из ассоциации текущего отчета
-        NodeRef currentLink = null;
-        List<AssociationRef> reportLinksAssoc = nodeService.getTargetAssocs(reportNodeRef, ErrandsService.ASSOC_ERRANDS_TS_CONNECTED_DOCUMENT_LINK);
-        for (AssociationRef rlar : reportLinksAssoc) {
-            NodeRef link = rlar.getTargetRef();
-            if (nodeService.getProperty(link, ContentModel.PROP_NAME).equals(connectedDocName)) {
-                currentLink = link;
-                break;
-            }
-        }
-        //проверяем использование ссылки в других отчетах
+        //проверяем использование документа в других отчетах
         NodeRef tableData = nodeService.getParentAssocs(reportNodeRef).get(0).getParentRef();
         List<NodeRef> allReports = documentTableService.getTableDataRows(tableData);
-        boolean linkIsUsed = false;
-        for (NodeRef r : allReports) {
-            if (!r.equals(reportNodeRef)) {
-                List<AssociationRef> rLinksAssoc = nodeService.getTargetAssocs(r, ErrandsService.ASSOC_ERRANDS_TS_CONNECTED_DOCUMENT_LINK);
-                for (AssociationRef rlar : rLinksAssoc) {
-                    NodeRef rl = rlar.getTargetRef();
-                    if (rl.equals(currentLink)) {
-                        linkIsUsed = true;
+        boolean docIsUsed = false;
+        for (NodeRef report : allReports) {
+            if (!report.equals(reportNodeRef)) {
+                List<AssociationRef> rCDAssoc = nodeService.getTargetAssocs(report, ErrandsService.ASSOC_ERRANDS_TS_CONNECTED_DOCUMENT);
+                for (AssociationRef rcdar : rCDAssoc) {
+                    NodeRef rcd = rcdar.getTargetRef();
+                    if (rcd.equals(connectedDoc)) {
+                        docIsUsed = true;
                     }
                 }
             }
 
         }
-        //удаляем ассоциацию
-        nodeService.removeAssociation(reportNodeRef, currentLink, ErrandsService.ASSOC_ERRANDS_TS_CONNECTED_DOCUMENT_LINK);
-        //удаляем  ссылку и связь
-        if (!linkIsUsed) {
-            nodeService.deleteNode(currentLink);
+        //удаляем связь если не нужна
+        if (!docIsUsed) {
             //ищем нужную связь
             List<NodeRef> connections = documentConnectionService.getConnections(errandNodeRef);
             for (NodeRef con : connections) {
