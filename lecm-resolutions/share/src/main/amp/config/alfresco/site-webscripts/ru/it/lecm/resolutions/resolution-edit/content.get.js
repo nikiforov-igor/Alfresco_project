@@ -1,0 +1,1 @@
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/document-edit/content.get.js">

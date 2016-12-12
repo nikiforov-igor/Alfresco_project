@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+    <template-type>ru/it/lecm/documents/document-edit</template-type>
+    <components>
+        <component>
+            <region-id>content</region-id>
+            <url>/lecm/resolutions/edit/content</url>
+        </component>
+        <component>
+            <region-id>not-permission-header</region-id>
+            <url>/lecm/documents/edit/header</url>
+        </component>
+    </components>
+</template-instance>
+
