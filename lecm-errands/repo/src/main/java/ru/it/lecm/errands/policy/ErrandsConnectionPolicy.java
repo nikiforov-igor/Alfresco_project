@@ -127,16 +127,15 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
         //установка ассоциации документа-основания
         List<AssociationRef> baseDocAssocRefs = nodeService.getTargetAssocs(additionalDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
         //если документа-основания нет, то родительский документ  является документом основанием.
+        NodeRef baseDoc = null;
         if (baseDocAssocRefs == null || baseDocAssocRefs.size() == 0) {
-            nodeService.createAssociation(errandDoc, additionalDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
-            nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, regNum);
+            baseDoc = additionalDoc;
         } else {
-            NodeRef baseDoc = baseDocAssocRefs.get(0).getTargetRef();
-            nodeService.createAssociation(errandDoc, baseDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
-            String baseRegNum = (String) nodeService.getProperty(additionalDoc, ErrandsService.PROP_BASE_DOC_NUMBER);
-            nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, baseRegNum);
-
+            baseDoc = baseDocAssocRefs.get(0).getTargetRef();
         }
+        nodeService.createAssociation(errandDoc, baseDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
+        String baseRegNum = (String) nodeService.getProperty(baseDoc, ErrandsService.PROP_BASE_DOC_NUMBER);
+        nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, baseRegNum);
 
         //		TODO: Метод transferRightToBaseDocument в итоге использует метод erransService.getSettingsNode,
 //		который ранее был типа getOrCreate, поэтому здесь надо бы проверить ноду на
