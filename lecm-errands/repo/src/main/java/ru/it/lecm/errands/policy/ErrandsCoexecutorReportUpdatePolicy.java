@@ -21,12 +21,13 @@ import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Created by APanyukov on 09.12.2016.
  */
-public class ErrandsCoexecutorReportUpdatePolicy implements NodeServicePolicies.OnUpdateNodePolicy {
+public class ErrandsCoexecutorReportUpdatePolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy {
 
     final static protected Logger logger = LoggerFactory.getLogger(ErrandsCoexecutorReportUpdatePolicy.class);
 
@@ -113,16 +114,18 @@ public class ErrandsCoexecutorReportUpdatePolicy implements NodeServicePolicies.
         PropertyCheck.mandatory(this, "authenticationService", authenticationService);
         PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
 
-        policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdateNodePolicy.QNAME,
-                ErrandsService.TYPE_ERRANDS_TS_COEXECUTOR_REPORT, new JavaBehaviour(this, "onUpdateNode"));
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+                ErrandsService.TYPE_ERRANDS_TS_COEXECUTOR_REPORT, new JavaBehaviour(this, "onUpdateProperties"));
 
     }
 
     @Override
-    public void onUpdateNode(NodeRef nodeRef) {
+    public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> map, Map<QName, Serializable> map1) {
+        Boolean oldIsRouteReportProperty = (Boolean) map.get(ErrandsService.PROP_ERRANDS_TS_COEXECUTOR_REPORT_IS_ROUTE);
+        Boolean newIsRouteReportProperty = (Boolean) map1.get(ErrandsService.PROP_ERRANDS_TS_COEXECUTOR_REPORT_IS_ROUTE);
+        //если атрибут isRouteReport изменился с false на true
+        if(oldIsRouteReportProperty != null && newIsRouteReportProperty != null && !oldIsRouteReportProperty && newIsRouteReportProperty){
 
-        Boolean isRouteReport = (Boolean) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_TS_COEXECUTOR_REPORT_IS_ROUTE);
-        if (isRouteReport) {
             NodeRef errandNodeRef = documentTableService.getDocumentByTableDataRow(nodeRef);
             //выставляем значения атрибутов
             nodeService.setProperty(nodeRef, ErrandsService.PROP_ERRANDS_TS_COEXECUTOR_REPORT_STATUS, ErrandsService.ERRANDS_TS_COEXECUTOR_REPORT_STATUS.ONCONTROL.toString());
