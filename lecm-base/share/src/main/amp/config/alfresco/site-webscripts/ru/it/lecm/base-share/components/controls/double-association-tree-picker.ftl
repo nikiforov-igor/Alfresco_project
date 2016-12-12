@@ -77,6 +77,35 @@
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 <#assign readonly = false>
 
+<#if params.selectedValueContextProperty??>
+	<#if context.properties[params.selectedValueContextProperty]??>
+		<#assign renderPickerJSSelectedValue = context.properties[params.selectedValueContextProperty]>
+	<#elseif args[params.selectedValueContextProperty]??>
+		<#assign renderPickerJSSelectedValue = args[params.selectedValueContextProperty]>
+	<#elseif context.properties[params.selectedValueContextProperty]??>
+		<#assign renderPickerJSSelectedValue = context.properties[params.selectedValueContextProperty]>
+	</#if>
+</#if>
+
+<#if form.arguments[field.name]?has_content>
+	<#assign renderPickerJSSelectedValue = form.arguments[field.name]/>
+<#elseif form.arguments['readonly_' + field.name]?has_content>
+	<#assign renderPickerJSSelectedValue=form.arguments['readonly_' + field.name]>
+	<#assign readonly = true>
+<#elseif params.selectedItemsFormArgs??>
+	<#assign selectedItemsFormArgs = params.selectedItemsFormArgs?split(",")>
+	<#list selectedItemsFormArgs as selectedItemsFormArg>
+		<#if form.arguments[selectedItemsFormArg]??>
+			<#if !renderPickerJSSelectedValue??>
+				<#assign renderPickerJSSelectedValue = ""/>
+			</#if>
+			<#if (renderPickerJSSelectedValue?length > 0)>
+				<#assign renderPickerJSSelectedValue = renderPickerJSSelectedValue + ","/>
+			</#if>
+			<#assign renderPickerJSSelectedValue = renderPickerJSSelectedValue + form.arguments[selectedItemsFormArg]/>
+		</#if>
+	</#list>
+</#if>
 <#if disabled>
     <div id="${controlId}" class="control association-tree-picker viewmode">
 	    <div class="label-div">
@@ -128,35 +157,6 @@
 <div class="clear"></div>
 
 <script type="text/javascript">
-    <#if params.selectedValueContextProperty??>
-        <#if context.properties[params.selectedValueContextProperty]??>
-            <#assign renderPickerJSSelectedValue = context.properties[params.selectedValueContextProperty]>
-        <#elseif args[params.selectedValueContextProperty]??>
-            <#assign renderPickerJSSelectedValue = args[params.selectedValueContextProperty]>
-        <#elseif context.properties[params.selectedValueContextProperty]??>
-            <#assign renderPickerJSSelectedValue = context.properties[params.selectedValueContextProperty]>
-        </#if>
-    </#if>
-    <#if !(renderPickerJSSelectedValue??) && params.selectedItemsFormArgs??>
-	    <#assign selectedItemsFormArgs = params.selectedItemsFormArgs?split(",")>
-	    <#list selectedItemsFormArgs as selectedItemsFormArg>
-		    <#if form.arguments[selectedItemsFormArg]??>
-		        <#if !renderPickerJSSelectedValue??>
-			        <#assign renderPickerJSSelectedValue = ""/>
-		        </#if>
-			    <#if (renderPickerJSSelectedValue?length > 0)>
-				    <#assign renderPickerJSSelectedValue = renderPickerJSSelectedValue + ","/>
-			    </#if>
-			    <#assign renderPickerJSSelectedValue = renderPickerJSSelectedValue + form.arguments[selectedItemsFormArg]/>
-		    </#if>
-	    </#list>
-    <#elseif form.arguments[field.name]?has_content>
-        <#assign renderPickerJSSelectedValue = form.arguments[field.name]/>
-	<#elseif form.arguments['readonly_' + field.name]?has_content>
-		<#assign renderPickerJSSelectedValue=form.arguments['readonly_' + field.name]>
-		<#assign readonly = true>
-    </#if>
-
 (function() {
 	function init() {
         LogicECM.module.Base.Util.loadScripts([

@@ -61,6 +61,34 @@
 	<#assign checkType = true>
 </#if>
 
+<#assign optionSeparator="|">
+<#assign labelSeparator=":">
+
+<#if field.control.params.selectedValueContextProperty??>
+    <#if context.properties[field.control.params.selectedValueContextProperty]??>
+        <#assign selectedValue = context.properties[field.control.params.selectedValueContextProperty]>
+    <#elseif args[field.control.params.selectedValueContextProperty]??>
+        <#assign selectedValue = args[field.control.params.selectedValueContextProperty]>
+    <#elseif context.properties[field.control.params.selectedValueContextProperty]??>
+        <#assign selectedValue = context.properties[field.control.params.selectedValueContextProperty]>
+    </#if>
+</#if>
+
+<#if selectedValue == "" && params.selectedItemsFormArgs??>
+    <#assign selectedItemsFormArgs = params.selectedItemsFormArgs?split(",")>
+    <#list selectedItemsFormArgs as selectedItemsFormArg>
+        <#if form.arguments[selectedItemsFormArg]??>
+            <#if !selectedValue??>
+                <#assign selectedValue = ""/>
+            </#if>
+            <#if (selectedValue?length > 0)>
+                <#assign selectedValue = selectedValue + ","/>
+            </#if>
+            <#assign selectedValue = selectedValue + form.arguments[selectedItemsFormArg]/>
+        </#if>
+    </#list>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <#if disabled>
@@ -117,32 +145,6 @@
 <div class="clear"></div>
 
 <script type="text/javascript">
-    <#if field.control.params.selectedValueContextProperty??>
-        <#if context.properties[field.control.params.selectedValueContextProperty]??>
-            <#assign selectedValue = context.properties[field.control.params.selectedValueContextProperty]>
-        <#elseif args[field.control.params.selectedValueContextProperty]??>
-            <#assign selectedValue = args[field.control.params.selectedValueContextProperty]>
-        <#elseif context.properties[field.control.params.selectedValueContextProperty]??>
-            <#assign selectedValue = context.properties[field.control.params.selectedValueContextProperty]>
-        </#if>
-    </#if>
-    <#assign optionSeparator="|">
-    <#assign labelSeparator=":">
-    <#if selectedValue == "" && params.selectedItemsFormArgs??>
-        <#assign selectedItemsFormArgs = params.selectedItemsFormArgs?split(",")>
-        <#list selectedItemsFormArgs as selectedItemsFormArg>
-            <#if form.arguments[selectedItemsFormArg]??>
-                <#if !selectedValue??>
-                    <#assign selectedValue = ""/>
-                </#if>
-                <#if (selectedValue?length > 0)>
-                    <#assign selectedValue = selectedValue + ","/>
-                </#if>
-                <#assign selectedValue = selectedValue + form.arguments[selectedItemsFormArg]/>
-            </#if>
-        </#list>
-    </#if>
-
 (function() {
  	function init() {
         LogicECM.module.Base.Util.loadScripts([
