@@ -29,7 +29,7 @@ if (reportRefs && reportRefs.length) {
                         reportAttachments[j].move(category);
                         attachments.push({
                             name: reportAttachments[j].name,
-                            link: "/share/page/" +  documentScript.getViewUrl(reportAttachments[j]) + "?nodeRef=" + reportAttachments[j].nodeRef
+                            link: "/share/page/document-attachment?nodeRef=" + reportAttachments[j].nodeRef
                         });
                     }
                 }
