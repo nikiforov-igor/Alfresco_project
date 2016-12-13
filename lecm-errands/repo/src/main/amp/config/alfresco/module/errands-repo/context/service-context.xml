@@ -70,6 +70,7 @@
                 <value>alfresco/module/${artifactId}/dictionaries/errands-nt-items.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-types.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-types-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-connection-types-items.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -201,6 +202,36 @@
         <property name="businessJournalService" ref="businessJournalService"/>
     </bean>
 
+    <bean id="errandsCoexecutorReportAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsCoexecutorReportAssociationPolicy"
+          init-method="init" parent="logicEcmAssociationPolicy" depends-on="errands.tableStructure.LogicEcmModelsBootstrap" />
+
+    <bean id="errandsCoexecutorReportUpdatePolicy" class="ru.it.lecm.errands.policy.ErrandsCoexecutorReportUpdatePolicy"
+          init-method="init" depends-on="errands.LogicEcmModelsBootstrap,errands.tableStructure.LogicEcmModelsBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="documentTableService" ref="documentTableService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="errandsService" ref="errandsService"/>
+        <property name="notificationsService" ref="notificationsService"/>
+        <property name="businessJournalService" ref="businessJournalService"/>
+        <property name="authenticationService" ref="authenticationService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+    </bean>
+    <bean id="errandsCoexecutorReportConnectedDocumentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsCoexecutorReportConnectedDocumentAssociationPolicy"
+          init-method="init" depends-on="documents.LogicEcmModelsBootstrap,errands.LogicEcmModelsBootstrap,errands.tableStructure.LogicEcmModelsBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="documentTableService" ref="documentTableService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="documentConnectionService" ref="documentConnectionService"/>
+    </bean>
+    <bean id="errandsCoexecutorReportAttachmentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsCoexecutorReportAttachmentAssociationPolicy"
+          init-method="init" depends-on="documents.LogicEcmModelsBootstrap,errands.LogicEcmModelsBootstrap,errands.tableStructure.LogicEcmModelsBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="documentTableService" ref="documentTableService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+    </bean>
+
     <bean id="errands.defaultStatemachine" parent="defaultStatemachines">
         <property name="statemachineName" value="lecm-errands:document" />
         <property name="path" value="alfresco/module/${artifactId}/models/lecm-errands-default-statemacine.xml" />
@@ -239,12 +270,6 @@
                 <props>
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-change-controller.bpmn20.xml</prop>
-                    <prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">${redeploy.process.definitions}</prop>
-                </props>
-                <props>
-                    <prop key="engineId">activiti</prop>
-                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-change-due-date.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
                     <prop key="redeploy">${redeploy.process.definitions}</prop>
                 </props>
@@ -311,6 +336,24 @@
                 <props>
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-change-due-date.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-execute1.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-coexecutor-report1.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-change-executor1.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
                     <prop key="redeploy">${redeploy.process.definitions}</prop>
                 </props>

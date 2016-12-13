@@ -614,11 +614,6 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 		return null;
 	}
 
-    /**
-     * Проверяет наличие незавершенных дочерних поручений исполнителя
-     * @param errand NodeRef поручения
-     * @return наличие незавершенных дочерних поручений исполнителя
-     */
     @Override
     public boolean hasChildNotFinalByExecutor(NodeRef errand) {
         if (nodeService.exists(errand)) {

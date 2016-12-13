@@ -4,7 +4,7 @@
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.it.ru/logicECM/errands/workflow/changeExecutor_1/1.0">
     <process id="errandsChangeExecutor_1" name="Сменить исполнителя(1)">
-        <startEvent id="startChangeExecutor" name="Start" activiti:formKey="lecmErrandWf:changeExecutor"></startEvent>
+        <startEvent id="startChangeExecutor" name="Start" activiti:formKey="lecmErrandWf:changeExecutor_1"></startEvent>
         <endEvent id="endChangeExecutor" name="End"></endEvent>
         <scriptTask id="changeExecutor" name="Change Executor" scriptFormat="javascript">
             <extensionElements>
@@ -14,20 +14,20 @@
                             var document = bpm_package.children[0];
                             if (document) {
                                 var executor = null;
-                                var currentUser =  orgstructure.getCurrentEmployee();
+                                var currentUser = orgstructure.getCurrentEmployee();
                                 var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
                                 if (executorAssoc && executorAssoc.length == 1) {
                                     executor = executorAssoc[0];
                                 }
-                                if (executor && lecmErrandWf_changeExecutorNewExecutor && executor != lecmErrandWf_changeExecutorNewExecutor) {
+                                if (executor && lecmErrandWf_changeExecutor_1NewExecutor && executor != lecmErrandWf_changeExecutor_1NewExecutor) {
 
                                     document.removeAssociation(executor, "lecm-errands:executor-assoc");
-                                    document.createAssociation(lecmErrandWf_changeExecutorNewExecutor, "lecm-errands:executor-assoc");
+                                    document.createAssociation(lecmErrandWf_changeExecutor_1NewExecutor, "lecm-errands:executor-assoc");
                                     documentMembers.addMember(document, executor, "ERRANDS_READER");
                                     lecmPermission.revokeDynamicRole(document, executor, "ERRANDS_EXECUTOR");
 
                                     notifications.sendNotificationFromCurrentUser({
-                                        recipients: [lecmErrandWf_changeExecutorNewExecutor],
+                                        recipients: [lecmErrandWf_changeExecutor_1NewExecutor],
                                         templateCode: 'ERRANDS_CHANGE_EXECUTOR_NEW',
                                         templateConfig: {
                                             mainObject: document,
@@ -38,19 +38,19 @@
                                         recipients: [executor],
                                         templateCode: 'ERRANDS_CHANGE_EXECUTOR_OLD',
                                         templateConfig: {
-                                        mainObject: document,
+                                            mainObject: document,
                                             eventExecutor: currentUser,
-                                            reason: lecmErrandWf_changeExecutorReason
+                                            reason: lecmErrandWf_changeExecutor_1Reason
                                         }
                                     });
                                     var recipients = [];
                                     var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
                                     var coexecutorsAssoc = document.assocs["lecm-errands:coexecutors-assoc"];
-                                    if (controllerAssoc && controllerAssoc.length == 1){
+                                    if (controllerAssoc && controllerAssoc.length == 1) {
                                         recipients.push(controllerAssoc[0]);
                                     }
-                                    if (coexecutorsAssoc && coexecutorsAssoc.length){
-                                        for(var i = 0; i < coexecutorsAssoc.length; i++){
+                                    if (coexecutorsAssoc && coexecutorsAssoc.length) {
+                                        for (var i = 0; i < coexecutorsAssoc.length; i++) {
                                             recipients.push(coexecutorsAssoc[i]);
                                         }
                                     }
@@ -58,16 +58,16 @@
                                         recipients: recipients,
                                         templateCode: 'ERRANDS_CHANGE_EXECUTOR',
                                         templateConfig: {
-                                        mainObject: document,
+                                            mainObject: document,
                                             eventExecutor: currentUser,
-                                            reason: lecmErrandWf_changeExecutorReason
+                                            reason: lecmErrandWf_changeExecutor_1Reason
                                         }
                                     });
 
                                     var logObjects = [];
-                                    logObjects.push("" + lecmErrandWf_changeExecutorNewExecutor.nodeRef);
+                                    logObjects.push("" + lecmErrandWf_changeExecutor_1NewExecutor.nodeRef);
                                     var logText = "#initiator ";
-                                    logText += documentScript.wrapperTitle("изменил", lecmErrandWf_changeExecutorReason);
+                                    logText += documentScript.wrapperTitle("изменил", lecmErrandWf_changeExecutor_1Reason);
                                     logText += " исполнителя поручения #mainobject на #object1";
                                     businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_EXECUTOR", logText, logObjects);
 
