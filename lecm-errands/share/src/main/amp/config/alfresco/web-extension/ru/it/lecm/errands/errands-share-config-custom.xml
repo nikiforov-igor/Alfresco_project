@@ -1324,6 +1324,7 @@
                     <show id="lecm-errands-ts:coexecutor-report-status"/>
                     <show id="lecm-errands-ts:coexecutor-report-route-date"/>
                     <show id="lecm-errands-ts:coexecutor-report-attachment-assoc"/>
+                    <show id="lecm-errands-ts:coexecutor-report-is-transferred"/>
                 </field-visibility>
             </form>
         </forms>
