@@ -17,7 +17,7 @@
 
 <#assign readonly = false>
 <#assign defaultValue=field.value>
-<#if form.mode == "create" && defaultValue?string == "">
+<#if form.mode == "create">
     <#if form.arguments[field.name]?has_content>
         <#assign defaultValue=form.arguments[field.name]>
 	<#elseif form.arguments['readonly_' + field.name]?has_content>

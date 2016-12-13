@@ -215,7 +215,7 @@ LogicECM.module = LogicECM.module || {};
 
 		onRemoveSelectedItem: function (layer, args) {
 			var nodeData, id, el, value, idx, added=[], removed=[], item, index;
-			if (Alfresco.util.hasEventInterest(this, args)) {
+			if (Alfresco.util.hasEventInterest(this, args) && !this.options.disabled && !this.readonly) {
 				nodeData = args[1].removed;
 				id = this.id + '-' + nodeData.nodeRef.replace(/:|\//g, '_');
 				Selector.query('[id="' + id + '"]', this.widgets.selected).forEach(function (el) {

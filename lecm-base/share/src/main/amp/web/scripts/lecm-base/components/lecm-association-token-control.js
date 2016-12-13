@@ -242,16 +242,16 @@ LogicECM.module = LogicECM.module || {};
 				this.options.pickerId = this.options.prefixPickerId + '-picker';
 
 				if (this.widgets.pickerButton != null) {
-					this.widgets.pickerButton.set('disabled', this.options.disabled);
+					this.widgets.pickerButton.set('disabled', this.options.disabled || this.readonly);
 				}
 
 				var input = Dom.get(this.controlId + "-autocomplete-input");
 				if (input != null) {
-					input.disabled = this.options.disabled || this.options.lazyLoading;
+					input.disabled = this.options.disabled || this.options.lazyLoading || this.readonly;
 				}
 
 				// Create button if control is enabled
-				if(!this.options.disabled)
+				if(!this.options.disabled && !this.readonly)
 				{
 					if (this.widgets.pickerButton == null) {
 						var buttonOptions = {
