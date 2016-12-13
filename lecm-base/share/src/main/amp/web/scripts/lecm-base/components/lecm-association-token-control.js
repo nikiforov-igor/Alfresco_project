@@ -242,16 +242,16 @@ LogicECM.module = LogicECM.module || {};
 				this.options.pickerId = this.options.prefixPickerId + '-picker';
 
 				if (this.widgets.pickerButton != null) {
-					this.widgets.pickerButton.set('disabled', this.options.disabled);
+					this.widgets.pickerButton.set('disabled', this.options.disabled || this.readonly);
 				}
 
 				var input = Dom.get(this.controlId + "-autocomplete-input");
 				if (input != null) {
-					input.disabled = this.options.disabled || this.options.lazyLoading;
+					input.disabled = this.options.disabled || this.options.lazyLoading || this.readonly;
 				}
 
 				// Create button if control is enabled
-				if(!this.options.disabled)
+				if(!this.options.disabled && !this.readonly)
 				{
 					if (this.widgets.pickerButton == null) {
 						var buttonOptions = {
@@ -2359,11 +2359,11 @@ LogicECM.module = LogicECM.module || {};
 				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
 					this.readonly = args[1].readonly;
 					if (this.widgets.pickerButton) {
-						this.widgets.pickerButton.set('disabled', args[1].readonly);
+						this.widgets.pickerButton.set('disabled', args[1].readonly || this.tempDisabled || this.options.disabled);
 					}
 					autocompleteInput = Dom.get(this.options.controlId + '-autocomplete-input');
 					if (autocompleteInput) {
-						autocompleteInput.disabled = args[1].readonly;
+						autocompleteInput.disabled = args[1].readonly || this.tempDisabled || this.options.disabled;
 					}
 					if (!args[1].readonly) {
 						if (this.widgets.dialog) {
@@ -2402,7 +2402,7 @@ LogicECM.module = LogicECM.module || {};
 				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
 					if (!this.options.disabled) {
 						if (this.widgets.pickerButton) {
-							this.widgets.pickerButton.set('disabled', false);
+							this.widgets.pickerButton.set('disabled', this.readonly);
 
 							if (this.widgets.dialog) {
 								this.widgets.dialog.hide();
@@ -2410,11 +2410,11 @@ LogicECM.module = LogicECM.module || {};
 						}
 						var input = Dom.get(this.id);
 						if (input) {
-							input.disabled = false;
+							input.disabled = this.readonly;
 						}
 						var autocomplete = Dom.get(this.options.controlId + "-autocomplete-input");
 						if (autocomplete) {
-							autocomplete.disabled = false;
+							autocomplete.disabled = this.readonly;
 						}
 						var added = Dom.get(this.options.controlId + "-added");
 						if (added) {
