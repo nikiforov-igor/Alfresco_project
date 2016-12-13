@@ -41,6 +41,7 @@
                 <value>alfresco/module/${artifactId}/actions/create-resolution-from-incoming.xml</value>
                 <value>alfresco/module/${artifactId}/actions/create-resolution-from-internal.xml</value>
                 <value>alfresco/module/${artifactId}/actions/create-resolution-from-ord.xml</value>
+                <value>alfresco/module/${artifactId}/actions/create-resolution-from-errand.xml</value>
             </list>
         </property>
     </bean>

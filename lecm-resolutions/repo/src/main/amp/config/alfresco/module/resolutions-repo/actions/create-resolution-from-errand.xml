@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items updateMode="CreateOrUpdate">
-    <item name="cm:Создание резолюции из внутреннего" type="lecm-group-actions:script-action">
-        <property name="cm:name"><![CDATA[Создание резолюции из внутреннего]]></property>
+    <item name="cm:Создание резолюции из Поручения" type="lecm-group-actions:script-action">
+        <property name="cm:name"><![CDATA[Создание резолюции из Поручения]]></property>
         <property name="cm:title"><![CDATA[Создать резолюцию]]></property>
-        <property name="lecm-group-actions:statuses"><![CDATA[Зарегистрирован]]></property>
-        <property name="lecm-group-actions:type"><![CDATA[[lecm-internal:document]]]></property>
+        <property name="lecm-group-actions:statuses"><![CDATA[Ожидает исполнения]]></property>
+        <property name="lecm-group-actions:type"><![CDATA[[lecm-errands:document]]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="lecm-group-actions:expression"><![CDATA[user.currentUser().hasBusinessRole('RESOLUTION_CREATORS') OR user.currentUser().hasBusinessRole('RVZ')]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
@@ -15,16 +15,13 @@
 
                 // Основание
                 params += "&assoc_lecm-resolutions_base-assoc=" + document.nodeRef.toString();
-                // Документ-основание
-                params += "&assoc_lecm-resolutions_base-document-assoc=" + document.nodeRef.toString();
 
-                // Срок исполнения
-                value = document.properties["lecm-internal:response-date"];
+                // Документ-основание
+                value = document.properties["lecm-errands:base-assoc-ref"];
                 if (value != null) {
-                    params += "&prop_lecm-resolutions_base-doc-execution-date-attr-name=lecm-internal:response-date";
-                    params += "&prop_lecm-resolutions_limitation-date-radio=DATE";
-                    params += "&prop_lecm-resolutions_limitation-date=" + utils.toISO8601(value);
+                    params += "&assoc_lecm-resolutions_base-document-assoc=" + value;
                 }
+
                 // Тематика
                 value = document.properties["lecm-document:subject-assoc-ref"];
                 if (value != null) {
@@ -44,6 +41,17 @@
                     hash |= 0; // Convert to 32bit integer
                 }
                 return hash;
+            }
+
+            function createAssocValue(assocs) {
+                var result = "";
+                if (assocs != null && assocs.length > 0) {
+                    for each (var assoc in assocs) {
+                        result += assoc.nodeRef.toString() + ",";
+                    }
+                    result = result.substring(0, result.length - 1);
+                }
+                return result;
             }
 ]]></property>
     </item>
