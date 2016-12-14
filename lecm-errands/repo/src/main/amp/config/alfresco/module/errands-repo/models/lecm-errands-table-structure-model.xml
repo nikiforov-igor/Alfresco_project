@@ -86,6 +86,11 @@
                         <tokenised>false</tokenised>
                     </index>
                 </property>
+                <!-- отчет соиспонителя перенесен -->
+                <property name="lecm-errands-ts:coexecutor-report-is-transferred">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
             </properties>
             <associations>
 	            <!--Соисполнитель-->

@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Перенести отчёты соисполнителей</shortname>
+    <description>Перенести отчёты соисполнителей</description>
+    <url>/lecm/errands/coexecutorReport/transfer</url>
+    <authentication>user</authentication>
+    <transaction>required</transaction>
+    <format default="json"/>
+</webscript>
