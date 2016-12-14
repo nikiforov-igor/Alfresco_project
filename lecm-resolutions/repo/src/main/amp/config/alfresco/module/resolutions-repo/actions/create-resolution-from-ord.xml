@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items updateMode="CreateOrUpdate">
-    <item name="cm:Создание резолюции из входящего" type="lecm-group-actions:script-action">
-        <property name="cm:name"><![CDATA[Создание резолюции из входящего]]></property>
+    <item name="cm:Создание резолюции из ОРД" type="lecm-group-actions:script-action">
+        <property name="cm:name"><![CDATA[Создание резолюции из ОРД]]></property>
         <property name="cm:title"><![CDATA[Создать резолюцию]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[Зарегистрирован]]></property>
-        <property name="lecm-group-actions:type"><![CDATA[[lecm-incoming:document]]]></property>
+        <property name="lecm-group-actions:type"><![CDATA[[lecm-ord:document]]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="lecm-group-actions:expression"><![CDATA[user.currentUser().hasBusinessRole('RESOLUTION_CREATORS') OR user.currentUser().hasBusinessRole('RVZ')]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
@@ -24,11 +24,6 @@
                     params += "&prop_lecm-resolutions_base-doc-execution-date-attr-name=lecm-eds-document:execution-date";
                     params += "&prop_lecm-resolutions_limitation-date-radio=DATE";
                     params += "&prop_lecm-resolutions_limitation-date=" + utils.toISO8601(value);
-                }
-                // Контроль
-                value = document.properties["lecm-document-aspects:is-on-control"];
-                if (value) {
-                    params += "&prop_lecm-resolutions_control=" + value;
                 }
                 // Тематика
                 value = document.properties["lecm-document:subject-assoc-ref"];
