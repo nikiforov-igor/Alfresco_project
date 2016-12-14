@@ -342,7 +342,7 @@ LogicECM.errands = LogicECM.errands || {};
         },
         onActionTransferCoexecutorReport: function (me, asset, owner, actionsConfig, confirmFunction) {
             var nodeRef = arguments[0].nodeRef;
-            if (nodeRef != null) {
+            if (nodeRef) {
                 doReportsTransfer([nodeRef]);
             }
         },
