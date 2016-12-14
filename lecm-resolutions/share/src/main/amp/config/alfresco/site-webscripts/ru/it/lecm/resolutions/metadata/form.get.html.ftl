@@ -57,7 +57,7 @@
 <div class="metadata-form" id="${id}_metadata">
     <#if hasStatemachine && (mayAdd!false)>
     <div class="lecm-dashlet-actions">
-        <a id="${id}-action-edit" href="${url.context}/page/resolution-edit?nodeRef=${nodeRef}" class="edit metadata-edit" title="${msg("dashlet.edit.tooltip")}"></a>
+        <a id="${id}-action-edit" href="${url.context}/page/resolution-edit?nodeRef=${nodeRef}&formId=editForm" class="edit metadata-edit" title="${msg("dashlet.edit.tooltip")}"></a>
         <a id="${id}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
     </div>
     </#if>

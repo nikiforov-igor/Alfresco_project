@@ -1,0 +1,18 @@
+.errands-limitation-date-set.view .errands-limitation-date-set-date,
+.errands-limitation-date-set.view .errands-limitation-date-set-limitless {
+    width: calc(100% - 213px);
+}
+
+.errands-limitation-date-set.view .errands-limitation-date-set-limitless {
+    margin-top: 10px;
+}
+
+.errands-limitation-date-set.view  .errands-limitation-date-set-radio .control input {
+    margin-bottom: 18px;
+}
+
+.metadata-form .errands-limitation-date-set.view .errands-limitation-date-set-radio .control.viewmode .value-div {
+    background-color: inherit;
+    border: inherit;
+    color: inherit;
+}

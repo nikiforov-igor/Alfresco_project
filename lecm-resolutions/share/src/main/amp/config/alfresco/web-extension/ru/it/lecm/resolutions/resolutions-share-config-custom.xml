@@ -292,6 +292,49 @@
             <form>
                 <field-visibility>
                     <show id="lecm-resolutions:base-document-assoc"/>
+                    <show id="lecm-resolutions:base-assoc"/>
+
+                    <show id="lecm-resolutions:control"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-resolutions:author-assoc"/>
+                    <show id="lecm-document:author-assoc"/>
+                    <show id="lecm-resolutions:controller-assoc"/>
+
+                    <show id="lecm-resolutions:limitation-date-radio"/>
+                    <show id="resolutions-limitless" force="true"/>
+                    <show id="lecm-resolutions:limitation-date"/>
+                </field-visibility>
+                <appearance>
+                    <set id="limitation-date" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-view-limitation-date-set.ftl"/>
+
+                    <field id="lecm-resolutions:base-document-assoc" read-only="true">
+                        <control>
+                            <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-resolutions:base-assoc" read-only="true">
+                        <control>
+                            <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-resolutions:author-assoc" label-id="label.resolution.creator"/>
+
+                    <field id="lecm-resolutions:limitation-date-radio" set="limitation-date">
+                        <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
+                            <control-param name="options">DATE,LIMITLESS</control-param>
+                        </control>
+                    </field>
+                    <field id="resolutions-limitless" set="limitation-date">
+                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                            <control-param name="textCode">label.errand.limitless</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-resolutions:limitation-date" set="limitation-date"  mandatory="true"/>
+                </appearance>
+            </form>
+            <form id="editForm">
+                <field-visibility>
+                    <show id="lecm-resolutions:base-document-assoc"/>
 
                     <show id="lecm-resolutions:control"/>
                     <show id="lecm-document:subject-assoc"/>
