@@ -200,6 +200,43 @@ LogicECM.errands = LogicECM.errands || {};
                 datagrid.search.performSearch(datagridMeta);
             });
 
+            //получаем кнопку переноса отчетов
+            var coexecutorsReportElementId = Dom.get(this.id).parentElement.parentElement.parentElement.id;
+            var formTemplateString = coexecutorsReportElementId.substring(0, coexecutorsReportElementId.indexOf("-coexecutors-reports", 0));
+            var transferSelectedReportsButton = Dom.get(formTemplateString + "-exec-report-transfer-coexecutors-reports");
+            //скрываем кнопку переноса отчетов если поручение в неподходящих статусах.
+            var isStatusOK = "На исполнении" == datagrid.options.currentDocumentStatus || "На доработке" == datagrid.options.currentDocumentStatus;
+            if (!isStatusOK) {
+                YAHOO.util.Dom.addStyle(transferSelectedReportsButton, "display", "none");
+            }
+
+            YAHOO.util.Event.on(transferSelectedReportsButton, "click", function () {
+                var selectedRows = this.getSelectedItems();
+                if (selectedRows && selectedRows.length) {
+                    //проверка на статусы выбранных отчетов
+                    var allItemsOk = true;
+                    var i, reportsRefs = [];
+                    for (i = 0; i < selectedRows.length; i++) {
+                        var reportStatus = selectedRows[i].itemData["prop_lecm-errands-ts_coexecutor-report-status"];
+                        var isReportTransferred = selectedRows[i].itemData["prop_lecm-errands-ts_coexecutor-report-is-transferred"];
+                        if (reportStatus.value != "ACCEPT" || isReportTransferred.value) {
+                            Alfresco.util.PopupManager.displayMessage({
+                                text: Alfresco.util.message("lecm.errands.coexecutors.reports.msg.wrong.report")
+                            });
+                            allItemsOk = false;
+                            break;
+                        } else {
+                            reportsRefs.push(selectedRows[i].nodeRef);
+                        }
+                    }
+                    //если все очтеты в статусе Принят - переносим
+                    if (allItemsOk) {
+                        this.doReportsTransfer(reportsRefs);
+                    }
+                }
+
+            }, datagrid, true);
+
             this.datagrid = datagrid;
         },
 
@@ -306,37 +343,42 @@ LogicECM.errands = LogicECM.errands || {};
         onActionTransferCoexecutorReport: function (me, asset, owner, actionsConfig, confirmFunction) {
             var nodeRef = arguments[0].nodeRef;
             if (nodeRef) {
-                Alfresco.util.Ajax.jsonRequest(
-                    {
-                        method: Alfresco.util.Ajax.POST,
-                        url: Alfresco.constants.PROXY_URI + "lecm/errands/coexecutorReport/transfer",
-                        dataObj: [nodeRef],
-                        successCallback: {
-                            fn: function (response) {
-                                var me = response.config.scope;
-                                if (response.json.success) {
+                doReportsTransfer([nodeRef]);
+            }
+        },
+        doReportsTransfer: function (reportsRefs) {
+            Alfresco.util.Ajax.jsonRequest(
+                {
+                    method: Alfresco.util.Ajax.POST,
+                    url: Alfresco.constants.PROXY_URI + "lecm/errands/coexecutorReport/transfer",
+                    dataObj: reportsRefs,
+                    successCallback: {
+                        fn: function (response) {
+                            var me = response.config.scope;
+                            if (response.json.success) {
+                                reportsRefs.forEach(function (nodeRef) {
                                     me._itemUpdate(nodeRef);
-                                    me.updateExecutorReport(response.json.data);
-                                } else {
-                                    Alfresco.util.PopupManager.displayMessage(
-                                        {
-                                            text: me.msg("message.details.failure")
-                                        });
-                                }
-                            }
-                        },
-                        failureCallback: {
-                            fn: function (response) {
-                                var me = response.config.scope;
+                                });
+                                me.updateExecutorReport(response.json.data);
+                            } else {
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
                                         text: me.msg("message.details.failure")
                                     });
                             }
-                        },
-                        scope: this
-                    });
-            }
+                        }
+                    },
+                    failureCallback: {
+                        fn: function (response) {
+                            var me = response.config.scope;
+                            Alfresco.util.PopupManager.displayMessage(
+                                {
+                                    text: me.msg("message.details.failure")
+                                });
+                        }
+                    },
+                    scope: this
+                });
         },
         //обновление форм отчета исполнителя
         updateExecutorReport: function (data) {
