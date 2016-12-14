@@ -57,7 +57,7 @@
 
                     <field id="view-base-doc" set="start">
                         <control template="/ru/it/lecm/resolutions/controls/resolution-base-doc-control.ftl">
-                            <control-param name="documentArgName">assoc_lecm-resolutions_base-assoc</control-param>
+                            <control-param name="documentArgName">assoc_lecm-resolutions_base-document-assoc</control-param>
                             <control-param name="formatString">
                                 <![CDATA[На основании документа <a target='_blank' href='/share/page/document?nodeRef={nodeRef}'>{lecm-document:present-string}</a>]]>
                             </control-param>
