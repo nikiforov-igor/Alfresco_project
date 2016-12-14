@@ -8,10 +8,10 @@ model.success = false;
 if (reportRefs && reportRefs.length) {
     for (var i = 0; i < reportRefs.length; i++) {
         var report = search.findNode(reportRefs[i]);
-        if (report != null && report.properties["lecm-errands-ts:coexecutor-report-status"] == "ACCEPT" && !report.properties["lecm-errands-ts:coexecutor-report-is-transferred"]) {
+        if (report && report.properties["lecm-errands-ts:coexecutor-report-status"] == "ACCEPT" && !report.properties["lecm-errands-ts:coexecutor-report-is-transferred"]) {
             var document = documentTables.getDocumentByTableDataRow(report);
             var currentEmployee = orgstructure.getCurrentEmployee();
-            if (document != null && lecmPermission.hasEmployeeDynamicRole(document, currentEmployee, "ERRANDS_EXECUTOR")) {
+            if (document && lecmPermission.hasEmployeeDynamicRole(document, currentEmployee, "ERRANDS_EXECUTOR")) {
                 var errandExecutor = document.assocs["lecm-errands:executor-assoc"][0];
                 var errandExecutorName = errandExecutor.properties["lecm-orgstr:employee-short-name"];
                 var reportCoexecutor = report.assocs["lecm-errands-ts:coexecutor-assoc"][0];

@@ -75,23 +75,24 @@ LogicECM.errands = LogicECM.errands || {};
                             }
                             var currentUser;
                             Alfresco.util.Ajax.jsonGet({
-                                url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getCurrentEmployee",
+                                url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getCurrentEmployee",
                                 successCallback: {
                                     fn: function (response) {
                                         var me = response.config.scope;
                                         if (response && response.json.nodeRef) {
                                             currentUser = response.json.nodeRef;
                                             var currentDocumentStatus;
-                                            Alfresco.util.Ajax.jsonGet({
-                                                url: Alfresco.constants.PROXY_URI + "/lecm/errands/api/getDocumentCurrentStatus",
+                                            Alfresco.util.Ajax.jsonPost({
+                                                url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                                                 dataObj: {
-                                                    "nodeRef": me.options.documentNodeRef
+                                                    nodeRef: me.options.documentNodeRef,
+                                                    substituteString: "{lecm-statemachine:status}"
                                                 },
                                                 successCallback: {
                                                     fn: function (response) {
                                                         var me = response.config.scope;
-                                                        if (response && response.json.status) {
-                                                            currentDocumentStatus = response.json.status;
+                                                        if (response && response.json.formatString) {
+                                                            currentDocumentStatus = response.json.formatString;
                                                             me.realCreateDatagrid(actions, currentUser, currentDocumentStatus);
                                                         }
                                                     }
@@ -211,7 +212,7 @@ LogicECM.errands = LogicECM.errands || {};
             var status = rowData.itemData["prop_lecm-errands-ts_coexecutor-report-status"];
             var isTransferred = rowData.itemData["prop_lecm-errands-ts_coexecutor-report-is-transferred"];
             var isStatusOK = "На исполнении" == this.options.currentDocumentStatus || "На доработке" == this.options.currentDocumentStatus;
-            return status != null && status.value == "ACCEPT" && !isTransferred.value && isStatusOK;
+            return status && status.value == "ACCEPT" && !isTransferred.value && isStatusOK;
         },
         editActionEvaluator: function (rowData) {
             var status = rowData.itemData["prop_lecm-errands-ts_coexecutor-report-status"];
@@ -304,7 +305,7 @@ LogicECM.errands = LogicECM.errands || {};
         },
         onActionTransferCoexecutorReport: function (me, asset, owner, actionsConfig, confirmFunction) {
             var nodeRef = arguments[0].nodeRef;
-            if (nodeRef != null) {
+            if (nodeRef) {
                 Alfresco.util.Ajax.jsonRequest(
                     {
                         method: Alfresco.util.Ajax.POST,
