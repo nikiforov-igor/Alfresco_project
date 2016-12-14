@@ -375,6 +375,7 @@
     <bean id="errandsEveryDayStatusExecutor" class="ru.it.lecm.errands.shedule.EveryDayStatusExecutor" parent="action-executer">
         <property name="ignoreLock" value="false"/>
         <property name="notificationsService" ref="notificationsService"/>
+        <property name="businessJournalService" ref="businessJournalService"/>
         <property name="nodeService" ref="nodeService"/>
     <property name="publicAction" value="false" />
     </bean>
