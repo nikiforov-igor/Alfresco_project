@@ -5,7 +5,7 @@ function getReports(type) {
     var result = remote.connect("alfresco").get(stringUtils.urlEncodeComponent(url));
     if (result.status == 200) {
         var json = jsonUtils.toObject(result);
-        var reportsList = json.list.toArray();
+        var reportsList = json && json.list || [];
         for (var index in reportsList) {
             reports.push(reportsList[index]);
         }
@@ -24,7 +24,7 @@ function main() {
         if (metadata && (metadata.type)) {
             model.documentType = metadata.type;
 
-            //model.reportsDescriptors = getReports(metadata.type);
+            model.reportsDescriptors = getReports(metadata.type);
         }
     }
 }
