@@ -179,9 +179,7 @@ public class EveryDayNotificationShedule extends AbstractScheduledAction {
         statuses.add("!Черновик");
         statuses.add("!Исполнено");
 
-        filters = "@lecm\\-errands\\:is\\-expired:\"false\""; // не просроченно
-
-        List<NodeRef> errandsDocuments = documentService.getDocumentsByFilter(types, paths, statuses, filters, null);
+        List<NodeRef> errandsDocuments = documentService.getDocumentsByFilter(types, paths, statuses, null, null);
 
         // в списке подписок у которых текущая дата меньше либо равна дате исполнения
         List<NodeRef> appropErrands = new ArrayList<NodeRef>();
