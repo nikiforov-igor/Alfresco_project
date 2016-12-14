@@ -5,7 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<bean parent="spacesStoreImporter" abstract="true">
+	<bean parent="spacesStoreImporter">
 		<property name="useExistingStore" value="true"/>
 		<property name="bootstrapViews">
 			<list>
