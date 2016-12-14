@@ -1,23 +1,24 @@
 <#assign isTrue=false>
 <#assign readonly = false>
-<#assign defaultValue="">
-<#if field.control.params.defaultValue?has_content>
-    <#assign defaultValue=false>
-    <#if field.control.params.defaultValue?is_boolean>
-		<#assign defaultValue=field.control.params.defaultValue>
-	<#elseif field.control.params.defaultValue?is_string && field.control.params.defaultValue == "true">
-		<#assign defaultValue=true>
-	</#if>
-</#if>
+<#assign defaultValue = "">
 <#if form.arguments[field.name]?has_content>
-    <#assign defaultValue=false>
-    <#if form.arguments[field.name]?is_boolean>
+	<#if form.arguments[field.name]?is_boolean>
 		<#assign defaultValue=form.arguments[field.name]>
-	<#elseif form.arguments[field.name]?is_string && form.arguments[field.name] == "true">
-		<#assign defaultValue=true>
-	<#elseif form.arguments['readonly_' + field.name]?has_content && form.arguments['readonly_' + field.name] == "true">
-		<#assign defaultValue=true>
-		<#assign readonly=true>
+	<#elseif form.arguments[field.name]?is_string>
+		<#assign defaultValue = (form.arguments[field.name] == "true")>
+	</#if>
+<#elseif form.arguments['readonly_' + field.name]?has_content>
+	<#assign readonly=true>
+	<#if form.arguments['readonly_' + field.name]?is_boolean>
+		<#assign defaultValue=form.arguments['readonly_' + field.name]>
+	<#elseif form.arguments['readonly_' + field.name]?is_string>
+		<#assign defaultValue = (form.arguments['readonly_' + field.name] == "true")>
+	</#if>
+<#elseif field.control.params.defaultValue?has_content>
+	<#if field.control.params.defaultValue?is_boolean>
+		<#assign defaultValue=field.control.params.defaultValue>
+	<#elseif field.control.params.defaultValue?is_string>
+		<#assign defaultValue = (field.control.params.defaultValue == "true")>
 	</#if>
 </#if>
 

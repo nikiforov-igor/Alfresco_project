@@ -2531,3 +2531,17 @@ div#lightbox {
     border: 1px solid #d2d2d2;
 }
 /* Tabs colors : end */
+
+.yui-skin-lecmTheme .dnd-uploader-with-preview .label-div {
+	padding-right: 12px;
+}
+.yui-skin-lecmTheme .dnd-uploader-with-preview .container {
+	border: 1px solid #cccccc;
+	margin: 2px;
+	padding: 0 2px 0 2px;
+	box-shadow: 0.33px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.yui-skin-lecmTheme .dnd-uploader-with-preview .buttons-div {
+	margin-top: 10px;
+}

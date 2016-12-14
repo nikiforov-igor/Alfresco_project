@@ -566,7 +566,7 @@ LogicECM.module = LogicECM.module || {};
 					selectInput = Dom.get(this.selectItemId);
 					if (selectInput) {
 						fn = args[1].readonly ? selectInput.setAttribute : selectInput.removeAttribute;
-						fn.call(selectInput, "readonly", "");
+						fn.call(selectInput, "disabled", "");
 					}
 					if (!args[1].readonly) {
 						addedInput = Dom.get(this.addedItemId);
