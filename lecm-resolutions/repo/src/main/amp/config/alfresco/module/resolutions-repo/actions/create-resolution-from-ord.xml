@@ -10,7 +10,7 @@
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
         <property name="lecm-group-actions:script"><![CDATA[
-            if (document != null) {
+            if (document) {
                 var params = 'documentType=lecm-resolutions:document';
 
                 // Основание
@@ -20,14 +20,14 @@
 
                 // Срок исполнения
                 value = document.properties["lecm-eds-document:execution-date"];
-                if (value != null) {
+                if (value) {
                     params += "&prop_lecm-resolutions_base-doc-execution-date-attr-name=lecm-eds-document:execution-date";
                     params += "&prop_lecm-resolutions_limitation-date-radio=DATE";
                     params += "&prop_lecm-resolutions_limitation-date=" + utils.toISO8601(value);
                 }
                 // Тематика
                 value = document.properties["lecm-document:subject-assoc-ref"];
-                if (value != null) {
+                if (value) {
                     params += "&assoc_lecm-document_subject-assoc=" + value;
                 }
 

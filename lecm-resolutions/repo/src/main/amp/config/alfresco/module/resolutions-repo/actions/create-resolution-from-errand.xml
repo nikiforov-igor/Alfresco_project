@@ -10,7 +10,7 @@
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
         <property name="lecm-group-actions:script"><![CDATA[
-            if (document != null) {
+            if (document) {
                 var params = 'documentType=lecm-resolutions:document';
 
                 // Основание
@@ -18,13 +18,13 @@
 
                 // Документ-основание
                 value = document.properties["lecm-errands:base-assoc-ref"];
-                if (value != null) {
+                if (value) {
                     params += "&assoc_lecm-resolutions_base-document-assoc=" + value;
                 }
 
                 // Тематика
                 value = document.properties["lecm-document:subject-assoc-ref"];
-                if (value != null) {
+                if (value) {
                     params += "&assoc_lecm-document_subject-assoc=" + value;
                 }
 
@@ -41,17 +41,6 @@
                     hash |= 0; // Convert to 32bit integer
                 }
                 return hash;
-            }
-
-            function createAssocValue(assocs) {
-                var result = "";
-                if (assocs != null && assocs.length > 0) {
-                    for each (var assoc in assocs) {
-                        result += assoc.nodeRef.toString() + ",";
-                    }
-                    result = result.substring(0, result.length - 1);
-                }
-                return result;
             }
 ]]></property>
     </item>
