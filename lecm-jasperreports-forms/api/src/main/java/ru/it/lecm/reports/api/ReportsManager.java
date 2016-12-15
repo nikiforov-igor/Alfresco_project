@@ -733,6 +733,7 @@ public class ReportsManager{
         final Boolean isRunAsSystem = reportDesc.getFlags().isRunAsSystem();
 
         final ReportsManager manager = this;
+        ReportFileData result = new ReportFileData();
 
         final AuthenticationUtil.RunAsWork<ReportFileData> runAsWork = new AuthenticationUtil.RunAsWork<ReportFileData>() {
             @Override
@@ -741,9 +742,17 @@ public class ReportsManager{
             }
         };
 
-        return isRunAsSystem ?
-                AuthenticationUtil.runAsSystem(runAsWork) :
-                AuthenticationUtil.runAs(runAsWork, AuthenticationUtil.getFullyAuthenticatedUser());
+        final String user = AuthenticationUtil.getFullyAuthenticatedUser();
+        if (isRunAsSystem) {
+            AuthenticationUtil.setFullyAuthenticatedUser(AuthenticationUtil.getSystemUserName());
+        }
+        try {
+            result = AuthenticationUtil.runAs(runAsWork, AuthenticationUtil.getFullyAuthenticatedUser());
+        } finally {
+            AuthenticationUtil.setFullyAuthenticatedUser(user);
+        }
+
+        return result;
     }
 
     public ReportTemplate getTemplateByCode(ReportDescriptor descriptor, String templateCode) {
