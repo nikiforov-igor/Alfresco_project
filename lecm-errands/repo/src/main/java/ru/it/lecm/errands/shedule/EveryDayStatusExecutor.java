@@ -44,11 +44,8 @@ public class EveryDayStatusExecutor extends ActionExecuterAbstractBase {
         // формируем уведомление Исполнителю, Инициатору и Контроллеру:
         notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_EXCEEDED_DEADLINE");
         // формируем запись в журнал
-        String logText = "Срок исполнения поручения #object1 превышен";
-        Date limitDate = (Date) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
-        DateFormat dateFormater = new SimpleDateFormat("dd.MM.yyyy");
-        String limitDateString = dateFormater.format(limitDate);
-        businessJournalService.log(nodeRef, "ERRAND_EXPIRED", logText, Collections.singletonList(limitDateString));
+        String logText = "Срок исполнения поручения #mainobject превышен";
+        businessJournalService.log(nodeRef, "ERRAND_EXPIRED", logText);
     }
 
     @Override
