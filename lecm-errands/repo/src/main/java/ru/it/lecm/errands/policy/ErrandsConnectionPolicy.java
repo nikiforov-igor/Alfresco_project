@@ -17,6 +17,7 @@ import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
+import ru.it.lecm.resolutions.api.ResolutionsService;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -104,8 +105,8 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
         //	   После рефакторинга транзакций валится добавление участника
         //     т.к. у дочернего поручение в этот момент еще нет папки с участниками
         //     Узнать нужно ли еще это условие в принципе
-        QName type = nodeService.getType(additionalDoc);
-        if (type.equals(ErrandsService.TYPE_ERRANDS)){
+        QName additionalDoctype = nodeService.getType(additionalDoc);
+        if (additionalDoctype.equals(ErrandsService.TYPE_ERRANDS)){
             NodeRef initiatorRef = nodeService.getTargetAssocs(additionalDoc, ErrandsService.ASSOC_ERRANDS_INITIATOR).get(0).getTargetRef();
             try {
                 documentMembersService.addMemberWithoutCheckPermission(errandDoc, initiatorRef, new HashMap<QName, Serializable>());
@@ -125,9 +126,14 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
         }
 
         //установка ассоциации документа-основания
-        List<AssociationRef> baseDocAssocRefs = nodeService.getTargetAssocs(additionalDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
+        List<AssociationRef> baseDocAssocRefs = null;
+        if (additionalDoctype.equals(ErrandsService.TYPE_ERRANDS)) {
+            baseDocAssocRefs = nodeService.getTargetAssocs(additionalDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
+        } else if (additionalDoctype.equals(ResolutionsService.TYPE_RESOLUTION_DOCUMENT)) {
+            baseDocAssocRefs = nodeService.getTargetAssocs(additionalDoc, ResolutionsService.ASSOC_BASE_DOCUMENT);
+        }
         //если документа-основания нет, то родительский документ  является документом основанием.
-        NodeRef baseDoc = null;
+        NodeRef baseDoc;
         if (baseDocAssocRefs == null || baseDocAssocRefs.size() == 0) {
             baseDoc = additionalDoc;
         } else {
