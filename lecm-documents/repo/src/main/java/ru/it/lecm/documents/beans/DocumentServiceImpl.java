@@ -643,23 +643,6 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                         logger.warn("Invalid QName for document property:" + propName);
                     }
                 }
-                // Копируем  вложения указанных категорий
-                final List<String> categories = settings.getCategoriesToCopy();
-                if (categories != null) {
-                    List<NodeRef> attachmentsToCopy = new ArrayList<>();
-                    for (String category : categories) {
-                        NodeRef categoryRef = documentAttachmentsService.getCategory(category, document);
-                        if (categoryRef != null) {
-                            attachmentsToCopy.addAll(documentAttachmentsService.getAttachmentsByCategory(categoryRef));
-                        }
-                    }
-                    if (attachmentsToCopy.size() != 0) {
-                        paramsBuilder.append("&assoc_")
-                                .append(DocumentService.ASSOC_TEMP_ATTACHMENTS.toPrefixString(namespaceService).replace(":", "_"))
-                                .append("=")
-                                .append(StringUtils.collectionToDelimitedString(attachmentsToCopy, ","));
-                    }
-                }
 
                 final List<String> assocsToCopy = settings.getAssocsToCopy();
                 for (String assocName : assocsToCopy) {
