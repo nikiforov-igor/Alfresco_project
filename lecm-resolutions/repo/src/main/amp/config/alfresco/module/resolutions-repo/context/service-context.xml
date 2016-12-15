@@ -63,8 +63,9 @@
     </bean>
 
     <bean id="resolutionsService" class="ru.it.lecm.resolutions.beans.ResolutionsServiceImpl" parent="baseBean"
-          depends-on="resolutions.LogicEcmInternalBootstrap">
+          depends-on="resolutions.LogicEcmInternalBootstrap, WorkCalendarService, namespaceService">
         <property name="calendarBean" ref="WorkCalendarService"/>
+        <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
     <bean id="resolutionsScript" parent="baseScript" class="ru.it.lecm.resolutions.scripts.ResolutionsWebScriptBean"
