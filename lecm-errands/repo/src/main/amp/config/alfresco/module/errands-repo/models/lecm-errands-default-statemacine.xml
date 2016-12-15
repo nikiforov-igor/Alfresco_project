@@ -1643,7 +1643,7 @@
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[(doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review")==true OR user.currentUser().hasBusinesersRole("RVZ") ) AND doc.attr("lecm-errands:transit-to-on-execution")==true]]></value>
+                                                                    <![CDATA[(doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review")==true OR user.currentUser().hasBusinessRole("RVZ") ) AND doc.attr("lecm-errands:transit-to-on-execution")==true]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
