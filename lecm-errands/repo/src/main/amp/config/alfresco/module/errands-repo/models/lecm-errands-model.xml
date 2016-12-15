@@ -204,8 +204,8 @@
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
-				<!-- Закрывать автоматически -->
-				<property name="lecm-errands:auto-close">
+				<!-- Закрывать автоматически вышестоящее поручение-->
+				<property name="lecm-errands:auto-close-parent">
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
