@@ -590,7 +590,7 @@
 			    <property name="lecm-errands:settings-mode-choosing-executors">
 				    <type>d:text</type>
 				    <mandatory>true</mandatory>
-				    <default>UNIT</default>
+				    <default>ORGANIZATION</default>
 				    <constraints>
 					    <constraint ref="lecm-errands:settings-mode-choosing-executors-const"/>
 				    </constraints>
