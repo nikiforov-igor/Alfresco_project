@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 
@@ -22,6 +23,11 @@ import java.util.Set;
 public class EveryDayStatusExecutor extends ActionExecuterAbstractBase {
     private NotificationsService notificationsService;
     private NodeService nodeService;
+    private BusinessJournalService businessJournalService;
+
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+        this.businessJournalService = businessJournalService;
+    }
 
     public void setNotificationsService(NotificationsService notificationsService) {
         this.notificationsService = notificationsService;
@@ -38,6 +44,9 @@ public class EveryDayStatusExecutor extends ActionExecuterAbstractBase {
 
         // формируем уведомление Исполнителю, Инициатору и Контроллеру:
         notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_EXCEEDED_DEADLINE");
+        // формируем запись в журнал
+        String logText = "Срок исполнения поручения #mainobject превышен";
+        businessJournalService.log(nodeRef, "ERRAND_EXPIRED", logText);
     }
 
     @Override
@@ -59,6 +68,7 @@ public class EveryDayStatusExecutor extends ActionExecuterAbstractBase {
         employeeAssocs.addAll(nodeService.getTargetAssocs(document, ErrandsService.ASSOC_ERRANDS_EXECUTOR));
         employeeAssocs.addAll(nodeService.getTargetAssocs(document, ErrandsService.ASSOC_ERRANDS_INITIATOR));
         employeeAssocs.addAll(nodeService.getTargetAssocs(document, ErrandsService.ASSOC_ERRANDS_CONTROLLER));
+        employeeAssocs.addAll(nodeService.getTargetAssocs(document, ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS));
 
         if (!employeeAssocs.isEmpty()) {
             for (AssociationRef employeeAssoc : employeeAssocs) {

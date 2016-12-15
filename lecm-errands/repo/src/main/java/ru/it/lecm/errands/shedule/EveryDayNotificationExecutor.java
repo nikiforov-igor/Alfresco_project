@@ -57,6 +57,11 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
                 notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_DEADLINE_COME");
             }
         }
+        // Уведомлении об истечении срока исполнения
+        boolean isExpired = (boolean) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_IS_EXPIRED);
+        if (isExpired) {
+            notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_EXCEEDED_DEADLINE");
+        }
 
         // Уведомление о истечении половины срока исполнения поручения.
         Date halfLimitDate = (Date) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_HALF_LIMIT_DATE);
@@ -103,6 +108,8 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
 
         employeeAssocs.addAll(nodeService.getTargetAssocs(document, ErrandsService.ASSOC_ERRANDS_EXECUTOR));
         employeeAssocs.addAll(nodeService.getTargetAssocs(document, ErrandsService.ASSOC_ERRANDS_CONTROLLER));
+        employeeAssocs.addAll(nodeService.getTargetAssocs(document, ErrandsService.ASSOC_ERRANDS_INITIATOR));
+        employeeAssocs.addAll(nodeService.getTargetAssocs(document, ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS));
 
         if (!employeeAssocs.isEmpty()) {
             for (AssociationRef employeeAssoc : employeeAssocs) {
