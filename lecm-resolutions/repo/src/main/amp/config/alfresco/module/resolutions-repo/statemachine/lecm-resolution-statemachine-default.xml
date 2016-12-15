@@ -208,12 +208,12 @@
                                                                 <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Направить]]></value>
-                                                            </property>
-                                                            <property>
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value><![CDATA[Направить]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -285,12 +285,12 @@
                                                                 <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Направить]]></value>
-                                                            </property>
-                                                            <property>
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value><![CDATA[Направить]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -776,7 +776,44 @@
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>df0c7111-dabf-4442-9939-7a0e4c15650b</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/9de7b81b-fa41-43ba-9327-f5d618ee3dfe
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+if (document && document.properties["lecm-resolutions:errands-json"]) {
+  var errandsList = eval('(' + document.properties["lecm-resolutions:errands-json"] + ')');
+  if (errandsList && errandsList.length) {
+    errandsList.forEach(function(errand) {
+      errand["assoc_lecm-errands_additional-document-assoc"] = document.nodeRef.toString();
+      errand["assoc_lecm-errands_initiator-assoc"] = document.properties["lecm-resolutions:author-assoc-ref"];
+      errands.createErrands(errand);
+    });
+  }
+}]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Создание поручений]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>TimerAction</type>
@@ -2881,12 +2918,12 @@
                         <nodeRef>workspace://SpacesStore/47e73f9b-3cdb-43cd-86ff-30c8bd07cc93</nodeRef>
                         <properties>
                             <property>
-                                <name>static-role-privilege</name>
-                                <value><![CDATA[]]></value>
-                            </property>
-                            <property>
                                 <name>isCreator</name>
                                 <value><![CDATA[true]]></value>
+                            </property>
+                            <property>
+                                <name>static-role-privilege</name>
+                                <value><![CDATA[]]></value>
                             </property>
                         </properties>
                         <aspects>

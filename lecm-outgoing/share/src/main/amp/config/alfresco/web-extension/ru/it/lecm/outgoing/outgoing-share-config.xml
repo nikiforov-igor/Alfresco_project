@@ -26,6 +26,7 @@
 					<show id="lecmSignAspects:isSigned" for-mode="view"/>
 					<show id="lecmSignAspects:signingDate" for-mode="view"/>
 					<show id="lecm-document-aspects:registrator-assoc" force="true"/>
+					<show id="lecm-outgoing:is-finishing"/>
 				</field-visibility>
 				<appearance>
 					<set id="common" appearance="" label="Сведения" /> <!-- tab1 -->
@@ -464,6 +465,7 @@
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
 					<show id="lecm-document-aspects:template-name" force="true"/>
 					<show id="lecm-document-aspects:template-ref" force="true"/>
+					<show id="lecm-outgoing:is-finishing"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:title"/>
@@ -646,6 +648,7 @@
 					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
 					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
+					<show id="lecm-outgoing:is-finishing"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-outgoing:contractor-assoc">
