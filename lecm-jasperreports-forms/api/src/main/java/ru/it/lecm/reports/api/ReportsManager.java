@@ -747,7 +747,9 @@ public class ReportsManager{
             AuthenticationUtil.setFullyAuthenticatedUser(AuthenticationUtil.getSystemUserName());
         }
         try {
-            result = AuthenticationUtil.runAs(runAsWork, AuthenticationUtil.getFullyAuthenticatedUser());
+            result = isRunAsSystem ?
+                    AuthenticationUtil.runAsSystem(runAsWork) :
+                    AuthenticationUtil.runAs(runAsWork, user);
         } finally {
             AuthenticationUtil.setFullyAuthenticatedUser(user);
         }
