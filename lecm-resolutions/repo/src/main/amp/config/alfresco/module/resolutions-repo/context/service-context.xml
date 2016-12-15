@@ -61,4 +61,17 @@
         <property name="statemachineName" value="lecm-resolutions:document"/>
         <property name="path" value="alfresco/module/${artifactId}/statemachine/lecm-resolution-statemachine-default.xml"/>
     </bean>
+
+    <bean id="resolutionsService" class="ru.it.lecm.resolutions.beans.ResolutionsServiceImpl" parent="baseBean"
+          depends-on="resolutions.LogicEcmInternalBootstrap">
+        <property name="calendarBean" ref="WorkCalendarService"/>
+    </bean>
+
+    <bean id="resolutionsScript" parent="baseScript" class="ru.it.lecm.resolutions.scripts.ResolutionsWebScriptBean"
+          depends-on="nodeService, errandsService">
+        <property name="extensionName">
+            <value>resolutionsScript</value>
+        </property>
+        <property name="resolutionsService" ref="resolutionsService"/>
+    </bean>
 </beans>

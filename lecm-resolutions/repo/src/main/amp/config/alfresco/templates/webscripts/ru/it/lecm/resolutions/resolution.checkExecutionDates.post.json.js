@@ -2,44 +2,30 @@ var results = [];
 var total = true;
 
 if (json.has("resolutionExecutionDate") && json.has("errandsExecutionDates")) {
-
-    var resolutionExecutionDateJson = json.get("resolutionExecutionDate");
+    var resolutionJson = json.get("resolutionExecutionDate");
     var errandsExecutionDatesJson = json.get("errandsExecutionDates");
 
-    var resolutionExecutionDate = getExecutionDate(resolutionExecutionDateJson);
+    var resolutionExecutionDate = resolutionsScript.calculateResolutionExecutionDate(
+        resolutionJson.has("date-radio") ? resolutionJson.get("date-radio") : null,
+        resolutionJson.has("date-days") ? resolutionJson.get("date-days") : null,
+        resolutionJson.has("date-type") ? resolutionJson.get("date-type") : null,
+        resolutionJson.has("date") ? resolutionJson.get("date") : null);
+
     var errandsExecutionDates = [];
 
     for (var i = 0; i < errandsExecutionDatesJson.length(); i++) {
-        var errandExecutionDate = getExecutionDate(errandsExecutionDatesJson.get(i));
-        var invalid = resolutionExecutionDate == null || errandExecutionDate == null || (resolutionExecutionDate.getTime() >= errandExecutionDate.getTime())
-        total = total && invalid;
-        results.push(invalid);
+        var errandJson = errandsExecutionDatesJson.get(i);
+
+        var errandExecutionDate = resolutionsScript.calculateResolutionExecutionDate(
+            errandJson.has("date-radio") ? errandJson.get("date-radio") : null,
+            errandJson.has("date-days") ? errandJson.get("date-days") : null,
+            errandJson.has("date-type") ? errandJson.get("date-type") : null,
+            errandJson.has("date") ? errandJson.get("date") : null);
+
+        var valid = resolutionExecutionDate == null || errandExecutionDate == null || (resolutionExecutionDate.getTime() >= errandExecutionDate.getTime());
+        total = total && valid;
+        results.push(valid);
     }
-}
-
-function getExecutionDate(json) {
-    var result = null;
-    if (json.has("date-radio")) {
-        if (json.get("date-radio") == "DATE" && json.has("date")) {
-            result = utils.fromISO8601(json.get("date"));
-        } else if (json.get("date-radio") == "DAYS" && json.has("date-type") && json.has("date-days")) {
-            var type = json.get("date-type");
-            var days = parseInt(json.get("date-days"));
-
-            result = new Date();
-            result.setHours(12);
-            result.setMinutes(0);
-            result.setSeconds(0);
-            result.setMilliseconds(0);
-
-            if (type == "CALENDAR") {
-                result.setDate(result.getDate() + days);
-            } else if (type == "WORK") {
-                result = workCalendar.getNextWorkingDateByDays(result, days)
-            }
-        }
-    }
-    return result;
 }
 
 model.total = total;
