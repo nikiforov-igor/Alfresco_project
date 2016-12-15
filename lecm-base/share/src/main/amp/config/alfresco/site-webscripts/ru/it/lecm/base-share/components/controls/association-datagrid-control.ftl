@@ -115,7 +115,9 @@
 
 <#assign defaultValue=field.value>
 <#if form.mode == "create" && defaultValue?string == "">
-    <#if field.control.params.selectedItemsFormArgs??>
+    <#if form.arguments[field.name]?has_content>
+        <#assign defaultValue=form.arguments[field.name]>
+    <#elseif field.control.params.selectedItemsFormArgs??>
         <#assign selectedItemsFormArgs = field.control.params.selectedItemsFormArgs?split(",")>
         <#list selectedItemsFormArgs as selectedItemsFormArg>
             <#if form.arguments[selectedItemsFormArg]??>
@@ -125,8 +127,6 @@
                 <#assign defaultValue = defaultValue + form.arguments[selectedItemsFormArg]/>
             </#if>
         </#list>
-    <#elseif form.arguments[field.name]?has_content>
-        <#assign defaultValue=form.arguments[field.name]>
     </#if>
 </#if>
 

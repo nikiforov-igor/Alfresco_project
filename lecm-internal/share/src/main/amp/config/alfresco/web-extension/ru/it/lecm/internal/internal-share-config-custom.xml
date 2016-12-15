@@ -443,7 +443,7 @@
                             <control-param name="secondShowSearch">true</control-param>
                             <control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
                             <control-param name="secondPickerButtonTitleCode">title.organizationUnit.select</control-param>
-                            <control-param name="selectedItemsFormArgs">assoc_lecm-internal_recipients-assoc,lecm-internal:recipients-assoc</control-param>
+                            <control-param name="selectedItemsFormArgs">lecm-internal:recipients-assoc</control-param>
                             <control-param name="secondSortProp">lecm-orgstr:element-short-name</control-param>
                         </control>
                     </field>
@@ -462,7 +462,7 @@
                     </field>
                     <field id="lecm-document:subject-assoc">
                         <control>
-                            <control-param name="selectedItemsFormArgs">lecm-document:subject-assoc,assoc_lecm-document_subject-assoc</control-param>
+                            <control-param name="selectedItemsFormArgs">lecm-document:subject-assoc</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:file-register-assoc"/>
@@ -555,7 +555,6 @@
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="itemType">lecm-internal:document</control-param>
-                            <control-param name="selectedItemsFormArgs">lecm-document-aspects:response-to-assoc</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:subject-assoc">

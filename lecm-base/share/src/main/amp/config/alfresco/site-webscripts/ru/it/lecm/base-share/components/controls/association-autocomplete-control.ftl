@@ -20,7 +20,12 @@
 </#if>
 
 <#if form.mode == "create" && !field.disabled && fieldValue?string == "">
-    <#if field.control.params.selectedItemsFormArgs??>
+    <#if form.arguments[field.name]?has_content>
+        <#assign fieldValue = form.arguments[field.name]/>
+	<#elseif form.arguments['readonly_' + field.name]?has_content>
+		<#assign fieldValue=form.arguments['readonly_' + field.name]>
+		<#assign readonly = true>
+    <#elseif field.control.params.selectedItemsFormArgs??>
         <#assign selectedItemsFormArgs = field.control.params.selectedItemsFormArgs?split(",")>
         <#list selectedItemsFormArgs as selectedItemsFormArg>
             <#if form.arguments[selectedItemsFormArg]??>
@@ -30,11 +35,6 @@
                 <#assign fieldValue = fieldValue + form.arguments[selectedItemsFormArg]/>
             </#if>
         </#list>
-    <#elseif form.arguments[field.name]?has_content>
-        <#assign fieldValue = form.arguments[field.name]/>
-	<#elseif form.arguments['readonly_' + field.name]?has_content>
-		<#assign fieldValue=form.arguments['readonly_' + field.name]>
-		<#assign readonly = true>
     </#if>
 </#if>
 

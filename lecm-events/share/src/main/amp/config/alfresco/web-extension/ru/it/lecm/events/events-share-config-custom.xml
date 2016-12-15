@@ -90,7 +90,7 @@
                     <field id="lecm-events:repeatable" read-only="true">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
                             <control-param name="hideFieldsIfNotSelect">lecm-events:repeatable-start-period,lecm-events:repeatable-end-period,lecm-events:repeatable-rule</control-param>
-                            <control-param name="disabledFieldsIfSelect">lecm-events:repeatable-start-period,lecm-events:repeatable-end-period,lecm-events:repeatable-rule</control-param>
+                            <control-param name="disabledFieldsIfNotSelect">lecm-events:repeatable-start-period,lecm-events:repeatable-end-period,lecm-events:repeatable-rule</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:repeatable-start-period" read-only="true"/>
@@ -313,7 +313,7 @@
                         </constraint-handlers>
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
                             <control-param name="hideFieldsIfNotSelect">lecm-events:repeatable-start-period,lecm-events:repeatable-end-period,lecm-events:repeatable-rule</control-param>
-                            <control-param name="disabledFieldsIfSelect">lecm-events:repeatable-start-period,lecm-events:repeatable-end-period,lecm-events:repeatable-rule</control-param>
+                            <control-param name="disabledFieldsIfNotSelect">lecm-events:repeatable-start-period,lecm-events:repeatable-end-period,lecm-events:repeatable-rule</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:repeatable-start-period" mandatory="true" set="createEventSet">

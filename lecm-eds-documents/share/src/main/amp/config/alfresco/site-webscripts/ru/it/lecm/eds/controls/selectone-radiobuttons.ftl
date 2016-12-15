@@ -32,32 +32,32 @@
 				</#if>
         	</label>
 		</div>
-		<#if fieldValue?string == "">
-			<#assign valueToShow=msg("form.control.novalue")>
-		<#else>
-			<#assign valueToShow=fieldValue>
-			<#if field.control.params.options?? && field.control.params.options != "">
-				<#list field.control.params.options?split(optionSeparator) as nameValue>
-					<#if nameValue?index_of(labelSeparator) == -1>
-						<#if nameValue == fieldValue?string || (fieldValue?is_number && fieldValue?c == nameValue)>
-							<#assign valueToShow=nameValue>
-							<#break>
-						</#if>
-					<#else>
-						<#assign choice=nameValue?split(labelSeparator)>
-						<#if choice[0] == fieldValue?string || (fieldValue?is_number && fieldValue?c == choice[0])>
-							<#assign valueToShow=msgValue(choice[1])>
-							<#break>
-						</#if>
-					</#if>
-				</#list>
-			</#if>
-		</#if>
-		<div class="container">
-			<div class="value-div">
-				${valueToShow?html}
-			</div>
-		</div>
+        <div class="container">
+            <div class="buttons-div">
+                <@formLib.renderFieldHelp field=field />
+            </div>
+            <div class="value-div">
+                <#if field.control.params.options?? && field.control.params.options != "">
+                    <input id="${fieldHtmlId}" type="hidden" name="-" value="${fieldValue?html}"/>
+                    <#list field.control.params.options?split(optionSeparator) as nameValue>
+                        <#if nameValue?index_of(labelSeparator) == -1>
+                                <input disabled="disabled" type="radio" name="${field.name}" value="${nameValue?html}"
+                            <#if nameValue == fieldValue?string || (fieldValue?is_number && fieldValue?c == nameValue)> checked="checked"</#if>"
+                            <#if disabled>disabled="disabled"</#if>"/>
+                            <label class="checkbox">${nameValue?html}</label>
+                        <#else>
+                            <#assign choice=nameValue?split(labelSeparator)>
+                                <input disabled="disabled" type="radio" name="${field.name}" value="${choice[0]?html}"
+                            <#if choice[0] == fieldValue?string || (fieldValue?is_number && fieldValue?c == choice[0])> checked="checked"</#if>
+                                       <#if disabled>disabled="disabled"</#if>"/>
+                            <label class="checkbox">${msgValue(choice[1])?html}</label>
+                        </#if>
+                    </#list>
+                <#else>
+                    <div id="${fieldHtmlId}" class="missing-options">${msg("form.control.selectone.missing-options")}</div>
+                </#if>
+            </div>
+        </div>
 	</div>
 <#else>
 	<div id="${fieldHtmlId}-parent" class="control selectone-radiobuttons editmode">
