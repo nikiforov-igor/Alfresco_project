@@ -1,6 +1,9 @@
 package ru.it.lecm.resolutions.api;
 
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+
+import java.util.Date;
 
 /**
  * User: AIvkin
@@ -8,9 +11,26 @@ import org.alfresco.service.namespace.QName;
  * Time: 14:40
  */
 public interface ResolutionsService {
+    String EXECUTION_DATE_RADIO_DAYS = "DAYS";
+    String EXECUTION_DATE_RADIO_DATE = "DATE";
+    String EXECUTION_DATE_RADIO_LIMITLESS = "LIMITLESS";
+
+    String EXECUTION_DATE_DAYS_WORK = "WORK";
+    String EXECUTION_DATE_DAYS_CALENDAR = "CALENDAR";
+
     String RESOLUTION_NAMESPACE_URI = "http://www.it.ru/logicECM/resolutions/1.0";
 
     QName TYPE_RESOLUTION_DOCUMENT = QName.createQName(RESOLUTION_NAMESPACE_URI, "document");
 
+    QName PROP_ERRANDS_JSON = QName.createQName(RESOLUTION_NAMESPACE_URI, "errands-json");
+    QName PROP_LIMITATION_DATE = QName.createQName(RESOLUTION_NAMESPACE_URI, "limitation-date");
+    QName PROP_LIMITATION_DATE_RADIO = QName.createQName(RESOLUTION_NAMESPACE_URI, "limitation-date-radio");
+    QName PROP_LIMITATION_DATE_DAYS = QName.createQName(RESOLUTION_NAMESPACE_URI, "limitation-date-days");
+    QName PROP_LIMITATION_DATE_TYPE = QName.createQName(RESOLUTION_NAMESPACE_URI, "limitation-date-type");
+
     QName ASSOC_BASE_DOCUMENT = QName.createQName(RESOLUTION_NAMESPACE_URI, "base-document-assoc");
+
+    Date calculateResolutionExecutionDate(String radio, Integer days, String daysType, Date date);
+
+    boolean checkResolutionErrandsExecutionDate(NodeRef resolution);
 }
