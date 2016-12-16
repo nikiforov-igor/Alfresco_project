@@ -207,7 +207,7 @@ LogicECM.errands = LogicECM.errands || {};
             //скрываем кнопку переноса отчетов если поручение в неподходящих статусах.
             var isStatusOK = "На исполнении" == datagrid.options.currentDocumentStatus || "На доработке" == datagrid.options.currentDocumentStatus;
             if (!isStatusOK) {
-                YAHOO.util.Dom.addStyle(transferSelectedReportsButton, "display", "none");
+                YAHOO.util.Dom.setStyle(transferSelectedReportsButton, "display", "none");
             }
 
             YAHOO.util.Event.on(transferSelectedReportsButton, "click", function () {
