@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="lecmResolutionWf:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Logic ECM resolutions workflow model</description>
+	<author>Logic ECM</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
+		<import uri="http://www.it.ru/logicECM/statemachine/aspects/1.0" prefix="lecm-statemachine-aspects"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/resolutions/workflow/1.0" prefix="lecmResolutionWf"/>
+	</namespaces>
+
+	<types>
+		<!--Возврат резолюции на доработку-->
+		<type name="lecmResolutionWf:decline">
+			<parent>bpm:startTask</parent>
+			<properties>
+				<property name="lecmResolutionWf:declineReason">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+    </types>
+</model>
