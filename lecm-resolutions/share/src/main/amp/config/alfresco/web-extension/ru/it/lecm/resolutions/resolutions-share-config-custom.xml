@@ -565,4 +565,31 @@
             </form>
         </forms>
     </config>
+
+    <config evaluator="string-compare" condition="activiti$resolutionDecline">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmResolutionWf:declineReason"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmResolutionWf:declineReason">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">7</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="Workflow">
+        <hidden-workflows>
+            <workflow name="activiti$resolutionsDecline"/>
+        </hidden-workflows>
+    </config>
 </alfresco-config>

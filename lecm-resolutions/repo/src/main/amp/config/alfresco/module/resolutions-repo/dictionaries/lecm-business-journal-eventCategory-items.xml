@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Категория события" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Отклонение резолюции" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Отклонение резолюции</property>
+                <property name="lecm-busjournal:eventCategory-code">DECLINE_RESOLUTION</property>
+            </item>
+        </items>
+    </item>
+</items>
