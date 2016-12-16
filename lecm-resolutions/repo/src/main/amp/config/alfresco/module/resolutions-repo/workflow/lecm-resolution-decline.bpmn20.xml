@@ -14,7 +14,7 @@
                             <![CDATA[
                             var declineReason = lecmResolutionWf_declineReason;
                             var document = bpm_package.children[0];
-                            if (document != null) {
+                            if (document) {
                                 var logText = "#initiator направил " + base.wrapperTitle("на доработку", declineReason) + " резолюцию: #mainobject.";
                                 businessJournal.log(document.nodeRef.toString(), "DECLINE_RESOLUTION", logText, []);
 
