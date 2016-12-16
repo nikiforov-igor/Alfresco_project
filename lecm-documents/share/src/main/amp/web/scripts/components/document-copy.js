@@ -28,7 +28,7 @@ LogicECM.module = LogicECM.module || {};
         {
             options: {
                 documentRef: null,
-                copyURL: null
+                canCopy: null
             },
 
             controlId: null,
@@ -36,17 +36,41 @@ LogicECM.module = LogicECM.module || {};
 
             onReady: function () {
                 this.copyButton = Alfresco.util.createYUIButton(this, this.controlId + "-copy-button", this.onCopy,  {
-                        disabled: !this.options.copyURL,
-                        title: this.options.copyURL ? this.msg("button.copy") : this.msg("button.copy.unavaiable")
+                        disabled: !this.options.canCopy,
+                        title: this.options.canCopy ? this.msg("button.copy") : this.msg("button.copy.unavaiable")
                     },
                     Dom.get(this.controlId + "-copy-button"));
 
-                Dom.addClass(this.controlId + "-copy", this.options.copyURL ? "enabled" : "disabled");
+                Dom.addClass(this.controlId + "-copy", this.options.canCopy ? "enabled" : "disabled");
             },
 
             onCopy: function () {
-                if (this.options.documentRef && this.options.copyURL) {
-                    document.location.href = Alfresco.constants.URL_PAGECONTEXT + this.options.copyURL;
+                if (this.options.documentRef && this.options.canCopy) {
+                    Alfresco.util.Ajax.jsonGet(
+                        {
+                            url: Alfresco.constants.PROXY_URI + 'lecm/document/api/copy/url',
+                            dataObj: {
+                                nodeRef: this.options.documentRef
+                            },
+                            successCallback: {
+                                fn: function (response) {
+                                    var me = response.config.scope;
+                                    if (response.json.copyURL) {
+                                        document.location.href = Alfresco.constants.URL_PAGECONTEXT + response.json.copyURL;
+                                    }
+                                }
+                            },
+                            failureCallback: {
+                                fn: function (response) {
+                                    var me = response.config.scope;
+                                    Alfresco.util.PopupManager.displayMessage(
+                                        {
+                                            text: me.msg("message.details.failure")
+                                        });
+                                }
+                            },
+                            scope: this
+                        });
                 }
             }
         });

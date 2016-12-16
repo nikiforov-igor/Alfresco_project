@@ -634,7 +634,6 @@
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="nodeService" ref="nodeService"/>
-        <property name="copyService" ref="copyService"/>
 	</bean>
 
 	<bean id="documentResponseToPolicy" class="ru.it.lecm.documents.policy.DocumentResponseToPolicy"
