@@ -86,6 +86,8 @@ LogicECM.module = LogicECM.module || {};
 
 		readsonly: false,
 
+        itemsLoading: false,
+
 		options:
 		{
 			// скрывать ли игнорируемые ноды в дереве
@@ -1507,74 +1509,70 @@ LogicECM.module = LogicECM.module || {};
 			}
 		},
 
-		_loadItems: function(nodeRef, searchTerm, clearList) {
-			if (clearList) {
-				this.skipItemsCount = 0;
-				Dom.get(this.options.pickerId + "-picker-items").scrollTop = 0;
-				this.alreadyShowCreateNewLink = false;
-			}
+        _loadItems: function (nodeRef, searchTerm, clearList) {
+            if (!this.itemsLoading) {
+                this.itemsLoading = true;
+                if (clearList) {
+                    this.skipItemsCount = 0;
+                    Dom.get(this.options.pickerId + "-picker-items").scrollTop = 0;
+                    this.alreadyShowCreateNewLink = false;
+                }
 
-			var successHandler = function AssociationTreeViewer__updateItems_successHandler(sRequest, oResponse, oPayload)
-			{
-				this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : nodeRef;
-				this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.empty"));
+                var successHandler = function AssociationTreeViewer__updateItems_successHandler(sRequest, oResponse, oPayload) {
+                    this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : nodeRef;
+                    this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.empty"));
 
-				this.skipItemsCount += oResponse.results.length;
-				Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "hidden");
+                    this.skipItemsCount += oResponse.results.length;
+                    Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "hidden");
 
-				if (!clearList || (this.options.showCreateNewLink && this.currentNode != null && this.currentNode.data.isContainer && this.currentNode.data.hasPermAddChildren && (!this.isSearch || this.options.plane) && !this.alreadyShowCreateNewLink))
-				{
-					this.widgets.dataTable.onDataReturnAppendRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
-				}
-				else
-				{
-					this.widgets.dataTable.onDataReturnInitializeTable.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
-				}
+                    if (!clearList || (this.options.showCreateNewLink && this.currentNode != null && this.currentNode.data.isContainer && this.currentNode.data.hasPermAddChildren && (!this.isSearch || this.options.plane) && !this.alreadyShowCreateNewLink)) {
+                        this.widgets.dataTable.onDataReturnAppendRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
+                    }
+                    else {
+                        this.widgets.dataTable.onDataReturnInitializeTable.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
+                    }
 
-				this.alreadyShowCreateNewLink = true;
-                this.isSearch = false;
-			};
+                    this.alreadyShowCreateNewLink = true;
+                    this.isSearch = false;
+                    this.itemsLoading = false;
+                };
 
-			var failureHandler = function AssociationTreeViewer__updateItems_failureHandler(sRequest, oResponse)
-			{
-				if (oResponse.status == 401)
-				{
-					// Our session has likely timed-out, so refresh to offer the login page
-					window.location.reload();
-				}
-				else
-				{
-					try
-					{
-						var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-						this.widgets.dataTable.set("MSG_ERROR", response.message);
-						this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
-					}
-					catch(e)
-					{
-					}
-				}
-			};
+                var failureHandler = function AssociationTreeViewer__updateItems_failureHandler(sRequest, oResponse) {
+                    if (oResponse.status == 401) {
+                        // Our session has likely timed-out, so refresh to offer the login page
+                        window.location.reload();
+                    }
+                    else {
+                        try {
+                            var response = YAHOO.lang.JSON.parse(oResponse.responseText);
+                            this.widgets.dataTable.set("MSG_ERROR", response.message);
+                            this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
+                        }
+                        catch (e) {
+                        }
+                    }
+                    this.itemsLoading = false;
+                };
 
-			// build the url to call the pickerchildren data webscript
-			var url = this._generateChildrenUrlPath(nodeRef) + this._generateChildrenUrlParams(searchTerm);
+                // build the url to call the pickerchildren data webscript
+                var url = this._generateChildrenUrlPath(nodeRef) + this._generateChildrenUrlParams(searchTerm);
 
-			if (Alfresco.logger.isDebugEnabled())
-			{
-				Alfresco.logger.debug("Generated pickerchildren url fragment: " + url);
-			}
+                if (Alfresco.logger.isDebugEnabled()) {
+                    Alfresco.logger.debug("Generated pickerchildren url fragment: " + url);
+                }
 
-			// call the pickerchildren data webscript
-            //if widget is active and not destroyed!!!
-            if (this.widgets.dataSource) {
-                this.widgets.dataSource.sendRequest(url,
-                    {
-                        success: successHandler,
-                        failure: failureHandler,
-                        scope: this
-                    });
+                // call the pickerchildren data webscript
+                //if widget is active and not destroyed!!!
+                if (this.widgets.dataSource) {
+                    this.widgets.dataSource.sendRequest(url,
+                        {
+                            success: successHandler,
+                            failure: failureHandler,
+                            scope: this
+                        });
+                }
             }
-		},
+        },
 
         _generateChildrenUrlPath: function AssociationTreeViewer__generatePickerChildrenUrlPath(nodeRef)
         {
