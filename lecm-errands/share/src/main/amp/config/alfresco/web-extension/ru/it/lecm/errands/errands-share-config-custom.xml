@@ -722,7 +722,8 @@
                     <show id="lecm-errands:reiteration-count"/>
                     <show id="reiteration-count-label" force="true"/>
                     <show id="lecm-errand-period-endless" force="true"/>
-
+                    <!-- Закрывать вышестоящее поручение -->
+                    <show id="lecm-errands:auto-close"/>
                     <!-- Исполнить точно в срок  -->
                     <show id="lecm-errands:just-in-time"/>
                     <!-- Контролер-->
@@ -880,7 +881,9 @@
                             <control-param name="textCode">label.errand.period-endless</control-param>
                         </control>
                     </field>
-
+                    <field id="lecm-errands:auto-close" set="block2-2">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    </field>
                     <field id="lecm-errands:just-in-time" set="block2-2">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
