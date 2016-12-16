@@ -269,6 +269,38 @@
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>61e11f7a-4da4-4876-92f4-2df3c8684eb2
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/76cc5324-1bf5-4a8d-9786-d196f723f5bc
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Срок исполнения поручений не может быть больше срока исполнения резолюции]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[@resolutionsService.checkResolutionErrandsExecutionDate(doc.nodeRef)]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -1429,6 +1461,10 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                                 <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
+                                                                <name>transition-script</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                            <property>
                                                                 <name>transitionLabel</name>
                                                                 <value><![CDATA[Утвердить]]></value>
                                                             </property>
@@ -1450,7 +1486,45 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                             </association>
                                                         </associations>
                                                         <roleAssociations/>
-                                                        <subFolders/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>19c9c798-a62e-42c6-9603-f141697cf794
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/59627fd9-94de-4c16-ad87-e4163ff3a0f9
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Срок исполнения поручений не может быть больше срока исполнения резолюции]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[@resolutionsService.checkResolutionErrandsExecutionDate(doc.nodeRef)]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
                                                     </node>
                                                     <node>
                                                         <type>userTransition</type>
