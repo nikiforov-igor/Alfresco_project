@@ -85,9 +85,12 @@ public class DocumentTempAttachmentsPolicy implements NodeServicePolicies.OnCrea
 				List<AssociationRef> parentRefs = nodeService.getTargetAssocs(attachmentRef, DocumentService.ASSOC_PARENT_DOCUMENT);
 				if (parentRefs != null && parentRefs.size() != 0) {
 					NodeRef parentNode = parentRefs.get(0).getTargetRef();
+					// Временно разрываем ассоциацию с родительским документом
 					nodeService.removeAssociation(attachmentRef, parentNode, DocumentService.ASSOC_PARENT_DOCUMENT);
+					// Копируем вложение в новый документ и переносим в категорию
 					NodeRef attachmentCopy = copyService.copyAndRename(attachmentRef, documentRef, ContentModel.ASSOC_CONTAINS, assocQname, false);
 					nodeService.moveNode(attachmentCopy, categoryRef, ContentModel.ASSOC_CONTAINS, assocQname);
+					// Восстанавливаем ассоциацю для оригинального вложения и создаем для копии
 					nodeService.createAssociation(attachmentRef, parentNode, DocumentService.ASSOC_PARENT_DOCUMENT);
 					nodeService.createAssociation(attachmentCopy, documentRef, DocumentService.ASSOC_PARENT_DOCUMENT);
 				} else {
