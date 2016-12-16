@@ -45,14 +45,17 @@
 				<!-- Требуется отчет -->
 				<property name="lecm-errands-dic:errand-type-report-required">
 					<type>d:boolean</type>
+					<default>false</default>
 				</property>
 				<!-- Без срока -->
 				<property name="lecm-errands-dic:errand-type-limitless">
 					<type>d:boolean</type>
+					<default>false</default>
 				</property>
 				<!-- Запускает рассмотрение -->
 				<property name="lecm-errands-dic:errand-type-launch-review">
 					<type>d:boolean</type>
+					<default>false</default>
 				</property>
 
             </properties>
