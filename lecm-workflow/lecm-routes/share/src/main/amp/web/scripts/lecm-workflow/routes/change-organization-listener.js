@@ -109,10 +109,6 @@
     }
 
     function checkSelected(formId) {
-        if (currentState.unit || currentState.stages) {
-            LogicECM.module.Base.Util.readonlyControl(formId, "lecmWorkflowRoutes:routeOrganizationAssoc", true);
-        } else {
-            LogicECM.module.Base.Util.readonlyControl(formId, "lecmWorkflowRoutes:routeOrganizationAssoc", false);
-        }
+        LogicECM.module.Base.Util.readonlyControl(formId, "lecmWorkflowRoutes:routeOrganizationAssoc", currentState.unit || currentState.stages);
     }
 })();
