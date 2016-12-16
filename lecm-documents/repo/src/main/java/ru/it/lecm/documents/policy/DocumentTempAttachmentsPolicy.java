@@ -82,6 +82,7 @@ public class DocumentTempAttachmentsPolicy implements NodeServicePolicies.OnCrea
 			if (categoryRef != null) {
 				String name = nodeService.getProperty(attachmentRef, ContentModel.PROP_NAME).toString();
 				QName assocQname = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
+				// Если вложение лежит в другом документе(есть ассоциация) - копируем. Если вложение новое - переносим.
 				List<AssociationRef> parentRefs = nodeService.getTargetAssocs(attachmentRef, DocumentService.ASSOC_PARENT_DOCUMENT);
 				if (parentRefs != null && parentRefs.size() != 0) {
 					NodeRef parentNode = parentRefs.get(0).getTargetRef();
