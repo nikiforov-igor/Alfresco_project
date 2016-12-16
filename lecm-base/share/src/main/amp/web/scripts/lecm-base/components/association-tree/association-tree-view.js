@@ -1525,7 +1525,7 @@ LogicECM.module = LogicECM.module || {};
                     this.skipItemsCount += oResponse.results.length;
                     Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "hidden");
 
-                    if (!clearList || (this.options.showCreateNewLink && this.currentNode != null && this.currentNode.data.isContainer && this.currentNode.data.hasPermAddChildren && (!this.isSearch || this.options.plane) && !this.alreadyShowCreateNewLink)) {
+                    if (!clearList || (this.options.showCreateNewLink && this.currentNode && this.currentNode.data.isContainer && this.currentNode.data.hasPermAddChildren && (!this.isSearch || this.options.plane) && !this.alreadyShowCreateNewLink)) {
                         this.widgets.dataTable.onDataReturnAppendRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
                     }
                     else {
