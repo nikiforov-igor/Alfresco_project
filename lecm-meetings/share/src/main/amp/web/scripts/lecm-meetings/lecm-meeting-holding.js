@@ -19,6 +19,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 
 	YAHOO.lang.augmentObject(LogicECM.module.Meetengs.Holding.prototype, {
 		submitElements: [],
+		forms: [],
 
 		HOLDING_MEETING: "holdingMeeting",
 		ITEM_FORM_PREFIX: "mhi-",
@@ -38,9 +39,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 			this.loadItems();
 
 			Alfresco.util.createYUIButton(this, "create-new-item-button", this.onCreateItem);
-			
-			this.debouncedSave = LogicECM.module.Base.Util.debounceWrap(this.saveForm, 1000);
-			
+
 			var me = this;
 			setInterval(function() {
 				me.saveForm();
@@ -82,20 +81,23 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 		},
 
 		onBeforeFormRuntimeInit: function(layer, args) {
-			var submitElement = args[1].runtime.submitElements[0];
+			var formRuntime = args[1].runtime;
+			this.forms.push(new FormWrapper(formRuntime));
+
+			var submitElement = formRuntime.submitElements[0];
 			this.submitElements.push(submitElement);
 
 			args[1].runtime.setAJAXSubmit(true);
 		},
 
-		saveForm: function() {
-			for (var i = 0; i < this.submitElements.length; i++) {
-				if (this.submitElements[i].getForm() && this.submitElements[i].getForm().id != (this.HOLDING_MEETING + "-form")) {
-					this.submitElements[i].submitForm();
+		saveForm: function(immediate) {
+			this.forms.forEach(function(form) {
+				if (form && form.runtime.formId !== this.HOLDING_MEETING + "-form" && form.isDirty()) {
+					form.submit(immediate);
 				}
-			}
+			}, true);
 		},
-		
+
 		onSubmit: function() {
 			this.saveDates();
 		},
@@ -190,7 +192,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 		},
 
 		onChangeTechnicalMembers: function () {
-			this.debouncedSave();
+			this.saveForm();
 			for (var i = 0; i < this.submitElements.length; i++) {
 				var formId = this.submitElements[i].getForm().id.replace("-form", "");
 				LogicECM.module.Base.Util.reInitializeControl(formId, "lecm-meetings-ts:holding-reporter-assoc", {});
@@ -199,7 +201,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 		},
 
 		saveDates: function () {
-			this.saveForm();
+			this.saveForm(true);
 
 			var arguments = {};
 			for (var i = 0; i < this.submitElements.length; i++) {
@@ -273,4 +275,71 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 			dialog.show();
 		}
 	}, true);
+
+	function FormWrapper(runtime) {
+		this.runtime = runtime;
+		this._updatePristineData();
+	}
+
+	FormWrapper.prototype = {
+
+		runtime: null,
+		timeout: null,
+		delay: 1500,
+		propOrAssocRegex: /^(assoc|prop)_/,
+
+		_effectiveFilter: function FormWrapper__effectiveFilter(input) {			
+			return this.propOrAssocRegex.test(input);
+		},
+
+		_updatePristineData: function FormWrapper__updatePristineData() {
+			var formData = this.runtime.getFormData();
+			var pristineFormData = {};
+
+			this.pristineFormData = Object.keys(formData)
+										  .filter(this._effectiveFilter, this)
+										  .reduce(function (res, key) {
+										   	  res[key] = formData[key];
+										   	  return res;
+										  }, {});
+		},
+
+		isDirty: function FormWrapper_isDirty() {
+			var newData = this.runtime.getFormData(),
+				newEffectiveKeys = [];
+
+			if (!newData) {
+				console.warn('Cannot get form data');
+				return false;
+			}
+
+			newEffectiveKeys = Object.keys(newData).filter(this._effectiveFilter, this);			
+			
+			if (Object.keys(this.pristineFormData).length !== newEffectiveKeys.length) {
+				return true;
+			}
+
+			return newEffectiveKeys.some(function(newKey) {
+				if (newData[newKey] !== this.pristineFormData[newKey]) {
+					return true;
+				}
+			}, this);
+		},
+
+		_submitForm: function FormWrapper__submitForm() {
+			var submitEl = this.runtime.submitElements[0];
+			submitEl && submitEl.submitForm();
+			this._updatePristineData();
+		},
+
+		submit: function FormWrapper_submit(immediate) {
+			clearTimeout(this.timeout);
+			
+			if (YAHOO.lang.isBoolean(immediate) && immediate) {
+				this._submitForm();
+			} else {
+				this.timeout = setTimeout(this._submitForm.bind(this), this.delay);
+			}
+		}
+	};
 })();
