@@ -37,7 +37,7 @@
                         scope: this,
                         fn: function (response) {
                             var unit = new Alfresco.util.NodeRef(response.json.nodeRef);
-                            LogicECM.module.Base.Util.enableControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc");
+                            LogicECM.module.Base.Util.readonlyControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc", false);
                             YAHOO.util.Event.onAvailable(LogicECM.module.Base.Util.getComponentReadyElementId(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc"), function() {
                                 YAHOO.Bubbling.fire("refreshItemList", {
                                     formId: formId,
@@ -57,7 +57,7 @@
                 });
             } else {
                 currentOrganization = null;
-                LogicECM.module.Base.Util.disableControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc");
+                LogicECM.module.Base.Util.readonlyControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc", true);
                 YAHOO.Bubbling.fire("routeOrganizationSelected", {
                     organization: currentOrganization
                 });
@@ -110,9 +110,9 @@
 
     function checkSelected(formId) {
         if (currentState.unit || currentState.stages) {
-            LogicECM.module.Base.Util.disableControl(formId, "lecmWorkflowRoutes:routeOrganizationAssoc");
+            LogicECM.module.Base.Util.readonlyControl(formId, "lecmWorkflowRoutes:routeOrganizationAssoc", true);
         } else {
-            LogicECM.module.Base.Util.enableControl(formId, "lecmWorkflowRoutes:routeOrganizationAssoc");
+            LogicECM.module.Base.Util.readonlyControl(formId, "lecmWorkflowRoutes:routeOrganizationAssoc", false);
         }
     }
 })();
