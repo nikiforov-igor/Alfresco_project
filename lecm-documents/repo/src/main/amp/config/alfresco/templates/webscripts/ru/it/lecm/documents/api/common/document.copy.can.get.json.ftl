@@ -1,5 +1,5 @@
 <#escape x as jsonUtils.encodeJSONString(x)!''>
 {
-  "canCopy": ${canCopy?string}
+  "canCopy": ${canCopy?js_string}
 }
 </#escape>

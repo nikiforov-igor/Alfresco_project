@@ -59,7 +59,7 @@ LogicECM.module = LogicECM.module || {};
                                     }
                                 }
                             },
-                            failureMessage: "message.details.failure",
+                            failureMessage: this.msg("message.details.failure"),
                             scope: this
                         });
                 }

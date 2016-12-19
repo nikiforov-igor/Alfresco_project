@@ -108,7 +108,7 @@
                     var copyControl = new LogicECM.module.DocumentCopy("${id}").setMessages(${messages});
                     copyControl.setOptions({
                         documentRef: "${nodeRef}",
-                        canCopy: ${canCopy?string}
+                        canCopy: ${canCopy?js_string}
                     });
                 })();
                 //]]></script>
