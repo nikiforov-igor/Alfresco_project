@@ -74,9 +74,9 @@
 //]]></script>
 
 <div class="form-field with-grid coexecutors-report" id="${controlId}">
-	<div class="show-declined-block">
-		<input type="checkbox" id="${controlId}-show-declined">
-		<label for="${controlId}-show-declined">${msg("errands.label.showDeclined")}</label>
+	<div class="reports-filter-block">
+		<input type="checkbox" id="${controlId}-change-filter">
+		<label id="${controlId}-change-filter-label" for="${controlId}-change-filter"></label>
 	</div>
 	<@grid.datagrid containerId false/>
 	<div id="${controlId}-container">
