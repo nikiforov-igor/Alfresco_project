@@ -1963,7 +1963,7 @@ if (document) {
                 }
             }
             if(limitationDate){
-                var jsLimitDate = new Date(limitationDate);
+                var jsLimitDate = new Date(limitationDate.getTime());
                 var dateFormat = new Packages.java.text.SimpleDateFormat("dd.MM.yyyy");
                 dateString = dateFormat.format(jsLimitDate).toString();
               	document.properties["lecm-errands:limitation-date"] = jsLimitDate;
