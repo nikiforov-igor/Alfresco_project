@@ -22,12 +22,12 @@
                                     if(document.properties["lecm-errands:limitation-date"] != lecmErrandWf_changeDueDateNewDueDate){
                                         document.properties["lecm-errands:limitation-date"] = lecmErrandWf_changeDueDateNewDueDate;
                                         document.properties["lecm-errands:limitation-date-radio"] = lecmErrandWf_changeDueDateNewDueDateRadio;
-                                        var jsLimitDate = new Date(lecmErrandWf_changeDueDateNewDueDate);
+                                        var jsLimitDate = new Date(lecmErrandWf_changeDueDateNewDueDate.getTime());
                                         var dateFormat = new Packages.java.text.SimpleDateFormat("dd.MM.yyyy");
                                         var dueDateString = dateFormat.format(jsLimitDate).toString();
                                         var curDate = new Date();
                                         var limitDays = Math.round((jsLimitDate - curDate) / (1000 * 60 * 60 * 24));
-                                        var threeWorkDaysDateLimit = new Date(workCalendar.getNextWorkingDate(utils.toISO8601(curDate), 3));
+                                        var threeWorkDaysDateLimit = new Date(workCalendar.getNextWorkingDate(utils.toISO8601(curDate), 3).getTime());
                                         if(threeWorkDaysDateLimit < jsLimitDate){
                                             var halfLimitDays = Math.round(limitDays/2);
                                             curDate.setDate(curDate.getDate()+ halfLimitDays);
