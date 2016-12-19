@@ -19,6 +19,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 
 	YAHOO.lang.augmentObject(LogicECM.module.Meetengs.Holding.prototype, {
 		submitElements: [],
+		forms: [],
 
 		HOLDING_MEETING: "holdingMeeting",
 		ITEM_FORM_PREFIX: "mhi-",
@@ -80,18 +81,21 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 		},
 
 		onBeforeFormRuntimeInit: function(layer, args) {
-			var submitElement = args[1].runtime.submitElements[0];
+			var formRuntime = args[1].runtime;
+			this.forms.push(new LogicECM.module.Base.FormWrapper(formRuntime));
+
+			var submitElement = formRuntime.submitElements[0];
 			this.submitElements.push(submitElement);
 
 			args[1].runtime.setAJAXSubmit(true);
 		},
 
-		saveForm: function() {
-			for (var i = 0; i < this.submitElements.length; i++) {
-				if (this.submitElements[i].getForm() && this.submitElements[i].getForm().id != (this.HOLDING_MEETING + "-form")) {
-					this.submitElements[i].submitForm();
+		saveForm: function(immediate) {
+			this.forms.forEach(function(form) {
+				if (form && form.runtime.formId !== this.HOLDING_MEETING + "-form" && form.isDirty()) {
+					form.submit(immediate);
 				}
-			}
+			}, true);
 		},
 
 		onSubmit: function() {
@@ -197,7 +201,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 		},
 
 		saveDates: function () {
-			this.saveForm();
+			this.saveForm(true);
 
 			var arguments = {};
 			for (var i = 0; i < this.submitElements.length; i++) {
@@ -271,4 +275,5 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 			dialog.show();
 		}
 	}, true);
+
 })();
