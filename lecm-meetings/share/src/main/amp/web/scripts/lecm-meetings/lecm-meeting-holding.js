@@ -82,7 +82,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 
 		onBeforeFormRuntimeInit: function(layer, args) {
 			var formRuntime = args[1].runtime;
-			this.forms.push(new FormWrapper(formRuntime));
+			this.forms.push(new LogicECM.module.Base.FormWrapper(formRuntime));
 
 			var submitElement = formRuntime.submitElements[0];
 			this.submitElements.push(submitElement);
@@ -276,70 +276,4 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 		}
 	}, true);
 
-	function FormWrapper(runtime) {
-		this.runtime = runtime;
-		this._updatePristineData();
-	}
-
-	FormWrapper.prototype = {
-
-		runtime: null,
-		timeout: null,
-		delay: 1500,
-		propOrAssocRegex: /^(assoc|prop)_/,
-
-		_effectiveFilter: function FormWrapper__effectiveFilter(input) {			
-			return this.propOrAssocRegex.test(input);
-		},
-
-		_updatePristineData: function FormWrapper__updatePristineData() {
-			var formData = this.runtime.getFormData();
-			var pristineFormData = {};
-
-			this.pristineFormData = Object.keys(formData)
-										  .filter(this._effectiveFilter, this)
-										  .reduce(function (res, key) {
-										   	  res[key] = formData[key];
-										   	  return res;
-										  }, {});
-		},
-
-		isDirty: function FormWrapper_isDirty() {
-			var newData = this.runtime.getFormData(),
-				newEffectiveKeys = [];
-
-			if (!newData) {
-				console.warn('Cannot get form data');
-				return false;
-			}
-
-			newEffectiveKeys = Object.keys(newData).filter(this._effectiveFilter, this);			
-			
-			if (Object.keys(this.pristineFormData).length !== newEffectiveKeys.length) {
-				return true;
-			}
-
-			return newEffectiveKeys.some(function(newKey) {
-				if (newData[newKey] !== this.pristineFormData[newKey]) {
-					return true;
-				}
-			}, this);
-		},
-
-		_submitForm: function FormWrapper__submitForm() {
-			var submitEl = this.runtime.submitElements[0];
-			submitEl && submitEl.submitForm();
-			this._updatePristineData();
-		},
-
-		submit: function FormWrapper_submit(immediate) {
-			clearTimeout(this.timeout);
-			
-			if (YAHOO.lang.isBoolean(immediate) && immediate) {
-				this._submitForm();
-			} else {
-				this.timeout = setTimeout(this._submitForm.bind(this), this.delay);
-			}
-		}
-	};
 })();
