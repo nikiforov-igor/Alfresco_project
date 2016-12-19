@@ -204,7 +204,7 @@
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
-				<!-- Закрывать автоматически -->
+				<!-- Закрывать автоматически вышестоящее поручение-->
 				<property name="lecm-errands:auto-close">
 					<type>d:boolean</type>
 					<default>false</default>
@@ -564,6 +564,18 @@
                         <many>false</many>
                     </target>
                 </association>
+				<!-- Связанные с исполнением документы -->
+				<association name="lecm-errands:execution-connected-document-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-document:base</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
 			</associations>
 			<mandatory-aspects>
 				<aspect>lecm-errands-ts:coexecutor-reports-aspect</aspect>
@@ -578,7 +590,7 @@
 			    <property name="lecm-errands:settings-mode-choosing-executors">
 				    <type>d:text</type>
 				    <mandatory>true</mandatory>
-				    <default>UNIT</default>
+				    <default>ORGANIZATION</default>
 				    <constraints>
 					    <constraint ref="lecm-errands:settings-mode-choosing-executors-const"/>
 				    </constraints>

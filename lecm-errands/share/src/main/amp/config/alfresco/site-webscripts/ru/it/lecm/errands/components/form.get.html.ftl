@@ -451,6 +451,11 @@
             </#if>
             <#if canEditExecutionReport>
                 <div class="exec-block">
+                    <span id="${id}-exec-report-transfer-coexecutors-reports" class="yui-button yui-push-button">
+                        <span class="first-child">
+                            <button>${msg("message.errands.executionReport.transferCoexecutorsReports")}</button>
+                        </span>
+                    </span>
                     <span id="${id}-exec-report-reset" class="yui-button yui-push-button">
                         <span class="first-child">
                             <button>${msg("message.errands.executionReport.clear")}</button>

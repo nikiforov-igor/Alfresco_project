@@ -42,7 +42,7 @@
 				}
 
 				if (organization && organization.nodeRef) {
-                LogicECM.module.Base.Util.enableControl(formId, "lecm-events-dic:resources-responsible-assoc");
+					LogicECM.module.Base.Util.enableControl(formId, "lecm-events-dic:resources-responsible-assoc");
 					YAHOO.Bubbling.fire("refreshItemList", {
 						formId: formId,
 						fieldId: "lecm-events-dic:resources-responsible-assoc",

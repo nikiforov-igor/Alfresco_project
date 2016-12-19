@@ -722,7 +722,8 @@
                     <show id="lecm-errands:reiteration-count"/>
                     <show id="reiteration-count-label" force="true"/>
                     <show id="lecm-errand-period-endless" force="true"/>
-
+                    <!-- Закрывать вышестоящее поручение -->
+                    <show id="lecm-errands:auto-close"/>
                     <!-- Исполнить точно в срок  -->
                     <show id="lecm-errands:just-in-time"/>
                     <!-- Контролер-->
@@ -880,7 +881,9 @@
                             <control-param name="textCode">label.errand.period-endless</control-param>
                         </control>
                     </field>
-
+                    <field id="lecm-errands:auto-close" set="block2-2">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    </field>
                     <field id="lecm-errands:just-in-time" set="block2-2">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
@@ -1324,6 +1327,7 @@
                     <show id="lecm-errands-ts:coexecutor-report-status"/>
                     <show id="lecm-errands-ts:coexecutor-report-route-date"/>
                     <show id="lecm-errands-ts:coexecutor-report-attachment-assoc"/>
+                    <show id="lecm-errands-ts:coexecutor-report-is-transferred"/>
                 </field-visibility>
             </form>
         </forms>
@@ -1335,6 +1339,14 @@
                     <show id="lecm-errands-ts:coexecutor-report-text" force="true"/>
                     <show id="lecm-errands-ts:coexecutor-report-connected-document-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-errands-ts:coexecutor-report-connected-document-assoc">
+                        <control>
+                            <control-param name="viewUrl">/share/page/document?nodeRef={nodeRef}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">Отчет об исполнении: {lecm-document:ext-present-string}</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
             <form>
                 <field-visibility>

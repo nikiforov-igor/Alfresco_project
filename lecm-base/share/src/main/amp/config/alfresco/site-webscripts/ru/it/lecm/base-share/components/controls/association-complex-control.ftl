@@ -28,7 +28,15 @@
 <#assign readonly = false>
 <#assign defaultValue = "">
 <#if form.mode == "create" && !field.disabled>
-	<#if params.selectedItemsFormArgs??>
+	<#if form.arguments[field.name]?has_content>
+		<#assign defaultValue=form.arguments[field.name]>
+	<#elseif form.arguments['readonly_' + field.name]?has_content>
+		<#assign defaultValue=form.arguments['readonly_' + field.name]>
+		<#assign readonly = true>
+	<#elseif params.defaultValue??>
+		<#assign defaultValue=params.defaultValue>
+		<#assign defaultValue=params.defaultValue>
+	<#elseif params.selectedItemsFormArgs??>
 		<#assign selectedItemsFormArgs = params.selectedItemsFormArgs?split(",")>
 		<#list selectedItemsFormArgs as selectedItemsFormArg>
 			<#if form.arguments[selectedItemsFormArg]??>
@@ -38,13 +46,6 @@
 				<#assign defaultValue = defaultValue + form.arguments[selectedItemsFormArg]/>
 			</#if>
 		</#list>
-	<#elseif form.arguments[field.name]?has_content>
-		<#assign defaultValue=form.arguments[field.name]>
-	<#elseif form.arguments['readonly_' + field.name]?has_content>
-		<#assign defaultValue=form.arguments['readonly_' + field.name]>
-		<#assign readonly = true>
-	<#elseif params.defaultValue??>
-		<#assign defaultValue=params.defaultValue>
 	</#if>
 
 	<#assign fieldValue = defaultValue>

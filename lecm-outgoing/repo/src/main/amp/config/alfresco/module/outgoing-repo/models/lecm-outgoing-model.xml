@@ -91,6 +91,11 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<!-- Завершающий -->
+				<property name="lecm-outgoing:is-finishing">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
 			</properties>
 			<associations>
 				<association name="lecm-outgoing:contractor-assoc">

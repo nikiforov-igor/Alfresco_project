@@ -25,7 +25,7 @@ LogicECM.module = LogicECM.module || {};
         LogicECM.module.Checkbox.superclass.constructor.call(this, "LogicECM.module.Checkbox", fieldHtmlId, ["container", "datasource"]);
         this.checkboxId = fieldHtmlId + "-entry";
         this.attentionId = fieldHtmlId + "-attention";
-		YAHOO.Bubbling.on("readonlyContol", this.onReadonlyControl, this);
+		YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
 	    YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
 	    YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
 	    YAHOO.Bubbling.on("disableRelatedFields", this.onDisableRelatedFields, this);
@@ -213,7 +213,7 @@ LogicECM.module = LogicECM.module || {};
 						}
 						if (this.checkbox) {
 							fn = args[1].readonly ? this.checkbox.setAttribute : this.checkbox.removeAttribute;
-							fn.call(this.checkbox, "readonly", "");
+							fn.call(this.checkbox, "disabled", "");
 						}
 					}
 				},
