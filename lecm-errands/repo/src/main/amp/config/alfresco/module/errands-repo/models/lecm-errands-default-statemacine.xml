@@ -2599,18 +2599,18 @@ if (doc) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только исполнителю]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR") AND !user.isAutor AND !user.currentUser().hasDynamicBusinessRole("BR_INITIATOR")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4489,18 +4489,18 @@ if(doc){
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только исполнителю поручения]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR") AND !user.isAutor AND !user.currentUser().hasDynamicBusinessRole("BR_INITIATOR")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4646,18 +4646,18 @@ if(doc){
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только исполнителю]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR") AND !user.isAutor AND !user.currentUser().hasDynamicBusinessRole("BR_INITIATOR")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -6577,18 +6577,18 @@ if (document != null) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только исполнителю]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR") AND !user.isAutor AND !user.currentUser().hasDynamicBusinessRole("BR_INITIATOR")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -6704,18 +6704,18 @@ if (document != null) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только исполнителю поручения]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR") AND !user.isAutor AND !user.currentUser().hasDynamicBusinessRole("BR_INITIATOR")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -8558,18 +8558,18 @@ if (document != null) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Контролёру]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER") AND !user.isAutor() AND !user.currentUser().hasDynamicBusinessRole("BR_INITITATOR")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
