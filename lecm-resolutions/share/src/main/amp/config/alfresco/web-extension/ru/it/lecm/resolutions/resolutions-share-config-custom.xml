@@ -319,11 +319,14 @@
                     <show id="resolutions-limitless" force="true"/>
                     <show id="lecm-resolutions:limitation-date"/>
 
+                    <show id="errands-list" force="true"/>
+
                     <show id="lecm-resolutions:reviewers-assoc"/>
                 </field-visibility>
                 <appearance>
                     <set id="limitation-date" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-view-limitation-date-set.ftl"/>
 
+                    <set id="execution" appearance="title" label-id="label.execution"/>
                     <set id="reviewers" appearance="title" label-id="label.review"/>
 
                     <field id="lecm-resolutions:base-document-assoc" read-only="true">
@@ -349,6 +352,10 @@
                         </control>
                     </field>
                     <field id="lecm-resolutions:limitation-date" set="limitation-date"  mandatory="true"/>
+
+                    <field id="errands-list" set="execution">
+                        <control template="/ru/it/lecm/errands/controls/errands-tree-control.ftl"/>
+                    </field>
 
                     <field id="lecm-resolutions:reviewers-assoc" set="reviewers">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
