@@ -57,6 +57,8 @@ function main() {
         if (res.status == 200) {
             var result = eval('(' + res + ')');
             model.canCopy = result.canCopy;
+        } else {
+            model.canCopy = false;
         }
     } else {
 		var accessInfo = DocumentUtils.getNodeAccess(model.nodeRef, user.id);

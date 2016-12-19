@@ -669,28 +669,34 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                     } catch (WriteTransactionNeededException e) {
                         logger.error(e.toString());
                     }
-                    for (String category : categories) {
-                        NodeRef categoryRef = documentAttachmentsService.getCategory(category, document);
-                        if (categoryRef != null) {
-                            // Проходим по вложениям, копируя их в userTemp
-                            List<NodeRef> attachmentsFromCategory = documentAttachmentsService.getAttachmentsByCategory(categoryRef);
-                            for (NodeRef attachment : attachmentsFromCategory) {
-                                if (userTemp != null) {
+                    if (userTemp != null) {
+                        for (String category : categories) {
+                            NodeRef categoryRef = documentAttachmentsService.getCategory(category, document);
+                            if (categoryRef != null) {
+                                // Проходим по вложениям, копируя их в userTemp
+                                List<NodeRef> attachmentsFromCategory = documentAttachmentsService.getAttachmentsByCategory(categoryRef);
+                                for (NodeRef attachment : attachmentsFromCategory) {
+
                                     List<AssociationRef> parentDocAssocs = nodeService.getTargetAssocs(attachment, DocumentService.ASSOC_PARENT_DOCUMENT);
+                                    // Временно удаляем ассоциации
                                     for (AssociationRef parentDocAssoc : parentDocAssocs) {
-                                        // Для всех вложений получаем ссылку на родительский документ
                                         NodeRef parentDoc = parentDocAssoc.getTargetRef();
-                                        // Временно удаляем ассоциацию
                                         nodeService.removeAssociation(attachment, parentDoc, DocumentService.ASSOC_PARENT_DOCUMENT);
+                                    }
+                                    try {
                                         // Копируем
                                         NodeRef attachmentCopy = copyService.copyAndRename(attachment, userTemp, ContentModel.ASSOC_CONTAINS,
                                                 QName.createQName(ContentModel.PROP_CONTENT.getNamespaceURI(), nodeService.getProperty(attachment, ContentModel.PROP_NAME).toString()),
                                                 false);
                                         attachmentsToMove.add(attachmentCopy);
-                                        // Возвращаем ассоциацию
-                                        nodeService.createAssociation(attachment, parentDoc, DocumentService.ASSOC_PARENT_DOCUMENT);
-
+                                    } finally {
+                                        // Возвращаем ассоциации
+                                        for (AssociationRef parentDocAssoc : parentDocAssocs) {
+                                            NodeRef parentDoc = parentDocAssoc.getTargetRef();
+                                            nodeService.createAssociation(attachment, parentDoc, DocumentService.ASSOC_PARENT_DOCUMENT);
+                                        }
                                     }
+
                                 }
                             }
                         }

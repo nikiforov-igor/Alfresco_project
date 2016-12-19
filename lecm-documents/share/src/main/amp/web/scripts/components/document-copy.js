@@ -54,21 +54,12 @@ LogicECM.module = LogicECM.module || {};
                             },
                             successCallback: {
                                 fn: function (response) {
-                                    var me = response.config.scope;
                                     if (response.json.copyURL) {
                                         document.location.href = Alfresco.constants.URL_PAGECONTEXT + response.json.copyURL;
                                     }
                                 }
                             },
-                            failureCallback: {
-                                fn: function (response) {
-                                    var me = response.config.scope;
-                                    Alfresco.util.PopupManager.displayMessage(
-                                        {
-                                            text: me.msg("message.details.failure")
-                                        });
-                                }
-                            },
+                            failureMessage: "message.details.failure",
                             scope: this
                         });
                 }

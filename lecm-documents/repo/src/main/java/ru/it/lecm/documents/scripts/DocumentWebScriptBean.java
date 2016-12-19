@@ -494,12 +494,11 @@ public class DocumentWebScriptBean extends BaseWebScript {
 
     /**
      * Проверяет наличие настроек копирования
-     * @param nodeRef документ
+     * @param document документ
      * @return наличие настроек копирования
      */
-    public boolean canCopyDocument(String nodeRef){
-        NodeRef document = NodeRef.isNodeRef(nodeRef) ? new NodeRef(nodeRef): null;
-        boolean canCopy = documentService.canCopyDocument(document);
+    public boolean canCopyDocument(ScriptNode document) {
+        boolean canCopy = documentService.canCopyDocument(document.getNodeRef());
         return canCopy;
     }
 
