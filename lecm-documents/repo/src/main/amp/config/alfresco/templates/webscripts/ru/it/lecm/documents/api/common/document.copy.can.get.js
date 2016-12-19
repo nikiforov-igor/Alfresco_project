@@ -1,4 +1,4 @@
-var document = search.findNode(args['nodeRef']);
+var document = utils.getNodeFromString(args['nodeRef']);
 var canCopy = false;
 if(document) {
     canCopy = documentScript.canCopyDocument(document);
