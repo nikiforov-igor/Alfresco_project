@@ -4,6 +4,13 @@
             <dependencies>
                 <js src="/scripts/lecm-resolution/constraints/resolutions-constraints.js"/>
             </dependencies>
+
+            <default-controls>
+                <type name="association:lecm-resolutions-dic:completion-methods" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Способы_x0020_завершения_x0020_резолюции</control-param>
+                    <control-param name="plane">true</control-param>
+                </type>
+            </default-controls>
         </forms>
     </config>
 
@@ -617,6 +624,31 @@
                         <control template="/ru/it/lecm/resolutions/controls/resolution-view-metadata-control.ftl"/>
                     </field>
                 </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-resolutions-dic:completion-methods">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-resolutions-dic:completion-methods">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
             </form>
         </forms>
     </config>
