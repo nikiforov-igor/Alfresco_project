@@ -253,6 +253,10 @@ LogicECM.errands = LogicECM.errands || {};
                     if (allItemsOk) {
                         this.doReportsTransfer(reportsRefs);
                     }
+                } else {
+                    Alfresco.util.PopupManager.displayMessage({
+                        text: Alfresco.util.message("lecm.errands.coexecutors.reports.msg.not.selected")
+                    });
                 }
 
             }, datagrid, true);
