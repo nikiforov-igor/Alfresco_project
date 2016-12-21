@@ -15,7 +15,7 @@
                             var completionReason = lecmResolutionWf_completionReason;
                             var document = bpm_package.children[0];
                             if (document) {
-                                if (lecmResolutionWf_completionMethodAssoc != null) {
+                                if (lecmResolutionWf_completionMethodAssoc) {
                                     var existCompletionMethods = document.assocs["lecm-resolutions:completion-method-assoc"];
                                     if (existCompletionMethods) {
                                         allItemsResults.forEach(function (item) {
