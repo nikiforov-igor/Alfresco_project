@@ -674,9 +674,32 @@
         </forms>
     </config>
 
+    <config evaluator="string-compare" condition="activiti$resolutionCompletion">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmResolutionWf:completionReason"/>
+                    <show id="lecmResolutionWf:completionMethodAssoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmResolutionWf:completionReason">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">7</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
     <config evaluator="string-compare" condition="Workflow">
         <hidden-workflows>
             <workflow name="activiti$resolutionsDecline"/>
+            <workflow name="activiti$resolutionCompletion"/>
         </hidden-workflows>
     </config>
 </alfresco-config>
