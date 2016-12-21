@@ -24,14 +24,14 @@
 					 documents.LogicEcmModelsBootstrap">
         <property name="models">
             <list>
-                <value>alfresco/module/${artifactId}/models/lecm-resolutions-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-resolutions-dictionaries-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-resolutions-model.xml</value>
             </list>
         </property>
         <property name="labels">
             <list>
-                <value>alfresco/module/${artifactId}/messages/lecm-resolutions-model</value>
                 <value>alfresco/module/${artifactId}/messages/lecm-resolutions-dictionaries-model</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-resolutions-model</value>
             </list>
         </property>
     </bean>
@@ -88,6 +88,12 @@
                 <props>
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/workflow/lecm-resolution-decline.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-resolution-completion.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
                     <prop key="redeploy">${redeploy.process.definitions}</prop>
                 </props>
