@@ -25,11 +25,13 @@
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-resolutions-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-resolutions-dictionaries-model.xml</value>
             </list>
         </property>
         <property name="labels">
             <list>
                 <value>alfresco/module/${artifactId}/messages/lecm-resolutions-model</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-resolutions-dictionaries-model</value>
             </list>
         </property>
     </bean>
@@ -54,6 +56,8 @@
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-resolutions-br-items.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/resolutions-nt-items.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-business-journal-eventCategory-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-resolution-completion-methods.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-resolution-completion-methods-items.xml</value>
             </list>
         </property>
     </bean>
