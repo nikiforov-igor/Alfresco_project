@@ -23,6 +23,7 @@
 		CREATE TABLE IF NOT EXISTS ${from} (
 		id INT NOT NULL AUTO_INCREMENT,
 		sys_node_uuid VARCHAR(100),
+		sys_node_dbid BIGINT,
 		isLatest TINYINT(1) UNSIGNED DEFAULT 1,
 		validFrom DATETIME,
 		validUntil DATETIME,
