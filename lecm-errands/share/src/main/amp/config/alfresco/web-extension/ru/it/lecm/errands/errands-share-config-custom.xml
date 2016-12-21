@@ -1587,7 +1587,6 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-errands:user-settings-without-initiator-approval"/>
 					<show id="lecm-errands:user-settings-default-initiator-assoc"/>
 					<show id="lecm-errands:user-settings-default-subject-assoc"/>
 				</field-visibility>
@@ -1599,7 +1598,6 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-errands:user-settings-without-initiator-approval"/>
 					<show id="lecm-errands:user-settings-default-initiator-assoc"/>
 					<show id="lecm-errands:user-settings-default-subject-assoc"/>
 				</field-visibility>
