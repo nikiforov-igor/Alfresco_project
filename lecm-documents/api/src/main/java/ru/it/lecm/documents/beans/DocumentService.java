@@ -238,6 +238,13 @@ public interface DocumentService {
 
     public NodeRef duplicateDocument(NodeRef document);
 
+    /**
+     * Проверяет наличие настроек копирования
+     * @param document NodeRef документа
+     * @return наличие настроек копирования
+     */
+    boolean canCopyDocument(NodeRef document);
+
     String getDocumentCopyURL(NodeRef document);
 
     /**

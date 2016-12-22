@@ -19,16 +19,18 @@
 -->
 <beans>
 
-    <bean id="resolutions.LogicEcmInternalBootstrap" parent="modelsToRepositoryLoader"
+    <bean id="resolutions.LogicEcmBootstrap" parent="modelsToRepositoryLoader"
           depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
 					 documents.LogicEcmModelsBootstrap">
         <property name="models">
             <list>
+                <value>alfresco/module/${artifactId}/models/lecm-resolutions-dictionaries-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-resolutions-model.xml</value>
             </list>
         </property>
         <property name="labels">
             <list>
+                <value>alfresco/module/${artifactId}/messages/lecm-resolutions-dictionaries-model</value>
                 <value>alfresco/module/${artifactId}/messages/lecm-resolutions-model</value>
             </list>
         </property>
@@ -40,7 +42,6 @@
             <list>
                 <value>alfresco/module/${artifactId}/actions/create-resolution-from-incoming.xml</value>
                 <value>alfresco/module/${artifactId}/actions/create-resolution-from-internal.xml</value>
-                <value>alfresco/module/${artifactId}/actions/create-resolution-from-ord.xml</value>
                 <value>alfresco/module/${artifactId}/actions/create-resolution-from-errand.xml</value>
             </list>
         </property>
@@ -53,6 +54,10 @@
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-resolutions-br-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/resolutions-nt-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-business-journal-eventCategory-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-resolution-completion-methods.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-resolution-completion-methods-items.xml</value>
             </list>
         </property>
     </bean>
@@ -63,7 +68,7 @@
     </bean>
 
     <bean id="resolutionsService" class="ru.it.lecm.resolutions.beans.ResolutionsServiceImpl" parent="baseBean"
-          depends-on="resolutions.LogicEcmInternalBootstrap, WorkCalendarService, namespaceService">
+          depends-on="resolutions.LogicEcmBootstrap, WorkCalendarService, namespaceService">
         <property name="calendarBean" ref="WorkCalendarService"/>
         <property name="namespaceService" ref="namespaceService"/>
     </bean>
@@ -74,5 +79,36 @@
             <value>resolutionsScript</value>
         </property>
         <property name="resolutionsService" ref="resolutionsService"/>
+    </bean>
+
+    <bean id="resolutionsWorkflowBootstrap" parent="workflowDeployer"
+          depends-on="resolutions.LogicEcmBootstrap">
+        <property name="workflowDefinitions">
+            <list>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-resolution-decline.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-resolution-completion.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+            </list>
+        </property>
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-resolutions-workflow-model.xml</value>
+            </list>
+        </property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/lecm-resolutions-workflow-model</value>
+            </list>
+        </property>
+        <property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
     </bean>
 </beans>

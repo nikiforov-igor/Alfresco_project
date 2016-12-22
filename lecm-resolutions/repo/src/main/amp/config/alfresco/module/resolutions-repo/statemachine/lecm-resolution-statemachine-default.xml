@@ -927,10 +927,10 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                         <subFolders/>
                                                     </node>
                                                     <node>
-                                                        <type>userTransition</type>
-                                                        <name>f97e4ed1-aa01-4767-8807-635edfed0815</name>
+                                                        <type>transitionWorkflow</type>
+                                                        <name>73ef9923-b474-4884-912e-032267ef0dac</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/19b43748-798d-440e-9224-aef89fe84b0c
+                                                            workspace://SpacesStore/ab3b1478-23a1-4f63-9f23-14d165020dd0
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -939,7 +939,11 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Завершение работ по резолюции]]></value>
+                                                                <value><![CDATA[Завершить работы]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>workflowId</name>
+                                                                <value><![CDATA[activiti$resolutionCompletion]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -948,6 +952,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
+                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
                                                         </aspects>
                                                         <associations>
@@ -1416,41 +1421,6 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                 <nodes>
                                                     <node>
                                                         <type>userTransition</type>
-                                                        <name>a529e242-7050-4d8d-bdf6-7d9acf753061</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/ab9bc791-8128-4d1f-914b-2dfedbec7b53
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Отклонить]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                            <transitionLabelAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/de0faa7e-a11f-4ae0-bcf9-ea2b4742334b
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>userTransition</type>
                                                         <name>8682d300-85a3-4106-a8f8-eb459009c8c6</name>
                                                         <nodeRef>
                                                             workspace://SpacesStore/3c00decf-fcda-43c7-92ec-705a239ed68b
@@ -1559,6 +1529,46 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                                 <type>transitionStatus</type>
                                                                 <reference>
                                                                     workspace://SpacesStore/85b7cdf4-63ee-4738-a261-03e7cb7c80af
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transitionWorkflow</type>
+                                                        <name>5e4a0ced-f683-4d6c-b8c1-7432dd27df81</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/43befe7e-c570-4f1f-ba02-d1c7ed4a9fb9
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value><![CDATA[Отклонить]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>workflowId</name>
+                                                                <value><![CDATA[activiti$resolutionDecline]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                            <workflowAspect/>
+                                                            <transitionLabelAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/de0faa7e-a11f-4ae0-bcf9-ea2b4742334b
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -2427,7 +2437,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                     </node>
                     <node>
                         <type>endEvent</type>
-                        <name>Исполнено</name>
+                        <name>Завершено</name>
                         <nodeRef>workspace://SpacesStore/9df87e0f-7ab3-4004-bd5b-1711e707a9df</nodeRef>
                         <properties/>
                         <aspects/>

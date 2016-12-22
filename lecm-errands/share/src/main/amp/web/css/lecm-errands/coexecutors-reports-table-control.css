@@ -21,3 +21,8 @@
 .datagrid .grid {
     overflow: hidden;
 }
+
+.datagrid .grid table .expand-row .label-div {
+    width: 130px;
+    padding-left: 50px;
+}

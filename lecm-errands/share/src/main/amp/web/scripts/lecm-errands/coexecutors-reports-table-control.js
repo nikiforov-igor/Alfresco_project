@@ -30,7 +30,7 @@ LogicECM.errands = LogicECM.errands || {};
             var actions = [];
             var actionType = "datagrid-action-link-" + this.options.bubblingLabel;
             var currentUser = {
-                businessRoles: [],
+                isExecutor: false,
                 nodeRef: null
             };
             Alfresco.util.Ajax.jsonRequest(
@@ -65,7 +65,7 @@ LogicECM.errands = LogicECM.errands || {};
                                             label: me.msg("actions.coexecutor.report.transfer"),
                                             evaluator: me.showTransferActionEvaluator
                                         });
-                                        currentUser.businessRoles.push("EXECUTOR");
+                                        currentUser.isExecutor = true;
                                     }
                                     if (roles.isCoexecutor) {
                                         actions.push({
@@ -75,7 +75,6 @@ LogicECM.errands = LogicECM.errands || {};
                                             label: me.msg("actions.edit"),
                                             evaluator: me.editActionEvaluator
                                         });
-                                        currentUser.businessRoles.push("COEXECUTOR");
                                     }
                                 }
                             }
@@ -149,21 +148,20 @@ LogicECM.errands = LogicECM.errands || {};
             if (this.tableData != null && this.tableData.rowType != null) {
                 var defaultFilter, changedFilter;
                 var filters = {
-                    showDeclineFilterOn: '@lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"DECLINE" OR @lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"ACCEPT" OR (@lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"PROJECT" AND @lecm\\-errands\\-ts\\:coexecutor\\-assoc\\-ref:"' + currentUser.nodeRef + '")' +
-                    'OR @lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"ONCONTROL"',
-                    showDeclineFilterOff: 'NOT @lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"DECLINE" AND NOT (@lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"PROJECT" AND NOT @lecm\\-errands\\-ts\\:coexecutor\\-assoc\\-ref:"' + currentUser.nodeRef + '")',
-                    showOnlyOwnFilterOn: '@lecm\\-errands\\-ts\\:coexecutor\\-assoc\\-ref:"' + currentUser.nodeRef + '"',
-                    showOnlyOwnFilterOff: null
+                    EMPTY: '',
+                    DECLINED: 'NOT @lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"DECLINE"',
+                    OWN: '@lecm\\-errands\\-ts\\:coexecutor\\-assoc\\-ref:"' + currentUser.nodeRef + '"'
                 };
                 // Фильтры для текущего пользвателя
-                if (currentUser.businessRoles.includes("COEXECUTOR") && currentUser.businessRoles.length == 1) {
-                    defaultFilter = filters.showOnlyOwnFilterOn;
-                    changedFilter = filters.showOnlyOwnFilterOff;
-                    Dom.get(this.id + "-cntrl-change-filter-label").innerHTML = Alfresco.util.message("errands.label.showAll");
-                } else {
-                    defaultFilter = filters.showDeclineFilterOff;
-                    changedFilter = filters.showDeclineFilterOn;
+                if (currentUser.isExecutor) {
+                    defaultFilter = filters.DECLINED;
+                    changedFilter = filters.EMPTY;
                     Dom.get(this.id + "-cntrl-change-filter-label").innerHTML = Alfresco.util.message("errands.label.showDeclined");
+
+                } else {
+                    defaultFilter = filters.OWN;
+                    changedFilter = filters.EMPTY;
+                    Dom.get(this.id + "-cntrl-change-filter-label").innerHTML = Alfresco.util.message("errands.label.showAll");
                 }
 
                 var datagrid = new LogicECM.errands.CoexecutorsReportsDatagrid(this.options.containerId).setOptions({
@@ -228,7 +226,7 @@ LogicECM.errands = LogicECM.errands || {};
             var transferSelectedReportsButton = Dom.get(formTemplateString + "-exec-report-transfer-coexecutors-reports");
             //скрываем кнопку переноса отчетов если поручение в неподходящих статусах.
             var isStatusOK = "На исполнении" == datagrid.options.currentDocumentStatus || "На доработке" == datagrid.options.currentDocumentStatus;
-            if (!isStatusOK || !datagrid.options.currentUser.businessRoles.includes("EXECUTOR")) {
+            if (!isStatusOK || !datagrid.options.currentUser.isExecutor) {
                 YAHOO.util.Dom.setStyle(transferSelectedReportsButton, "display", "none");
             }
 
@@ -255,6 +253,10 @@ LogicECM.errands = LogicECM.errands || {};
                     if (allItemsOk) {
                         this.doReportsTransfer(reportsRefs);
                     }
+                } else {
+                    Alfresco.util.PopupManager.displayMessage({
+                        text: Alfresco.util.message("lecm.errands.coexecutors.reports.msg.not.selected")
+                    });
                 }
 
             }, datagrid, true);

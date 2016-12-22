@@ -52,11 +52,13 @@ function main() {
             model.viewUrl = result.url;
         }
 
-        url = '/lecm/document/api/copy/url?nodeRef=' + encodeURI(model.nodeRef);
-        var copyReq = remote.connect("alfresco").get(url);
-        if (copyReq.status == 200) {
-            var result = eval('(' + copyReq + ')');
-            model.copyURL = result.copyURL;
+        url = '/lecm/document/api/copy/can?nodeRef=' + encodeURI(model.nodeRef);
+        var res = remote.connect("alfresco").get(url);
+        if (res.status == 200) {
+            var result = eval('(' + res + ')');
+            model.canCopy = result.canCopy;
+        } else {
+            model.canCopy = false;
         }
     } else {
 		var accessInfo = DocumentUtils.getNodeAccess(model.nodeRef, user.id);

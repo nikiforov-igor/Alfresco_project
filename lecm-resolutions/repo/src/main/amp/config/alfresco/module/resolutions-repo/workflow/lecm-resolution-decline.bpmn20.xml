@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/resolutions/workflow/decline/1.0">
+    <process id="resolutionDecline" name="Резолюция. Отклонить">
+        <startEvent id="startResolutionsDecline" name="Start" activiti:formKey="lecmResolutionWf:decline"></startEvent>
+        <endEvent id="endResolutionsDecline" name="End"></endEvent>
+        <scriptTask id="declineResolution" name="Resolution decline" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            <![CDATA[
+                            var declineReason = lecmResolutionWf_declineReason;
+                            var document = bpm_package.children[0];
+                            if (document) {
+                                var logText = "#initiator направил " + base.wrapperTitle("на доработку", declineReason) + " резолюцию: #mainobject.";
+                                businessJournal.log(document.nodeRef.toString(), "DECLINE_RESOLUTION", logText, []);
+
+                                var creatorAssoc = document.assocs["lecm-document:author-assoc"];
+                                if (creatorAssoc && creatorAssoc.length) {
+                                    notifications.sendNotificationFromCurrentUser({
+                                        recipients: creatorAssoc,
+                                        templateCode: 'RESOLUTION_DECLINE',
+                                        templateConfig: {
+                                            mainObject: document,
+                                            eventExecutor: orgstructure.getCurrentEmployee(),
+                                            reason: declineReason
+                                        }
+                                    });
+                                }
+                            }
+                            ]]>
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script></script>
+        </scriptTask>
+        <receiveTask id="resolutionsReceiveTask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startResolutionsDecline" targetRef="declineResolution"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="declineResolution" targetRef="resolutionsReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="resolutionsReceiveTask" targetRef="endResolutionsDecline"></sequenceFlow>
+    </process>
+</definitions>
