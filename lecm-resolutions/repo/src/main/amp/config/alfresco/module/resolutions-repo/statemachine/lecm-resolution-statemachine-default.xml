@@ -28,7 +28,7 @@
                     <node>
                         <type>alternative</type>
                         <name>cd606954-e12a-4ca0-b03c-b70871b5e52f</name>
-                        <nodeRef>workspace://SpacesStore/4bc657b7-0ecb-456b-85d3-86eabb27f22f</nodeRef>
+                        <nodeRef>workspace://SpacesStore/35c02189-cae5-4ec5-ada5-f9bf61e87013</nodeRef>
                         <properties>
                             <property>
                                 <name>alternativeExpression</name>
@@ -40,7 +40,7 @@
                         <associations>
                             <association>
                                 <type>alternativeStatus</type>
-                                <reference>workspace://SpacesStore/61dbdc2d-fb0a-4068-abb2-34b25fd41c8e</reference>
+                                <reference>workspace://SpacesStore/5a222458-20ab-4493-9a21-fe478db0c9be</reference>
                             </association>
                         </associations>
                         <roleAssociations/>
@@ -49,7 +49,7 @@
                     <node>
                         <type>alternative</type>
                         <name>6c4b4ff1-fcbc-450d-96cd-227c15600ab2</name>
-                        <nodeRef>workspace://SpacesStore/f35b5739-a955-41aa-a752-f2a5c490c2dc</nodeRef>
+                        <nodeRef>workspace://SpacesStore/359f7d7f-9856-46a6-8f04-5a6d9af40e6a</nodeRef>
                         <properties>
                             <property>
                                 <name>alternativeExpression</name>
@@ -61,7 +61,7 @@
                         <associations>
                             <association>
                                 <type>alternativeStatus</type>
-                                <reference>workspace://SpacesStore/0e3dd34b-f71d-48fb-ad12-4bc5748fe5dc</reference>
+                                <reference>workspace://SpacesStore/0c853b35-3d13-441b-9895-c0b2ab3f0002</reference>
                             </association>
                         </associations>
                         <roleAssociations/>
@@ -75,7 +75,7 @@
                     <node>
                         <type>taskStatus</type>
                         <name>Черновик</name>
-                        <nodeRef>workspace://SpacesStore/8acdc717-322e-4573-8bd9-f0c81fd59979</nodeRef>
+                        <nodeRef>workspace://SpacesStore/2f80f90c-8424-4c9e-a6ff-83be8de1fc63</nodeRef>
                         <properties>
                             <property>
                                 <name>forDraft</name>
@@ -102,7 +102,7 @@
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>5256d969-2d82-4365-bb96-5bc4a8e6d790</name>
-                                        <nodeRef>workspace://SpacesStore/51449375-2ba8-4eec-a190-a7f46ba7df0c</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/45adc118-4b38-4b97-b1ac-dc460e78189a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -121,7 +121,7 @@
                                     <node>
                                         <type>WaitForDocumentChange</type>
                                         <name>d957edd8-1877-440c-9697-5db55511a666</name>
-                                        <nodeRef>workspace://SpacesStore/11e5f653-5674-437f-8ab8-07ae489bd77a</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/24750d48-3866-4b09-b255-0931167a0e52</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -140,7 +140,7 @@
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>52609e83-0353-4378-80f2-73024508ba17</name>
-                                        <nodeRef>workspace://SpacesStore/e72f5b02-12b7-4608-9e2f-7a0ff9b6c640</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ca854df2-81e1-4b42-9fff-e0dd800cb923</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -159,7 +159,7 @@
                                     <node>
                                         <type>TimerAction</type>
                                         <name>aff7c918-9158-4c92-96b5-725ee4286791</name>
-                                        <nodeRef>workspace://SpacesStore/609d8c8f-3594-4e90-a0dd-442fab3d8673</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/10f3cf0b-048e-4a28-86a5-7e864f003fe6</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -178,7 +178,7 @@
                                     <node>
                                         <type>FinishStateWithTransition</type>
                                         <name>1b7ace9d-e865-4f47-bf78-ae787a9e00d4</name>
-                                        <nodeRef>workspace://SpacesStore/0d7a9e2a-851a-4b16-b884-1735b37886b6</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ed41eb4e-4f79-4079-a740-6cf734ebf63c</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -200,7 +200,7 @@
                                                         <type>userTransition</type>
                                                         <name>2950130a-9c80-4249-9ebd-1ec974eefec5</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/ea63c6dd-c523-47e0-8ca9-fb07a32c30e6
+                                                            workspace://SpacesStore/d8bc38be-6f19-4e8f-8304-a9ac2d78d8c1
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -228,7 +228,7 @@
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/61dbdc2d-fb0a-4068-abb2-34b25fd41c8e
+                                                                    workspace://SpacesStore/5a222458-20ab-4493-9a21-fe478db0c9be
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -242,7 +242,7 @@
                                                                         <name>c177ae1d-9f26-4c15-8438-4a4d30441527
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/90da8c46-a592-448b-b21a-e17e2f699b53
+                                                                            workspace://SpacesStore/c0108242-b4aa-45c9-9f55-36debd1b3ea4
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -274,7 +274,7 @@
                                                                         <name>61e11f7a-4da4-4876-92f4-2df3c8684eb2
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/76cc5324-1bf5-4a8d-9786-d196f723f5bc
+                                                                            workspace://SpacesStore/ac3e1916-9ac5-4603-8286-a5435a9943d8
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -309,7 +309,7 @@
                                                         <type>userTransition</type>
                                                         <name>7fff70ee-712f-4f70-8543-e2bf6c61bafb</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/230bad97-61d9-49bd-80c7-e1a66961449d
+                                                            workspace://SpacesStore/41d1edda-a83d-413d-9865-fbef0c4db2dd
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -337,7 +337,7 @@
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/0e3dd34b-f71d-48fb-ad12-4bc5748fe5dc
+                                                                    workspace://SpacesStore/0c853b35-3d13-441b-9895-c0b2ab3f0002
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -351,7 +351,7 @@
                                                                         <name>b63b0e48-cb86-4633-bdec-9c7f15c469b7
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/dd45b45d-63a4-491a-b598-b6b674443ff6
+                                                                            workspace://SpacesStore/757d8de2-472c-4664-af1e-10ea69cafcf0
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -389,7 +389,7 @@
                                     <node>
                                         <type>UserWorkflow</type>
                                         <name>60a8d986-9162-4301-9eac-5b95463402df</name>
-                                        <nodeRef>workspace://SpacesStore/86a459db-9e7d-4479-85d5-4ff5b3754bcf</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/2fa77666-8607-4847-8d6b-68612b20541d</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -408,7 +408,7 @@
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>e2448e6e-5e9d-4a79-94de-5df7adb503e6</name>
-                                        <nodeRef>workspace://SpacesStore/6fd6b9fa-449f-4acf-9467-d4603caf731b</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/052c797b-d8f7-4c55-966d-0b7b9bac3941</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -427,7 +427,7 @@
                                     <node>
                                         <type>TransitionAction</type>
                                         <name>9ed9c834-9feb-4228-bcb6-35627eeb16f5</name>
-                                        <nodeRef>workspace://SpacesStore/113a2c04-4d8a-4d19-bb31-7f9fb336ba34</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ba4e30f8-7e6a-46ec-a370-2b222044a94c</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -446,7 +446,7 @@
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>1115144d-d977-4a5b-a2cb-0782562f5938</name>
-                                        <nodeRef>workspace://SpacesStore/f1713e1b-5c99-4317-a809-e6f7b182876a</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a6673fe6-db47-46c9-acad-92cb1d249ff2</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -465,7 +465,7 @@
                                     <node>
                                         <type>TimerAction</type>
                                         <name>f326d045-17d6-4676-91ea-129728154b70</name>
-                                        <nodeRef>workspace://SpacesStore/b9e4b597-cdbd-42e4-a75e-b640069aaad6</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/c13302bd-48da-4f83-bfe8-4ab5409b250c</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -489,7 +489,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_number</name>
-                                        <nodeRef>workspace://SpacesStore/38876232-2df0-43fb-864d-8b29e7c4843e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/bee913cc-55f5-46a9-82e8-e06aecbba46c</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -504,7 +504,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_control</name>
-                                        <nodeRef>workspace://SpacesStore/27a95bd3-7f01-4722-968a-750bbb67ebf6</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/05b283ba-30ac-4808-8655-303a72b8fb44</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -519,7 +519,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document_subject-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/d8101dd4-76c7-49a7-8b53-79a20414e7e8</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ed6ea299-547a-452b-bd95-7211a14c1b39</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -534,7 +534,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_author-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/beda9cc1-c8fd-4a84-b493-effb58d81fa3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/48cdbcc3-bee2-46fd-adfd-34dcd37bafd9</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -549,7 +549,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_controller-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/e79b0eea-fedc-402e-9f3b-2bfdee3d6d6e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/2ed24ada-879e-4316-8934-52a3e24792e5</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -564,7 +564,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date</name>
-                                        <nodeRef>workspace://SpacesStore/6c92be53-e88b-4878-9786-6d47d9418598</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/fdbc2aa4-d680-41cf-9d97-6639ee4215ef</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -579,7 +579,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-radio</name>
-                                        <nodeRef>workspace://SpacesStore/cf1e5c51-d0aa-48ea-ae12-4029149ea61a</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a895b71a-3670-4c82-8b83-152fdf28e728</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -594,7 +594,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-days</name>
-                                        <nodeRef>workspace://SpacesStore/af38a65b-4ca3-4709-91e9-f51db05a1b8b</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/494fcafd-0ca8-44fd-b6c7-63d38e81a775</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -609,7 +609,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-type</name>
-                                        <nodeRef>workspace://SpacesStore/27e45c0e-7dd2-44fe-a061-99997e4f59f0</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/d523d151-c3c7-4670-97aa-97d1769a37f6</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -624,7 +624,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_reviewers-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/74d1ac84-ae4e-44ba-b7ef-89b267e34b14</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/f7f1dbf0-3a04-4f09-954b-c5f51ed89580</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -639,7 +639,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_closers</name>
-                                        <nodeRef>workspace://SpacesStore/f8e831a7-645c-49c4-b6fc-0100240dbf19</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ef65f1db-db00-4b46-8eca-3d6aaba61ec7</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -654,7 +654,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>limitation-date-script</name>
-                                        <nodeRef>workspace://SpacesStore/fff0f4f6-79a3-47ee-9c54-4e40ac764cff</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/559baa69-369d-4f3d-9d87-7349c4b17d63</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -669,7 +669,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>resolutions-limitless</name>
-                                        <nodeRef>workspace://SpacesStore/b6dffc45-833a-4f0f-a8bd-1d8acbbdd053</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/bad8b656-fcdf-493c-a364-cf3e26ae5be1</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -684,7 +684,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_errands-json</name>
-                                        <nodeRef>workspace://SpacesStore/5b7052a8-e10c-4566-8dca-7645b61f33ab</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a4172044-cf65-44cb-9102-9291c65b215d</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -699,7 +699,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/767ea405-cd2f-42b2-af39-b45801a1a2da</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/8258ff36-8c09-418d-afc6-cf8c2f54f4f3</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -714,7 +714,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-document-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/77caff31-f441-46bf-a5ea-906586f177d5</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/1df94c3f-7c07-4172-9b3c-37f97436bde9</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -733,7 +733,7 @@
                     <node>
                         <type>taskStatus</type>
                         <name>На исполнении</name>
-                        <nodeRef>workspace://SpacesStore/61dbdc2d-fb0a-4068-abb2-34b25fd41c8e</nodeRef>
+                        <nodeRef>workspace://SpacesStore/5a222458-20ab-4493-9a21-fe478db0c9be</nodeRef>
                         <properties>
                             <property>
                                 <name>do-not-ask-for-confirmation</name>
@@ -756,7 +756,7 @@
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>a4c63c4d-a965-4ac4-81c6-22767f5f8527</name>
-                                        <nodeRef>workspace://SpacesStore/491b81cf-c656-415b-9130-1527f882b10a</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/22735b7c-cf76-47e8-934d-92a1235b41ba</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -775,7 +775,7 @@
                                     <node>
                                         <type>WaitForDocumentChange</type>
                                         <name>a695606b-ecc3-4d84-9f75-b0c48d9d1956</name>
-                                        <nodeRef>workspace://SpacesStore/05a6e405-6c06-47ef-a961-3c6f4ce10481</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/54eb1dc8-4110-4669-acbe-595d73615566</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -794,7 +794,7 @@
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>380966c4-e59c-4c15-b61a-9b4e992d106f</name>
-                                        <nodeRef>workspace://SpacesStore/4c1228ca-4ab8-41e6-bdf2-16bdf0ca6153</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/68c15719-756d-4165-9406-37b88caa7a50</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -816,7 +816,7 @@
                                                         <type>ScriptActionEntity</type>
                                                         <name>df0c7111-dabf-4442-9939-7a0e4c15650b</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/9de7b81b-fa41-43ba-9327-f5d618ee3dfe
+                                                            workspace://SpacesStore/2282cfab-cd3e-4923-9269-a7cec853664c
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -850,7 +850,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>TimerAction</type>
                                         <name>7ee0098c-e86f-48bb-a028-e0314c2d163a</name>
-                                        <nodeRef>workspace://SpacesStore/1e27f568-efe3-40b0-bda9-6e1500cb6c4d</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/29b87ded-4fad-4440-8f4b-854ee2543e1e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -869,7 +869,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>FinishStateWithTransition</type>
                                         <name>dc7c2e54-ac74-4aac-a6b1-0bce1e36d1f9</name>
-                                        <nodeRef>workspace://SpacesStore/bf322f62-0fa4-43bd-b6d6-811cdbe4a8cc</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/70a5114e-ff57-4e16-ba10-5de7f266f5ca</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -891,7 +891,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                         <type>userTransition</type>
                                                         <name>56e1dfe9-013a-4d1b-a93f-0384cc8cba23</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/6513f300-04d4-4219-b4ae-5efd0b634b4b
+                                                            workspace://SpacesStore/4ddcea71-586d-4761-b6d0-f8aec72a8865
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -919,7 +919,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/85b7cdf4-63ee-4738-a261-03e7cb7c80af
+                                                                    workspace://SpacesStore/9a33da3e-c24d-4af9-852c-7b98cdf575a6
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -930,7 +930,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                         <type>transitionWorkflow</type>
                                                         <name>73ef9923-b474-4884-912e-032267ef0dac</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/ab3b1478-23a1-4f63-9f23-14d165020dd0
+                                                            workspace://SpacesStore/3275a69e-ca40-4969-b31b-4abd5f5836c0
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -959,12 +959,50 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/9df87e0f-7ab3-4004-bd5b-1711e707a9df
+                                                                    workspace://SpacesStore/9970297f-cb0c-4d93-8404-5448c3c595db
                                                                 </reference>
                                                             </association>
                                                         </associations>
                                                         <roleAssociations/>
-                                                        <subFolders/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>10ce5cea-07d3-4a44-a29b-09e4f0674a3a
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/e12cd5ab-e336-443b-a86d-f5657b48866b
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие недоступно]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[@resolutionsService.currentEmployeeIsCloser(doc.nodeRef)]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
                                                     </node>
                                                 </nodes>
                                             </subFolder>
@@ -973,7 +1011,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>UserWorkflow</type>
                                         <name>86d84b4c-33a3-4ddc-b658-0240379ba689</name>
-                                        <nodeRef>workspace://SpacesStore/04c2585f-c988-4e7e-85ec-50e55312e856</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/3286d634-7348-476f-9115-5dfeb3e6137b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -992,7 +1030,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>d96c29a5-45d0-482c-a6e5-39ca1ad1f5ee</name>
-                                        <nodeRef>workspace://SpacesStore/2723e843-e369-4e93-94cf-9392755482c8</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/971d03b7-3a0f-4988-a565-6494f5a241dc</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1011,7 +1049,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>TransitionAction</type>
                                         <name>d0d06343-9b02-4908-9074-86bbf507b9c9</name>
-                                        <nodeRef>workspace://SpacesStore/42ca79d8-adbb-4b44-82b5-4419598830e7</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/f668f896-7a8c-48c8-8d7d-3d2ea9799b4a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1030,7 +1068,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>d20c2b2e-7eea-44df-87f0-decf20c6e014</name>
-                                        <nodeRef>workspace://SpacesStore/452f5145-fc1b-4c09-92a9-87641a74f813</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/805e5377-26d7-434f-b2d1-70a2a1a29b24</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1049,7 +1087,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>TimerAction</type>
                                         <name>d8c6a064-e87f-4cfb-8619-27bff4ea23b5</name>
-                                        <nodeRef>workspace://SpacesStore/2df1aca8-b868-466f-b44a-8db7b986eb7b</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/e59282e7-9143-4829-8560-93e1dd0eadf1</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1073,7 +1111,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_control</name>
-                                        <nodeRef>workspace://SpacesStore/6929e594-2710-47d0-b2c9-0ffb333876cc</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/e4b8db3f-7cfc-4035-b78e-f346a5d11c4f</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1088,7 +1126,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document_subject-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/a3e737e7-21a2-4d70-b467-aa1234e4db97</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/1ee83962-fa2e-45b1-b109-957f7cc18e01</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1103,7 +1141,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_author-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/3578f140-4ce1-48ee-aec0-a0c270045cc9</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/0f6e7190-4b20-40c3-857a-eed5df89692d</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1118,7 +1156,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_controller-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/67b6e80a-81b3-48b5-992e-1e40f03c5bc9</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/f18748f7-34a8-43a3-ba37-a56b0c44224a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1133,7 +1171,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_closers</name>
-                                        <nodeRef>workspace://SpacesStore/27c88fa0-16b2-410f-ab4c-59db244ebc48</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/d4d3fcb0-51fc-4273-95dc-22c7ced45512</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1148,7 +1186,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>limitation-date-script</name>
-                                        <nodeRef>workspace://SpacesStore/cda18d1e-c97a-4ef3-8be2-ddb0712beedd</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/e77c7bc5-21af-43e4-84b3-cf66e38538a7</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1163,7 +1201,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-radio</name>
-                                        <nodeRef>workspace://SpacesStore/111ff3f9-ad89-4bd3-b464-475e4c4cd45b</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/4bae7d86-2f46-4b80-949c-0ea7ee6fae06</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1178,7 +1216,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>resolutions-limitless</name>
-                                        <nodeRef>workspace://SpacesStore/bc223819-0c0f-4d3d-b6e6-8c1d58879ec7</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/45492689-59c8-4224-996d-3ca0bdeaa5e3</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1193,7 +1231,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-days</name>
-                                        <nodeRef>workspace://SpacesStore/34401095-021b-43e3-92bb-1dc0e8c9e91b</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/6aad3bc7-db45-4e2b-a193-8972d20dcd68</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1208,7 +1246,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-type</name>
-                                        <nodeRef>workspace://SpacesStore/14ffb11a-6db1-40d2-9ccb-39dd23a03730</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/e4f70aca-c69b-47ab-8abc-bdecc5babfcf</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1223,7 +1261,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date</name>
-                                        <nodeRef>workspace://SpacesStore/649869b5-4f9a-4da3-a9cb-ed65ecc87729</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/c4ab3473-1aec-49a0-8e04-b1644350823b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1238,7 +1276,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_errands-json</name>
-                                        <nodeRef>workspace://SpacesStore/8224ed13-90c0-427c-86c1-9e8a44cb76ea</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/786a8f67-077c-4222-bc51-4bec02a0ec68</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1253,7 +1291,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_reviewers-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/37543463-1f55-4ab0-ab90-e81b07d7bef3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/6bf98f5f-b794-4f65-9eaa-2bbe4f5a6771</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1268,7 +1306,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/d2c138e7-9a85-4cb1-8d96-c55b098766c3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/87fec1eb-b847-49d6-8646-f86b068f7f0e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1283,7 +1321,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-document-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/b1be7b28-7dc4-4291-8850-fbfef4af6210</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ec4e3b9d-e90a-4ae1-9715-937ba74019a3</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1302,7 +1340,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                     <node>
                         <type>taskStatus</type>
                         <name>На утверждении</name>
-                        <nodeRef>workspace://SpacesStore/0e3dd34b-f71d-48fb-ad12-4bc5748fe5dc</nodeRef>
+                        <nodeRef>workspace://SpacesStore/0c853b35-3d13-441b-9895-c0b2ab3f0002</nodeRef>
                         <properties>
                             <property>
                                 <name>do-not-ask-for-confirmation</name>
@@ -1325,7 +1363,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>004074df-6cd1-483a-90e8-350a48b67d73</name>
-                                        <nodeRef>workspace://SpacesStore/9387fde3-ec2d-4356-aeb6-1f3aeb01f9eb</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/f119ac17-6e33-4baf-bc19-88ec25226f38</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1344,7 +1382,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>WaitForDocumentChange</type>
                                         <name>b0ef5b71-72f2-4547-83ac-3b8d0ced39e0</name>
-                                        <nodeRef>workspace://SpacesStore/fac6d90a-453e-4f3d-910e-1c4a3c12b1a1</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/36677835-29cb-46c8-bdc0-ee9152511251</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1363,7 +1401,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>37cf412b-88dd-4eda-a8b4-4b445323fb65</name>
-                                        <nodeRef>workspace://SpacesStore/d3bfa2a3-70f3-49e7-9f3c-a67189931127</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/bc8b8c70-37ab-433e-8b9e-3a8d9c4f523a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1382,7 +1420,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>TimerAction</type>
                                         <name>8c066639-f56c-446e-9d21-434045df8bad</name>
-                                        <nodeRef>workspace://SpacesStore/bbe2392d-ffdc-498c-b774-7c483b2155e6</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/b4965987-de1a-439a-897c-c7dc90f9ca42</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1401,7 +1439,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>FinishStateWithTransition</type>
                                         <name>4247de9d-68f7-40bb-9d3c-a8307a207492</name>
-                                        <nodeRef>workspace://SpacesStore/c44f3fcd-32bb-4b65-814d-bb2bacebce62</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/87bc68f8-feaa-4187-b573-a012071bbec1</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1423,7 +1461,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                         <type>userTransition</type>
                                                         <name>8682d300-85a3-4106-a8f8-eb459009c8c6</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/3c00decf-fcda-43c7-92ec-705a239ed68b
+                                                            workspace://SpacesStore/39b55b96-f1aa-4d87-9721-aaa7544528d9
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -1451,7 +1489,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/61dbdc2d-fb0a-4068-abb2-34b25fd41c8e
+                                                                    workspace://SpacesStore/5a222458-20ab-4493-9a21-fe478db0c9be
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -1465,7 +1503,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                                         <name>19c9c798-a62e-42c6-9603-f141697cf794
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/59627fd9-94de-4c16-ad87-e4163ff3a0f9
+                                                                            workspace://SpacesStore/291f2015-bc6a-4157-8904-c768777c8dad
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -1500,7 +1538,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                         <type>userTransition</type>
                                                         <name>4fdd7cae-f0a0-45a5-a84d-da362eb66298</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/1a842ced-c8d3-4c65-a5f8-ac4606549b49
+                                                            workspace://SpacesStore/4d87bb94-d721-44a8-b3c3-a0747bee2481
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -1528,7 +1566,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/85b7cdf4-63ee-4738-a261-03e7cb7c80af
+                                                                    workspace://SpacesStore/9a33da3e-c24d-4af9-852c-7b98cdf575a6
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -1539,7 +1577,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                         <type>transitionWorkflow</type>
                                                         <name>5e4a0ced-f683-4d6c-b8c1-7432dd27df81</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/43befe7e-c570-4f1f-ba02-d1c7ed4a9fb9
+                                                            workspace://SpacesStore/69ab322f-e2ff-45a1-8c38-077d2060ca1d
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -1568,7 +1606,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/de0faa7e-a11f-4ae0-bcf9-ea2b4742334b
+                                                                    workspace://SpacesStore/9695d80e-2ef1-45a0-8087-cb3c7d3186e4
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -1582,7 +1620,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>UserWorkflow</type>
                                         <name>58774b6b-caff-42d0-8aec-7ef333157871</name>
-                                        <nodeRef>workspace://SpacesStore/b1b9eff4-1bfa-4063-beef-4168a151c2d5</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/009d0d31-7edd-49e6-a831-22a07173d147</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1601,7 +1639,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>3ce464a6-d082-4b39-8005-039e533df53b</name>
-                                        <nodeRef>workspace://SpacesStore/87099954-77b8-4825-a9f9-66e854fc69b7</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a86564de-4511-4b56-9bdc-bfb2d2c0616b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1620,7 +1658,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>TransitionAction</type>
                                         <name>7b240a2c-9089-4151-bfd9-36136d920395</name>
-                                        <nodeRef>workspace://SpacesStore/783a6616-2146-4c13-89fe-8e37234aec3d</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/02ba7a75-d73a-4567-a1f3-570ab9b988c8</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1639,7 +1677,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>c2b9e10d-9a53-4df1-8180-3fee70f8316b</name>
-                                        <nodeRef>workspace://SpacesStore/0cf16a5c-4676-45ed-b0dd-f07e1a129bd0</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/835df7bb-bbe8-4845-aa5a-bf00892d69cd</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1658,7 +1696,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>TimerAction</type>
                                         <name>85325c18-c029-4974-aa42-a5faa190eeb4</name>
-                                        <nodeRef>workspace://SpacesStore/21a30c10-c456-48a5-885d-4e24f9a48186</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/69faa0a9-81b7-437b-a14e-3cb7693310b9</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1682,7 +1720,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_control</name>
-                                        <nodeRef>workspace://SpacesStore/b37e2cf7-1856-4379-95ca-dfa7f4976d06</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/9acdc4eb-9d8c-48e5-83ba-37ff91ed8c20</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1697,7 +1735,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document_subject-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/abb294e7-eb20-4a98-8497-f93ed6106520</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/b50d9442-f80a-49c7-95e4-687e6e5e9a57</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1712,7 +1750,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_author-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/321c386b-e2f6-4012-9aa4-dbbf12432bf8</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/4704458a-86e5-45ae-a625-3f4b9d7f4c6e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1727,7 +1765,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_controller-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/aaf8044a-eaec-4d85-977a-a921f9e14d52</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/233095a9-a2b7-47b6-a042-63acbc670ae0</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1742,7 +1780,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_closers</name>
-                                        <nodeRef>workspace://SpacesStore/57222cbe-05bb-47be-b51b-662959b8e105</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ab15ad66-8cd6-4d5e-b07e-25a0b2c71b0b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1757,7 +1795,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>limitation-date-script</name>
-                                        <nodeRef>workspace://SpacesStore/737fead6-cbc4-4d70-8863-42f4e2775e44</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/360d1428-fa66-4dce-bd43-3a73f853fd99</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1772,7 +1810,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-radio</name>
-                                        <nodeRef>workspace://SpacesStore/cb60b96d-e60a-47e9-8d8b-ce780e9ec11d</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/27df3ace-0627-44e9-a620-28b762b9503b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1787,7 +1825,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>resolutions-limitless</name>
-                                        <nodeRef>workspace://SpacesStore/72114ec3-a784-4263-ae1a-615483bc4218</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/afde605f-f6d7-481b-81e5-870444b3a277</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1802,7 +1840,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-days</name>
-                                        <nodeRef>workspace://SpacesStore/83ff8cf2-ea78-4933-89e6-18e24e5e2c6e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/55170286-a181-4f3c-a847-154abad7cd55</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1817,7 +1855,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-type</name>
-                                        <nodeRef>workspace://SpacesStore/c6d84ee2-3096-421f-9623-ad6785fc23d8</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/326011a6-d529-46d3-a106-cb67fecc69a7</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1832,7 +1870,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date</name>
-                                        <nodeRef>workspace://SpacesStore/0f446e23-6b70-44cd-9763-184049b32569</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/fcba0eb1-8387-4a93-9169-6258185d014c</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1847,7 +1885,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_errands-json</name>
-                                        <nodeRef>workspace://SpacesStore/3d6137fa-8469-418e-bbb1-2ae4e7f4e08f</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/7f824e6f-6e32-4e95-8c66-66acdf543f5a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1862,7 +1900,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_reviewers-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/7415fadb-2da5-4394-85b8-f9b887a4e1f3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/c5d1a6c4-9a72-4328-a001-20c1dc1090ed</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1877,7 +1915,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/4b2d223a-5ea9-4eec-ac7f-570ee113d8e9</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/bb327d9b-5fb6-4709-ab35-9b0ef2c2943e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1892,7 +1930,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-document-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/8b54455a-69cb-4339-a043-9cb43fb3b1e6</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/41a0b9a3-3698-47ad-94ed-171e8fe626b0</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1911,7 +1949,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                     <node>
                         <type>taskStatus</type>
                         <name>На доработке</name>
-                        <nodeRef>workspace://SpacesStore/de0faa7e-a11f-4ae0-bcf9-ea2b4742334b</nodeRef>
+                        <nodeRef>workspace://SpacesStore/9695d80e-2ef1-45a0-8087-cb3c7d3186e4</nodeRef>
                         <properties>
                             <property>
                                 <name>do-not-ask-for-confirmation</name>
@@ -1934,7 +1972,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>a8f36e45-3eae-4af2-97e7-b1e3c1b5a209</name>
-                                        <nodeRef>workspace://SpacesStore/0fbf31a8-e9ed-4212-9111-ca77c6709ef0</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/68b52890-5978-41b8-b79c-b0d948f28be2</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1953,7 +1991,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>WaitForDocumentChange</type>
                                         <name>3ad0c069-0132-47b0-8016-2d05724d4d00</name>
-                                        <nodeRef>workspace://SpacesStore/c6144cb3-0b32-4d73-bc0a-03063d28f4b4</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/4a9843a3-7e82-4651-8bb1-d5a7e5e5b398</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1972,7 +2010,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>462f8e47-73ed-4acf-9d90-2f3e1a58bd3b</name>
-                                        <nodeRef>workspace://SpacesStore/ace6f895-ce2e-4d7f-ad6b-ee5bda2e87b4</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/cbe45f1d-46b6-481f-8570-d7933f7c3fb3</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -1991,7 +2029,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>TimerAction</type>
                                         <name>e7db4b17-7ab1-476f-8b82-bf27fd196a3f</name>
-                                        <nodeRef>workspace://SpacesStore/caeca268-5769-44d2-8762-d02ddf1daaff</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a7ef0924-6ed3-4fbc-96c3-0cc892dd451d</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -2010,7 +2048,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>FinishStateWithTransition</type>
                                         <name>d7e1c136-15c5-4602-b461-9c141be55f74</name>
-                                        <nodeRef>workspace://SpacesStore/51ccaee5-f5c2-4bff-940c-d250a4940cc6</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a20e26c6-2e02-479c-89ef-1f5433f2ba6a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -2032,7 +2070,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                         <type>userTransition</type>
                                                         <name>efe0c573-e401-4fc8-b6fa-d5c1c8bbc89a</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/915d0079-2b12-4380-a0cc-2cd294f88f42
+                                                            workspace://SpacesStore/1984c846-831c-4c4f-86ba-ad5e614e8fde
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -2056,7 +2094,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/0e3dd34b-f71d-48fb-ad12-4bc5748fe5dc
+                                                                    workspace://SpacesStore/0c853b35-3d13-441b-9895-c0b2ab3f0002
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -2067,7 +2105,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                         <type>userTransition</type>
                                                         <name>cde071de-0b68-478e-98a0-ea122e8100c7</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/e8571e73-f3c8-4e6f-9978-1d3a45ec3155
+                                                            workspace://SpacesStore/ef92eada-2318-4c6b-8e0b-4207b9bbb6ec
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -2095,7 +2133,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/85b7cdf4-63ee-4738-a261-03e7cb7c80af
+                                                                    workspace://SpacesStore/9a33da3e-c24d-4af9-852c-7b98cdf575a6
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -2109,7 +2147,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>UserWorkflow</type>
                                         <name>53f5c032-11e6-45c3-b9f9-d7c2977ee748</name>
-                                        <nodeRef>workspace://SpacesStore/a59d6cf6-7965-48eb-b634-56536cd66077</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/2fa72df2-1d76-4b4e-b00f-bdf71dfbfba6</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -2128,7 +2166,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>328cafac-9fbc-48ad-a9ff-5f964aad00d8</name>
-                                        <nodeRef>workspace://SpacesStore/b2eab658-836e-4177-b8e2-979bbe6fe7b5</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/cc42a545-426e-4554-a6c0-85c9bebc3b8b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -2147,7 +2185,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>TransitionAction</type>
                                         <name>998ac57d-da77-4174-882d-e4ff38729c08</name>
-                                        <nodeRef>workspace://SpacesStore/0e5de27b-65c5-4dde-a610-8a661d4b99da</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/abb9bdb6-85f1-44df-9e8e-9131c8a232b2</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -2166,7 +2204,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>dcfbf819-61fd-4a91-83cd-cefa3928988e</name>
-                                        <nodeRef>workspace://SpacesStore/0c0264e3-74cf-4f65-aafe-1568fa9c6ed0</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/fa4f56e6-3ba5-4ccb-9a9f-dffabca7750a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -2185,7 +2223,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>TimerAction</type>
                                         <name>84da60ee-24ef-44b8-8724-7e5ed967c1a5</name>
-                                        <nodeRef>workspace://SpacesStore/801c6482-ea3a-49e7-8e08-d7c28b96cf00</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/37337c57-d13b-4d3f-a195-4c45fa7cfd63</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -2209,7 +2247,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_control</name>
-                                        <nodeRef>workspace://SpacesStore/263344f5-bcb3-4733-99f9-c34e54ad1e36</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/b0559933-0ae1-4357-89ad-3a89b0f1afaa</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2224,7 +2262,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document_subject-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/c9094484-73bc-4c5b-9c4b-d9a37faaacb3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/9e6d0f47-a59d-48d3-8a9c-adc06d74309f</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2239,7 +2277,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_author-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/0d35074e-1a7f-4b7c-8a47-ba05d6026726</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/233e024c-d20d-4ac7-9148-78f7f5294e97</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2254,7 +2292,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_controller-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/0d7af2f2-2a5f-4d4d-895e-9e6cac8da56e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/6586417a-d08a-46fb-9d4d-e6315ae13d66</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2269,7 +2307,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_closers</name>
-                                        <nodeRef>workspace://SpacesStore/7ee41e27-8a14-42fc-8013-9a9ab55807c3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/7cec4a1a-f622-499f-ab11-be12ff384fc5</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2284,7 +2322,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>limitation-date-script</name>
-                                        <nodeRef>workspace://SpacesStore/2d3bd81e-593f-4599-918a-6f941eab6673</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/7546599e-27b8-4635-b3a1-7024a205c760</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2299,7 +2337,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-radio</name>
-                                        <nodeRef>workspace://SpacesStore/9f507455-55e4-4319-bd1d-388f403070ed</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/fcfd8c9d-a00c-4cc5-9038-8c899cec9896</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2314,7 +2352,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>resolutions-limitless</name>
-                                        <nodeRef>workspace://SpacesStore/2bad9dd4-59b9-4fcb-b2b0-7add03761a84</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/7464b196-beb9-4b2f-ab71-76ae1bcd1a0e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2329,7 +2367,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-days</name>
-                                        <nodeRef>workspace://SpacesStore/572efe43-30d3-47ea-9a09-cb016f30de80</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/0c381472-b8e0-4162-a7b9-be59b97ebf74</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2344,7 +2382,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-type</name>
-                                        <nodeRef>workspace://SpacesStore/a69a5498-7a9d-4630-bd26-c688a15e510f</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/f565b446-7413-44c2-9489-b1252325472b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2359,7 +2397,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date</name>
-                                        <nodeRef>workspace://SpacesStore/d257150d-8b1a-46b1-be22-a63d9330b2d2</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/cd488110-847c-4d59-9b7b-708f72e57bf1</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2374,7 +2412,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_errands-json</name>
-                                        <nodeRef>workspace://SpacesStore/377cf423-e8c2-477c-94ac-7d360440c68a</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/174f08dc-61ca-424c-9a29-a0a12ca4787a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2389,7 +2427,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_reviewers-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/1cdabda5-80be-4ff5-b6d8-5148250bc554</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/377b263a-f794-4e5f-823c-bdae7a29d23f</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2404,7 +2442,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/2c4c3d33-3082-425a-b44d-b8c2f5bfd1be</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/6a08ec61-ca9c-4896-a1ad-9f65a701e4cc</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2419,7 +2457,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-document-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/97308f1c-d72f-4e05-939e-57ac0363797b</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/84fefa6c-af9a-4fde-b0d2-8c3ee64e77d2</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2438,7 +2476,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                     <node>
                         <type>endEvent</type>
                         <name>Завершено</name>
-                        <nodeRef>workspace://SpacesStore/9df87e0f-7ab3-4004-bd5b-1711e707a9df</nodeRef>
+                        <nodeRef>workspace://SpacesStore/9970297f-cb0c-4d93-8404-5448c3c595db</nodeRef>
                         <properties/>
                         <aspects/>
                         <associations/>
@@ -2450,7 +2488,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>8dde59d1-741d-4b00-b56d-9ca1edaf88a2</name>
-                                        <nodeRef>workspace://SpacesStore/ed499685-4a4c-46b2-bd90-03b0243dc203</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/70a6c17a-352f-44c9-a720-ee2e709ebca5</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -2474,7 +2512,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_control</name>
-                                        <nodeRef>workspace://SpacesStore/bcaf573d-7fbf-40bd-83d3-d046eb7fdad3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/4b447f92-9ee8-4882-9af5-0a60e90df805</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2489,7 +2527,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document_subject-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/10cbba8f-8e4a-4e2f-9b38-065882972cae</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/758a4f1b-471f-4bc1-ac37-9fb6c6f1198a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2504,7 +2542,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_author-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/44b4fa11-2ba5-4804-96a4-ba95a0dccaef</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/61feef16-b52c-46ae-8673-4a174fd8a080</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2519,7 +2557,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_controller-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/a00abfd8-a389-4336-b5a2-5b6efc1462ea</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/f8a7e3ae-546c-4b5a-b0e4-d7d581847b62</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2534,7 +2572,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_closers</name>
-                                        <nodeRef>workspace://SpacesStore/8f9a798d-9f30-4e54-8bff-e9ae4e877054</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/9785c4a8-17b5-4ced-9861-b56502582772</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2549,7 +2587,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>limitation-date-script</name>
-                                        <nodeRef>workspace://SpacesStore/37774ede-5828-4a81-9e78-2fcf7d1fa6fa</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/cc030b55-5f93-47ee-8442-b4debac0d9ab</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2564,7 +2602,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-radio</name>
-                                        <nodeRef>workspace://SpacesStore/b967e224-37ff-4a8c-a471-1563c9647b87</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/cc00a1b1-2ccf-4687-b4e6-cf53ec6f509e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2579,7 +2617,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>resolutions-limitless</name>
-                                        <nodeRef>workspace://SpacesStore/34fb16b8-b46a-434e-98c7-152df4ad29e5</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/6e456ec6-395f-47bb-b6c5-b7f91ee03a93</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2594,7 +2632,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-days</name>
-                                        <nodeRef>workspace://SpacesStore/2730e84d-ab37-41dd-b245-2b6a376ad3b3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/fc152f12-fd05-4a2d-9c4b-1ed904629656</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2609,7 +2647,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-type</name>
-                                        <nodeRef>workspace://SpacesStore/579babf8-574b-4122-9680-dd8e294dc3ce</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/780d15aa-2c05-4738-a51b-87aca46916f7</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2624,7 +2662,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date</name>
-                                        <nodeRef>workspace://SpacesStore/2ce8190b-d629-4f40-a2c8-6ccb4e2b18ba</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/6623cfd1-1d10-49db-a422-09d15469fa55</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2639,7 +2677,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_errands-json</name>
-                                        <nodeRef>workspace://SpacesStore/592639eb-94b0-4859-92f4-b7b32affeb6e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/e6eb7863-63ba-408e-8ff3-6691cb025247</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2654,7 +2692,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_reviewers-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/078a2528-bb65-46bf-b37d-2ee20cdbebf3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/77a8a291-b99d-4adf-9980-dc3cd9a5517b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2669,7 +2707,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/f6214bd1-bed6-440a-bc91-8e23c2c0bab1</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/77afae71-784b-4627-8b81-dbbf4bb872b3</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2684,7 +2722,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-document-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/a6c6c021-e3c8-4c3d-92ab-d1a774bed36f</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/f2eac342-6251-4d95-86ec-24bc96203be3</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2703,7 +2741,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                     <node>
                         <type>endEvent</type>
                         <name>Аннлировано</name>
-                        <nodeRef>workspace://SpacesStore/85b7cdf4-63ee-4738-a261-03e7cb7c80af</nodeRef>
+                        <nodeRef>workspace://SpacesStore/9a33da3e-c24d-4af9-852c-7b98cdf575a6</nodeRef>
                         <properties/>
                         <aspects/>
                         <associations/>
@@ -2715,7 +2753,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>4945b39c-7035-45d6-ad77-3a7700afa000</name>
-                                        <nodeRef>workspace://SpacesStore/a4ad2fcb-2713-47b9-8737-29cd92be9033</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/45dd7ff6-0d09-400c-a5b1-e6f77704cd6c</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionId</name>
@@ -2739,7 +2777,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_control</name>
-                                        <nodeRef>workspace://SpacesStore/d4788e71-108d-4231-89b0-1b0b649c1a2b</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/06c9b4cc-c3bf-4ab1-9d91-5d0edd503f17</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2754,7 +2792,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document_subject-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/bc646e90-225c-4e5d-89d0-df7f346bb07d</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/4c35a2da-db2d-42d1-9a2c-82bb886820f2</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2769,7 +2807,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_author-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/f18014fa-d71b-4323-9bae-90453b162b1e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/b620c45c-2f35-46bc-ae1b-89bf6fd86610</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2784,7 +2822,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_controller-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/d84d0544-ede9-4292-aab7-2e35623c419e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/2924270a-e5a1-4fe6-a739-becde3e983b2</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2799,7 +2837,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_closers</name>
-                                        <nodeRef>workspace://SpacesStore/267b8372-7ef2-4174-ad06-832bf06f95ca</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/aa362915-940c-4e0c-b5f4-9f38372b4c0e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2814,7 +2852,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>limitation-date-script</name>
-                                        <nodeRef>workspace://SpacesStore/a6b39dbe-e187-481f-b6e2-d252b5b7f34c</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/cc9f1127-1d17-4625-9ac6-1f937e7752db</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2829,7 +2867,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-radio</name>
-                                        <nodeRef>workspace://SpacesStore/3f2360f7-3760-483e-be87-f970c826e216</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/641ced17-5519-40a9-8f95-94d5d21482e6</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2844,7 +2882,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>resolutions-limitless</name>
-                                        <nodeRef>workspace://SpacesStore/6364c05d-022d-42de-8283-e4337aabdcda</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/cd1b92ec-c6a4-4156-8615-18ad1ccc1525</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2859,7 +2897,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-days</name>
-                                        <nodeRef>workspace://SpacesStore/d245c830-a119-47a3-82d8-887cf70cd810</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/59402a97-3cbf-4f5c-85d9-aeaaa8f2dd5d</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2874,7 +2912,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-type</name>
-                                        <nodeRef>workspace://SpacesStore/d9ca2e79-9aa3-4232-b6c7-700aa6029ae0</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/c0e2afda-421c-451b-afb9-5650f5ce9af7</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2889,7 +2927,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date</name>
-                                        <nodeRef>workspace://SpacesStore/ebf62feb-9745-4b55-99fd-c657ab2f99bb</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/290fde98-eda7-4d18-9389-cbd2e39749ea</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2904,7 +2942,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_errands-json</name>
-                                        <nodeRef>workspace://SpacesStore/cca091ca-95c0-4d95-9c7c-68dcf12413d3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ac68084b-ae10-4ae5-8560-1dea02294a3a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2919,7 +2957,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_reviewers-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/af943251-dce1-4e9e-8327-5fbb16927d8d</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a4d0359d-9f52-41e5-8a81-959ed0e5077d</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2934,7 +2972,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/70afbaec-a162-4a67-9612-e2535e82938e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/2547f558-3295-4a65-a0b4-5fc93b15cc01</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2949,7 +2987,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-document-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/705d58f8-79ec-4ab7-9f24-f3d007d6b9b5</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/aca2f34a-a869-44df-8fa5-5872568c5aae</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2973,7 +3011,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                     <node>
                         <type>static-role-item</type>
                         <name>8f268f4d-6474-456d-b5a6-9cb83ad55b08</name>
-                        <nodeRef>workspace://SpacesStore/f3bccb0e-1347-429e-97b0-3219231c6069</nodeRef>
+                        <nodeRef>workspace://SpacesStore/a97ef12b-42a0-45f9-8b15-2653369113f6</nodeRef>
                         <properties>
                             <property>
                                 <name>isCreator</name>
@@ -2999,7 +3037,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                     <node>
                         <type>static-role-item</type>
                         <name>6be0e71c-89ee-435c-ba22-17270b5af37c</name>
-                        <nodeRef>workspace://SpacesStore/47e73f9b-3cdb-43cd-86ff-30c8bd07cc93</nodeRef>
+                        <nodeRef>workspace://SpacesStore/5d94a8cb-20e9-423d-9b32-1ea033a7a2b3</nodeRef>
                         <properties>
                             <property>
                                 <name>isCreator</name>

@@ -18,6 +18,10 @@ public interface ResolutionsService {
     String EXECUTION_DATE_DAYS_WORK = "WORK";
     String EXECUTION_DATE_DAYS_CALENDAR = "CALENDAR";
 
+    String CLOSERS_AUTHOR = "AUTHOR";
+    String CLOSERS_CONTROLLER = "CONTROLLER";
+    String CLOSERS_AUTHOR_AND_CONTROLLER = "AUTHOR_AND_CONTROLLER";
+
     String RESOLUTION_NAMESPACE_URI = "http://www.it.ru/logicECM/resolutions/1.0";
 
     QName TYPE_RESOLUTION_DOCUMENT = QName.createQName(RESOLUTION_NAMESPACE_URI, "document");
@@ -27,10 +31,15 @@ public interface ResolutionsService {
     QName PROP_LIMITATION_DATE_RADIO = QName.createQName(RESOLUTION_NAMESPACE_URI, "limitation-date-radio");
     QName PROP_LIMITATION_DATE_DAYS = QName.createQName(RESOLUTION_NAMESPACE_URI, "limitation-date-days");
     QName PROP_LIMITATION_DATE_TYPE = QName.createQName(RESOLUTION_NAMESPACE_URI, "limitation-date-type");
+    QName PROP_CLOSERS = QName.createQName(RESOLUTION_NAMESPACE_URI, "closers");
 
     QName ASSOC_BASE_DOCUMENT = QName.createQName(RESOLUTION_NAMESPACE_URI, "base-document-assoc");
+    QName ASSOC_AUTHOR = QName.createQName(RESOLUTION_NAMESPACE_URI, "author-assoc");
+    QName ASSOC_CONTROLLER = QName.createQName(RESOLUTION_NAMESPACE_URI, "controller-assoc");
 
     Date calculateResolutionExecutionDate(String radio, Integer days, String daysType, Date date);
 
     boolean checkResolutionErrandsExecutionDate(NodeRef resolution);
+
+    boolean currentEmployeeIsCloser(NodeRef resolution);
 }

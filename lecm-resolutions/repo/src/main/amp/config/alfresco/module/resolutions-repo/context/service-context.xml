@@ -73,6 +73,7 @@
           depends-on="resolutions.LogicEcmBootstrap, WorkCalendarService, namespaceService">
         <property name="calendarBean" ref="WorkCalendarService"/>
         <property name="namespaceService" ref="namespaceService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
 
     <bean id="resolutionsScript" parent="baseScript" class="ru.it.lecm.resolutions.scripts.ResolutionsWebScriptBean"
