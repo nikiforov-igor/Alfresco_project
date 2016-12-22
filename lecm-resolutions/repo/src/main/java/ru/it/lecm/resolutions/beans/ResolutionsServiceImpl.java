@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.errands.ErrandsService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.resolutions.api.ResolutionsService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
@@ -27,6 +28,7 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
 
     private IWorkCalendar calendarBean;
     private NamespaceService namespaceService;
+    private OrgstructureBean orgstructureService;
 
     public void setCalendarBean(IWorkCalendar calendarBean) {
         this.calendarBean = calendarBean;
@@ -34,6 +36,10 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
 
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
+    }
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
     }
 
     @Override
@@ -64,43 +70,60 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
 
     @Override
     public boolean checkResolutionErrandsExecutionDate(NodeRef resolution) {
-         if (nodeService.exists(resolution)) {
-             String errandsJsonStr = (String) nodeService.getProperty(resolution, PROP_ERRANDS_JSON);
-             if (errandsJsonStr != null) {
-                 try {
-                     Date resolutionLimitationDate = calculateResolutionExecutionDate(
-                             (String) nodeService.getProperty(resolution, PROP_LIMITATION_DATE_RADIO),
-                             (Integer) nodeService.getProperty(resolution, PROP_LIMITATION_DATE_DAYS),
-                             (String) nodeService.getProperty(resolution, PROP_LIMITATION_DATE_TYPE),
-                             (Date) nodeService.getProperty(resolution, PROP_LIMITATION_DATE));
+        if (nodeService.exists(resolution)) {
+            String errandsJsonStr = (String) nodeService.getProperty(resolution, PROP_ERRANDS_JSON);
+            if (errandsJsonStr != null) {
+                try {
+                    Date resolutionLimitationDate = calculateResolutionExecutionDate(
+                            (String) nodeService.getProperty(resolution, PROP_LIMITATION_DATE_RADIO),
+                            (Integer) nodeService.getProperty(resolution, PROP_LIMITATION_DATE_DAYS),
+                            (String) nodeService.getProperty(resolution, PROP_LIMITATION_DATE_TYPE),
+                            (Date) nodeService.getProperty(resolution, PROP_LIMITATION_DATE));
 
-                     if (resolutionLimitationDate != null) {
-                         JSONArray errandsJsonArray = new JSONArray(errandsJsonStr);
-                         for (int i = 0; i < errandsJsonArray.length(); i++) {
-                             JSONObject errandJson = errandsJsonArray.getJSONObject(i);
+                    if (resolutionLimitationDate != null) {
+                        JSONArray errandsJsonArray = new JSONArray(errandsJsonStr);
+                        for (int i = 0; i < errandsJsonArray.length(); i++) {
+                            JSONObject errandJson = errandsJsonArray.getJSONObject(i);
 
-                             String errandLimitationDateRadio = getPropFromJson(errandJson, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO);
-                             String errandLimitationDateDays = getPropFromJson(errandJson, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_DAYS);
-                             String errandLimitationDateType = getPropFromJson(errandJson, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TYPE);
-                             String errandLimitationDateDate = getPropFromJson(errandJson, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
+                            String errandLimitationDateRadio = getPropFromJson(errandJson, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO);
+                            String errandLimitationDateDays = getPropFromJson(errandJson, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_DAYS);
+                            String errandLimitationDateType = getPropFromJson(errandJson, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TYPE);
+                            String errandLimitationDateDate = getPropFromJson(errandJson, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
 
-                             Date errandLimitationDate = calculateResolutionExecutionDate(errandLimitationDateRadio,
-                                     (errandLimitationDateDays != null && !errandLimitationDateDays.isEmpty()) ? Integer.parseInt(errandLimitationDateDays) : null,
-                                     errandLimitationDateType,
-                                     (errandLimitationDateDate != null && !errandLimitationDateDate.isEmpty()) ? ISO8601DateFormat.parse(errandLimitationDateDate) : null);
+                            Date errandLimitationDate = calculateResolutionExecutionDate(errandLimitationDateRadio,
+                                    (errandLimitationDateDays != null && !errandLimitationDateDays.isEmpty()) ? Integer.parseInt(errandLimitationDateDays) : null,
+                                    errandLimitationDateType,
+                                    (errandLimitationDateDate != null && !errandLimitationDateDate.isEmpty()) ? ISO8601DateFormat.parse(errandLimitationDateDate) : null);
 
-                             if (errandLimitationDate != null && errandLimitationDate.after(resolutionLimitationDate)) {
-                                 return false;
-                             }
-                         }
-                     }
-                 } catch (JSONException e) {
+                            if (errandLimitationDate != null && errandLimitationDate.after(resolutionLimitationDate)) {
+                                return false;
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
                     logger.error("Error parse resolution errands json");
-                 }
-             }
-         }
+                }
+            }
+        }
 
         return true;
+    }
+
+    @Override
+    public boolean currentEmployeeIsCloser(NodeRef resolution) {
+        NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+        String closerType = (String) nodeService.getProperty(resolution, PROP_CLOSERS);
+
+        if (currentEmployee != null) {
+            NodeRef author = findNodeByAssociationRef(resolution, ASSOC_AUTHOR, null, ASSOCIATION_TYPE.TARGET);
+            NodeRef controller = findNodeByAssociationRef(resolution, ASSOC_CONTROLLER, null, ASSOCIATION_TYPE.TARGET);
+
+            return (CLOSERS_AUTHOR.equals(closerType) && currentEmployee.equals(author))
+                    || (CLOSERS_CONTROLLER.equals(closerType) && currentEmployee.equals(controller))
+                    || (CLOSERS_AUTHOR_AND_CONTROLLER.equals(closerType) && (currentEmployee.equals(author) || currentEmployee.equals(controller)));
+        }
+
+        return false;
     }
 
     private String getPropFromJson(JSONObject json, QName propQName) throws JSONException {
