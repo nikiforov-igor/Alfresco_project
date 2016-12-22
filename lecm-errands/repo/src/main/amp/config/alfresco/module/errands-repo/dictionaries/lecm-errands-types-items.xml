@@ -5,6 +5,7 @@
             <item name="cm:На рассмотрение" type="lecm-errands-dic:errand-type">
                 <property name="cm:name"><![CDATA[На рассмотрение]]></property>
                 <property name="lecm-errands-dic:errand-type-default-title"><![CDATA[Рассмотреть документ]]></property>
+                <property name="lecm-errands-dic:errand-type-manual-selection">true</property>
                 <property name="lecm-errands-dic:errand-type-report-required">false</property>
                 <property name="lecm-errands-dic:errand-type-limitless">true</property>
                 <property name="lecm-errands-dic:errand-type-launch-review">true</property>
@@ -12,6 +13,7 @@
             <item name="cm:На исполнение (неконтрольное)" type="lecm-errands-dic:errand-type">
                 <property name="cm:name"><![CDATA[На исполнение (неконтрольное)]]></property>
                 <property name="lecm-errands-dic:errand-type-default-title"><![CDATA[Исполнить документ]]></property>
+                <property name="lecm-errands-dic:errand-type-manual-selection">true</property>
                 <property name="lecm-errands-dic:errand-type-report-required">false</property>
                 <property name="lecm-errands-dic:errand-type-limitless">true</property>
                 <property name="lecm-errands-dic:errand-type-launch-review">false</property>
@@ -19,6 +21,7 @@
             <item name="cm:На исполнение (контрольное)" type="lecm-errands-dic:errand-type">
                 <property name="cm:name"><![CDATA[На исполнение (контрольное)]]></property>
                 <property name="lecm-errands-dic:errand-type-default-title"><![CDATA[Исполнить документ]]></property>
+                <property name="lecm-errands-dic:errand-type-manual-selection">true</property>
                 <property name="lecm-errands-dic:errand-type-report-required">true</property>
                 <property name="lecm-errands-dic:errand-type-limitless">false</property>
                 <property name="lecm-errands-dic:errand-type-launch-review">false</property>
@@ -26,8 +29,17 @@
             <item name="cm:Для информации" type="lecm-errands-dic:errand-type">
                 <property name="cm:name"><![CDATA[Для информации]]></property>
                 <property name="lecm-errands-dic:errand-type-default-title"><![CDATA[Принять к сведению]]></property>
+                <property name="lecm-errands-dic:errand-type-manual-selection">true</property>
                 <property name="lecm-errands-dic:errand-type-report-required">false</property>
                 <property name="lecm-errands-dic:errand-type-limitless">true</property>
+                <property name="lecm-errands-dic:errand-type-launch-review">false</property>
+            </item>
+            <item name="cm:Для информации" type="lecm-errands-dic:errand-type">
+                <property name="cm:name"><![CDATA[Поручение по пункту ОРД]]></property>
+                <property name="lecm-errands-dic:errand-type-default-title"><![CDATA[]]></property>
+                <property name="lecm-errands-dic:errand-type-manual-selection">false</property>
+                <property name="lecm-errands-dic:errand-type-report-required">false</property>
+                <property name="lecm-errands-dic:errand-type-limitless">false</property>
                 <property name="lecm-errands-dic:errand-type-launch-review">false</property>
             </item>
         </items>
