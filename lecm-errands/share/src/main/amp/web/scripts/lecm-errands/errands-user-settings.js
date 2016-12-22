@@ -23,9 +23,29 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 	YAHOO.extend(LogicECM.ErrandsUserSettings, Alfresco.component.Base,
 		{
+			canChooseInititator: false,
+
 			onReady: function ()
 			{
-				this.loadSettings();
+				Alfresco.util.Ajax.jsonGet({
+					url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getCurrentEmployeeRoles",
+					successCallback: {
+						fn: function (response) {
+							var me = response.config.scope;
+							if (response && response.json) {
+								var roles = response.json;
+								me.canChooseInititator = roles.some(function(role){
+									return "ERRANDS_CHOOSING_INITIATOR" == role.id
+								});
+								me.loadSettings();
+							}
+						}
+					},
+					failureMessage: this.msg("message.details.failure"),
+					scope: this
+				});
+
+
 			},
 
 			loadSettings: function() {
@@ -65,6 +85,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 								container.innerHTML = response.serverResponse.responseText;
 
 								Dom.get("errands-user-settings-edit-form-form-submit").value = me.msg("label.save");
+
+								var defaultInitiatorControl = Dom.get("errands-user-settings-edit-form_assoc_lecm-errands_user-settings-default-initiator-assoc-cntrl");
+								if(defaultInitiatorControl) {
+									defaultInitiatorControl.title = Alfresco.util.message("lecm.errands.user-settings.default-initiator.description");
+									if (!this.canChooseInititator) {
+										LogicECM.module.Base.Util.disableControl("errands-user-settings-edit-form", "lecm-errands:user-settings-default-initiator-assoc");
+									}
+								}
 
 								var form = new Alfresco.forms.Form("errands-user-settings-edit-form-form");
 								form.setSubmitAsJSON(true);

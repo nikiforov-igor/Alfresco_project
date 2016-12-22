@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/resolutions/workflow/completion/1.0">
+    <process id="resolutionCompletion" name="Резолюция. Завершение работ">
+        <startEvent id="startResolutionsCompletion" name="Start" activiti:formKey="lecmResolutionWf:completion"></startEvent>
+        <endEvent id="endResolutionsCompletion" name="End"></endEvent>
+        <scriptTask id="completionResolution" name="Resolution completion" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            <![CDATA[
+                            var completionReason = lecmResolutionWf_completionReason;
+                            var document = bpm_package.children[0];
+                            if (document) {
+                                if (lecmResolutionWf_completionMethodAssoc) {
+                                    var existCompletionMethods = document.assocs["lecm-resolutions:completion-method-assoc"];
+                                    if (existCompletionMethods) {
+                                        allItemsResults.forEach(function (item) {
+                                            document.removeAssociation(item, "lecm-resolutions:completion-method-assoc");
+                                        });
+                                    }
+				                    document.createAssociation(lecmResolutionWf_completionMethodAssoc, "lecm-resolutions:completion-method-assoc");
+			                    }
+                            }
+                            ]]>
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script></script>
+        </scriptTask>
+        <receiveTask id="resolutionsReceiveTask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startResolutionsCompletion" targetRef="completionResolution"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="completionResolution" targetRef="resolutionsReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="resolutionsReceiveTask" targetRef="endResolutionsCompletion"></sequenceFlow>
+    </process>
+</definitions>

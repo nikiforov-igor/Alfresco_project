@@ -6,9 +6,10 @@
                 "nodeRef": "${type.nodeRef}",
                 "name": "${type.name}",
                 "defaultTitle": "${type.properties["lecm-errands-dic:errand-type-default-title"]}",
-                "report-required": "${type.properties["lecm-errands-dic:errand-type-report-required"]?string}",
-                "limitless": "${type.properties["lecm-errands-dic:errand-type-limitless"]?string}",
-                "launch-review": "${type.properties["lecm-errands-dic:errand-type-launch-review"]?string}"
+                "manual-selection": ${type.properties["lecm-errands-dic:errand-type-manual-selection"]?string},
+                "report-required": ${type.properties["lecm-errands-dic:errand-type-report-required"]?string},
+                "limitless": ${type.properties["lecm-errands-dic:errand-type-limitless"]?string},
+                "launch-review": ${type.properties["lecm-errands-dic:errand-type-launch-review"]?string}
 
         }<#if type_has_next>,</#if>
         </#list>

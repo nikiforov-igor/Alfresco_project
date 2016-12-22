@@ -85,9 +85,9 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
                              String errandLimitationDateDate = getPropFromJson(errandJson, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
 
                              Date errandLimitationDate = calculateResolutionExecutionDate(errandLimitationDateRadio,
-                                     errandLimitationDateDays != null ? Integer.parseInt(errandLimitationDateDays) : null,
+                                     (errandLimitationDateDays != null && !errandLimitationDateDays.isEmpty()) ? Integer.parseInt(errandLimitationDateDays) : null,
                                      errandLimitationDateType,
-                                     errandLimitationDateDate != null ? ISO8601DateFormat.parse(errandLimitationDateDate) : null);
+                                     (errandLimitationDateDate != null && !errandLimitationDateDate.isEmpty()) ? ISO8601DateFormat.parse(errandLimitationDateDate) : null);
 
                              if (errandLimitationDate != null && errandLimitationDate.after(resolutionLimitationDate)) {
                                  return false;

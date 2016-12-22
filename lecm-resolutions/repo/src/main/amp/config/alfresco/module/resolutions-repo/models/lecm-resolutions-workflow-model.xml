@@ -9,6 +9,7 @@
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
 		<import uri="http://www.it.ru/logicECM/statemachine/aspects/1.0" prefix="lecm-statemachine-aspects"/>
+		<import uri="http://www.it.ru/logicECM/resolutions/dictionaries/1.0" prefix="lecm-resolutions-dic"/>
 	</imports>
 
 	<namespaces>
@@ -25,6 +26,34 @@
 					<mandatory>true</mandatory>
 				</property>
 			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+
+        <!--Завершение работ по резолюции ( инициировано пользователем)-->
+		<type name="lecmResolutionWf:completion">
+			<parent>bpm:startTask</parent>
+			<properties>
+				<property name="lecmResolutionWf:completionReason">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+            <associations>
+                <!-- Способ завершения -->
+                <association name="lecmResolutionWf:completionMethodAssoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-resolutions-dic:completion-methods</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
 			<mandatory-aspects>
 				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
 			</mandatory-aspects>
