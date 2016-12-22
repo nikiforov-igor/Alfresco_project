@@ -914,6 +914,7 @@
                     <field id="lecm-document:subject-assoc" set="block2-2">
                         <control>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
+                            <control-param name="selectedValueContextProperty">parentDocSubjectAssoc</control-param>
                         </control>
                     </field>
 
@@ -968,7 +969,7 @@
                             <control-param name="scripts">scripts/lecm-errands/errands-reinit-executors.js</control-param>
                         </control>
                     </field>
-                    <field id="errands-create-form-script">
+                    <field id="errands-workflow-form-script">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/components/lecm-errands-create-form.js</control-param>
                             <control-param name="scriptLoadedFireAction">errandsCreateFormScriptLoaded</control-param>
