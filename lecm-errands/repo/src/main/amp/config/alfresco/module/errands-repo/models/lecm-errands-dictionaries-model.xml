@@ -65,5 +65,8 @@
 
             </properties>
         </type>
+		<type name="lecm-errand-dic:errand-cancel-reason">
+			<parent>lecm-dic:plane_dictionary_values</parent>
+		</type>
 	</types>
 </model>

@@ -34,7 +34,7 @@
                 <property name="lecm-errands-dic:errand-type-limitless">true</property>
                 <property name="lecm-errands-dic:errand-type-launch-review">false</property>
             </item>
-            <item name="cm:Для информации" type="lecm-errands-dic:errand-type">
+            <item name="cm:Поручение по пункту ОРД" type="lecm-errands-dic:errand-type">
                 <property name="cm:name"><![CDATA[Поручение по пункту ОРД]]></property>
                 <property name="lecm-errands-dic:errand-type-default-title"><![CDATA[]]></property>
                 <property name="lecm-errands-dic:errand-type-manual-selection">false</property>
