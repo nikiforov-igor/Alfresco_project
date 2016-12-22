@@ -42,6 +42,11 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+				<!-- Доступно для выбора в ручную -->
+				<property name="lecm-errands-dic:errand-type-manual-selection">
+					<type>d:boolean</type>
+					<default>true</default>
+				</property>
 				<!-- Требуется отчет -->
 				<property name="lecm-errands-dic:errand-type-report-required">
 					<type>d:boolean</type>
