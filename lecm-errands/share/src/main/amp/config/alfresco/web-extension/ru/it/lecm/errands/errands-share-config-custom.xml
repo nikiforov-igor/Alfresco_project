@@ -751,7 +751,7 @@
                     <show id="change-executors-script" force="true"/>
                     <show id="change-errand-type-script" force="true"/>
                     <show id="report-required-handler-script" force="true"/>
-                    <show id="errands-create-form-script" force="true"/>
+                    <show id="errands-workflow-form-script" force="true"/>
 
                     <!-- Buttons -->
                     <show id="save-draft-button" force="true"/>
