@@ -133,7 +133,7 @@
 
                     <field id="lecm-resolutions:errands-json" label-id="field.primaryRouting.errands.title" set="errands">
                         <control template="/ru/it/lecm/eds/controls/multi-form-control.ftl">
-                            <control-param name="availableRemoveDefault">false</control-param>
+                            <control-param name="availableRemoveDefault">true</control-param>
                             <control-param name="documentType">lecm-errands:document</control-param>
                             <control-param name="documentFromId">from-resolution</control-param>
                             <control-param name="submitFireEvent">sendResolution</control-param>
@@ -514,7 +514,7 @@
 
                     <field id="lecm-resolutions:errands-json" label-id="field.primaryRouting.errands.title" set="errands">
                         <control template="/ru/it/lecm/eds/controls/multi-form-control.ftl">
-                            <control-param name="availableRemoveDefault">false</control-param>
+                            <control-param name="availableRemoveDefault">true</control-param>
                             <control-param name="documentType">lecm-errands:document</control-param>
                             <control-param name="documentFromId">from-resolution</control-param>
                             <control-param name="submitFireEvent">sendResolution</control-param>

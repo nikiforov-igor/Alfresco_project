@@ -313,7 +313,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                         if (indexesBlock) {
                             Dom.setStyle(indexesBlock, "line-height", blockHeight);
                         }
-                    }, 100);
+                    }, 500);
 
                 }
             },
