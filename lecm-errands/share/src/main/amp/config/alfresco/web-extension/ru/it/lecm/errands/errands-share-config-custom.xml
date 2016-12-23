@@ -751,7 +751,7 @@
                     <show id="change-executors-script" force="true"/>
                     <show id="change-errand-type-script" force="true"/>
                     <show id="report-required-handler-script" force="true"/>
-                    <show id="errands-create-form-script" force="true"/>
+                    <show id="errands-workflow-form-script" force="true"/>
 
                     <!-- Buttons -->
                     <show id="save-draft-button" force="true"/>
@@ -914,6 +914,7 @@
                     <field id="lecm-document:subject-assoc" set="block2-2">
                         <control>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
+                            <control-param name="selectedItemsFormArgs">parentDocSubjectAssoc</control-param>
                         </control>
                     </field>
 
@@ -968,7 +969,7 @@
                             <control-param name="scripts">scripts/lecm-errands/errands-reinit-executors.js</control-param>
                         </control>
                     </field>
-                    <field id="errands-create-form-script">
+                    <field id="errands-workflow-form-script">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/components/lecm-errands-create-form.js</control-param>
                             <control-param name="scriptLoadedFireAction">errandsCreateFormScriptLoaded</control-param>
@@ -1468,7 +1469,34 @@
 			</form>
 		</forms>
 	</config>
-
+    <config evaluator="node-type" condition="lecm-errands-dic:errand-cancel-reason">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+    <config evaluator="model-type" condition="lecm-errands-dic:errand-cancel-reason">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                </field-visibility>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                </field-visibility>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
     <config evaluator="node-type" condition="lecm-errands-dic:errand-type">
         <forms>
             <form>

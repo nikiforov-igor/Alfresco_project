@@ -71,6 +71,8 @@
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-types.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-types-items.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-connection-types-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-cancel-reasons.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-cancel-reasons-items.xml</value>
 			</list>
 		</property>
 	</bean>

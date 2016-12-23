@@ -18,7 +18,8 @@ if (childErrands != null) {
 				"name": errand.properties["lecm-document:present-string"],
 				"limitationDate": errand.properties["lecm-errands:limitation-date"],
 				"executorNodeRef": executor.nodeRef.toString(),
-				"executorName": executor.properties["lecm-orgstr:employee-short-name"]
+				"executorName": executor.properties["lecm-orgstr:employee-short-name"],
+				"autoClose": errand.properties["lecm-errands:auto-close"]
 			});
 		}
 	}
