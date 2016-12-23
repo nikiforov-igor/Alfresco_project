@@ -238,8 +238,7 @@ LogicECM.errands = LogicECM.errands || {};
                     var i, reportsRefs = [];
                     for (i = 0; i < selectedRows.length; i++) {
                         var reportStatus = selectedRows[i].itemData["prop_lecm-errands-ts_coexecutor-report-status"];
-                        var isReportTransferred = selectedRows[i].itemData["prop_lecm-errands-ts_coexecutor-report-is-transferred"];
-                        if (reportStatus.value != "ACCEPT" || isReportTransferred.value) {
+                        if (reportStatus.value != "ACCEPT") {
                             Alfresco.util.PopupManager.displayMessage({
                                 text: Alfresco.util.message("lecm.errands.coexecutors.reports.msg.wrong.report")
                             });
@@ -270,10 +269,9 @@ LogicECM.errands = LogicECM.errands || {};
             return status != null && status.value == "ONCONTROL";
         },
         showTransferActionEvaluator: function (rowData) {
-            var status = rowData.itemData["prop_lecm-errands-ts_coexecutor-report-status"];
-            var isTransferred = rowData.itemData["prop_lecm-errands-ts_coexecutor-report-is-transferred"];
-            var isStatusOK = "На исполнении" == this.options.currentDocumentStatus || "На доработке" == this.options.currentDocumentStatus;
-            return status && status.value == "ACCEPT" && !isTransferred.value && isStatusOK;
+            var reportStatus = rowData.itemData["prop_lecm-errands-ts_coexecutor-report-status"];
+            var isDocumentStatusOK = "На исполнении" == this.options.currentDocumentStatus || "На доработке" == this.options.currentDocumentStatus;
+            return reportStatus && reportStatus.value == "ACCEPT" && isDocumentStatusOK;
         },
         editActionEvaluator: function (rowData) {
             var status = rowData.itemData["prop_lecm-errands-ts_coexecutor-report-status"];
@@ -367,7 +365,7 @@ LogicECM.errands = LogicECM.errands || {};
         onActionTransferCoexecutorReport: function (me, asset, owner, actionsConfig, confirmFunction) {
             var nodeRef = arguments[0].nodeRef;
             if (nodeRef) {
-                doReportsTransfer([nodeRef]);
+                this.doReportsTransfer([nodeRef]);
             }
         },
         doReportsTransfer: function (reportsRefs) {
