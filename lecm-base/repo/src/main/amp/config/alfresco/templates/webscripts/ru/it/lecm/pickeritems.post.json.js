@@ -5,6 +5,7 @@
         var showInaccessible = false;
         if (json.has("showInaccessible")) {
             showInaccessible = json.get("showInaccessible");
+            model.showInaccessible = showInaccessible;
         }
         var accessibleItems = getPickerItems();
         if (accessibleItems) {
