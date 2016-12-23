@@ -1348,8 +1348,9 @@
                 <appearance>
                     <field id="lecm-errands-ts:coexecutor-report-connected-document-assoc">
                         <control>
-                            <control-param name="viewUrl">/share/page/document?nodeRef={nodeRef}</control-param>
+                            <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">Отчет об исполнении: {lecm-document:ext-present-string}</control-param>
+                            <control-param name="showInaccessible">true</control-param>
                         </control>
                     </field>
                 </appearance>
