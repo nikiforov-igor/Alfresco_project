@@ -26,6 +26,13 @@
     margin-top: -2px;
 }
 
+.control.multi-form li div.index-block {
+    float: left;
+    border-right: 1px solid #ccc;
+    margin-top: -2px;
+    padding-right: 10px;
+}
+
 .control.multi-form ul.multi-form-documents-list li.multi-form-documents-item {
     margin-bottom: 10px;
     border-bottom: 1px solid #ccc;
