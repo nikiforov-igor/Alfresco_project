@@ -1904,15 +1904,16 @@ var errand = stm_document,
     if (controllers && controllers.length) {
         Array.prototype.push.apply(recipients, controllers);
     }
-
-    notifications.sendNotification({
-        recipients: recipients,
-        templateCode: 'ERRANDS_EXPIRED',
-        templateConfig: {
-            mainObject: errand
-        },
-        dontCheckAccessToObject: true
-    });
+    if (isExpired) {
+        notifications.sendNotification({
+            recipients: recipients,
+            templateCode: 'ERRANDS_EXPIRED',
+            templateConfig: {
+                mainObject: errand
+            },
+            dontCheckAccessToObject: true
+        });
+    }
 })();]]></value>
                                                             </property>
                                                             <property>
