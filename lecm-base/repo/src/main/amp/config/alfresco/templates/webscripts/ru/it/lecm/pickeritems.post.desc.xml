@@ -7,7 +7,8 @@
   itemValueType,
   itemNameSubstituteString,
   substituteParent,
-  selectedItemsNameSubstituteString
+  selectedItemsNameSubstituteString,
+  showInAccessible
   </description>
   <url>/lecm/forms/picker/items</url>
   <format default="json"/>
