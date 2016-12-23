@@ -151,6 +151,7 @@ public class LecmPermissionWebScript extends BaseWebScript {
 		List<NodeRef> results = lecmPermissionService.getEmployeesByDynamicRole(document.getNodeRef(), roleCode);
 		return createScriptable(results);
 	}
+
     /**
      * Запускает выполнение от имени администратора
      */
