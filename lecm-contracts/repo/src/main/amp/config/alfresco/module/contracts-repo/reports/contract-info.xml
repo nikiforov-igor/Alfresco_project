@@ -113,7 +113,7 @@
                         <property name="cm:name"><![CDATA[Измерение]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:text]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[lecm_contract_partner_assoc|Контрагент,
-lecm_document_subject_assoc|Тематика, lecm_contract_typecontract_assoc|Вид, lecm_document_creator_ref|Инициатор]]></property>
+lecm_document_subject_assoc|Тематика,lecm_contract_typecontract_assoc|Вид,lecm_document_creator_ref|Инициатор]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[dim]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
