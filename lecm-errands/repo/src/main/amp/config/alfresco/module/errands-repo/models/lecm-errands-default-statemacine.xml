@@ -2726,7 +2726,7 @@ if (doc) {
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Это действие доступно только Создателю,Автору и Контроллеру поручения]]></value>
+                                                                                    <![CDATA[Это действие доступно только Создателю,Автору и Контролеру поручения]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -5020,7 +5020,7 @@ if(doc){
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Это действие доступно только Создателю, Автору и Контроллеру поручения]]></value>
+                                                                                    <![CDATA[Это действие доступно только Создателю, Автору и Контролеру поручения]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -7082,7 +7082,7 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Это действие доступно только Создателю, Автору и Контроллеру поручения]]></value>
+                                                                                    <![CDATA[Это действие доступно только Создателю, Автору и Контролеру поручения]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -8689,7 +8689,7 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Это действие доступно только Создателю, Автору и Контроллеру поручения]]></value>
+                                                                                    <![CDATA[Это действие доступно только Создателю, Автору и Контролеру поручения]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>

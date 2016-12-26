@@ -18,7 +18,7 @@
 			                        logObjects.push("" + lecmErrandWf_changeControllerNewController.nodeRef);
 			                        var logText = "Сотрудник #initiator ";
 			                        logText += documentScript.wrapperTitle("назначил", lecmErrandWf_changeControllerReason);
-			                        logText += " сотрудника #object1 контроллером по поручению: #mainobject";
+			                        logText += " сотрудника #object1 контролером по поручению: #mainobject";
 			                        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_CONTROLLER", logText, logObjects);
 
 			                        var currentEmployee = orgstructure.getCurrentEmployee();
