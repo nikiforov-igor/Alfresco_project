@@ -310,6 +310,14 @@
 					<type>d:text</type>
 				</property>
 
+                <!-- Сигналы -->
+                <!-- Сигнал об отмене -->
+                <property name="lecm-errands:cancellation-signal">
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                    <default>false</default>
+                </property>
+
 				<!-- Поиск/сортировка ассоциаций-->
 				<property name="lecm-errands:initiator-assoc-ref">
 					<type>d:text</type>

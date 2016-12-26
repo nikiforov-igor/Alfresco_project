@@ -165,6 +165,9 @@
 				<#if field.control.params.doNotCheckAccess??>
 					doNotCheckAccess: ${field.control.params.doNotCheckAccess?string},
 				</#if>
+				<#if field.control.params.showInaccessible ??>
+					showInaccessible: ${field.control.params.showInaccessible?string},
+				</#if>
 				<#if field.control.params.itemType??>
 					itemType: "${field.control.params.itemType}",
 				<#else>

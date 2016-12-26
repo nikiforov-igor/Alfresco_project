@@ -26,12 +26,14 @@
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-resolutions-dictionaries-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-resolutions-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-resolutions-aspects-model.xml</value>
             </list>
         </property>
         <property name="labels">
             <list>
                 <value>alfresco/module/${artifactId}/messages/lecm-resolutions-dictionaries-model</value>
                 <value>alfresco/module/${artifactId}/messages/lecm-resolutions-model</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-resolutions-aspects-model</value>
             </list>
         </property>
     </bean>
@@ -71,6 +73,7 @@
           depends-on="resolutions.LogicEcmBootstrap, WorkCalendarService, namespaceService">
         <property name="calendarBean" ref="WorkCalendarService"/>
         <property name="namespaceService" ref="namespaceService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
 
     <bean id="resolutionsScript" parent="baseScript" class="ru.it.lecm.resolutions.scripts.ResolutionsWebScriptBean"

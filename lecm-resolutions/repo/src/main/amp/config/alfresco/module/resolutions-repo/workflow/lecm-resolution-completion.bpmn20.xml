@@ -24,6 +24,19 @@
                                     }
 				                    document.createAssociation(lecmResolutionWf_completionMethodAssoc, "lecm-resolutions:completion-method-assoc");
 			                    }
+
+			                    var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
+			                    if (childErrands) {
+			                        childErrands.forEach(function (errand) {
+                                        errand.properties["lecm-errands:cancellation-signal"] = true;
+                                        errand.save();
+                                    });
+			                    }
+
+                                var baseDocAssoc = document.assocs["lecm-resolutions:base-document-assoc"];
+                                if (baseDocAssoc && baseDocAssoc.length) {
+                                    baseDocAssoc[0].createAssociation(document, "lecm-resolutions-aspect:resolutions-completed-assoc");
+                                }
                             }
                             ]]>
                         </activiti:string>
