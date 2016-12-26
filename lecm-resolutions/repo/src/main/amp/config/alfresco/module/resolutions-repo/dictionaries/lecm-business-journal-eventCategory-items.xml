@@ -6,6 +6,10 @@
                 <property name="cm:name">Отклонение резолюции</property>
                 <property name="lecm-busjournal:eventCategory-code">DECLINE_RESOLUTION</property>
             </item>
+            <item name="cm:Аннулирование резолюции" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Аннулирование резолюции</property>
+                <property name="lecm-busjournal:eventCategory-code">ANNUL_RESOLUTION</property>
+            </item>
         </items>
     </item>
 </items>
