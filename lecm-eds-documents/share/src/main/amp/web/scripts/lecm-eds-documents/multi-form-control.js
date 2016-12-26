@@ -302,19 +302,16 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 var li = Dom.get(this.id + "_" + num + "_item");
                 if (li) {
                     var me = this;
-                    setTimeout(function () {
-                        var blockHeight = (li.offsetHeight - 10) + "px";
+                    var blockHeight = (li.offsetHeight - 10) + "px";
 
-                        var removeItem = Dom.get(me.id + "_" + num + "_remove");
-                        if (removeItem) {
-                            Dom.setStyle(removeItem, "height", blockHeight);
-                        }
-                        var indexesBlock = Dom.get(me.id + "_" + num + "_indexes");
-                        if (indexesBlock) {
-                            Dom.setStyle(indexesBlock, "line-height", blockHeight);
-                        }
-                    }, 500);
-
+                    var removeItem = Dom.get(me.id + "_" + num + "_remove");
+                    if (removeItem) {
+                        Dom.setStyle(removeItem, "height", blockHeight);
+                    }
+                    var indexesBlock = Dom.get(me.id + "_" + num + "_indexes");
+                    if (indexesBlock) {
+                        Dom.setStyle(indexesBlock, "line-height", blockHeight);
+                    }
                 }
             },
 

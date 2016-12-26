@@ -91,3 +91,7 @@
 .control.multi-form .label-div ~ .container {
     min-width: 140px;
 }
+
+.control.multi-form .errands-limitation-date-set .errands-limitation-date-set-radio .label-div ~ .container {
+    min-width: 10px;
+}
