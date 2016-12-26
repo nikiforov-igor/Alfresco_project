@@ -42,7 +42,7 @@ public class EveryDayStatusExecutor extends ActionExecuterAbstractBase {
         // выставляем атрибут "Просрочен" в значение true
         nodeService.setProperty(nodeRef, ErrandsService.PROP_ERRANDS_IS_EXPIRED, true);
 
-        // формируем уведомление Исполнителю, Инициатору и Контроллеру:
+        // формируем уведомление Исполнителю, Инициатору и Контролеру:
         notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_EXCEEDED_DEADLINE");
         // формируем запись в журнал
         String logText = "Срок исполнения поручения #mainobject превышен";
@@ -55,7 +55,7 @@ public class EveryDayStatusExecutor extends ActionExecuterAbstractBase {
 
 
     /**
-     * Получаем список участников в подписке: Исполнителей, Инициатора и Контроллера
+     * Получаем список участников в подписке: Исполнителей, Инициатора и Контролера
      *
      * @param document
      * @return
