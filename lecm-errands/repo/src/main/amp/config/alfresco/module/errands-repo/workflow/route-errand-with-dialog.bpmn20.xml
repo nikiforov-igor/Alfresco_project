@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/errands/workflow/routeErrand/1.0">
+    <process id="routeErrand" name="Направление поручения на исполнение">
+        <startEvent id="startRouteErrand" name="Start" activiti:formKey="lecmErrandWf:routeErrand"></startEvent>
+        <endEvent id="endRouteErrand" name="End"></endEvent>
+        <scriptTask id="routeErrandTask" name="Route Errand" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            <![CDATA[
+	                            var emptyServiceTask = "Service task";
+	                        ]]>
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script></script>
+        </scriptTask>
+        <receiveTask id="routeErrandReceiveTask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startRouteErrand" targetRef="routeErrandTask"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="routeErrandTask" targetRef="routeErrandReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="routeErrandReceiveTask" targetRef="endRouteErrand"></sequenceFlow>
+    </process>
+</definitions>

@@ -2387,6 +2387,26 @@
             </form>
         </forms>
     </config>
+    <config evaluator="string-compare" condition="activiti$routeErrand">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmErrandWf:errandRouteMessage"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:errandRouteMessage">
+                        <control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+                            <control-param name="msg">ru.it.errand.route.message</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 
     <config evaluator="string-compare" condition="Workflow">
         <hidden-workflows>
@@ -2408,6 +2428,7 @@
             <workflow name="activiti$errandsRemoveDraft"/>
             <workflow name="activiti$errandsCoexecutorReport"/>
             <workflow name="activiti$errandsCoexecutorReport_1"/>
+            <workflow name="activiti$routeErrand"/>
         </hidden-workflows>
     </config>
 

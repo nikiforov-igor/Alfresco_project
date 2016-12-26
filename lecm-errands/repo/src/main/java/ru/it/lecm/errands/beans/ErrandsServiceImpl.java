@@ -26,6 +26,7 @@ import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.resolutions.api.ResolutionsService;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
@@ -629,5 +630,25 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
             }
         }
         return false;
+    }
+
+    @Override
+    public NodeRef getBaseDocumentByAdditionalDocument(NodeRef document){
+        //установка ассоциации документа-основания
+        List<AssociationRef> baseDocAssocRefs = null;
+        QName additionalDoctype = nodeService.getType(document);
+        if (additionalDoctype.equals(ErrandsService.TYPE_ERRANDS)) {
+            baseDocAssocRefs = nodeService.getTargetAssocs(document, ErrandsService.ASSOC_BASE_DOCUMENT);
+        } else if (additionalDoctype.equals(ResolutionsService.TYPE_RESOLUTION_DOCUMENT)) {
+            baseDocAssocRefs = nodeService.getTargetAssocs(document, ResolutionsService.ASSOC_BASE_DOCUMENT);
+        }
+        //если документа-основания нет, то родительский документ  является документом основанием.
+        NodeRef baseDoc;
+        if (baseDocAssocRefs == null || baseDocAssocRefs.size() == 0) {
+            baseDoc = document;
+        } else {
+            baseDoc = baseDocAssocRefs.get(0).getTargetRef();
+        }
+        return baseDoc;
     }
 }
