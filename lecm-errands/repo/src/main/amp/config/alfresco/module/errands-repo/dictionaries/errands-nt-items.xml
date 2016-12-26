@@ -360,7 +360,7 @@
                 <property name="lecm-notification-template:template">
                     <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} назначил(а) вас контролёром исполнения поручения {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))}.]]></property>
                 <property name="lecm-notification-template:description">
-                    <![CDATA[Поручение. Назначение контроллера]]></property>
+                    <![CDATA[Поручение. Назначение контролера]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
