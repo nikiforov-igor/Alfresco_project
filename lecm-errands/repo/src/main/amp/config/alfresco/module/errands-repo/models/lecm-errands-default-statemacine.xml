@@ -255,6 +255,10 @@
                                                                 <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
+                                                                <name>transition-script</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                            <property>
                                                                 <name>transitionLabel</name>
                                                                 <value><![CDATA[Направить поручение]]></value>
                                                             </property>
@@ -296,6 +300,148 @@
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>ab4082ca-35ea-4ea3-9223-ad330cdef62e
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/e2858004-b8e9-4d5c-91ee-ec9a89c7b1f1
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно если у поручения нет документа-основания или он не в финальном статусе]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-errands:base-assoc-ref") == null OR !@stateMachineHelper.isFinal(doc.attr("lecm-errands:base-assoc-ref"))]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
+                                                    <node>
+                                                        <type>transitionWorkflow</type>
+                                                        <name>901ad1f7-ca04-4b4d-a0d3-28f7bf9fd389</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/61e182b2-cb20-490f-aabf-b762e371a43d
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value><![CDATA[Направить поручение]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>workflowId</name>
+                                                                <value><![CDATA[activiti$routeErrand]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                            <transitionLabelAspect/>
+                                                            <workflowAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/04b0871c-55e3-4795-af59-dd0973447c45
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>04e3c776-b226-469c-b923-49c9da293637
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/8fde30f5-b204-4182-8d64-ccdcc18a2994
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно при условии наличия документа-основания в финальном статусе]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-errands:base-assoc-ref") != null AND @stateMachineHelper.isFinal(doc.attr("lecm-errands:base-assoc-ref"))]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>f44f58eb-58a0-4713-9218-cca32c31fc78
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/51ed6c65-ccc9-418c-920a-b4974b65f868
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Данное действие доступно только инициатору поручения]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -1781,76 +1927,93 @@ if(doc){
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = stm_document;
-if(document){
-  var prevStatus = statemachine.getPreviousStatusName(document);
-  if(!prevStatus || prevStatus == "Черновик"){
-    if (!regnumbers.isDocumentRegistered(document)) {
-      var regNumberCode;
-      var parentDoc = errands.getAdditionalDocument(document.nodeRef.toString());
-      if(!parentDoc){ 
-      	regNumberCode = "ERRAND_FREE_NUMBER";
-      }else{    
-        regNumberCode = "ERRAND_ON_BASIS_NUMBER";
-      }
-       regnumbers.registerDocument(document, regNumberCode);
-       regnumbers.setDocumentNumber(regNumberCode, document, "lecm-errands:number");
-    }
-
-    var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
-    if (controllerAssoc != null && controllerAssoc.length == 1) {
-       var controller = controllerAssoc[0];
-       lecmPermission.grantDynamicRole(document, controller , "ERRANDS_CONTROLLER", "LECM_BASIC_PG_Reader");
-    }
-
-    var initiator = null;
-    var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
-    if (initiatorAssoc != null && initiatorAssoc.length == 1) {
-        initiator = initiatorAssoc[0];
-    }
-
-    var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
-    if (executorAssoc != null && executorAssoc.length == 1) {
-        var executor = executorAssoc[0];
-
-        lecmPermission.grantDynamicRole(document, executor, "ERRANDS_EXECUTOR", "LECM_BASIC_PG_ActionPerformer");
-
-        if (initiator != null) {
-            notifications.sendNotificationFromCurrentUser({
-                recipients: [executor],
-                templateCode: 'ERRANDS_DIRECTED_BY_INITIATOR',
-                templateConfig: {
-                    mainObject: document,
-                    eventExecutor: initiator
-                }
-            });
+if (document) {
+    var prevStatus = statemachine.getPreviousStatusName(document);
+    if (!prevStatus || prevStatus == "Черновик") {
+        if (!regnumbers.isDocumentRegistered(document)) {
+            var regNumberCode;
+            var parentDoc = errands.getAdditionalDocument(document.nodeRef.toString());
+            if (!parentDoc) {
+                regNumberCode = "ERRAND_FREE_NUMBER";
+            } else {
+                regNumberCode = "ERRAND_ON_BASIS_NUMBER";
+            }
+            regnumbers.registerDocument(document, regNumberCode);
+            regnumbers.setDocumentNumber(regNumberCode, document, "lecm-errands:number");
         }
-    }
-
-    var soExecutors = document.assocs["lecm-errands:coexecutors-assoc"];
-    if (soExecutors != null) {
-        for (var i = 0; i < soExecutors.length; i++) {
-            documentMembers.addMember(document, soExecutors[i], "ERRANDS_READER");
-          statemachine.grandDynamicRoleForEmployee(document, soExecutors[i], "ERRANDS_COEXECUTOR", task);
+        var initiator = null;
+        var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
+        if (initiatorAssoc != null && initiatorAssoc.length == 1) {
+            initiator = initiatorAssoc[0];
+            lecmPermission.grantDynamicRole(document, initiator, "BR_INITIATOR", "LECM_BASIC_PG_Owner");
+            documentMembers.addMember(document, initiator, "ERRANDS_READER");
         }
 
-        if (initiator != null) {
-            notifications.sendNotificationFromCurrentUser({
-               recipients: soExecutors,
-               templateCode: 'ERRANDS_CO_EXECUTOR',
-               templateConfig: {
-                   mainObject: document,
-                   eventExecutor: initiator
-               }
-            });
+        var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
+        if (controllerAssoc != null && controllerAssoc.length == 1) {
+            var controller = controllerAssoc[0];
+            lecmPermission.grantDynamicRole(document, controller, "ERRANDS_CONTROLLER", "LECM_BASIC_PG_ActionPerformer");
+            documentMembers.addMember(document, controller, "ERRANDS_READER");
+
+            if (initiator != null) {
+                notifications.sendNotificationFromCurrentUser({
+                    recipients: [controller],
+                    templateCode: 'ERRANDS_CONTROLLER_ASSIGN',
+                    templateConfig: {
+                        mainObject: document,
+                        eventExecutor: initiator
+                    }
+                });
+            }
+        }
+   
+        var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
+        if (executorAssoc != null && executorAssoc.length == 1) {
+            var executor = executorAssoc[0];
+
+            lecmPermission.grantDynamicRole(document, executor, "ERRANDS_EXECUTOR", "LECM_BASIC_PG_ActionPerformer");
+
+            if (initiator != null) {
+                notifications.sendNotificationFromCurrentUser({
+                    recipients: [executor],
+                    templateCode: 'ERRANDS_DIRECTED_BY_INITIATOR',
+                    templateConfig: {
+                        mainObject: document,
+                        eventExecutor: initiator
+                    }
+                });
+            }
+            documentMembers.addMember(document, executor, "ERRANDS_READER");
+        }
+
+        var soExecutors = document.assocs["lecm-errands:coexecutors-assoc"];
+        if (soExecutors != null) {
+            for (var i = 0; i < soExecutors.length; i++) {
+                documentMembers.addMember(document, soExecutors[i], "ERRANDS_READER");
+                lecmPermission.grantDynamicRole(document, soExecutors[i], "ERRANDS_COEXECUTOR", "LECM_BASIC_PG_ActionPerformer");
+                documentMembers.addMember(document, soExecutors[i], "ERRANDS_READER");
+
+            }
+
+            if (initiator != null) {
+                notifications.sendNotificationFromCurrentUser({
+                    recipients: soExecutors,
+                    templateCode: 'ERRANDS_CO_EXECUTOR',
+                    templateConfig: {
+                        mainObject: document,
+                        eventExecutor: initiator
+                    }
+                });
+            }
+
         }
     }
-  }
 }]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Направить поручение Исполнителю]]></value>
+                                                                    <![CDATA[Регистрация, уведомления, выдача прав, добавление участников]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -1869,14 +2032,22 @@ if(document){
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = bpm_package.children[0];
 if (document !== null) {
-   document.properties["lecm-errands:wait-for-execution-date"] = new Date();
+    document.properties["lecm-errands:wait-for-execution-date"] = new Date();
    document.save();
+   var additionalDoc = errands.getAdditionalDocument(document.nodeRef.toString());
+   if (additionalDoc) {
+    if (!additionalDoc.hasAspect("lecm-errands-aspect:errand-wait-for-execution-signal")) {
+      additionalDoc.addAspect("lecm-errands-aspect:errand-wait-for-execution-signal");
+    }
+    additionalDoc.createAssociation(document, "lecm-errands-aspect:errand-wait-for-execution-assoc");
+    additionalDoc.save();
+   }
 }]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Сохранение фактического времени перехода в статус]]></value>
+                                                                    <![CDATA[Сохранение фактического времени перехода в статус и сигнал в родительский документ]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -1904,15 +2075,16 @@ var errand = stm_document,
     if (controllers && controllers.length) {
         Array.prototype.push.apply(recipients, controllers);
     }
-
-    notifications.sendNotification({
-        recipients: recipients,
-        templateCode: 'ERRANDS_EXPIRED',
-        templateConfig: {
-            mainObject: errand
-        },
-        dontCheckAccessToObject: true
-    });
+  	if (isExpired) {
+      notifications.sendNotification({
+          recipients: recipients,
+          templateCode: 'ERRANDS_EXPIRED',
+          templateConfig: {
+              mainObject: errand
+          },
+          dontCheckAccessToObject: true
+      });
+  	}
 })();]]></value>
                                                             </property>
                                                             <property>
@@ -2206,8 +2378,8 @@ if (doc) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -2316,8 +2488,8 @@ if (doc) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -2454,13 +2626,13 @@ if (doc) {
                                                                                     <![CDATA[lecm-document:subject-assoc-ref]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>formInputFromType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>formInputToValue</name>
                                                                                 <value>
                                                                                     <![CDATA[parentDocSubjectAssoc]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>formInputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -2481,13 +2653,13 @@ if (doc) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Это действие доступно исполнителю и соисполнителю с правам ]]></value>
+                                                                                    <![CDATA[Это действие доступно только исполнителю поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -2529,163 +2701,6 @@ if (doc) {
                                             <subFolder>
                                                 <name>transitions</name>
                                                 <nodes>
-                                                    <node>
-                                                        <type>UserWorkflowEntity</type>
-                                                        <name>201ca1b1-64c3-4fb1-9359-d76b69d56a2b</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/0bd869e1-ed71-4f96-b9d5-4db29303eaac
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsRequestCancel]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>workflowLabel</name>
-                                                                <value><![CDATA[Запросить отмену поручения]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <workflowAspect/>
-                                                        </aspects>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders>
-                                                            <subFolder>
-                                                                <name>variables</name>
-                                                                <nodes>
-                                                                    <node>
-                                                                        <type>outputVariable</type>
-                                                                        <name>b6ecd9e9-11ff-4a38-a265-47ca6b932915
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/5f2983bb-c3a8-449b-9825-b0094208b13a
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>outputFromType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>outputToValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[requestCancelResult]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>outputToType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>outputFromValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[requestCancelResult]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>520f0431-e423-4271-b5af-14ef21ad8f06
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/e05228e4-5073-4794-94be-f4da9d8e1227
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Это действие доступно только исполнителю]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR") AND !user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>4c411c9f-d862-476b-8a9c-e9a074f16349
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/1875674b-adf2-4079-be43-a5cc79e063b6
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Вы уже направили запрос отмены поручения]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isCancelRequested") == null OR !doc.attr("lecm-errands-aspect:isCancelRequested")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>a333cc0c-2322-44d6-aaa2-657db20a4b9f
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/cffd9ad9-514f-4691-a671-723c22d03524
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Вы уже запросили изменение срока поручения]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                </nodes>
-                                                            </subFolder>
-                                                        </subFolders>
-                                                    </node>
                                                     <node>
                                                         <type>UserWorkflowEntity</type>
                                                         <name>c7e85155-a57d-4da0-8d5f-e1be8abd4225</name>
@@ -3918,34 +3933,6 @@ if (document != null) {
                                                     </node>
                                                     <node>
                                                         <type>ScriptActionEntity</type>
-                                                        <name>981e1edc-c0d4-4b3d-a4d9-b18e74c1206f</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/84e579e0-942e-4ee4-a8c0-45b3038bbac1
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[var initiator = null;
-var initiatorAssoc = stm_document.assocs["lecm-errands:initiator-assoc"];
-if (initiatorAssoc !== null && initiatorAssoc.length == 1) {
-	initiator = initiatorAssoc[0];
-  if (initiator !== null) {
-    lecmPermission.grantDynamicRole(stm_document, initiator, "BR_INITIATOR", "LECM_BASIC_PG_Owner");
-  }
-}]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value><![CDATA[Выдача права инициатору]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
                                                         <name>65784de3-a420-4153-9d02-529dd7159515</name>
                                                         <nodeRef>
                                                             workspace://SpacesStore/1e8ad1a6-817f-4805-95a6-d6390f5e4f63
@@ -4126,8 +4113,8 @@ if(doc){
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -4236,8 +4223,8 @@ if(doc){
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -4371,16 +4358,16 @@ if(doc){
                                                                             <property>
                                                                                 <name>formInputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-document:subject-assoc-ref]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>formInputFromType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
+                                                                                    <![CDATA[lecm-document:subject-assoc]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>formInputToValue</name>
                                                                                 <value>
                                                                                     <![CDATA[parentDocSubjectAssoc]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>formInputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4401,13 +4388,13 @@ if(doc){
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только исполнителю поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -6188,8 +6175,8 @@ if (document != null) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -6298,8 +6285,8 @@ if (document != null) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -6433,16 +6420,16 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>formInputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-document:subject-assoc-ref]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>formInputFromType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
+                                                                                    <![CDATA[lecm-document:subject-assoc]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>formInputToValue</name>
                                                                                 <value>
                                                                                     <![CDATA[parentDocSubjectAssoc]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>formInputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -6463,13 +6450,13 @@ if (document != null) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только исполнителю поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -8185,8 +8172,8 @@ if (document != null) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -8295,8 +8282,8 @@ if (document != null) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -8374,8 +8361,8 @@ if (document != null) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -8483,8 +8470,8 @@ if (document != null) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>

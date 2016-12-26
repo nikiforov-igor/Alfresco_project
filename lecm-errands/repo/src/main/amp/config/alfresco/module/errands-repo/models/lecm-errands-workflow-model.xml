@@ -26,6 +26,10 @@
 				</list>
 			</parameter>
 		</constraint>
+		<constraint name='cancelReasonLength' type='LENGTH'>
+			<parameter name='minLength'><value>1</value></parameter>
+			<parameter name='maxLength'><value>200</value></parameter>
+		</constraint>
 	</constraints>
 	<types>
 		<type name="lecmErrandWf:removeDraft">
@@ -196,6 +200,9 @@
 				<property name="lecmErrandWf:requestCancelReason">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="cancelReasonLength"/>
+					</constraints>
 				</property>
 			</properties>
 			<mandatory-aspects>
