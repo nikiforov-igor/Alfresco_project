@@ -245,6 +245,12 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                             Dom.addClass(li, "multi-form-documents-item");
 
                             var itemsHtml = "";
+
+                            var indexTemplate = "<div class='index-block' id='{divIndexId}'></div>";
+                            itemsHtml += YAHOO.lang.substitute(indexTemplate, {
+                                divIndexId: this.id + "_" + num + "_indexes"
+                            });
+
                             if (!this.options.disabled && (!args || this.options.availableRemoveDefault)) {
                                 itemsHtml += this.getActionsDivHTML(num);
                             }
@@ -255,7 +261,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                             li.innerHTML = itemsHtml;
                             ul.appendChild(li);
 
-                            YAHOO.util.Event.onAvailable(this.id + "_" + num + "_item", this.calcActionsHeight, num, this);
+                            YAHOO.util.Event.onAvailable(this.id + "-line-" + num + "-form", this.calcActionsHeight, num, this);
 
                             ul.scrollTop = ul.scrollHeight;
 
@@ -294,9 +300,21 @@ LogicECM.module.eds = LogicECM.module.eds || {};
 
             calcActionsHeight: function (num) {
                 var li = Dom.get(this.id + "_" + num + "_item");
-                var removeItem = Dom.get(this.id + "_" + num + "_remove");
-                if (li && removeItem) {
-                    Dom.setStyle(removeItem, "height", (li.offsetHeight - 10) + "px");
+                if (li) {
+                    var me = this;
+                    setTimeout(function () {
+                        var blockHeight = (li.offsetHeight - 10) + "px";
+
+                        var removeItem = Dom.get(me.id + "_" + num + "_remove");
+                        if (removeItem) {
+                            Dom.setStyle(removeItem, "height", blockHeight);
+                        }
+                        var indexesBlock = Dom.get(me.id + "_" + num + "_indexes");
+                        if (indexesBlock) {
+                            Dom.setStyle(indexesBlock, "line-height", blockHeight);
+                        }
+                    }, 500);
+
                 }
             },
 
@@ -325,6 +343,18 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 var countElement = Dom.get(this.id + "-count");
                 if (countElement) {
                     countElement.value = Object.keys(this.forms).length;
+                }
+                this.resetIndexes();
+            },
+
+            resetIndexes: function() {
+                var index = 0, elIndexes;
+                for (var i = 0; i <= this.currentLine; i++) {
+                    elIndexes = Dom.get(this.id + "_" + i + "_indexes");
+                    if (elIndexes) {
+                        index++;
+                        elIndexes.innerHTML = index;
+                    }
                 }
             }
         });
