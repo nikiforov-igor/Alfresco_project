@@ -50,7 +50,6 @@ public abstract class BaseBean implements InitializingBean {
     public static final QName PROP_BASE_LINK_URL = QName.createQName(LINKS_NAMESPACE, "url");
 
     public static final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-    public static final DateFormat DateFormatISO8601_SZ = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     /**
      * карта с папками из декларативного описания бина
      */

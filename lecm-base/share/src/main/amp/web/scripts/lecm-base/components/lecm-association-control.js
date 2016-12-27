@@ -261,16 +261,16 @@ LogicECM.module = LogicECM.module || {};
 				this.options.pickerId = this.options.prefixPickerId + '-picker';
 
 				if (this.widgets.pickerButton != null) {
-					this.widgets.pickerButton.set('disabled', this.options.disabled);
+					this.widgets.pickerButton.set('disabled', this.options.disabled || this.readonly);
 				}
 
 				var input = Dom.get(this.controlId + "-autocomplete-input");
 				if (input != null) {
-					input.disabled = this.options.disabled || this.options.lazyLoading;
+					input.disabled = this.options.disabled || this.options.lazyLoading || this.readonly;
 				}
 
 				// Create button if control is enabled
-				if(!this.options.disabled)
+				if(!this.options.disabled && !this.readonly)
 				{
 					if (this.widgets.pickerButton == null) {
 						var buttonOptions = {
@@ -1678,7 +1678,7 @@ LogicECM.module = LogicECM.module || {};
 					}
 
 					if (oRecord.getData("type") == "lecm-orgstr:employee") {
-						template += '<h3 class="item-name">' + Util.getControlEmployeeView("{nodeRef}","{name}", true) + '</h3>';
+						template += '<h3 class="item-name">' + Util.getControlEmployeeView(oRecord.getData("nodeRef"),"{name}", true) + '</h3>';
 					} else {
 						if (scope.options.showAssocViewForm) {
 							template += '<h3 class="item-name">' + Util.getControlValueView(oRecord.getData("nodeRef"), "{name}", "{name}") + '</h3>';
