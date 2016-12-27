@@ -1966,8 +1966,14 @@
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
                     </field>
 	                <field id="lecmErrandWf:requestCancelReason">
-		                <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-			                <control-param name="rows">7</control-param>
+                        <control  template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отмены_x0020_поручений</control-param>
+                            <control-param name="itemType">lecm-errands-dic:errand-cancel-reason</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
 		                </control>
 	                </field>
                 </appearance>
@@ -2107,6 +2113,7 @@
 	            <field-visibility>
 		            <show id="packageItems"/>
 		            <show id="lecmErrandWf:cancelReason"/>
+                    <show id="lecmErrandWf:cancelChildren"/>
 	            </field-visibility>
 	            <appearance>
 		            <field id="packageItems">
@@ -2117,6 +2124,9 @@
 				            <control-param name="rows">7</control-param>
 			            </control>
 		            </field>
+                    <field id="lecmErrandWf:cancelChildren">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    </field>
 	            </appearance>
             </form>
         </forms>
@@ -2398,6 +2408,26 @@
             </form>
         </forms>
     </config>
+    <config evaluator="string-compare" condition="activiti$routeErrand">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmErrandWf:errandRouteMessage"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:errandRouteMessage">
+                        <control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+                            <control-param name="msg">ru.it.errand.route.message</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 
     <config evaluator="string-compare" condition="Workflow">
         <hidden-workflows>
@@ -2419,6 +2449,7 @@
             <workflow name="activiti$errandsRemoveDraft"/>
             <workflow name="activiti$errandsCoexecutorReport"/>
             <workflow name="activiti$errandsCoexecutorReport_1"/>
+            <workflow name="activiti$routeErrand"/>
         </hidden-workflows>
     </config>
 

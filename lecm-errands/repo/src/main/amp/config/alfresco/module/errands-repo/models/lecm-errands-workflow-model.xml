@@ -26,6 +26,10 @@
 				</list>
 			</parameter>
 		</constraint>
+		<constraint name='cancelReasonLength' type='LENGTH'>
+			<parameter name='minLength'><value>1</value></parameter>
+			<parameter name='maxLength'><value>200</value></parameter>
+		</constraint>
 	</constraints>
 	<types>
 		<type name="lecmErrandWf:removeDraft">
@@ -200,6 +204,9 @@
 				<property name="lecmErrandWf:requestCancelReason">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="cancelReasonLength"/>
+					</constraints>
 				</property>
 			</properties>
 			<mandatory-aspects>
@@ -292,6 +299,13 @@
 			<properties>
 				<property name="lecmErrandWf:cancelReason">
 					<type>d:text</type>
+					<constraints>
+						<constraint ref="cancelReasonLength"/>
+					</constraints>
+				</property>
+				<property name="lecmErrandWf:cancelChildren">
+					<type>d:boolean</type>
+					<default>true</default>
 				</property>
 			</properties>
 			<mandatory-aspects>
@@ -475,5 +489,9 @@
                 <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
             </mandatory-aspects>
         </type>
+
+		<type name="lecmErrandWf:routeErrand">
+			<parent>bpm:startTask</parent>
+		</type>
     </types>
 </model>

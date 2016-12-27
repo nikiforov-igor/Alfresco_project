@@ -35,7 +35,7 @@
 
                                 var baseDocAssoc = document.assocs["lecm-resolutions:base-document-assoc"];
                                 if (baseDocAssoc && baseDocAssoc.length) {
-                                    baseDocAssoc[0].createAssociation(document, "lecm-resolutions-aspect:resolutions-completed-assoc");
+                                    edsDocument.sendChildChangeSignal(baseDocAssoc[0]);
                                 }
                             }
                             ]]>

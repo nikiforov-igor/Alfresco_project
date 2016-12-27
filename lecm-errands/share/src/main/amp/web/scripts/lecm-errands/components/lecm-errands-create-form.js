@@ -9,6 +9,7 @@
         Bubbling = YAHOO.Bubbling,
         Substitute = YAHOO.lang.substitute;
     var formId,formButtons;
+    var isRouteClick = true;
 
     Bubbling.on('saveDraftButtonClick', saveDraft);
     Bubbling.on('expandButtonClick', toggleSet);
@@ -64,7 +65,7 @@
             return el.name == "prop_lecm-errands_is-short";
         }, 'input', formId);
         var routeButton = Selector.query(".yui-submit-button", formButtons, true);
-
+        isRouteClick = false;
         isShort.value = "false";
         routeButton.click();
     }
@@ -94,14 +95,75 @@
         });
 
         if(args[1].fieldId == "errands-workflow-form-script") {
+            var createFormModule = Alfresco.util.ComponentManager.get(formId);
+            var submitElement = createFormModule.runtimeForm.submitElements[0];
+            var oldSubmitFunction = submitElement.submitForm;
+            var args = {
+                callback: oldSubmitFunction,
+                scope: createFormModule
+            };
             Event.onContentReady(formId + "_assoc_lecm-errands_additional-document-assoc", function () {
                 var parentDocRef = this.value;
                 if (parentDocRef) {
                     checkOtherChildAutoClose(parentDocRef);
+
+                    Alfresco.util.Ajax.jsonGet({
+                        url: Alfresco.constants.PROXY_URI + "lecm/errands/api/getBaseByAdditional",
+                        dataObj: {
+                            nodeRef: parentDocRef
+                        },
+                        successCallback: {
+                            fn: function (response) {
+                                var baseDoc = response.json;
+                                if (baseDoc && baseDoc.isFinal) {
+                                    submitElement.submitForm = doBeforeSubmit.bind(createFormModule, args);
+                                }
+                            }
+                        },
+                        failureMessage: Alfresco.util.message("message.failure")
+                    });
                 }
             });
         }
 
+    }
+
+    function doBeforeSubmit(args) {
+        var scope = this;
+        var callback = args.callback;
+        if (isRouteClick) {
+            var routeDialog = new YAHOO.widget.SimpleDialog(formId + '-route-errand-dialog-panel', {
+                visible: false,
+                draggable: true,
+                close: false,
+                fixedcenter: true,
+                constraintoviewport: true,
+                destroyOnHide: true,
+                buttons: [
+                    {
+                        text: Alfresco.util.message("button.ok"),
+                        handler: function () {
+                            callback.call(scope);
+                            routeDialog.hide();
+                        },
+                        isDefault: true
+                    },
+                    {
+                        text: Alfresco.util.message("button.cancel"),
+                        handler: function () {
+                            routeDialog.hide();
+                        }
+                    }
+                ]
+            });
+            routeDialog.setHeader("Выполнение действия \"Направить поручение\"");
+            routeDialog.setBody("<p>" + Alfresco.util.message("ru.it.errand.route.message") + "</p>");
+            routeDialog.render(document.body);
+            routeDialog.show();
+
+        } else {
+            callback.call(this);
+        }
     }
 
     function checkOtherChildAutoClose(nodeRef) {

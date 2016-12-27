@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/resolutions/workflow/annul/1.0">
+    <process id="resolutionAnnul" name="Резолюция. Аннулировать">
+        <startEvent id="startResolutionsAnnul" name="Start" activiti:formKey="lecmResolutionWf:annul"></startEvent>
+        <endEvent id="endResolutionsAnnul" name="End"></endEvent>
+        <scriptTask id="annulResolution" name="Resolution annul" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            <![CDATA[
+                                var annulReason = lecmResolutionWf_annulReason;
+                                var document = bpm_package.children[0];
+                                if (document) {
+                                    document.properties["lecm-resolutions:annul-signal"] = true;
+                                    document.properties["lecm-resolutions:annul-signal-reason"] = lecmResolutionWf_annulReason;
+                                    document.save();
+                                }
+                            ]]>
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script></script>
+        </scriptTask>
+        <receiveTask id="resolutionsReceiveTask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startResolutionsAnnul" targetRef="annulResolution"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="annulResolution" targetRef="resolutionsReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="resolutionsReceiveTask" targetRef="endResolutionsAnnul"></sequenceFlow>
+    </process>
+</definitions>
