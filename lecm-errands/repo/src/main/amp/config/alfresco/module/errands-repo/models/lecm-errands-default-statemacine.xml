@@ -1945,20 +1945,19 @@ if (document) {
         var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
         if (initiatorAssoc != null && initiatorAssoc.length == 1) {
             initiator = initiatorAssoc[0];
-            lecmPermission.grantDynamicRole(document, initiator, "BR_INITIATOR", "LECM_BASIC_PG_Owner");
+            statemachine.grandDynamicRoleForEmployee(document, initiator, "BR_INITIATOR", task);
             documentMembers.addMember(document, initiator, "ERRANDS_READER");
         }
-
         var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
-        if (controllerAssoc != null && controllerAssoc.length == 1) {
+        if (controllerAssoc && controllerAssoc.length == 1) {
             var controller = controllerAssoc[0];
-            lecmPermission.grantDynamicRole(document, controller, "ERRANDS_CONTROLLER", "LECM_BASIC_PG_ActionPerformer");
+            statemachine.grandDynamicRoleForEmployee(document, controller, "ERRANDS_CONTROLLER", task);
             documentMembers.addMember(document, controller, "ERRANDS_READER");
 
             if (initiator != null) {
                 notifications.sendNotificationFromCurrentUser({
                     recipients: [controller],
-                    templateCode: 'ERRANDS_CONTROLLER_NEW',
+                    templateCode: 'ERRANDS_CONTROLLER_ASSIGN',
                     templateConfig: {
                         mainObject: document,
                         eventExecutor: initiator
@@ -1966,13 +1965,11 @@ if (document) {
                 });
             }
         }
-   
+
         var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
         if (executorAssoc != null && executorAssoc.length == 1) {
             var executor = executorAssoc[0];
-
-            lecmPermission.grantDynamicRole(document, executor, "ERRANDS_EXECUTOR", "LECM_BASIC_PG_ActionPerformer");
-
+            statemachine.grandDynamicRoleForEmployee(document, executor, "ERRANDS_EXECUTOR", task);
             if (initiator != null) {
                 notifications.sendNotificationFromCurrentUser({
                     recipients: [executor],
@@ -1989,12 +1986,9 @@ if (document) {
         var soExecutors = document.assocs["lecm-errands:coexecutors-assoc"];
         if (soExecutors != null) {
             for (var i = 0; i < soExecutors.length; i++) {
+                statemachine.grandDynamicRoleForEmployee(document, soExecutors[i], "ERRANDS_COEXECUTOR", task);
                 documentMembers.addMember(document, soExecutors[i], "ERRANDS_READER");
-                lecmPermission.grantDynamicRole(document, soExecutors[i], "ERRANDS_COEXECUTOR", "LECM_BASIC_PG_ActionPerformer");
-                documentMembers.addMember(document, soExecutors[i], "ERRANDS_READER");
-
             }
-
             if (initiator != null) {
                 notifications.sendNotificationFromCurrentUser({
                     recipients: soExecutors,
