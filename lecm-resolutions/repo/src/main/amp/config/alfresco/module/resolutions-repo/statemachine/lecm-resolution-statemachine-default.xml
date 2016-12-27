@@ -823,6 +823,11 @@ if (document) {
     });
   }
 
+  var baseDocAssoc = document.assocs["lecm-resolutions:base-document-assoc"];
+  if (baseDocAssoc && baseDocAssoc.length) {
+    edsDocument.sendChildChangeSignal(baseDocAssoc[0]);
+  }
+
   var recipients = [];
 
   var authorAssoc = document.assocs["lecm-resolutions:author-assoc"];
