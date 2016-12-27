@@ -2034,6 +2034,7 @@ if (document) {
       	 additionalDoc.addAspect("lecm-eds-aspect:child-change-signal");
        }
       additionalDoc.properties["lecm-eds-aspect:child-change-signal-count"]++;
+      additionalDoc.save();
     }
 }]]></value>
                                                             </property>
