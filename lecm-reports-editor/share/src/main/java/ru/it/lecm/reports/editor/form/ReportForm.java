@@ -275,8 +275,9 @@ public class ReportForm extends LecmFormGet {
                             allowedValues[0] = columnExpression;
                         } else {
                             allowedValues = columnExpression.split(",");
-			    for (int i = 0; i < allowedValues.length; i++)
+                            for (int i = 0; i < allowedValues.length; i++) {
                                 allowedValues[i] = allowedValues[i].trim();
+                            }
                         }
                     }
                 }
