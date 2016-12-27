@@ -1,3 +1,8 @@
+/*параметры*/
+var categoryName = "Подлинник";
+var errorFolderName = "Сканирование/Ошибки сканирования";
+
+/*выполняем*/
 var name = document.properties["cm:name"];
 var attempts = 0;
 var attached = false;
@@ -26,8 +31,8 @@ while (!attached && (10 > attempts++)) {
                 /*нашли ноду по ID*/
                 if (node.isSubType('lecm-document:base')) {
                     documentAttachments.getCategories(node.nodeRef.toString());
-                    /*получаем категорию "Подлинник"*/
-                    var category = documentAttachments.getCategoryByName("Подлинник", node);
+                    /*получаем категорию "categoryName"*/
+                    var category = documentAttachments.getCategoryByName(categoryName, node);
 
                     var i = 0;
                     while (category.childByNamePath(newName) != null) {
@@ -77,13 +82,11 @@ if (!attached) {
     /*Обрабатываем ошибку*/
     logger.log("Failed to attach file");
 
-    var folderName = "Сканирование/Ошибки сканирования";
-
-    newName = folderName + "/" + name;
+    newName = errorFolderName + "/" + name;
     i = 0;
     while (companyhome.childByNamePath(newName) != null) {
         i++;
-        newName = folderName + "/" + fName + "(" + i + ")" + extension;
+        newName = errorFolderName + "/" + fName + "(" + i + ")" + extension;
     }
     if (i > 0) {
         document.properties["cm:name"] = fName + "(" + i + ")" + extension;
@@ -93,6 +96,6 @@ if (!attached) {
     props["cm:isIndexed"] = false;
     document.addAspect("cm:indexControl", props);
     
-    logger.log("FolderName = " + folderName);
-    base.moveNode(document, folderName);
+    logger.log("FolderName = " + errorFolderName);
+    base.moveNode(document, errorFolderName);
 }

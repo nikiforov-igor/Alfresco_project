@@ -1,8 +1,6 @@
 package ru.it.lecm.incoming.external;
 
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * User: pmelnikov
@@ -11,11 +9,9 @@ import org.slf4j.LoggerFactory;
  */
 @Deprecated
 public class RepositoryReceiver extends AbstractReceiver {
-    private static final Logger logger = LoggerFactory.getLogger(EmailRepositoryReceiver.class);
-
     @Override
     public void receive(NodeRef document) {
-        logger.error("Deprecated Action! Use 'create-incoming-from-doc.js' script instead!");
+        throw new UnsupportedOperationException("Deprecated Action! Use 'create-incoming-from-doc.js' script instead!");
     }
 
 }
