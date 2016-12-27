@@ -13,6 +13,17 @@
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
                 </assocs>
             </item>
+            <item name="cm:ERRANDS_CANCEL" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[RESOLUTION_ANNUL]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("аннулировал", #reason)} резолюцию {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
+                <property name="lecm-notification-template:description"><![CDATA[Поручение. Аннулировано]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
         </items>
     </item>
 </items>

@@ -146,7 +146,7 @@ LogicECM.module = LogicECM.module || {};
                 }
 	            var input = Dom.get(this.controlId + "-autocomplete-input");
 	            if (input != null) {
-		            input.disabled = this.options.disabled || this.options.lazyLoading;
+		            input.disabled = this.options.disabled || this.options.lazyLoading || this.readonly;
 	            }
 	            LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
                 YAHOO.Bubbling.fire("associationAutoCompleteControlReady", {

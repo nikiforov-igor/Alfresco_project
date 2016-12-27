@@ -15,6 +15,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
+import org.alfresco.util.ISO8601DateFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -182,7 +183,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[MIN TO \"" + BaseBean.DateFormatISO8601_SZ.format(toDate) + "\"> AND @lecm\\-events\\:to\\-date:<\"" + BaseBean.DateFormatISO8601_SZ.format(fromDate) + "\" TO MAX] AND @lecm\\-events\\:removed: false";
+		String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[MIN TO \"" + ISO8601DateFormat.format(toDate) + "\"> AND @lecm\\-events\\:to\\-date:<\"" + ISO8601DateFormat.format(fromDate) + "\" TO MAX] AND @lecm\\-events\\:removed: false";
 		query += onlyForCalendar ? " AND @lecm\\-events\\:show\\-in\\-calendar: true " + additionalFilter : " " + additionalFilter;
 		query += " AND (" + organizationQueryProcessor.getQuery(null) + ")";
 		sp.setQuery(query);
@@ -263,13 +264,13 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		String query;
 		if (maxCount > 0) {
 			sp.setMaxItems(maxCount);
-			query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + BaseBean.DateFormatISO8601_SZ.format(fromDate) + "\" TO MAX> AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + (additionalFilter == null ? "" : additionalFilter);
+			query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + ISO8601DateFormat.format(fromDate) + "\" TO MAX> AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + (additionalFilter == null ? "" : additionalFilter);
 		} else {
 			Calendar calendar = Calendar.getInstance();
 			calendar.set(Calendar.HOUR_OF_DAY, 23);
 			calendar.set(Calendar.MINUTE, 59);
 			calendar.set(Calendar.SECOND, 59);
-			query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + BaseBean.DateFormatISO8601_SZ.format(fromDate) + "\" TO \"" + DateFormatISO8601_SZ.format(calendar.getTime()) + "\"> AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + (additionalFilter == null ? "" : additionalFilter);
+			query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + ISO8601DateFormat.format(fromDate) + "\" TO \"" + ISO8601DateFormat.format(calendar.getTime()) + "\"> AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + (additionalFilter == null ? "" : additionalFilter);
 		}
 		sp.setQuery(query + " AND (" + organizationQueryProcessor.getQuery(null) + ")");
 
