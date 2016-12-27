@@ -789,7 +789,91 @@
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>dcd38f7f-a754-4ed2-b58b-3b7775205fab</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/18307b81-0952-44fc-a4b6-f9febcd46de0
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-resolutions:annul-signal")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+if (document) {
+  var annulReason = document.properties["lecm-resolutions:annul-signal-reason"];
+
+  var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
+  if (childErrands) {
+    childErrands.forEach(function (errand) {
+      errand.properties["lecm-errands:cancellation-signal"] = true;
+      errand.save();
+    });
+  }
+
+  var recipients = [];
+
+  var authorAssoc = document.assocs["lecm-resolutions:author-assoc"];
+  if (authorAssoc && authorAssoc.length) {
+    recipients.push(authorAssoc[0]);
+  }
+
+  var creatorAssoc = document.assocs["lecm-document:author-assoc"];
+  if (creatorAssoc && creatorAssoc.length) {
+    recipients.push(creatorAssoc[0]);
+  }
+
+  var controllerAssoc = document.assocs["lecm-resolutions:controller-assoc"];
+  if (controllerAssoc && controllerAssoc.length) {
+    recipients.push(controllerAssoc[0]);
+  }
+
+  notifications.sendNotificationFromCurrentUser({
+    recipients: recipients,
+    templateCode: 'RESOLUTION_ANNUL',
+    templateConfig: {
+      mainObject: document,
+      eventExecutor: orgstructure.getCurrentEmployee(),
+      reason: annulReason
+    },
+    dontCheckAccessToObject: true
+  });
+}]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/9a33da3e-c24d-4af9-852c-7b98cdf575a6
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>ScriptAction</type>
@@ -887,45 +971,6 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                             <subFolder>
                                                 <name>transitions</name>
                                                 <nodes>
-                                                    <node>
-                                                        <type>userTransition</type>
-                                                        <name>56e1dfe9-013a-4d1b-a93f-0384cc8cba23</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/4ddcea71-586d-4761-b6d0-f8aec72a8865
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transition-script</name>
-                                                                <value><![CDATA[]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Аннулировать резолюцию]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                            <transitionLabelAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/9a33da3e-c24d-4af9-852c-7b98cdf575a6
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
                                                     <node>
                                                         <type>transitionWorkflow</type>
                                                         <name>73ef9923-b474-4884-912e-032267ef0dac</name>
@@ -1025,7 +1070,36 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>UserWorkflowEntity</type>
+                                                        <name>5aa04d50-e1a2-4d77-89f2-ebf100b544b6</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/2476d6e6-5b1c-4022-9ec5-bd9e3d71a9db
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>workflowId</name>
+                                                                <value><![CDATA[activiti$resolutionAnnul]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>workflowLabel</name>
+                                                                <value><![CDATA[Аннулировать резолюцию]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <workflowAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>StartWorkflow</type>
@@ -1396,7 +1470,77 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>cf9f7846-5fad-427b-b550-d6769feccf5d</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/e1bf5d5a-f99c-4d56-8e39-e8863765ee39
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-resolutions:annul-signal")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+if (document) {
+  var annulReason = document.properties["lecm-resolutions:annul-signal-reason"];
+  var recipients = [];
+
+  var authorAssoc = document.assocs["lecm-resolutions:author-assoc"];
+  if (authorAssoc && authorAssoc.length) {
+    recipients.push(authorAssoc[0]);
+  }
+
+  var creatorAssoc = document.assocs["lecm-document:author-assoc"];
+  if (creatorAssoc && creatorAssoc.length) {
+    recipients.push(creatorAssoc[0]);
+  }
+
+  notifications.sendNotificationFromCurrentUser({
+    recipients: recipients,
+    templateCode: 'RESOLUTION_ANNUL',
+    templateConfig: {
+      mainObject: document,
+      eventExecutor: orgstructure.getCurrentEmployee(),
+      reason: annulReason
+    },
+    dontCheckAccessToObject: true
+  });
+}]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/9a33da3e-c24d-4af9-852c-7b98cdf575a6
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>ScriptAction</type>
@@ -1535,45 +1679,6 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                         </subFolders>
                                                     </node>
                                                     <node>
-                                                        <type>userTransition</type>
-                                                        <name>4fdd7cae-f0a0-45a5-a84d-da362eb66298</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/4d87bb94-d721-44a8-b3c3-a0747bee2481
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transition-script</name>
-                                                                <value><![CDATA[]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Аннулировать резолюцию]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                            <transitionLabelAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/9a33da3e-c24d-4af9-852c-7b98cdf575a6
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
                                                         <type>transitionWorkflow</type>
                                                         <name>5e4a0ced-f683-4d6c-b8c1-7432dd27df81</name>
                                                         <nodeRef>
@@ -1634,7 +1739,36 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>UserWorkflowEntity</type>
+                                                        <name>7f6fba9b-40c5-4efd-8945-4a731e96f369</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/a73ed36a-3408-4618-b37a-63df913e21f8
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>workflowId</name>
+                                                                <value><![CDATA[activiti$resolutionAnnul]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>workflowLabel</name>
+                                                                <value><![CDATA[Аннулировать резолюцию]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <workflowAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>StartWorkflow</type>
@@ -2005,7 +2139,77 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>523a544e-6bb6-4de5-916d-b1c928e06e9a</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/ca707f41-ecf8-4d85-b9e6-d22f40a49e31
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-resolutions:annul-signal")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+if (document) {
+  var annulReason = document.properties["lecm-resolutions:annul-signal-reason"];
+  var recipients = [];
+
+  var authorAssoc = document.assocs["lecm-resolutions:author-assoc"];
+  if (authorAssoc && authorAssoc.length) {
+    recipients.push(authorAssoc[0]);
+  }
+
+  var creatorAssoc = document.assocs["lecm-document:author-assoc"];
+  if (creatorAssoc && creatorAssoc.length) {
+    recipients.push(creatorAssoc[0]);
+  }
+
+  notifications.sendNotificationFromCurrentUser({
+    recipients: recipients,
+    templateCode: 'RESOLUTION_ANNUL',
+    templateConfig: {
+      mainObject: document,
+      eventExecutor: orgstructure.getCurrentEmployee(),
+      reason: annulReason
+    },
+    dontCheckAccessToObject: true
+  });
+}]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/9a33da3e-c24d-4af9-852c-7b98cdf575a6
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>ScriptAction</type>
@@ -2101,45 +2305,6 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
-                                                    <node>
-                                                        <type>userTransition</type>
-                                                        <name>cde071de-0b68-478e-98a0-ea122e8100c7</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/ef92eada-2318-4c6b-8e0b-4207b9bbb6ec
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transition-script</name>
-                                                                <value><![CDATA[]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Аннулировать резолюцию]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                            <transitionLabelAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/9a33da3e-c24d-4af9-852c-7b98cdf575a6
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -2161,7 +2326,36 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>UserWorkflowEntity</type>
+                                                        <name>54600579-4ca8-4107-8fc6-c5be8d94a5ef</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/47229dcd-b258-41bb-bc7b-082186328d3d
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>workflowId</name>
+                                                                <value><![CDATA[activiti$resolutionAnnul]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>workflowLabel</name>
+                                                                <value><![CDATA[Аннулировать резолюцию]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <workflowAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>StartWorkflow</type>
@@ -2767,7 +2961,40 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>53767b53-363b-4bd2-bd0f-825bd8bb98a9</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/02a640d0-88ab-47ed-9278-3a503268ce29
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+if (document) {
+  var annulReason = document.properties["lecm-resolutions:annul-signal-reason"];
+
+  var logText = "#initiator " + base.wrapperTitle("аннулировал", annulReason) + " резолюцию #mainobject.";
+  businessJournal.log(document.nodeRef.toString(), "ANNUL_RESOLUTION", logText, []);
+}]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Аннулирование]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                 </nodes>
                             </subFolder>
