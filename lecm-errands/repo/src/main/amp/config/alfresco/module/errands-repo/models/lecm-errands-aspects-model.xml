@@ -47,5 +47,17 @@
                 </association>
             </associations>
         </aspect>
+        <aspect name="lecm-errands-aspect:changeDueDateSignal">
+            <properties>
+                <property name="lecm-errands-aspect:duedate-shift-size">
+                    <type>d:long</type>
+                    <default>0</default>
+                </property>
+                <property name="lecm-errands-aspect:limitless">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+            </properties>
+        </aspect>
     </aspects>
 </model>

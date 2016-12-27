@@ -105,7 +105,11 @@
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>
-
+				
+				<property name="lecmErrandWf:changeChildDueDate">
+					<type>d:boolean</type>
+					<default>true</default>
+				</property>
 			</properties>
 			<mandatory-aspects>
 				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>

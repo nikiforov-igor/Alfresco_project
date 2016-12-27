@@ -1769,7 +1769,9 @@
                     <show id="lecmErrandWf:changeDueDateNewDueDateRadio"/>
                     <show id="lecmErrandWf:changeDueDateNewDueDate"/>
                     <show id="errandLimitless" force="true"/>
+                    <show id="lecmErrandWf:changeChildDueDate"/>
                     <show id="lecmErrandWf:changeDueDateReason"/>
+                    <show id="changeDueDateFormScript" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="limitation-date"  template="/ru/it/lecm/errands/controls/wf-due-date-set.ftl"/>
@@ -1786,7 +1788,6 @@
                             </control-param>
                         </control>
                     </field>
-
                     <field id="lecmErrandWf:changeDueDateNewDueDateRadio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DATE</control-param>
@@ -1806,9 +1807,18 @@
                             <control-param name="textCode">label.errand.limitless</control-param>
                         </control>
                     </field>
+                    <field id="lecmErrandWf:changeChildDueDate">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    </field>
                     <field id="lecmErrandWf:changeDueDateReason" set="reason">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">6</control-param>
+                        </control>
+                    </field>
+                    <field id="changeDueDateFormScript">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-change-due-date-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">errandsWFChangeDueDateScriptLoaded</control-param>
                         </control>
                     </field>
                 </appearance>
