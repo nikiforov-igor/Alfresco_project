@@ -750,16 +750,17 @@ LogicECM.module = LogicECM.module || {};
 				}
 			},
 
-			removeNode: function AssociationSearchViewer_removeNode(event, params)
-			{
-				delete this.selectedItems[params.node.nodeRef];
-				this.singleSelectedItem = null;
-				if (this.options.createDialog) {
-					this.updateSelectedItems();
-				}
-				this.updateAddButtons();
-				if (params.updateForms) {
-					this.updateFormFields();
+			removeNode: function AssociationSearchViewer_removeNode(event, params) {
+				if (!this.tempDisabled && !this.readonly) {
+					delete this.selectedItems[params.node.nodeRef];
+					this.singleSelectedItem = null;
+					if (this.options.createDialog) {
+						this.updateSelectedItems();
+					}
+					this.updateAddButtons();
+					if (params.updateForms) {
+						this.updateFormFields();
+					}
 				}
 			},
 
@@ -1302,6 +1303,10 @@ LogicECM.module = LogicECM.module || {};
 					this.readonly = args[1].readonly;
 					if (this.widgets.pickerButton) {
 						this.widgets.pickerButton.set('disabled', args[1].readonly);
+					}
+					var input = Dom.get(this.id);
+					if (input) {
+						input.disabled = args[1].readonly;
 					}
 					//непонятно зачем скрывать диалог и активировать поля, которые не были деактивированы...
 					if (!args[1].readonly) {
