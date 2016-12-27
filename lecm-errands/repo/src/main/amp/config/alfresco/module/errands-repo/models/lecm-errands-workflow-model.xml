@@ -485,5 +485,9 @@
                 <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
             </mandatory-aspects>
         </type>
+
+		<type name="lecmErrandWf:routeErrand">
+			<parent>bpm:startTask</parent>
+		</type>
     </types>
 </model>

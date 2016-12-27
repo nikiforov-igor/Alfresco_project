@@ -12,9 +12,11 @@
 	</util:list>
 	<util:list id="eds.document.models">
 		<value>alfresco/module/${artifactId}/models/lecm-eds-document-model.xml</value>
+		<value>alfresco/module/${artifactId}/models/lecm-eds-aspects-model.xml</value>
 	</util:list>
 	<util:list id="eds.models.labels">
 		<value>alfresco/module/${artifactId}/messages/lecm-eds-document-model</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-eds-aspects-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-eds-global-settings-model</value>
 	</util:list>
 	<bean id="eds.models.bootstrap" parent="modelsToRepositoryLoader"
@@ -109,4 +111,7 @@
         </property>
     </bean>
 
+    <bean id="edsService" class="ru.it.lecm.eds.EDSDocumentServiceImpl" parent="baseBean"
+          depends-on="eds.models.bootstrap">
+    </bean>
 </beans>

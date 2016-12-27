@@ -58,5 +58,19 @@
 				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
 			</mandatory-aspects>
 		</type>
+
+        <!--Аннулирование резолюции-->
+        <type name="lecmResolutionWf:annul">
+            <parent>bpm:startTask</parent>
+            <properties>
+                <property name="lecmResolutionWf:annulReason">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+            <mandatory-aspects>
+                <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+            </mandatory-aspects>
+        </type>
     </types>
 </model>

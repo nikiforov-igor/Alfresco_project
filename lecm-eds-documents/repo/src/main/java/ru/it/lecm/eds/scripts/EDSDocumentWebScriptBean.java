@@ -4,6 +4,7 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -20,9 +21,14 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
 
     private OrgstructureBean orgstructureService;
     private NodeService nodeService;
+    private EDSDocumentService edsService;
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
+    }
+
+    public void setEdsService(EDSDocumentService edsService) {
+        this.edsService = edsService;
     }
 
     /**
@@ -39,6 +45,11 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
             result.add(orgstructureService.getEmployeeLogin(recipient.getTargetRef()));
         }
         return result;
+    }
+
+    public void sendChildChangeSignal(ScriptNode baseDocument) {
+        ParameterCheck.mandatory("baseDocument", baseDocument);
+        edsService.sendChildChangeSignal(baseDocument.getNodeRef());
     }
 
 
