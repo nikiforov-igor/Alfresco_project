@@ -115,6 +115,7 @@
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="workflowNodeConverter" ref="activitiNodeConverter"/>
 		<property name="globalProperties" ref="global-properties"/>
+		<property name="repositoryStructureHelper" ref="repositoryStructureHelper"/>
 	</bean>
 
 	<bean id="lecmRepositoryWebScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.LecmRepositoryWebScriptBean">
