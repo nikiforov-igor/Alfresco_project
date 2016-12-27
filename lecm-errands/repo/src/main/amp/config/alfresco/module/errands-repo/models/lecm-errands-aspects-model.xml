@@ -53,9 +53,16 @@
                     <type>d:long</type>
                     <default>0</default>
                 </property>
-                <property name="lecm-errands-aspect:limitless">
+                <property name="lecm-errands-aspect:duedate-limitless">
                     <type>d:boolean</type>
                     <default>false</default>
+                </property>
+                <property name="lecm-errands-aspect:new-limitation-date">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+                <property name="lecm-errands-aspect:change-duedate-reason">
+                    <type>d:text</type>
                 </property>
             </properties>
         </aspect>
