@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-eds-aspect:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Logic ECM EDS aspects model</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+    <imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
+    </namespaces>
+
+    <aspects>
+        <aspect name="lecm-eds-aspect:child-change-signal">
+            <properties>
+                <property name="lecm-eds-aspect:child-change-signal-count">
+                    <type>d:int</type>
+                    <default>0</default>
+                </property>
+            </properties>
+        </aspect>
+    </aspects>
+</model>

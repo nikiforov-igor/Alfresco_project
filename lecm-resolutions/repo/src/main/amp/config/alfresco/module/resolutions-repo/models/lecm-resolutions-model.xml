@@ -146,6 +146,20 @@
                     <default>false</default>
                 </property>
 
+                <!-- Сигналы -->
+                <!-- Сигнал об аннулировании -->
+                <property name="lecm-resolutions:annul-signal">
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                    <default>false</default>
+                </property>
+                <!-- Сигнал об аннулировании - причина -->
+                <property name="lecm-resolutions:annul-signal-reason">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
+
+
                 <!-- Поиск/сортировка ассоциаций-->
                 <property name="lecm-resolutions:author-assoc-ref">
                     <type>d:text</type>
