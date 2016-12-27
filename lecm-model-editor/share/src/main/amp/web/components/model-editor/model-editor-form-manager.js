@@ -99,7 +99,6 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 					"import": [
 						{ _uri: 'http://www.alfresco.org/model/dictionary/1.0', _prefix: 'd' },
 						{ _uri: 'http://www.alfresco.org/model/content/1.0', _prefix: 'cm' },
-						{ _uri: 'http://www.alfresco.org/model/system/1.0', _prefix: 'sys' },
 						{ _uri: 'http://www.it.ru/logicECM/document/1.0', _prefix: 'lecm-document' },
 						{ _uri: 'http://www.it.ru/logicECM/eds-document/1.0', _prefix: 'lecm-eds-document' }
 					]
@@ -279,6 +278,10 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 							atomic: 'true',
 							stored: 'false',
 							tokenised: records[i].getData('tokenised') || 'both'
+						};
+					} else {
+						prop.index = {
+							_enabled: 'false'
 						};
 					}
 					model.types.type.properties.property.push(prop);

@@ -38,19 +38,23 @@ IT.Utils = IT.Utils || {};
 				throw "Invalid XML: " + data;
 			}
 			return xml;
-		},
-		json2xml: function (o, tab) {
-			var toXml = function (v, name, ind) {
+		},		
+		json2xml: function (o, tab, leaveEmpty) {
+			var toXml = function (v, name, ind) {				
 				var xml = "";
 				if (v instanceof Array) {
-					for (var i = 0, n = v.length; i < n; i++)
-						xml += ind + toXml(v[i], name, ind + "\t") + "\n";
+					for (var i = 0, n = v.length; i < n; i++) {
+						var value = v[i];
+						(value || leaveEmpty) && (xml += ind + toXml(value, name, ind + "\t") + "\n");
+					}
 				} else if (typeof (v) == "object") {
 					var hasChild = false;
 					xml += ind + "<" + name;
 					for (var m in v) {
-						if (m.charAt(0) == "_")
-							xml += " " + m.substr(1) + "=\"" + v[m].toString() + "\"";
+						if (m.charAt(0) == "_") {
+							var value = v[m].toString();
+							(value || leaveEmpty) && (xml += " " + m.substr(1) + "=\"" + value + "\"");
+						}
 						else
 							hasChild = true;
 					}
@@ -68,7 +72,8 @@ IT.Utils = IT.Utils || {};
 							+ name + ">";
 					}
 				} else {
-					xml += ind + "<" + name + ">" + v.toString() + "</" + name + ">";
+					var value = v.toString();
+					(value || leaveEmpty) && (xml += ind + "<" + name + ">" + v.toString() + "</" + name + ">");
 				}
 				YAHOO.log(xml);
 				return xml;
