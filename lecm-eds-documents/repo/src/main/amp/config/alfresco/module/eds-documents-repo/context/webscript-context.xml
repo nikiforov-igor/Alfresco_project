@@ -13,8 +13,10 @@
 
     <bean id="eds.document.script" parent="baseScript"
           class="ru.it.lecm.eds.scripts.EDSDocumentWebScriptBean"
+          depends-on="edsService"
           p:extensionName="edsDocument"
           p:orgstructureService-ref="serviceOrgstructure"
-          p:nodeService-ref="nodeService"/>
+          p:nodeService-ref="nodeService"
+          p:edsService-ref="edsService"/>
 
 </beans>
