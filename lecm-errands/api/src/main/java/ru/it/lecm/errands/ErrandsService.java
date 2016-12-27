@@ -313,13 +313,6 @@ public interface ErrandsService {
      */
     boolean hasChildNotFinalByExecutor(NodeRef errand);
 
-    /**
-     * Возвращает документ-основание по ссылке на основание(additional doc)
-     * @param document родительский документ
-     * @return документ-основание
-     */
-    NodeRef getBaseDocumentByAdditionalDocument(NodeRef document);
-
     enum ModeChoosingExecutors {
         ORGANIZATION,
         UNIT

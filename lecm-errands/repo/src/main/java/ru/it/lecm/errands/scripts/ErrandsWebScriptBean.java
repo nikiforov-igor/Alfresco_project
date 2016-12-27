@@ -866,14 +866,4 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     public boolean isHideAdditionAttributes() {
         return errandsService.isHideAdditionAttributes();
     }
-
-    /**
-     * Возвращает документ-основание по ссылке на основание(additional doc)
-     * @param document родительский документ
-     * @return документ-основание
-     */
-    public ScriptNode getBaseDocumentByAdditionalDocument(ScriptNode document) {
-        NodeRef baseDoc = errandsService.getBaseDocumentByAdditionalDocument(document.getNodeRef());
-        return new ScriptNode(baseDoc, serviceRegistry, getScope());
-    }
 }
