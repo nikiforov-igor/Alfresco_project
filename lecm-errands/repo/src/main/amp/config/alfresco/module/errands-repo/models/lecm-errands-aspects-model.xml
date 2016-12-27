@@ -6,7 +6,6 @@
     <imports>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
-        <import uri="http://www.it.ru/logicECM/errands/1.0" prefix="lecm-errands"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/errands-aspects/1.0" prefix="lecm-errands-aspect"/>
