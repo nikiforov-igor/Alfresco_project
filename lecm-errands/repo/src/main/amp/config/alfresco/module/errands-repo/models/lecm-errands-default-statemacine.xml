@@ -2030,11 +2030,7 @@ if (document !== null) {
    document.save();
    var additionalDoc = errands.getAdditionalDocument(document.nodeRef.toString());
    if (additionalDoc) {
-    if (!additionalDoc.hasAspect("lecm-errands-aspect:errand-wait-for-execution-signal")) {
-      additionalDoc.addAspect("lecm-errands-aspect:errand-wait-for-execution-signal");
-    }
-    additionalDoc.createAssociation(document, "lecm-errands-aspect:errand-wait-for-execution-assoc");
-    additionalDoc.save();
+
    }
 }]]></value>
                                                             </property>

@@ -11,9 +11,7 @@
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
                         <activiti:string>
-                            <![CDATA[
-	                            var emptyServiceTask = "Service task";
-	                        ]]>
+                            <![CDATA[]]>
                         </activiti:string>
                     </activiti:field>
                 </activiti:executionListener>
