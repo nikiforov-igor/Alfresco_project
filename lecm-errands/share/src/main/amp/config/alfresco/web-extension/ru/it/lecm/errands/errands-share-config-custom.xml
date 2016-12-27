@@ -2103,6 +2103,7 @@
 	            <field-visibility>
 		            <show id="packageItems"/>
 		            <show id="lecmErrandWf:cancelReason"/>
+                    <show id="lecmErrandWf:cancelChildren"/>
 	            </field-visibility>
 	            <appearance>
 		            <field id="packageItems">
@@ -2113,6 +2114,9 @@
 				            <control-param name="rows">7</control-param>
 			            </control>
 		            </field>
+                    <field id="lecmErrandWf:cancelChildren">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    </field>
 	            </appearance>
             </form>
         </forms>
