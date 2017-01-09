@@ -3,7 +3,7 @@
              xmlns:activiti="http://activiti.org/bpmn"
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.it.ru/logicECM/errands/workflow/requestDueDateChange_1/1.0">
-    <process id="errandsRequestDueDateChange_1" name="Запросить изменение срока поручения">
+    <process id="errandsRequestDueDateChange_1" name="Запросить изменение срока поручения(1)">
         <extensionElements>
             <activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                 <activiti:field name="script">
@@ -26,10 +26,10 @@
                         <activiti:string><![CDATA[
                             var document = bpm_package.children[0];
 
-                            documentWorkflowComments.createWorkflowComment(document, lecmErrandWf_requestDueDateChangeReason);
+                            documentWorkflowComments.createWorkflowComment(document, lecmErrandWf_requestDueDateChange_1Reason);
 
                             var logText = "#initiator запросил ";
-                            logText += documentScript.wrapperTitle("изменение срока", lecmErrandWf_requestDueDateChangeReason);
+                            logText += documentScript.wrapperTitle("изменение срока", lecmErrandWf_requestDueDateChange_1Reason);
                             logText += "исполнения поручения: #mainobject.";
                             businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, []);
 
@@ -72,8 +72,8 @@
                 <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
                         <activiti:string>
-                            task.setVariable("lecmErrandWf_requestDueDateChangeTaskNewDate", task.getVariable("lecmErrandWf_requestDueDateChangeNewDate"));
-                            task.setVariable("lecmErrandWf_requestDueDateChangeTaskDateReason", task.getVariable("lecmErrandWf_requestDueDateChangeReason"));
+                            task.setVariable("lecmErrandWf_requestDueDateChangeTaskNewDate", task.getVariable("lecmErrandWf_requestDueDateChange_1NewDate"));
+                            task.setVariable("lecmErrandWf_requestDueDateChangeTaskDateReason", task.getVariable("lecmErrandWf_requestDueDateChange_1Reason"));
                         </activiti:string>
                     </activiti:field>
                 </activiti:taskListener>

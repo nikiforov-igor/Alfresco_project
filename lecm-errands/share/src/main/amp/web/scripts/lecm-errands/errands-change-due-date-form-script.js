@@ -21,7 +21,7 @@
                         if (!hasChildOnLifeCycle) {
                             var changeChildDueDateField = Dom.get(formId + "_prop_lecmErrandWf_changeDueDateChangeChildDueDate");
                             if (!changeChildDueDateField) {
-                                changeChildDueDateField = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeChildDueDate");
+                                changeChildDueDateField = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChange_1ChildDueDate");
                             }
                             if (changeChildDueDateField) {
                                 changeChildDueDateField.value = false;

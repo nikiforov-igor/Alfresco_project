@@ -1755,7 +1755,7 @@
                             </control-param>
                         </control>
                     </field>
-                    <field id="lecmErrandWf:requestDueDateChange_1NewDateRadio" label-id="lecm.errands.label.dueDate.change.radio" set="limitation-date" mandatory="true">
+                    <field id="lecmErrandWf:requestDueDateChange_1NewDateRadio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DATE</control-param>
                             <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
@@ -1774,10 +1774,10 @@
                             <control-param name="textCode">label.errand.limitless</control-param>
                         </control>
                     </field>
-                    <field id="lecmErrandWf:requestDueDateChange_1ChildDueDate" label-id="lecm.errands.label.dueDate.change.child" set="block2">
+                    <field id="lecmErrandWf:requestDueDateChange_1ChildDueDate" set="block2">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
-	                <field id="lecmErrandWf:requestDueDateChange_1Reason" label-id="" set="block2">
+	                <field id="lecmErrandWf:requestDueDateChange_1Reason" set="block2">
 		                <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
 			                <control-param name="rows">6</control-param>
 		                </control>
@@ -1879,7 +1879,7 @@
                             <control-param name="textCode">label.errand.limitless</control-param>
                         </control>
                     </field>
-                    <field id="lecmErrandWf:changeDueDateChangeChildDueDate" label-id="lecm.errands.label.dueDate.change.child" set="block2">
+                    <field id="lecmErrandWf:changeDueDateChangeChildDueDate" set="block2">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
                     <field id="lecmErrandWf:changeDueDateReason" set="block2">
