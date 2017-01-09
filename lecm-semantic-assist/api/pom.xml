@@ -6,7 +6,7 @@
     <parent>
         <groupId>ru.it.lecm.br5.semantic</groupId>
         <artifactId>semantic-assist</artifactId>
-        <version>1.8.5</version>
+        <version>1.8.6</version>
     </parent>
 
     <artifactId>semantic-assist-api</artifactId>

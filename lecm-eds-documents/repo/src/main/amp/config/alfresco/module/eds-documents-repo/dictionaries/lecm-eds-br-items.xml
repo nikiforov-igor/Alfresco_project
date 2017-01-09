@@ -38,8 +38,8 @@
 				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
 				<property name="lecm-orgstr:business-role-description">Сотрудник, получивший документ на исполнение.</property>
 			</item>
-			<item name="cm:СЭД. Контроллер" type="lecm-orgstr:business-role">
-				<property name="cm:name">СЭД. Контроллер</property>
+			<item name="cm:СЭД. Контролер" type="lecm-orgstr:business-role">
+				<property name="cm:name">СЭД. Контролер</property>
 				<property name="lecm-orgstr:business-role-identifier">DA_CONTROLLER_DYN</property>
 				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
 				<property name="lecm-orgstr:business-role-description">Сотрудник, назначенный Контролером по ОРД документу</property>

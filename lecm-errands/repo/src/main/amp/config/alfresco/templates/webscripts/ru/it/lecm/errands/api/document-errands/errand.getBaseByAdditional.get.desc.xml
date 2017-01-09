@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Get base document for the errand by additional doc</shortname>
+    <description>Errand base document</description>
+    <url>/lecm/errands/api/getBaseByAdditional?nodeRef={nodeRef}</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>
