@@ -3922,8 +3922,10 @@ if (document) {
         } else if (oldLimitRadio == "LIMITLESS" || !oldLimitDate) {
             document.properties["lecm-errands:limitation-date"] = newLimitationDate;
         }
-        var dateFormat = new Packages.java.text.SimpleDateFormat("dd.MM.yyyy");
-        dueDateString = dateFormat.format(newLimitationDate).toString();
+        var day = utils.pad(newLimitationDate.getDate(), 2);
+        var month = utils.pad(newLimitationDate.getMonth(), 2);
+        var year = utils.pad(newLimitationDate.getFullYear(), 4);
+        dueDateString = day + "." + month + "." + year;
         var wfeDate = new Date(document.properties["lecm-errands:wait-for-execution-date"]);
         var fromWFELimitDays = Math.round((newLimitationDate - wfeDate) / (1000 * 60 * 60 * 24));
         var halfLimitDays = Math.round(fromWFELimitDays / 2);
@@ -6201,8 +6203,10 @@ if (document) {
         } else if (oldLimitRadio == "LIMITLESS" || !oldLimitDate) {
             document.properties["lecm-errands:limitation-date"] = newLimitationDate;
         }
-        var dateFormat = new Packages.java.text.SimpleDateFormat("dd.MM.yyyy");
-        dueDateString = dateFormat.format(newLimitationDate).toString();
+        var day = utils.pad(newLimitationDate.getDate(), 2);
+        var month = utils.pad(newLimitationDate.getMonth(), 2);
+        var year = utils.pad(newLimitationDate.getFullYear(), 4);
+        dueDateString = day + "." + month + "." + year;
         var wfeDate = new Date(document.properties["lecm-errands:wait-for-execution-date"]);
         var fromWFELimitDays = Math.round((newLimitationDate - wfeDate) / (1000 * 60 * 60 * 24));
         var halfLimitDays = Math.round(fromWFELimitDays / 2);
