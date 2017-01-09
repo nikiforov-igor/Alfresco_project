@@ -39,7 +39,7 @@
 	</bean>
 
 	<bean id="arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
-	      depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap">
+	      depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap, documents.LogicEcmConnectionTypesBootstrap">
         <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ"/>
 		<property name="dictionaries">
 			<list>
