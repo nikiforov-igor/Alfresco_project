@@ -87,7 +87,7 @@
             <item name="cm:ERRANDS_CO_EXECUTOR_ACCEPT" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CO_EXECUTOR_ACCEPT]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} принял ваш отчет по поручению {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} принял Ваш отчет по поручению {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Отчет по поручению принят]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -265,7 +265,7 @@
             <item name="cm:ERRANDS_CHANGE_DUE_DATE_REQUEST" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CHANGE_DUE_DATE_REQUEST]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} просит изменить срок исполнения поручения: {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))}.]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} запросил {wrapTitle("изменение срока", #reason)} исполнения поручения: {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Запрос изменения сроков исполнения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -346,7 +346,7 @@
             <item name="cm:ERRANDS_CHANGE_DUE_DATE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CHANGE_DUE_DATE]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} изменил срок исполнения поручения {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))} на {#dueDate}.]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {wrapTitle("изменил", #reason)} срок исполнения поручения {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))} на {#dueDate}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Изменен срок поручения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>

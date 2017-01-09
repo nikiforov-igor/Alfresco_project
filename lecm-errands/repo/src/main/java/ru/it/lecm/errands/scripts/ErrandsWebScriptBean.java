@@ -664,6 +664,21 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+    /**
+     * Получение списка нод подчиненных резолюций
+     * @param documentRef документ
+     * @return список нод подчиненных резолюций
+     */
+    public Scriptable getChildResolutions(String documentRef) {
+        ParameterCheck.mandatory("documentRef", documentRef);
+        NodeRef document = new NodeRef(documentRef);
+        if (nodeService.exists(document)) {
+            List<NodeRef> childResolutions = errandsService.getChildResolutions(document);
+            return createScriptable(childResolutions);
+        }
+        return null;
+    }
+
     public ScriptNode getDashletSettings() {
         return new ScriptNode(errandsService.getDashletSettingsNode(), serviceRegistry, getScope());
     }
