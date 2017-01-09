@@ -78,6 +78,23 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				this.options.mode = 'edit';
 			}
 
+			function doBeforeAjaxRequest(form) {
+				var propsForRemove = [];
+				for (var property in form.dataObj) {
+					if (form.dataObj.hasOwnProperty(property) &&
+						property.indexOf("prop_lecm-template") != 0 &&
+						property.indexOf("assoc_lecm-template") != 0 &&
+						property.indexOf("alf_destination") != 0 &&
+						property.indexOf("prop_cm") != 0) {
+						propsForRemove.push(property);
+					}
+				}
+				for (var i in propsForRemove) {
+					delete form.dataObj[propsForRemove[i]];
+				}
+				return true;
+			}
+
 			if (!this.widgets.formsRuntime || args[1].eventGroup == this.widgets.formsRuntime.formId) {
 				var obj = args[1],
 					form = Dom.get(obj.component.id),
@@ -90,23 +107,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 						this.widgets.formsRuntime = obj.component.formsRuntime;
 						this.widgets.formsRuntime.ajaxSubmitHandlers.successCallback.fn = onSuccessFormSubmit;
 						this.widgets.formsRuntime.doBeforeAjaxRequest = {
-							fn: function(form)
-							{
-								var propsForRemove = [];
-								for (var property in form.dataObj) {
-									if (form.dataObj.hasOwnProperty(property) &&
-										property.indexOf("prop_lecm-template") != 0 &&
-										property.indexOf("assoc_lecm-template") != 0 &&
-										property.indexOf("alf_destination") != 0 &&
-										property.indexOf("prop_cm") != 0) {
-										propsForRemove.push(property);
-									}
-								}
-								for (var i in propsForRemove) {
-									delete form.dataObj[propsForRemove[i]];
-								}
-								return true;
-							},
+							fn: doBeforeAjaxRequest,
 							scope: this
 						};
 						this.widgets.formsRuntime.applyTabFix();
