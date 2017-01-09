@@ -2505,6 +2505,7 @@
         <hidden-workflows>
             <workflow name="activiti$lecm-errands_document"/>
             <workflow name="activiti$errandsRequestDueDateChange"/>
+            <workflow name="activiti$errandsRequestDueDateChange_1"/>
             <workflow name="activiti$errandsRequestCancel"/>
             <workflow name="activiti$errandsChangeDueDate"/>
             <workflow name="activiti$errandsInitiatorApprove"/>
