@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>ru.it.lecm.barcode</groupId>
 		<artifactId>barcode</artifactId>
-		<version>1.8.5</version>
+		<version>1.8.6</version>
 	</parent>
 
 	<artifactId>barcode-api</artifactId>
