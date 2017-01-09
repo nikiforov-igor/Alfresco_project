@@ -124,6 +124,8 @@ LogicECM.module = LogicECM.module || {};
                 useStrictFilterByOrg: false,
 				doNotCheckAccess: false,
 
+				showInaccessible: false,
+
 				ignoreNodes: null,
 
                 allowedNodes:null,
@@ -321,7 +323,8 @@ LogicECM.module = LogicECM.module || {};
 								itemValueType: "nodeRef",
 								itemNameSubstituteString: this.options.nameSubstituteString,
 								sortProp: this.options.sortProp,
-								selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString()
+								selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString(),
+								showInaccessible: this.options.showInaccessible
 							},
 							successCallback:
 							{
@@ -761,18 +764,23 @@ LogicECM.module = LogicECM.module || {};
 			},
 
             getDefaultView: function (displayValue, width100, item) {
-				var result = "<span class='not-person" + (width100 ? " width100" : "") + "'>";
-	            if (this.options.viewUrl != null && item != null && item.nodeRef != null) {
-		            var href = YAHOO.lang.substitute(this.options.viewUrl, {
-			            nodeRef: item.nodeRef
-		            });
-
-		            result += "<a href='" + href + "' target='blank'>" + displayValue + "</a>";
-	            } else {
-		            result += displayValue;
-	            }
-	            result += "</span>";
-	            return result;
+				var resultTemplate = "<span class='not-person{class1}'>{value}</span>";
+				var value;
+				if (this.options.viewUrl && item && item.nodeRef && item.hasAccess) {
+					var href = YAHOO.lang.substitute(this.options.viewUrl, {
+						nodeRef: item.nodeRef
+					});
+					value = YAHOO.lang.substitute("<a href='{href}' target='blank'>{displayValue}</a>", {
+						href: href,
+						displayValue: displayValue
+					});
+				} else {
+					value = displayValue;
+				}
+				return YAHOO.lang.substitute(resultTemplate, {
+					class1: width100 ? " width100" : "",
+					value: value
+				});
 			},
 
 			updateAddButtons: function AssociationSearchViewer_updateAddButtons() {

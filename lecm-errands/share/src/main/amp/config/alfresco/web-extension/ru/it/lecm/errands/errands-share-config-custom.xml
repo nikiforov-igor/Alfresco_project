@@ -311,6 +311,7 @@
                     <field id="lecm-errands:type-assoc" mandatory="true" >
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
+                            <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                         </control>
                     </field>
                     <field id="change-errand-type-script">
@@ -533,6 +534,7 @@
                     <field id="lecm-errands:type-assoc" mandatory="true">
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
+                            <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:title">
@@ -749,7 +751,7 @@
                     <show id="change-executors-script" force="true"/>
                     <show id="change-errand-type-script" force="true"/>
                     <show id="report-required-handler-script" force="true"/>
-                    <show id="errands-create-form-script" force="true"/>
+                    <show id="errands-workflow-form-script" force="true"/>
 
                     <!-- Buttons -->
                     <show id="save-draft-button" force="true"/>
@@ -773,6 +775,7 @@
                     <field id="lecm-errands:type-assoc" mandatory="true" >
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
+                            <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                         </control>
                     </field>
                     <field id="change-errand-type-script">
@@ -911,6 +914,7 @@
                     <field id="lecm-document:subject-assoc" set="block2-2">
                         <control>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
+                            <control-param name="selectedItemsFormArgs">parentDocSubjectAssoc</control-param>
                         </control>
                     </field>
 
@@ -965,7 +969,7 @@
                             <control-param name="scripts">scripts/lecm-errands/errands-reinit-executors.js</control-param>
                         </control>
                     </field>
-                    <field id="errands-create-form-script">
+                    <field id="errands-workflow-form-script">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/components/lecm-errands-create-form.js</control-param>
                             <control-param name="scriptLoadedFireAction">errandsCreateFormScriptLoaded</control-param>
@@ -1004,6 +1008,7 @@
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
+                            <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:title" set="left">
@@ -1078,6 +1083,7 @@
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
+                            <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:title" set="left">
@@ -1157,6 +1163,7 @@
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
+                            <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:title" set="left">
@@ -1342,8 +1349,9 @@
                 <appearance>
                     <field id="lecm-errands-ts:coexecutor-report-connected-document-assoc">
                         <control>
-                            <control-param name="viewUrl">/share/page/document?nodeRef={nodeRef}</control-param>
+                            <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">Отчет об исполнении: {lecm-document:ext-present-string}</control-param>
+                            <control-param name="showInaccessible">true</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1462,13 +1470,41 @@
 			</form>
 		</forms>
 	</config>
-
+    <config evaluator="node-type" condition="lecm-errands-dic:errand-cancel-reason">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+    <config evaluator="model-type" condition="lecm-errands-dic:errand-cancel-reason">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                </field-visibility>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                </field-visibility>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
     <config evaluator="node-type" condition="lecm-errands-dic:errand-type">
         <forms>
             <form>
                 <field-visibility>
                     <show id="cm:name" force="true"/>
                     <show id="lecm-errands-dic:errand-type-default-title"/>
+                    <show id="lecm-errands-dic:errand-type-manual-selection"/>
                     <show id="lecm-errands-dic:errand-type-report-required"/>
                     <show id="lecm-errands-dic:errand-type-limitless"/>
                     <show id="lecm-errands-dic:errand-type-launch-review"/>
@@ -1496,6 +1532,7 @@
                 <field-visibility>
                     <show id="cm:name" force="true"/>
                     <show id="lecm-errands-dic:errand-type-default-title"/>
+                    <show id="lecm-errands-dic:errand-type-manual-selection"/>
                     <show id="lecm-errands-dic:errand-type-report-required"/>
                     <show id="lecm-errands-dic:errand-type-limitless"/>
                     <show id="lecm-errands-dic:errand-type-launch-review"/>
@@ -1587,7 +1624,6 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-errands:user-settings-without-initiator-approval"/>
 					<show id="lecm-errands:user-settings-default-initiator-assoc"/>
 					<show id="lecm-errands:user-settings-default-subject-assoc"/>
 				</field-visibility>
@@ -1599,7 +1635,6 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-errands:user-settings-without-initiator-approval"/>
 					<show id="lecm-errands:user-settings-default-initiator-assoc"/>
 					<show id="lecm-errands:user-settings-default-subject-assoc"/>
 				</field-visibility>

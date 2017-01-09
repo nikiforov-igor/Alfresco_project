@@ -204,7 +204,7 @@
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
-				<!-- Закрывать автоматически вышестоящее поручение-->
+				<!-- Закрывает вышестоящее поручение-->
 				<property name="lecm-errands:auto-close">
 					<type>d:boolean</type>
 					<default>false</default>
@@ -620,14 +620,6 @@
 	    <type name="lecm-errands:user-settings">
 		    <title>Logic Ecm Errands User Settings</title>
 		    <parent>cm:cmobject</parent>
-		    <properties>
-			    <!-- Режим выбора исполнителей  -->
-			    <property name="lecm-errands:user-settings-without-initiator-approval">
-				    <type>d:boolean</type>
-				    <mandatory>true</mandatory>
-				    <default>false</default>
-			    </property>
-		    </properties>
 		    <associations>
 			    <!-- Инициатор по умолчанию -->
 			    <association name="lecm-errands:user-settings-default-initiator-assoc">

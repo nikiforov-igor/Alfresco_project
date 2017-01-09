@@ -90,8 +90,40 @@
                     }
                 }
             },
-            failureMessage: "message.failure"
+            failureMessage: Alfresco.util.message("message.failure")
         });
 
+        if(args[1].fieldId == "errands-workflow-form-script") {
+            Event.onContentReady(formId + "_assoc_lecm-errands_additional-document-assoc", function () {
+                var parentDocRef = this.value;
+                if (parentDocRef) {
+                    checkOtherChildAutoClose(parentDocRef);
+                }
+            });
+        }
+
+    }
+
+    function checkOtherChildAutoClose(nodeRef) {
+        Alfresco.util.Ajax.jsonGet({
+            url: Alfresco.constants.PROXY_URI + "lecm/errands/api/getChildErrands",
+            dataObj: {
+                nodeRef: nodeRef
+            },
+            successCallback: {
+                fn: function (response) {
+                    var children = response.json;
+                    if (children && children.length) {
+                        haveSomeAutoCloseChild = children.some(function (child) {
+                            return !!child.autoClose
+                        });
+                        if (haveSomeAutoCloseChild) {
+                            LogicECM.module.Base.Util.disableControl(formId, "lecm-errands:auto-close");
+                        }
+                    }
+                }
+            },
+            failureMessage: Alfresco.util.message("message.failure")
+        });
     }
 })();
