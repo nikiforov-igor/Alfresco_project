@@ -26,7 +26,7 @@
 				</list>
 			</parameter>
 		</constraint>
-		<constraint name='cancelReasonLength' type='LENGTH'>
+		<constraint name='lecmErrandWf:cancelReasonLength' type='LENGTH'>
 			<parameter name='minLength'><value>1</value></parameter>
 			<parameter name='maxLength'><value>200</value></parameter>
 		</constraint>
@@ -201,7 +201,7 @@
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<constraints>
-						<constraint ref="cancelReasonLength"/>
+						<constraint ref="lecmErrandWf:cancelReasonLength"/>
 					</constraints>
 				</property>
 			</properties>
@@ -296,7 +296,7 @@
 				<property name="lecmErrandWf:cancelReason">
 					<type>d:text</type>
 					<constraints>
-						<constraint ref="cancelReasonLength"/>
+						<constraint ref="lecmErrandWf:cancelReasonLength"/>
 					</constraints>
 				</property>
 				<property name="lecmErrandWf:cancelChildren">
