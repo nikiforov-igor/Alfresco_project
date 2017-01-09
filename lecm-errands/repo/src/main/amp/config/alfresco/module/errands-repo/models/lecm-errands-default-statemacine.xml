@@ -3901,7 +3901,7 @@ if (document) {
     var dueDateString = "";
     var limitless = document.properties["lecm-errands-aspect:duedate-limitless"];
     var shiftSize = document.properties["lecm-errands-aspect:duedate-shift-size"];
-    var newLimitationDate = document.properties["lecm-errands-aspect:new-limitation-date"];
+    var newLimitationDate = new Date(document.properties["lecm-errands-aspect:new-limitation-date"].getTime());
     var reason = document.properties["lecm-errands-aspect:change-duedate-reason"];
     var oldLimitDate = document.properties["lecm-errands:limitation-date"];
     var oldLimitRadio = document.properties["lecm-errands:limitation-date-radio"];
@@ -3976,7 +3976,7 @@ if (document) {
 
     var children = [];
     var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
-    var childrenResolutions = documentConnection.getConnectedDocuments(document, 'onBasis', "lecm-resolutions:document");
+    var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
 
     if (childrenErrands || childrenResolutions) {
         if (childrenErrands) {
@@ -6183,7 +6183,7 @@ if (document) {
     var dueDateString = "";
     var limitless = document.properties["lecm-errands-aspect:duedate-limitless"];
     var shiftSize = document.properties["lecm-errands-aspect:duedate-shift-size"];
-    var newLimitationDate = document.properties["lecm-errands-aspect:new-limitation-date"];
+    var newLimitationDate = new Date(document.properties["lecm-errands-aspect:new-limitation-date"].getTime());
     var reason = document.properties["lecm-errands-aspect:change-duedate-reason"];
     var oldLimitDate = document.properties["lecm-errands:limitation-date"];
     var oldLimitRadio = document.properties["lecm-errands:limitation-date-radio"];
@@ -6258,7 +6258,7 @@ if (document) {
 
     var children = [];
     var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
-    var childrenResolutions = documentConnection.getConnectedDocuments(document, 'onBasis', "lecm-resolutions:document");
+    var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
 
     if (childrenErrands || childrenResolutions) {
         if (childrenErrands) {

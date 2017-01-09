@@ -26,15 +26,10 @@
                                 var newLimitationDate;
 
                                 if (lecmErrandWf_changeDueDateNewDueDateRadio == "DATE") {
-                                    if (oldLimitDate && oldLimitRadio != "LIMITLESS" ) {
-                                       var oldDate = new Date(oldLimitDate.getTime());
-                                       shiftSize = new Date(lecmErrandWf_changeDueDateNewDueDate) - oldDate;
-                                       newLimitationDate = new Date(oldDate.getTime() + shiftSize);
-                                       document.properties["lecm-errands:limitation-date"] = new Date(oldDate.getTime() + shiftSize);
-                                    } else if ( oldLimitRadio == "LIMITLESS" || !oldLimitDate) {
-                                       newLimitationDate = new Date(lecmErrandWf_changeDueDateNewDueDate);
-                                       document.properties["lecm-errands:limitation-date"] = lecmErrandWf_changeDueDateNewDueDate;
-                                    }
+                                    document.properties["lecm-errands:limitation-date"] = lecmErrandWf_changeDueDateNewDueDate;
+                                    newLimitationDate = new Date(lecmErrandWf_changeDueDateNewDueDate);
+                                    shiftSize = new Date(newLimitationDate.getTime() - oldLimitDate.getTime());
+
                                     var dateFormat = new Packages.java.text.SimpleDateFormat("dd.MM.yyyy");
                                     var dueDateString = dateFormat.format(newLimitationDate).toString();
                                     var wfeDate = new Date(document.properties["lecm-errands:wait-for-execution-date"]);
