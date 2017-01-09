@@ -29,7 +29,6 @@ import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.errands.beans.ErrandsServiceImpl;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.resolutions.api.ResolutionsService;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
@@ -674,11 +673,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         ParameterCheck.mandatory("documentRef", documentRef);
         NodeRef document = new NodeRef(documentRef);
         if (nodeService.exists(document)) {
-            List<NodeRef> childResolutions = new ArrayList<>();
-            List<AssociationRef> childResolutionsAssocs = nodeService.getSourceAssocs(document, ResolutionsService.ASSOC_BASE);
-            for (AssociationRef assoc : childResolutionsAssocs) {
-                childResolutions.add(assoc.getSourceRef());
-            }
+            List<NodeRef> childResolutions = errandsService.getChildResolutions(document);
             return createScriptable(childResolutions);
         }
         return null;

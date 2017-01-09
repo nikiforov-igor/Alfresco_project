@@ -26,6 +26,7 @@ import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.resolutions.api.ResolutionsService;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
@@ -629,5 +630,15 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
             }
         }
         return false;
+    }
+    
+    @Override
+    public List<NodeRef> getChildResolutions(NodeRef errand){
+        List<NodeRef> childResolutions = new ArrayList<>();
+        List<AssociationRef> childResolutionsAssocs = nodeService.getSourceAssocs(errand, ResolutionsService.ASSOC_BASE);
+        for (AssociationRef assoc : childResolutionsAssocs) {
+            childResolutions.add(assoc.getSourceRef());
+        }
+        return childResolutions;
     }
 }
