@@ -3977,14 +3977,11 @@ if (document) {
     var children = [];
     var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
     var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
-
-    if (childrenErrands || childrenResolutions) {
-        if (childrenErrands) {
-            children = children.concat(childrenErrands);
-        }
-        if (childrenResolutions) {
-            children = children.concat(childrenResolutions);
-        }
+    if (childrenErrands) {
+        children = children.concat(childrenErrands);
+    }
+    if (childrenResolutions) {
+        children = children.concat(childrenResolutions);
     }
     children.forEach(function (child) {
         child.properties["lecm-errands-aspect:duedate-shift-size"] = shiftSize;
@@ -6259,14 +6256,11 @@ if (document) {
     var children = [];
     var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
     var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
-
-    if (childrenErrands || childrenResolutions) {
-        if (childrenErrands) {
-            children = children.concat(childrenErrands);
-        }
-        if (childrenResolutions) {
-            children = children.concat(childrenResolutions);
-        }
+    if (childrenErrands) {
+        children = children.concat(childrenErrands);
+    }
+    if (childrenResolutions) {
+        children = children.concat(childrenResolutions);
     }
     children.forEach(function (child) {
         child.properties["lecm-errands-aspect:duedate-shift-size"] = shiftSize;

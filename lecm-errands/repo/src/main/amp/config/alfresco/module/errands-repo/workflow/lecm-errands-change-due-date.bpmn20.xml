@@ -59,15 +59,12 @@
                                 if (lecmErrandWf_changeDueDateChangeChildDueDate) {
                                     var children = [];
                                     var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
-                                    var childrenResolutions = documentConnection.getConnectedDocuments(document,'onBasis',"lecm-resolutions:document");
-
-                                    if (childrenErrands || childrenResolutions) {
-                                       if (childrenErrands) {
-                                           children = children.concat(childrenErrands);
-                                       }
-                                       if (childrenResolutions) {
-                                         children = children.concat(childrenResolutions);
-                                       }
+                                    var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
+                                    if (childrenErrands) {
+                                        children = children.concat(childrenErrands);
+                                    }
+                                    if (childrenResolutions) {
+                                        children = children.concat(childrenResolutions);
                                     }
                                     children.forEach(function (child) {
                                        child.properties["lecm-errands-aspect:duedate-shift-size"] = shiftSize;
