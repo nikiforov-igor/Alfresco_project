@@ -1,8 +1,8 @@
 var errandRef = args["nodeRef"];
 var errand = utils.getNodeFromString(errandRef);
 
-var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
-var childrenResolutions = documentConnection.getConnectedDocuments(doc, 'onBasis', "lecm-resolutions:document");
+var childrenErrands = errands.getChildErrands(errand.nodeRef.toString());
+var childrenResolutions = documentConnection.getConnectedDocuments(errand, 'onBasis', "lecm-resolutions:document");
 
 var hasChildOnLifeCycle = false;
 if (childrenErrands || childrenResolutions) {

@@ -26,7 +26,7 @@
 				</list>
 			</parameter>
 		</constraint>
-		<constraint name='cancelReasonLength' type='LENGTH'>
+		<constraint name='lecmErrandWf:cancelReasonLength' type='LENGTH'>
 			<parameter name='minLength'><value>1</value></parameter>
 			<parameter name='maxLength'><value>200</value></parameter>
 		</constraint>
@@ -45,53 +45,75 @@
 				<!--<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>-->
 			<!--</mandatory-aspects>-->
 		</type>
-
 		<type name="lecmErrandWf:requestDueDateChange">
 			<parent>bpm:startTask</parent>
+			<properties>
+				<property name="lecmErrandWf:requestDueDateChangeNewDate">
+					<type>d:date</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecmErrandWf:requestDueDateChangeReason">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="lecmErrandWf:requestDueDateChange_1">
+			<parent>bpm:startTask</parent>
             <properties>
-                <property name="lecmErrandWf:requestDueDateChangeNewDate">
+				<property name="lecmErrandWf:requestDueDateChange_1NewDateRadio">
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="lecmErrandWf:dueDateRadioConst"/>
+					</constraints>
+				</property>
+                <property name="lecmErrandWf:requestDueDateChange_1NewDate">
                     <type>d:date</type>
-                    <mandatory>true</mandatory>
                 </property>
-                <property name="lecmErrandWf:requestDueDateChangeReason">
+                <property name="lecmErrandWf:requestDueDateChange_1Reason">
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
+				<property name="lecmErrandWf:requestDueDateChange_1ChildDueDate">
+					<type>d:boolean</type>
+					<default>true</default>
+				</property>
             </properties>
             <mandatory-aspects>
 				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
 			</mandatory-aspects>
 		</type>
-
-        <type name="lecmErrandWf:requestDueDateChangeTask">
-            <parent>bpm:activitiOutcomeTask</parent>
-            <properties>
-                <property name="lecmErrandWf:requestDueDateChangeTaskNewDate">
-                    <type>d:date</type>
-                </property>
-                <property name="lecmErrandWf:requestDueDateChangeTaskDateReason">
-                    <type>d:text</type>
-                </property>
-                <property name="lecmErrandWf:requestDueDateChangeTaskComment">
-                    <type>d:text</type>
-                </property>
-                <property name="lecmErrandWf:requestDueDateChangeTaskResult">
-                    <type>d:text</type>
-                    <default>REJECTED</default>
-                    <constraints>
-                        <constraint name="lecmErrandWf:requestDueDateChangeTaskResultConstraint" type="LIST">
-                            <parameter name="allowedValues">
-                                <list>
-                                    <value>APPROVED</value>
-                                    <value>REJECTED</value>
-                                </list>
-                            </parameter>
-                        </constraint>
-                    </constraints>
-                </property>
-            </properties>
-        </type>
-
+		<type name="lecmErrandWf:requestDueDateChangeTask">
+			<parent>bpm:activitiOutcomeTask</parent>
+			<properties>
+				<property name="lecmErrandWf:requestDueDateChangeTaskNewDate">
+					<type>d:date</type>
+				</property>
+				<property name="lecmErrandWf:requestDueDateChangeTaskDateReason">
+					<type>d:text</type>
+				</property>
+				<property name="lecmErrandWf:requestDueDateChangeTaskComment">
+					<type>d:text</type>
+				</property>
+				<property name="lecmErrandWf:requestDueDateChangeTaskResult">
+					<type>d:text</type>
+					<default>REJECTED</default>
+					<constraints>
+						<constraint name="lecmErrandWf:requestDueDateChangeTaskResultConstraint" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>APPROVED</value>
+									<value>REJECTED</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+			</properties>
+		</type>
         <type name="lecmErrandWf:changeDueDate">
 			<parent>bpm:startTask</parent>
 			<properties>
@@ -110,7 +132,7 @@
 					<mandatory>true</mandatory>
 				</property>
 				
-				<property name="lecmErrandWf:changeChildDueDate">
+				<property name="lecmErrandWf:changeDueDateChangeChildDueDate">
 					<type>d:boolean</type>
 					<default>true</default>
 				</property>
@@ -205,7 +227,7 @@
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<constraints>
-						<constraint ref="cancelReasonLength"/>
+						<constraint ref="lecmErrandWf:cancelReasonLength"/>
 					</constraints>
 				</property>
 			</properties>
@@ -300,7 +322,7 @@
 				<property name="lecmErrandWf:cancelReason">
 					<type>d:text</type>
 					<constraints>
-						<constraint ref="cancelReasonLength"/>
+						<constraint ref="lecmErrandWf:cancelReasonLength"/>
 					</constraints>
 				</property>
 				<property name="lecmErrandWf:cancelChildren">

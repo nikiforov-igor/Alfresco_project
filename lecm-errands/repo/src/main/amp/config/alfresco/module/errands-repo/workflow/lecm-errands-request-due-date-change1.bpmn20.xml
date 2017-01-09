@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/errands/workflow/requestDueDateChange_1/1.0">
+    <process id="errandsRequestDueDateChange_1" name="Запросить изменение срока поручения">
+        <extensionElements>
+            <activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                <activiti:field name="script">
+                    <activiti:string><![CDATA[(function(){
+						var document = bpm_package.children[0];
+						if (document.hasAspect('lecm-errands-aspect:isDueDateChangeRequestedAspect')) {
+							document.removeAspect('lecm-errands-aspect:isDueDateChangeRequestedAspect');
+						}
+					})();]]></activiti:string>
+                </activiti:field>
+            </activiti:executionListener>
+        </extensionElements>
+
+        <startEvent id="startRequestDueDateChange" name="Запрос переноса срока поручения" activiti:formKey="lecmErrandWf:requestDueDateChange_1"></startEvent>
+
+        <scriptTask id="requestDueDateChange" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+                            var document = bpm_package.children[0];
+
+                            documentWorkflowComments.createWorkflowComment(document, lecmErrandWf_requestDueDateChangeReason);
+
+                            var logText = "#initiator запросил ";
+                            logText += documentScript.wrapperTitle("изменение срока", lecmErrandWf_requestDueDateChangeReason);
+                            logText += "исполнения поручения: #mainobject.";
+                            businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, []);
+
+                            var initiator = null;
+                            var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
+                            if (initiatorAssoc && initiatorAssoc.length == 1) {
+                                initiator = initiatorAssoc[0];
+                            }
+
+                            var currentEmployee = orgstructure.getCurrentEmployee();
+
+                            if (initiator) {
+
+                                notifications.sendNotificationFromCurrentUser({
+                                    recipients: [initiator],
+                                    templateCode: 'ERRANDS_CHANGE_DUE_DATE_REQUEST',
+                                    templateConfig: {
+                                        mainObject: document,
+                                        eventExecutor: currentEmployee
+                                    }
+                                });
+
+                                execution.setVariable("requestDueDateChangeAssignee", orgstructure.getEmployeeLogin(initiator));
+                            }
+
+                            var props = [];
+                            props["lecm-errands-aspect:isDueDateChangeRequested"] = true;
+                            document.addAspect("lecm-errands-aspect:isDueDateChangeRequestedAspect", props);
+                        ]]></activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script></script>
+        </scriptTask>
+
+        <receiveTask id="requestDueDateChangeReceiveTask" name="Receive Task"></receiveTask>
+
+        <userTask id="changeRequestedDueDate" name="Перенести срок поручения" activiti:assignee="${requestDueDateChangeAssignee}" activiti:formKey="lecmErrandWf:requestDueDateChangeTask">
+            <extensionElements>
+                <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            task.setVariable("lecmErrandWf_requestDueDateChangeTaskNewDate", task.getVariable("lecmErrandWf_requestDueDateChangeNewDate"));
+                            task.setVariable("lecmErrandWf_requestDueDateChangeTaskDateReason", task.getVariable("lecmErrandWf_requestDueDateChangeReason"));
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+
+                <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+                            var document = bpm_package.children[0];
+                            if (document) {
+                                var executor = null;
+                                var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
+                                if (executorAssoc && executorAssoc.length == 1) {
+                                    executor = executorAssoc[0];
+                                }
+                                var initiator = null;
+                                var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
+                                if (initiatorAssoc && initiatorAssoc.length == 1) {
+                                    initiator = initiatorAssoc[0];
+                                }
+                                if (executor && initiator) {
+                                    var decision = task.getVariableLocal("lecmErrandWf_requestDueDateChangeTaskResult");
+
+                                    var recipients = [];
+                                    recipients.push(executor);
+
+                                    var comment = task.getVariableLocal("lecmErrandWf_requestDueDateChangeTaskComment");
+                                    if (comment) {
+                                        documentWorkflowComments.createWorkflowComment(document, comment);
+                                    }
+
+                                    if (decision == "REJECTED") {
+                                        notifications.sendNotificationFromCurrentUser({
+                                            recipients: recipients,
+                                            templateCode: 'ERRANDS_REJECT_CHANGE_DUE_DATE_REQUEST',
+                                            templateConfig: {
+                                                mainObject: document,
+                                                eventExecutor: initiator
+                                            }
+                                        });
+                                    } else if (decision == "APPROVED") {
+                                        var newDueDate = task.getVariableLocal("lecmErrandWf_requestDueDateChangeTaskNewDate");
+                                        if (newDueDate) {
+                                            var now = new Date();
+                                            now.setHours(12);
+                                            now.setMinutes(0);
+                                            now.setSeconds(0);
+                                            now.setMilliseconds(0);
+                                            var newDueDateJS = new Date(newDueDate.getTime());
+                                            document.properties["lecm-errands:limitation-date"] = newDueDate;
+                                            document.properties["lecm-errands:is-expired"] = (now > newDueDateJS);
+                                            document.save();
+                                        }
+
+
+                                        notifications.sendNotificationFromCurrentUser({
+                                            recipients: recipients,
+                                            templateCode: 'ERRANDS_ACCEPT_CHANGE_DUE_DATE_REQUEST',
+                                            templateConfig: {
+                                                mainObject: document,
+                                                eventExecutor: initiator
+                                            }
+                                        });
+                                        var logText = "#initiator утвердил ";
+                                        var comment = task.getVariableLocal("lecmErrandWf_requestDueDateChangeTaskComment");
+                                        if (comment) {
+                                            logText += documentScript.wrapperTitle("перенос", comment);
+                                        } else {
+                                            logText += "перенос";
+                                        }
+                                        logText += " срока поручения: #mainobject.";
+                                        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, []);
+                                    }
+                                }
+                            }
+                            var document = bpm_package.children[0];
+                            document.properties["lecm-errands-aspect:isDueDateChangeRequested"] = false;
+                            document.save();
+                            ]]></activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+
+            </extensionElements>
+        </userTask>
+
+        <endEvent id="endRequestDueDateChange" name="End"></endEvent>
+
+        <sequenceFlow id="flow1" name="" sourceRef="startRequestDueDateChange" targetRef="requestDueDateChange"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="requestDueDateChange" targetRef="requestDueDateChangeReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="requestDueDateChangeReceiveTask" targetRef="changeRequestedDueDate"></sequenceFlow>
+        <sequenceFlow id="flow4" name="" sourceRef="changeRequestedDueDate" targetRef="endRequestDueDateChange"></sequenceFlow>
+
+    </process>
+</definitions>

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
         Bubbling = YAHOO.Bubbling;
@@ -6,7 +6,7 @@
 
     Bubbling.on('errandsWFChangeDueDateScriptLoaded', init);
 
-    function init(){
+    function init(layer, args) {
         formId = args[1].formId;
         Event.onContentReady(formId + "_assoc_packageItems-added", function () {
             var errandRef = Dom.get(formId + "_assoc_packageItems-added").value;
@@ -18,9 +18,15 @@
                 successCallback: {
                     fn: function (response) {
                         var hasChildOnLifeCycle = response.json.hasChildOnLifeCycle;
-                        if (hasChildOnLifeCycle) {
-                            Dom.get(formId + "_prop_lecmErrandWf_changeChildDueDate").value = false;
-                            LogicECM.module.Base.Util.hideControl(formId, "lecmErrandWf:changeChildDueDate");
+                        if (!hasChildOnLifeCycle) {
+                            var changeChildDueDateField = Dom.get(formId + "_prop_lecmErrandWf_changeDueDateChangeChildDueDate");
+                            if (!changeChildDueDateField) {
+                                changeChildDueDateField = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeChildDueDate");
+                            }
+                            if (changeChildDueDateField) {
+                                changeChildDueDateField.value = false;
+                                Dom.setStyle(changeChildDueDateField.parentElement.parentElement.parentElement, "display", "none");
+                            }
                         }
                     }
                 },

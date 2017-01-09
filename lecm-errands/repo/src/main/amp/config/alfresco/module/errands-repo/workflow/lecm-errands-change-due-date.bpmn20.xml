@@ -28,7 +28,7 @@
                                 if (lecmErrandWf_changeDueDateNewDueDateRadio == "DATE"){
                                     if (oldLimitDate && oldLimitRadio != "LIMITLESS" ){
                                        var oldDate = new Date(oldLimitDate);
-                                       shiftSize = jsLimitDate - oldDate;
+                                       shiftSize = new Date(lecmErrandWf_changeDueDateNewDueDate) - oldDate;
                                        newLimitationDate = new Date(oldDate.getTime() + shiftSize);
                                        document.properties["lecm-errands:limitation-date"] = new Date(oldDate.getTime() + shiftSize);
                                     } else if( oldLimitRadio == "LIMITLESS" || !oldLimitDate){
@@ -48,7 +48,6 @@
                                     }else{
                                        document.properties["lecm-errands:is-limit-short"] = false;
                                       }
-
                                     document.properties["lecm-errands:limitation-date-radio"] = lecmErrandWf_changeDueDateNewDueDateRadio;
                                 }else if (lecmErrandWf_changeDueDateNewDueDateRadio == "LIMITLESS"){
                                     limitless = true;
@@ -62,10 +61,10 @@
                                         changed = false;
                                     }
                                 }
-                                if (lecmErrandWf_changeChildDueDate){
+                                if (lecmErrandWf_changeDueDateChangeChildDueDate){
                                           var children = [];
-                                          var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
-                                          var childrenResolutions = documentConnection.getConnectedDocuments(doc,'onBasis',"lecm-resolutions:document");
+                                          var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
+                                          var childrenResolutions = documentConnection.getConnectedDocuments(document,'onBasis',"lecm-resolutions:document");
 
                                           if(childrenErrands || childrenResolutions){
                                              if(childrenErrands){
