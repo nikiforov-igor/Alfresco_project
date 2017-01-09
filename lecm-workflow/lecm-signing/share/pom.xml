@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>ru.it.lecm.workflow.signing</groupId>
 		<artifactId>signing</artifactId>
-		<version>1.8.5</version>
+		<version>1.8.6</version>
 	</parent>
 
 	<artifactId>signing-share</artifactId>
