@@ -242,22 +242,22 @@ span.wrapper-title {
 /* Site-wide Styles */
 
 @font-face {
-  font-family: 'Open Sans Old';
-  font-style: normal;
-  font-weight: 400;
-  src: url(../../font/opensans.woff) format('woff');
+	font-family: 'Open Sans Old';
+	font-style: normal;
+	font-weight: 400;
+	src: url(../../font/opensans.woff) format('woff');
 }
 @font-face {
-  font-family: 'Open Sans Bold Old';
-  font-style: normal;
-  font-weight: 600;
-  src: url(../../font/opensansbold.woff) format('woff');
+	font-family: 'Open Sans Bold Old';
+	font-style: normal;
+	font-weight: 600;
+	src: url(../../font/opensansbold.woff) format('woff');
 }
 @font-face {
-  font-family: 'Open Sans Condensed Old';
-  font-style: normal;
-  font-weight: 300;
-  src: url(../../font/opensanscondensed.woff) format('woff');
+	font-family: 'Open Sans Condensed Old';
+	font-style: normal;
+	font-weight: 300;
+	src: url(../../font/opensanscondensed.woff) format('woff');
 }
 
 button::-moz-focus-inner,
