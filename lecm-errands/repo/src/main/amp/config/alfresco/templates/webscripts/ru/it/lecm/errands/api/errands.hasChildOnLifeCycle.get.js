@@ -2,7 +2,7 @@ var errandRef = args["nodeRef"];
 var errand = utils.getNodeFromString(errandRef);
 
 var childrenErrands = errands.getChildErrands(errand.nodeRef.toString());
-var childrenResolutions = documentConnection.getConnectedDocuments(errand, 'onBasis', "lecm-resolutions:document");
+var childrenResolutions = errands.getChildResolutions(errand.nodeRef.toString());
 
 var hasChildOnLifeCycle = false;
 if (childrenErrands || childrenResolutions) {
@@ -18,7 +18,7 @@ if (childrenErrands || childrenResolutions) {
 }
 if (children && children.length) {
     hasChildOnLifeCycle = children.some(function (child) {
-        return (!statemachine.isFinal(child.nodeRef.toString()) || !statemachine.isDraft(child))
+        return (!statemachine.isFinal(child.nodeRef.toString()) && !statemachine.isDraft(child))
     });
 }
 model.hasChildOnLifeCycle = hasChildOnLifeCycle;

@@ -25,13 +25,13 @@
 								var oldLimitRadio = document.properties["lecm-errands:limitation-date-radio"];
                                 var newLimitationDate;
 
-                                if (lecmErrandWf_changeDueDateNewDueDateRadio == "DATE"){
-                                    if (oldLimitDate && oldLimitRadio != "LIMITLESS" ){
-                                       var oldDate = new Date(oldLimitDate);
+                                if (lecmErrandWf_changeDueDateNewDueDateRadio == "DATE") {
+                                    if (oldLimitDate && oldLimitRadio != "LIMITLESS" ) {
+                                       var oldDate = new Date(oldLimitDate.getTime());
                                        shiftSize = new Date(lecmErrandWf_changeDueDateNewDueDate) - oldDate;
                                        newLimitationDate = new Date(oldDate.getTime() + shiftSize);
                                        document.properties["lecm-errands:limitation-date"] = new Date(oldDate.getTime() + shiftSize);
-                                    } else if( oldLimitRadio == "LIMITLESS" || !oldLimitDate){
+                                    } else if ( oldLimitRadio == "LIMITLESS" || !oldLimitDate) {
                                        newLimitationDate = new Date(lecmErrandWf_changeDueDateNewDueDate);
                                        document.properties["lecm-errands:limitation-date"] = lecmErrandWf_changeDueDateNewDueDate;
                                     }
@@ -39,56 +39,50 @@
                                     var dueDateString = dateFormat.format(newLimitationDate).toString();
                                     var wfeDate = new Date(document.properties["lecm-errands:wait-for-execution-date"]);
                                     var fromWFELimitDays = Math.round((newLimitationDate - wfeDate) / (1000 * 60 * 60 * 24));
-                                    var halfLimitDays = Math.round(fromWFELimitDays/2);
-                                    wfeDate.setDate(wfeDate.getDate()+ halfLimitDays);
+                                    var halfLimitDays = Math.round(fromWFELimitDays / 2);
+                                    wfeDate.setDate(wfeDate.getDate() + halfLimitDays);
                                     document.properties["lecm-errands:half-limit-date"] = wfeDate;
                                     var shortLimitDays = notifications.getSettingsShortLimitDays();
-                                    if (fromWFELimitDays <= shortLimitDays){
-                                       document.properties["lecm-errands:is-limit-short"] = true;
-                                    }else{
-                                       document.properties["lecm-errands:is-limit-short"] = false;
-                                      }
+                                    if (fromWFELimitDays <= shortLimitDays) {
+                                        document.properties["lecm-errands:is-limit-short"] = true;
+                                    } else {
+                                        document.properties["lecm-errands:is-limit-short"] = false;
+                                    }
                                     document.properties["lecm-errands:limitation-date-radio"] = lecmErrandWf_changeDueDateNewDueDateRadio;
-                                }else if (lecmErrandWf_changeDueDateNewDueDateRadio == "LIMITLESS"){
+                                } else if (lecmErrandWf_changeDueDateNewDueDateRadio == "LIMITLESS") {
                                     limitless = true;
-                                    if (oldLimitDate && oldLimitRadio != "LIMITLESS" ){
+                                    if (oldLimitDate && oldLimitRadio != "LIMITLESS" ) {
                                         document.properties["lecm-errands:limitation-date-radio"] = lecmErrandWf_changeDueDateNewDueDateRadio;
                                         document.properties["lecm-errands:limitation-date"] = null;
                                         document.properties["lecm-errands:is-limit-short"] = false;
                                         document.properties["lecm-errands:half-limit-date"] = null;
                                         dueDateString = "Без срока";
-                                    } else if( oldLimitRadio == "LIMITLESS" || !oldLimitDate){
+                                    } else if (oldLimitRadio == "LIMITLESS" || !oldLimitDate) {
                                         changed = false;
                                     }
                                 }
-                                if (lecmErrandWf_changeDueDateChangeChildDueDate){
-                                          var children = [];
-                                          var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
-                                          var childrenResolutions = documentConnection.getConnectedDocuments(document,'onBasis',"lecm-resolutions:document");
+                                if (lecmErrandWf_changeDueDateChangeChildDueDate) {
+                                    var children = [];
+                                    var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
+                                    var childrenResolutions = documentConnection.getConnectedDocuments(document,'onBasis',"lecm-resolutions:document");
 
-                                          if(childrenErrands || childrenResolutions){
-                                             if(childrenErrands){
-                                                 children = childrenErrands;
-                                             }
-                                             if(childrenResolutions){
-                                               children = childrenResolutions;
-                                             }
-                                             if(childrenErrands && childrenResolutions){
-                                               children = childrenErrands.concat(childrenResolutions);
-                                             }
-                                          }
-                                          children.forEach(function(child){
-                                             if (!child.hasAspect("lecm-errands-aspect:changeDueDateSignal")) {
-                                                child.addAspect("lecm-errands-aspect:changeDueDateSignal");
-                                             }
-                                             child.properties["lecm-errands-aspect:duedate-shift-size"] = shiftSize;
-								             child.properties["lecm-errands-aspect:duedate-limitless"] = limitless;
-								             child.properties["lecm-errands-aspect:new-limitation-date"] = newLimitationDate;
-								             child.properties["lecm-errands-aspect:change-duedate-reason"] = lecmErrandWf_changeDueDateReason;
-								             child.save();
-                                          });
+                                    if (childrenErrands || childrenResolutions) {
+                                       if (childrenErrands) {
+                                           children = children.concat(childrenErrands);
+                                       }
+                                       if (childrenResolutions) {
+                                         children = children.concat(childrenResolutions);
+                                       }
+                                    }
+                                    children.forEach(function (child) {
+                                       child.properties["lecm-errands-aspect:duedate-shift-size"] = shiftSize;
+                                       child.properties["lecm-errands-aspect:duedate-limitless"] = limitless;
+                                       child.properties["lecm-errands-aspect:new-limitation-date"] = newLimitationDate;
+                                       child.properties["lecm-errands-aspect:change-duedate-reason"] = lecmErrandWf_changeDueDateReason;
+                                       child.save();
+                                    });
                                 }
-                                if(changed){
+                                if (changed) {
                                     document.properties["lecm-errands:limitation-date-text"] = dueDateString;
                                     document.save();
                                     var recipients = [];
@@ -99,11 +93,11 @@
                                         recipients.push(executorAssoc[0]);
                                     }
                                     if (coexecutorsAssoc && coexecutorsAssoc.length) {
-                                        for(i = 0; i < coexecutorsAssoc.length; i++){
+                                        for (i = 0; i < coexecutorsAssoc.length; i++) {
                                             recipients.push(coexecutorsAssoc[i]);
                                         }
                                     }
-                                    if (controllerAssoc != null && controllerAssoc.length == 1) {
+                                    if (controllerAssoc && controllerAssoc.length == 1) {
                                         recipients.push(controllerAssoc[0]);
                                     }
                                     notifications.sendNotificationFromCurrentUser({

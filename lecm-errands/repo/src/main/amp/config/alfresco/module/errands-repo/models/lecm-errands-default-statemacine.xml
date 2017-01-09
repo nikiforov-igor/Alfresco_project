@@ -3975,24 +3975,18 @@ if (document) {
     }
 
     var children = [];
-    var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
-    var childrenResolutions = documentConnection.getConnectedDocuments(doc, 'onBasis', "lecm-resolutions:document");
+    var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
+    var childrenResolutions = documentConnection.getConnectedDocuments(document, 'onBasis', "lecm-resolutions:document");
 
     if (childrenErrands || childrenResolutions) {
         if (childrenErrands) {
-            children = childrenErrands;
+            children = children.concat(childrenErrands);
         }
         if (childrenResolutions) {
-            children = childrenResolutions;
-        }
-        if (childrenErrands && childrenResolutions) {
-            children = childrenErrands.concat(childrenResolutions);
+            children = children.concat(childrenResolutions);
         }
     }
     children.forEach(function (child) {
-        if (!child.hasAspect("lecm-errands-aspect:changeDueDateSignal")) {
-            child.addAspect("lecm-errands-aspect:changeDueDateSignal");
-        }
         child.properties["lecm-errands-aspect:duedate-shift-size"] = shiftSize;
         child.properties["lecm-errands-aspect:duedate-limitless"] = limitless;
         child.properties["lecm-errands-aspect:new-limitation-date"] = newLimitationDate;
@@ -6263,24 +6257,18 @@ if (document) {
     }
 
     var children = [];
-    var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
-    var childrenResolutions = documentConnection.getConnectedDocuments(doc, 'onBasis', "lecm-resolutions:document");
+    var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
+    var childrenResolutions = documentConnection.getConnectedDocuments(document, 'onBasis', "lecm-resolutions:document");
 
     if (childrenErrands || childrenResolutions) {
         if (childrenErrands) {
-            children = childrenErrands;
+            children = children.concat(childrenErrands);
         }
         if (childrenResolutions) {
-            children = childrenResolutions;
-        }
-        if (childrenErrands && childrenResolutions) {
-            children = childrenErrands.concat(childrenResolutions);
+            children = children.concat(childrenResolutions);
         }
     }
     children.forEach(function (child) {
-        if (!child.hasAspect("lecm-errands-aspect:changeDueDateSignal")) {
-            child.addAspect("lecm-errands-aspect:changeDueDateSignal");
-        }
         child.properties["lecm-errands-aspect:duedate-shift-size"] = shiftSize;
         child.properties["lecm-errands-aspect:duedate-limitless"] = limitless;
         child.properties["lecm-errands-aspect:new-limitation-date"] = newLimitationDate;

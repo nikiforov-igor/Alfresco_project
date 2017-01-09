@@ -42,7 +42,6 @@
                             var currentEmployee = orgstructure.getCurrentEmployee();
 
                             if (initiator) {
-
                                 notifications.sendNotificationFromCurrentUser({
                                     recipients: [initiator],
                                     templateCode: 'ERRANDS_CHANGE_DUE_DATE_REQUEST',
@@ -126,8 +125,6 @@
                                             document.properties["lecm-errands:is-expired"] = (now > newDueDateJS);
                                             document.save();
                                         }
-
-
                                         notifications.sendNotificationFromCurrentUser({
                                             recipients: recipients,
                                             templateCode: 'ERRANDS_ACCEPT_CHANGE_DUE_DATE_REQUEST',
