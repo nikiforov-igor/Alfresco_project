@@ -31,7 +31,7 @@
                                     shiftSize = new Date(newLimitationDate.getTime() - oldLimitDate.getTime());
 
                                     var dateFormat = new Packages.java.text.SimpleDateFormat("dd.MM.yyyy");
-                                    var dueDateString = dateFormat.format(newLimitationDate).toString();
+                                    dueDateString = dateFormat.format(newLimitationDate).toString();
                                     var wfeDate = new Date(document.properties["lecm-errands:wait-for-execution-date"]);
                                     var fromWFELimitDays = Math.round((newLimitationDate - wfeDate) / (1000 * 60 * 60 * 24));
                                     var halfLimitDays = Math.round(fromWFELimitDays / 2);
