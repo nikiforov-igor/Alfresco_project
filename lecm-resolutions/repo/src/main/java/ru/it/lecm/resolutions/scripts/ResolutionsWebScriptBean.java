@@ -36,7 +36,7 @@ public class ResolutionsWebScriptBean extends BaseWebScript {
         return resolutionsService.calculateResolutionExecutionDate(radio, daysInt, daysType, dateParsed);
     }
 
-    public Scriptable getAvailableExecutors(ScriptNode resolution) {
+    public Scriptable getResolutionClosers(ScriptNode resolution) {
         List<NodeRef> results = resolutionsService.getResolutionClosers(resolution.getNodeRef());
         if (results != null) {
             return createScriptable(results);
