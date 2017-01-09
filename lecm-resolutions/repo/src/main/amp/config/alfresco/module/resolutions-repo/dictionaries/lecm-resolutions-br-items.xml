@@ -8,6 +8,30 @@
 				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
 				<property name="lecm-orgstr:business-role-description">Cотрудник, отвечающий за создание резолюций</property>
 			</item>
+            <item name="cm:Резолюции. Создатель" type="lecm-orgstr:business-role">
+				<property name="cm:name">Резолюции. Создатель</property>
+				<property name="lecm-orgstr:business-role-identifier">RESOLUTION_CREATOR_DYN</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
+				<property name="lecm-orgstr:business-role-description"></property>
+			</item>
+            <item name="cm:Резолюции. Автор" type="lecm-orgstr:business-role">
+				<property name="cm:name">Резолюции. Автор</property>
+				<property name="lecm-orgstr:business-role-identifier">RESOLUTION_AUTHOR_DYN</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
+				<property name="lecm-orgstr:business-role-description"></property>
+			</item>
+            <item name="cm:Резолюции. Контролер" type="lecm-orgstr:business-role">
+				<property name="cm:name">Резолюции. Контролер</property>
+				<property name="lecm-orgstr:business-role-identifier">RESOLUTION_CONTROLLER_DYN</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
+				<property name="lecm-orgstr:business-role-description"></property>
+			</item>
+            <item name="cm:Резолюции. Завершающий" type="lecm-orgstr:business-role">
+				<property name="cm:name">Резолюции. Завершающий</property>
+				<property name="lecm-orgstr:business-role-identifier">RESOLUTION_CLOSER_DYN</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
+				<property name="lecm-orgstr:business-role-description"></property>
+			</item>
 		</items>
 	</item>
 </items>

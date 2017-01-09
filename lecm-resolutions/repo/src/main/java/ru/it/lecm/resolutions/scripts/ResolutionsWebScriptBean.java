@@ -1,11 +1,15 @@
 package ru.it.lecm.resolutions.scripts;
 
+import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.ParameterCheck;
+import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.resolutions.api.ResolutionsService;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * User: AIvkin
@@ -30,5 +34,13 @@ public class ResolutionsWebScriptBean extends BaseWebScript {
         Date dateParsed = (date != null && !date.isEmpty()) ? ISO8601DateFormat.parse(date) : null;
 
         return resolutionsService.calculateResolutionExecutionDate(radio, daysInt, daysType, dateParsed);
+    }
+
+    public Scriptable getAvailableExecutors(ScriptNode resolution) {
+        List<NodeRef> results = resolutionsService.getResolutionClosers(resolution.getNodeRef());
+        if (results != null) {
+            return createScriptable(results);
+        }
+        return null;
     }
 }

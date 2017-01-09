@@ -4,6 +4,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * User: AIvkin
@@ -41,5 +42,5 @@ public interface ResolutionsService {
 
     boolean checkResolutionErrandsExecutionDate(NodeRef resolution);
 
-    boolean currentEmployeeIsCloser(NodeRef resolution);
+    List<NodeRef> getResolutionClosers(NodeRef resolution);
 }

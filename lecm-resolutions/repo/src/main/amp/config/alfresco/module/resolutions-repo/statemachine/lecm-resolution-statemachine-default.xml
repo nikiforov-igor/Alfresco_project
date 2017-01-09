@@ -932,6 +932,53 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>3161b3d4-f145-4e62-81ee-435adb76321f</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/1e7cc642-d9b4-4c92-ae4f-33916e824b89
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+  /* Создатель */
+  var creatorAssoc = stm_document.assocs["lecm-resolutions:author-assoc"];
+  if (creatorAssoc && creatorAssoc.length) {
+    statemachine.grandDynamicRoleForEmployee(stm_document, creatorAssoc[0], "RESOLUTION_CREATOR_DYN", task);
+  }
+
+  /* Автор */
+  var authorAssoc = stm_document.assocs["lecm-document:author-assoc"];
+  if (authorAssoc && authorAssoc.length) {
+    statemachine.grandDynamicRoleForEmployee(stm_document, authorAssoc[0], "RESOLUTION_AUTHOR_DYN", task);
+  }
+
+  /* Контролер */
+  var controllerAssoc = stm_document.assocs["lecm-resolutions:controller-assoc"];
+  if (controllerAssoc && controllerAssoc.length) {
+    statemachine.grandDynamicRoleForEmployee(stm_document, controllerAssoc[0], "RESOLUTION_CONTROLLER_DYN", task);
+  }
+
+  /* Завершающий */
+  var closers = resolutionsScript.getAvailableExecutors(stm_document);
+  if (closers) {
+    closers.forEach(function (employee) {
+      statemachine.grandDynamicRoleForEmployee(stm_document, employee, "RESOLUTION_CLOSER_DYN", task);
+    });
+  }
+})();]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Нарезка прав]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -1042,7 +1089,7 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@resolutionsService.currentEmployeeIsCloser(doc.nodeRef)]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "RESOLUTION_CLOSER_DYN")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -1414,6 +1461,103 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                     </node>
                                 </nodes>
                             </subFolder>
+                            <subFolder>
+                                <name>dynamicRoles</name>
+                                <nodes>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>b23071ae-2895-4da7-8166-4c2d955f6268</name>
+                                        <nodeRef>workspace://SpacesStore/b23071ae-2895-4da7-8166-4c2d955f6268</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CONTROLLER_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>5556ba66-2179-4dba-92b4-451f44a510bc</name>
+                                        <nodeRef>workspace://SpacesStore/5556ba66-2179-4dba-92b4-451f44a510bc</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_AUTHOR_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>8b4ddc01-bca9-4bb6-9a62-4c19d9cc6043</name>
+                                        <nodeRef>workspace://SpacesStore/8b4ddc01-bca9-4bb6-9a62-4c19d9cc6043</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CLOSER_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>b024f101-4d66-4467-a373-d74995b11bb9</name>
+                                        <nodeRef>workspace://SpacesStore/b024f101-4d66-4467-a373-d74995b11bb9</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CREATOR_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                </nodes>
+                            </subFolder>
                         </subFolders>
                     </node>
                     <node>
@@ -1564,7 +1708,46 @@ if (document) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>6ac37178-291b-49b4-90f3-1f9dc88a60b7</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/7391928e-bf8f-4d82-ab50-9fbe77c9bc74
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+  /* Создатель */
+  var creatorAssoc = stm_document.assocs["lecm-resolutions:author-assoc"];
+  if (creatorAssoc && creatorAssoc.length) {
+    statemachine.grandDynamicRoleForEmployee(stm_document, creatorAssoc[0], "RESOLUTION_CREATOR_DYN", task);
+  }
+
+  /* Автор */
+  var authorAssoc = stm_document.assocs["lecm-document:author-assoc"];
+  if (authorAssoc && authorAssoc.length) {
+    statemachine.grandDynamicRoleForEmployee(stm_document, authorAssoc[0], "RESOLUTION_AUTHOR_DYN", task);
+  }
+})();]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Нарезка прав]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>TimerAction</type>
@@ -2079,6 +2262,103 @@ if (document) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                </nodes>
+                            </subFolder>
+                            <subFolder>
+                                <name>dynamicRoles</name>
+                                <nodes>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>62471a32-d3c9-4ef6-bc09-7303e35dbeb8</name>
+                                        <nodeRef>workspace://SpacesStore/62471a32-d3c9-4ef6-bc09-7303e35dbeb8</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CONTROLLER_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>1555c0e1-ee06-4128-8338-61cd9f60ecef</name>
+                                        <nodeRef>workspace://SpacesStore/1555c0e1-ee06-4128-8338-61cd9f60ecef</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployeeExtended]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_AUTHOR_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>59cc8f02-c99e-4f81-9c89-0dbee46bc18e</name>
+                                        <nodeRef>workspace://SpacesStore/59cc8f02-c99e-4f81-9c89-0dbee46bc18e</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CLOSER_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>901dd3ee-8f98-4f0d-a3f0-0365de2f247f</name>
+                                        <nodeRef>workspace://SpacesStore/901dd3ee-8f98-4f0d-a3f0-0365de2f247f</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CREATOR_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
                                         <subFolders/>
                                     </node>
                                 </nodes>
@@ -2666,6 +2946,103 @@ if (document) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                </nodes>
+                            </subFolder>
+                            <subFolder>
+                                <name>dynamicRoles</name>
+                                <nodes>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>defc69f5-4fe7-4cea-9705-cde13f292f36</name>
+                                        <nodeRef>workspace://SpacesStore/defc69f5-4fe7-4cea-9705-cde13f292f36</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CONTROLLER_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>d4d2bbd6-7f8f-4b86-a05a-f4831986418d</name>
+                                        <nodeRef>workspace://SpacesStore/d4d2bbd6-7f8f-4b86-a05a-f4831986418d</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_AUTHOR_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>30f44d27-dfbc-44ff-9b1c-ee8f2a46fd6d</name>
+                                        <nodeRef>workspace://SpacesStore/30f44d27-dfbc-44ff-9b1c-ee8f2a46fd6d</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CLOSER_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>fbd6115e-cca2-4c34-8eb1-0fb477b15950</name>
+                                        <nodeRef>workspace://SpacesStore/fbd6115e-cca2-4c34-8eb1-0fb477b15950</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployeeExtended]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CREATOR_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
                                         <subFolders/>
                                     </node>
                                 </nodes>
@@ -3288,6 +3665,74 @@ if (document) {
                             <roleAssociation>
                                 <type>role-assoc</type>
                                 <businessRoleName>RESOLUTION_CREATORS</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders/>
+                    </node>
+                    <node>
+                        <type>dynamic-role-item</type>
+                        <name>8d44408e-b30f-49d3-a6af-626fb5d9c70f</name>
+                        <nodeRef>workspace://SpacesStore/ecd9c4de-04e2-4179-b13d-130e4c6d2df0</nodeRef>
+                        <properties/>
+                        <aspects>
+                            <business-role/>
+                        </aspects>
+                        <associations/>
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>RESOLUTION_CREATOR_DYN</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders/>
+                    </node>
+                    <node>
+                        <type>dynamic-role-item</type>
+                        <name>479dcb3c-6d32-43e0-a866-773bd01340dd</name>
+                        <nodeRef>workspace://SpacesStore/e9806b5e-5b0e-4ac2-8e6e-1011444d0136</nodeRef>
+                        <properties/>
+                        <aspects>
+                            <business-role/>
+                        </aspects>
+                        <associations/>
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>RESOLUTION_AUTHOR_DYN</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders/>
+                    </node>
+                    <node>
+                        <type>dynamic-role-item</type>
+                        <name>a7c7c535-434b-4c66-a791-ecba42215012</name>
+                        <nodeRef>workspace://SpacesStore/171a1b92-4d9b-4076-84b4-5f5a8639baa0</nodeRef>
+                        <properties/>
+                        <aspects>
+                            <business-role/>
+                        </aspects>
+                        <associations/>
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>RESOLUTION_CONTROLLER_DYN</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders/>
+                    </node>
+                    <node>
+                        <type>dynamic-role-item</type>
+                        <name>d0447dee-b328-48b1-bb88-254683c8e271</name>
+                        <nodeRef>workspace://SpacesStore/05334aa2-1869-46fa-bdca-5f30ecda44c0</nodeRef>
+                        <properties/>
+                        <aspects>
+                            <business-role/>
+                        </aspects>
+                        <associations/>
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>RESOLUTION_CLOSER_DYN</businessRoleName>
                             </roleAssociation>
                         </roleAssociations>
                         <subFolders/>
