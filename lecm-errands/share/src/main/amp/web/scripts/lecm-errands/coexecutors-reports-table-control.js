@@ -331,7 +331,7 @@ LogicECM.errands = LogicECM.errands || {};
 
         onActionDeclineCoexecutorReport: function (me, asset, owner, actionsConfig, confirmFunction) {
             var nodeRef = arguments[0].nodeRef;
-            if (nodeRef != null) {
+            if (nodeRef) {
                 var me = this;
                 var formId = "decline-coexecutor-report";
                 var declineReportDialog = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
