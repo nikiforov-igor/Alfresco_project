@@ -5,6 +5,7 @@ var childrenErrands = errands.getChildErrands(errand.nodeRef.toString());
 var childrenResolutions = errands.getChildResolutions(errand.nodeRef.toString());
 
 var hasChildOnLifeCycle = false;
+var children = [];
 if (childrenErrands) {
     children = children.concat(childrenErrands);
 }
