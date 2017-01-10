@@ -201,7 +201,8 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                     showCancelButton: true,
                     itemNodeRef: item.nodeRef,
                     ignoreNodes: item.nodeRef,
-                    args: JSON.stringify(args)
+                    args: JSON.stringify(args),
+					showCaption: false
                 },
                 actionUrl: null,
                 destroyOnHide: true,

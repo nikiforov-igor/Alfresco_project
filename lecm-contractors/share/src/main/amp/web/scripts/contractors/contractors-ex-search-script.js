@@ -290,7 +290,8 @@
                 duplicates_str: duplicatesFilter
             }),
             showSubmitButton: true,
-            showCancelButton: true
+            showCancelButton: true,
+			showCaption: false
         };
 
         var duplicateDetails = new Alfresco.module.SimpleDialog(options.dialogId + "-showDialog");

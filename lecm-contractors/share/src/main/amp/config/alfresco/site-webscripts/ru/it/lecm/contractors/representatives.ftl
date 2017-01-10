@@ -123,7 +123,8 @@ LogicECM.module.Base.Util.loadScripts([
 				mode: "create",
 				submitType: "json",
 				ignoreNodes: response.json.join(),
-				showCancelButton: true
+				showCancelButton: true,
+				showCaption: false
 			};
 
 		addRepresentativeForm.setOptions({

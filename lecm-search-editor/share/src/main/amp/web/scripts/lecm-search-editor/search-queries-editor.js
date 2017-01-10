@@ -430,7 +430,8 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                         mode: isCreate ? "create" : "edit",
                         formId: "",
                         submitType:"json",
-                        showCancelButton: true
+                        showCancelButton: true,
+						showCaption: false
                     };
 
                     var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");

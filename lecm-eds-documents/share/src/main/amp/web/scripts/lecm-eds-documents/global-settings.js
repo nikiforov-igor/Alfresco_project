@@ -80,7 +80,8 @@ LogicECM.module = LogicECM.module || {};
 							mode: "edit",
 							formUI: true,
 							submitType:"json",
-							showSubmitButton:"true"
+							showSubmitButton:"true",
+							showCaption: false
 						},
 						successCallback: {
 							fn: successCallback

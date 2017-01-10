@@ -237,7 +237,8 @@ LogicECM.module = LogicECM.module || {};
 					formId: 'workflow-form',
 					args: JSON.stringify(action.variables),
 					nodeRef: this.options.nodeRef,
-					showCancelButton: true
+					showCancelButton: true,
+					showCaption: false
 
 				};
 				if (action.variables != null) {
@@ -357,7 +358,8 @@ LogicECM.module = LogicECM.module || {};
 						formId: 'workflow-form',
 						destination: action.formFolder,
 						showCancelButton: true,
-						args: JSON.stringify(action.variables)
+						args: JSON.stringify(action.variables),
+						showCaption: false
 					};
 
 					var dialogWidth = '84em';
@@ -484,7 +486,8 @@ LogicECM.module = LogicECM.module || {};
 				formUI: true,
 				submitType: 'json',
 				showCancelButton: true,
-				reassignReload: true
+				reassignReload: true,
+				showCaption: false
 			};
 			
 			var dialogWidth = '55em';

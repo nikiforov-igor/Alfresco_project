@@ -1003,7 +1003,8 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 		            mode:"create",
 		            formId: "addTableRow",
 		            submitType:"json",
-		            showCancelButton: true
+		            showCancelButton: true,
+					showCaption: false
 	            };
 
 				this.updateTemplateParams(templateRequestParams);

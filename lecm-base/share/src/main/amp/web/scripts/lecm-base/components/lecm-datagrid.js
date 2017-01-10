@@ -2687,7 +2687,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 		            itemId: item.nodeRef,
 		            mode: "edit",
 		            submitType: "json",
-		            showCancelButton: true
+		            showCancelButton: true,
+					showCaption: false
 	            };
 	            if (this.options.editForm) {
 		            templateRequestParams.formId = this.options.editForm;
@@ -2784,7 +2785,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 		            mode:"create",
 		            formId: meta.createFormId != null ? meta.createFormId : "",
 		            submitType:"json",
-		            showCancelButton: true
+		            showCancelButton: true,
+					showCaption: false
 	            };
 
                 // Using Forms Service, so always create new instance

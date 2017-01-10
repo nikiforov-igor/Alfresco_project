@@ -1097,7 +1097,8 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 		            mode:"create",
 		            formId: "addTableRow",
 		            submitType:"json",
-		            showCancelButton: true
+		            showCancelButton: true,
+					showCaption: false
 	            };
 
                 // Using Forms Service, so always create new instance
@@ -1230,7 +1231,8 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 				itemId: item.nodeRef,
 				mode: "edit",
 				submitType: "json",
-				showCancelButton: true
+				showCancelButton: true,
+				showCaption: false
 			};
 
 			templateRequestParams.formId = 'editWorkspace';

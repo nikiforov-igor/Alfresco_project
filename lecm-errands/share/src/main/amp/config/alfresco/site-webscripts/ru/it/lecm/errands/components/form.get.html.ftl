@@ -104,7 +104,8 @@
 		                        submitType:"json",
 	                            showSubmitButton: true,
 	                            showResetButton: false,
-	                            showCancelButton: false
+	                            showCancelButton: false,
+								showCaption: false
 	                        },
 	                        successCallback: {
 	                            fn: function (response) {

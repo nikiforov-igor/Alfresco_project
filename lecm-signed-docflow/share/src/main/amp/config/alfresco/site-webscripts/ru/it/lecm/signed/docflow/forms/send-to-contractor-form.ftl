@@ -127,7 +127,8 @@
 									formId: "auth-form",
 									mode: "create",
 									showCancelButton: "true",
-									submitType: "json"
+									submitType: "json",
+									showCaption: false
 								},
 								actionUrl: null,
 								destroyOnHide: true,

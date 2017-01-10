@@ -39,7 +39,8 @@ LogicECM.module.Delegation.Procuracy = LogicECM.module.Delegation.Procuracy || {
 						+ "&mode={mode}"
 						+ "&submitType={submitType}"
 						+ "&showCancelButton=true"
-						+ "&ignoreNodes={ignoreNodes}";
+						+ "&ignoreNodes={ignoreNodes}"
+						+ "&showCaption=false";
 			//если мы задали ИД-шник формы, то передаем и его
 			if (this.options.editForm) {
 				templateUrl += "&formId=" + this.options.editForm;

@@ -110,7 +110,8 @@ LogicECM.module.Members = LogicECM.module.Members || {};
                     formId: this.id + "-create-form",
                     submitType: "json",
                     ignoreNodes: this.currentMembers.join(","),
-                    showCancelButton: true
+                    showCancelButton: true,
+					showCaption: false
                 };
 
 //				// Using Forms Service, so always create new instance

@@ -19,7 +19,8 @@ LogicECM.module.OrgStructure.PROFILE_SETTINGS =  LogicECM.module.OrgStructure.PR
 	                formId:"${id}",
 	                mode: LogicECM.module.OrgStructure.IS_ENGINEER ? "edit" : "view",
 	                submitType:"json",
-	                showSubmitButton:LogicECM.module.OrgStructure.IS_ENGINEER ? "true" : "false"
+	                showSubmitButton:LogicECM.module.OrgStructure.IS_ENGINEER ? "true" : "false",
+					showCaption: false
 	            },
 	            successCallback:{
 	                fn:function(response){

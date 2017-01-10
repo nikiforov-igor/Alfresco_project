@@ -214,7 +214,8 @@ LogicECM.module = LogicECM.module || {};
                     mode: "create",
                     submitType: "json",
                     formId: "association-create-new-node-form",
-                    showCancelButton: true
+                    showCancelButton: true,
+					showCaption: false
                 };
 
                 new Alfresco.module.SimpleDialog("create-new-form-dialog-" + this.eventGroup).setOptions({

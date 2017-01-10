@@ -324,7 +324,8 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
 		        mode:"edit",
 		        submitType:"json",
 		        formId:"dictionary-node-form",
-		        showCancelButton: true
+		        showCancelButton: true,
+				showCaption: false
 	        };
             new Alfresco.module.SimpleDialog("form-dialog").setOptions({
                 width:"40em",
