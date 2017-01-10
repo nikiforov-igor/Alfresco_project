@@ -95,7 +95,6 @@
                 <property name="lecm-errands-ts:coexecutor-report-decline-reason">
                     <type>d:text</type>
                 </property>
-
             </properties>
             <associations>
 	            <!--Соисполнитель-->
