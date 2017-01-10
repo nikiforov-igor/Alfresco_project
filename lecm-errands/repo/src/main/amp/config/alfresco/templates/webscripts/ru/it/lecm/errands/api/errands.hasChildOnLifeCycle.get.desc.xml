@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Наличие не черновых и не финализированных подчиненных поручений/резолюций</shortname>
+    <description>Наличие не черновых и не финализированных подчиненных поручений/резолюций</description>
+    <url>/lecm/errands/api/hasChildOnLifeCycle?nodeRef={nodeRef}</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>

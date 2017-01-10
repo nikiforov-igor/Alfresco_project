@@ -313,6 +313,13 @@ public interface ErrandsService {
      */
     boolean hasChildNotFinalByExecutor(NodeRef errand);
 
+    /**
+     * Получение списка дочерних резолюций
+     * @param errand документ
+     * @return список дочерних резолюций
+     */
+    List<NodeRef> getChildResolutions(NodeRef errand);
+
     enum ModeChoosingExecutors {
         ORGANIZATION,
         UNIT

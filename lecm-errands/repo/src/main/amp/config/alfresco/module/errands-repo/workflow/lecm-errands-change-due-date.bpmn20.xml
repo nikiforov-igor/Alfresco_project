@@ -14,44 +14,68 @@
                             var document = bpm_package.children[0];
                             var currentUser =  orgstructure.getCurrentEmployee();
 	                        if (document) {
-	                            var changed = false;
+	                            var changed = true;
                                 var logObjects = [];
                                 var logText;
                                 var dueDateString = "";
-                                if (lecmErrandWf_changeDueDateNewDueDateRadio == "DATE"){
-                                    if(document.properties["lecm-errands:limitation-date"] != lecmErrandWf_changeDueDateNewDueDate){
-                                        document.properties["lecm-errands:limitation-date"] = lecmErrandWf_changeDueDateNewDueDate;
-                                        document.properties["lecm-errands:limitation-date-radio"] = lecmErrandWf_changeDueDateNewDueDateRadio;
-                                        var jsLimitDate = new Date(lecmErrandWf_changeDueDateNewDueDate.getTime());
-                                        var dateFormat = new Packages.java.text.SimpleDateFormat("dd.MM.yyyy");
-                                        var dueDateString = dateFormat.format(jsLimitDate).toString();
-                                        var curDate = new Date();
-                                        var limitDays = Math.round((jsLimitDate - curDate) / (1000 * 60 * 60 * 24));
-                                        var threeWorkDaysDateLimit = new Date(workCalendar.getNextWorkingDate(utils.toISO8601(curDate), 3).getTime());
-                                        if(threeWorkDaysDateLimit < jsLimitDate){
-                                            var halfLimitDays = Math.round(limitDays/2);
-                                            curDate.setDate(curDate.getDate()+ halfLimitDays);
-                                            document.properties["lecm-errands:half-limit-date"] = curDate;
-                                        }
-                                        var wfeDate = new Date(document.properties["lecm-errands:wait-for-execution-date"]);
-                                        var fromWFELimitDays = Math.round((jsLimitDate - wfeDate) / (1000 * 60 * 60 * 24));
-                                        var shortLimitDays = notifications.getSettingsShortLimitDays();
-                                        if (fromWFELimitDays <= shortLimitDays){
-                                          document.properties["lecm-errands:is-limit-short"] = true;
-                                        }else{
-                                          document.properties["lecm-errands:is-limit-short"] = false;
-                                          }
-                                        changed = true;
+                                var limitless = false;
+                                var shiftSize = 0;
+                                var newLimitationDate = null;
+                                var oldLimitDate = document.properties["lecm-errands:limitation-date"];
+								var oldLimitRadio = document.properties["lecm-errands:limitation-date-radio"];
+                                var newLimitationDate;
+
+                                if (lecmErrandWf_changeDueDateNewDueDateRadio == "DATE") {
+                                    document.properties["lecm-errands:limitation-date"] = lecmErrandWf_changeDueDateNewDueDate;
+                                    newLimitationDate = new Date(lecmErrandWf_changeDueDateNewDueDate);
+                                    shiftSize = new Date(newLimitationDate.getTime() - oldLimitDate.getTime());
+                                    var day = utils.pad(newLimitationDate.getDate(), 2);
+                                    var month = utils.pad(newLimitationDate.getMonth(), 2);
+                                    var year = utils.pad(newLimitationDate.getFullYear(), 4);
+                                    dueDateString = day + "." + month + "." + year;
+                                    var wfeDate = new Date(document.properties["lecm-errands:wait-for-execution-date"]);
+                                    var fromWFELimitDays = Math.round((newLimitationDate - wfeDate) / (1000 * 60 * 60 * 24));
+                                    var halfLimitDays = Math.round(fromWFELimitDays / 2);
+                                    wfeDate.setDate(wfeDate.getDate() + halfLimitDays);
+                                    document.properties["lecm-errands:half-limit-date"] = wfeDate;
+                                    var shortLimitDays = notifications.getSettingsShortLimitDays();
+                                    if (fromWFELimitDays <= shortLimitDays) {
+                                        document.properties["lecm-errands:is-limit-short"] = true;
+                                    } else {
+                                        document.properties["lecm-errands:is-limit-short"] = false;
                                     }
-                                }else if (lecmErrandWf_changeDueDateNewDueDateRadio == "LIMITLESS" && document.properties["lecm-errands:limitation-date-radio"] != lecmErrandWf_changeDueDateNewDueDateRadio ){
                                     document.properties["lecm-errands:limitation-date-radio"] = lecmErrandWf_changeDueDateNewDueDateRadio;
-                                    document.properties["lecm-errands:limitation-date"] = null;
-                                    document.properties["lecm-errands:is-limit-short"] = false;
-                                    document.properties["lecm-errands:half-limit-date"] = null;
-                                    dueDateString = "Без срока";
-                                    changed = true;
+                                } else if (lecmErrandWf_changeDueDateNewDueDateRadio == "LIMITLESS") {
+                                    limitless = true;
+                                    if (oldLimitDate && oldLimitRadio != "LIMITLESS" ) {
+                                        document.properties["lecm-errands:limitation-date-radio"] = lecmErrandWf_changeDueDateNewDueDateRadio;
+                                        document.properties["lecm-errands:limitation-date"] = null;
+                                        document.properties["lecm-errands:is-limit-short"] = false;
+                                        document.properties["lecm-errands:half-limit-date"] = null;
+                                        dueDateString = "Без срока";
+                                    } else if (oldLimitRadio == "LIMITLESS" || !oldLimitDate) {
+                                        changed = false;
+                                    }
                                 }
-                                if(changed){
+                                if (lecmErrandWf_changeDueDateChangeChildDueDate) {
+                                    var children = [];
+                                    var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
+                                    var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
+                                    if (childrenErrands) {
+                                        children = children.concat(childrenErrands);
+                                    }
+                                    if (childrenResolutions) {
+                                        children = children.concat(childrenResolutions);
+                                    }
+                                    children.forEach(function (child) {
+                                       child.properties["lecm-errands-aspect:duedate-shift-size"] = shiftSize;
+                                       child.properties["lecm-errands-aspect:duedate-limitless"] = limitless;
+                                       child.properties["lecm-errands-aspect:new-limitation-date"] = newLimitationDate;
+                                       child.properties["lecm-errands-aspect:change-duedate-reason"] = lecmErrandWf_changeDueDateReason;
+                                       child.save();
+                                    });
+                                }
+                                if (changed) {
                                     document.properties["lecm-errands:limitation-date-text"] = dueDateString;
                                     document.save();
                                     var recipients = [];
@@ -62,11 +86,11 @@
                                         recipients.push(executorAssoc[0]);
                                     }
                                     if (coexecutorsAssoc && coexecutorsAssoc.length) {
-                                        for(i = 0; i < coexecutorsAssoc.length; i++){
+                                        for (i = 0; i < coexecutorsAssoc.length; i++) {
                                             recipients.push(coexecutorsAssoc[i]);
                                         }
                                     }
-                                    if (controllerAssoc != null && controllerAssoc.length == 1) {
+                                    if (controllerAssoc && controllerAssoc.length == 1) {
                                         recipients.push(controllerAssoc[0]);
                                     }
                                     notifications.sendNotificationFromCurrentUser({
@@ -75,7 +99,8 @@
                                        templateConfig: {
                                            mainObject: document,
                                            eventExecutor: currentUser,
-                                           dueDate: dueDateString
+                                           dueDate: dueDateString,
+                                           reason: lecmErrandWf_changeDueDateReason
                                        }
                                     });
                                     logObjects.push(dueDateString);
@@ -83,7 +108,6 @@
                                     logText += documentScript.wrapperTitle("изменил", lecmErrandWf_changeDueDateReason);
                                     logText += " срок исполнения поручения #mainobject на  #object1";
 			                        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, logObjects);
-
                                 }
 	                        }
                    		]]></activiti:string>
