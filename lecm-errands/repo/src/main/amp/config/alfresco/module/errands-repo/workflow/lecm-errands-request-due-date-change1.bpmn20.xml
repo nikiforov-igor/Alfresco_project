@@ -84,6 +84,8 @@
                         <activiti:string><![CDATA[
                             var document = bpm_package.children[0];
                             if (document) {
+                                var logObjects = [];
+                                var logText;
                                 var executor = null;
                                 var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
                                 if (executorAssoc && executorAssoc.length == 1) {
@@ -94,29 +96,28 @@
                                 if (initiatorAssoc && initiatorAssoc.length == 1) {
                                     initiator = initiatorAssoc[0];
                                 }
+                                var currentUser =  orgstructure.getCurrentEmployee();
                                 if (executor && initiator) {
                                     var decision = task.getVariableLocal("lecmErrandWf_requestDueDateChangeTask_1Result");
-
                                     var recipients = [];
                                     recipients.push(executor);
-
                                     if (decision == "REJECTED") {
+                                        var rejectReason = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1RejectReason");
+
                                         notifications.sendNotificationFromCurrentUser({
                                             recipients: recipients,
                                             templateCode: 'ERRANDS_REJECT_CHANGE_DUE_DATE_REQUEST',
                                             templateConfig: {
                                                 mainObject: document,
-                                                eventExecutor: initiator,
-                                                reason: lecmErrandWf_requestDueDateChangeTask_1RejectReason
+                                                eventExecutor: currentUser,
+                                                reason: rejectReason
                                             }
                                         });
                                         logText = "#initiator ";
-                                        logText += documentScript.wrapperTitle("отклонил", lecmErrandWf_requestDueDateChangeTask_1RejectReason);
+                                        logText += documentScript.wrapperTitle("отклонил", rejectReason);
                                         logText += " запрос на изменение срока исполнения поручения #mainobject";
                                         businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, []);
                                     } else if (decision == "APPROVED") {
-                                        var logObjects = [];
-                                        var logText;
                                         var dueDateString = "";
                                         var limitless = false;
                                         var shiftSize = 0;
@@ -124,11 +125,16 @@
                                         var oldLimitDate = document.properties["lecm-errands:limitation-date"];
                                         var oldLimitRadio = document.properties["lecm-errands:limitation-date-radio"];
                                         var newLimitationDate;
-
-                                        if (lecmErrandWf_requestDueDateChangeTask_1NewDueDateRadio == "DATE") {
-                                            document.properties["lecm-errands:limitation-date"] = lecmErrandWf_requestDueDateChangeTask_1NewDate;
-                                            newLimitationDate = new Date(lecmErrandWf_requestDueDateChangeTask_1NewDate);
-                                            shiftSize = new Date(newLimitationDate.getTime() - oldLimitDate.getTime());
+                                        var dateRadio = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1NewDueDateRadio");
+                                        var newDueDate = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1NewDate");
+                                        var processChild = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1ChildDueDate");
+                                        var changeDateReason = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1DateReason");
+                                        if (dateRadio == "DATE") {
+                                            document.properties["lecm-errands:limitation-date"] = newDueDate;
+                                            newLimitationDate = new Date(newDueDate);
+                                            if (oldLimitDate && oldLimitRadio != "LIMITLESS" ) {
+                                                shiftSize = new Date(newLimitationDate.getTime() - oldLimitDate.getTime());
+                                            }
                                             var day = utils.pad(newLimitationDate.getDate(), 2);
                                             var month = utils.pad(newLimitationDate.getMonth() + 1, 2);
                                             var year = utils.pad(newLimitationDate.getFullYear(), 4);
@@ -144,18 +150,18 @@
                                             } else {
                                                 document.properties["lecm-errands:is-limit-short"] = false;
                                             }
-                                            document.properties["lecm-errands:limitation-date-radio"] = lecmErrandWf_requestDueDateChangeTask_1NewDueDateRadio;
-                                        } else if (lecmErrandWf_requestDueDateChangeTask_1NewDueDateRadio == "LIMITLESS") {
+                                            document.properties["lecm-errands:limitation-date-radio"] = dateRadio;
+                                        } else if (dateRadio == "LIMITLESS") {
                                             limitless = true;
                                             if (oldLimitDate && oldLimitRadio != "LIMITLESS" ) {
-                                                document.properties["lecm-errands:limitation-date-radio"] = lecmErrandWf_requestDueDateChangeTask_1NewDueDateRadio;
+                                                document.properties["lecm-errands:limitation-date-radio"] = dateRadio;
                                                 document.properties["lecm-errands:limitation-date"] = null;
                                                 document.properties["lecm-errands:is-limit-short"] = false;
                                                 document.properties["lecm-errands:half-limit-date"] = null;
                                                 dueDateString = "Без срока";
                                             }
                                         }
-                                        if (lecmErrandWf_requestDueDateChangeTask_1ChildDueDate) {
+                                        if (processChild) {
                                             var children = [];
                                             var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
                                             var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
@@ -169,7 +175,7 @@
                                                child.properties["lecm-errands-aspect:duedate-shift-size"] = shiftSize;
                                                child.properties["lecm-errands-aspect:duedate-limitless"] = limitless;
                                                child.properties["lecm-errands-aspect:new-limitation-date"] = newLimitationDate;
-                                               child.properties["lecm-errands-aspect:change-duedate-reason"] = lecmErrandWf_requestDueDateChangeTask_1DateReason;
+                                               child.properties["lecm-errands-aspect:change-duedate-reason"] = changeDateReason;
                                                child.save();
                                             });
                                         }
@@ -197,12 +203,12 @@
                                                mainObject: document,
                                                eventExecutor: currentUser,
                                                dueDate: dueDateString,
-                                               reason: lecmErrandWf_requestDueDateChangeTask_1DateReason
+                                               reason: changeDateReason
                                            }
                                         });
                                         logObjects.push(dueDateString);
                                         logText = "#initiator ";
-                                        logText += documentScript.wrapperTitle("изменил", lecmErrandWf_requestDueDateChangeTask_1DateReason);
+                                        logText += documentScript.wrapperTitle("изменил", changeDateReason);
                                         logText += " срок исполнения поручения #mainobject на  #object1";
                                         businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, logObjects);
                                     }

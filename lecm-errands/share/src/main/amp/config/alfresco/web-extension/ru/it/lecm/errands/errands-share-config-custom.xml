@@ -1836,18 +1836,22 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show  id="packageItems"/>
                     <show id="lecmErrandWf:requestDueDateChangeTask_1CurrentDueDate"/>
+                    <show id="lecmErrandWf:requestDueDateChangeTask_1NewDueDateRadio"/>
                     <show id="lecmErrandWf:requestDueDateChangeTask_1NewDate"/>
+                    <show id="errandLimitless" force="true"/>
                     <show id="lecmErrandWf:requestDueDateChangeTask_1DateReason"/>
                     <show id="lecmErrandWf:requestDueDateChangeTask_1Result"/>
-                    <show id="lecmErrandWf:requestDueDateChangeTask_1NewDueDateRadio"/>
                     <show id="lecmErrandWf:requestDueDateChangeTask_1RejectReason"/>
-					<show id="errandLimitless" force="true"/>
                     <show id="requestDueDateChangeTaskFormScript" force="true"/>
 				</field-visibility>
 				<appearance>
 					<set id="limitation-date"  template="/ru/it/lecm/errands/controls/wf-due-date-set.ftl"/>
                     <set id="block2"/>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
                     <field id="lecmErrandWf:requestDueDateChangeTask_1CurrentDueDate" label-id="label.current-due-date" read-only="true">
                         <control template="/ru/it/lecm/documents/controls/workflow/format-packageItems-document.ftl">
                             <control-param name="substituteString">
@@ -1887,10 +1891,13 @@
                         </constraint-handlers>
                         <control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl"/>
                     </field>
-                    <field id="lecmErrandWf:requestDueDateChangeTask_1RejectReason" set="block2" mandatory="true">
+                    <field id="lecmErrandWf:requestDueDateChangeTask_1RejectReason" set="block2">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">5</control-param>
                         </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestDueDateChangeTaskRejectReasonValidation" event="change"/>
+                        </constraint-handlers>
                     </field>
                     <field id="requestDueDateChangeTaskFormScript">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
