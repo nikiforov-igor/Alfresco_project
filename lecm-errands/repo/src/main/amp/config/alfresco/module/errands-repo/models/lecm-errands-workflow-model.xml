@@ -30,6 +30,14 @@
 			<parameter name='minLength'><value>1</value></parameter>
 			<parameter name='maxLength'><value>200</value></parameter>
 		</constraint>
+		<constraint name="lecmErrandWf:requestDueDateChangeTaskResultConstraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>APPROVED</value>
+					<value>REJECTED</value>
+				</list>
+			</parameter>
+		</constraint>
 	</constraints>
 	<types>
 		<type name="lecmErrandWf:removeDraft">
@@ -105,15 +113,36 @@
 					<type>d:text</type>
 					<default>REJECTED</default>
 					<constraints>
-						<constraint name="lecmErrandWf:requestDueDateChangeTaskResultConstraint" type="LIST">
-							<parameter name="allowedValues">
-								<list>
-									<value>APPROVED</value>
-									<value>REJECTED</value>
-								</list>
-							</parameter>
-						</constraint>
+						<constraint ref="lecmErrandWf:requestDueDateChangeTaskResultConstraint"/>
 					</constraints>
+				</property>
+			</properties>
+		</type>
+
+		<type name="lecmErrandWf:requestDueDateChangeTask_1">
+			<parent>bpm:activitiOutcomeTask</parent>
+			<properties>
+				<property name="lecmErrandWf:requestDueDateChangeTask_1NewDueDateRadio">
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="lecmErrandWf:dueDateRadioConst"/>
+					</constraints>
+				</property>
+				<property name="lecmErrandWf:requestDueDateChangeTask_1NewDate">
+					<type>d:date</type>
+				</property>
+				<property name="lecmErrandWf:requestDueDateChangeTask_1DateReason">
+					<type>d:text</type>
+				</property>
+				<property name="lecmErrandWf:requestDueDateChangeTask_1Result">
+					<type>d:text</type>
+					<default>APPROVED</default>
+					<constraints>
+						<constraint ref="lecmErrandWf:requestDueDateChangeTaskResultConstraint"/>
+					</constraints>
+				</property>
+				<property name="lecmErrandWf:requestDueDateChangeTask_1RejectReason">
+					<type>d:text</type>
 				</property>
 			</properties>
 		</type>

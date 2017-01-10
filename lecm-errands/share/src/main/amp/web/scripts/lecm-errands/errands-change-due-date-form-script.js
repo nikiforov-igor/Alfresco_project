@@ -5,6 +5,7 @@
     var formId;
 
     Bubbling.on('errandsWFChangeDueDateScriptLoaded', init);
+    Bubbling.on('requestDueDateChangeTaskFormScriptLoaded', process);
 
     function init(layer, args) {
         formId = args[1].formId;
@@ -33,5 +34,27 @@
                 failureMessage: Alfresco.util.message("message.failure")
             });
         });
+    }
+    function process(){
+        formId = args[1].formId;
+        LogicECM.module.Base.Util.loadCSS([
+            'css/lecm-errands/errands-request-change-duedate-form.css'
+        ]);
+        var rejectReasonElement = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1RejectReason");
+        var resultElement = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1Result");
+        if (resultElement) {
+            var resultControl = resultElement.parentElement.parentElement;
+            Dom.setStyle(resultControl, "padding-left", "190px");
+            if (rejectReasonElement) {
+                var rejectReasonControl = rejectReasonElement.parentElement.parentElement.parentElement;
+                Event.on(resultElement, "change", function () {
+                    Dom.setStyle(rejectReasonControl, "display", resultElement.value == "REJECTED" ? "block" : "none");
+                });
+            }
+        }
+
+
+
+
     }
 })();

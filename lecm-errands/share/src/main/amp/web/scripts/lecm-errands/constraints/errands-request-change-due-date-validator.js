@@ -24,3 +24,31 @@ LogicECM.module.Errands.requestChangeDueDateTaskNewDateValidation =
 		}
 		return true;
 	};
+LogicECM.module.Errands.requestChangeDueDateTask_1NewDateValidation =
+	function (field, args, event, form, silent, message) {
+		var result = field.form["prop_lecmErrandWf_requestDueDateChangeTask_1Result"];
+		var isApprove = result != null && result.value == "APPROVED";
+		if (isApprove) {
+			if (field.name != "prop_lecmErrandWf_requestDueDateChangeTask_1NewDate") {
+				return true;
+			}
+			if (field.form) {
+				var radio = field.form["prop_lecmErrandWf_requestDueDateChangeTask_1NewDueDateRadio"];
+				var limitationDate = field.form["prop_lecmErrandWf_requestDueDateChangeTask_1NewDate"];
+				var radioValue = null;
+				if (radio) {
+					for (var i = 0; i < radio.length; i++) {
+						if (radio[i].checked == true) {
+							radioValue = radio[i].value;
+						}
+					}
+				}
+				if (radioValue == "LIMITLESS") {
+					return true;
+				} else {
+					return (limitationDate && limitationDate.value.length);
+				}
+			}
+		}
+		return true;
+	};
