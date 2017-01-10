@@ -702,5 +702,13 @@
 			</properties>
 		</aspect>
 
+		<!-- Аспект для хранения счетчика приложенных сканером вложений -->
+		<aspect name="lecm-document-aspects:scanned-attachments">
+			<properties>
+				<property name="lecm-document-aspects:scanned-attachments-count">
+					<type>d:int</type>
+				</property>
+			</properties>
+		</aspect>
     </aspects>
 </model>

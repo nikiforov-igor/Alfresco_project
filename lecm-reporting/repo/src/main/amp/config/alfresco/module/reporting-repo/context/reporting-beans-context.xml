@@ -73,6 +73,7 @@
 		<property name="reportingHelper">
 			<ref bean="ReportingHelper" />
 		</property>
+		<property name="publicAction" value="false" />
 	</bean>	
 
 	<bean id="report-container-executer"
@@ -93,6 +94,7 @@
 		<property name="reportingHelper">
 			<ref bean="ReportingHelper" />
 		</property>
+		<property name="publicAction" value="false" />
 	</bean>
 		
 	<bean id="report-executer"
@@ -107,6 +109,7 @@
 		<property name="databaseHelperBean">
 			<ref bean="alfrescoReportingDatabaseHelper" />
 		</property>
+		<property name="publicAction" value="false" />
 	</bean>
 
 	<bean id="harvesting-executer"
@@ -136,6 +139,7 @@
 		<property name="globalProperties">
 			<ref bean="global-properties" />
 		</property>
+		<property name="publicAction" value="false" />
 	</bean>	
      
      <bean id="alfrescoReportingDatabaseHelper" 
