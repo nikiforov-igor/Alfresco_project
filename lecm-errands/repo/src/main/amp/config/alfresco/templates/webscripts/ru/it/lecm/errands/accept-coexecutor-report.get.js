@@ -27,7 +27,7 @@ if (report != null && report.properties["lecm-errands-ts:coexecutor-report-statu
 
 		var reportCoexecutor = report.assocs["lecm-errands-ts:coexecutor-assoc"][0];
 		var logText = "#initiator принял отчет соисполнителя ";
-		logText += documentScript.wrapperLink(currentUser, reportCoexecutor.properties["lecm-orgstr:employee-short-name"]);
+		logText += documentScript.wrapperLink(reportCoexecutor, reportCoexecutor.properties["lecm-orgstr:employee-short-name"]);
 		logText += " по поручению #mainobject";
 		businessJournal.log(document.nodeRef.toString(), "ERRAND_СOEXECUTOR_REPORT", logText, []);
 
