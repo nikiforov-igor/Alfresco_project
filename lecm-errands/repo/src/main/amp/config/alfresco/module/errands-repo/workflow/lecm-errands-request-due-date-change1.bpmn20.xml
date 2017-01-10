@@ -130,7 +130,7 @@
                                             newLimitationDate = new Date(lecmErrandWf_requestDueDateChangeTask_1NewDate);
                                             shiftSize = new Date(newLimitationDate.getTime() - oldLimitDate.getTime());
                                             var day = utils.pad(newLimitationDate.getDate(), 2);
-                                            var month = utils.pad(newLimitationDate.getMonth(), 2);
+                                            var month = utils.pad(newLimitationDate.getMonth() + 1, 2);
                                             var year = utils.pad(newLimitationDate.getFullYear(), 4);
                                             dueDateString = day + "." + month + "." + year;
                                             var wfeDate = new Date(document.properties["lecm-errands:wait-for-execution-date"]);
