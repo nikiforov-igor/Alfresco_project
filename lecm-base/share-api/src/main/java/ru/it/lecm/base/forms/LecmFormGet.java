@@ -1,8 +1,12 @@
 package ru.it.lecm.base.forms;
 
-import org.alfresco.web.config.forms.FormSet;
+import org.alfresco.web.config.forms.*;
 import org.alfresco.web.scripts.forms.FormUIGet;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.extensions.webscripts.WebScriptException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +19,11 @@ import java.util.Map;
  * Time: 16:50
  */
 public abstract class LecmFormGet extends FormUIGet {
+    private final static Log logger = LogFactory.getLog(LecmFormGet.class);
+
+    protected final String CONTROL_LECM_SELECT_MANY = "/ru/it/lecm/base-share/components/controls/selectmany.ftl";
+    protected final String CONTROL_LECM_SELECT_ONE = "/ru/it/lecm/base-share/components/controls/selectone.ftl";
+
     protected enum CustomTypes {
         STATUS,
         TEMPLATES
@@ -27,6 +36,17 @@ public abstract class LecmFormGet extends FormUIGet {
         d_date,
         d_datetime,
         d_double
+    }
+
+    protected enum NumericTypes {
+        d_int,
+        d_float,
+        d_long,
+        d_double
+    }
+
+    protected boolean isNumber(String value) {
+        return enumHasValue(NumericTypes.class, value != null ? value.replace("d:", "d_") : "not_number");
     }
 
     protected boolean isNotAssoc(String typeKey) {
@@ -47,6 +67,133 @@ public abstract class LecmFormGet extends FormUIGet {
 
     protected String nonBlank(String s, String sDefault) {
         return (s != null && s.trim().length() > 0) ? s : sDefault;
+    }
+
+    /**
+     * Получить контрол по умолчанию из share-config по его типу
+     */
+    protected Control getDefaultControlFromConfig(DefaultControlsConfigElement defaultControls, String alfrescoType) {
+        Control defaultControlConfig;
+        boolean isPropertyField = isNotAssoc(alfrescoType);
+        if (isPropertyField) {
+            defaultControlConfig = defaultControls.getItems().get(alfrescoType);
+            if (defaultControlConfig == null) { // попытка получить дефолтный контрол по старой альфресовской схеме
+                defaultControlConfig = defaultControls.getItems().get(alfrescoType.replace(OLD_DATA_TYPE_PREFIX, ""));
+                if (defaultControlConfig == null) {
+                    defaultControlConfig = defaultControls.getItems().get(DEFAULT_FIELD_TYPE);
+                }
+            }
+        } else {
+            defaultControlConfig = defaultControls.getItems().get(ASSOCIATION + ":" + alfrescoType);
+            if (defaultControlConfig == null) {
+                defaultControlConfig = defaultControls.getItems().get(ASSOCIATION);
+            }
+        }
+        return defaultControlConfig;
+    }
+
+    /**
+     * Обновить список констрейнтов (@param constraints) на основании данных из поля (@param field)
+     */
+    protected void updateConstraints(ArrayList<Constraint> constraints, Field field) {
+        /*MANDATORY*/
+        if (field.isMandatory()) {
+            Constraint constraint;
+            try {
+                constraint = generateConstraintModel(field, CONSTRAINT_MANDATORY);
+                if (constraint != null) {
+                    constraints.add(constraint);
+                }
+            } catch (JSONException e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+
+        /*LENGTH*/
+        if (field.getControl() != null && field.getControl().getParams() != null) {
+            Map<String, String> parameters = field.getControl().getParams();
+            if (parameters.containsKey("constraintLENGTH")) {
+                int minLength = -1;
+                int maxLength = -1;
+                try {
+                    if (parameters.containsKey("constraintLENGTH_minLength")) {
+                        minLength = Integer.valueOf(parameters.get("constraintLENGTH_minLength"));
+                    }
+                    if (parameters.containsKey("constraintLENGTH_maxLength")) {
+                        maxLength = Integer.valueOf(parameters.get("constraintLENGTH_maxLength"));
+                    }
+                } catch (Exception ex) {
+                    logger.error( ex.getMessage(), ex);
+                }
+
+                Constraint constraint;
+                try {
+                    constraint = generateConstraintModel(field, CONSTRAINT_LENGTH);
+                    if (constraint != null) {
+                        Map<String, String> m = new HashMap<>();
+                        m.put("minLength", "" + minLength);
+                        m.put("maxLength", "" + maxLength);
+                        constraint.setJSONParams(new JSONObject(m));
+                        constraints.add(constraint);
+                    }
+                } catch (JSONException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+        }
+    }
+
+    /**
+     * Получить констрейнт по id (@param constraintId)
+     */
+    protected Constraint generateConstraintModel(Field field, String constraintId) throws JSONException {
+        Constraint constraint = null;
+
+        // retrieve the default constraints configuration
+        ConstraintHandlersConfigElement defaultConstraintHandlers = null;
+        FormsConfigElement formsGlobalConfig = (FormsConfigElement) this.configService.getGlobalConfig().getConfigElement(CONFIG_FORMS);
+        if (formsGlobalConfig != null) {
+            defaultConstraintHandlers = formsGlobalConfig.getConstraintHandlers();
+        }
+
+        if (defaultConstraintHandlers == null) {
+            throw new WebScriptException("Failed to locate default constraint handlers configurarion");
+        }
+
+        // get the default handler for the constraint
+        ConstraintHandlerDefinition defaultConstraintConfig = defaultConstraintHandlers.getItems().get(constraintId);
+        if (defaultConstraintConfig != null) {
+            // generate and process the constraint model
+            // get the validation handler from the config
+            String validationHandler = defaultConstraintConfig.getValidationHandler();
+
+            constraint = new Constraint(field.getId(), constraintId, validationHandler, new JSONObject());
+
+            if (defaultConstraintConfig.getEvent() != null) {
+                constraint.setEvent(defaultConstraintConfig.getEvent());
+            } else {
+                constraint.setEvent(DEFAULT_CONSTRAINT_EVENT);
+            }
+
+            // look for an overridden message in the field's constraint config,
+            // if none found look in the default constraint config
+            String constraintMsg = null;
+            if (defaultConstraintConfig.getMessageId() != null) {
+                constraintMsg = retrieveMessage(defaultConstraintConfig.getMessageId());
+            } else if (defaultConstraintConfig.getMessage() != null) {
+                constraintMsg = defaultConstraintConfig.getMessage();
+            }
+            if (constraintMsg == null) {
+                constraintMsg = retrieveMessage(validationHandler + ".message");
+            }
+
+            // add the message if there is one
+            if (constraintMsg != null) {
+                constraint.setMessage(constraintMsg);
+            }
+        }
+
+        return constraint;
     }
 
     /**
