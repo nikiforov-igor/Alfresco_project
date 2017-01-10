@@ -80,7 +80,7 @@ public class DataFieldColumn extends JRDesignField {
 		result.setDescription( colDesc.getDefault());
 
 		/* значение ... */
-		result.setValueLink( colDesc.getExpression());
+		result.setValueLink(colDesc.getExpression());
 
 		/* тип ... */
 		try {
