@@ -332,36 +332,59 @@ LogicECM.errands = LogicECM.errands || {};
         onActionDeclineCoexecutorReport: function (me, asset, owner, actionsConfig, confirmFunction) {
             var nodeRef = arguments[0].nodeRef;
             if (nodeRef != null) {
-                Alfresco.util.Ajax.jsonRequest(
-                    {
-                        method: Alfresco.util.Ajax.GET,
-                        url: Alfresco.constants.PROXY_URI + "lecm/errands/coexecutorReport/decline?nodeRef=" + nodeRef,
-                        successCallback: {
-                            fn: function (response) {
-                                var me = response.config.scope;
-                                if (response.json.success) {
-                                    me._itemUpdate(nodeRef);
-                                } else {
-                                    Alfresco.util.PopupManager.displayMessage(
-                                        {
-                                            text: me.msg("message.details.failure")
-                                        });
-                                }
-                            }
-                        },
-                        failureCallback: {
-                            fn: function (response) {
-                                var me = response.config.scope;
-                                Alfresco.util.PopupManager.displayMessage(
-                                    {
-                                        text: me.msg("message.details.failure")
-                                    });
-                            }
+                var me = this;
+                var formId = "decline-coexecutor-report";
+                var declineReportDialog = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
+                declineReportDialog.setOptions({
+                    templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'components/form',
+                    actionUrl: Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/errands/coexecutorReport/decline?nodeRef=' + nodeRef,
+                    templateRequestParams: {
+                        formId: formId,
+                        itemKind: "node",
+                        itemId: nodeRef,
+                        mode: "edit",
+                        showCancelButton: true,
+                        submitType: 'json'
+                    },
+                    width: '50em',
+                    destroyOnHide: true,
+                    doBeforeDialogShow: {
+                        fn: function (form, simpleDialog) {
+                            simpleDialog.dialog.setHeader(this.msg("label.coexecutor.reports.decline"));
+                            simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
+                                LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
+                                LogicECM.module.Base.Util.formDestructor(event, args, params);
+                            }, {moduleId: simpleDialog.id}, this);
                         },
                         scope: this
-                    });
+                    },
+                    onSuccess: {
+                        fn: function (response) {
+                            if (response.json.success) {
+                                me._itemUpdate(nodeRef);
+                            } else {
+                                Alfresco.util.PopupManager.displayMessage(
+                                    {
+                                        text: Alfresco.util.message("message.details.failure")
+                                    });
+                            }
+                            declineReportDialog.hide();
+                        },
+                        scope: this
+                    },
+                    onFailure: {
+                        fn: function (response) {
+                            Alfresco.util.PopupManager.displayMessage(
+                                {
+                                    text: Alfresco.util.message("message.details.failure")
+                                });
+                            declineReportDialog.hide();
+                        }
+                    }
+                });
+                declineReportDialog.show();
             }
-        },
+            },
         onActionTransferCoexecutorReport: function (me, asset, owner, actionsConfig, confirmFunction) {
             var nodeRef = arguments[0].nodeRef;
             if (nodeRef) {

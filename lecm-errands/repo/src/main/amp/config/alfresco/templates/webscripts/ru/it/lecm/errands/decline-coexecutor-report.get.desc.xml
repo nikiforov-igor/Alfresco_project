@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Отклонить отчёт соисполнителя</shortname>
-	<description>Отклонить отчёт соисполнителя</description>
-	<url>/lecm/errands/coexecutorReport/decline?nodeRef={nodeRef}</url>
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-	<format default="json"/>
-</webscript>

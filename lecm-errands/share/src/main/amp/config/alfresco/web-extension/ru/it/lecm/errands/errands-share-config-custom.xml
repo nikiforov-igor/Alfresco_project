@@ -1356,6 +1356,18 @@
                     </field>
                 </appearance>
             </form>
+            <form id="decline-coexecutor-report">
+                <field-visibility>
+                    <show id="lecm-errands-ts:coexecutor-report-decline-reason"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-errands-ts:coexecutor-report-decline-reason" mandatory="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">5</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
             <form>
                 <field-visibility>
                     <show id="lecm-errands-ts:coexecutor-report-text"/>
