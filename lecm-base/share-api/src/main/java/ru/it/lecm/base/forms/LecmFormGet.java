@@ -131,8 +131,8 @@ public abstract class LecmFormGet extends FormUIGet {
                     constraint = generateConstraintModel(field, CONSTRAINT_LENGTH);
                     if (constraint != null) {
                         Map<String, String> m = new HashMap<>();
-                        m.put("minLength", "" + minLength);
-                        m.put("maxLength", "" + maxLength);
+                        m.put("minLength", Integer.toString(minLength));
+                        m.put("maxLength", Integer.toString(maxLength));
                         constraint.setJSONParams(new JSONObject(m));
                         constraints.add(constraint);
                     }
