@@ -908,10 +908,10 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 			logger.debug("AfterCommit start");
 			// TODO: Совсем плохо падает без обёртки в транзакцию.
 			// Надо отсмотреть на предмет потенциальных блокировок
+			final HashMap<NodeRef, Action> actions = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
 			transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
 				@Override
 				public Void execute() throws Throwable {
-					HashMap<NodeRef, Action> actions = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
 					if (actions != null) {
 						List<NodeRef> nodes = new LinkedList<>(actions.keySet());
 						while (!nodes.isEmpty()) {
