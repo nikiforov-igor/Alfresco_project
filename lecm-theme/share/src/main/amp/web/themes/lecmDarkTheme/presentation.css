@@ -2346,35 +2346,52 @@ div.currentValueDisplay,
     margin-top: 15px;
 }
 
-.alf-header {
+.yui-skin-lecmDarkTheme.alfresco-share .alfresco-header-Header {
     position: fixed;
     width: 100%;
     z-index: 99999; /*Ну уж точно поверх всех*/ /*кроме диалоговых окон*/
     margin-left: 0;
     margin-right: 0;
+	top: 0;
 }
 
-.yui-skin-lecmDarkTheme.alfresco-share .alf-header .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
+.yui-skin-lecmDarkTheme.alfresco-share .share-header-title {
+	margin-top: 25px;
+}
+
+.yui-skin-lecmDarkTheme.alfresco-share #share-header {
+	min-height: 66px;
+}
+
+.yui-skin-lecmDarkTheme.alfresco-share .share-header-title .alfresco-layout-LeftAndRight__right {
+    float: left;
+}
+
+.yui-skin-lecmDarkTheme.alfresco-share .alfresco-header-Header .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
     padding: 1px 5px 5px;
 }
-.yui-skin-lecmDarkTheme.alfresco-share .alf-header .alf-search-box .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
+.yui-skin-lecmDarkTheme.alfresco-share .alfresco-header-Header .alf-search-box .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
     padding: 3px 2px 0;
     margin-right: 2px;
 }
-.yui-skin-lecmDarkTheme.alfresco-share .alf-header .alf-search-box .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem.dijitMenuItemHover {
+.yui-skin-lecmDarkTheme.alfresco-share .alfresco-header-Header .alf-search-box .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem.dijitMenuItemHover {
     background: #cbcbcb;
 }
-.yui-skin-lecmDarkTheme .alf-header div.dijitMenuItem span {
+.yui-skin-lecmDarkTheme .alfresco-header-Header div.dijitMenuItem span {
     display: inline-block;
     vertical-align: middle;
     line-height: 25px;
 }
-.alf-header div.dijitMenuItem span,
-.alf-header div.dijitMenuItem span.alf-menu-bar-label-node a {
+.alfresco-header-Header div.dijitMenuItem span,
+.alfresco-header-Header div.dijitMenuItem span.alf-menu-bar-label-node a {
     font-family: arial, helvetica, sans-serif;
 }
-.yui-skin-lecmDarkTheme.alfresco-share .alf-header .alf-menu-arrow {
-    width: 12px;
+.yui-skin-lecmDarkTheme.alfresco-share .alfresco-header-Header .alf-menu-arrow {
+    font-size: 25px;
+}
+
+.yui-skin-lecmDarkTheme.alfresco-share .alfresco-header-Header .alfresco-menus-AlfMenuBarPopup__text-wrapper {
+	padding-bottom: 3px;
 }
 
 .alfresco-share .logo {
@@ -2383,10 +2400,6 @@ div.currentValueDisplay,
 
 #share-header .alf-menu-title {
     margin-top: 42px !important;
-}
-
-#share-header .title-menu {
-    margin-top: 48px !important;
 }
 
 #no_menu_page #bd #lecm-page {
