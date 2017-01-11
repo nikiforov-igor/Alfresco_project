@@ -3402,7 +3402,7 @@ if (doc) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -3425,7 +3425,7 @@ if (doc) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployeeExtended]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -3448,7 +3448,7 @@ if (doc) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_Initiator]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -5716,7 +5716,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_Initiator]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -5762,7 +5762,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -5785,7 +5785,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployeeExtended]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -7911,7 +7911,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_Initiator]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -7957,7 +7957,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -7980,7 +7980,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployeeExtended]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -9315,7 +9315,7 @@ if (document != null) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_Initiator]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -9338,7 +9338,7 @@ if (document != null) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reviewer]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -9361,7 +9361,7 @@ if (document != null) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Employee]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -9384,7 +9384,7 @@ if (document != null) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reviewer]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
