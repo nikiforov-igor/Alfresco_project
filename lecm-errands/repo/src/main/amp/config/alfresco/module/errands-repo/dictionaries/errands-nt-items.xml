@@ -277,7 +277,7 @@
             <item name="cm:ERRANDS_REJECT_CHANGE_DUE_DATE_REQUEST" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_REJECT_CHANGE_DUE_DATE_REQUEST]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} отклонил ваш запрос об изменении сроков поручения {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))}.]]></property>
+                    <![CDATA[Ваш запрос на изменение срока исполнения поручения {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))} {wrapTitle("отклонен", #reason)}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Запрос изменения сроков исполнения отклонен]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>

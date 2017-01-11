@@ -1844,6 +1844,84 @@
 		</forms>
 	</config>
 
+    <config evaluator="task-type" condition="lecmErrandWf:requestDueDateChangeTask_1">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show  id="packageItems"/>
+                    <show id="lecmErrandWf:requestDueDateChangeTask_1CurrentDueDate"/>
+                    <show id="lecmErrandWf:requestDueDateChangeTask_1NewDueDateRadio"/>
+                    <show id="lecmErrandWf:requestDueDateChangeTask_1NewDate"/>
+                    <show id="errandLimitless" force="true"/>
+                    <show id="lecmErrandWf:requestDueDateChangeTask_1DateReason"/>
+                    <show id="lecmErrandWf:requestDueDateChangeTask_1Result"/>
+                    <show id="lecmErrandWf:requestDueDateChangeTask_1RejectReason"/>
+                    <show id="requestDueDateChangeTaskFormScript" force="true"/>
+				</field-visibility>
+				<appearance>
+					<set id="limitation-date"  template="/ru/it/lecm/errands/controls/wf-due-date-set.ftl"/>
+                    <set id="block2"/>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:requestDueDateChangeTask_1CurrentDueDate" label-id="label.current-due-date" read-only="true">
+                        <control template="/ru/it/lecm/documents/controls/workflow/format-packageItems-document.ftl">
+                            <control-param name="substituteString">
+                                <![CDATA[
+					               {lecm-errands:limitation-date-text}
+				                ]]>
+                            </control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:requestDueDateChangeTask_1NewDueDateRadio" set="limitation-date" mandatory="true">
+                        <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
+                            <control-param name="defaultValue">DATE</control-param>
+                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:requestDueDateChangeTask_1NewDate" mandatory="true" set="limitation-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestChangeDueDateTask_1NewDateValidation" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="errandLimitless" set="limitation-date">
+                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                            <control-param name="textCode">label.errand.limitless</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:requestDueDateChangeTask_1DateReason" read-only="true" set="block2">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">5</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:requestDueDateChangeTask_1Result" mandatory="true" set="block2">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestChangeDueDateTask_1NewDateValidation" event="change"/>
+                        </constraint-handlers>
+                        <control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:requestDueDateChangeTask_1RejectReason" set="block2">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">5</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestDueDateChangeTaskRejectReasonValidation" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="requestDueDateChangeTaskFormScript">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-change-due-date-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">requestDueDateChangeTaskFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
     <config evaluator="string-compare" condition="activiti$errandsChangeDueDate">
         <forms>
             <form>

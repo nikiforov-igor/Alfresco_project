@@ -66,13 +66,15 @@
 
         <receiveTask id="requestDueDateChangeReceiveTask" name="Receive Task"></receiveTask>
 
-        <userTask id="changeRequestedDueDate" name="Перенести срок поручения" activiti:assignee="${requestDueDateChangeAssignee}" activiti:formKey="lecmErrandWf:requestDueDateChangeTask">
+        <userTask id="changeRequestedDueDate" name="Перенести срок поручения" activiti:assignee="${requestDueDateChangeAssignee}" activiti:formKey="lecmErrandWf:requestDueDateChangeTask_1">
             <extensionElements>
                 <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
                         <activiti:string>
-                            task.setVariable("lecmErrandWf_requestDueDateChangeTaskNewDate", task.getVariable("lecmErrandWf_requestDueDateChange_1NewDate"));
-                            task.setVariable("lecmErrandWf_requestDueDateChangeTaskDateReason", task.getVariable("lecmErrandWf_requestDueDateChange_1Reason"));
+                            task.setVariable("lecmErrandWf_requestDueDateChangeTask_1NewDueDateRadio", task.getVariable("lecmErrandWf_requestDueDateChange_1NewDateRadio"));
+                            task.setVariable("lecmErrandWf_requestDueDateChangeTask_1NewDate", task.getVariable("lecmErrandWf_requestDueDateChange_1NewDate"));
+                            task.setVariable("lecmErrandWf_requestDueDateChangeTask_1DateReason", task.getVariable("lecmErrandWf_requestDueDateChange_1Reason"));
+                            task.setVariable("lecmErrandWf_requestDueDateChangeTask_1ChildDueDate", task.getVariable("lecmErrandWf_requestDueDateChange_1ChildDueDate"));
                         </activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -80,8 +82,11 @@
                 <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
+                            <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/change-due-date-script.js">
                             var document = bpm_package.children[0];
                             if (document) {
+                                var logObjects = [];
+                                var logText;
                                 var executor = null;
                                 var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
                                 if (executorAssoc && executorAssoc.length == 1) {
@@ -92,56 +97,33 @@
                                 if (initiatorAssoc && initiatorAssoc.length == 1) {
                                     initiator = initiatorAssoc[0];
                                 }
+                                var currentUser =  orgstructure.getCurrentEmployee();
                                 if (executor && initiator) {
-                                    var decision = task.getVariableLocal("lecmErrandWf_requestDueDateChangeTaskResult");
-
+                                    var decision = task.getVariableLocal("lecmErrandWf_requestDueDateChangeTask_1Result");
                                     var recipients = [];
                                     recipients.push(executor);
-
-                                    var comment = task.getVariableLocal("lecmErrandWf_requestDueDateChangeTaskComment");
-                                    if (comment) {
-                                        documentWorkflowComments.createWorkflowComment(document, comment);
-                                    }
-
                                     if (decision == "REJECTED") {
+                                        var rejectReason = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1RejectReason");
+
                                         notifications.sendNotificationFromCurrentUser({
                                             recipients: recipients,
                                             templateCode: 'ERRANDS_REJECT_CHANGE_DUE_DATE_REQUEST',
                                             templateConfig: {
                                                 mainObject: document,
-                                                eventExecutor: initiator
+                                                eventExecutor: currentUser,
+                                                reason: rejectReason
                                             }
                                         });
-                                    } else if (decision == "APPROVED") {
-                                        var newDueDate = task.getVariableLocal("lecmErrandWf_requestDueDateChangeTaskNewDate");
-                                        if (newDueDate) {
-                                            var now = new Date();
-                                            now.setHours(12);
-                                            now.setMinutes(0);
-                                            now.setSeconds(0);
-                                            now.setMilliseconds(0);
-                                            var newDueDateJS = new Date(newDueDate.getTime());
-                                            document.properties["lecm-errands:limitation-date"] = newDueDate;
-                                            document.properties["lecm-errands:is-expired"] = (now > newDueDateJS);
-                                            document.save();
-                                        }
-                                        notifications.sendNotificationFromCurrentUser({
-                                            recipients: recipients,
-                                            templateCode: 'ERRANDS_ACCEPT_CHANGE_DUE_DATE_REQUEST',
-                                            templateConfig: {
-                                                mainObject: document,
-                                                eventExecutor: initiator
-                                            }
-                                        });
-                                        var logText = "#initiator утвердил ";
-                                        var comment = task.getVariableLocal("lecmErrandWf_requestDueDateChangeTaskComment");
-                                        if (comment) {
-                                            logText += documentScript.wrapperTitle("перенос", comment);
-                                        } else {
-                                            logText += "перенос";
-                                        }
-                                        logText += " срока поручения: #mainobject.";
+                                        logText = "#initiator ";
+                                        logText += documentScript.wrapperTitle("отклонил", rejectReason);
+                                        logText += " запрос на изменение срока исполнения поручения #mainobject";
                                         businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, []);
+                                    } else if (decision == "APPROVED") {
+                                        var dateRadio = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1NewDueDateRadio");
+                                        var newDueDate = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1NewDate");
+                                        var processChild = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1ChildDueDate");
+                                        var changeDateReason = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1DateReason");
+                                        processDueDateChanges(dateRadio, newDueDate, processChild, changeDateReason);
                                     }
                                 }
                             }

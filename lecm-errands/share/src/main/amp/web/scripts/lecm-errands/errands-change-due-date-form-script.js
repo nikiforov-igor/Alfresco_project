@@ -3,8 +3,12 @@
         Event = YAHOO.util.Event,
         Bubbling = YAHOO.Bubbling;
     var formId;
+    LogicECM.module.Base.Util.loadCSS([
+        'css/lecm-errands/errands-change-duedate-form.css'
+    ]);
 
     Bubbling.on('errandsWFChangeDueDateScriptLoaded', init);
+    Bubbling.on('requestDueDateChangeTaskFormScriptLoaded', process);
 
     function init(layer, args) {
         formId = args[1].formId;
@@ -31,6 +35,29 @@
                     }
                 },
                 failureMessage: Alfresco.util.message("message.failure")
+            });
+        });
+    }
+
+    function process(layer, args) {
+        formId = args[1].formId;
+        Event.onContentReady(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1Result", function () {
+            var resultElement = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1Result");
+            Event.onContentReady(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1RejectReason", function () {
+                var rejectReasonElement = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1RejectReason");
+                var rejectReasonControl = rejectReasonElement.parentElement.parentElement.parentElement;
+                Event.onContentReady(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1Result-container-APPROVED", function () {
+                    Event.onContentReady(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1Result-container-REJECTED", function () {
+                        var defaultResultValueEl = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1Result-container-APPROVED");
+                        var otherResultValueEl = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1Result-container-REJECTED");
+                        var onResultChanged = function () {
+                            Dom.setStyle(rejectReasonControl, "display", resultElement.value == "REJECTED" ? "block" : "none");
+                        };
+                        Event.on(defaultResultValueEl, "click", onResultChanged);
+                        Event.on(otherResultValueEl, "click", onResultChanged);
+                        defaultResultValueEl.click();
+                    });
+                });
             });
         });
     }

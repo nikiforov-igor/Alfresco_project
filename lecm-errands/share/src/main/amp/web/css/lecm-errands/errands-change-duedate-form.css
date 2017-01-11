@@ -1,0 +1,9 @@
+.errands-wf-duedate-set {
+    width: calc(100% - 290px);
+}
+.control.selectone-radiobuttons.editmode:nth-child(3) .value-div {
+    width: 95px;
+}
+.control.selectone-radiobuttons.editmode:nth-child(3) .label-div {
+    visibility: hidden;
+}
