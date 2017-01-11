@@ -1871,6 +1871,7 @@ if(doc){
 	}
 
 	doc.properties["lecm-errands:transit-to-on-execution"] = hasOnExecution;
+	doc.properties["lecm-eds-aspect:child-change-signal-count"] = 0;
 	doc.save();
 
   
@@ -3823,6 +3824,7 @@ if (doc){
     }
   }
 	doc.properties["lecm-errands:transit-to-executed"] = isAllChildOnFinal;
+	doc.properties["lecm-eds-aspect:child-change-signal-count"] = 0;
 	doc.save();
 
 }]]></value>
