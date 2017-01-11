@@ -221,22 +221,22 @@ span.wrapper-title {
 /* Site-wide Styles */
 
 @font-face {
-  font-family: 'Open Sans';
+  font-family: 'Open Sans Old';
   font-style: normal;
   font-weight: 400;
-  src: url(../../js/alfresco/css/opensans.woff) format('woff');
+  src: url(../../font/opensans.woff) format('woff');
 }
 @font-face {
-  font-family: 'Open Sans Bold';
+  font-family: 'Open Sans Bold Old';
   font-style: normal;
   font-weight: 600;
-  src: url(../../js/alfresco/css/opensansbold.woff) format('woff');
+  src: url(../../font/opensansbold.woff) format('woff');
 }
 @font-face {
-  font-family: 'Open Sans Condensed';
+  font-family: 'Open Sans Condensed Old';
   font-style: normal;
   font-weight: 300;
-  src: url(../../js/alfresco/css/opensanscondensed.woff) format('woff');
+  src: url(../../font/opensanscondensed.woff) format('woff');
 }
 
 button::-moz-focus-inner,
@@ -272,6 +272,15 @@ input[type="file"] > input[type="button"]::-moz-focus-inner
    font-family: Open Sans, Arial, sans-serif;
    font-size: 81%;
    color: #333;
+}
+
+.sticky-wrapper,
+.sticky-footer,
+.yui-overlay,
+#lightbox,
+#ygddfdiv {
+	font-family: Arial, sans-serif;
+	font-size: 81%;
 }
 
 .sticky-wrapper h1,
@@ -2347,16 +2356,20 @@ div.currentValueDisplay,
   top: 0;
 }
 
+.yui-skin-lecmTheme.alfresco-share .share-header-title > div.widgets {
+  background-color: inherit;
+}
+
+.yui-skin-lecmTheme.alfresco-share h1.alfresco-header-Title span.alfresco-header-Title__text,
+.yui-skin-lecmTheme.alfresco-share h1.alfresco-header-Title span.alfresco-header-Title__text a {
+  font-family: Open Sans Condensed Old, Arial, sans-serif;
+  line-height: 40px;
+  font-size: 32px;
+  margin-top: -6px;
+}
+
 .yui-skin-lecmTheme.alfresco-share .share-header-title {
-  margin-top: 25px;
-}
-
-.yui-skin-lecmTheme.alfresco-share #share-header {
-  min-height: 66px;
-}
-
-.yui-skin-lecmTheme.alfresco-share .share-header-title .alfresco-layout-LeftAndRight__right {
-  float: left;
+	border: none;
 }
 
 .yui-skin-lecmTheme.alfresco-share .alfresco-header-Header .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
