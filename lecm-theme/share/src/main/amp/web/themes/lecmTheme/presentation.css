@@ -274,7 +274,11 @@ input[type="file"] > input[type="button"]::-moz-focus-inner
    color: #333;
 }
 
-.sticky-wrapper .bd .balloon .text {
+.sticky-wrapper,
+.sticky-footer,
+.yui-overlay,
+#lightbox,
+#ygddfdiv {
 	font-family: Arial, sans-serif;
 	font-size: 81%;
 }
