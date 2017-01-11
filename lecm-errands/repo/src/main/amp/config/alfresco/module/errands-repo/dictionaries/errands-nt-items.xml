@@ -4,7 +4,7 @@
         <items updateMode="CreateOrUpdate">
             <item name="cm:ERRANDS_EXCEEDED_DEADLINE" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#mainObject.attribute("lecm-errands:just-in-time") ? "" : "Обратите внимание: поручение "} {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} не исполнено в установленный срок. {#mainObject.attribute("lecm-errands:just-in-time") ? "Работа с ним завершена, поручение переходит в статус 'Не исполнено'" : ""}]]></property>
+                    <![CDATA[Поручение {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} не исполнено в установленный срок. {#mainObject.attribute("lecm-errands:just-in-time") ? "Работы по нему прекращены." : ""}]]></property>
                 <property name="cm:name"><![CDATA[ERRANDS_EXCEEDED_DEADLINE]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Превышен срок исполнения]]></property>
@@ -52,8 +52,8 @@
             <item name="cm:ERRANDS_DEADLINE_COME" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_DEADLINE_COME]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Наступил срок выполнения поручения: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-errands:title"))}]]></property>
-                <property name="lecm-notification-template:description"><![CDATA[Поручение. Наступил срок]]></property>
+                    <![CDATA[Истек срок исполнения поручения: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-errands:title"))}]]></property>
+                <property name="lecm-notification-template:description"><![CDATA[Поручение. Истек срок]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
@@ -99,7 +99,7 @@
             <item name="cm:ERRANDS_CO_EXECUTOR_DECLINE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CO_EXECUTOR_DECLINE]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("отклонил", #reason)} Ваш отчет по поручению {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} отклонил ваш отчет по поручению {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Отчет по поручению отклонен]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -298,7 +298,7 @@
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
                 </assocs>
             </item>
-			<item name="cm:ERRANDS_EXPIRED" type="lecm-notification-template:template">
+            <item name="cm:ERRANDS_EXPIRED" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_EXPIRED]]></property>
                 <property name="lecm-notification-template:template"><![CDATA[Поручение {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))} не исполнено в установленный срок.]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Поручение. Не исполнено в установленный срок]]></property>
@@ -306,7 +306,7 @@
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc" xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
                 </assocs>
-			</item>
+            </item>
             <item name="cm:ERRANDS_CHANGE_EXECUTOR_NEW" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CHANGE_EXECUTOR_NEW]]></property>
                 <property name="lecm-notification-template:template">
