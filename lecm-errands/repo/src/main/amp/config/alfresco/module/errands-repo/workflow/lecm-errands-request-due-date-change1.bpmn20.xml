@@ -24,7 +24,6 @@
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
-                            <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/change-due-date-script.js">
                             var document = bpm_package.children[0];
 
                             documentWorkflowComments.createWorkflowComment(document, lecmErrandWf_requestDueDateChange_1Reason);
@@ -83,6 +82,7 @@
                 <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
+                            <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/change-due-date-script.js">
                             var document = bpm_package.children[0];
                             if (document) {
                                 var logObjects = [];
