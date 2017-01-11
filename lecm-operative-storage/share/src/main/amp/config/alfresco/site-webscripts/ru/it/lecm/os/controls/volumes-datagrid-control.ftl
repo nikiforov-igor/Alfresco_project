@@ -89,7 +89,8 @@
 							itemId: item.nodeRef,
 							mode: "edit",
 							submitType: "json",
-							showCancelButton: true
+							showCancelButton: true,
+							showCaption: false
 						};
 
 

@@ -163,7 +163,8 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
 		            formId: "transfer-right",
 		            submitType: "json",
 		            ignoreNodes: this.options.creatorRef,
-		            showCancelButton: true
+		            showCancelButton: true,
+					showCaption: false
 	            };
 
 //				// Using Forms Service, so always create new instance

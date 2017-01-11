@@ -52,7 +52,8 @@ LogicECM.module = LogicECM.module || {};
 							mode: "create",
 							submitType: "json",
 							showCancelButton: true,
-							taskIds: this.options.taskId
+							taskIds: this.options.taskId,
+							showCaption: false
 						},
 						actionUrl: null,
 						destroyOnHide: true,

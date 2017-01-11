@@ -123,7 +123,8 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 						destination: destination,
 						showCancelButton: false,
 						showResetButton: false,
-						showSubmitButton: true
+						showSubmitButton: true,
+						showCaption: false
 					};
 
 				Alfresco.util.Ajax.request({

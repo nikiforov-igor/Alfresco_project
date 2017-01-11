@@ -57,7 +57,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 							mode: "edit",
 							formUI: true,
 							submitType:"json",
-							showSubmitButton:"true"
+							showSubmitButton:"true",
+							showCaption: false
 						},
 						successCallback: {
 							fn: function (response) {

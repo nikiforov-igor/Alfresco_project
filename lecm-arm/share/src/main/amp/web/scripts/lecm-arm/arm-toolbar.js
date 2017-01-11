@@ -98,7 +98,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 						mode:"create",
 						formId: "",
 						submitType:"json",
-						showCancelButton: true
+						showCancelButton: true,
+						showCaption: false
 					};
 
 					// Using Forms Service, so always create new instance

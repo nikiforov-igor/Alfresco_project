@@ -222,7 +222,8 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 						showSubmitButton: false,
 						initFields: JSON.stringify({
 							"lecm-template:doc-type": params.value
-						})
+						}),
+						showCaption: false
 					},
 					successCallback: {
 						scope: this,
@@ -256,7 +257,8 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 						mode: params.mode,
 						formId: params.formId,
 						submitType: 'json',
-						showSubmitButton: false
+						showSubmitButton: false,
+						showCaption: false
 					},
 					successCallback: {
 						scope: this,

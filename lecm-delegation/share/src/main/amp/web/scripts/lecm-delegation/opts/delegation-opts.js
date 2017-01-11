@@ -124,7 +124,8 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 					showCancelButton: false,
 					showResetButton: false,
 					showSubmitButton: true,
-					ignoreNodes: [LogicECM.module.Delegation.Const.employee]
+					ignoreNodes: [LogicECM.module.Delegation.Const.employee],
+					showCaption: false
 				};
 				Alfresco.util.Ajax.request ({
 					method: "GET",

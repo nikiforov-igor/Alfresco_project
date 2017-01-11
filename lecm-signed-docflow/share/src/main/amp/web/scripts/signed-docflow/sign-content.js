@@ -48,7 +48,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					submitType: "json",
 					showCancelButton: "true",
 					formId: "signs-info-all",
-					signedContentRef: this.options.nodeRef
+					signedContentRef: this.options.nodeRef,
+					showCaption: false
 				},
 				destroyOnHide: true,
 				doBeforeDialogShow: {
@@ -107,7 +108,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						mode: "create",
 						submitType: "json",
 						showCancelButton: "true",
-						formId: "send-to-contractor"
+						formId: "send-to-contractor",
+						showCaption: false
 					},
 					destroyOnHide: true,
 					contentRef: this.options.nodeRef,
@@ -206,7 +208,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 										formId: "auth-form",
 										mode: "create",
 										showCancelButton: "true",
-										submitType: "json"
+										submitType: "json",
+										showCaption: false
 									},
 									actionUrl: null,
 									destroyOnHide: true,

@@ -42,7 +42,8 @@
 							mayView: ${hasPermission?string!"false"},
 							hasStatemachine: ${hasStatemachine?string!"false"},
                             mode:"edit",
-							showCancelButton: true
+							showCancelButton: true,
+							showCaption: false
                         };
 
             Alfresco.util.Ajax.request(

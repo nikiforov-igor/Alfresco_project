@@ -44,7 +44,8 @@ LogicECM.module.Deputy = LogicECM.module.Deputy || {};
 					mode: 'edit',
 					formUI: true,
 					submitType: 'json',
-					showSubmitButton: 'true'
+					showSubmitButton: 'true',
+					showCaption: false
 				},
 				successCallback: {
 					scope: this,

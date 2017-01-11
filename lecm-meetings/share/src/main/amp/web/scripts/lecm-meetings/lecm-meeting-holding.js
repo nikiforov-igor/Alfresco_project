@@ -65,7 +65,8 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 							showSubmitButton: true,
 							showCancelButton: true,
 							args: JSON.stringify(this.options.args),
-							fields: JSON.stringify(this.options.higlightedFields)
+							fields: JSON.stringify(this.options.higlightedFields),
+							showCaption: false
 						},
 						successCallback: {
 							fn: function (response) {
@@ -137,7 +138,8 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 						submitType: "json",
 						formId: "holding",
 						showSubmitButton: true,
-						showCancelButton: true
+						showCancelButton: true,
+						showCaption: false
 					},
 					successCallback: {
 						fn: function (response) {
@@ -234,7 +236,8 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 				submitType: 'json',
 				formId: 'holding-accept',
 				args: JSON.stringify(arguments),
-				showCancelButton: true
+				showCancelButton: true,
+				showCaption: false
 			};
 
 			var dialog = new Alfresco.module.SimpleDialog(this.HOLDING_MEETING).setOptions({

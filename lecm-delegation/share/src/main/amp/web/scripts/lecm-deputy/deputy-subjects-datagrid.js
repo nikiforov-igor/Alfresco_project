@@ -39,7 +39,8 @@ LogicECM.module.Deputy.Const = LogicECM.module.Deputy.Const || {};
 				mode: "create",
 				formId: LogicECM.module.Deputy.Const.plane ? "plane-create-deputy" : "tree-create-deputy",
 				submitType: "json",
-				showCancelButton: true
+				showCancelButton: true,
+				showCaption: false
 			};
 
 			// Using Forms Service, so always create new instance
@@ -110,7 +111,8 @@ LogicECM.module.Deputy.Const = LogicECM.module.Deputy.Const || {};
 				mode: 'edit',
 				formId: LogicECM.module.Deputy.Const.plane ? "plane-edit-deputy" : "tree-edit-deputy",
 				submitType: 'json',
-				showCancelButton: true
+				showCancelButton: true,
+				showCaption: false
 			};
 
 			// Using Forms Service, so always create new instance

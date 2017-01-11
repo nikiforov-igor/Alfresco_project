@@ -75,7 +75,8 @@
                             submitType: "json",
                             showSubmitButton: "true",
                             showCancelButton: ((LogicECM.module.ReportsEditor.REPORT_SETTINGS && LogicECM.module.ReportsEditor.REPORT_SETTINGS.isSubReport == "true")
-                                    ? "false": "true")
+                                    ? "false": "true"),
+							showCaption: false
                         },
                         successCallback: {
                             fn: function (response) {

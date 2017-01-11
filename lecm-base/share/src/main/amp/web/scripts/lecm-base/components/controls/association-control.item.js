@@ -849,7 +849,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					formId: "ex-control-search",
 					mode: "edit",
 					showSubmitButton: false,
-					showCancelButton: false
+					showCancelButton: false,
+					showCaption: false
 				};
 				this.currentState.exSearchFormId = formData.htmlid + "-form";
 
