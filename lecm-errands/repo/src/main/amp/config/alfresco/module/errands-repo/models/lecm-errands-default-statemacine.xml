@@ -1704,21 +1704,23 @@ var errand = stm_document,
     isExpired = !!errand.properties['lecm-errands:is-expired'],
     initiators = errand.assocs['lecm-errands:initiator-assoc'],
     executors =  errand.assocs['lecm-errands:executor-assoc'],
-    controllers = errand.assocs['lecm-errands:controller-assoc'],
-    recipients = initiators.concat(executors);
+    controllers = errand.assocs['lecm-errands:controller-assoc'];
 
-    if (controllers && controllers.length) {
-        Array.prototype.push.apply(recipients, controllers);
+    if (isExpired) {
+        var recipients = initiators.concat(executors);
+        if (controllers && controllers.length) {
+            Array.prototype.push.apply(recipients, controllers);
+        }
+
+        notifications.sendNotification({
+            recipients: recipients,
+            templateCode: 'ERRANDS_EXPIRED',
+            templateConfig: {
+                mainObject: errand
+            },
+            dontCheckAccessToObject: true
+        });
     }
-
-    notifications.sendNotification({
-        recipients: recipients,
-        templateCode: 'ERRANDS_EXPIRED',
-        templateConfig: {
-            mainObject: errand
-        },
-        dontCheckAccessToObject: true
-    });
 })();]]></value>
                                                             </property>
                                                             <property>
