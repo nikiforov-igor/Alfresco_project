@@ -1828,7 +1828,7 @@
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.attr("lecm-errands:event-counter") !=0]]></value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:child-change-signal") AND doc.attr("lecm-eds-aspect:child-change-signal-count") != 0]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -1836,17 +1836,14 @@
 if(doc){
   var children = [];
   var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
-  var childrenResolutions = documentConnection.getConnectedDocuments(doc,'onBasis',"lecm-resolutions:document");
+  var childrenResolutions = documentConnection.getChildResolutions(doc.nodeRef.toString());
  				
   if(childrenErrands || childrenResolutions){
     if(childrenErrands){
-    	children = childrenErrands;
+    	children = children.concat(childrenErrands);
     }
     if(childrenResolutions){
-      children = childrenResolutions;
-    }
-    if(childrenErrands && childrenResolutions){
-      children = childrenErrands.concat(childrenResolutions);
+      children = children.concat(childrenResolutions);
     }
   }
  
@@ -1874,6 +1871,7 @@ if(doc){
 	}
 
 	doc.properties["lecm-errands:transit-to-on-execution"] = hasOnExecution;
+	doc.properties["lecm-eds-aspect:child-change-signal-count"] = 0;
 	doc.save();
 
   
@@ -2030,11 +2028,7 @@ if (document) {
     document.save();
     var additionalDoc = errands.getAdditionalDocument(document.nodeRef.toString());
     if (additionalDoc) {
-       if (!additionalDoc.hasAspect("lecm-eds-aspect:child-change-signal")) {
-      	 additionalDoc.addAspect("lecm-eds-aspect:child-change-signal");
-       }
-      additionalDoc.properties["lecm-eds-aspect:child-change-signal-count"]++;
-      additionalDoc.save();
+       edsDocument.sendChildChangeSignal(additionalDoc);
     }
 }]]></value>
                                                             </property>
@@ -2157,34 +2151,6 @@ if (document) {
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value><![CDATA[Операции со сроком поручения]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
-                                                        <name>0cc66627-7575-4f0f-b292-e865921237fb</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/5ef11fde-47a7-4382-a6dc-4011a0ed16b7
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[var doc = stm_document;
-if (doc) {
-  var parentDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
-  if (parentDoc && parentDoc.type == "{http://www.it.ru/logicECM/errands/1.0}document") {
-    parentDoc.properties["lecm-errands:event-counter"]++;
-    parentDoc.save();
-  }
-}]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value><![CDATA[Инкремент счетчика]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -3836,7 +3802,7 @@ if (doc) {
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.attr("lecm-errands:event-counter") !=0]]></value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:child-change-signal") AND doc.attr("lecm-eds-aspect:child-change-signal-count") != 0]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -3858,6 +3824,7 @@ if (doc){
     }
   }
 	doc.properties["lecm-errands:transit-to-executed"] = isAllChildOnFinal;
+	doc.properties["lecm-eds-aspect:child-change-signal-count"] = 0;
 	doc.save();
 
 }]]></value>
@@ -4152,16 +4119,16 @@ if(doc){
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var doc = bpm_package.children[0];
 if(doc){
-  var parentDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
-  if(parentDoc && parentDoc.type == "{http://www.it.ru/logicECM/errands/1.0}document"){
-    parentDoc.properties["lecm-errands:event-counter"]++;
-    parentDoc.save();
-  }
+   var additionalDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
+    if (additionalDoc) {
+      edsDocument.sendChildChangeSignal(additionalDoc);
+    }
 }]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
-                                                                <value><![CDATA[Инкремент счетчика]]></value>
+                                                                <value>
+                                                                    <![CDATA[Сигнал в родительский документ]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -6117,41 +6084,6 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                 </reference>
                                                             </association>
                                                         </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>transition</type>
-                                                        <name>88259f0a-6284-48fa-8a67-15a787bceda9</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/936b0817-6384-4bdd-9124-24dd5b19d0fa
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionExpression</name>
-                                                                <value>
-                                                                    <![CDATA[doc.attr("lecm-errands:event-counter") !=0]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var doc = bpm_package.children[0];
-if (doc){
-
-}]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                        </aspects>
-                                                        <associations/>
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
@@ -8276,41 +8208,6 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
-                                                    <node>
-                                                        <type>transition</type>
-                                                        <name>73377ebd-c26c-4348-a8b8-1bc7daf86737</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/2924499c-a35a-4343-b69b-792b1b47ae02
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionExpression</name>
-                                                                <value>
-                                                                    <![CDATA[doc.attr("lecm-errands:event-counter") !=0]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var doc = bpm_package.children[0];
-if (doc){
- 
-}]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                        </aspects>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -9564,17 +9461,16 @@ if (document != null) {
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var doc = stm_document;
 if (doc) {
-  var parentDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
-  if (parentDoc && parentDoc.type == "{http://www.it.ru/logicECM/errands/1.0}document") {
-    parentDoc.properties["lecm-errands:event-counter"]++;
-    parentDoc.save();
+  var additionalDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
+  if (additionalDoc) {
+    edsDocument.sendChildChangeSignal(additionalDoc);
   }
 }]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Установка счетчиков родительского поручения]]></value>
+                                                                    <![CDATA[Сигнал в родительский документ]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -10090,10 +9986,9 @@ if (document != null) {
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var doc = stm_document;
 if (doc) {
-  var parentDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
-  if (parentDoc && parentDoc.type == "{http://www.it.ru/logicECM/errands/1.0}document") {
-    parentDoc.properties["lecm-errands:event-counter"]++;
-    parentDoc.save();
+  var additionalDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
+  if (additionalDoc) {
+    edsDocument.sendChildChangeSignal(additionalDoc);
   }
 
 }]]></value>
@@ -10101,7 +9996,7 @@ if (doc) {
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Установка счетчиков родительского поручения]]></value>
+                                                                    <![CDATA[Сигнал в родительский документ]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -10591,10 +10486,9 @@ if (doc) {
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var doc = stm_document;
 if (doc) {
-  var parentDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
-  if (parentDoc && parentDoc.type == "{http://www.it.ru/logicECM/errands/1.0}document") {
-    parentDoc.properties["lecm-errands:event-counter"]++;
-    parentDoc.save();
+  var additionalDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
+  if (additionalDoc) {
+    edsDocument.sendChildChangeSignal(additionalDoc);
   }
 
 }]]></value>
@@ -10602,7 +10496,7 @@ if (doc) {
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Установка счетчиков родительского поручения]]></value>
+                                                                    <![CDATA[Сигнал в родительский документ]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
