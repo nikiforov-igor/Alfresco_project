@@ -346,7 +346,7 @@
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                         </control>
                     </field>
-                    <field id="lecm-resolutions:author-assoc" label-id="label.resolution.creator"/>
+                    <field id="lecm-document:author-assoc" label-id="label.resolution.creator"/>
 
                     <field id="lecm-resolutions:limitation-date-radio" set="limitation-date">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
