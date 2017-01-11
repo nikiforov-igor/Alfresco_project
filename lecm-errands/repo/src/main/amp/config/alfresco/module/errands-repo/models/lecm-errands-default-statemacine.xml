@@ -2027,11 +2027,7 @@ if (document) {
     document.save();
     var additionalDoc = errands.getAdditionalDocument(document.nodeRef.toString());
     if (additionalDoc) {
-       if (!additionalDoc.hasAspect("lecm-eds-aspect:child-change-signal")) {
-      	 additionalDoc.addAspect("lecm-eds-aspect:child-change-signal");
-       }
-      additionalDoc.properties["lecm-eds-aspect:child-change-signal-count"]++;
-      additionalDoc.save();
+       edsDocument.sendChildChangeSignal(additionalDoc);
     }
 }]]></value>
                                                             </property>
@@ -4123,11 +4119,7 @@ if(doc){
 if(doc){
    var additionalDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
     if (additionalDoc) {
-       if (!additionalDoc.hasAspect("lecm-eds-aspect:child-change-signal")) {
-      	 additionalDoc.addAspect("lecm-eds-aspect:child-change-signal");
-       }
-      additionalDoc.properties["lecm-eds-aspect:child-change-signal-count"]++;
-      additionalDoc.save();
+      edsDocument.sendChildChangeSignal(additionalDoc);
     }
 }]]></value>
                                                             </property>
@@ -9469,11 +9461,7 @@ if (document != null) {
 if (doc) {
   var additionalDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
   if (additionalDoc) {
-    if (!additionalDoc.hasAspect("lecm-eds-aspect:child-change-signal")) {
-      additionalDoc.addAspect("lecm-eds-aspect:child-change-signal");
-    }
-    additionalDoc.properties["lecm-eds-aspect:child-change-signal-count"]++;
-    additionalDoc.save();
+    edsDocument.sendChildChangeSignal(additionalDoc);
   }
 }]]></value>
                                                             </property>
@@ -9998,11 +9986,7 @@ if (document != null) {
 if (doc) {
   var additionalDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
   if (additionalDoc) {
-    if (!additionalDoc.hasAspect("lecm-eds-aspect:child-change-signal")) {
-      additionalDoc.addAspect("lecm-eds-aspect:child-change-signal");
-    }
-    additionalDoc.properties["lecm-eds-aspect:child-change-signal-count"]++;
-    additionalDoc.save();
+    edsDocument.sendChildChangeSignal(additionalDoc);
   }
 
 }]]></value>
@@ -10502,11 +10486,7 @@ if (doc) {
 if (doc) {
   var additionalDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
   if (additionalDoc) {
-    if (!additionalDoc.hasAspect("lecm-eds-aspect:child-change-signal")) {
-      additionalDoc.addAspect("lecm-eds-aspect:child-change-signal");
-    }
-    additionalDoc.properties["lecm-eds-aspect:child-change-signal-count"]++;
-    additionalDoc.save();
+    edsDocument.sendChildChangeSignal(additionalDoc);
   }
 
 }]]></value>
