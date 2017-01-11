@@ -27,7 +27,7 @@ LogicECM.module.Errands.requestChangeDueDateTaskNewDateValidation =
 LogicECM.module.Errands.requestChangeDueDateTask_1NewDateValidation =
 	function (field, args, event, form, silent, message) {
 		var result = field.form["prop_lecmErrandWf_requestDueDateChangeTask_1Result"];
-		var isApprove = result != null && result.value == "APPROVED";
+		var isApprove = result && result.value == "APPROVED";
 		if (isApprove) {
 			if (field.name != "prop_lecmErrandWf_requestDueDateChangeTask_1NewDate") {
 				return true;
@@ -55,7 +55,7 @@ LogicECM.module.Errands.requestChangeDueDateTask_1NewDateValidation =
 LogicECM.module.Errands.requestDueDateChangeTaskRejectReasonValidation =
 	function (field, args, event, form, silent, message) {
 		var result = field.form["prop_lecmErrandWf_requestDueDateChangeTask_1Result"];
-		var isReject = result != null && result.value == "REJECTED";
+		var isReject = result && result.value == "REJECTED";
 		if (isReject) {
 			var rejectReason = field.form["prop_lecmErrandWf_requestDueDateChangeTask_1RejectReason"];
 			return rejectReason.value.length > 0;
