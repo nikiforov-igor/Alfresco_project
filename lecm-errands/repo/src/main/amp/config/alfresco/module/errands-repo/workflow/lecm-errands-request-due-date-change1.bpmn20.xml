@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<import resource="change-due-date-script.js">
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
              xmlns:activiti="http://activiti.org/bpmn"
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
@@ -25,6 +24,7 @@
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
+                            <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/change-due-date-script.js">
                             var document = bpm_package.children[0];
 
                             documentWorkflowComments.createWorkflowComment(document, lecmErrandWf_requestDueDateChange_1Reason);
