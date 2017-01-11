@@ -41,37 +41,40 @@
     (function() {
         var Dom = YAHOO.util.Dom;
 
-    	function init() {
+        function init() {
             LogicECM.module.Base.Util.loadScripts([
+				'scripts/lecm-base/components/lecm_tiny_mce.js',
                 'scripts/lecm-base/components/lecm-rich-text.js'
-			], createRichText);
-		}
-		function createRichText() {
-	        new LogicECM.RichTextControl("${fieldHtmlId}").setOptions(
-	            {
-	                <#if form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>disabled: true,</#if>
-	                currentValue: "${value?js_string}",
-	                mandatory: ${field.mandatory?string},
-		            editorParameters:{
-			            width: "100%",
-			            inline_styles: false,
-			            convert_fonts_to_spans: false,
-			            theme: 'advanced',
-			            theme_advanced_toolbar_location: "top",
-			            theme_advanced_toolbar_align: "left",
-			            theme_advanced_statusbar_location: "bottom",
-			            theme_advanced_path: false,
-			            language: "${locale?substring(0, 2)?js_string}",
-			            plugins: "fullscreen,table,paste",
+            ], createRichText);
+        }
+        function createRichText() {
+            new LogicECM.RichTextControl("${fieldHtmlId}").setOptions(
+                {
+                    <#if form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>disabled: true,</#if>
+                    currentValue: "${value?js_string}",
+                    mandatory: ${field.mandatory?string},
+                    editorParameters:{
+                        width: "100%",
+                        inline_styles: false,
+                        convert_fonts_to_spans: false,                      
+                        toolbar_location: "top",
+                        toolbar_align: "left",
+                        statusbar_location: "bottom",
+                        path: false,
+                        language: "${locale?substring(0, 2)?js_string}",
+			            plugins: "fullscreen table paste",
                         paste_remove_styles_if_webkit: false,
-			            theme_advanced_buttons1: "bold,italic,underline,strikethrough,separator,fontselect,fontsizeselect, separator, fullscreen",
-			            theme_advanced_buttons2: "justifyleft,justifycenter,justifyright,justifyfull,separator,bullist,numlist,table,separator,undo,redo,separator,forecolor,backcolor",
-			            theme_advanced_buttons3: null,
-                        init_instance_callback : setTabIndex
-		            }
-	            }).setMessages(${messages});
-		}
-        function setTabIndex (editor) {
+                        init_instance_callback : setTabIndex,
+                        menu: {},
+                        toolbar: [
+                            "bold italic underline strikethrough | fontselect fontsizeselect | fullscreen",
+                            "alignleft aligncenter alignright alignjustify | bullist numlist table | undo redo | forecolor backcolor"
+                        ],
+						paste_as_text: true
+                    }
+                }).setMessages(${messages});
+        }
+        function setTabIndex (editor) {            
             var editorId = editor.id;
 
             Dom.setAttribute(editorId + '_ifr', "tabindex", Dom.getAttribute(editorId, "tabindex"));
