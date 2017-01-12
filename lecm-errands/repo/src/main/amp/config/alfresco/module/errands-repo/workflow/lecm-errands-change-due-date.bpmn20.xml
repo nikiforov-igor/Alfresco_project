@@ -15,8 +15,6 @@
                             var document = bpm_package.children[0];
                             var currentUser =  orgstructure.getCurrentEmployee();
 	                        if (document) {
-	                            var logObjects = [];
-                                var logText;
                                 var dateRadio = execution.getVariable("lecmErrandWf_changeDueDateNewDueDateRadio");
                                 var newDueDate = execution.getVariable("lecmErrandWf_changeDueDateNewDueDate");
                                 var processChild = execution.getVariable("lecmErrandWf_changeDueDateChangeChildDueDate");
