@@ -97,9 +97,10 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
 
         businessJournalService.log(additionalDoc, "CREATE_ERRAND_BASED_ON_DOC", "#initiator создал(а) поручение по документу " + wrapperLink(additionalDoc, documentService.getDocumentActualNumber(additionalDoc) + " от " + regDateString, documentService.getDocumentUrl(additionalDoc)), null);
         //установка индекса поручения по сурс ассоциации
-        Integer childCount = nodeService.getSourceAssocs(additionalDoc, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT).size();
-        nodeService.setProperty(errandDoc, ErrandsService.PROP_ERRANDS_CHILD_INDEX, childCount);
-
+        if (((Integer) nodeService.getProperty(errandDoc, ErrandsService.PROP_ERRANDS_CHILD_INDEX)) == 0) {
+            Integer childCount = nodeService.getSourceAssocs(additionalDoc, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT).size();
+            nodeService.setProperty(errandDoc, ErrandsService.PROP_ERRANDS_CHILD_INDEX, childCount);
+        }
 
         //TODO ALF-2843
         //	   После рефакторинга транзакций валится добавление участника
