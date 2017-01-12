@@ -237,6 +237,7 @@
           init-method="init" depends-on="errands.LogicEcmModelsBootstrap">
         <property name="policyComponent" ref="policyComponent"/>
         <property name="nodeService" ref="nodeService"/>
+        <property name="stateMachineService" ref="stateMachineHelper"/>
     </bean>
 
     <bean id="errands.defaultStatemachine" parent="defaultStatemachines">
