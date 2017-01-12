@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/errands/workflow/changeCoexecutors/1.0">
+    <process id="errandsChangeCoexecutors" name="Изменить состав соисполнителей">
+        <startEvent id="startChangeCoexecutors" name="Start" activiti:formKey="lecmErrandWf:changeCoxecutors"></startEvent>
+        <endEvent id="endChangeCoexecutors" name="End"></endEvent>
+        <scriptTask id="changeCoexecutors" name="Change Executor" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+	                        var document = bpm_package.children[0];
+	                        if (document != null) {
+                                var currentUser =  orgstructure.getCurrentEmployee();
+		                        var newCoexecutors = execution.getVariable(lecmErrandWf_changeCoexecutorsNewCoexecutors);
+								var oldCoexecutors = document.assocs["lecm-errands:coexecutors-assoc"];
+								var finalNewCoexecutors = [];
+								var removedExecutors = [];
+
+								if (newCoexecutors && newCoexecutors.length){
+									if(oldCoexecutors && oldCoexecutors.length){
+											finalNewCoexecutors = newCoexecutors.filter(function(element){
+												for (var i = 0; i < oldCoexecutors.length; i++) {
+													if(element.nodeRef.equals(oldCoexecutors[i].nodeRef)){
+														return false;
+													}
+												}
+												return true;
+											});
+											removedExecutors = oldCoexecutors.filter(function(element){
+												for (var i = 0; i < newCoexecutors.length; i++) {
+													if(element.nodeRef.equals(newCoexecutors[i].nodeRef)){
+														return false;
+													}
+												}
+												return true;
+											});
+									} else {
+										finalNewCoexecutors = newCoexecutors;
+									}
+								} else {
+									if(oldCoexecutors && oldCoexecutors.length){
+										removedExecutors = oldCoexecutors;
+									}
+								}
+
+		                        if (finalNewCoexecutors.length || removedExecutors.length) {
+									if (finalNewCoexecutors.length) {
+										finalNewCoexecutors.forEach(function(coexecutor){
+											document.createAssociation(coexecutor, "lecm-errands:coexecutor-assoc");
+											statemachine.grandDynamicRoleForEmployee(document, coexecutor, "ERRANDS_COEXECUTOR");
+
+										});
+										notifications.sendNotificationFromCurrentUser({
+												recipients: [finalNewCoexecutors],
+												templateCode: 'ERRANDS_CO_EXECUTOR',
+												templateConfig: {
+													mainObject: document,
+													eventExecutor: currentUser
+												}
+											});
+									}
+									if (removedExecutors.length) {
+										finalNewCoexecutors.forEach(function(coexecutor){
+											document.removeAssociation(coexecutor, "lecm-errands:coexecutor-assoc");
+											lecmPermission.revokeDynamicRole(document, coexecutor, "ERRANDS_COEXECUTOR");
+										});
+										notifications.sendNotificationFromCurrentUser({
+												recipients: [finalNewCoexecutors],
+												templateCode: 'ERRANDS_CO_EXECUTOR_REMOVE',
+												templateConfig: {
+													mainObject: document,
+													eventExecutor: currentUser
+												}
+											});
+									}
+
+			                        var logObjects = [];
+			                        logObjects.push(newCoexecutors.join());
+			                        var logText = "#initiator изменил состав соисполнителей на: #object1";
+			                        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_COEXECUTORS", logText, logObjects);
+
+		                        }
+	                        }
+                        ]]></activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script></script>
+        </scriptTask>
+        <receiveTask id="errandReceiveTask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startChangeCoexecutors" targetRef="changeCoexecutors"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="changeCoexecutors" targetRef="errandReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="errandReceiveTask" targetRef="endChangeCoexecutors"></sequenceFlow>
+    </process>
+</definitions>
