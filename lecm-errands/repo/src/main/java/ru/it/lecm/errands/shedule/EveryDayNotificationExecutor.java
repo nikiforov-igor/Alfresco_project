@@ -60,7 +60,7 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
         // Уведомлении об истечении срока исполнения
         boolean isExpired = (boolean) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_IS_EXPIRED);
         if (isExpired) {
-            notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_EXCEEDED_DEADLINE");
+            notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_DEADLINE_COME");
         }
 
         // Уведомление о истечении половины срока исполнения поручения.
