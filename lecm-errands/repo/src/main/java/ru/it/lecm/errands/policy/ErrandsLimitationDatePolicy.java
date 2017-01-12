@@ -26,11 +26,6 @@ public class ErrandsLimitationDatePolicy implements NodeServicePolicies.OnUpdate
     private final static String WORK_DAY_TYPE_STRING = "р.д.";
     private final static String LIMITLESS_STRING = "Без срока";
 
-    private Boolean radioChanged = false;
-    private Boolean dateChanged = false;
-    private Boolean dayTypeChanged = false;
-    private Boolean dayCountChanged = false;
-
     private PolicyComponent policyComponent;
 
     private NodeService nodeService;
@@ -82,6 +77,10 @@ public class ErrandsLimitationDatePolicy implements NodeServicePolicies.OnUpdate
         Integer oldDaysCount = (Integer) before.get(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_DAYS);
         String newDaysType = (String) after.get(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TYPE);
         Integer newDaysCount = (Integer) after.get(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_DAYS);
+        Boolean radioChanged = false;
+        Boolean dateChanged = false;
+        Boolean dayTypeChanged = false;
+        Boolean dayCountChanged = false;
 
         if (!Objects.equals(newDateRadio, oldDateRadio)) {
             radioChanged = true;
@@ -122,10 +121,6 @@ public class ErrandsLimitationDatePolicy implements NodeServicePolicies.OnUpdate
                 }
                 if (changed && dateText != null) {
                     nodeService.setProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TEXT, dateText);
-                    radioChanged = false;
-                    dateChanged = false;
-                    dayCountChanged = false;
-                    dayTypeChanged = false;
                 }
             }
         }
