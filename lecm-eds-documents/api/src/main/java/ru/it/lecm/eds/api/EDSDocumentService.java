@@ -26,7 +26,15 @@ public interface EDSDocumentService {
 
 	QName PROP_CHILD_CHANGE_SIGNAL_COUNT = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "child-change-signal-count");
 
+    /**
+     * Отпавка сигнала об изменении дочерних документов
+     * @param baseDoc Документ, которому отправляется сигнал
+     */
     void sendChildChangeSignal(NodeRef baseDoc);
 
+    /**
+     * Сбро сигнала об изменении дочерних документов
+     * @param baseDoc Документ, у которого сбрасывается сигнал
+     */
     void resetChildChangeSignal(NodeRef baseDoc);
 }

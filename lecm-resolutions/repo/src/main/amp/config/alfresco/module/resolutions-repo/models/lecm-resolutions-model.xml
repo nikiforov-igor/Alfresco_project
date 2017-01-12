@@ -134,7 +134,7 @@
                     <mandatory>false</mandatory>
                 </property>
                 <!-- Требуется решение Завершающего -->
-                <property name="lecm-resolutions:requires-solution-closers">
+                <property name="lecm-resolutions:require-closers-decision">
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>

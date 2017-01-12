@@ -914,7 +914,7 @@ if (document) {
       } if (childrenErrands.length == canceledCount) {
         document.properties["lecm-resolutions:annul-signal"] = true;
       } else {
-        document.properties["lecm-resolutions:requires-solution-closers"] = true;
+        document.properties["lecm-resolutions:require-closers-decision"] = true;
 
         notifications.sendNotificationFromCurrentUser({
           recipients: resolutionsScript.getResolutionClosers(document),
