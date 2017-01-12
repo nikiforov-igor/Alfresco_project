@@ -2094,11 +2094,6 @@
                             <control-param name="selectedItemsFormArgs">currentCoexecutorsAssoc</control-param>
                         </control>
                     </field>
-                    <field id="lecmErrandWf:changeExecutorReason">
-                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">7</control-param>
-                        </control>
-                    </field>
                 </appearance>
             </form>
         </forms>

@@ -10,6 +10,10 @@
                 <property name="cm:name">Смена исполнителя поручения</property>
                 <property name="lecm-busjournal:eventCategory-code">ERRAND_CHANGE_EXECUTOR</property>
             </item>
+            <item name="cm:Изменение состава соисполнителей" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Изменение состава соисполнителей</property>
+                <property name="lecm-busjournal:eventCategory-code">ERRAND_CHANGE_COEXECUTORS</property>
+            </item>
 	        <item name="cm:Изменение срока" type="lecm-busjournal:eventCategory">
 		        <property name="cm:name">Изменение срока</property>
 		        <property name="lecm-busjournal:eventCategory-code">ERRAND_CHANGE_DUE_DATE</property>

@@ -4,7 +4,7 @@
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.it.ru/logicECM/errands/workflow/changeCoexecutors/1.0">
     <process id="errandsChangeCoexecutors" name="Изменить состав соисполнителей">
-        <startEvent id="startChangeCoexecutors" name="Start" activiti:formKey="lecmErrandWf:changeCoxecutors"></startEvent>
+        <startEvent id="startChangeCoexecutors" name="Start" activiti:formKey="lecmErrandWf:changeCoexecutors"></startEvent>
         <endEvent id="endChangeCoexecutors" name="End"></endEvent>
         <scriptTask id="changeCoexecutors" name="Change Executor" scriptFormat="javascript">
             <extensionElements>
@@ -14,7 +14,12 @@
 	                        var document = bpm_package.children[0];
 	                        if (document != null) {
                                 var currentUser =  orgstructure.getCurrentEmployee();
-		                        var newCoexecutors = execution.getVariable(lecmErrandWf_changeCoexecutorsNewCoexecutors);
+                                var newCoexecutors = [];
+                                if (lecmErrandWf_changeCoexecutorsNewCoexecutors && lecmErrandWf_changeCoexecutorsNewCoexecutors.size()) {
+                                	for (var i = 0; i < lecmErrandWf_changeCoexecutorsNewCoexecutors.size(); i++){
+                                		newCoexecutors.push(lecmErrandWf_changeCoexecutorsNewCoexecutors.get(i));
+									}
+                                }
 								var oldCoexecutors = document.assocs["lecm-errands:coexecutors-assoc"];
 								var finalNewCoexecutors = [];
 								var removedExecutors = [];
@@ -49,7 +54,7 @@
 		                        if (finalNewCoexecutors.length || removedExecutors.length) {
 									if (finalNewCoexecutors.length) {
 										finalNewCoexecutors.forEach(function(coexecutor){
-											document.createAssociation(coexecutor, "lecm-errands:coexecutor-assoc");
+											document.createAssociation(coexecutor, "lecm-errands:coexecutors-assoc");
 											statemachine.grandDynamicRoleForEmployee(document, coexecutor, "ERRANDS_COEXECUTOR");
 
 										});
@@ -64,7 +69,7 @@
 									}
 									if (removedExecutors.length) {
 										finalNewCoexecutors.forEach(function(coexecutor){
-											document.removeAssociation(coexecutor, "lecm-errands:coexecutor-assoc");
+											document.removeAssociation(coexecutor, "lecm-errands:coexecutors-assoc");
 											lecmPermission.revokeDynamicRole(document, coexecutor, "ERRANDS_COEXECUTOR");
 										});
 										notifications.sendNotificationFromCurrentUser({
