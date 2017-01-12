@@ -109,7 +109,7 @@
             _renderEditor: function RichTextControl__renderEditor()
             {
                 // create the editor instance
-                this.editor = new Alfresco.util.RichEditor("tinyMCE", this.id, this.options.editorParameters);
+                this.editor = new Alfresco.util.RichEditor("LECMTinyMCE", this.id, this.options.editorParameters);
 
                 if (!this.options.currentValue || this.options.currentValue.indexOf("mimetype=text/html") !== -1)
                 {
@@ -120,7 +120,7 @@
                 
                 // Make sure we persist the dom content from the editor in to the hidden textarea when appropriate 
                 var _this = this;
-                this.editor.getEditor().on('BeforeSetContent keyup', function(e) {
+                this.editor.getEditor().on('BeforeSetContent Change keyup', function(e) {
                    _this._handleContentChange();
                 });
                 
