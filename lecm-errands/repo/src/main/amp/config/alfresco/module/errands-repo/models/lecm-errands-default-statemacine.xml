@@ -221,26 +221,26 @@ if (document) {
     var limitationDateDaysType = document.properties["lecm-errands:limitation-date-type"];
     var limitationDate = document.properties["lecm-errands:limitation-date"];
     var dateString = "";
-    if(limitationDateRadio) {
-        if(limitationDateRadio == "DATE" && limitationDate){
+    if (limitationDateRadio) {
+        if (limitationDateRadio == "DATE" && limitationDate) {
             var day = utils.pad(newLimitationDate.getDate(), 2);
             var month = utils.pad(newLimitationDate.getMonth() + 1, 2);
             var year = utils.pad(newLimitationDate.getFullYear(), 4);
             dateString = day + "." + month + "." + year;
-        } else if( limitationDateRadio == "DAYS" ){
-            if(limitationDateDays && limitationDateDaysType) {
+        } else if (limitationDateRadio == "DAYS") {
+            if (limitationDateDays && limitationDateDaysType) {
                 if (limitationDateDaysType == "WORK") {
                     dateString = limitationDateDays + " р.д.";
                 } else if (limitationDateDaysType == "CALENDAR") {
                     dateString = limitationDateDays + " к.д.";
                 }
             }
-        } else if(limitationDateRadio == "LIMITLESS"){
+        } else if (limitationDateRadio == "LIMITLESS") {
             dateString = "Без срока";
         }
     }
 
-  	document.properties["lecm-errands:limitation-date-text"] = dateString;  
+    document.properties["lecm-errands:limitation-date-text"] = dateString;
     document.save();
 }]]></value>
                                                             </property>
