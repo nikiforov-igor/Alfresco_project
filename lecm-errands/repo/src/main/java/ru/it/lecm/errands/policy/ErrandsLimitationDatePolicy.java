@@ -9,22 +9,27 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
-import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by APanyukov on 11.01.2017.
  */
-public class ErrandsLimitationDatePolicy implements NodeServicePolicies.OnUpdateNodePolicy {
+public class ErrandsLimitationDatePolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy {
 
     private final static String CALENDAR_DAY_TYPE_STRING = "к.д.";
     private final static String WORK_DAY_TYPE_STRING = "р.д.";
     private final static String LIMITLESS_STRING = "Без срока";
+
+    private Boolean radioChanged = false;
+    private Boolean dateChanged = false;
+    private Boolean dayTypeChanged = false;
+    private Boolean dayCountChanged = false;
 
     private PolicyComponent policyComponent;
 
@@ -60,40 +65,67 @@ public class ErrandsLimitationDatePolicy implements NodeServicePolicies.OnUpdate
         PropertyCheck.mandatory(this, "policyComponent", policyComponent);
         PropertyCheck.mandatory(this, "nodeService", nodeService);
         PropertyCheck.mandatory(this, "stateMachineService", stateMachineService);
-        policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdateNodePolicy.QNAME,
-                ErrandsService.TYPE_ERRANDS, new JavaBehaviour(this, "onUpdateNode"));
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+                ErrandsService.TYPE_ERRANDS, new JavaBehaviour(this, "onUpdateProperties"));
     }
 
     /*
         Заполнение атрибута текстового представления срока исполнения
      */
     @Override
-    public void onUpdateNode(NodeRef nodeRef) {
-        String dueDateRadio = (String) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO);
-        Date dueDate = (Date) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
-        String dueDateDaysType = (String) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TYPE);
-        Integer dueDateDaysCount = (Integer) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_DAYS);
+    public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+        String oldDateRadio = (String) before.get(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO);
+        String newDateRadio = (String) after.get(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO);
+        Date oldDate = (Date) before.get(ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
+        Date newDate = (Date) after.get(ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
+        String oldDaysType = (String) before.get(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TYPE);
+        Integer oldDaysCount = (Integer) before.get(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_DAYS);
+        String newDaysType = (String) after.get(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TYPE);
+        Integer newDaysCount = (Integer) after.get(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_DAYS);
 
-        if (dueDateRadio != null) {
-            String dateText = "";
-            if ("DATE".equals(dueDateRadio) || dueDate != null) {
-                DateFormat formater = new SimpleDateFormat("dd.MM.yyyy");
-                dateText = formater.format(dueDate);
-            } else if ("DAYS".equals(dueDateRadio)) {
-                Boolean isDraft = stateMachineService.isDraft(nodeRef);
-                if (dueDateDaysType != null && dueDateDaysCount != null) {
-                    if (isDraft) {
-                        if ("WORK".equals(dueDateDaysType)) {
-                            dateText = dueDateDaysCount + " " + WORK_DAY_TYPE_STRING;
-                        } else if ("CALENDAR".equals(dueDateDaysType)) {
-                            dateText = dueDateDaysCount + " " + CALENDAR_DAY_TYPE_STRING;
-                        }
-                    }
-                }
-            } else if ("LIMITLESS".equals(dueDateRadio)) {
+        if (!Objects.equals(newDateRadio, oldDateRadio)) {
+            radioChanged = true;
+        }
+        if (newDate != oldDate) {
+            dateChanged = true;
+        }
+        if (!Objects.equals(newDaysType, oldDaysType)) {
+            dayTypeChanged = true;
+        }
+        if (!Objects.equals(newDaysCount, oldDaysCount)) {
+            dayCountChanged = true;
+        }
+        if ((newDateRadio != null && "LIMITLESS".equals(newDateRadio)) || newDateRadio != null && (newDate != null || (newDaysType != null && newDaysCount != null))) {
+            String dateText = null;
+            Boolean changed = false;
+            if (radioChanged && "LIMITLESS".equals(newDateRadio)) {
                 dateText = LIMITLESS_STRING;
+                nodeService.setProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, null);
+                changed = true;
+            } else if ((radioChanged && "DATE".equals(newDateRadio) && newDate != null) || dateChanged) {
+                DateFormat formater = new SimpleDateFormat("dd.MM.yyyy");
+                dateText = formater.format(newDate);
+                changed = true;
+            } else if ((radioChanged && "DAYS".equals(newDateRadio) && newDaysType != null && newDaysCount != null)
+                    || dayTypeChanged || dayCountChanged) {
+                Boolean isDraft = stateMachineService.isDraft(nodeRef);
+                if (isDraft) {
+                    if ("WORK".equals(newDaysType)) {
+                        dateText = newDaysCount + " " + WORK_DAY_TYPE_STRING;
+                    } else if ("CALENDAR".equals(newDaysType)) {
+                        dateText = newDaysCount + " " + CALENDAR_DAY_TYPE_STRING;
+                    }
+                    nodeService.setProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, null);
+                }
+                changed = true;
             }
-            nodeService.setProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TEXT, dateText);
+            if (changed && dateText != null) {
+                nodeService.setProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TEXT, dateText);
+                radioChanged = false;
+                dateChanged = false;
+                dayCountChanged = false;
+                dayTypeChanged = false;
+            }
         }
     }
 }
