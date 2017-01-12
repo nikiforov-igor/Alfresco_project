@@ -60,6 +60,7 @@
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-business-journal-eventCategory-items.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-resolution-completion-methods.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-resolution-completion-methods-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-resolutions-regnumbers.xml</value>
             </list>
         </property>
     </bean>

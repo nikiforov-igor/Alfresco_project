@@ -914,7 +914,7 @@ if (document) {
       } if (childrenErrands.length == canceledCount) {
         document.properties["lecm-resolutions:annul-signal"] = true;
       } else {
-        document.properties["lecm-resolutions:require-closers-decision"] = true;
+        document.properties["lecm-resolutions:requires-solution-closers"] = true;
 
         notifications.sendNotificationFromCurrentUser({
           recipients: resolutionsScript.getResolutionClosers(document),
@@ -1083,6 +1083,45 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value><![CDATA[Нарезка прав]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>33b5099b-2261-45d5-8ce9-1febae838b67</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/566877e3-191c-4e33-8c6e-6b82ed33b31d
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+if (document && !regnumbers.isDocumentRegistered(document)) {
+  var regNumberCode;
+  var parentDocAssoc = document.assocs["lecm-resolutions:base-document-assoc"];
+  if (parentDocAssoc && parentDocAssoc.length) {
+    regNumberCode = "RESOLUTION_ON_BASIS_NUMBER";
+    var childIndex = 1;
+    var childAssoc = parentDocAssoc[0].sourceAssocs["lecm-resolutions:base-document-assoc"];
+    if (childAssoc && childAssoc.length) {
+      childIndex = childAssoc.length;
+    }
+    document.properties["lecm-resolutions:child-index-counter"] = childIndex;
+    document.save();
+  } else {
+    regNumberCode = "RESOLUTION_FREE_NUMBER";
+  }
+  regnumbers.registerDocument(document, regNumberCode);
+  regnumbers.setDocumentNumber(regNumberCode, document, "lecm-resolutions:number");
+}]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Регистрация]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
