@@ -2356,6 +2356,18 @@ div.currentValueDisplay,
   top: 0;
 }
 
+.yui-skin-lecmTheme.alfresco-share .share-header-title {
+	margin-top: 25px;
+}
+
+.yui-skin-lecmTheme.alfresco-share #share-header {
+	min-height: 66px;
+}
+
+.yui-skin-lecmTheme.alfresco-share .share-header-title .alfresco-layout-LeftAndRight__right {
+    float: left;
+}
+
 .yui-skin-lecmTheme.alfresco-share .share-header-title > div.widgets {
   background-color: inherit;
 }
