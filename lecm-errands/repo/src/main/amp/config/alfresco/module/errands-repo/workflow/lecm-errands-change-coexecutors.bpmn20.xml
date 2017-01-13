@@ -12,7 +12,7 @@
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
 	                        var document = bpm_package.children[0];
-	                        if (document != null) {
+	                        if (document) {
                                 var currentUser =  orgstructure.getCurrentEmployee();
                                 var newCoexecutors = [];
                                 if (lecmErrandWf_changeCoexecutorsNewCoexecutors && lecmErrandWf_changeCoexecutorsNewCoexecutors.size()) {
@@ -83,7 +83,10 @@
 									}
 
 			                        var logObjects = [];
-			                        logObjects.push(newCoexecutors.join());
+
+			                        logObjects.push(newCoexecutors.map(function (coexecutor) {
+    									return documentScript.wrapperLink(coexecutor, coexecutor.properties["lecm-orgstr:employee-short-name"]);
+									}).join());
 			                        var logText = "#initiator изменил состав соисполнителей на: #object1";
 			                        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_COEXECUTORS", logText, logObjects);
 
