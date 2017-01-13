@@ -8,7 +8,6 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.errands.ErrandsService;
-import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -30,16 +29,6 @@ public class ErrandsLimitationDatePolicy implements NodeServicePolicies.OnUpdate
 
     private NodeService nodeService;
 
-    private StateMachineServiceBean stateMachineService;
-
-    public StateMachineServiceBean getStateMachineService() {
-        return stateMachineService;
-    }
-
-    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
-        this.stateMachineService = stateMachineService;
-    }
-
     public PolicyComponent getPolicyComponent() {
         return policyComponent;
     }
@@ -59,7 +48,6 @@ public class ErrandsLimitationDatePolicy implements NodeServicePolicies.OnUpdate
     final public void init() {
         PropertyCheck.mandatory(this, "policyComponent", policyComponent);
         PropertyCheck.mandatory(this, "nodeService", nodeService);
-        PropertyCheck.mandatory(this, "stateMachineService", stateMachineService);
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 ErrandsService.TYPE_ERRANDS, new JavaBehaviour(this, "onUpdateProperties"));
     }
@@ -93,15 +81,12 @@ public class ErrandsLimitationDatePolicy implements NodeServicePolicies.OnUpdate
                     dateText = formater.format(newDate);
                 } else if ((radioChanged && "DAYS".equals(newDateRadio) && newDaysType != null && newDaysCount != null)
                         || dayTypeChanged || dayCountChanged) {
-                    Boolean isDraft = stateMachineService.isDraft(nodeRef);
-                    if (isDraft) {
-                        if ("WORK".equals(newDaysType)) {
-                            dateText = newDaysCount + " " + WORK_DAY_TYPE_STRING;
-                        } else if ("CALENDAR".equals(newDaysType)) {
-                            dateText = newDaysCount + " " + CALENDAR_DAY_TYPE_STRING;
-                        }
-                        nodeService.setProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, null);
+                    if ("WORK".equals(newDaysType)) {
+                        dateText = newDaysCount + " " + WORK_DAY_TYPE_STRING;
+                    } else if ("CALENDAR".equals(newDaysType)) {
+                        dateText = newDaysCount + " " + CALENDAR_DAY_TYPE_STRING;
                     }
+                    nodeService.setProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, null);
                 }
                 if (dateText != null) {
                     nodeService.setProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TEXT, dateText);
