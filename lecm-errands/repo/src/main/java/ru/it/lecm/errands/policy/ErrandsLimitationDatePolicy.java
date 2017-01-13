@@ -77,35 +77,20 @@ public class ErrandsLimitationDatePolicy implements NodeServicePolicies.OnUpdate
         Integer oldDaysCount = (Integer) before.get(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_DAYS);
         String newDaysType = (String) after.get(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TYPE);
         Integer newDaysCount = (Integer) after.get(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_DAYS);
-        Boolean radioChanged = false;
-        Boolean dateChanged = false;
-        Boolean dayTypeChanged = false;
-        Boolean dayCountChanged = false;
-
-        if (!Objects.equals(newDateRadio, oldDateRadio)) {
-            radioChanged = true;
-        }
-        if (!Objects.equals(newDate, oldDate)) {
-            dateChanged = true;
-        }
-        if (!Objects.equals(newDaysType, oldDaysType)) {
-            dayTypeChanged = true;
-        }
-        if (!Objects.equals(newDaysCount, oldDaysCount)) {
-            dayCountChanged = true;
-        }
+        Boolean radioChanged = !Objects.equals(newDateRadio, oldDateRadio);
+        Boolean dateChanged = !Objects.equals(newDate, oldDate);
+        Boolean dayTypeChanged = !Objects.equals(newDaysType, oldDaysType);
+        Boolean dayCountChanged = !Objects.equals(newDaysCount, oldDaysCount);
+        
         if (radioChanged || dateChanged || dayTypeChanged || dayCountChanged) {
             if (newDateRadio != null && ("LIMITLESS".equals(newDateRadio) || newDate != null || (newDaysType != null && newDaysCount != null))) {
                 String dateText = null;
-                Boolean changed = false;
                 if (radioChanged && "LIMITLESS".equals(newDateRadio)) {
                     dateText = LIMITLESS_STRING;
                     nodeService.setProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, null);
-                    changed = true;
                 } else if ((radioChanged && "DATE".equals(newDateRadio) && newDate != null) || dateChanged) {
                     DateFormat formater = new SimpleDateFormat("dd.MM.yyyy");
                     dateText = formater.format(newDate);
-                    changed = true;
                 } else if ((radioChanged && "DAYS".equals(newDateRadio) && newDaysType != null && newDaysCount != null)
                         || dayTypeChanged || dayCountChanged) {
                     Boolean isDraft = stateMachineService.isDraft(nodeRef);
@@ -117,9 +102,8 @@ public class ErrandsLimitationDatePolicy implements NodeServicePolicies.OnUpdate
                         }
                         nodeService.setProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, null);
                     }
-                    changed = true;
                 }
-                if (changed && dateText != null) {
+                if (dateText != null) {
                     nodeService.setProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TEXT, dateText);
                 }
             }
