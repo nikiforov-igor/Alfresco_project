@@ -7,3 +7,6 @@
 .control.selectone-radiobuttons.editmode:nth-child(3) .label-div {
     visibility: hidden;
 }
+.change-due-date-form-radiobuttons {
+    padding-left: 190px;
+}

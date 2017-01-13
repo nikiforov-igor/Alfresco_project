@@ -828,33 +828,32 @@ if (document) {
     edsDocument.sendChildChangeSignal(baseDocAssoc[0]);
   }
 
-  var recipients = [];
+  if (annulReason) {
+    var recipients = [];
+    var authorAssoc = document.assocs["lecm-resolutions:author-assoc"];
+    if (authorAssoc && authorAssoc.length) {
+      recipients.push(authorAssoc[0]);
+    }
+    var creatorAssoc = document.assocs["lecm-document:author-assoc"];
+    if (creatorAssoc && creatorAssoc.length) {
+      recipients.push(creatorAssoc[0]);
+    }
 
-  var authorAssoc = document.assocs["lecm-resolutions:author-assoc"];
-  if (authorAssoc && authorAssoc.length) {
-    recipients.push(authorAssoc[0]);
+    var controllerAssoc = document.assocs["lecm-resolutions:controller-assoc"];
+    if (controllerAssoc && controllerAssoc.length) {
+      recipients.push(controllerAssoc[0]);
+    }
+    notifications.sendNotificationFromCurrentUser({
+      recipients: recipients,
+      templateCode: 'RESOLUTION_ANNUL',
+      templateConfig: {
+        mainObject: document,
+        eventExecutor: orgstructure.getCurrentEmployee(),
+        reason: annulReason
+      },
+      dontCheckAccessToObject: true
+    });
   }
-
-  var creatorAssoc = document.assocs["lecm-document:author-assoc"];
-  if (creatorAssoc && creatorAssoc.length) {
-    recipients.push(creatorAssoc[0]);
-  }
-
-  var controllerAssoc = document.assocs["lecm-resolutions:controller-assoc"];
-  if (controllerAssoc && controllerAssoc.length) {
-    recipients.push(controllerAssoc[0]);
-  }
-
-  notifications.sendNotificationFromCurrentUser({
-    recipients: recipients,
-    templateCode: 'RESOLUTION_ANNUL',
-    templateConfig: {
-      mainObject: document,
-      eventExecutor: orgstructure.getCurrentEmployee(),
-      reason: annulReason
-    },
-    dontCheckAccessToObject: true
-  });
 }]]></value>
                                                             </property>
                                                             <property>
@@ -870,6 +869,115 @@ if (document) {
                                                                 <type>transitionStatus</type>
                                                                 <reference>
                                                                     workspace://SpacesStore/3312133a-a9ea-461a-87a4-9ae2897d3033
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>e9bf1aa9-6dc9-4a20-8708-ca34575a89b9</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/7d538900-afac-48fd-a5ca-f12867a0ed50
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-eds-aspect:child-change-signal-count") > 0]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[var document = bpm_package.children[0];
+if (document) {
+  var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
+  if (childrenErrands && childrenErrands.length) {
+    var canceledCount = 0;
+    var executedCount = 0;
+
+    childrenErrands.forEach(function (errand) {
+      if ("Исполнено" == errand.properties["lecm-statemachine:status"]) {
+        executedCount++;
+      } else if ("Отменено" == errand.properties["lecm-statemachine:status"]) {
+        canceledCount++;
+      }
+    });
+
+    if (childrenErrands.length == (executedCount + canceledCount)) {
+      if (childrenErrands.length == executedCount) {
+        document.properties["lecm-resolutions:auto-complete"] = true;
+      } if (childrenErrands.length == canceledCount) {
+        document.properties["lecm-resolutions:annul-signal"] = true;
+      } else {
+        document.properties["lecm-resolutions:requires-solution-closers"] = true;
+
+        notifications.sendNotificationFromCurrentUser({
+          recipients: resolutionsScript.getResolutionClosers(document),
+          templateCode: 'RESOLUTION_REQUIRES_SOLUTION_CLOSERS',
+          templateConfig: {
+            mainObject: document
+          },
+          dontCheckAccessToObject: true
+        });
+      }
+    }
+  }
+
+  document.properties["lecm-eds-aspect:child-change-signal-count"] = 0;
+  document.save();
+}
+]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>35879ee7-725e-4966-a234-c9ec29a51442</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/4892f210-cd23-4960-aad8-53e77c9f4e5b
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-resolutions:auto-complete")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/8bdee28b-dda1-4bd6-b9ea-56cf5713d426
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -914,9 +1022,12 @@ if (document) {
 if (document && document.properties["lecm-resolutions:errands-json"]) {
   var errandsList = eval('(' + document.properties["lecm-resolutions:errands-json"] + ')');
   if (errandsList && errandsList.length) {
+    var i = 0;
     errandsList.forEach(function(errand) {
       errand["assoc_lecm-errands_additional-document-assoc"] = document.nodeRef.toString();
       errand["assoc_lecm-errands_initiator-assoc"] = document.properties["lecm-resolutions:author-assoc-ref"];
+      i++;
+      errand["prop_lecm-errands_child-index-counter"] = "" + i;
       errands.createErrands(errand);
     });
   }
@@ -972,6 +1083,45 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value><![CDATA[Нарезка прав]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>33b5099b-2261-45d5-8ce9-1febae838b67</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/566877e3-191c-4e33-8c6e-6b82ed33b31d
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+if (document && !regnumbers.isDocumentRegistered(document)) {
+  var regNumberCode;
+  var parentDocAssoc = document.assocs["lecm-resolutions:base-document-assoc"];
+  if (parentDocAssoc && parentDocAssoc.length) {
+    regNumberCode = "RESOLUTION_ON_BASIS_NUMBER";
+    var childIndex = 1;
+    var childAssoc = parentDocAssoc[0].sourceAssocs["lecm-resolutions:base-document-assoc"];
+    if (childAssoc && childAssoc.length) {
+      childIndex = childAssoc.length;
+    }
+    document.properties["lecm-resolutions:child-index-counter"] = childIndex;
+    document.save();
+  } else {
+    regNumberCode = "RESOLUTION_FREE_NUMBER";
+  }
+  regnumbers.registerDocument(document, regNumberCode);
+  regnumbers.setDocumentNumber(regNumberCode, document, "lecm-resolutions:number");
+}]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Регистрация]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -3544,8 +3694,10 @@ if (document) {
 if (document) {
   var annulReason = document.properties["lecm-resolutions:annul-signal-reason"];
 
-  var logText = "#initiator " + base.wrapperTitle("аннулировал", annulReason) + " резолюцию #mainobject.";
-  businessJournal.log(document.nodeRef.toString(), "ANNUL_RESOLUTION", logText, []);
+  if (annulReason) {
+    var logText = "#initiator " + base.wrapperTitle("аннулировал", annulReason) + " резолюцию #mainobject.";
+    businessJournal.log(document.nodeRef.toString(), "ANNUL_RESOLUTION", logText, []);
+  }
 }]]></value>
                                                             </property>
                                                             <property>

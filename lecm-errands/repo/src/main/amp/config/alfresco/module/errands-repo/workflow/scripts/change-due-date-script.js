@@ -1,4 +1,6 @@
 function processDueDateChanges (dateRadio, newDueDate, processChild, changeDateReason) {
+    var logObjects = [];
+    var logText;
     var changed = true;
     var dueDateString = "";
     var limitless = false;

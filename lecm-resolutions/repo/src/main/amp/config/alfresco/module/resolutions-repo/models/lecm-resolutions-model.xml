@@ -133,6 +133,11 @@
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                 </property>
+                <!-- Требуется решение Завершающего -->
+                <property name="lecm-resolutions:require-closers-decision">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
                 <!-- Создание в черновик -->
                 <property name="lecm-resolutions:is-draft">
                     <type>d:boolean</type>
@@ -144,6 +149,14 @@
                 <property name="lecm-resolutions:base-doc-execution-date-attr-name">
                     <type>d:text</type>
                     <default>false</default>
+                </property>
+                <property name="lecm-resolutions:auto-complete">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+                <property name="lecm-resolutions:child-index-counter">
+                    <type>d:int</type>
+                    <default>0</default>
                 </property>
 
                 <!-- Сигналы -->
