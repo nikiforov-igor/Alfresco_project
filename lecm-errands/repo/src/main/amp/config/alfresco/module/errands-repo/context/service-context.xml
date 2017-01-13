@@ -233,6 +233,11 @@
         <property name="orgstructureService" ref="serviceOrgstructure"/>
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
     </bean>
+    <bean id="errandsLimitationDatePolicy" class="ru.it.lecm.errands.policy.ErrandsLimitationDatePolicy"
+          init-method="init" depends-on="errands.LogicEcmModelsBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
 
     <bean id="errands.defaultStatemachine" parent="defaultStatemachines">
         <property name="statemachineName" value="lecm-errands:document" />

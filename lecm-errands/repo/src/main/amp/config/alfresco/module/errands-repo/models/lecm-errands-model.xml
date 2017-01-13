@@ -21,7 +21,7 @@
     <constraints>
         <constraint name="lecm-errands:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
             <parameter name="presentString">
-                <value><![CDATA[№ {lecm-errands:number}, {lecm-errands:title}, исполнитель {lecm-errands:executor-assoc/lecm-orgstr:employee-short-name}, срок {lecm-errands:limitation-date?dd.MM.yyyy}]]></value>
+                <value><![CDATA[№ {lecm-errands:number}, {lecm-errands:title}, Исполнитель {lecm-errands:executor-assoc/lecm-orgstr:employee-short-name}, срок: {lecm-errands:limitation-date-text}]]></value>
             </parameter>
         </constraint>
         <constraint name="lecm-errands:attachment-categories" type="LIST">
