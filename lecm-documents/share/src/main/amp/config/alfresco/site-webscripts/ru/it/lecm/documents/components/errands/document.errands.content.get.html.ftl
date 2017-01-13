@@ -68,6 +68,9 @@
                     itemType: "lecm-errands:document",
                     destination: LogicECM.module.Documents.ERRANDS_SETTINGS.nodeRef,
                     parentDoc: "${nodeRef}"
+                <#if subjectAssoc??>,
+                    parentDocSubjectAssoc: "${subjectAssoc}"
+                </#if>
                 }).setMessages(${messages});
     }
     YAHOO.util.Event.onContentReady("${id}-formContainer", initComponent);
