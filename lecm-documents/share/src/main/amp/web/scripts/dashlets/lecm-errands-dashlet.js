@@ -60,7 +60,7 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                     }
                     var args = {
                         parentDoc: parentDoc,
-                        parentLimitationDate: limitDate,
+                        parentLimitationDate: limitDate
                     };
 
                     this.onAddErrandClick(args);
