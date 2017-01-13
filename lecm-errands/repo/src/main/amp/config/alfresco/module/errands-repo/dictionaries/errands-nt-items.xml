@@ -84,6 +84,18 @@
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
                 </assocs>
             </item>
+            <item name="cm:ERRANDS_CO_EXECUTOR_REMOVE" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} удалил Вас из состава соисполнителей по поручению  {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))}]]></property>
+                <property name="cm:name"><![CDATA[ERRANDS_CO_EXECUTOR_REMOVE]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Поручение. Удаление соисполнителя]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
             <item name="cm:ERRANDS_CO_EXECUTOR_ACCEPT" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CO_EXECUTOR_ACCEPT]]></property>
                 <property name="lecm-notification-template:template">

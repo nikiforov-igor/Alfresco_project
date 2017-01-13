@@ -23,6 +23,7 @@
 
                                     document.removeAssociation(executor, "lecm-errands:executor-assoc");
                                     document.createAssociation(lecmErrandWf_changeExecutor_1NewExecutor, "lecm-errands:executor-assoc");
+                                    statemachine.grandDynamicRoleForEmployee(document, lecmErrandWf_changeExecutor_1NewExecutor, "ERRANDS_EXECUTOR");
                                     documentMembers.addMember(document, executor, "ERRANDS_READER");
                                     lecmPermission.revokeDynamicRole(document, executor, "ERRANDS_EXECUTOR");
 
