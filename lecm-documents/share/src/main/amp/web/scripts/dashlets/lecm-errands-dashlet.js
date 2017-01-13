@@ -18,7 +18,8 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
             options: {
                 itemType: "lecm-errands:document",
                 destination: null,
-                parentDoc: null
+                parentDoc: null,
+                parentDocSubjectAssoc: null
             },
 
             onAddErrandClick: function Errands_onAddErrandsClick(args) {
@@ -44,7 +45,8 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                 }
                 var args = {
                     parentDoc: this.options.parentDoc,
-                    parentLimitationDate: limitDate
+                    parentLimitationDate: limitDate,
+                    parentDocSubjectAssoc: this.options.parentDocSubjectAssoc
                 };
 
                 this.onAddErrandClick(args);
@@ -58,7 +60,7 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                     }
                     var args = {
                         parentDoc: parentDoc,
-                        parentLimitationDate: limitDate
+                        parentLimitationDate: limitDate,
                     };
 
                     this.onAddErrandClick(args);
