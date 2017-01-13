@@ -52,6 +52,11 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
         edsService.sendChildChangeSignal(baseDocument.getNodeRef());
     }
 
+    public void resetChildChangeSignal(ScriptNode baseDocument) {
+        ParameterCheck.mandatory("baseDocument", baseDocument);
+        edsService.resetChildChangeSignal(baseDocument.getNodeRef());
+    }
+
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
