@@ -43,6 +43,8 @@
         formId = args[1].formId;
         Event.onContentReady(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1Result", function () {
             var resultElement = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1Result");
+            var resultControl = resultElement.parentElement.parentElement;
+            Dom.addClass(resultControl, "change-due-date-form-radiobuttons");
             Event.onContentReady(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1RejectReason", function () {
                 var rejectReasonElement = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1RejectReason");
                 var rejectReasonControl = rejectReasonElement.parentElement.parentElement.parentElement;
