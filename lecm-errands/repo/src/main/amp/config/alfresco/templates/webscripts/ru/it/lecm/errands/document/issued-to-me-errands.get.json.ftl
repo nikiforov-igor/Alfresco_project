@@ -17,7 +17,8 @@
     "executor": "${record.executor}",
     "executor_name": "${record.executor_name}",
     "isExpired":   "${record.isExpired?string}",
-    "isImportant": "${record.isImportant?string}"
+    "isImportant": "${record.isImportant?string}",
+    "subject": "${record.subject}"
     }
         <#if record_has_next>,</#if>
     </#list>

@@ -52,7 +52,7 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                 this.onAddErrandClick(args);
             },
 
-            createReErrand: function Errands_onAddErrandsClick(parentDoc, limit) {
+            createReErrand: function Errands_onAddErrandsClick(parentDoc, subject, limit) {
                 if (parentDoc) {
                     var limitDate = "";
                     if (limit){
@@ -60,7 +60,8 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                     }
                     var args = {
                         parentDoc: parentDoc,
-                        parentLimitationDate: limitDate
+                        parentLimitationDate: limitDate,
+                        parentDocSubjectAssoc: subject
                     };
 
                     this.onAddErrandClick(args);
