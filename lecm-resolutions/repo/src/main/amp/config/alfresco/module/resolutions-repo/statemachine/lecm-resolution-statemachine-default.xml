@@ -1101,6 +1101,12 @@ if (document && document.properties["lecm-resolutions:errands-json"]) {
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = stm_document;
 if (document && !regnumbers.isDocumentRegistered(document)) {
+  var document = stm_document;
+  if (document) {
+    document.properties["lecm-resolutions:transition-to-execution-date"] = new Date();
+    document.save();
+  }
+
   var regNumberCode;
   var parentDocAssoc = document.assocs["lecm-resolutions:base-document-assoc"];
   if (parentDocAssoc && parentDocAssoc.length) {

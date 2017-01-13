@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Тип объекта" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Резолюция" type="lecm-busjournal:objectType">
+                <property name="cm:name">Поручение</property>
+                <property name="lecm-busjournal:objectType-code">LECM_RESOLUTION</property>
+                <property name="lecm-busjournal:objectType-class">lecm-resolutions:document</property>
+                <property name="lecm-busjournal:objectType-template">{lecm-document:present-string}</property>
+                <property name="lecm-busjournal:objectType-list-template">статус: {lecm-statemachine:status}, {lecm-resolutions:completion-method-assoc-text-content}</property>
+            </item>
+        </items>
+    </item>
+</items>
