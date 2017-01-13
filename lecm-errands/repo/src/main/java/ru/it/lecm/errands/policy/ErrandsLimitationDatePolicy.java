@@ -85,7 +85,7 @@ public class ErrandsLimitationDatePolicy implements NodeServicePolicies.OnUpdate
         if (!Objects.equals(newDateRadio, oldDateRadio)) {
             radioChanged = true;
         }
-        if (newDate != oldDate) {
+        if (!Objects.equals(newDate, oldDate)) {
             dateChanged = true;
         }
         if (!Objects.equals(newDaysType, oldDaysType)) {
@@ -95,7 +95,7 @@ public class ErrandsLimitationDatePolicy implements NodeServicePolicies.OnUpdate
             dayCountChanged = true;
         }
         if (radioChanged || dateChanged || dayTypeChanged || dayCountChanged) {
-            if ((newDateRadio != null && "LIMITLESS".equals(newDateRadio)) || newDateRadio != null && (newDate != null || (newDaysType != null && newDaysCount != null))) {
+            if (newDateRadio != null && ("LIMITLESS".equals(newDateRadio) || newDate != null || (newDaysType != null && newDaysCount != null))) {
                 String dateText = null;
                 Boolean changed = false;
                 if (radioChanged && "LIMITLESS".equals(newDateRadio)) {
