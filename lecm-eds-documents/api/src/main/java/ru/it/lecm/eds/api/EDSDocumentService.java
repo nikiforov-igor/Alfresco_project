@@ -44,12 +44,12 @@ public interface EDSDocumentService {
     void resetChildChangeSignal(NodeRef baseDoc);
 
     /**
-     * Формирование срока исполнения в текстовом виде
+     * Формирование настроек срока в текстовом виде
      * @param radio значение переключателя
      * @param date дата
      * @param daysCount количество дней
      * @param daysType тип дней
-     * @return срок исполнения в текстовом виде
+     * @return настройки срока в текстовом виде
      */
-    String getExecutionDateText(String radio, Date date, String daysType, Integer daysCount);
+    String getComplexDateText(String radio, Date date, String daysType, Integer daysCount);
 }

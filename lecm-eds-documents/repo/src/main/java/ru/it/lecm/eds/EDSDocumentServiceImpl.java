@@ -66,7 +66,7 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
     }
 
     @Override
-    public String getExecutionDateText(String radio, Date date, String daysType, Integer daysCount) {
+    public String getComplexDateText(String radio, Date date, String daysType, Integer daysCount) {
         String result = null;
         if ("LIMITLESS".equals(radio)) {
             result = this.limitlessString;

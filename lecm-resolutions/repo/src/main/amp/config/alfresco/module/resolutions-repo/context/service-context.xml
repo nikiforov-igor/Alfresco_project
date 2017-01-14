@@ -122,10 +122,17 @@
         <property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
     </bean>
 
-    <bean id="resolutionLimitationDatePolicy" class="ru.it.lecm.resolutions.policy.ResolutionLimitationDatePolicy"
+    <bean id="resolutionLimitationDatePolicy" class="ru.it.lecm.eds.policy.ComplexDatePolicy"
           init-method="init" depends-on="resolutions.LogicEcmBootstrap">
         <property name="policyComponent" ref="policyComponent"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="edsDocumentService" ref="edsService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="type" value="lecm-resolutions:document"/>
+        <property name="propDateRadio" value="lecm-resolutions:limitation-date-radio"/>
+        <property name="propDate" value="lecm-resolutions:limitation-date"/>
+        <property name="propDateDaysCount" value="lecm-resolutions:limitation-date-days"/>
+        <property name="propDateDaysType" value="lecm-resolutions:limitation-date-type"/>
+        <property name="propDateText" value="lecm-resolutions:limitation-date-text"/>
     </bean>
 </beans>
