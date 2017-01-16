@@ -131,7 +131,7 @@
           p:reportsForDeploy-ref="operative.storage.deployer.reportsForDeploy"/>
 
 	<bean id="operative.storage.arm.bootstrap.main" parent="lecmDictionaryBootstrap"
-		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
+		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap,operative.storage.dictionary.bootstrap"
 		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ"
 		  p:dictionaries-ref="operative.storage.arm.os"/>
 
