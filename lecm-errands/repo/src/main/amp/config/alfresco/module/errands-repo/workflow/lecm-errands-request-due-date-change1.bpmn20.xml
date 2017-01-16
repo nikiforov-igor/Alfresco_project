@@ -85,6 +85,8 @@
                             <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/change-due-date-script.js">
                             var document = bpm_package.children[0];
                             if (document) {
+                                var logObjects = [];
+                                var logText;
                                 var executor = null;
                                 var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
                                 if (executorAssoc && executorAssoc.length == 1) {
@@ -112,7 +114,7 @@
                                                 reason: rejectReason
                                             }
                                         });
-                                        var logText = "#initiator ";
+                                        logText = "#initiator ";
                                         logText += documentScript.wrapperTitle("отклонил", rejectReason);
                                         logText += " запрос на изменение срока исполнения поручения #mainobject";
                                         businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, []);

@@ -216,32 +216,32 @@
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = bpm_package.children[0];
 if (document) {
-    var limitationDateRadio = document.properties["lecm-errands:limitation-date-radio"];
-    var limitationDateDays = document.properties["lecm-errands:limitation-date-days"];
-    var limitationDateDaysType = document.properties["lecm-errands:limitation-date-type"];
-    var limitationDate = document.properties["lecm-errands:limitation-date"];
-    var dateString = "";
-    if (limitationDateRadio) {
-        if (limitationDateRadio == "DATE" && limitationDate) {
-            var day = utils.pad(newLimitationDate.getDate(), 2);
-            var month = utils.pad(newLimitationDate.getMonth() + 1, 2);
-            var year = utils.pad(newLimitationDate.getFullYear(), 4);
-            dateString = day + "." + month + "." + year;
-        } else if (limitationDateRadio == "DAYS") {
-            if (limitationDateDays && limitationDateDaysType) {
-                if (limitationDateDaysType == "WORK") {
-                    dateString = limitationDateDays + " р.д.";
-                } else if (limitationDateDaysType == "CALENDAR") {
-                    dateString = limitationDateDays + " к.д.";
-                }
-            }
-        } else if (limitationDateRadio == "LIMITLESS") {
-            dateString = "Без срока";
-        }
-    }
+	var limitationDateRadio = document.properties["lecm-errands:limitation-date-radio"];
+	var limitationDateDays = document.properties["lecm-errands:limitation-date-days"];
+	var limitationDateDaysType = document.properties["lecm-errands:limitation-date-type"];
+	var limitationDate = document.properties["lecm-errands:limitation-date"];
+	var dateString = "";
+	if (limitationDateRadio) {
+		if (limitationDateRadio == "DATE" && limitationDate) {
+			var day = utils.pad(newLimitationDate.getDate(), 2);
+			var month = utils.pad(newLimitationDate.getMonth() + 1, 2);
+			var year = utils.pad(newLimitationDate.getFullYear(), 4);
+			dateString = day + "." + month + "." + year;
+		} else if (limitationDateRadio == "DAYS") {
+			if (limitationDateDays && limitationDateDaysType) {
+				if (limitationDateDaysType == "WORK") {
+					dateString = limitationDateDays + " р.д.";
+				} else if (limitationDateDaysType == "CALENDAR") {
+					dateString = limitationDateDays + " к.д.";
+				}
+			}
+		} else if (limitationDateRadio == "LIMITLESS") {
+			dateString = "Без срока";
+		}
+	}
 
-    document.properties["lecm-errands:limitation-date-text"] = dateString;
-    document.save();
+	document.properties["lecm-errands:limitation-date-text"] = dateString;
+	document.save();
 }]]></value>
                                                             </property>
                                                             <property>
@@ -434,8 +434,8 @@ if (document) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -2192,6 +2192,7 @@ if (document) {
           if (limitDays <= shortLimitDays) {
             document.properties["lecm-errands:is-limit-short"] = true;
           }
+          document.properties["lecm-errands:limitation-date-radio"] = "DATE";
 
         }
       }
@@ -2322,7 +2323,7 @@ if (document) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR") AND !user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -2393,8 +2394,8 @@ if (document) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -2494,7 +2495,7 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsCancel]]></value>
+                                                                <value><![CDATA[activiti$errandsCancel_1]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -2503,8 +2504,8 @@ if (document) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -4262,8 +4263,8 @@ if(doc){
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -4363,7 +4364,7 @@ if(doc){
                                                             </property>
                                                             <property>
                                                                 <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsCancel]]></value>
+                                                                <value><![CDATA[activiti$errandsCancel_1]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -4372,8 +4373,8 @@ if(doc){
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -4721,7 +4722,8 @@ if(doc){
                                                         <properties>
                                                             <property>
                                                                 <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsRequestCancel]]></value>
+                                                                <value>
+                                                                    <![CDATA[activiti$errandsRequestCancel_1]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>workflowLabel</name>
@@ -5166,6 +5168,101 @@ if(doc){
                                                                                 <name>condition</name>
                                                                                 <value>
                                                                                     <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.isAutor() OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(),"ERRANDS_CONTROLLER")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
+                                                    <node>
+                                                        <type>UserWorkflowEntity</type>
+                                                        <name>9cc6c3f1-8c3b-458f-8143-0badcff523af</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/fbff1595-36fd-4c18-87a9-4ec0982dc2a6
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>workflowId</name>
+                                                                <value>
+                                                                    <![CDATA[activiti$errandsChangeCoexecutors]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>workflowLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Изменить состав соисполнителей]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <workflowAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>95948f30-dc25-4efd-9fa8-900e667d1f6b
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/a4d429b5-ad6f-4421-b950-692689137cff
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно только исполнителю поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(),"ERRANDS_EXECUTOR")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>5a64f4e3-828d-4366-a795-d5cca45c4b23
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/10e74259-9f62-4d66-8468-3e2882e1a875
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-errands:coexecutors-assoc]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[currentCoexecutorsAssoc]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -6422,8 +6519,8 @@ if (document != null) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -6523,7 +6620,7 @@ if (document != null) {
                                                             </property>
                                                             <property>
                                                                 <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsCancel]]></value>
+                                                                <value><![CDATA[activiti$errandsCancel_1]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -6532,8 +6629,8 @@ if (document != null) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -6754,7 +6851,8 @@ if (document != null) {
                                                         <properties>
                                                             <property>
                                                                 <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsRequestCancel]]></value>
+                                                                <value>
+                                                                    <![CDATA[activiti$errandsRequestCancel_1]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>workflowLabel</name>
@@ -7326,6 +7424,101 @@ if (document != null) {
                                                                                 <name>condition</name>
                                                                                 <value>
                                                                                     <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.isAutor() OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(),"ERRANDS_CONTROLLER")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
+                                                    <node>
+                                                        <type>UserWorkflowEntity</type>
+                                                        <name>c118fc72-8d5e-4694-83ee-3aa55339e66f</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/2e19f21b-7ca0-456a-ab9e-8db67d7a7f2d
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>workflowId</name>
+                                                                <value>
+                                                                    <![CDATA[activiti$errandsChangeCoexecutors]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>workflowLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Изменить состав соисполнителей]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <workflowAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>eebc0fe2-0204-4e29-a38d-3d9a69ab35de
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/2cb302f3-ab11-4de7-9ab2-8f5b958968ee
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Это действие доступно только исполнителю поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>bafe4765-c357-472d-a04f-e7e69c3e13f5
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/dc623ea5-fb40-4c8f-9ab9-5e12607704c9
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-errands:coexecutors-assoc]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[currentCoexecutorsAssoc]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -8384,8 +8577,8 @@ if (document != null) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -8485,7 +8678,7 @@ if (document != null) {
                                                             </property>
                                                             <property>
                                                                 <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsCancel]]></value>
+                                                                <value><![CDATA[activiti$errandsCancel_1]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -8494,8 +8687,8 @@ if (document != null) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -8573,8 +8766,8 @@ if (document != null) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -8682,8 +8875,8 @@ if (document != null) {
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
