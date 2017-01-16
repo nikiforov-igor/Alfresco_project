@@ -2502,6 +2502,10 @@ div#lightbox {
 }
 /* arm menu : end */
 
+.yui-skin-lecmTheme .alf-files-icon {
+    background-image: url("/share/components/images/header/docs_16_light.png");
+}
+
 /* Controls colors : start */
 .yui-skin-lecmTheme .control .container .value-div > input[type=text],
 .yui-skin-lecmTheme .control .container .value-div > div.control-selected-values,

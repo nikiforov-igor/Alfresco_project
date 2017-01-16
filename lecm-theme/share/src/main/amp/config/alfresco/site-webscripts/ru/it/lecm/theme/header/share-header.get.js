@@ -89,7 +89,8 @@ var myWidgets = [
 		config: {
 			id: "MY_FILES_MENU_ITEM",
 			label: msg.get("label.my-files"),
-			targetUrl: "context/mine/myfiles"
+			targetUrl: "context/mine/myfiles",
+			iconClass: "alf-files-icon"
 		}
     },
     {

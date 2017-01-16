@@ -1,7 +1,7 @@
 /* global Alfresco, YAHOO, LogicECM */
 
 (function () {
-	var formId, controlReadyId,
+	var componentReadyFormId, controlReadyId,
 		forms = Alfresco.util.ComponentManager.find({
 			name: 'Alfresco.FormUI'
 		}),
@@ -13,9 +13,9 @@
 		});
 
 	if (resourceForms && resourceForms.length) {
-		formId = resourceForms[0].id;
+		componentReadyFormId = resourceForms[0].id.replace("-form", "");
 	}
-	controlReadyId = LogicECM.module.Base.Util.getComponentReadyElementId(formId, "lecm-events-dic:resources-responsible-assoc");
+	controlReadyId = LogicECM.module.Base.Util.getComponentReadyElementId(componentReadyFormId, "lecm-events-dic:resources-responsible-assoc");
 
 	YAHOO.util.Event.onAvailable(controlReadyId, function () {
 		YAHOO.Bubbling.on("organisationSelected", function (layer, args) {

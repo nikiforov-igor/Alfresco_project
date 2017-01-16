@@ -225,15 +225,6 @@
 		</property>
 	</bean>
 
-	<bean id="businessJournalAuthLoggerScheduleExecutor" class="ru.it.lecm.businessjournal.schedule.BusinessJournalAuthLoggerScheduleExecutor" parent="action-executer">
-		<property name="ignoreLock">
-			<value>false</value>
-		</property>
-		<property name="businessJournalService">
-			<ref bean="businessJournalService"/>
-		</property>
-	</bean>
-
 	<bean id="updateEventCategoryPolicy" class="ru.it.lecm.businessjournal.policies.BusinessJournalEventCategoryUpdatePolicy"
 		  init-method="init">
 		<property name="policyComponent">
