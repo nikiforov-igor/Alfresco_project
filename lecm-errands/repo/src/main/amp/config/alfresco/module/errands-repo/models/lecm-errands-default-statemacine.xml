@@ -1700,15 +1700,15 @@ if (document !== null) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function() {
-var errand = stm_document,
-    isExpired = !!errand.properties['lecm-errands:is-expired'],
-    initiators = errand.assocs['lecm-errands:initiator-assoc'],
+var errand = stm_document;
+if (!!errand.properties['lecm-errands:is-expired']) {
+    var initiators = errand.assocs['lecm-errands:initiator-assoc'],
     executors =  errand.assocs['lecm-errands:executor-assoc'],
-    controllers = errand.assocs['lecm-errands:controller-assoc'],
-    recipients = initiators.concat(executors);
+    controllers = errand.assocs['lecm-errands:controller-assoc'];
 
+    var recipients = initiators.concat(executors);
     if (controllers && controllers.length) {
-        Array.prototype.push.apply(recipients, controllers);
+        recipients = recipients.concat(controllers);
     }
 
     notifications.sendNotification({
@@ -1719,6 +1719,7 @@ var errand = stm_document,
         },
         dontCheckAccessToObject: true
     });
+}
 })();]]></value>
                                                             </property>
                                                             <property>
