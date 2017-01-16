@@ -14,13 +14,9 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.eds.api.EDSGlobalSettingsService;
-import ru.it.lecm.internal.api.InternalService;
-import ru.it.lecm.nd.api.NDModel;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
-import ru.it.lecm.ord.api.ORDModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.outgoing.api.OutgoingModel;
 import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
 import ru.it.lecm.regnumbers.template.TemplateRunException;
@@ -37,6 +33,8 @@ import java.util.*;
  *
  * @author vmalygin/apalm
  */
+
+@Deprecated
 public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract implements ReservationWorkflowService {
 
 	private final static Logger logger = LoggerFactory.getLogger(ReservationWorkflowServiceImpl2.class);
@@ -53,12 +51,17 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 	private static final String ND_DOC_NUMBER = "ND_NUMBER";
 	private static final String ORD_DOC_NUMBER = "ORD_NUMBER";
 	private static final String CONTRACT_DOC_NUMBER = "CONTRACT_REGNUM";
-	
-	private static final String OUTGOING_DOC = OutgoingModel.TYPE_OUTGOING.toString();
-	private static final String INTERNAL_DOC = InternalService.TYPE_INTERNAL.toString();
-	private static final String ND_DOC = NDModel.TYPE_ND.toString();
-	private static final String ORD_DOC = ORDModel.TYPE_ORD.toString();
+
+	private static final String OUTGOING_NAMESPACE_URI = "http://www.it.ru/logicECM/outgoing/1.0";
+	private static final String INTERNAL_NAMESPACE_URI = "http://www.it.ru/logicECM/internal/1.0";
+	private static final String ND_NAMESPACE_URI = "http://www.it.ru/lecm/ND/1.0";
+	private static final String ORD_NAMESPACE_URI = "http://www.it.ru/lecm/ORD/1.0";
 	private static final String CONTRACTS_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/1.0";
+
+	private static final String OUTGOING_DOC = QName.createQName(OUTGOING_NAMESPACE_URI, "document").toString();
+	private static final String INTERNAL_DOC = QName.createQName(INTERNAL_NAMESPACE_URI, "document").toString();
+	private static final String ND_DOC = QName.createQName(ND_NAMESPACE_URI, "document").toString();
+	private static final String ORD_DOC = QName.createQName(ORD_NAMESPACE_URI, "document").toString();
 	private static final String CONTRACT_DOC = QName.createQName(CONTRACTS_NAMESPACE_URI, "document").toString();
 	
 	public void setEdsGlobalSettingsService(EDSGlobalSettingsService edsGlobalSettingsService) {
