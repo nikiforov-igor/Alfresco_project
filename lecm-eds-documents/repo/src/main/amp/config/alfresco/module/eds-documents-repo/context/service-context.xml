@@ -113,5 +113,8 @@
 
     <bean id="edsService" class="ru.it.lecm.eds.EDSDocumentServiceImpl" parent="baseBean"
           depends-on="eds.models.bootstrap">
+        <property name="calendarDayTypeString" value="к.д."/>
+        <property name="workDayTypeString" value="р.д."/>
+        <property name="limitlessString" value="Без срока"/>
     </bean>
 </beans>
