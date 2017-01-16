@@ -218,7 +218,7 @@ if (user.isAdmin) {
 			config: {
 				id: "LOGIC_ECM_ADMIN_MENU_ITEM",
 				label: msg.get("label.administration.menu-group"),
-				targetUrl: "console/admin-console/"
+				targetUrl: "console/admin-console/application"
 			}
 		},
 		constructorsMenu);
