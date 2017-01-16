@@ -15,14 +15,14 @@ function processCancelErrand(cancelChildren, reason) {
         });
     }
     var soExecutors = document.assocs["lecm-errands:coexecutors-assoc"];
-    if (soExecutors != null) {
+    if (soExecutors) {
         soExecutors.forEach(function (coexecutor) {
             recipients.push(coexecutor);
         });
     }
 
     var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
-    if (controllerAssoc != null && controllerAssoc.length == 1) {
+    if (controllerAssoc && controllerAssoc.length == 1) {
         recipients.push(controllerAssoc[0]);
     }
 
