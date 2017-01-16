@@ -111,8 +111,12 @@ public class ErrandsCoexecutorReportAttachmentAssociationPolicy implements NodeS
                     NodeRef reportAttachment = reportAttachmentAssocRef.getTargetRef();
                     if (reportAttachment.equals(attachment)) {
                         attachmentIsUsed = true;
+                        break;
                     }
                 }
+            }
+            if (attachmentIsUsed) {
+                break;
             }
         }
         if (!attachmentIsUsed) {
