@@ -94,7 +94,9 @@ function main() {
             "executor": record.assocs["lecm-errands:executor-assoc"][0].nodeRef.toString(),
             "executor_name": record.properties["lecm-errands:executor-assoc-text-content"],
             "isExpired": record.properties["lecm-errands:is-expired"],
-            "isImportant": record.properties["lecm-errands:is-important"]
+            "isImportant": record.properties["lecm-errands:is-important"],
+            "subject": (record.properties["lecm-document:subject-assoc"] && record.properties["lecm-document:subject-assoc"].length) ?
+                record.properties["lecm-document:subject-assoc"][0].nodeRef.toString() : null
         });
     }
     model.skipCount = skipCount;

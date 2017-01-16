@@ -1,5 +1,6 @@
 package ru.it.lecm.base.scripts;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
 import org.alfresco.repo.jscript.ScriptNode;
@@ -8,6 +9,7 @@ import org.alfresco.repo.node.getchildren.FilterProp;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthorityService;
@@ -21,6 +23,7 @@ import ru.it.lecm.base.ListOfUsedTypesBean;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.LecmObjectsService;
+import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.base.beans.getchildren.FilterPropLECM;
 import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -42,6 +45,7 @@ public class BaseWebScriptBean extends BaseWebScript {
     private OrgstructureBean orgstructureService;
     private AuthorityService authorityService;
     private Properties globalProperties;
+    private RepositoryStructureHelper repositoryStructureHelper;
 
 	final int REQUEST_MAX = 1000;
 
@@ -69,6 +73,10 @@ public class BaseWebScriptBean extends BaseWebScript {
 	
 	public void setAuthorityService(AuthorityService authorityService) {
         this.authorityService = authorityService;
+    }
+
+    public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
+        this.repositoryStructureHelper = repositoryStructureHelper;
     }
 
 	public ScriptPagingNodes getChilds(ScriptNode node, String childQNameType, int maxItems, int skipCount, String sortProp, Boolean sortAsc, Boolean onlyActive) {
@@ -366,5 +374,55 @@ public class BaseWebScriptBean extends BaseWebScript {
 
     public String getGlobalProperty(String key, String defaultValue) {
         return this.globalProperties.getProperty(key, defaultValue);
+    }
+    /**
+     * Получение ноды по её ID
+     *
+     * @param nodeId - ID
+     * @return ScriptNode
+     */
+    public ScriptNode getNode(Long nodeId) {
+        NodeRef nodeRef = nodeService.getNodeRef(nodeId);
+        return nodeRef != null ? new ScriptNode(nodeRef, serviceRegistry, getScope()) : null;
+    }
+
+    /**
+     * Перемещение документа в глубь структуры текущей папки
+     *
+     * @param document - что переместить
+     * @param path - куда переместить
+     */
+    public void moveNode(final ScriptNode document, final String path) {
+        moveNode(document, new ScriptNode(repositoryStructureHelper.getCompanyHomeRef(), serviceRegistry), path);
+    }
+
+    /**
+     * Перемещение документа в глубь структуры текущей папки
+     *
+     * @param document - что переместить
+     * @param target - куда переместить (родительская директория)
+     * @param path - куда переместить
+     */
+    public void moveNode(final ScriptNode document, final ScriptNode target, final String path) {
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+            @Override
+            public Object doWork() throws Exception {
+                StringTokenizer tokenizer = new StringTokenizer(path, "/");
+                NodeRef nodeRef = target.getNodeRef();
+                while (tokenizer.hasMoreTokens()) {
+                    String folder = tokenizer.nextToken();
+                    if (!"".equals(folder)) {
+                        NodeRef currentFolder = repositoryStructureHelper.getFolder(nodeRef, folder);
+                        if (currentFolder == null) {
+                            currentFolder = repositoryStructureHelper.createFolder(nodeRef, folder);
+                        }
+                        nodeRef = currentFolder;
+                    }
+                }
+                ChildAssociationRef parent = nodeService.getPrimaryParent(document.getNodeRef());
+                nodeService.moveNode(document.getNodeRef(), nodeRef, ContentModel.ASSOC_CONTAINS, parent.getQName());
+                return null;
+            }
+        });
     }
 }

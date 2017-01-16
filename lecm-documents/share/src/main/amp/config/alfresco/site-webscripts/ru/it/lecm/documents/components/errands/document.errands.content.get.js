@@ -1,5 +1,6 @@
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/document-utils.js">
 
 function main() {
     AlfrescoUtil.param("nodeRef");
@@ -8,6 +9,12 @@ function main() {
     var data = getErrands(model.nodeRef);
     if (data != null) {
         model.data = data;
+    }
+    var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
+    if (nodeDetails) {
+        if (nodeDetails.item.node.properties.hasOwnProperty("lecm-document:subject-assoc-ref")) {
+            model.subjectAssoc = nodeDetails.item.node.properties["lecm-document:subject-assoc-ref"];
+        }
     }
 }
 

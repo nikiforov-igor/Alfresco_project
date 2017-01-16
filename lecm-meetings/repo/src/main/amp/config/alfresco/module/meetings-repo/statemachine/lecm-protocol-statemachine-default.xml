@@ -5396,44 +5396,6 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
-                                                        <name>9c617353-b98b-476e-8ae6-a57f924d60e1</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/3186394b-1e0d-4d4a-be1b-0c7a2af288d6
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[(function(){
-    var protocol = stm_document;
-  if (orgstructure.isCurrentEmployeeHasBusinessRole("ERRANDS_INITIATOR")) {
-      var auto = protocol.properties["lecm-protocol:errands-autocreation"];
-      if (auto) {
-          var tableAssocs = protocol.assocs["lecm-protocol-ts:points-assoc"];
-          if (tableAssocs!==null && tableAssocs.length > 0){
-              var table = tableAssocs[0];
-              var  pointAssocs = table.childAssocs["cm:contains"];
-              if (pointAssocs!==null && pointAssocs.length > 0 ){
-                  /* формируем поручения */
-                  protocolService.formErrands(protocol);
-              }
-          }
-
-      }
-  }
-})();]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value><![CDATA[Сформировать поручения]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -6240,6 +6202,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
         auto = !!protocol.properties['lecm-protocol:errands-autocreation'],
         tableAssocs = protocol.assocs['lecm-protocol-ts:points-assoc'],
         msg = 'Просрочено исполнение пункта #mainobject протокола #object1',
+        autoCreateErrand = (orgstructure.isCurrentEmployeeHasBusinessRole("ERRANDS_INITIATOR") && auto),
         tableData, protocolPoints, i, point, isExpired, pointExecutors;
 
     if (tableAssocs && tableAssocs.length) {
@@ -6268,13 +6231,18 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                 }
             }
         }
+
+		/* формируем поручения */
+        if (autoCreateErrand && protocolPoints && protocolPoints.length) {
+          protocolService.formErrands(protocol);
+        }
     }
 })();]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Уведомить исполнителей пунктов]]></value>
+                                                                    <![CDATA[Уведомить исполнителей пунктов, создать поручения по пунктам]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>

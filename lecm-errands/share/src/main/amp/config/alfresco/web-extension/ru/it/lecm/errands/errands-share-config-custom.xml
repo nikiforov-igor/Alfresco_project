@@ -2076,6 +2076,29 @@
             </form>
         </forms>
     </config>
+
+    <config evaluator="string-compare" condition="activiti$errandsChangeCoexecutors">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmErrandWf:changeCoexecutorsNewCoexecutors"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:changeCoexecutorsNewCoexecutors">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+                            <control-param name="selectedItemsFormArgs">currentCoexecutorsAssoc</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
     <config evaluator="string-compare" condition="activiti$errandsChangeController">
         <forms>
             <form>
@@ -2749,6 +2772,7 @@
             <workflow name="activiti$errandsCancel_1"/>
             <workflow name="activiti$errandsChangeExecutor"/>
             <workflow name="activiti$errandsChangeExecutor_1"/>
+            <workflow name="activiti$errandsChangeCoexecutors"/>
             <workflow name="activiti$errandsChangeController"/>
             <workflow name="activiti$errandsCreateChildErrand"/>
             <workflow name="activiti$errandsRemoveDraft"/>

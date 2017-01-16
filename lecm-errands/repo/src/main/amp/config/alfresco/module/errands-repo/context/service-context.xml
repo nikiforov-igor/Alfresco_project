@@ -233,10 +233,19 @@
         <property name="orgstructureService" ref="serviceOrgstructure"/>
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
     </bean>
-    <bean id="errandsLimitationDatePolicy" class="ru.it.lecm.errands.policy.ErrandsLimitationDatePolicy"
+
+    <bean id="errandsLimitationDatePolicy" class="ru.it.lecm.eds.policy.ComplexDatePolicy"
           init-method="init" depends-on="errands.LogicEcmModelsBootstrap">
         <property name="policyComponent" ref="policyComponent"/>
         <property name="nodeService" ref="nodeService"/>
+        <property name="edsDocumentService" ref="edsService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="type" value="lecm-errands:document"/>
+        <property name="propDateRadio" value="lecm-errands:limitation-date-radio"/>
+        <property name="propDate" value="lecm-errands:limitation-date"/>
+        <property name="propDateDaysCount" value="lecm-errands:limitation-date-days"/>
+        <property name="propDateDaysType" value="lecm-errands:limitation-date-type"/>
+        <property name="propDateText" value="lecm-errands:limitation-date-text"/>
     </bean>
 
     <bean id="errands.defaultStatemachine" parent="defaultStatemachines">
@@ -373,6 +382,12 @@
                 <props>
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-request-due-date-change1.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-change-coexecutors.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
                     <prop key="redeploy">${redeploy.process.definitions}</prop>
                 </props>

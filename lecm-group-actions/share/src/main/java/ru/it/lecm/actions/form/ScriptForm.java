@@ -59,7 +59,7 @@ public class ScriptForm extends LecmFormGet {
         HashMap<String, Object> form = new HashMap<String, Object>();
         model.put(MODEL_FORM, form);
 
-        ArrayList<Object> constraints = new ArrayList<Object>();
+        ArrayList<Constraint> constraints = new ArrayList<Constraint>();
         form.put(MODEL_CONSTRAINTS, constraints);
 
         ArrayList<Set> sets = new ArrayList<Set>();
@@ -106,18 +106,7 @@ public class ScriptForm extends LecmFormGet {
                 fields.put(descriptor.getId(), field);
                 FieldPointer fieldPointer = new FieldPointer(field.getId());
                 set.addChild(fieldPointer);
-                if (field.isMandatory()) {
-                    Constraint constraint;
-                    try {
-                        constraint = generateConstraintModel(field, CONSTRAINT_MANDATORY);
-                        if (constraint != null) {
-                            constraints.add(constraint);
-                        }
-                    } catch (JSONException e) {
-                        logger.error(e.getMessage(), e);
-                    }
-                }
-
+                updateConstraints(constraints, field);
             }
         }
 
@@ -226,23 +215,11 @@ public class ScriptForm extends LecmFormGet {
             boolean isPropertyField = isNotAssoc(alfrescoType);
             if (isPropertyField) {
                 field.setType(PROPERTY);
-
-                defaultControlConfig = defaultControls.getItems().get(alfrescoType);
-                if (defaultControlConfig == null) { // попытка получить дефолтный контрол по старой альфресовской схеме
-                    defaultControlConfig = defaultControls.getItems().get(alfrescoType.replace(OLD_DATA_TYPE_PREFIX, ""));
-                    if (defaultControlConfig == null) {
-                        defaultControlConfig = defaultControls.getItems().get(DEFAULT_FIELD_TYPE);
-                    }
-                }
             } else {
                 field.setType(ASSOCIATION);
                 field.setEndpointDirection("TARGET");
-
-                defaultControlConfig = defaultControls.getItems().get(ASSOCIATION + ":" + alfrescoType);
-                if (defaultControlConfig == null) {
-                    defaultControlConfig = defaultControls.getItems().get(ASSOCIATION);
-                }
             }
+            defaultControlConfig = getDefaultControlFromConfig(defaultControls, alfrescoType);
 
             if (defaultControlConfig != null) {
                 control = new FieldControl(defaultControlConfig.getTemplate());
@@ -262,64 +239,6 @@ public class ScriptForm extends LecmFormGet {
         }
     }
 
-    protected Constraint generateConstraintModel(Field field, String constraintId) throws JSONException {
-        Constraint constraint = null;
-
-        // retrieve the default constraints configuration
-        ConstraintHandlersConfigElement defaultConstraintHandlers = null;
-        FormsConfigElement formsGlobalConfig =
-                (FormsConfigElement) this.configService.getGlobalConfig().getConfigElement(CONFIG_FORMS);
-        if (formsGlobalConfig != null) {
-            defaultConstraintHandlers = formsGlobalConfig.getConstraintHandlers();
-        }
-
-        if (defaultConstraintHandlers == null) {
-            throw new WebScriptException("Failed to locate default constraint handlers configurarion");
-        }
-
-        // get the default handler for the constraint
-        ConstraintHandlerDefinition defaultConstraintConfig =
-                defaultConstraintHandlers.getItems().get(constraintId);
-
-        if (defaultConstraintConfig != null) {
-            // generate and process the constraint model
-            constraint = generateConstraintModel(field, constraintId, new JSONObject(), defaultConstraintConfig);
-        }
-
-        return constraint;
-    }
-
-    private Constraint generateConstraintModel(Field field, String constraintId, JSONObject constraintParams, ConstraintHandlerDefinition defaultConstraintConfig) {
-        // get the validation handler from the config
-        String validationHandler = defaultConstraintConfig.getValidationHandler();
-
-        Constraint constraint = new Constraint(field.getId(), constraintId, validationHandler, constraintParams);
-
-        if (defaultConstraintConfig.getEvent() != null) {
-            constraint.setEvent(defaultConstraintConfig.getEvent());
-        } else {
-            constraint.setEvent(DEFAULT_CONSTRAINT_EVENT);
-        }
-
-        // look for an overridden message in the field's constraint config,
-        // if none found look in the default constraint config
-        String constraintMsg = null;
-        if (defaultConstraintConfig.getMessageId() != null) {
-            constraintMsg = retrieveMessage(defaultConstraintConfig.getMessageId());
-        } else if (defaultConstraintConfig.getMessage() != null) {
-            constraintMsg = defaultConstraintConfig.getMessage();
-        }
-        if (constraintMsg == null) {
-            constraintMsg = retrieveMessage(validationHandler + ".message");
-        }
-
-        // add the message if there is one
-        if (constraintMsg != null) {
-            constraint.setMessage(constraintMsg);
-        }
-
-        return constraint;
-    }
 
     @Override
     protected boolean isNotAssoc(String typeKey) {

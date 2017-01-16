@@ -3,12 +3,17 @@ package ru.it.lecm.eds.api;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
+import java.util.Date;
+
 /**
  * User: dbayandin
  * Date: 31.01.14
  * Time: 12:48
  */
 public interface EDSDocumentService {
+    String EXECUTION_DATE_RADIO_DAYS = "DAYS";
+    String EXECUTION_DATE_RADIO_DATE = "DATE";
+    String EXECUTION_DATE_RADIO_LIMITLESS = "LIMITLESS";
 
     String EDS_NAMESPACE_URI = "http://www.it.ru/logicECM/eds-document/1.0";
 	String EDS_ASPECTS_NAMESPACE_URI = "http://www.it.ru/logicECM/eds-document/aspects/1.0";
@@ -37,4 +42,14 @@ public interface EDSDocumentService {
      * @param baseDoc Документ, у которого сбрасывается сигнал
      */
     void resetChildChangeSignal(NodeRef baseDoc);
+
+    /**
+     * Формирование настроек срока в текстовом виде
+     * @param radio значение переключателя
+     * @param date дата
+     * @param daysCount количество дней
+     * @param daysType тип дней
+     * @return настройки срока в текстовом виде
+     */
+    String getComplexDateText(String radio, Date date, String daysType, Integer daysCount);
 }

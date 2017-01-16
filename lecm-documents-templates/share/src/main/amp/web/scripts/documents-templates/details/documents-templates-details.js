@@ -106,7 +106,10 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 						// doBeforeFOrmSubmit; doBeforeAjaxRequest;
 						this.widgets.formsRuntime = obj.component.formsRuntime;
 						this.widgets.formsRuntime.ajaxSubmitHandlers.successCallback.fn = onSuccessFormSubmit;
-						this.widgets.formsRuntime.doBeforeAjaxRequest.fn = doBeforeAjaxRequest;
+						this.widgets.formsRuntime.doBeforeAjaxRequest = {
+							fn: doBeforeAjaxRequest,
+							scope: this
+						};
 						this.widgets.formsRuntime.applyTabFix();
 					} else {
 						console.warn('formsRuntime already exists for LogicECM.module.DocumentsTemplates.DetailsView[' + this.id + '] mode ' + obj.component.options.mode);
