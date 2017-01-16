@@ -36,17 +36,17 @@ for (var i = 0; i < arms.length; i++) {
 }
 
 /*Alfresco*/
-var standartWidgets = [];
-
-standartWidgets.push({
-	id: "PEOPLE_MENU_ITEM",
-	name: "alfresco/menus/AlfMenuItem",
-	config: {
+var standartWidgets = [
+	{
 		id: "PEOPLE_MENU_ITEM",
-		label: msg.get("label.people"),
-		targetUrl: "people-finder"
+		name: "alfresco/menus/AlfMenuItem",
+		config: {
+			id: "PEOPLE_MENU_ITEM",
+			label: msg.get("label.people"),
+			targetUrl: "people-finder"
+		}
 	}
-});
+];
 
 if (user.isAdmin || showRepositoryLink == "true") {
 	standartWidgets.push({
