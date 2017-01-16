@@ -7,7 +7,7 @@
                 <property name="lecm-busjournal:objectType-code">LECM_ERRAND</property>
                 <property name="lecm-busjournal:objectType-class">lecm-errands:document</property>
                 <property name="lecm-busjournal:objectType-template">{lecm-document:present-string}</property>
-                <property name="lecm-busjournal:objectType-list-template">инициатор : {lecm-errands:initiator-assoc/lecm-orgstr:employee-short-name}</property>
+                <property name="lecm-busjournal:objectType-list-template">Статус: {lecm-statemachine:status}</property>
             </item>
             <item name="cm:Отчет соисполнителя" type="lecm-busjournal:objectType">
                 <property name="cm:name">Отчет соисполнителя</property>

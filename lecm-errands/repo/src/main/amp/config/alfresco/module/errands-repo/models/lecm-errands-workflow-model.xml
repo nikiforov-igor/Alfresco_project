@@ -330,6 +330,56 @@
 			</associations>
 		</type>
 
+		<type name="lecmErrandWf:requestCancelTask_1">
+			<parent>bpm:activitiOutcomeTask</parent>
+			<properties>
+				<property name="lecmErrandWf:requestCancelTask_1Result">
+					<type>d:text</type>
+					<default>CANCEL_ERRAND</default>
+					<constraints>
+						<constraint name="lecmErrandWf:requestCancelTask_1ResultConstraint" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>CANCEL_ERRAND</value> <!-- отменить поручение -->
+									<value>REJECTED</value> <!-- отклонен -->
+									<value>CHANGE_EXECUTOR</value> <!-- изменить исполнителя -->
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+				<property name="lecmErrandWf:requestCancelTask_1Reason">
+					<type>d:text</type>
+				</property>
+				<property name="lecmErrandWf:requestCancelTask_1CancelReason">
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="lecmErrandWf:cancelReasonLength"/>
+					</constraints>
+				</property>
+				<property name="lecmErrandWf:requestCancelTask_1CancelChildren">
+					<type>d:boolean</type>
+					<default>true</default>
+				</property>
+				<property name="lecmErrandWf:requestCancelTask_1RejectReason">
+					<type>d:text</type>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecmErrandWf:requestCancelTask_1NewExecutor">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+
 		<type name="lecmErrandWf:initiatorDecline">
 			<parent>bpm:startTask</parent>
 			<properties>
@@ -375,11 +425,23 @@
 			<properties>
 				<property name="lecmErrandWf:cancelReason">
 					<type>d:text</type>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="lecmErrandWf:cancel_1">
+			<parent>bpm:startTask</parent>
+			<properties>
+				<property name="lecmErrandWf:cancel_1CancelReason">
+					<type>d:text</type>
 					<constraints>
 						<constraint ref="lecmErrandWf:cancelReasonLength"/>
 					</constraints>
 				</property>
-				<property name="lecmErrandWf:cancelChildren">
+				<property name="lecmErrandWf:cancel_1CancelChildren">
 					<type>d:boolean</type>
 					<default>true</default>
 				</property>
