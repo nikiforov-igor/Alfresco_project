@@ -727,11 +727,6 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                         props.put(ErrandsService.PROP_ERRANDS_START_DATE, (Serializable) value);
                                     }
 
-                                    value = properties.get("lecmErrandWf_justInTime");
-                                    if (value != null) {
-                                        props.put(ErrandsService.PROP_ERRANDS_JUST_IN_TIME, (Serializable) value);
-                                    }
-
                                     String name = GUID.generate();
 
                                     NodeRef draft = repositoryStructureHelper.getDraftsRef(user);

@@ -59,8 +59,6 @@
                     <show id="lecm-document:subject-assoc"/>
                     <!-- Без утверждения инициатором -->
                     <show id="lecm-errands:without-initiator-approval"/>
-                    <!-- Исполнить точно в срок  -->
-                    <show id="lecm-errands:just-in-time"/>
                     <!-- Разделительная линия -->
                     <show id="lecm-errands:line"/>
                     <!-- Дата исполнения -->
@@ -132,7 +130,6 @@
                     <field id="lecm-document:creator" set="common"/>
                     <field id="lecm-document:subject-assoc" set="common"/>
                     <field id="lecm-errands:without-initiator-approval" set="common"/>
-                    <field id="lecm-errands:just-in-time" set="common"/>
                     <field id="lecm-errands:line" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/line.ftl"/>
                     </field>
@@ -265,8 +262,6 @@
                     <show id="reiteration-count-label" force="true"/>
                     <show id="lecm-errand-period-endless" force="true"/>
 
-                    <!-- Исполнить точно в срок  -->
-                    <show id="lecm-errands:just-in-time"/>
                     <!-- Контролер-->
                     <show id="lecm-errands:controller-assoc"/>
                     <!-- Требуется отчет -->
@@ -418,9 +413,6 @@
                         </control>
                     </field>
 
-                    <field id="lecm-errands:just-in-time" set="block2-2">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
-                    </field>
                     <field id="lecm-errands:controller-assoc" set="block2-2">
                         <control>
                             <control-param name="showSearch">true</control-param>
@@ -518,8 +510,6 @@
                     <show id="lecm-errands:initiator-assoc"/>
                     <!-- Срок исполнения -->
                     <show id="lecm-errands:limitation-date"/>
-                    <!-- Исполнить точно в срок  -->
-                    <show id="lecm-errands:just-in-time"/>
                     <!-- Контролер-->
                     <show id="lecm-errands:controller-assoc"/>
                     <!-- Требуется отчет -->
@@ -582,9 +572,6 @@
                                         validation-handler="LogicECM.module.Errands.limitationDateValidation"
                                         event="change"/>
                         </constraint-handlers>
-                    </field>
-                    <field id="lecm-errands:just-in-time">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
                     <field id="lecm-errands:controller-assoc">
                         <control>
@@ -726,8 +713,6 @@
                     <show id="lecm-errand-period-endless" force="true"/>
                     <!-- Закрывать вышестоящее поручение -->
                     <show id="lecm-errands:auto-close"/>
-                    <!-- Исполнить точно в срок  -->
-                    <show id="lecm-errands:just-in-time"/>
                     <!-- Контролер-->
                     <show id="lecm-errands:controller-assoc"/>
                     <!-- Требуется отчет -->
@@ -885,9 +870,6 @@
                         </control>
                     </field>
                     <field id="lecm-errands:auto-close" set="block2-2">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
-                    </field>
-                    <field id="lecm-errands:just-in-time" set="block2-2">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
                     <field id="lecm-errands:controller-assoc" set="block2-2">
@@ -1270,8 +1252,6 @@
                     <show id="lecm-errands-ts:coexecutor-reports-assoc"/>
                     <!-- Без утверждения инициатором -->
                     <show id="lecm-errands:without-initiator-approval"/>
-                    <!-- Исполнить точно в срок  -->
-                    <show id="lecm-errands:just-in-time"/>
                 </field-visibility>
             </form>
             <form id="searchQueryGrid">
@@ -1313,8 +1293,6 @@
                     <show id="lecm-document:subject-assoc"/>
                     <!-- Без утверждения инициатором -->
                     <show id="lecm-errands:without-initiator-approval"/>
-                    <!-- Исполнить точно в срок  -->
-                    <show id="lecm-errands:just-in-time"/>
                     <!-- Дата исполнения -->
                     <show id="lecm-errands:execution-date"/>
                     <show id="lecm-document:author-assoc"/>
@@ -2453,7 +2431,6 @@
                     <show id="lecmErrandWf:coexecutorsAssoc"/>   <!-- lecm-errands:coexecutors-assoc -->
                     <show id="lecmErrandWf:withoutInitiatorApproval"/>   <!-- lecm-errands:without-initiator-approval -->
                     <show id="lecmErrandWf:startDate"/>   <!-- lecm-errands:start-date -->
-                    <show id="lecmErrandWf:justInTime"/>   <!-- lecm-errands:just-in-time -->
 
                     <show id="packageItems"/>
                 </field-visibility>
@@ -2503,10 +2480,6 @@
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
                     </field>
-                    <field id="lecmErrandWf:justInTime">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
-                    </field>
-
                     <field id="packageItems">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
                     </field>

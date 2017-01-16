@@ -1,6 +1,5 @@
 package ru.it.lecm.errands.policy;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
@@ -11,13 +10,11 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
-import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 
 /**
  * Created by APanyukov on 09.12.2016.
@@ -92,13 +89,7 @@ public class ErrandsCoexecutorReportAttachmentAssociationPolicy implements NodeS
         NodeRef attachment = associationRef.getTargetRef();
         NodeRef report = associationRef.getSourceRef();
         NodeRef errandDoc = documentTableService.getDocumentByTableDataRow(report);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss.SSS");
-        String dateString = dateFormat.format(new Date());
-        NodeRef currentUser = orgstructureService.getCurrentEmployee();
-        String attachmentName = "Отчет соисполнителя " + nodeService.getProperty(currentUser, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME) + ", от " + dateString;
-        nodeService.setProperty(attachment, ContentModel.PROP_NAME, attachmentName);
-        NodeRef category = documentAttachmentsService.getCategory("Отчеты соисполнителей", errandDoc);
+        NodeRef category = documentAttachmentsService.getCategory("Исполнение", errandDoc);
         if (category != null) {
             documentAttachmentsService.addAttachment(attachment, category);
         }
@@ -107,6 +98,25 @@ public class ErrandsCoexecutorReportAttachmentAssociationPolicy implements NodeS
     @Override
     public void onDeleteAssociation(AssociationRef associationRef) {
         NodeRef attachment = associationRef.getTargetRef();
-        documentAttachmentsService.deleteAttachment(attachment);
+        NodeRef reportNodeRef = associationRef.getSourceRef();
+
+        //проверяем использование вложения в других отчетах
+        NodeRef tableData = nodeService.getParentAssocs(reportNodeRef).get(0).getParentRef();
+        List<NodeRef> allReports = documentTableService.getTableDataRows(tableData);
+        boolean attachmentIsUsed = false;
+        for (NodeRef report : allReports) {
+            if (!report.equals(reportNodeRef)) {
+                List<AssociationRef> reportAttachmentAssoc = nodeService.getTargetAssocs(report, ErrandsService.ASSOC_ERRANDS_TS_CONNECTED_DOCUMENT);
+                for (AssociationRef reportAttachmentAssocRef : reportAttachmentAssoc) {
+                    NodeRef reportAttachment = reportAttachmentAssocRef.getTargetRef();
+                    if (reportAttachment.equals(attachment)) {
+                        attachmentIsUsed = true;
+                    }
+                }
+            }
+        }
+        if (!attachmentIsUsed) {
+            documentAttachmentsService.deleteAttachment(attachment);
+        }
     }
 }
