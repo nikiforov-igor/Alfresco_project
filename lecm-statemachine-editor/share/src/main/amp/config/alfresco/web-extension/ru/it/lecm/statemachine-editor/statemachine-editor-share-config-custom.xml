@@ -836,7 +836,6 @@
 					<show id="lecm-stmeditor:transitionExpression" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
                     <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
-					<show id="lecm-stmeditor:do-not-ask-for-confirmation" force="true"/>
                     <show id="lecm-stmeditor:transitionDocumentChangeScript" force="true"/>
 				</field-visibility>
 				<appearance>
@@ -873,7 +872,6 @@
                     <show id="lecm-stmeditor:transitionExpression" force="true"/>
                     <show id="lecm-stmeditor:transitionStatus" force="true"/>
                     <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
-					<show id="lecm-stmeditor:do-not-ask-for-confirmation" force="true"/>
                     <show id="lecm-stmeditor:transitionDocumentChangeScript" force="true"/>
                 </field-visibility>
                 <appearance>
