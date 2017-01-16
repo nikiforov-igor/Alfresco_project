@@ -121,22 +121,7 @@ public class ControlForm extends LecmFormGet {
         if (template != null && template.length() > 0) {
             control = new FieldControl(template);
         } else if (alfrescoType != null && alfrescoType.length() > 0) {
-            Control defaultControlConfig;
-            boolean isPropertyField = isNotAssoc(alfrescoType);
-            if (isPropertyField) {
-                defaultControlConfig = defaultControls.getItems().get(alfrescoType);
-                if (defaultControlConfig == null) { // попытка получить дефолтный контрол по старой альфресовской схеме
-                    defaultControlConfig = defaultControls.getItems().get(alfrescoType.replace(OLD_DATA_TYPE_PREFIX, ""));
-                    if (defaultControlConfig == null) {
-                        defaultControlConfig = defaultControls.getItems().get(DEFAULT_FIELD_TYPE);
-                    }
-                }
-            } else {
-                defaultControlConfig = defaultControls.getItems().get(ASSOCIATION + ":" + alfrescoType);
-                if (defaultControlConfig == null) {
-                    defaultControlConfig = defaultControls.getItems().get(ASSOCIATION);
-                }
-            }
+            Control defaultControlConfig = getDefaultControlFromConfig(defaultControls, alfrescoType);
             if (defaultControlConfig != null) {
                 control = new FieldControl(defaultControlConfig.getTemplate());
                 List<ControlParam> paramsConfig = defaultControlConfig.getParamsAsList();
