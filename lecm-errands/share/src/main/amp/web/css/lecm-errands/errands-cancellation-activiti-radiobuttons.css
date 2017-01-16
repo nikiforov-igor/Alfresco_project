@@ -1,0 +1,9 @@
+.cancellation-activiti-radiobuttons .fields-by-radiobutton .checkbox-control .label-div {
+    display: none;
+}
+
+.cancellation-activiti-radiobuttons .fields-by-radiobutton .control .label-div {
+    width: 100%;
+    padding-left: 18px;
+    text-align: left;
+}

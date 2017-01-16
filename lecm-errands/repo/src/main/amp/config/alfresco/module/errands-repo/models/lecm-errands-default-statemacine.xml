@@ -2192,6 +2192,7 @@ if (document) {
           if (limitDays <= shortLimitDays) {
             document.properties["lecm-errands:is-limit-short"] = true;
           }
+          document.properties["lecm-errands:limitation-date-radio"] = "DATE";
 
         }
       }
@@ -2494,7 +2495,7 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsCancel]]></value>
+                                                                <value><![CDATA[activiti$errandsCancel_1]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -4363,7 +4364,7 @@ if(doc){
                                                             </property>
                                                             <property>
                                                                 <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsCancel]]></value>
+                                                                <value><![CDATA[activiti$errandsCancel_1]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -4721,7 +4722,8 @@ if(doc){
                                                         <properties>
                                                             <property>
                                                                 <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsRequestCancel]]></value>
+                                                                <value>
+                                                                    <![CDATA[activiti$errandsRequestCancel_1]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>workflowLabel</name>
@@ -6618,7 +6620,7 @@ if (document != null) {
                                                             </property>
                                                             <property>
                                                                 <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsCancel]]></value>
+                                                                <value><![CDATA[activiti$errandsCancel_1]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -6849,7 +6851,8 @@ if (document != null) {
                                                         <properties>
                                                             <property>
                                                                 <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsRequestCancel]]></value>
+                                                                <value>
+                                                                    <![CDATA[activiti$errandsRequestCancel_1]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>workflowLabel</name>
@@ -8675,7 +8678,7 @@ if (document != null) {
                                                             </property>
                                                             <property>
                                                                 <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsCancel]]></value>
+                                                                <value><![CDATA[activiti$errandsCancel_1]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>

@@ -2166,6 +2166,39 @@
         </forms>
     </config>
 
+    <config evaluator="string-compare" condition="activiti$errandsRequestCancel_1">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="bpm:workflowDescription"/>
+                    <show id="packageItems"/>
+                    <show id="lecmErrandWf:requestCancelReason"/>
+                </field-visibility>
+                <appearance>
+                    <field id="bpm:workflowDescription">
+                        <control template="/ru/it/lecm/documents/controls/workflow/document-present-string-hidden.ftl">
+                            <control-param name="leftPartTextCode">ru.it.errand.requestCancel.workflowDescription.message</control-param>
+                        </control>
+                    </field>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:requestCancelReason">
+                        <control  template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отмены_x0020_поручений</control-param>
+                            <control-param name="itemType">lecm-errands-dic:errand-cancel-reason</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
 	<config evaluator="task-type" condition="lecmErrandWf:requestCancelTask">
 		<forms>
 			<form>
@@ -2207,6 +2240,79 @@
 			</form>
 		</forms>
 	</config>
+
+    <config evaluator="task-type" condition="lecmErrandWf:requestCancelTask_1">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmErrandWf:requestCancelTask_1Reason"/>
+                    <show id="lecmErrandWf:requestCancelTask_1Result"/>
+                    <show id="lecmErrandWf:requestCancelTask_1CancelReason"/>
+                    <show id="lecmErrandWf:requestCancelTask_1CancelChildren"/>
+                    <show id="lecmErrandWf:requestCancelTask_1RejectReason"/>
+                    <show id="lecmErrandWf:requestCancelTask_1NewExecutor"/>
+                    <show id="requestCancelTaskFormScript" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:requestCancelTask_1Reason" read-only="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">3</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:requestCancelTask_1Result" mandatory="true" label-id="label.errands.request.cancel.result.radiobuttons">
+                        <control template="/ru/it/lecm/errands/controls/errands-cancellation-activiti-radiobuttons-control.ftl">
+                            <control-param name="selectedValue">CANCEL_ERRAND</control-param>
+                            <control-param name="changeValueFireAction">errandsRequestCancelResultChanged</control-param>
+                            <control-param name="fieldsByOption">lecmErrandWf:requestCancelTask_1CancelReason|lecmErrandWf:requestCancelTask_1CancelChildren#alf#lecmErrandWf:requestCancelTask_1RejectReason#alf#lecmErrandWf:requestCancelTask_1NewExecutor</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:requestCancelTask_1CancelReason" >
+                        <control  template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отмены_x0020_поручений</control-param>
+                            <control-param name="itemType">lecm-errands-dic:errand-cancel-reason</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:requestCancelTask_1CancelChildren">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:requestCancelTask_1RejectReason">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">3</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:requestCancelTask_1NewExecutor">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestCancelTaskNewExecutorValidation" message-id="validation-hint.mandatory" event="change"/>
+                        </constraint-handlers>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+                            <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="employeeAbsenceMarker">true</control-param>
+                            <control-param name="useStrictFilterByOrg">true</control-param>
+                            <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+                        </control>
+                    </field>
+                    <field id="requestCancelTaskFormScript">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-cancel-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">requestCancelTaskFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 
     <config evaluator="string-compare" condition="activiti$errandsInitiatorDecline">
         <forms>
@@ -2295,22 +2401,56 @@
     <config evaluator="string-compare" condition="activiti$errandsCancel">
         <forms>
             <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmErrandWf:cancelReason"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:cancelReason">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">7</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$errandsCancel_1">
+        <forms>
+            <form>
 	            <field-visibility>
 		            <show id="packageItems"/>
-		            <show id="lecmErrandWf:cancelReason"/>
-                    <show id="lecmErrandWf:cancelChildren"/>
+		            <show id="lecmErrandWf:cancel_1CancelReason"/>
+                    <show id="lecmErrandWf:cancel_1CancelChildren"/>
+                    <show id="errandCancelFormScript" force="true"/>
 	            </field-visibility>
 	            <appearance>
 		            <field id="packageItems">
 			            <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
 		            </field>
-		            <field id="lecmErrandWf:cancelReason">
-			            <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-				            <control-param name="rows">7</control-param>
-			            </control>
-		            </field>
-                    <field id="lecmErrandWf:cancelChildren">
+                    <field id="lecmErrandWf:cancel_1CancelReason">
+                        <control  template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отмены_x0020_поручений</control-param>
+                            <control-param name="itemType">lecm-errands-dic:errand-cancel-reason</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:cancel_1CancelChildren">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    </field>
+                    <field id="errandCancelFormScript">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-cancel-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">errandCancelFormScriptLoaded</control-param>
+                        </control>
                     </field>
 	            </appearance>
             </form>
@@ -2620,6 +2760,7 @@
             <workflow name="activiti$errandsRequestDueDateChange"/>
             <workflow name="activiti$errandsRequestDueDateChange_1"/>
             <workflow name="activiti$errandsRequestCancel"/>
+            <workflow name="activiti$errandsRequestCancel_1"/>
             <workflow name="activiti$errandsChangeDueDate"/>
             <workflow name="activiti$errandsInitiatorApprove"/>
             <workflow name="activiti$errandsInitiatorDecline"/>
@@ -2628,6 +2769,7 @@
             <workflow name="activiti$errandsControllerDecline"/>
             <workflow name="activiti$errandsControllerApprove"/>
             <workflow name="activiti$errandsCancel"/>
+            <workflow name="activiti$errandsCancel_1"/>
             <workflow name="activiti$errandsChangeExecutor"/>
             <workflow name="activiti$errandsChangeExecutor_1"/>
             <workflow name="activiti$errandsChangeCoexecutors"/>

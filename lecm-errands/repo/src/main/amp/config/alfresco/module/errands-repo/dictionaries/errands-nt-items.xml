@@ -123,7 +123,7 @@
             <item name="cm:ERRANDS_CANCEL" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CANCEL]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Поручение {#mainObject.wrapAsLink(#mainObject.attribute("lecm-errands:title"))} назначенное вам сотрудником {#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("отменено", #comment)}. Внимание: На основании этого поручения Вами было создано {#formatLink(#link_url, #link_title.intValue())} дочерних поручений.]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("отменил", #comment)} поручение {#mainObject.wrapAsLink(#mainObject.attribute("lecm-errands:title"))}]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Поручение. Отменено]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
@@ -253,7 +253,7 @@
             <item name="cm:ERRANDS_REJECT_CANCEL_REQUEST" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_REJECT_CANCEL_REQUEST]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Ваш запрос об отмене поручения {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))} отклонен.]]></property>
+                    <![CDATA[Ваш запрос об отмене поручения {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))} {#wrapTitle("отклонен",#reason)}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Запрос отмены отклонен]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
