@@ -4,7 +4,7 @@
             <dependencies>
                 <js src="/scripts/lecm-errands/constraints/errands-request-cancel-new-executor-validator.js"/>
                 <js src="/scripts/lecm-errands/constraints/errands-request-change-due-date-validator.js"/>
-                <!--<js src="/scripts/lecm-errands/constraints/errands-limitation-date-validator.js"/>-->
+                <js src="/scripts/lecm-errands/constraints/errands-limitation-date-validator.js"/>
                 <js src="/scripts/lecm-errands/constraints/errands-check-coosing-executor.js"/>
                 <js src="/scripts/lecm-errands/constraints/errands-constraints.js"/>
             </dependencies>
@@ -816,6 +816,9 @@
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
                             <control-param name="changeItemsFireAction">initiatorChanged</control-param>
                         </control>
+                        <constraint-handlers>
+                            <constraint message-id="message.incorrect.child.errand.limitation.date" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+                        </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-radio" set="limitation-date"  mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">

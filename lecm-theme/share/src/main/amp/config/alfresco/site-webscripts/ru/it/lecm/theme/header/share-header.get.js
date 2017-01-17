@@ -2,8 +2,6 @@
 <import resource="classpath:/alfresco/site-webscripts/org/alfresco/callutils.js">
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/document-utils.js">
 
-var imagesRoot = "/share/components/images/header/";
-
 function getArmsForMenu() {
 	var result = [],
 		url = "/lecm/menu/arms/get",
@@ -13,8 +11,9 @@ function getArmsForMenu() {
 		result = eval('(' + response + ')');
 	}
 	return result;
-}
+};
 
+/*Логика ECM*/
 var logicECMWidgets = [];
 var arms = getArmsForMenu();
 
@@ -36,16 +35,17 @@ for (var i = 0; i < arms.length; i++) {
 	});
 }
 
+/*Alfresco*/
 var standartWidgets = [
 	{
-	    id: "PEOPLE_MENU_ITEM",
-	    name: "alfresco/menus/AlfMenuItem",
-	    config: {
-	       id: "PEOPLE_MENU_ITEM",
-	       label: msg.get("label.people"),
-	       targetUrl: "people-finder"
-	    }
-    }
+		id: "PEOPLE_MENU_ITEM",
+		name: "alfresco/menus/AlfMenuItem",
+		config: {
+			id: "PEOPLE_MENU_ITEM",
+			label: msg.get("label.people"),
+			targetUrl: "people-finder"
+		}
+	}
 ];
 
 if (user.isAdmin || showRepositoryLink == "true") {
@@ -60,89 +60,68 @@ if (user.isAdmin || showRepositoryLink == "true") {
     });
 }
 
-var myWidgets = [
+standartWidgets.push(
 	{
-       id: "MY_TASKS_MENU_ITEM",
-       name: "alfresco/header/AlfMenuItem",
-       config:
-       {
-          id: "MY_TASKS_MENU_ITEM",
-          label: msg.get("label.my-tasks"),
-          iconClass: "alf-mytasks-icon",
-          targetUrl: "my-tasks#filter=workflows|active"
-       }
-    },
-    {
-       id: "MY_WORKFLOWS_MENU_ITEM",
-       name: "alfresco/header/AlfMenuItem",
-       config:
-       {
-          id: "MY_WORKFLOWS_MENU_ITEM",
-          label: msg.get("label.my-workflows"),
-          iconClass: "alf-myworkflows-icon",
-          targetUrl: "my-workflows#filter=workflows|active"
-       }
-    },
-    {
+		id: "MY_TASKS_MENU_ITEM",
+		name: "alfresco/header/AlfMenuItem",
+		config: {
+			id: "MY_TASKS_MENU_ITEM",
+			label: msg.get("label.my-tasks"),
+			iconClass: "alf-mytasks-icon",
+			targetUrl: "my-tasks#filter=workflows|active"
+		}
+	},
+	{
+		id: "MY_WORKFLOWS_MENU_ITEM",
+		name: "alfresco/header/AlfMenuItem",
+		config: {
+			id: "MY_WORKFLOWS_MENU_ITEM",
+			label: msg.get("label.my-workflows"),
+			iconClass: "alf-myworkflows-icon",
+			targetUrl: "my-workflows#filter=workflows|active"
+		}
+	},
+	{
 		id: "MY_FILES_MENU_ITEM",
 		name: "alfresco/menus/AlfMenuItem",
 		config: {
 			id: "MY_FILES_MENU_ITEM",
 			label: msg.get("label.my-files"),
-			targetUrl: "context/mine/myfiles",
-			iconClass: "alf-files-icon"
+			iconClass: "alf-files-icon",
+			targetUrl: "context/mine/myfiles"
 		}
-    },
-    {
-        id: "USER_MENU_PROFILE_MENU_ITEM",
-        name: "alfresco/header/AlfMenuItem",
-        config:
-        {
-           id: "USER_MENU_PROFILE_MENU_ITEM",
-           label: msg.get("label.my-profile"),
-           iconClass: "alf-user-profile-icon",
-           targetUrl: "user/" + encodeURIComponent(user.name) + "/profile"
-        }
-    }
-];
+	}
+);
 
-var adminWidgets = [
-	{
-		id: "ADMIN_CONSOLE_MENU_ITEM",
-		name: "alfresco/menus/AlfMenuItem",
-		config: {
-			id: "ADMIN_CONSOLE_MENU_ITEM",
-			label: msg.get("label.application"),
-			targetUrl: "console/admin-console/application"
-		}
-	},
-	{
-		id: "ADMIN_GROUPS_MENU_ITEM",
-		name: "alfresco/menus/AlfMenuItem",
-		config: {
-			id: "ADMIN_GROUPS_MENU_ITEM",
-			label: msg.get("label.groups"),
-			targetUrl: "console/admin-console/groups"
-		}
-	},
-	{
-		id: "ADMIN_REPOSITORY_MENU_ITEM",
-		name: "alfresco/menus/AlfMenuItem",
-		config: {
-			id: "ADMIN_REPOSITORY_MENU_ITEM",
-			label: msg.get("label.admin-repository"),
-			targetUrl: "console/admin-console/repository"
-		}
-	},
-	{
-		id: "ADMIN_USERS_MENU_ITEM",
-		name: "alfresco/menus/AlfMenuItem",
-		config: {
-			id: "ADMIN_USERS_MENU_ITEM",
-			label: msg.get("label.users"),
-			targetUrl: "console/admin-console/users"
-		}
-	},
+/*Ещё*/
+var moreMenu = {
+    id: "LOGIC_ECM_MORE_MENU_BAR",
+    name: "alfresco/header/AlfMenuBarPopup",
+    config: {
+        id: "LOGIC_ECM_MORE_MENU_BAR",
+        label: msg.get("label.more"),
+        widgets: [
+	        {
+	            name: "alfresco/menus/AlfMenuGroup",
+	            id: "LOGIC_ECM_WIDGETS",
+	            config: {
+	                label:  msg.get("label.logic-ecm.menu-group"),
+	                widgets: logicECMWidgets
+	            }
+	        },
+	        {
+	            name: "alfresco/menus/AlfMenuGroup",
+	            config: {
+	                label: msg.get("label.commons.menu-group"),
+	                widgets: standartWidgets
+	            }
+	        }
+        ]
+    }
+};
+
+/*Конструкторы*/
+var constructWidgets = [
 	{
 		id: "ADMIN_DOC_MODEL_MENU_ITEM",
 		name: "alfresco/menus/AlfMenuItem",
@@ -181,62 +160,17 @@ var adminWidgets = [
 	}
 ];
 
-if (!conditionEditionTeam) {
-	adminWidgets.push({
-		id: "ADMIN_REPLIACATION_MENU_ITEM",
-		name: "alfresco/menus/AlfMenuItem",
-		config: {
-			id: "ADMIN_REPLIACATION_MENU_ITEM",
-			label: msg.get("label.replication"),
-			targetUrl: "console/admin-console/replication-jobs"
-		}
-	});
-}
-
-
-var moreMenu = {
-    id: "LOGIC_ECM_MORE_MENU_BAR",
-    name: "alfresco/header/AlfMenuBarPopup",
-    config: {
-        id: "LOGIC_ECM_MORE_MENU_BAR",
-        label: msg.get("label.more"),
-        widgets: [
-	        {
-	            name: "alfresco/menus/AlfMenuGroup",
-	            id: "LOGIC_ECM_WIDGETS",
-	            config: {
-	                label:  msg.get("label.logic-ecm.menu-group"),
-	                widgets: logicECMWidgets
-	            }
-	        },
-	        {
-	            name: "alfresco/menus/AlfMenuGroup",
-	            config: {
-	                label: msg.get("label.commons.menu-group"),
-	                widgets: standartWidgets
-	            }
-	        },
-	        {
-	            name: "alfresco/menus/AlfMenuGroup",
-	            config: {
-	                label: msg.get("label.my.menu-group"),
-	                widgets: myWidgets
-	            }
-	        }
-        ]
-    }
+var constructorsMenu = {
+	id: "LOGIC_ECM_CONSTRUCTORS_MENU_BAR",
+	name: "alfresco/header/AlfMenuBarPopup",
+	config: {
+		id: "LOGIC_ECM_CONSTRUCTORS_MENU_BAR",
+		label: msg.get("label.constructors.menu-group"),
+		widgets: constructWidgets
+	}
 };
 
-if (user.isAdmin){
-	moreMenu.config.widgets.push({
-		name: "alfresco/menus/AlfMenuGroup",
-		config: {
-			label: msg.get("label.administration.menu-group"),
-			widgets: adminWidgets
-		}
-	});
-}
-
+/*Главная панель*/
 var appItems = [
 	{
 		id: "SED_MENU_ITEM",
@@ -276,9 +210,21 @@ var appItems = [
 		}
 	}
 ];
+if (user.isAdmin) {
+	appItems.push(
+		{
+			id: "LOGIC_ECM_ADMIN_MENU_ITEM",
+			name: "alfresco/menus/AlfMenuBarItem",
+			config: {
+				id: "LOGIC_ECM_ADMIN_MENU_ITEM",
+				label: msg.get("label.administration.menu-group"),
+				targetUrl: "console/admin-console/application"
+			}
+		},
+		constructorsMenu);
+}
 
-var menuBar =
-    widgetUtils.findObject(model.jsonModel, "id", "HEADER_APP_MENU_BAR");
+var menuBar = widgetUtils.findObject(model.jsonModel, "id", "HEADER_APP_MENU_BAR");
 if (menuBar != null) {
     menuBar.config.widgets = appItems;
 }
