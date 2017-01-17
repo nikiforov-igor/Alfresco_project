@@ -4,7 +4,7 @@
             <dependencies>
                 <js src="/scripts/lecm-errands/constraints/errands-request-cancel-new-executor-validator.js"/>
                 <js src="/scripts/lecm-errands/constraints/errands-request-change-due-date-validator.js"/>
-                <js src="/scripts/lecm-errands/constraints/errands-limitation-date-validator.js"/>
+                <!--<js src="/scripts/lecm-errands/constraints/errands-limitation-date-validator.js"/>-->
                 <js src="/scripts/lecm-errands/constraints/errands-check-coosing-executor.js"/>
                 <js src="/scripts/lecm-errands/constraints/errands-constraints.js"/>
             </dependencies>
