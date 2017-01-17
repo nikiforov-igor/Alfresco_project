@@ -46,6 +46,9 @@
             <parameter name="createUrl">
                 <value>resolution-create</value>
             </parameter>
+            <parameter name="editUrl">
+                <value>resolution-edit</value>
+            </parameter>
         </constraint>
 
         <constraint name="lecm-resolutions:limitation-date-type-const" type="LIST">

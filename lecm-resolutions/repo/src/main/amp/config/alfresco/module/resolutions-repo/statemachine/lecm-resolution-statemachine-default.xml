@@ -282,18 +282,18 @@
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Срок исполнения поручений не может быть больше срока исполнения резолюции]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@resolutionsService.checkResolutionErrandsExecutionDate(doc.nodeRef)]]></value>
+                                                                                    <![CDATA[@resolutionsService.checkResolutionErrandsExecutionDate(doc.nodeRef) AND doc.attr("cm:name") != null]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -314,13 +314,13 @@
                                                                                 <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Работа по документу-основанию резолюции завершена. Продолжить работу с резолюцией?]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -423,18 +423,18 @@
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Срок исполнения поручений не может быть больше срока исполнения резолюции]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@resolutionsService.checkResolutionErrandsExecutionDate(doc.nodeRef)]]></value>
+                                                                                    <![CDATA[@resolutionsService.checkResolutionErrandsExecutionDate(doc.nodeRef) AND doc.attr("cm:name") != null]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -455,13 +455,13 @@
                                                                                 <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Работа по документу-основанию резолюции завершена. Продолжить работу с резолюцией?]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -2184,18 +2184,18 @@ if (document) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Срок исполнения поручений не может быть больше срока исполнения резолюции]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@resolutionsService.checkResolutionErrandsExecutionDate(doc.nodeRef)]]></value>
+                                                                                    <![CDATA[@resolutionsService.checkResolutionErrandsExecutionDate(doc.nodeRef) AND doc.attr("cm:name") != null]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -3154,18 +3154,18 @@ if (document) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Срок исполнения поручений не может быть больше срока исполнения резолюции]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@resolutionsService.checkResolutionErrandsExecutionDate(doc.nodeRef)]]></value>
+                                                                                    <![CDATA[@resolutionsService.checkResolutionErrandsExecutionDate(doc.nodeRef) AND doc.attr("cm:name") != null]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -3263,18 +3263,18 @@ if (document) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Срок исполнения поручений не может быть больше срока исполнения резолюции]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@resolutionsService.checkResolutionErrandsExecutionDate(doc.nodeRef)]]></value>
+                                                                                    <![CDATA[@resolutionsService.checkResolutionErrandsExecutionDate(doc.nodeRef) AND doc.attr("cm:name") != null]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
