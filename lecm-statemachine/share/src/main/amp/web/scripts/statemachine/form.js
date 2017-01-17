@@ -891,6 +891,15 @@ LogicECM.module = LogicECM.module || {};
                                                 },
                                                 scope: this
                                             },
+                                            failureCallback: {
+                                                scope: this,
+                                                fn: function (response) {
+                                                    dlg.hide();
+                                                    Alfresco.util.PopupManager.displayMessage({
+                                                        text: this.msg("message.failure")
+                                                    });
+                                                }
+                                            },
                                             failureMessage: "message.failure"
                                         });
 								}.bind(button, dialog, nodeRef, fields);
