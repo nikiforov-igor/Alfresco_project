@@ -621,7 +621,7 @@
                 </field-visibility>
                 <appearance>
                     <field id="viewMetadata">
-                        <control template="/ru/it/lecm/resolutions/controls/resolution-view-metadata-control.ftl"/>
+                        <control template="/ru/it/lecm/documents/controls/document-view-metadata-control.ftl"/>
                     </field>
                 </appearance>
             </form>
