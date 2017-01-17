@@ -570,7 +570,7 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
                     return true;
                 };
                 Bubbling.addDefaultAction("datagrid-action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler, me.options.forceSubscribing);
-                Bubbling.addDefaultAction("show-more", fnActionHandler, me.options.forceSubscribing);
+				Bubbling.addDefaultAction("show-more"  + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler, me.options.forceSubscribing);
             }
 
             if (!this.options.overrideSortingWith && me.options.otherActions != null && me.options.otherActions.length > 0){
@@ -603,7 +603,7 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
                     return true;
                 };
                 Bubbling.addDefaultAction("datagrid-other-action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnOtherActionHandler, me.options.forceSubscribing);
-                Bubbling.addDefaultAction("show-more", fnOtherActionHandler, me.options.forceSubscribing);
+				Bubbling.addDefaultAction("show-more"  + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnOtherActionHandler, me.options.forceSubscribing);
             }
 
             // Actions module

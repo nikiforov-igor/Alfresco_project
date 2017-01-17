@@ -35,6 +35,7 @@ LogicECM.module = LogicECM.module || {};
 		LogicECM.module.AssociationTokenControl.superclass.constructor.call(this, "AssociationTokenControl", htmlId);
 		YAHOO.Bubbling.on("refreshItemList", this.onRefreshItemList, this);
 		YAHOO.Bubbling.on("addSelectedItems", this.onAddSelectedItems, this);
+		YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
 		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
 		YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
 		YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
@@ -87,6 +88,8 @@ LogicECM.module = LogicECM.module || {};
 			cancelSingleSelectedItem: null,
 
 			tempDisabled: false,
+
+			readonly: false,
 
 			controlAutoComplete: null,
 
@@ -239,16 +242,16 @@ LogicECM.module = LogicECM.module || {};
 				this.options.pickerId = this.options.prefixPickerId + '-picker';
 
 				if (this.widgets.pickerButton != null) {
-					this.widgets.pickerButton.set('disabled', this.options.disabled);
+					this.widgets.pickerButton.set('disabled', this.options.disabled || this.readonly);
 				}
 
 				var input = Dom.get(this.controlId + "-autocomplete-input");
 				if (input != null) {
-					input.disabled = this.options.disabled || this.options.lazyLoading;
+					input.disabled = this.options.disabled || this.options.lazyLoading || this.readonly;
 				}
 
 				// Create button if control is enabled
-				if(!this.options.disabled)
+				if(!this.options.disabled && !this.readonly)
 				{
 					if (this.widgets.pickerButton == null) {
 						var buttonOptions = {
@@ -1638,7 +1641,7 @@ LogicECM.module = LogicECM.module || {};
 					}
 
 					if (oRecord.getData("type") == "lecm-orgstr:employee") {
-						template += '<h3 class="item-name">' + Util.getControlEmployeeView("{nodeRef}","{name}", true) + '</h3>';
+						template += '<h3 class="item-name">' + Util.getControlEmployeeView(oRecord.getData("nodeRef"),"{name}", true) + '</h3>';
 					} else {
 						if (scope.options.showAssocViewForm) {
 							template += '<h3 class="item-name">' + Util.getControlValueView(oRecord.getData("nodeRef"), "{name}", "{name}") + '</h3>';
@@ -1908,7 +1911,7 @@ LogicECM.module = LogicECM.module || {};
 
 			removeNode: function (event, params)
 			{
-				if (!this.tempDisabled) {
+				if (!this.tempDisabled && !this.readonly) {
 					delete this.selectedItems[params.node.nodeRef];
 					this.singleSelectedItem = null;
 					this.updateSelectedItems();
@@ -2352,50 +2355,74 @@ LogicECM.module = LogicECM.module || {};
 				return 20;
 			},
 
+			onReadonlyControl: function (layer, args) {
+				var autocompleteInput;
+				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+					this.readonly = args[1].readonly;
+					if (this.widgets.pickerButton) {
+						this.widgets.pickerButton.set('disabled', args[1].readonly || this.tempDisabled || this.options.disabled);
+					}
+					autocompleteInput = Dom.get(this.options.controlId + '-autocomplete-input');
+					if (autocompleteInput) {
+						autocompleteInput.disabled = args[1].readonly || this.tempDisabled || this.options.disabled;
+					}
+					if (!args[1].readonly) {
+						if (this.widgets.dialog) {
+							this.widgets.dialog.hide();
+						}
+					}
+				}
+			},
+
 			onDisableControl: function (layer, args) {
 				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-					if (this.widgets.pickerButton != null) {
+					if (this.widgets.pickerButton) {
 						this.widgets.pickerButton.set('disabled', true);
 					}
-
-					var input = Dom.get(this.options.controlId + "-autocomplete-input");
-					if (input != null) {
+					var input = Dom.get(this.id);
+					if (input) {
 						input.disabled = true;
 					}
-					this.tempDisabled = true;
-
+					var autocomplete = Dom.get(this.options.controlId + "-autocomplete-input");
+					if (autocomplete) {
+						autocomplete.disabled = true;
+					}
 					var added = Dom.get(this.options.controlId + "-added");
-					if (added != null) {
+					if (added) {
 						added.disabled = true;
 					}
 					var removed = Dom.get(this.options.controlId + "-removed");
-					if (removed != null) {
+					if (removed) {
 						removed.disabled = true;
 					}
+					this.tempDisabled = true;
 				}
 			},
 
 			onEnableControl: function (layer, args) {
 				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
 					if (!this.options.disabled) {
-						if (this.widgets.pickerButton != null) {
-							this.widgets.pickerButton.set('disabled', false);
+						if (this.widgets.pickerButton) {
+							this.widgets.pickerButton.set('disabled', this.readonly);
 
-							if (this.widgets.dialog != null) {
+							if (this.widgets.dialog) {
 								this.widgets.dialog.hide();
 							}
 						}
-
-						var input = Dom.get(this.options.controlId + "-autocomplete-input");
-						if (input != null) {
-							input.disabled = false;
+						var input = Dom.get(this.id);
+						if (input) {
+							input.disabled = this.readonly;
+						}
+						var autocomplete = Dom.get(this.options.controlId + "-autocomplete-input");
+						if (autocomplete) {
+							autocomplete.disabled = this.readonly;
 						}
 						var added = Dom.get(this.options.controlId + "-added");
-						if (added != null) {
+						if (added) {
 							added.disabled = false;
 						}
 						var removed = Dom.get(this.options.controlId + "-removed");
-						if (removed != null) {
+						if (removed) {
 							removed.disabled = false;
 						}
 					}

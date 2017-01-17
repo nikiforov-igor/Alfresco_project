@@ -62,10 +62,11 @@
 <#assign  verticalListClass = "vertical">
 </#if>
 
+<#assign readonly = false>
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
 <#if disabled>
-<div id="${controlId}" class="control association-token-control ${verticalListClass} viewmode">
+<div id="${controlId}" class="control association-token-control members ${verticalListClass} viewmode">
 	<div class="label-div">
         <#if showViewIncompleteWarning && (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
 		<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}"/><span>
@@ -80,7 +81,7 @@
 	</div>
 </div>
 <#else>
-<div class="control association-token-control editmode">
+<div class="control association-token-control members editmode">
 	<div class="label-div">
 		<label for="${controlId}">
         ${field.label?html}:
@@ -195,7 +196,12 @@
 
     <#assign defaultValue = "">
     <#if form.mode == "create" && !field.disabled>
-        <#if params.selectedItemsFormArgs??>
+        <#if form.arguments[field.name]?has_content>
+            <#assign defaultValue=form.arguments[field.name]>
+        <#elseif form.arguments['readonly_' + field.name]?has_content>
+            <#assign defaultValue=form.arguments['readonly_' + field.name]>
+            <#assign readonly = true>
+        <#elseif params.selectedItemsFormArgs??>
             <#assign selectedItemsFormArgs = params.selectedItemsFormArgs?split(",")>
             <#list selectedItemsFormArgs as selectedItemsFormArg>
                 <#if form.arguments[selectedItemsFormArg]??>
@@ -205,9 +211,6 @@
                     <#assign defaultValue = defaultValue + form.arguments[selectedItemsFormArg]/>
                 </#if>
             </#list>
-
-        <#elseif form.arguments[field.name]?has_content>
-            <#assign defaultValue=form.arguments[field.name]>
         </#if>
     </#if>
 
@@ -325,6 +328,9 @@
                 fieldId: "${field.configName}",
                 formId: "${args.htmlid}"
             }).setMessages( ${messages} );
+		<#if readonly>
+			LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+		</#if>
         }
         YAHOO.util.Event.onDOMReady(init);
     })();

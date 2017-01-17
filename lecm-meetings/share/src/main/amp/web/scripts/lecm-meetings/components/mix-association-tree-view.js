@@ -192,7 +192,7 @@ LogicECM.module = LogicECM.module || {};
 			fieldId: null,
 
 			formId: false,
-			
+
 			itemTypeSubstituteStrings: null
         },
 
@@ -423,7 +423,7 @@ LogicECM.module = LogicECM.module || {};
 					if (!this.options.multipleSelectMode && this.singleSelectedItem == null) {
 						this.singleSelectedItem = item;
 					}
-	                
+
                 }
 
                 if(!this.options.disabled)
@@ -1390,7 +1390,7 @@ LogicECM.module = LogicECM.module || {};
                 }
 
                 if (oRecord.getData("type") == "lecm-orgstr:employee") {
-                    template += '<h3 class="item-name">' + Util.getControlEmployeeView("{nodeRef}","{name}", true) + '</h3>';
+                    template += '<h3 class="item-name">' + Util.getControlEmployeeView(oRecord.getData("nodeRef"),"{name}", true) + '</h3>';
                 } else {
                     if (scope.options.showAssocViewForm) {
                         template += '<h3 class="item-name">' + Util.getControlValueView(oRecord.getData("nodeRef"), "{name}", "{name}") + '</h3>';

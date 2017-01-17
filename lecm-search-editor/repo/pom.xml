@@ -6,7 +6,7 @@
     <parent>
         <groupId>ru.it.lecm.search-editor</groupId>
         <artifactId>search-editor</artifactId>
-        <version>1.8.5</version>
+        <version>1.8.6</version>
     </parent>
 
     <artifactId>search-editor-repo</artifactId>

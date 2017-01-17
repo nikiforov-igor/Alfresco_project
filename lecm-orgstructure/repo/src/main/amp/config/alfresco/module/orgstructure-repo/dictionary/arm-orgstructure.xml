@@ -11,6 +11,9 @@
 		    <item name="cm:Справочник организации" type="lecm-arm:arm">
 		        <property name="cm:name"><![CDATA[Справочник организации]]></property>
 		        <property name="lecm-arm:code"><![CDATA[orgstructure]]></property>
+		        <property name="lecm-arm:show-create-button"><![CDATA[false]]></property>
+		        <property name="lecm-arm:order"><![CDATA[10]]></property>
+		        <property name="lecm-arm:show-in-menu"><![CDATA[true]]></property>
 		        <items>
 		            <item name="cm:Справочник организации" type="lecm-arm:accordion">
 		                <property name="cm:name"><![CDATA[Справочник организации]]></property>

@@ -35,6 +35,7 @@ LogicECM.module = LogicECM.module || {};
         LogicECM.module.AssociationTreeViewer.superclass.constructor.call(this, "AssociationTreeViewer" + (subName ? subName : ""), htmlId);
         YAHOO.Bubbling.on("refreshItemList", this.onRefreshItemList, this);
         YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemAdded, this);
+		YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
 		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
 		YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
 		YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
@@ -80,6 +81,12 @@ LogicECM.module = LogicECM.module || {};
 		skipItemsCount: 0,
 
 		alreadyShowCreateNewLink: false,
+
+		tempDisabled: false,
+
+		readsonly: false,
+
+        itemsLoading: false,
 
 		options:
 		{
@@ -218,11 +225,11 @@ LogicECM.module = LogicECM.module || {};
 			this.options.pickerId = this.options.prefixPickerId + '-picker';
 
 			if (this.widgets.pickerButton != null) {
-				this.widgets.pickerButton.set('disabled', this.options.disabled);
+				this.widgets.pickerButton.set('disabled', this.options.disabled || this.readonly);
 			}
 
             // Create button if control is enabled
-            if(!this.options.disabled)
+            if(!this.options.disabled && !this.readsonly)
             {
 	            if (this.widgets.pickerButton == null) {
 		            var buttonOptions = {
@@ -1396,7 +1403,7 @@ LogicECM.module = LogicECM.module || {};
                 }
 
                 if (oRecord.getData("type") == "lecm-orgstr:employee") {
-                    template += '<h3 class="item-name">' + Util.getControlEmployeeView("{nodeRef}","{name}", true) + '</h3>';
+                    template += '<h3 class="item-name">' + Util.getControlEmployeeView(oRecord.getData("nodeRef"),"{name}", true) + '</h3>';
                 } else {
                     if (scope.options.showAssocViewForm) {
                         template += '<h3 class="item-name">' + Util.getControlValueView(oRecord.getData("nodeRef"), "{name}", "{name}") + '</h3>';
@@ -1497,82 +1504,76 @@ LogicECM.module = LogicECM.module || {};
 
 		onPickerItemsContainerScroll: function(event) {
 			var container = event.currentTarget;
-			if (container.scrollTop + container.clientHeight == container.scrollHeight && !this.isSearch) {
+			if (container.scrollTop + container.clientHeight == container.scrollHeight) {
                 Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "visible");
 				this._loadItems(this.currentNode.data.nodeRef, this.searchData, false);
 			}
 		},
 
-		_loadItems: function(nodeRef, searchTerm, clearList) {
-			if (clearList) {
-				this.skipItemsCount = 0;
-				Dom.get(this.options.pickerId + "-picker-items").scrollTop = 0;
-				this.alreadyShowCreateNewLink = false;
-			}
+        _loadItems: function (nodeRef, searchTerm, clearList) {
+            if (!this.itemsLoading) {
+                this.itemsLoading = true;
+                if (clearList) {
+                    this.skipItemsCount = 0;
+                    Dom.get(this.options.pickerId + "-picker-items").scrollTop = 0;
+                    this.alreadyShowCreateNewLink = false;
+                }
 
-			var successHandler = function AssociationTreeViewer__updateItems_successHandler(sRequest, oResponse, oPayload)
-			{
-				this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : nodeRef;
-				this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.empty"));
+                var successHandler = function AssociationTreeViewer__updateItems_successHandler(sRequest, oResponse, oPayload) {
+                    this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : nodeRef;
+                    this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.empty"));
 
-				this.skipItemsCount += oResponse.results.length;
-				Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "hidden");
+                    this.skipItemsCount += oResponse.results.length;
+                    Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "hidden");
 
-				if (!clearList || (this.options.showCreateNewLink && this.currentNode != null && this.currentNode.data.isContainer && this.currentNode.data.hasPermAddChildren && (!this.isSearch || this.options.plane) && !this.alreadyShowCreateNewLink))
-				{
-					this.widgets.dataTable.onDataReturnAppendRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
-				}
-				else
-				{
-					this.widgets.dataTable.onDataReturnInitializeTable.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
-				}
+                    if (!clearList || (this.options.showCreateNewLink && this.currentNode && this.currentNode.data.isContainer && this.currentNode.data.hasPermAddChildren && (!this.isSearch || this.options.plane) && !this.alreadyShowCreateNewLink)) {
+                        this.widgets.dataTable.onDataReturnAppendRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
+                    }
+                    else {
+                        this.widgets.dataTable.onDataReturnInitializeTable.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
+                    }
 
-				this.alreadyShowCreateNewLink = true;
-                this.isSearch = false;
-			};
+                    this.alreadyShowCreateNewLink = true;
+                    this.isSearch = false;
+                    this.itemsLoading = false;
+                };
 
-			var failureHandler = function AssociationTreeViewer__updateItems_failureHandler(sRequest, oResponse)
-			{
-				if (oResponse.status == 401)
-				{
-					// Our session has likely timed-out, so refresh to offer the login page
-					window.location.reload();
-				}
-				else
-				{
-					try
-					{
-                        this.isSearch = false;
-						var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-						this.widgets.dataTable.set("MSG_ERROR", response.message);
-						this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
-					}
-					catch(e)
-					{
-					}
-				}
-			};
+                var failureHandler = function AssociationTreeViewer__updateItems_failureHandler(sRequest, oResponse) {
+                    if (oResponse.status == 401) {
+                        // Our session has likely timed-out, so refresh to offer the login page
+                        window.location.reload();
+                    }
+                    else {
+                        try {
+                            var response = YAHOO.lang.JSON.parse(oResponse.responseText);
+                            this.widgets.dataTable.set("MSG_ERROR", response.message);
+                            this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
+                        }
+                        catch (e) {
+                        }
+                    }
+                    this.itemsLoading = false;
+                };
 
-			// build the url to call the pickerchildren data webscript
-			var url = this._generateChildrenUrlPath(nodeRef) + this._generateChildrenUrlParams(searchTerm);
+                // build the url to call the pickerchildren data webscript
+                var url = this._generateChildrenUrlPath(nodeRef) + this._generateChildrenUrlParams(searchTerm);
 
-			if (Alfresco.logger.isDebugEnabled())
-			{
-				Alfresco.logger.debug("Generated pickerchildren url fragment: " + url);
-			}
+                if (Alfresco.logger.isDebugEnabled()) {
+                    Alfresco.logger.debug("Generated pickerchildren url fragment: " + url);
+                }
 
-			// call the pickerchildren data webscript
-            //if widget is active and not destroyed!!!
-            if (this.widgets.dataSource) {
-                this.isSearch = true;
-                this.widgets.dataSource.sendRequest(url,
-                    {
-                        success: successHandler,
-                        failure: failureHandler,
-                        scope: this
-                    });
+                // call the pickerchildren data webscript
+                //if widget is active and not destroyed!!!
+                if (this.widgets.dataSource) {
+                    this.widgets.dataSource.sendRequest(url,
+                        {
+                            success: successHandler,
+                            failure: failureHandler,
+                            scope: this
+                        });
+                }
             }
-		},
+        },
 
         _generateChildrenUrlPath: function AssociationTreeViewer__generatePickerChildrenUrlPath(nodeRef)
         {
@@ -1661,13 +1662,15 @@ LogicECM.module = LogicECM.module || {};
 
         removeNode: function AssociationTreeViewer_removeNode(event, params)
         {
-            delete this.selectedItems[params.node.nodeRef];
-            this.singleSelectedItem = null;
-            this.updateSelectedItems();
-            this.updateAddButtons();
-	        if (params.updateForms) {
-		        this.updateFormFields();
-	        }
+			if (!this.tempDisabled && !this.readonly) {
+				delete this.selectedItems[params.node.nodeRef];
+				this.singleSelectedItem = null;
+				this.updateSelectedItems();
+				this.updateAddButtons();
+				if (params.updateForms) {
+					this.updateFormFields();
+				}
+			}
         },
 
         updateSelectedItems: function AssociationTreeViewer_updateSelectedItems() {
@@ -2114,22 +2117,61 @@ LogicECM.module = LogicECM.module || {};
 			return 20;
 		},
 
+		onReadonlyControl: function (layer, args) {
+			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+				this.readonly = args[1].readonly;
+				if (this.widgets.pickerButton) {
+					this.widgets.pickerButton.set('disabled', args[1].readonly);
+				}
+				if (!args[1].readonly && this.widgets.dialog) {
+					this.widgets.dialog.hide();
+				}
+			}
+		},
+
 		onDisableControl: function (layer, args) {
 			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-				if (this.widgets.pickerButton != null) {
+				if (this.widgets.pickerButton) {
 					this.widgets.pickerButton.set('disabled', true);
 				}
+				var input = Dom.get(this.id);
+				if (input) {
+					input.disabled = true;
+				}
+				var added = Dom.get(this.options.controlId + "-added");
+				if (added) {
+					added.disabled = true;
+				}
+				var removed = Dom.get(this.options.controlId + "-removed");
+				if (removed) {
+					removed.disabled = true;
+				}
+				this.tempDisabled = true;
 			}
 		},
 
 		onEnableControl: function (layer, args) {
 			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-				if (!this.options.disabled && this.widgets.pickerButton != null) {
-					this.widgets.pickerButton.set('disabled', false);
-
-					if (this.widgets.dialog != null) {
+				if (!this.options.disabled) {
+					if (this.widgets.pickerButton) {
+						this.widgets.pickerButton.set('disabled', false);
+					}
+					if (this.widgets.dialog) {
 						this.widgets.dialog.hide();
 					}
+					var input = Dom.get(this.id);
+					if (input) {
+						input.disabled = false;
+					}
+					var added = Dom.get(this.options.controlId + "-added");
+					if (added) {
+						added.disabled = false;
+					}
+					var removed = Dom.get(this.options.controlId + "-removed");
+					if (removed) {
+						removed.disabled = false;
+					}
+					this.tempDisabled = false;
 				}
 			}
 		},
@@ -2151,7 +2193,7 @@ LogicECM.module = LogicECM.module || {};
 				this.allowedNodes = null;
 				this.allowedNodesScript = null;
 
-				this.onReady();
+				this.init();
 			}
 		}
 	});

@@ -194,7 +194,6 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 		},
 
 		onChangeTechnicalMembers: function () {
-			this.saveForm();
 			for (var i = 0; i < this.submitElements.length; i++) {
 				var formId = this.submitElements[i].getForm().id.replace("-form", "");
 				LogicECM.module.Base.Util.reInitializeControl(formId, "lecm-meetings-ts:holding-reporter-assoc", {});

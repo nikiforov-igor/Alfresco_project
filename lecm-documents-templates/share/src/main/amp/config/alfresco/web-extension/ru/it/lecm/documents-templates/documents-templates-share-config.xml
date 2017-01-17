@@ -7,6 +7,7 @@
 					<show id="lecm-base-dummy-aspects:script" force="true"/>
 					<show id="cm:title"/>
 					<show id="lecm-template:organizationAssoc"/>
+					<show id="lecm-template:readonly"/>
 					<show id="lecm-template:doc-type"/>
 					<show id="lecm-template:attributes"/>
 				</field-visibility>
@@ -30,8 +31,12 @@
 								<control-param name="changeItemsFireAction">templateOrganizationSelect</control-param>
 								<control-param name="sortProp">lecm-contractor:shortname</control-param>
 								<control-param name="childrenDataSource">/lecm/orgstructure/getOrganizations/picker</control-param>
+								<control-param name="pickerItemsScript">/lecm/orgstructure/getOrganizations/items</control-param>
 								<control-param name="defaultValueDataSource">/lecm/documents-templates/defaultOrganization</control-param>
 							</control>
+						</field>
+						<field id="lecm-template:readonly" set="top2">
+							<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 						</field>
 						<field id="lecm-base-dummy-aspects:script" set="top">
 							<control template="/ru/it/lecm/documents-templates/components/controls/actions.ftl"/>
@@ -54,6 +59,7 @@
 					<show id="lecm-base-dummy-aspects:script" force="true"/>
 					<show id="cm:title"/>
 					<show id="lecm-template:organizationAssoc"/>
+					<show id="lecm-template:readonly"/>
 					<show id="lecm-template:doc-type"/>
 					<show id="lecm-template:attributes"/>
 				</field-visibility>
@@ -77,8 +83,12 @@
 								<control-param name="changeItemsFireAction">templateOrganizationSelect</control-param>
 								<control-param name="sortProp">lecm-contractor:shortname</control-param>
 								<control-param name="childrenDataSource">/lecm/orgstructure/getOrganizations/picker</control-param>
+								<control-param name="pickerItemsScript">/lecm/orgstructure/getOrganizations/items</control-param>
 								<control-param name="defaultValueDataSource">/lecm/documents-templates/defaultOrganization</control-param>
 							</control>
+						</field>
+						<field id="lecm-template:readonly" set="top2">
+							<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 						</field>
 						<field id="lecm-base-dummy-aspects:script" set="top">
 							<control template="/ru/it/lecm/documents-templates/components/controls/actions.ftl"/>

@@ -18,6 +18,7 @@ import java.util.HashMap;
  * Date: 28.01.14
  * Time: 9:04
  */
+@Deprecated
 abstract public class AbstractReceiver {
 
     protected NodeService nodeService;

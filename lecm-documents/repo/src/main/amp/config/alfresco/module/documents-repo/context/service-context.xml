@@ -691,6 +691,7 @@
 	<bean id="attach-to-document" class="ru.it.lecm.documents.action.AttachToDocumentActionExecuter" parent="action-executer">
 		<property name="nodeService" ref="NodeService"/>
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+        <property name="publicAction" value="false" />
 	</bean>
 
 	<util:list id="documents.groupOperations">

@@ -90,6 +90,7 @@
                     <field id="lecm-events:repeatable" read-only="true">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
                             <control-param name="hideFieldsIfNotSelect">lecm-events:repeatable-start-period,lecm-events:repeatable-end-period,lecm-events:repeatable-rule</control-param>
+                            <control-param name="disabledFieldsIfNotSelect">lecm-events:repeatable-start-period,lecm-events:repeatable-end-period,lecm-events:repeatable-rule</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:repeatable-start-period" read-only="true"/>
@@ -312,6 +313,7 @@
                         </constraint-handlers>
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
                             <control-param name="hideFieldsIfNotSelect">lecm-events:repeatable-start-period,lecm-events:repeatable-end-period,lecm-events:repeatable-rule</control-param>
+                            <control-param name="disabledFieldsIfNotSelect">lecm-events:repeatable-start-period,lecm-events:repeatable-end-period,lecm-events:repeatable-rule</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:repeatable-start-period" mandatory="true" set="createEventSet">
@@ -411,8 +413,6 @@
                     <show id="lecm-events:repeatable-end-period"/>
                     <!-- Правила -->
                     <show id="lecm-events:repeatable-rule"/>
-                    <!-- Участники -->
-                    <show id="lecm-events:temp-members-assoc"/>
                     <!-- Приглашённые -->
                     <show id="lecm-events:invited-members-assoc"/>
                     <!-- Место проведения -->
@@ -482,15 +482,6 @@
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
                         </constraint-handlers>
-                    </field>
-                    <field id="lecm-events:temp-members-assoc">
-                        <control template="/ru/it/lecm/events/controls/events-members-control.ftl">
-                            <control-param name="plane">true</control-param>
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-                            <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-                            <control-param name="useStrictFilterByOrg">true</control-param>
-                            <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
-                        </control>
                     </field>
                     <field id="lecm-events:invited-members-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">

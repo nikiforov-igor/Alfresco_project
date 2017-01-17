@@ -47,29 +47,29 @@
      * @constructor
      */
     LogicECM.DatePicker = function(htmlId, currentValueHtmlId) {
-        var me = this;
         // Mandatory properties
-        me.name = "LogicECM.DatePicker";
-        me.id = htmlId;
-        me.currentValueHtmlId = currentValueHtmlId;
+        this.name = "LogicECM.DatePicker";
+        this.id = htmlId;
+        this.currentValueHtmlId = currentValueHtmlId;
 
         /* Register this component */
-        Alfresco.util.ComponentManager.register(me);
+        Alfresco.util.ComponentManager.register(this);
 
         /* Load YUI Components */
-        Alfresco.util.YUILoaderHelper.require(["button", "calendar"], me.onComponentsLoaded, me);
+        Alfresco.util.YUILoaderHelper.require(["button", "calendar"], this.onComponentsLoaded, this);
 
         // Initialise prototype properties
-        me.widgets = {};
+        this.widgets = {};
 
-	    Bubbling.on("disableControl", me.onDisableControl, this);
-	    Bubbling.on("enableControl", me.onEnableControl, this);
-        Bubbling.on("hideControl", me.onHideControl, this);
-        Bubbling.on("showControl", me.onShowControl, this);
-	    Bubbling.on("handleFieldChange", me.onHandleFieldChange, this);
-	    Bubbling.on("showDatePicker", me.hidePickerWhenAnotherIsOpening, this);
+		Bubbling.on("readonlyControl", this.onReadonlyControl, this);
+	    Bubbling.on("disableControl", this.onDisableControl, this);
+	    Bubbling.on("enableControl", this.onEnableControl, this);
+        Bubbling.on("hideControl", this.onHideControl, this);
+        Bubbling.on("showControl", this.onShowControl, this);
+	    Bubbling.on("handleFieldChange", this.onHandleFieldChange, this);
+	    Bubbling.on("showDatePicker", this.hidePickerWhenAnotherIsOpening, this);
 
-        return me;
+        return this;
     };
 
     LogicECM.DatePicker.prototype =
@@ -131,6 +131,8 @@
                 datePickerVerticalIndent: 5,
 
                 tempDisabled: false,
+
+				readonly: false,
 
                 /**
                  * Object container for storing YUI widget instances.
@@ -352,7 +354,7 @@
                     // При открытии календаря посылаем событие, чтобы закрыть все другие открытые календари
                     Bubbling.fire("showDatePicker", {datepicker : this});
 
-	                if (!this.tempDisabled) {
+	                if (!this.tempDisabled && !this.readonly) {
 		                var me = this;
 		                var picker = Dom.get(me.id);
 		                var parent = picker.parentNode;
@@ -575,6 +577,19 @@
                     var me = this;
                     return Alfresco.util.message.call(me, messageId, "LogicECM.DatePicker", Array.prototype.slice.call(arguments).slice(1));
                 },
+
+				onReadonlyControl: function (layer, args) {
+					var input, fn;
+					if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+						this.readonly = args[1].readonly;
+						input = Dom.get(this.id + "-date");
+						fn = args[1].readonly ? input.setAttribute : input.removeAttribute;
+						fn.call(input, "readonly", "");
+						if (args[1].readonly) {
+							this.widgets.calendar.hide();
+						}
+					}
+				},
 
 	            onDisableControl: function (layer, args) {
 		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {

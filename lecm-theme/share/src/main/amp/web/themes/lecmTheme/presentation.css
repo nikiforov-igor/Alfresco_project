@@ -1943,10 +1943,12 @@ div.orgchart-picker-menu .search-input {
 .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel,
 .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:link,
 .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:visited,
-.tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:hover
-{
-  background-color:#C9EBF6;
-  color:black;
+.tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:hover,
+.yui-skin-lecmTheme .ygtv-highlight .ygtv-highlight1,
+.yui-skin-lecmTheme .ygtv-highlight .ygtv-highlight1 .ygtvlabel {
+    background-color: #C9EBF6;
+    color: black;
+    font-weight: bold;
 }
 
 /*datagrid control*/
@@ -2113,6 +2115,10 @@ span.person a div.description:empty {
 }
 .dark a.title {
     text-decoration: underline;
+}
+
+.yui-skin-lecmTheme .set-panel-body {
+    padding-left: 0;
 }
 
 .set-bordered-panel-body {
@@ -2526,7 +2532,17 @@ div#lightbox {
 .yui-skin-lecmTheme .arm-menu-item {
     background-image: url("/share/components/images/header/docs_16_light.png");
 }
+.yui-skin-lecmTheme .arm-menu-item.orgstructure {
+    background-image: url("/share/components/images/header/orgstructure_light.png");
+}
+.yui-skin-lecmTheme .arm-menu-item.ADMIN {
+    background-image: url("/share/components/images/header/settings_16_light.png");
+}
 /* arm menu : end */
+
+.yui-skin-lecmTheme .alf-files-icon {
+    background-image: url("/share/components/images/header/docs_16_light.png");
+}
 
 /* Controls colors : start */
 .yui-skin-lecmTheme .control .container .value-div > input[type=text],
@@ -2557,3 +2573,17 @@ div#lightbox {
     border: 1px solid #d2d2d2;
 }
 /* Tabs colors : end */
+
+.yui-skin-lecmTheme .dnd-uploader-with-preview .label-div {
+	padding-right: 12px;
+}
+.yui-skin-lecmTheme .dnd-uploader-with-preview .container {
+	border: 1px solid #cccccc;
+	margin: 2px;
+	padding: 0 2px 0 2px;
+	box-shadow: 0.33px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.yui-skin-lecmTheme .dnd-uploader-with-preview .buttons-div {
+	margin-top: 10px;
+}

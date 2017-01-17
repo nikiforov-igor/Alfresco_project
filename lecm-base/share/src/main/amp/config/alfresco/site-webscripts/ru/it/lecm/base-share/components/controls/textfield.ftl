@@ -17,13 +17,16 @@
     <#assign mandatory = field.mandatory>
 </#if>
 
+<#assign readonly = false>
 <#assign defaultValue=field.value>
-<#if form.mode == "create" && defaultValue?string == "">
-    <#if field.control.params.defaultValue??>
-        <#assign defaultValue=field.control.params.defaultValue>
-    </#if>
+<#if form.mode == "create">
     <#if form.arguments[field.name]?has_content>
         <#assign defaultValue=form.arguments[field.name]>
+    <#elseif form.arguments['readonly_' + field.name]?has_content>
+        <#assign defaultValue=form.arguments['readonly_' + field.name]>
+        <#assign readonly = true>
+    <#elseif field.control.params.defaultValue??>
+        <#assign defaultValue=field.control.params.defaultValue>
     </#if>
 </#if>
 
@@ -118,6 +121,9 @@
             </#if>
             validationType: "${field.control.params.validationType!'keyup'}"
         }).setMessages(${messages});
+		<#if readonly>
+			LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+		</#if>
     }
 
     YAHOO.util.Event.onContentReady("${fieldHtmlId}", init);

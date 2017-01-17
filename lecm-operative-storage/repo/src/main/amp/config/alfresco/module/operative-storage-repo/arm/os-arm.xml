@@ -6,6 +6,9 @@
 				<property name="cm:name"><![CDATA[АРМ Архивариуса]]></property>
 				<property name="lecm-arm:code"><![CDATA[archive]]></property>
 				<property name="lecm-arm:show-calendar"><![CDATA[false]]></property>
+				<property name="lecm-arm:show-create-button"><![CDATA[true]]></property>
+				<property name="lecm-arm:order"><![CDATA[30]]></property>
+				<property name="lecm-arm:show-in-menu"><![CDATA[true]]></property>
 				<items>
 					<item name="cm:Номенклатурные дела" type="lecm-arm:accordion">
 						<property name="cm:name"><![CDATA[Номенклатурные дела]]></property>
@@ -247,5 +250,8 @@
 				</items>
 			</item>
 		</items>
+		<assocs>
+			<assoc type="lecm-arm:menu-business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/СЭД. Архивариус"/>
+		</assocs>
 	</item>
 </items>

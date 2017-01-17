@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>ru.it.lecm.reports</groupId>
 		<artifactId>lecm-reports</artifactId>
-		<version>1.8.5</version>
+		<version>1.8.6</version>
 	</parent>
 
 	<artifactId>lecm-reports-repo</artifactId>

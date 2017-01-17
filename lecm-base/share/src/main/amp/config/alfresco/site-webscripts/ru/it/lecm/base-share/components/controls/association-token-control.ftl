@@ -135,10 +135,16 @@
 <script type="text/javascript">
     <#assign optionSeparator="|">
     <#assign labelSeparator=":">
+	<#assign readonly = false>
 
     <#assign defaultValue = "">
     <#if form.mode == "create" && !field.disabled>
-        <#if params.selectedItemsFormArgs??>
+        <#if form.arguments[field.name]?has_content>
+            <#assign defaultValue=form.arguments[field.name]>
+        <#elseif form.arguments['readonly_' + field.name]?has_content>
+            <#assign defaultValue=form.arguments['readonly_' + field.name]>
+            <#assign readonly = true>
+        <#elseif params.selectedItemsFormArgs??>
             <#assign selectedItemsFormArgs = params.selectedItemsFormArgs?split(",")>
             <#list selectedItemsFormArgs as selectedItemsFormArg>
                 <#if form.arguments[selectedItemsFormArg]??>
@@ -148,9 +154,6 @@
                     <#assign defaultValue = defaultValue + form.arguments[selectedItemsFormArg]/>
                 </#if>
             </#list>
-
-        <#elseif form.arguments[field.name]?has_content>
-            <#assign defaultValue=form.arguments[field.name]>
         </#if>
     </#if>
 
@@ -259,6 +262,9 @@
 				fieldId: "${field.configName}",
 				formId: "${args.htmlid}"
 			}).setMessages( ${messages} );
+			<#if readonly>
+				LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+			</#if>
 		}
 		YAHOO.util.Event.onDOMReady(init);
 	})();

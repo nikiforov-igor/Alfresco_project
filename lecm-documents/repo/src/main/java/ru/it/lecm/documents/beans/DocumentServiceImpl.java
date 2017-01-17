@@ -607,6 +607,18 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         }
         return null;
     }
+    @Override
+    public boolean canCopyDocument(NodeRef document){
+        boolean canCopy = false;
+        if (document != null && nodeService.exists(document)) {
+            final QName docType = nodeService.getType(document);
+            final String prefixedType = docType.toPrefixString(namespaceService);
+
+            DocumentCopySettings settings = DocumentCopySettingsBean.getSettingsForDocType(prefixedType);
+            canCopy = settings != null && !settings.isEmpty();
+        }
+        return canCopy;
+    }
 
     @Override
     public String getDocumentCopyURL(NodeRef document) {
@@ -645,6 +657,60 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                         }
                     } catch (InvalidQNameException invalid) {
                         logger.warn("Invalid QName for document property:" + propName);
+                    }
+                }
+                // Формируем список вложений для копирования. Копирование происходит в полиси создания ассоциации temp-attachments
+                final List<String> categories = settings.getCategoriesToCopy();
+                if (categories != null) {
+
+                    List<NodeRef> attachmentsToMove = new ArrayList<>();
+                    NodeRef userTemp = null;
+                    try {
+                        userTemp = repositoryStructureHelper.getUserTemp(false);
+                        if (userTemp == null) {
+                            userTemp = repositoryStructureHelper.createUserTemp();
+                        }
+                    } catch (WriteTransactionNeededException e) {
+                        logger.error(e.toString());
+                    }
+                    if (userTemp != null) {
+                        for (String category : categories) {
+                            NodeRef categoryRef = documentAttachmentsService.getCategory(category, document);
+                            if (categoryRef != null) {
+                                // Проходим по вложениям, копируя их в userTemp
+                                List<NodeRef> attachmentsFromCategory = documentAttachmentsService.getAttachmentsByCategory(categoryRef);
+                                for (NodeRef attachment : attachmentsFromCategory) {
+
+                                    List<AssociationRef> parentDocAssocs = nodeService.getTargetAssocs(attachment, DocumentService.ASSOC_PARENT_DOCUMENT);
+                                    // Временно удаляем ассоциации
+                                    for (AssociationRef parentDocAssoc : parentDocAssocs) {
+                                        NodeRef parentDoc = parentDocAssoc.getTargetRef();
+                                        nodeService.removeAssociation(attachment, parentDoc, DocumentService.ASSOC_PARENT_DOCUMENT);
+                                    }
+                                    try {
+                                        // Копируем
+                                        NodeRef attachmentCopy = copyService.copyAndRename(attachment, userTemp, ContentModel.ASSOC_CONTAINS,
+                                                QName.createQName(ContentModel.PROP_CONTENT.getNamespaceURI(), nodeService.getProperty(attachment, ContentModel.PROP_NAME).toString()),
+                                                false);
+                                        attachmentsToMove.add(attachmentCopy);
+                                    } finally {
+                                        // Возвращаем ассоциации
+                                        for (AssociationRef parentDocAssoc : parentDocAssocs) {
+                                            NodeRef parentDoc = parentDocAssoc.getTargetRef();
+                                            nodeService.createAssociation(attachment, parentDoc, DocumentService.ASSOC_PARENT_DOCUMENT);
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+
+                    if (attachmentsToMove.size() != 0) {
+                        paramsBuilder.append("&assoc_")
+                                .append(DocumentService.ASSOC_TEMP_ATTACHMENTS.toPrefixString(namespaceService).replace(":", "_"))
+                                .append("=")
+                                .append(StringUtils.collectionToDelimitedString(attachmentsToMove, ","));
                     }
                 }
 

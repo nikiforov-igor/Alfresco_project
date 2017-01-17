@@ -1,10 +1,14 @@
 <#if field.control.params.rows??><#assign rows=field.control.params.rows><#else><#assign rows=2></#if>
 <#if field.control.params.columns??><#assign columns=field.control.params.columns><#else><#assign columns=60></#if>
 
+<#assign readonly = false>
 
 <#assign defaultValue = "">
 <#if form.arguments[field.name]?has_content>
     <#assign defaultValue = form.arguments[field.name]>
+<#elseif form.arguments['readonly_' + field.name]?has_content>
+	<#assign defaultValue=form.arguments['readonly_' + field.name]>
+	<#assign readonly = true>
 </#if>
 
 <#assign value = field.value>
@@ -53,6 +57,8 @@
                     <#if form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>disabled: true,</#if>
                     currentValue: "${value?js_string}",
                     mandatory: ${field.mandatory?string},
+					fieldId: "${field.configName}",
+					formId: "${args.htmlid}",
                     editorParameters:{
                         width: "100%",
                         inline_styles: false,
@@ -73,6 +79,9 @@
 						paste_as_text: true
                     }
                 }).setMessages(${messages});
+			<#if readonly>
+				LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+			</#if>
         }
         function setTabIndex (editor) {            
             var editorId = editor.id;

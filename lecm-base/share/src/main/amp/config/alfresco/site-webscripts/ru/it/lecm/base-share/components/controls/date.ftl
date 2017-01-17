@@ -15,10 +15,14 @@
 	<#assign hideDateFormat=false>
 </#if>
 
+<#assign readonly = false>
 <#assign defaultValue=field.value>
-<#if form.mode == "create" && defaultValue?string == "">
+<#if form.mode == "create">
     <#if form.arguments[field.name]?has_content>
         <#assign defaultValue=form.arguments[field.name]>
+	<#elseif form.arguments['readonly_' + field.name]?has_content>
+		<#assign defaultValue=form.arguments['readonly_' + field.name]>
+		<#assign readonly = true>
     </#if>
 </#if>
 
@@ -94,6 +98,9 @@
                 }
 
 		        YAHOO.util.Event.onContentReady("${controlId}-parent", initBoobling);
+				<#if readonly>
+					LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+				</#if>
 	        })();
 	        //]]></script>
 
@@ -137,7 +144,7 @@
 </div>
 <#elseif !multiValued>
         <#assign currentValue = defaultValue?js_string>
-        <#if  !currentValue?has_content && !disabled > 
+        <#if  !currentValue?has_content && !disabled >
              <#assign currentValue = field.control.params.defaultValue!""?js_string>
              <#if currentValue == "now">
                     <#if field.control.params.defaultTime?? >
@@ -146,7 +153,7 @@
                         <#assign currentValue = .now?string("yyyy-MM-dd")>
                     </#if>
              </#if>
-        </#if>     
+        </#if>
         <script type="text/javascript">//<![CDATA[
         (function () {
             function init() {
@@ -220,6 +227,9 @@
                 });
             </#if>
                 picker.draw();
+				<#if readonly>
+					LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+				</#if>
             }
 
             YAHOO.util.Event.onAvailable('${fieldHtmlId}', init, this, true);

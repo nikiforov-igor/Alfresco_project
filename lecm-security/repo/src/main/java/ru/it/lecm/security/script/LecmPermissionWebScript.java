@@ -1,6 +1,7 @@
 package ru.it.lecm.security.script;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.AuthorityService;
@@ -151,6 +152,26 @@ public class LecmPermissionWebScript extends BaseWebScript {
 		List<NodeRef> results = lecmPermissionService.getEmployeesByDynamicRole(document.getNodeRef(), roleCode);
 		return createScriptable(results);
 	}
+    /**
+     * Запускает выполнение от имени администратора
+     */
+    public void setRunAsUserSystem(){
+        AuthenticationUtil.setRunAsUserSystem();
+    }
+
+    /**
+     * Заталкивает в стек аунтификацию пользователя
+     */
+    public void pushAuthentication(){
+        AuthenticationUtil.pushAuthentication();
+    }
+
+    /**
+     * Выталкивает аунтификацию пользователя
+     */
+    public void popAuthentication(){
+        AuthenticationUtil.popAuthentication();
+    }
 	
 	public Collection<LecmPermissionService.LecmPermissionGroup> getPermGroups() {
 		return lecmPermissionService.getPermGroups();

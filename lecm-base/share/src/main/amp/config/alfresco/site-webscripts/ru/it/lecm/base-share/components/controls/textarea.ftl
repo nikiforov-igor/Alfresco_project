@@ -1,10 +1,14 @@
 <#if field.control.params.rows??><#assign rows=field.control.params.rows><#else><#assign rows=2></#if>
 <#if field.control.params.columns??><#assign columns=field.control.params.columns><#else><#assign columns=60></#if>
 
+<#assign readonly = false>
 <#assign defaultValue=field.value>
-<#if form.mode == "create" && defaultValue?string == "">
+<#if form.mode == "create">
     <#if form.arguments[field.name]?has_content>
         <#assign defaultValue=form.arguments[field.name]>
+	<#elseif form.arguments['readonly_' + field.name]?has_content>
+		<#assign defaultValue=form.arguments['readonly_' + field.name]>
+		<#assign readonly = true>
     </#if>
 </#if>
 
@@ -58,6 +62,9 @@
             </#if>
             disabled: ${disabled?string}
         });
+		<#if readonly>
+			LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+		</#if>
     }
 
     YAHOO.util.Event.onDOMReady(init);

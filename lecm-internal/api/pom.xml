@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>ru.it.lecm.internal</groupId>
 		<artifactId>internal</artifactId>
-		<version>1.8.5</version>
+		<version>1.8.6</version>
 	</parent>
 
 	<artifactId>internal-repo-api</artifactId>

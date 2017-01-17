@@ -12,8 +12,9 @@
 		        <property name="cm:name"><![CDATA[АРМ СЭД]]></property>
 		        <property name="lecm-arm:code"><![CDATA[SED]]></property>
 		        <property name="lecm-arm:show-calendar"><![CDATA[true]]></property>
-        <property name="lecm-arm:order"><![CDATA[0]]></property>
-        <property name="lecm-arm:show-in-menu"><![CDATA[true]]></property>
+		        <property name="lecm-arm:show-create-button"><![CDATA[true]]></property>
+		        <property name="lecm-arm:order"><![CDATA[0]]></property>
+		        <property name="lecm-arm:show-in-menu"><![CDATA[true]]></property>
 		        <items>
 		            <item name="cm:Моя работа" type="lecm-arm:accordion">
 		                <property name="cm:name"><![CDATA[Моя работа]]></property>

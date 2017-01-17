@@ -20,7 +20,7 @@
     <parent>
         <groupId>ru.it.lecm.orgstructure</groupId>
         <artifactId>orgstructure</artifactId>
-        <version>1.8.5</version>
+        <version>1.8.6</version>
     </parent>
 
     <artifactId>orgstructure-share</artifactId>

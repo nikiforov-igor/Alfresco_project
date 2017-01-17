@@ -1,8 +1,14 @@
+<#assign readonly=false>
 <#assign defaultValue=field.value>
-<#if form.mode == "create" && defaultValue?string == "">
-    <#if form.arguments[field.name]?has_content>
-        <#assign defaultValue=form.arguments[field.name]>
-    </#if>
+<#if form.mode == "create">
+	<#if form.arguments[field.name]?has_content>
+		<#assign defaultValue=form.arguments[field.name]>
+	<#elseif form.arguments['readonly_' + field.name]?has_content>
+		<#assign defaultValue=form.arguments['readonly_' + field.name]>
+		<#assign readonly = true>
+	<#elseif field.control.params.defaultValue??>
+		<#assign defaultValue=field.control.params.defaultValue>
+	</#if>
 </#if>
 
 <#assign disabled=(field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))/>
@@ -47,6 +53,9 @@
 					formId: "${args.htmlid}",
                     disabled: ${disabled?string}
 				});
+			<#if readonly>
+				LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+			</#if>
 			}
 
 			YAHOO.util.Event.onDOMReady(init);

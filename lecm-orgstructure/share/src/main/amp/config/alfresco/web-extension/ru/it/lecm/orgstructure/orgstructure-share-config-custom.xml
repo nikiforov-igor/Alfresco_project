@@ -472,6 +472,8 @@
     <config evaluator="node-type" condition="lecm-orgstr:organization-unit">
         <forms>
             <form>
+                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
@@ -479,7 +481,12 @@
                     <show id="lecm-orgstr:unit-type"/>
                 </field-visibility>
 	            <appearance>
-		            <field id="lecm-orgstr:unit-type">
+                    <set id="mainAttributes" appearance="" label-id="info.mainAttributes" />
+                    
+                    <field id="lecm-orgstr:element-full-name" set="mainAttributes"/>
+                    <field id="lecm-orgstr:element-short-name" set="mainAttributes"/>
+                    <field id="lecm-orgstr:unit-code" set="mainAttributes"/>
+		            <field id="lecm-orgstr:unit-type" set="mainAttributes">
 			            <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
 		            </field>
 	            </appearance>

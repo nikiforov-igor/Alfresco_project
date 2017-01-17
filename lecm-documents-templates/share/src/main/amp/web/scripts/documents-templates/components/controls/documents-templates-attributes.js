@@ -22,12 +22,20 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		Bubbling.on('clearTemplateAttributes', this.onClearTemplateAttributes, this);
 		Bubbling.on('beforeSubmitTemplate', this.onBeforeSubmitTemplate, this);
 		Bubbling.on('templateOrganizationSelect', this.onTemplateOrganizationSelect, this);
+
+		this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "onOrganizationSelect"],
+			{
+				fn: this.populateDataGrid,
+				scope: this
+			});
 		return this;
 	};
 
 	YAHOO.lang.extend(LogicECM.module.DocumentsTemplates.Attributes, Alfresco.component.Base, {
 
 		DICTIONARY_TYPES: [ 'any', 'encrypted', 'text', 'mltext', 'content', 'int', 'long', 'float', 'double', 'date', 'datetime', 'boolean', 'qname', 'noderef', 'childassocref', 'assocref', 'path', 'category', 'locale', 'version', 'period' ],
+
+		DEFAULT_ORG_UNIT_PATH: '/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг',
 
 		_fields: null,
 
@@ -94,7 +102,8 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			this.templates = {};
 			this.selectedFields = {};
 			this.templateDocType = Selector.query('input[name="prop_lecm-template_doc-type"]', form, true).value;
-			this.templateOrganization = Selector.query('input[name="assoc_lecm-template_organizationAssoc"]', form, true).value;
+			this.templateOrganization = {};
+			this.templateOrganization.nodeRef = Selector.query('input[name="assoc_lecm-template_organizationAssoc"]', form, true).value;
 			this.defaultParams = {
 				defaultValue: '',
 				docType: this.templateDocType,
@@ -265,7 +274,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				htmlid = obj.record.getId() + '-value-ctrl';
 
 			/*Добавим фильтр по организации*/
-			if (this.templateOrganization != null && isAssoc) {
+			if (this.templateOrganization.nodeRef && isAssoc) {
 				var filerAdded = false;
 				var orgFilter, existsFilter, orgField;
 
@@ -280,7 +289,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 							orgFilter =
 								"{{IN_SAME_ORGANIZATION({strict:" + (params[prefix + 'UseStrictFilterByOrg'] ? params[prefix + 'UseStrictFilterByOrg'] : "false") +
 								(orgField != null ? ", org_field:\\\"" + orgField + "\\\"" : "") +
-								", organization:\\\"" + this.templateOrganization + "\\\"})}}";
+								", organization:\\\"" + this.templateOrganization.nodeRef + "\\\"})}}";
 
 							existsFilter = params[prefix + 'AdditionalFilter'];
 
@@ -295,7 +304,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 							orgFilter =
 								"{{IN_SAME_ORGANIZATION({strict:" + (params[prefix + 'useStrictFilterByOrg'] ? params[prefix + 'useStrictFilterByOrg'] : "false") +
 								(orgField != null ? ", org_field:\\\"" + orgField + "\\\"" : "") +
-								", organization:\\\"" + this.templateOrganization + "\\\"})}}";
+								", organization:\\\"" + this.templateOrganization.nodeRef + "\\\"})}}";
 
 							existsFilter = params[prefix + 'additionalFilter'];
 
@@ -304,6 +313,16 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 							filerAdded = true;
 						}
+						//подменяем XPATH
+						var replacedPathProps = ["RootLocation", "_rootLocation", "rootLocation"];
+						replacedPathProps.forEach(function (keyProp) {
+							var indx = key.indexOf(keyProp);
+							if (indx >= 0) {
+								if (params[key] == "{organization}") {
+									params[key] = (this.templateOrganization.orgUnitPath ? this.templateOrganization.orgUnitPath : this.DEFAULT_ORG_UNIT_PATH);
+								}
+							}
+						}, this);
 					}
 				}
 				if (!filerAdded) {/* по дефолту - добавляем*/
@@ -311,7 +330,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					orgFilter =
 						"{{IN_SAME_ORGANIZATION({strict:" + (params['useStrictFilterByOrg'] ? params['useStrictFilterByOrg'] : "false") +
 						(orgField != null ? ", org_field:\\\"" + orgField + "\\\"" : "") +
-						", organization:\\\"" + this.templateOrganization + "\\\"})}}";
+						", organization:\\\"" + this.templateOrganization.nodeRef + "\\\"})}}";
 
 					params['doNotCheckAccess'] = true;
 					params['additionalFilter'] = (params['additionalFilter'] && params['additionalFilter'].length > 0 ? params['additionalFilter'] + ' AND ' : '') + orgFilter;
@@ -446,42 +465,48 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				}
 			}
 
-			if (this.templateOrganization && (!organization || organization.nodeRef != this.templateOrganization)) {
+			if (this.templateOrganization.nodeRef && (!organization || organization.nodeRef != this.templateOrganization.nodeRef)) {
 				this.onClearTemplateAttributes();
 			}
 
-			this.templateOrganization = organization != null ? organization.nodeRef : null;
+			this.templateOrganization = organization ? organization : {};
 
 			Bubbling.fire('updateButtonState', {
-				disabledState: this.templateOrganization == null
+				disabledState: !this.templateOrganization.nodeRef
 			});
+
+			this.deferredListPopulation.fulfil("onOrganizationSelect");
 		},
 
 		onBeforeSubmitTemplate: function (layer, args) {
 			/* this === LogicECM.module.DocumentsTemplates.Attributes */
 			var records = this.widgets.datatable.getRecordSet().getRecords();
-			var templateData = records.reduce(function (prev, curr) {
-				var obj = {
+			var templateData = records.map(function (record) {
+				return {
+					readonly: "true" === this.widgets.readonlyValue.value,
 					initial: {
-						dataType: curr.getData('attribute').dataType,
-						formsName: curr.getData('attribute').formsName,
-						attribute: curr.getData('attribute').name,
-						type: curr.getData('attribute').type,
-						value: Dom.get(curr.getData('value')) ? Dom.get(curr.getData('value')).value : null
+						dataType: record.getData('attribute').dataType,
+						formsName: record.getData('attribute').formsName,
+						attribute: record.getData('attribute').name,
+						type: record.getData('attribute').type,
+						value: Dom.get(record.getData('value')) ? Dom.get(record.getData('value')).value : null
 					}
 				};
-				curr.setData('initial', obj.initial);
-				prev.push(obj);
-				return prev;
-			}, []);
+			}, this);
 			this.widgets.hiddenValue.value = JSON.stringify(templateData);
 		},
 
 		onReady: function () {
 			this.widgets.hiddenValue = Dom.get(this.id + '-value');
+			this.widgets.readonlyValue = Selector.query('input[name="prop_lecm-template_readonly"]', Dom.get(this.options.formId), true);
 			this.templates.deleteTemplate = Dom.get(this.id  + '-delete-template').innerHTML;
 			this.templates.attributeTemplate = Dom.get(this.id  + '-attribute-template').innerHTML;
 			this.templates.valueTemplate = Dom.get(this.id + '-value-template').innerHTML;
+
+			this.deferredListPopulation.fulfil("onReady");
+		},
+
+		populateDataGrid: function () {
 			this.widgets.datasource = new YAHOO.util.FunctionDataSource(this.initDatasource, {
 				scope: this
 			});

@@ -597,16 +597,17 @@
 			</form>
 			<form id="datagrid">
 				<field-visibility>
-					<show id="lecm-protocol-ts:reporter-assoc"/>
-					<show id="lecm-protocol-ts:point-formulation"/>
+					<show id="lecm-protocol-ts:decision"/>
+					<show id="lecm-protocol-ts:executor-assoc"/>
+					<show id="lecm-protocol-ts:execution-date"/>
 				</field-visibility>
 			</form>
 			<form id="points-datagrid">
 				<field-visibility>
 					<show id="lecm-document:indexTableRow" force="true"/>
-					<show id="lecm-protocol-ts:reporter-assoc"/>
-					<show id="lecm-protocol-ts:point-formulation"/>
-					<show id="lecm-protocol-ts:point-status-assoc" force="true"/>
+					<show id="lecm-protocol-ts:decision"/>
+					<show id="lecm-protocol-ts:executor-assoc"/>
+					<show id="lecm-protocol-ts:execution-date"/>
 				</field-visibility>
 			</form>
 		</forms>

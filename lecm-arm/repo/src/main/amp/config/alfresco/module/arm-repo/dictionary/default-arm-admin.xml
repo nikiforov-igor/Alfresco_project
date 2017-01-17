@@ -8,20 +8,23 @@
 		<property name="lecm-dic:plane">false</property>
 		<property name="lecm-dic:description">Настройки АРМ</property>
 		<items>
-		    <item name="cm:Администрирование" type="lecm-arm:arm">
-		        <property name="cm:name"><![CDATA[Администрирование]]></property>
-		        <property name="lecm-arm:code"><![CDATA[ADMIN]]></property>
-		        <items>
-		            <item name="cm:Другие настройки" type="lecm-arm:accordion">
-		                <property name="cm:name"><![CDATA[Другие настройки]]></property>
-		                <property name="lecm-arm:order"><![CDATA[200]]></property>
-		                <property name="lecm-arm:search-type"><![CDATA[]]></property>
-		                <property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
-		                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-		                <property name="lecm-arm:search-query"><![CDATA[]]></property>
-		            </item>
-		        </items>
-		    </item>
+			<item name="cm:Администрирование" type="lecm-arm:arm">
+				<property name="cm:name"><![CDATA[Администрирование]]></property>
+				<property name="lecm-arm:code"><![CDATA[ADMIN]]></property>
+				<property name="lecm-arm:show-create-button">false</property>
+				<property name="lecm-arm:order"><![CDATA[20]]></property>
+				<property name="lecm-arm:show-in-menu"><![CDATA[true]]></property>
+				<items>
+					<item name="cm:Другие настройки" type="lecm-arm:accordion">
+						<property name="cm:name"><![CDATA[Другие настройки]]></property>
+		 				<property name="lecm-arm:order"><![CDATA[200]]></property>
+						<property name="lecm-arm:search-type"><![CDATA[]]></property>
+						<property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
+						<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+						<property name="lecm-arm:search-query"><![CDATA[]]></property>
+					</item>
+				</items>
+			</item>
 		</items>
 	</item>
 </items>

@@ -35,11 +35,14 @@ LogicECM.module = LogicECM.module || {};
 		Bubbling.on('removeSelectedItem', this.onRemoveSelectedItem, this);
 		Bubbling.on('pickerClosed', this.onPickerClosed, this);
         Bubbling.on('loadAllOriginalItems', this.onLoadAllOriginalItems, this);
+        Bubbling.on('readonlyControl', this.onReadonlyControl, this);
 
 		return this;
 	};
 
 	YAHOO.extend(LogicECM.module.AssociationComplexControl, Alfresco.component.Base, {
+
+		readonly: null,
 
 		fieldValues: [],
 
@@ -50,6 +53,8 @@ LogicECM.module = LogicECM.module || {};
 		autocompleteHelper: null,
 
 		options: {
+			fieldId: null,
+			formId: null,
 			disabled: null,
 			changeItemsFireAction: null,
 			additionalFilter: '',
@@ -60,7 +65,8 @@ LogicECM.module = LogicECM.module || {};
 			pickerButtonTitle: null,
 			pickerButtonLabel: null,
             multipleSelectMode: false,
-			itemsOptions: []
+			itemsOptions: [],
+			sortSelected: false
 		},
 
 		widgets: {
@@ -72,65 +78,66 @@ LogicECM.module = LogicECM.module || {};
         optionsMap: {},
 
 		_renderSelectedItems: function (selectedItems) {
-
-			var ACUtils = LogicECM.module.AssociationComplexControl.Utils,
-				count;
+			var ACUtils = LogicECM.module.AssociationComplexControl.Utils;
 
 			function onAddListener(params) {
 				Event.on(params.id, 'click', this.onRemove, params, this);
 			}
 
-			selectedItems.forEach(function(selected) {
-                if (selected) {
-                    var displayName,
-                        elementName,
-                        elem = document.createElement('div'),
-                        id = selected.nodeRef.replace(/:|\//g, '_'),
-                        itemId = this.id + '-' + id,
-                        notSelected = !Selector.query('[id="' + itemId + '"]', this.widgets.selected, true),
-                        options = this.optionsMap[selected.key] || this.options;
+			function existing(item) {
+				var itemId, notSelected;
+				if (item) {
+					itemId = this.id + '-' + item.nodeRef.replace(/:|\//g, '_');
+					notSelected = !Selector.query('[id="' + itemId + '"]', this.widgets.selected, true);
+				}
+				return !!item && notSelected;
+			}
 
-                    if (notSelected) {
-                        if (options.plane || !options.showPath) {
-                            displayName = selected.selectedName;
-                        } else {
-                            displayName = selected.simplePath + selected.selectedName;
-                        }
+			function render(item) {
+				var elem = document.createElement('div'),
+					options = this.optionsMap[item.key] || this.options,
+					itemId = this.id + '-' + item.nodeRef.replace(/:|\//g, '_'),
+					displayName = (options.plane || !options.showPath) ? item.selectedName : item.simplePath + item.selectedName,
+					elementName;
 
-                        if (this.options.disabled) {
-                            if ('lecm-orgstr:employee' === options.itemType) {
-                                elem.innerHTML = BaseUtil.getCroppedItem(BaseUtil.getControlEmployeeView(selected.nodeRef, displayName));
-                            } else {
-                                elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected));
-                            }
-                            elem.firstChild.id = itemId;
-                        } else {
-                            Event.onAvailable(itemId, onAddListener, {id: itemId, nodeData: selected}, this);
-                            if ('lecm-orgstr:employee' === options.itemType) {
-                                elementName = ACUtils.getEmployeeAbsenceMarkeredHTML(selected.nodeRef, displayName, true, options.employeeAbsenceMarker, []);
-                                elem.innerHTML = BaseUtil.getCroppedItem(elementName, ACUtils.getRemoveButtonHTML(this.id, selected));
-                            } else {
-                                elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected), ACUtils.getRemoveButtonHTML(this.id, selected));
-                            }
-                        }
-                        this.widgets.selected.appendChild(elem.firstChild);
-                    }
-                }
-			}, this);
+				if (this.options.disabled || this.readonly) {
+					if ('lecm-orgstr:employee' === options.itemType) {
+						elem.innerHTML = BaseUtil.getCroppedItem(BaseUtil.getControlEmployeeView(item.nodeRef, displayName));
+					} else {
+						elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, item));
+					}
+					elem.firstChild.id = itemId;
+				} else {
+					Event.onAvailable(itemId, onAddListener, {id: itemId, nodeData: item}, this);
+					if ('lecm-orgstr:employee' === options.itemType) {
+						elementName = ACUtils.getEmployeeAbsenceMarkeredHTML(item.nodeRef, displayName, true, options.employeeAbsenceMarker, []);
+						elem.innerHTML = BaseUtil.getCroppedItem(elementName, ACUtils.getRemoveButtonHTML(this.id, item));
+					} else {
+						elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, item), ACUtils.getRemoveButtonHTML(this.id, item));
+					}
+				}
+				this.widgets.selected.appendChild(elem.firstChild);
+			}
+
+			var count, fn;
+
+			if (this.options.sortSelected) {
+				selectedItems.filter(existing, this).sort(ACUtils.sortByName).forEach(render, this);
+			} else {
+				selectedItems.filter(existing, this).forEach(render, this);
+			}
 			count = this.widgets.selected.childElementCount;
 			if (this.widgets.autocomplete) {
-				if (!this.options.endpointMany && count) {
-					Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
-				} else {
-					Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
-				}
+				fn = (!this.options.endpointMany && count) ? Dom.addClass : Dom.removeClass;
+				fn.call(Dom, this.widgets.autocomplete.getInputEl(), 'hidden');
 			}
 			return count;
 		},
 
 		createAssociationControlAutocompleteHelper: function () {
+			var ACUtils = LogicECM.module.AssociationComplexControl.Utils;
 			if (this.options.showAutocomplete) {
-				this.autocompleteHelper = new Alfresco.util.Deferred(LogicECM.module.AssociationComplexControl.Utils.getItemKeys(this.options.itemsOptions), {
+				this.autocompleteHelper = new Alfresco.util.Deferred(ACUtils.getItemKeys(this.options.itemsOptions), {
 					scope: this,
 					fn: this.enableAutocomplete
 				});
@@ -161,6 +168,19 @@ LogicECM.module = LogicECM.module || {};
 			}
 		},
 
+		onReadonlyControl: function(layer, args) {
+			var autocompleteInput, fn;
+			if (!this.options.disabled && this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+				this.readonly = args[1].readonly;
+				this.widgets.pickerButton.set('disabled', args[1].readonly);
+				if (this.widgets.autocomplete) {
+					autocompleteInput = this.widgets.autocomplete.getInputEl();
+					fn = args[1].readonly ? autocompleteInput.setAttribute : autocompleteInput.removeAttribute;
+					fn.call(autocompleteInput, 'disabled', '');
+				}
+			}
+		},
+
 		onLoadAllOriginalItems: function(layer, args) {
 			if (Alfresco.util.hasEventInterest(this, args)) {
                 this.optionsMap = args[1].optionsMap;
@@ -188,12 +208,14 @@ LogicECM.module = LogicECM.module || {};
 				if (this.widgets.added) {
 					this.widgets.added.value = Alfresco.util.encodeHTML(Object.keys(this.widgets.picker.added).join(','));
 				}
+				
+				this.fire('afterChange', {});
 			}
 		},
 
 		onRemoveSelectedItem: function (layer, args) {
 			var nodeData, id, el, value, idx, added=[], removed=[], item, index;
-			if (Alfresco.util.hasEventInterest(this, args)) {
+			if (Alfresco.util.hasEventInterest(this, args) && !this.options.disabled && !this.readonly) {
 				nodeData = args[1].removed;
 				id = this.id + '-' + nodeData.nodeRef.replace(/:|\//g, '_');
 				Selector.query('[id="' + id + '"]', this.widgets.selected).forEach(function (el) {
@@ -243,14 +265,15 @@ LogicECM.module = LogicECM.module || {};
 
 		onPickerClosed: function (layer, args) {
 			if (Alfresco.util.hasEventInterest(this, args)) {
-                var selectedValues = [],
+                var ACUtils = LogicECM.module.AssociationComplexControl.Utils,
+					selectedValues = [],
                     selectedKeys = Object.keys(args[1].selected),
                     removedKeys = Object.keys(args[1].removed),
                     addedKeys = Object.keys(args[1].added);
 
                 selectedValues = selectedKeys.map(function(key) {
 					return this[key];
-				}, args[1].selected).sort(LogicECM.module.AssociationComplexControl.Utils.sortByIndex);
+				}, args[1].selected).sort(ACUtils.sortByIndex);
 
 				this.widgets.selected.innerHTML = '';
 				this._renderSelectedItems(selectedValues);
@@ -312,14 +335,15 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		generateRequest: function (sQuery) {
-			var decodedQuery = decodeURIComponent(sQuery),
+			var ACUtils = LogicECM.module.AssociationComplexControl.Utils,
+				decodedQuery = decodeURIComponent(sQuery),
 				searchTerm = this.searchProperties.reduce(function (prev, curr) {
 				return prev + (prev.length ? '#' : '') + curr + ':' + decodedQuery;
 			}, '');
 			Dom.addClass(this.widgets.autocomplete.getInputEl(), 'wait-for-load');
 			searchTerm = searchTerm ? searchTerm : 'cm:name:' + decodedQuery;
 
-			return LogicECM.module.AssociationComplexControl.Utils.generateChildrenUrlParams(this.options, searchTerm, 0, true);
+			return ACUtils.generateChildrenUrlParams(this.options, searchTerm, 0, true);
 		},
 
 		formatResult: function (oResultData, sQuery, sResultMatch) {
@@ -442,6 +466,8 @@ LogicECM.module = LogicECM.module || {};
 					fn: this.onAutocomplete
 				}, 'keydown');
 			}
+
+			BaseUtil.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
 		}
 	}, true);
 })();

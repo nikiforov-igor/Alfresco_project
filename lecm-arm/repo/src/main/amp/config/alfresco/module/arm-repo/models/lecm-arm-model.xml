@@ -49,6 +49,11 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="lecm-arm:show-create-button">
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+					<default>true</default>
+				</property>
 			</properties>
 			<overrides>
 				<property name="lecm-dic:valueContainsType">

@@ -10,9 +10,13 @@
     <#assign plane = false>
 </#if>
 
+<#assign readonly = false>
 <#assign defaultValue=field.control.params.defaultValue!"">
 <#if form.arguments[field.name]?has_content>
     <#assign defaultValue=form.arguments[field.name]>
+<#elseif form.arguments['readonly_' + field.name]?has_content>
+	<#assign defaultValue=form.arguments['readonly_' + field.name]>
+	<#assign readonly = true>
 </#if>
 
 
@@ -55,6 +59,34 @@
 	<#assign checkType = false>
 <#else>
 	<#assign checkType = true>
+</#if>
+
+<#assign optionSeparator="|">
+<#assign labelSeparator=":">
+
+<#if field.control.params.selectedValueContextProperty??>
+    <#if context.properties[field.control.params.selectedValueContextProperty]??>
+        <#assign selectedValue = context.properties[field.control.params.selectedValueContextProperty]>
+    <#elseif args[field.control.params.selectedValueContextProperty]??>
+        <#assign selectedValue = args[field.control.params.selectedValueContextProperty]>
+    <#elseif context.properties[field.control.params.selectedValueContextProperty]??>
+        <#assign selectedValue = context.properties[field.control.params.selectedValueContextProperty]>
+    </#if>
+</#if>
+
+<#if selectedValue == "" && params.selectedItemsFormArgs??>
+    <#assign selectedItemsFormArgs = params.selectedItemsFormArgs?split(",")>
+    <#list selectedItemsFormArgs as selectedItemsFormArg>
+        <#if form.arguments[selectedItemsFormArg]??>
+            <#if !selectedValue??>
+                <#assign selectedValue = ""/>
+            </#if>
+            <#if (selectedValue?length > 0)>
+                <#assign selectedValue = selectedValue + ","/>
+            </#if>
+            <#assign selectedValue = selectedValue + form.arguments[selectedItemsFormArg]/>
+        </#if>
+    </#list>
 </#if>
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
@@ -113,32 +145,6 @@
 <div class="clear"></div>
 
 <script type="text/javascript">
-    <#if field.control.params.selectedValueContextProperty??>
-        <#if context.properties[field.control.params.selectedValueContextProperty]??>
-            <#assign selectedValue = context.properties[field.control.params.selectedValueContextProperty]>
-        <#elseif args[field.control.params.selectedValueContextProperty]??>
-            <#assign selectedValue = args[field.control.params.selectedValueContextProperty]>
-        <#elseif context.properties[field.control.params.selectedValueContextProperty]??>
-            <#assign selectedValue = context.properties[field.control.params.selectedValueContextProperty]>
-        </#if>
-    </#if>
-    <#assign optionSeparator="|">
-    <#assign labelSeparator=":">
-    <#if selectedValue == "" && params.selectedItemsFormArgs??>
-        <#assign selectedItemsFormArgs = params.selectedItemsFormArgs?split(",")>
-        <#list selectedItemsFormArgs as selectedItemsFormArg>
-            <#if form.arguments[selectedItemsFormArg]??>
-                <#if !selectedValue??>
-                    <#assign selectedValue = ""/>
-                </#if>
-                <#if (selectedValue?length > 0)>
-                    <#assign selectedValue = selectedValue + ","/>
-                </#if>
-                <#assign selectedValue = selectedValue + form.arguments[selectedItemsFormArg]/>
-            </#if>
-        </#list>
-    </#if>
-
 (function() {
  	function init() {
         LogicECM.module.Base.Util.loadScripts([
@@ -246,6 +252,9 @@
 			formId: "${args.htmlid}"
 		</#if>
     }).setMessages( ${messages} );
+	<#if readonly>
+		LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);
+	</#if>
  	}
  	YAHOO.util.Event.onDOMReady(init);
 })();

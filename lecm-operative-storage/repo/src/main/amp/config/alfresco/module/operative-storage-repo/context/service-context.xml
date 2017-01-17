@@ -90,7 +90,6 @@
     </util:list>
 
 	<util:list id="operative.storage.arm.os">
-		<value>alfresco/module/${artifactId}/arm/os-settings-arm.xml</value>
 		<value>alfresco/module/${artifactId}/arm/os-arm.xml</value>
 	</util:list>
 
@@ -123,7 +122,7 @@
           p:reportsForDeploy-ref="operative.storage.deployer.reportsForDeploy"/>
 
 	<bean id="operative.storage.arm.bootstrap.main" parent="lecmDictionaryBootstrap"
-		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
+		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap,operative.storage.dictionary.bootstrap"
 		  p:rootPath="/Business platform/LECM/Сервис АРМ"
 		  p:dictionaries-ref="operative.storage.arm.os"/>
 

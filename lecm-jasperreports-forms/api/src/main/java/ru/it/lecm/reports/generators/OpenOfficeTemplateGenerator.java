@@ -4,8 +4,6 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertyContainer;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.document.XDocumentInfo;
-import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.document.XDocumentProperties;
 import com.sun.star.document.XDocumentPropertiesSupplier;
 import com.sun.star.frame.XComponentLoader;
@@ -105,11 +103,10 @@ public class OpenOfficeTemplateGenerator extends OOTemplateGenerator {
 
             final XDocumentPropertiesSupplier xDocPropsSuppl = (XDocumentPropertiesSupplier)UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xCompDoc);
             final XDocumentProperties xDocProps = xDocPropsSuppl.getDocumentProperties();
+            final XPropertyContainer userProperties = xDocProps.getUserDefinedProperties();
 
-            final XDocumentInfoSupplier xDocInfoSuppl = (XDocumentInfoSupplier)UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xCompDoc);
-            final XDocumentInfo docInfo = xDocInfoSuppl.getDocumentInfo();
-            final XPropertySet docProperties = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, docInfo);
-            final XPropertyContainer docPropertyContainer = (XPropertyContainer)UnoRuntime.queryInterface(XPropertyContainer.class, docInfo);
+            final XPropertySet docProperties = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, userProperties);
+            final XPropertyContainer docPropertyContainer = (XPropertyContainer) UnoRuntime.queryInterface(XPropertyContainer.class, docProperties);
 
             if (author != null) {
                 stage = String.format("Set openOffice property Author='%s'\n\t of document '%s'", author, srcOODocUrl);

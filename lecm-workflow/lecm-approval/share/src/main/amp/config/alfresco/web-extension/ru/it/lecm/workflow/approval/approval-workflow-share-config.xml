@@ -45,11 +45,10 @@
 					</field>
 					<field id="lecmWorkflowRoutes:selectRouteAssoc">
 						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.Workflow.routeIsEmptyValidator" event="keyup" message-id="approval.required.not.empty.route"/>
-							<constraint type="INVALID" validation-handler="LogicECM.module.Workflow.routeHasEmployeesValidator" event="keyup" message-id="approval.required.filled.route"/>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Workflow.routeHasEmployeesValidator" event="keyup" message-id="approval.required.filled.route"/>
 						</constraint-handlers>
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_маршрутов</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_маршрутов</control-param>
 							<control-param name="nameSubstituteString">{cm:title}</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
@@ -58,6 +57,9 @@
 							<control-param name="itemType">lecmWorkflowRoutes:route</control-param>
 							<control-param name="showAssocViewForm">true</control-param>
 							<control-param name="lazyLoading">true</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="showAutocomplete">true</control-param>
+							<control-param name="showSearch">true</control-param>
 						</control>
 					</field>
 					<field id="lecmWorkflowRoutes:hackSelectRouteAssocFake">

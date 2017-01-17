@@ -33,6 +33,7 @@ LogicECM.module = LogicECM.module || {};
 	{
 		LogicECM.module.AssociationSearchViewer.superclass.constructor.call(this, "AssociationSearchViewer", htmlId);
 		YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemAdded, this);
+		YAHOO.Bubbling.on("readonlyControl", this.onReadonlyControl, this);
 		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
 		YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
 
@@ -64,6 +65,8 @@ LogicECM.module = LogicECM.module || {};
 			searchProperties: null,
 
 			isSearch: false,
+
+			readonly: false,
 
 			options:
 			{
@@ -99,6 +102,8 @@ LogicECM.module = LogicECM.module || {};
 
                 sortProp: "cm:name",
 
+				sortSelected: false,
+
 				selectedItemsNameSubstituteString: null,
 
 				// fire bubling методы выполняемые по нажатию определенной кнопки в диалоговом окне
@@ -119,6 +124,8 @@ LogicECM.module = LogicECM.module || {};
                 useStrictFilterByOrg: false,
 				doNotCheckAccess: false,
 
+				showInaccessible: false,
+
 				ignoreNodes: null,
 
                 allowedNodes:null,
@@ -134,7 +141,7 @@ LogicECM.module = LogicECM.module || {};
 				viewUrl: null,
 
 				checkSearchColumnDataType: true,
-				
+
 				fieldId: null,
 
 				formId: false
@@ -316,7 +323,8 @@ LogicECM.module = LogicECM.module || {};
 								itemValueType: "nodeRef",
 								itemNameSubstituteString: this.options.nameSubstituteString,
 								sortProp: this.options.sortProp,
-								selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString()
+								selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString(),
+								showInaccessible: this.options.showInaccessible
 							},
 							successCallback:
 							{
@@ -742,32 +750,38 @@ LogicECM.module = LogicECM.module || {};
 				}
 			},
 
-			removeNode: function AssociationSearchViewer_removeNode(event, params)
-			{
-				delete this.selectedItems[params.node.nodeRef];
-				this.singleSelectedItem = null;
-				if (this.options.createDialog) {
-					this.updateSelectedItems();
-				}
-				this.updateAddButtons();
-				if (params.updateForms) {
-					this.updateFormFields();
+			removeNode: function AssociationSearchViewer_removeNode(event, params) {
+				if (!this.tempDisabled && !this.readonly) {
+					delete this.selectedItems[params.node.nodeRef];
+					this.singleSelectedItem = null;
+					if (this.options.createDialog) {
+						this.updateSelectedItems();
+					}
+					this.updateAddButtons();
+					if (params.updateForms) {
+						this.updateFormFields();
+					}
 				}
 			},
 
             getDefaultView: function (displayValue, width100, item) {
-				var result = "<span class='not-person" + (width100 ? " width100" : "") + "'>";
-	            if (this.options.viewUrl != null && item != null && item.nodeRef != null) {
-		            var href = YAHOO.lang.substitute(this.options.viewUrl, {
-			            nodeRef: item.nodeRef
-		            });
-
-		            result += "<a href='" + href + "' target='blank'>" + displayValue + "</a>";
-	            } else {
-		            result += displayValue;
-	            }
-	            result += "</span>";
-	            return result;
+				var resultTemplate = "<span class='not-person{class1}'>{value}</span>";
+				var value;
+				if (this.options.viewUrl && item && item.nodeRef && item.hasAccess) {
+					var href = YAHOO.lang.substitute(this.options.viewUrl, {
+						nodeRef: item.nodeRef
+					});
+					value = YAHOO.lang.substitute("<a href='{href}' target='blank'>{displayValue}</a>", {
+						href: href,
+						displayValue: displayValue
+					});
+				} else {
+					value = displayValue;
+				}
+				return YAHOO.lang.substitute(resultTemplate, {
+					class1: width100 ? " width100" : "",
+					value: value
+				});
 			},
 
 			updateAddButtons: function AssociationSearchViewer_updateAddButtons() {
@@ -802,8 +816,9 @@ LogicECM.module = LogicECM.module || {};
 
 				el = Dom.get(this.options.controlId + "-currentValueDisplay");
 				el.innerHTML = '';
-				var num = 0;
-				for (var i in this.selectedItems) {
+
+				var items = this.getSelectedItems(!!this.options.sortSelected);
+				items.forEach(function(i, index, array){
 					if (this.notShowedSelectedValue[i] == null) {
 						var displayName = this.selectedItems[i].selectedName;
 
@@ -822,7 +837,7 @@ LogicECM.module = LogicECM.module || {};
 							YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c1", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c1", updateForms: true}, this);
 						}
 					}
-				}
+				}, this);
 
 				if(!this.options.disabled)
 				{
@@ -915,13 +930,18 @@ LogicECM.module = LogicECM.module || {};
 				return removedItems;
 			},
 
-			getSelectedItems:function AssociationSearchViewer_getSelectedItems() {
-				var selectedItems = [];
+			getSelectedItems:function AssociationSearchViewer_getSelectedItems(sort) {
+				var selectedItems = [], me = this;
 
 				for (var item in this.selectedItems) {
 					if (this.selectedItems.hasOwnProperty(item)) {
 						selectedItems.push(item);
 					}
+				}
+				if(sort){
+					selectedItems = selectedItems.sort(function (a, b) {
+						return me.selectedItems[a].name.localeCompare(me.selectedItems[b].name);
+					});
 				}
 				return selectedItems;
 			},
@@ -1250,13 +1270,12 @@ LogicECM.module = LogicECM.module || {};
             },
 
             updateSelectedItems: function AssociationTreeViewer_updateSelectedItems() {
-				var items = this.selectedItems;
+				var items = this.getSelectedItems(!!this.options.sortSelected);
 				var fieldId = this.options.pickerId + "-selected-elements";
 				Dom.get(fieldId).innerHTML = '';
 				Dom.get(fieldId).className = 'currentValueDisplay';
 
-				var num = 0;
-				for (i in items) {
+				items.forEach(function(i, index, array){
 					if (this.notShowedSelectedValue[i] == null) {
 						var displayName = this.selectedItems[i].selectedName;
 
@@ -1267,7 +1286,7 @@ LogicECM.module = LogicECM.module || {};
 						}
 						YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c2", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c2", updateForms: false}, this);
 					}
-				}
+				}, this);
 			},
 
             checkSearchField: function AssociationTreeViewer_checkSearchField() {
@@ -1278,48 +1297,72 @@ LogicECM.module = LogicECM.module || {};
                     this.widgets.searchButton.set("disabled", false);
                 }
             },
-			
+
+			onReadonlyControl: function (layer, args) {
+				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+					this.readonly = args[1].readonly;
+					if (this.widgets.pickerButton) {
+						this.widgets.pickerButton.set('disabled', args[1].readonly);
+					}
+					var input = Dom.get(this.id);
+					if (input) {
+						input.disabled = args[1].readonly;
+					}
+					//непонятно зачем скрывать диалог и активировать поля, которые не были деактивированы...
+					if (!args[1].readonly) {
+						if (this.widgets.dialog) {
+							this.widgets.dialog.hide();
+						}
+					}
+				}
+			},
+
 			onDisableControl: function (layer, args) {
 				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-					if (this.widgets.pickerButton != null) {
+					if (this.widgets.pickerButton) {
 						this.widgets.pickerButton.set('disabled', true);
 					}
-
-					this.tempDisabled = true;
-
+					var input = Dom.get(this.id);
+					if (input) {
+						input.disabled = true;
+					}
 					var added = Dom.get(this.options.controlId + "-added");
-					if (added != null) {
+					if (added) {
 						added.disabled = true;
 					}
 					var removed = Dom.get(this.options.controlId + "-removed");
-					if (removed != null) {
+					if (removed) {
 						removed.disabled = true;
 					}
+					this.tempDisabled = true;
 				}
 			},
 
 			onEnableControl: function (layer, args) {
 				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
 					if (!this.options.disabled) {
-						if (this.widgets.pickerButton != null) {
+						if (this.widgets.pickerButton) {
 							this.widgets.pickerButton.set('disabled', false);
 
-							if (this.widgets.dialog != null) {
+							if (this.widgets.dialog) {
 								this.widgets.dialog.hide();
 							}
 						}
-
+						var input = Dom.get(this.id);
+						if (input) {
+							input.disabled = false;
+						}
 						var added = Dom.get(this.options.controlId + "-added");
-						if (added != null) {
+						if (added) {
 							added.disabled = false;
 						}
 						var removed = Dom.get(this.options.controlId + "-removed");
-						if (removed != null) {
+						if (removed) {
 							removed.disabled = false;
 						}
 					}
 					this.tempDisabled = false;
 				}
-			},
+			}
 		});
 })();

@@ -5,7 +5,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
@@ -32,14 +31,6 @@ import java.util.*;
  * Time: 15:28
  */
 public class ReportForm extends LecmFormGet {
-
-    protected enum NumericTypes {
-        d_int,
-        d_float,
-        d_long,
-        d_double
-    }
-
     public static final String TEMPLATE_CODE = "templateCode";
     public static final String TEMPLATES = "TEMPLATES";
     public static final String TEMPLATES_COLUMN_NAME = "Шаблон представления";
@@ -109,52 +100,14 @@ public class ReportForm extends LecmFormGet {
                 FieldPointer fieldPointer = new FieldPointer(field.getId());
                 set.addChild(fieldPointer);
 
-                if (field.isMandatory()) {
-                    Constraint constraint;
-                    try {
-                        constraint = generateConstraintModel(field, CONSTRAINT_MANDATORY);
-                        if (constraint != null) {
-                            constraints.add(constraint);
-                        }
-                    } catch (JSONException e) {
-                        logger.error(e.getMessage(), e);
-                    }
-                }
+                updateConstraints(constraints, field);
 
+                /*специфика для Редактора Отчетов*/
                 if (!ParameterTypedValue.Type.RANGE.equals(param.getParameterValue().getType()) && isNumber(param.getAlfrescoType())) {
                     Constraint constraint;
                     try {
                         constraint = generateConstraintModel(field, "LECM_NUMBER");
                         if (constraint != null) {
-                            constraints.add(constraint);
-                        }
-                    } catch (JSONException e) {
-                        logger.error(e.getMessage(), e);
-                    }
-                }
-
-                Map<String, String> parameters = field.getControl().getParams();
-                if (parameters.containsKey("constraintLENGTH")) {
-                    int minLength = -1;
-                    int maxLength = -1;
-                    try {
-                        if (parameters.containsKey("constraintLENGTH_minLength")) {
-                            minLength = Integer.valueOf(parameters.get("constraintLENGTH_minLength"));
-                        }
-                        if (parameters.containsKey("constraintLENGTH_maxLength")) {
-                            maxLength = Integer.valueOf(parameters.get("constraintLENGTH_maxLength"));
-                        }
-                    } catch (Exception ex) {
-                        logger.error( ex.getMessage(), ex);
-                    }
-                    Constraint constraint;
-                    try {
-                        constraint = generateConstraintModel(field, CONSTRAINT_LENGTH);
-                        if (constraint != null) {
-                            Map<String, String> m = new HashMap<>();
-                            m.put("minLength", "" + minLength);
-                            m.put("maxLength", "" + maxLength);
-                            constraint.setJSONParams(new JSONObject(m));
                             constraints.add(constraint);
                         }
                     } catch (JSONException e) {
@@ -240,47 +193,20 @@ public class ReportForm extends LecmFormGet {
             }
 
             Control defaultControlConfig;
-            String[] allowedValues = null;
             if (column.getParameterValue().getType().equals(ParameterType.Type.RANGE)
                     && enumHasValue(RangeableTypes.class, alfrescoType.replaceAll(":", "_"))) {
-
+                field.setType(PROPERTY);
                 String rangedType = alfrescoType.replace(OLD_DATA_TYPE_PREFIX, "").concat("-range");
                 defaultControlConfig = defaultControls.getItems().get(rangedType);
             } else { // для списка и значения
                 boolean isPropertyField = isNotAssoc(alfrescoType);
                 if (isPropertyField) {
                     field.setType(PROPERTY);
-
-                    defaultControlConfig = defaultControls.getItems().get(alfrescoType);
-                    if (defaultControlConfig == null) { // попытка получить дефолтный контрол по старой альфресовской схеме
-                        defaultControlConfig = defaultControls.getItems().get(alfrescoType.replace(OLD_DATA_TYPE_PREFIX, ""));
-                        if (defaultControlConfig == null) {
-                            defaultControlConfig = defaultControls.getItems().get(DEFAULT_FIELD_TYPE);
-                        }
-                    }
                 } else {
                     field.setType(ASSOCIATION);
                     field.setEndpointDirection("TARGET");
-
-                    defaultControlConfig = defaultControls.getItems().get(ASSOCIATION + ":" + alfrescoType);
-                    if (defaultControlConfig == null) {
-                        defaultControlConfig = defaultControls.getItems().get(ASSOCIATION);
-                    }
                 }
-                String columnExpression = column.getExpression();
-                if (columnExpression != null && !columnExpression.isEmpty()) {
-                    if (!columnExpression.startsWith("{") && !columnExpression.startsWith("#")) {// не вычисляемое значение, значит либо константа, либо список значений
-                        if (!columnExpression.contains(",")) { // константа
-                            allowedValues = new String[1];
-                            allowedValues[0] = columnExpression;
-                        } else {
-                            allowedValues = columnExpression.split(",");
-                            for (int i = 0; i < allowedValues.length; i++) {
-                                allowedValues[i] = allowedValues[i].trim();
-                            }
-                        }
-                    }
-                }
+                defaultControlConfig = getDefaultControlFromConfig(defaultControls, alfrescoType);
             }
 
             if (defaultControlConfig != null) {
@@ -315,73 +241,36 @@ public class ReportForm extends LecmFormGet {
 
             field.setControl(control);
 
-            if (allowedValues != null) {
+            /*Подменяем контрол на selectone/selectmany - если требуется*/
+            String allowedValuesStr = null;
+
+            String columnExpression = column.getExpression();
+            if (columnExpression != null && !columnExpression.isEmpty()
+                    && !columnExpression.startsWith("{") && !columnExpression.startsWith("#")) {
+                // не вычисляемое значение - либо константа, либо список значений
+                allowedValuesStr = columnExpression;
+            } else if (field.getControl().getParams().containsKey(CONTROL_PARAM_OPTIONS)) {
+                allowedValuesStr = field.getControl().getParams().get(CONTROL_PARAM_OPTIONS);
+            }
+
+            if (allowedValuesStr != null && !allowedValuesStr.isEmpty()) {
                 if (field.isRepeating()) {
-                    field.getControl().setTemplate("/ru/it/lecm/base-share/components/controls/selectmany.ftl");
+                    field.getControl().setTemplate(CONTROL_LECM_SELECT_MANY);
                 } else {
-                    field.getControl().setTemplate("/ru/it/lecm/base-share/components/controls/selectone.ftl");
+                    field.getControl().setTemplate(CONTROL_LECM_SELECT_ONE);
                 }
 
-                if (!field.getControl().getParams().containsKey(CONTROL_PARAM_OPTIONS)) {
-                    List<String> optionsList = new ArrayList<String>(allowedValues.length);
-                    Collections.addAll(optionsList, allowedValues);
-
-                    field.getControl().getParams().put(CONTROL_PARAM_OPTIONS,
-                            StringUtils.collectionToDelimitedString(optionsList, DELIMITER));
-                    field.getControl().getParams().put(CONTROL_PARAM_OPTION_SEPARATOR, DELIMITER);
+                String[] allowedValues = allowedValuesStr.split(",");
+                for (int i = 0; i < allowedValues.length; i++) {
+                    allowedValues[i] = allowedValues[i].trim().replace("\n", "");
                 }
+                List<String> optionsList = new ArrayList<>(allowedValues.length);
+                Collections.addAll(optionsList, allowedValues);
+
+                field.getControl().getParams().put(CONTROL_PARAM_OPTIONS, StringUtils.collectionToDelimitedString(optionsList, DELIMITER));
+                field.getControl().getParams().put(CONTROL_PARAM_OPTION_SEPARATOR, DELIMITER);
             }
         }
-    }
-
-    protected Constraint generateConstraintModel(Field field, String constraintId) throws JSONException {
-        Constraint constraint = null;
-
-        // retrieve the default constraints configuration
-        ConstraintHandlersConfigElement defaultConstraintHandlers = null;
-        FormsConfigElement formsGlobalConfig = (FormsConfigElement) this.configService.getGlobalConfig().getConfigElement(CONFIG_FORMS);
-        if (formsGlobalConfig != null) {
-            defaultConstraintHandlers = formsGlobalConfig.getConstraintHandlers();
-        }
-
-        if (defaultConstraintHandlers == null) {
-            throw new WebScriptException("Failed to locate default constraint handlers configurarion");
-        }
-
-        // get the default handler for the constraint
-        ConstraintHandlerDefinition defaultConstraintConfig = defaultConstraintHandlers.getItems().get(constraintId);
-        if (defaultConstraintConfig != null) {
-            // generate and process the constraint model
-            // get the validation handler from the config
-            String validationHandler = defaultConstraintConfig.getValidationHandler();
-
-            constraint = new Constraint(field.getId(), constraintId, validationHandler, new JSONObject());
-
-            if (defaultConstraintConfig.getEvent() != null) {
-                constraint.setEvent(defaultConstraintConfig.getEvent());
-            } else {
-                constraint.setEvent(DEFAULT_CONSTRAINT_EVENT);
-            }
-
-            // look for an overridden message in the field's constraint config,
-            // if none found look in the default constraint config
-            String constraintMsg = null;
-            if (defaultConstraintConfig.getMessageId() != null) {
-                constraintMsg = retrieveMessage(defaultConstraintConfig.getMessageId());
-            } else if (defaultConstraintConfig.getMessage() != null) {
-                constraintMsg = defaultConstraintConfig.getMessage();
-            }
-            if (constraintMsg == null) {
-                constraintMsg = retrieveMessage(validationHandler + ".message");
-            }
-
-            // add the message if there is one
-            if (constraintMsg != null) {
-                constraint.setMessage(constraintMsg);
-            }
-        }
-
-        return constraint;
     }
 
     private ReportDescriptor getReportDescriptor(String reportCode) {
@@ -392,9 +281,5 @@ public class ReportForm extends LecmFormGet {
         } finally {
             IOUtils.closeQuietly(xmlStream);
         }
-    }
-
-    private boolean isNumber(String value) {
-        return enumHasValue(NumericTypes.class, value != null ? value.replace("d:", "d_") : "not_number");
     }
 }

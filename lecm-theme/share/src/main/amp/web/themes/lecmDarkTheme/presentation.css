@@ -2123,6 +2123,10 @@ span.person a div.description:empty {
     text-decoration: underline;
 }
 
+.yui-skin-lecmTheme .set-panel-body {
+    padding-left: 0;
+}
+
 .set-bordered-panel-body {
     overflow: hidden;
 }
@@ -2531,7 +2535,16 @@ div#lightbox {
 .yui-skin-lecmDarkTheme .arm-menu-item {
     background-image: url("/share/components/images/header/docs_16_light.png");
 }
+.yui-skin-lecmDarkTheme .arm-menu-item.orgstructure {
+    background-image: url("/share/components/images/header/orgstructure_light.png");
+}
+.yui-skin-lecmDarkTheme .arm-menu-item.ADMIN {
+    background-image: url("/share/components/images/header/settings_16_light.png");
+}
 /* arm menu : end */
+.yui-skin-lecmDarkTheme .alf-files-icon {
+    background-image: url("/share/components/images/header/docs_16_light.png");
+}
 
 .yui-skin-lecmDarkTheme .ygtv-highlight .ygtv-highlight1,
 .yui-skin-lecmDarkTheme .ygtv-highlight .ygtv-highlight1 .ygtvlabel {
@@ -2628,6 +2641,17 @@ div#lightbox {
     background-position: center center;
 }
 
+.yui-skin-lecmDarkTheme .dnd-uploader-with-preview .label-div {
+	padding-right: 12px;
+}
+.yui-skin-lecmDarkTheme .dnd-uploader-with-preview .container {
+	border: 1px solid #636363;
+	margin: 2px;
+	padding: 0 2px 0 2px;
+}
+.yui-skin-lecmDarkTheme .dnd-uploader-with-preview .buttons-div {
+	margin-top: 10px;
+}
 .yui-skin-lecmDarkTheme .dnd-uploader-with-preview .buttons-div .show-preview-button button {
     background: url('images/LECM_C-style-icons-5-16.png') no-repeat center center;
 }

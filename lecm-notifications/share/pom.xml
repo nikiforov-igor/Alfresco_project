@@ -5,7 +5,7 @@
     <parent>
         <groupId>ru.it.lecm.notifications</groupId>
         <artifactId>notifications</artifactId>
-        <version>1.8.5</version>
+        <version>1.8.6</version>
     </parent>
 
     <artifactId>notifications-share</artifactId>

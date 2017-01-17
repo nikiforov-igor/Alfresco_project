@@ -21,7 +21,7 @@
     <parent>
         <groupId>ru.it.lecm.documents</groupId>
         <artifactId>documents</artifactId>
-        <version>1.8.5</version>
+        <version>1.8.6</version>
     </parent>
 
     <artifactId>documents-repo-api</artifactId>

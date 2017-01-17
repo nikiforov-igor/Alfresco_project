@@ -733,9 +733,21 @@ public class ReportsManager extends BaseBean {
             }
         };
 
-        return isRunAsSystem ?
-                AuthenticationUtil.runAsSystem(runAsWork) :
-                AuthenticationUtil.runAs(runAsWork, AuthenticationUtil.getFullyAuthenticatedUser());
+        ReportFileData result = new ReportFileData();
+
+        final String user = AuthenticationUtil.getFullyAuthenticatedUser();
+        if (isRunAsSystem) {
+            try {
+                AuthenticationUtil.setFullyAuthenticatedUser(AuthenticationUtil.getSystemUserName());
+                result = AuthenticationUtil.runAsSystem(runAsWork);
+            } finally {
+                AuthenticationUtil.setFullyAuthenticatedUser(user);
+            }
+        } else {
+            result = AuthenticationUtil.runAs(runAsWork, user);
+        }
+
+        return result;
     }
 
     public ReportTemplate getTemplateByCode(ReportDescriptor descriptor, String templateCode) {
