@@ -115,7 +115,20 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             onEdit: function () {
-	            window.location.href = Alfresco.constants.URL_PAGECONTEXT + "document-edit?nodeRef=" + this.options.nodeRef;
+                Alfresco.util.Ajax.jsonGet(
+                    {
+                        url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/api/url/edit",
+                        dataObj: {
+                            nodeRef: this.options.nodeRef
+                        },
+                        successCallback: {
+                            fn:function(response){
+                                window.location.href = Alfresco.constants.URL_PAGECONTEXT + response.json.url + "?nodeRef=" + this.options.nodeRef;
+                            },
+                            scope: this
+                        },
+                        failureMessage: "message.failure"
+                    });
             },
 
             refreshContainer: function (containerId, formId, response) {
