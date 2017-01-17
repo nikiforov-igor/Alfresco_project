@@ -26,7 +26,7 @@ function main() {
                 var param = paramsArray[i];
                 var name = param.split("=")[0];
                 var value = param.split("=")[1];
-                if (name != null && value != null) {
+                if (name && value) {
                     if (name == "highlightedFields") {
                         highlightedFields = eval("(" + value + ")");
                     }
