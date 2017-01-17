@@ -11,6 +11,7 @@ public class DocumentUrlConstraint extends AbstractConstraint {
 
     private String createUrl = null;
     private String viewUrl = null;
+    private String editUrl = null;
 
     public String getCreateUrl() {
         return createUrl;
@@ -26,6 +27,14 @@ public class DocumentUrlConstraint extends AbstractConstraint {
 
     public void setViewUrl(String viewUrl) {
         this.viewUrl = viewUrl;
+    }
+
+    public String getEditUrl() {
+        return editUrl;
+    }
+
+    public void setEditUrl(String editUrl) {
+        this.editUrl = editUrl;
     }
 
     @Override

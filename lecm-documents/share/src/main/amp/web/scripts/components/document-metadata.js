@@ -109,13 +109,26 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             },
                             scope: this
                         },
-                        failureMessage: "message.failure",
+                        failureMessage: this.msg("message.failure"),
                         execScripts: true
                     });
             },
 
             onEdit: function () {
-	            window.location.href = Alfresco.constants.URL_PAGECONTEXT + "document-edit?nodeRef=" + this.options.nodeRef;
+                Alfresco.util.Ajax.jsonGet(
+                    {
+                        url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/api/url/edit",
+                        dataObj: {
+                            nodeRef: this.options.nodeRef
+                        },
+                        successCallback: {
+                            fn:function(response){
+                                window.location.href = Alfresco.constants.URL_PAGECONTEXT + response.json.url + "?nodeRef=" + this.options.nodeRef;
+                            },
+                            scope: this
+                        },
+                        failureMessage: this.msg("message.failure")
+                    });
             },
 
             refreshContainer: function (containerId, formId, response) {
@@ -135,7 +148,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                 container.innerHTML = response.serverResponse.responseText;
                             }
                         },
-                        failureMessage: "message.failure",
+                        failureMessage: this.msg("message.failure"),
                         execScripts: true,
                         htmlId: response.json.persistedObject,
                         containerId: containerId
