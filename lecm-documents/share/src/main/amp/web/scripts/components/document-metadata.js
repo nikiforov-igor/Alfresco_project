@@ -109,7 +109,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             },
                             scope: this
                         },
-                        failureMessage: "message.failure",
+                        failureMessage: this.msg("message.failure"),
                         execScripts: true
                     });
             },
@@ -148,7 +148,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                 container.innerHTML = response.serverResponse.responseText;
                             }
                         },
-                        failureMessage: "message.failure",
+                        failureMessage: this.msg("message.failure"),
                         execScripts: true,
                         htmlId: response.json.persistedObject,
                         containerId: containerId

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/errands/workflow/requestCancel_1/1.0">
+    <process id="errandsRequestCancel_1" name="Запросить отмену поручения(1)">
+        <startEvent id="startRequestCancel" name="Start" activiti:formKey="lecmErrandWf:requestCancel"></startEvent>
+        <endEvent id="endRequestCancel" name="End"></endEvent>
+        <scriptTask id="requestCancel" name="RequestCancel" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+                            var document = bpm_package.children[0];
+
+                            documentWorkflowComments.createWorkflowComment(document, lecmErrandWf_requestCancelReason);
+
+                            var initiator = null;
+                            var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
+                            if (initiatorAssoc && initiatorAssoc.length == 1) {
+                                initiator = initiatorAssoc[0];
+                            }
+                            var currentEmployee = orgstructure.getCurrentEmployee();
+
+                            var logText = "#initiator запросил ";
+                            logText += documentScript.wrapperTitle("отмену", lecmErrandWf_requestCancelReason);
+                            logText += " поручения: #mainobject.";
+                            businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
+
+                            if (initiator) {
+                                notifications.sendNotificationFromCurrentUser({
+                                    recipients: [initiator],
+                                    templateCode: 'ERRANDS_CANCEL_REQUEST',
+                                    templateConfig: {
+                                        mainObject: document,
+                                        eventExecutor: currentEmployee,
+                                        reason: lecmErrandWf_requestCancelReason
+                                    }
+                                });
+
+                                execution.setVariable("requestCancelAssignee", orgstructure.getEmployeeLogin(initiator));
+                            }
+
+                            var props = [];
+                            props["lecm-errands-aspect:isCancelRequested"] = true;
+                            document.addAspect("lecm-errands-aspect:isCancelRequestedAspect", props);
+
+                        ]]></activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script></script>
+        </scriptTask>
+        <userTask id="requestCancelTask" name="Обработать запрос на отмену" activiti:assignee='${requestCancelAssignee}' activiti:formKey="lecmErrandWf:requestCancelTask_1">
+            <extensionElements>
+                <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            task.setVariable("lecmErrandWf_requestCancelTask_1Reason", task.getVariable("lecmErrandWf_requestCancelReason"));
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+                <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+                            <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-cancel-errand-script.js">
+                            <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-change-executor-script.js">
+						    var document = bpm_package.children[0];
+						    if (document) {
+							    var executor = null;
+							    var currentUser = orgstructure.getCurrentEmployee();
+							    var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
+							    if (executorAssoc && executorAssoc.length) {
+							        executor = executorAssoc[0];
+						        }
+							    if (executor) {
+						            var decision = task.getVariableLocal("lecmErrandWf_requestCancelTask_1Result");
+
+						            var recipients = [];
+								    recipients.push(executor);
+
+							        if (decision == "REJECTED") {
+									    notifications.sendNotificationFromCurrentUser({
+											recipients: recipients,
+											templateCode: 'ERRANDS_REJECT_CANCEL_REQUEST',
+											templateConfig: {
+												mainObject: document,
+												eventExecutor: currentUser,
+												reason: task.getVariable("lecmErrandWf:requestCancelTask_1RejectReason")
+											}
+										});
+
+	                                    var logText = "#initiator"
+	                                    logText += documentScript.wrapperTitle("отклонил", task.getVariable("lecmErrandWf:requestCancelTask_1RejectReason"))
+	                                    logText += "запрос на отмену поручения: #mainobject.";
+									    businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
+								    } else if (decision == "CANCEL_ERRAND") {
+								        execution.setVariable("requestCancelResult", "cancelErrand");
+                                        processCancelErrand(task.getVariable("lecmErrandWf:requestCancelTask_1CancelChildren"), task.getVariable("lecmErrandWf:requestCancelTask_1CancelReason"));
+								    } else if (decision == "CHANGE_EXECUTOR") {
+						                var newExecutor = task.getVariableLocal("lecmErrandWf_requestCancelTask_1NewExecutor");
+						                if (newExecutor) {
+						                    processChangeExecutor(newExecutor, "");
+						                    var logObjects = [];
+						                    logObjects.push("" + newExecutor.nodeRef);
+										    var logText = "#initiator изменил исполнителя поручения: #mainobject на #object1";
+										    businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_EXECUTOR", logText, logObjects);
+						                    execution.setVariable("requestCancelResult", "changeExecutor");
+						                }
+								    }
+							    }
+						    }
+                            var document = bpm_package.children[0];
+                            document.properties["lecm-errands-aspect:isCancelRequested"] = false;
+                            document.save();
+					    ]]></activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+            </extensionElements>
+        </userTask>
+        <receiveTask id="errandReceiveTask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startRequestCancel" targetRef="requestCancel"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="requestCancel" targetRef="errandReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="errandReceiveTask" targetRef="requestCancelTask"></sequenceFlow>
+        <sequenceFlow id="flow4" name="" sourceRef="requestCancelTask" targetRef="endRequestCancel"></sequenceFlow>
+    </process>
+</definitions>

@@ -92,6 +92,11 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<!--Флаг для перехода на статус "На исполнении"-->
+				<property name="lecm-ord:transit-to-on-execution">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
 			</properties>
 			<associations>
 				<association name="lecm-ord:controller-assoc">

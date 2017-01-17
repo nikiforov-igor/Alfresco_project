@@ -297,6 +297,12 @@
                 </props>
                 <props>
                     <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-request-cancel1.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-initiator-decline.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
                     <prop key="redeploy">${redeploy.process.definitions}</prop>
@@ -322,6 +328,12 @@
                 <props>
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-cancel.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-cancel1.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
                     <prop key="redeploy">${redeploy.process.definitions}</prop>
                 </props>

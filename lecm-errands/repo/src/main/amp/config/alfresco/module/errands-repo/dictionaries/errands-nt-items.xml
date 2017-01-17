@@ -4,7 +4,7 @@
         <items updateMode="CreateOrUpdate">
             <item name="cm:ERRANDS_EXCEEDED_DEADLINE" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Поручение {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} не исполнено в установленный срок. {#mainObject.attribute("lecm-errands:just-in-time") ? "Работы по нему прекращены." : ""}]]></property>
+                    <![CDATA[Поручение {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} не исполнено в установленный срок.]]></property>
                 <property name="cm:name"><![CDATA[ERRANDS_EXCEEDED_DEADLINE]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Превышен срок исполнения]]></property>
@@ -123,7 +123,7 @@
             <item name="cm:ERRANDS_CANCEL" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CANCEL]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Поручение {#mainObject.wrapAsLink(#mainObject.attribute("lecm-errands:title"))} назначенное вам сотрудником {#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("отменено", #comment)}. Внимание: На основании этого поручения Вами было создано {#formatLink(#link_url, #link_title.intValue())} дочерних поручений.]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("отменил", #comment)} поручение {#mainObject.wrapAsLink(#mainObject.attribute("lecm-errands:title"))}]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Поручение. Отменено]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
@@ -170,7 +170,7 @@
             <item name="cm:ERRANDS_COEXEC_REPORT" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_COEXEC_REPORT]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Соисполнитель {#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} направил вам отчет об исполнении по поручению {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
+                    <![CDATA[Соисполнитель {#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} направил вам отчет об исполнении поручения {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Отчет о соисполнении]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -253,7 +253,7 @@
             <item name="cm:ERRANDS_REJECT_CANCEL_REQUEST" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_REJECT_CANCEL_REQUEST]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Ваш запрос об отмене поручения {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))} отклонен.]]></property>
+                    <![CDATA[Ваш запрос об отмене поручения {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))} {#wrapTitle("отклонен",#reason)}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Запрос отмены отклонен]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>

@@ -79,6 +79,29 @@
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>1dc30073-8436-4a99-8a2b-06531bd4f9fd</name>
+                                        <nodeRef>workspace://SpacesStore/f813d456-5267-4009-ba34-bba80d070eb0</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>MEETINGS_ENGINEER</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -1374,6 +1397,29 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>DOCUMENTS_READER</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>ae832776-d73d-4fe1-a170-8041b7fb9510</name>
+                                        <nodeRef>workspace://SpacesStore/95994f6f-57b5-4f57-a891-fe75bfa47cbb</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>MEETINGS_ENGINEER</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -3215,6 +3261,29 @@ if (document !== null) {
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>bb60c508-e64a-4dd8-80a2-c8b3cbc545c0</name>
+                                        <nodeRef>workspace://SpacesStore/fc8edd85-6ff8-4d44-91cd-0f899a915b57</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>MEETINGS_ENGINEER</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -4296,6 +4365,32 @@ if (document !== null) {
                             <roleAssociation>
                                 <type>role-assoc</type>
                                 <businessRoleName>DOCUMENTS_READER</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders/>
+                    </node>
+                    <node>
+                        <type>static-role-item</type>
+                        <name>4647c116-8776-4597-965b-e0fdd88807c8</name>
+                        <nodeRef>workspace://SpacesStore/61388577-3ea4-49a3-a4a2-a3a51795bb4f</nodeRef>
+                        <properties>
+                            <property>
+                                <name>isCreator</name>
+                                <value><![CDATA[false]]></value>
+                            </property>
+                            <property>
+                                <name>static-role-privilege</name>
+                                <value><![CDATA[]]></value>
+                            </property>
+                        </properties>
+                        <aspects>
+                            <business-role/>
+                        </aspects>
+                        <associations/>
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>MEETINGS_ENGINEER</businessRoleName>
                             </roleAssociation>
                         </roleAssociations>
                         <subFolders/>

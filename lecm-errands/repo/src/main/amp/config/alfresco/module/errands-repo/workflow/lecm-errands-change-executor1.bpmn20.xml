@@ -11,6 +11,7 @@
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
+                            <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-change-executor-script.js">
                             var document = bpm_package.children[0];
                             if (document) {
                                 var executor = null;
@@ -20,50 +21,7 @@
                                     executor = executorAssoc[0];
                                 }
                                 if (executor && lecmErrandWf_changeExecutor_1NewExecutor && executor != lecmErrandWf_changeExecutor_1NewExecutor) {
-
-                                    document.removeAssociation(executor, "lecm-errands:executor-assoc");
-                                    document.createAssociation(lecmErrandWf_changeExecutor_1NewExecutor, "lecm-errands:executor-assoc");
-                                    statemachine.grandDynamicRoleForEmployee(document, lecmErrandWf_changeExecutor_1NewExecutor, "ERRANDS_EXECUTOR");
-                                    documentMembers.addMember(document, executor, "ERRANDS_READER");
-                                    lecmPermission.revokeDynamicRole(document, executor, "ERRANDS_EXECUTOR");
-
-                                    notifications.sendNotificationFromCurrentUser({
-                                        recipients: [lecmErrandWf_changeExecutor_1NewExecutor],
-                                        templateCode: 'ERRANDS_CHANGE_EXECUTOR_NEW',
-                                        templateConfig: {
-                                            mainObject: document,
-                                            eventExecutor: currentUser
-                                        }
-                                    });
-                                    notifications.sendNotificationFromCurrentUser({
-                                        recipients: [executor],
-                                        templateCode: 'ERRANDS_CHANGE_EXECUTOR_OLD',
-                                        templateConfig: {
-                                            mainObject: document,
-                                            eventExecutor: currentUser,
-                                            reason: lecmErrandWf_changeExecutor_1Reason
-                                        }
-                                    });
-                                    var recipients = [];
-                                    var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
-                                    var coexecutorsAssoc = document.assocs["lecm-errands:coexecutors-assoc"];
-                                    if (controllerAssoc && controllerAssoc.length == 1) {
-                                        recipients.push(controllerAssoc[0]);
-                                    }
-                                    if (coexecutorsAssoc && coexecutorsAssoc.length) {
-                                        for (var i = 0; i < coexecutorsAssoc.length; i++) {
-                                            recipients.push(coexecutorsAssoc[i]);
-                                        }
-                                    }
-                                    notifications.sendNotificationFromCurrentUser({
-                                        recipients: recipients,
-                                        templateCode: 'ERRANDS_CHANGE_EXECUTOR',
-                                        templateConfig: {
-                                            mainObject: document,
-                                            eventExecutor: currentUser,
-                                            reason: lecmErrandWf_changeExecutor_1Reason
-                                        }
-                                    });
+                                    processChangeExecutor(lecmErrandWf_changeExecutor_1NewExecutor, lecmErrandWf_changeExecutor_1Reason);
 
                                     var logObjects = [];
                                     logObjects.push("" + lecmErrandWf_changeExecutor_1NewExecutor.nodeRef);
@@ -71,7 +29,6 @@
                                     logText += documentScript.wrapperTitle("изменил", lecmErrandWf_changeExecutor_1Reason);
                                     logText += " исполнителя поручения #mainobject на #object1";
                                     businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_EXECUTOR", logText, logObjects);
-
                                 }
                             }
                         ]]></activiti:string>
