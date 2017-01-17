@@ -262,25 +262,6 @@
         <#if props["lecm-errands:content"]?has_content>
             <div class="errand-content">${props["lecm-errands:content"]}</div>
         </#if>
-        <div class="times">
-            <#assign viewFormat>${msg("form.control.date-picker.view.date.format")}</#assign>
-
-            <#assign justInTimeProp = props["lecm-errands:just-in-time"],
-                justInTime=false>
-            <#if justInTimeProp??>
-                <#if justInTimeProp?is_boolean>
-                    <#assign justInTime=justInTimeProp>
-                <#elseif justInTimeProp?is_string && justInTimeProp == "true">
-                    <#assign justInTime=true>
-                </#if>
-            </#if>
-
-            ${msg("message.eddand.limitationDate")} <span id="${id}-limitation-date"></span>
-            <input type="hidden" id="errandLimitationDate" value=""/>
-            <#if justInTime>
-                &nbsp;${msg("message.eddand.justInTime")}
-            </#if>
-        </div>
         <#if hasViewContentListPerm>
 	        <div id="${id}-attachments" class="data-list-block">
 	            <span class="heading">${msg("message.eddand.attachments")}<span class="count"> (${(attachments![])?size})</span></span>
