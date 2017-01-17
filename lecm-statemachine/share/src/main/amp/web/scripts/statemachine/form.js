@@ -899,8 +899,7 @@ LogicECM.module = LogicECM.module || {};
                                                         text: this.msg("message.failure")
                                                     });
                                                 }
-                                            },
-                                            failureMessage: "message.failure"
+                                            }
                                         });
 								}.bind(button, dialog, nodeRef, fields);
 							}
