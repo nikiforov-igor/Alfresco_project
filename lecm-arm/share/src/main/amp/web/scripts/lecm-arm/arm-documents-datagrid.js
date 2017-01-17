@@ -122,21 +122,21 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 var handlePagination = function DataGrid_handlePagination(state, me) {
                     me.widgets.paginator.setState(state);
                 };
-
+                var prefix = this.options.useExtPaginationMode ? "lecm." : "";
                 this.widgets.paginator = new YAHOO.widget.Paginator(
                     {
                         containers: [this.id + "-paginatorBottom"],
                         rowsPerPage: this.options.pageSize,
                         initialPage: this.options.initialPage,
                         totalRecords:  YAHOO.widget.Paginator.VALUE_UNLIMITED, // temporary to allow initialPage config.  Will be overwritten by DataTable
-                        template: this.msg("lecm.pagination.template"),
-                        pageReportTemplate: this.msg("lecm.pagination.template.page-report"),
-                        previousPageLinkLabel: this.msg("pagination.previousPageLinkLabel"),
-                        nextPageLinkLabel: this.msg("pagination.nextPageLinkLabel"),
-                        firstPageLinkLabel: this.msg("lecm.pagination.firstPageLinkLabel"),
-                        lastPageLinkLabel: this.msg("lecm.pagination.lastPageLinkLabel"),
-                        lastPageLinkTitle: this.msg("lecm.pagination.lastPageLinkLabel.title"),
-                        firstPageLinkTitle: this.msg("lecm.pagination.firstPageLinkLabel.title")
+                        template: this.msg(prefix + "pagination.template"),
+                        pageReportTemplate: this.msg(prefix + "pagination.template.page-report"),
+                        previousPageLinkLabel: this.msg(prefix + "pagination.previousPageLinkLabel"),
+                        nextPageLinkLabel: this.msg(prefix + "pagination.nextPageLinkLabel"),
+                        firstPageLinkLabel: this.msg(prefix + "pagination.firstPageLinkLabel"),
+                        lastPageLinkLabel: this.msg(prefix + "pagination.lastPageLinkLabel"),
+                        lastPageLinkTitle: this.msg(prefix + "pagination.lastPageLinkLabel.title"),
+                        firstPageLinkTitle: this.msg(prefix + "pagination.firstPageLinkLabel.title")
                     });
 
                 this.widgets.paginator.subscribe("changeRequest" + this.id, handlePagination, this);
