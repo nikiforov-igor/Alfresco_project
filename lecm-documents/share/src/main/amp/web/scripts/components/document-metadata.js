@@ -127,7 +127,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             },
                             scope: this
                         },
-                        failureMessage: "message.failure"
+                        failureMessage: this.msg("message.failure")
                     });
             },
 

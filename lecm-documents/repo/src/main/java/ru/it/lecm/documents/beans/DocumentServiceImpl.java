@@ -1050,13 +1050,12 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
 
     @Override
     public String getEditUrl(QName type) {
+        String value = null;
         ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(type.getNamespaceURI(), DocumentService.CONSTRAINT_DOCUMENT_URL));
         if (constraint != null && (constraint.getConstraint() instanceof DocumentUrlConstraint)) {
-            String value = ((DocumentUrlConstraint) constraint.getConstraint()).getEditUrl();
-            return value == null ? DEFAULT_EDIT_URL : value;
-        } else {
-            return DEFAULT_EDIT_URL;
+            value = ((DocumentUrlConstraint) constraint.getConstraint()).getEditUrl();
         }
+        return value == null ? DEFAULT_EDIT_URL : value;
     }
 
     @Override

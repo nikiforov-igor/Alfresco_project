@@ -3,6 +3,6 @@
     <description>Адрес страницы редактирования документа</description>
     <url>/lecm/document/api/url/edit?nodeRef={nodeRef}</url>
     <authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
     <format default="json"/>
 </webscript>
