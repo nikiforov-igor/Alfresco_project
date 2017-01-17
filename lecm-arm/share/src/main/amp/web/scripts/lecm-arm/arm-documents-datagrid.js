@@ -129,10 +129,14 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         rowsPerPage: this.options.pageSize,
                         initialPage: this.options.initialPage,
                         totalRecords:  YAHOO.widget.Paginator.VALUE_UNLIMITED, // temporary to allow initialPage config.  Will be overwritten by DataTable
-                        template: this.msg("pagination.template"),
-                        pageReportTemplate: this.msg("pagination.template.page-report"),
+                        template: this.msg("lecm.pagination.template"),
+                        pageReportTemplate: this.msg("lecm.pagination.template.page-report"),
                         previousPageLinkLabel: this.msg("pagination.previousPageLinkLabel"),
-                        nextPageLinkLabel: this.msg("pagination.nextPageLinkLabel")
+                        nextPageLinkLabel: this.msg("pagination.nextPageLinkLabel"),
+                        firstPageLinkLabel: this.msg("lecm.pagination.firstPageLinkLabel"),
+                        lastPageLinkLabel: this.msg("lecm.pagination.lastPageLinkLabel"),
+                        lastPageLinkTitle: this.msg("lecm.pagination.lastPageLinkLabel.title"),
+                        firstPageLinkTitle: this.msg("lecm.pagination.firstPageLinkLabel.title")
                     });
 
                 this.widgets.paginator.subscribe("changeRequest" + this.id, handlePagination, this);

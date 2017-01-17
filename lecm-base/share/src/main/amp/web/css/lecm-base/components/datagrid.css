@@ -164,3 +164,13 @@
 .datagrid .yui-dt-col-actions .yui-dt-liner {
     padding: 3px;
 }
+
+.datagrid .datagrid-bar .paginator .yui-pg-jtp-options {
+    width: 5em;
+}
+
+.datagrid .datagrid-bar .paginator span.yui-pg-first,
+.datagrid .datagrid-bar .paginator span.yui-pg-last
+{
+    display:none;
+}
