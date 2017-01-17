@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.reservation;
+package ru.it.lecm.workflow.reservation.deprecated;
 
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
@@ -24,6 +24,9 @@ import ru.it.lecm.workflow.DocumentInfo;
 import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
+import ru.it.lecm.workflow.reservation.DecisionResult;
+import ru.it.lecm.workflow.reservation.ReservationAspectsModel;
+import ru.it.lecm.workflow.reservation.ReservationWorkflowService;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;

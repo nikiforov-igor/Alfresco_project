@@ -62,6 +62,15 @@
         </property>
     </bean>
 
+    <bean id="internal.groupOperations" parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/actions/reservation-internal.xml</value>
+            </list>
+        </property>
+    </bean>
+
     <bean id="internal.defaultStatemachine" parent="defaultStatemachines">
         <property name="statemachineName" value="lecm-internal:document" />
         <property name="path" value="alfresco/module/${artifactId}/models/lecm-internal-default-statemachine.xml" />
