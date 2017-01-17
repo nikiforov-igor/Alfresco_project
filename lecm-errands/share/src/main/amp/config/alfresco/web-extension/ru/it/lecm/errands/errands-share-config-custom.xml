@@ -802,7 +802,7 @@
                             <control-param name="changeItemsFireAction">initiatorChanged</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint message-id="message.incorrect.child.errand.limitation.date" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-radio" set="limitation-date"  mandatory="true">
