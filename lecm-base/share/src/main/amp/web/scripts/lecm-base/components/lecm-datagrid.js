@@ -1099,6 +1099,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             containers: [this.id + "-paginatorBottom"],
                             rowsPerPage: this.options.pageSize,
                             initialPage: this.options.initialPage,
+                            totalRecords: YAHOO.widget.Paginator.VALUE_UNLIMITED,
                             template: this.msg(prefix + "pagination.template"),
                             pageReportTemplate: this.msg(prefix + "pagination.template.page-report"),
                             previousPageLinkLabel: this.msg(prefix + "pagination.previousPageLinkLabel"),
