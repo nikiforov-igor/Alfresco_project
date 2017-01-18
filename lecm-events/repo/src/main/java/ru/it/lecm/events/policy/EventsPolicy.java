@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.events.beans.EventsService;
@@ -37,6 +38,7 @@ public class EventsPolicy extends BaseBean {
 	private LecmPermissionService lecmPermissionService;
 	private EventsService eventService;
 	private NotificationsService notificationsService;
+	private DocumentMembersService documentMembersService;
 
 	SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 	SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -59,6 +61,10 @@ public class EventsPolicy extends BaseBean {
 
 	public void setNotificationsService(NotificationsService notificationsService) {
 		this.notificationsService = notificationsService;
+	}
+
+	public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+		this.documentMembersService = documentMembersService;
 	}
 
 	@Override
@@ -327,7 +333,7 @@ public class EventsPolicy extends BaseBean {
 		}
 	}
 
-	public void onCreateInitiator(AssociationRef nodeAssocRef) {
+	public void onCreateInitiator(AssociationRef nodeAssocRef) throws WriteTransactionNeededException {
 		NodeRef event = nodeAssocRef.getSourceRef();
 		NodeRef initiator = nodeAssocRef.getTargetRef();
 		List<AssociationRef> authorAssocs = nodeService.getTargetAssocs(event, DocumentService.ASSOC_AUTHOR);
@@ -337,6 +343,7 @@ public class EventsPolicy extends BaseBean {
 
 			if (!author.equals(initiator)) {
 				lecmPermissionService.grantDynamicRole("EVENTS_INITIATOR_DYN", event, initiator.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Owner"));
+				documentMembersService.addMemberWithoutCheckPermission(event, initiator,  LecmPermissionService.LecmPermissionGroup.PGROLE_Reader, true);
 			}
 		}
 	}

@@ -879,10 +879,31 @@ LogicECM.module = LogicECM.module || {};
 							button = document.getElementById('confirm-edit-fields-edit-button');
 							if (button) {
 								button.onclick = function(dlg, ref, flds) {
-									dlg.hide();
-									var url =  Alfresco.constants.URL_PAGECONTEXT + 'document-edit?nodeRef=' + ref;
-									var params = 'highlightedFields=' + JSON.stringify(flds);
-									LogicECM.module.Base.Util.setPostLocation(url + '&' + LogicECM.module.Base.Util.encodeUrlParams(params));
+                                    Alfresco.util.Ajax.jsonGet(
+                                        {
+                                            url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/api/url/edit",
+                                            dataObj: {
+                                                nodeRef: ref
+                                            },
+                                            successCallback: {
+                                                fn:function(response){
+                                                    dlg.hide();
+                                                    var url =  Alfresco.constants.URL_PAGECONTEXT + response.json.url + '?nodeRef=' + ref;
+                                                    var params = 'highlightedFields=' + JSON.stringify(flds);
+                                                    LogicECM.module.Base.Util.setPostLocation(url + '&' + LogicECM.module.Base.Util.encodeUrlParams(params));
+                                                },
+                                                scope: this
+                                            },
+                                            failureCallback: {
+                                                scope: this,
+                                                fn: function (response) {
+                                                    dlg.hide();
+                                                    Alfresco.util.PopupManager.displayMessage({
+                                                        text: this.msg("message.failure")
+                                                    });
+                                                }
+                                            }
+                                        });
 								}.bind(button, dialog, nodeRef, fields);
 							}
 						}

@@ -652,7 +652,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                                 paramsBuilder.append("&prop_")
                                         .append(propQName.toPrefixString(namespaceService).replace(":", "_"))
                                         .append("=")
-                                        .append(propValue.toString());
+                                        .append(URLEncoder.encodeUriComponent(propValue.toString()));
                             }
                         }
                     } catch (InvalidQNameException invalid) {
@@ -1050,6 +1050,16 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         } else {
             return DEFAULT_VIEW_URL;
         }
+    }
+
+    @Override
+    public String getEditUrl(QName type) {
+        String value = null;
+        ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(type.getNamespaceURI(), DocumentService.CONSTRAINT_DOCUMENT_URL));
+        if (constraint != null && (constraint.getConstraint() instanceof DocumentUrlConstraint)) {
+            value = ((DocumentUrlConstraint) constraint.getConstraint()).getEditUrl();
+        }
+        return value == null ? DEFAULT_EDIT_URL : value;
     }
 
     @Override
