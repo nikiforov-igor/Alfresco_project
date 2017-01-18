@@ -77,6 +77,16 @@
 							var document = bpm_package.children[0];
 							var workflowRole = task.getVariableLocal('registrarDynamicRole');
 
+                            var getEffectiveEmployee = function (delegationOpts) {
+                                var potentialEffectiveEmployee = delegationOpts.assocs['lecm-d8n:delegation-opts-trustee-assoc'][0];
+                                var potentialEffectiveEmployeeTypeShort = potentialEffectiveEmployee.typeShort + '';
+                                if (potentialEffectiveEmployeeTypeShort == 'lecm-orgstr:employee') {
+                                    return potentialEffectiveEmployee;
+                                } else {
+                                    return null;
+                                }
+                            };
+
 							/* Если роль не указана, то ориентируемся на делегирование всего */
 							var delegateAll = workflowRole == null;
 							var employee = assignee;
@@ -85,18 +95,12 @@
 							if (isDelegationActive) {
 							    var effectiveEmployee;
 							    if (delegateAll) {
-							        var potentialEffectiveEmployee = delegationOpts.assocs['lecm-d8n:delegation-opts-trustee-assoc'][0];
-							        if (potentialEffectiveEmployee.typeShort + '' == 'lecm-orgstr:employee') {
-							            effectiveEmployee = potentialEffectiveEmployee;
-							        }
+							        effectiveEmployee = getEffectiveEmployee(delegationOpts);
 							    } else {
 							        effectiveEmployee = delegation.getEffectiveExecutor(employee.nodeRef.toString(), workflowRole);
 							        /* Если эффективного исполнителя не нашли по бизнес-ролям, то поискать его через параметры делегирования */
-							        if (employee == effectiveEmployee) {
-							            var potentialEffectiveEmployee = delegationOpts.assocs['lecm-d8n:delegation-opts-trustee-assoc'][0];
-							            if (potentialEffectiveEmployee.typeShort + '' == 'lecm-orgstr:employee') {
-							                effectiveEmployee = potentialEffectiveEmployee;
-							            }
+							        if (employee.nodeRef.equals(effectiveEmployee.nodeRef)) {
+							            effectiveEmployee = getEffectiveEmployee(delegationOpts);
 							        }
 							    }
 							    if (effectiveEmployee) {
