@@ -8,8 +8,6 @@
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.it.ru/logicECM/contract/dictionaries/1.0" prefix="lecm-contract-dic"/>
 		<import uri="http://www.it.ru/logicECM/contract/1.0" prefix="lecm-contract"/>
-		<import uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
-		<import uri="http://www.it.ru/lecm/org/connection/1.0" prefix="lecm-connect"/>
 		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
 		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
 	</imports>
@@ -124,8 +122,8 @@
 			<mandatory-aspects>
 				<aspect>lecm-document-aspects:semanticAssistAspect</aspect>
 				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
-                                <aspect>lecm-document-aspects:has-reg-document-data</aspect>
-                                <aspect>lecm-document-aspects:has-reg-project-data</aspect>
+				<aspect>lecm-document-aspects:has-reg-document-data</aspect>
+				<aspect>lecm-document-aspects:has-reg-project-data</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>

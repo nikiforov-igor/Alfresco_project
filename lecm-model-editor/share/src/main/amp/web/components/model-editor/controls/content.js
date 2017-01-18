@@ -394,13 +394,13 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 						var p = model.types.type[0].properties.property;
 						if (p instanceof Array) {
 							for ( var i = 0, n = p.length; i < n; i++) {
-								var index = (YAHOO.lang.isObject(p[i].index)?p[i].index._enabled:null);
-								var tokenised = (YAHOO.lang.isObject(p[i].index)?p[i].index.tokenised:null);
+								var index = (YAHOO.lang.isObject(p[i].index)?p[i].index._enabled:'true');
+								var tokenised = (YAHOO.lang.isObject(p[i].index)?p[i].index.tokenised:'true');
 								tmpAttributesArray[i] = {'_name':(p[i]._name.substr(p[i]._name.indexOf(':')+1,p[i]._name.length)), 'title':p[i].title, 'type':p[i].type, 'default':p[i]['default'], 'mandatory':p[i].mandatory, '_enabled':index, 'tokenised':tokenised};//,  'validator':p[i].constraints.constraint.ref};
 							}
 						} else {
-							var index = (YAHOO.lang.isObject(p.index)?p.index._enabled:null);
-							var tokenised = (YAHOO.lang.isObject(p.index)?p.index.tokenised:null);
+							var index = (YAHOO.lang.isObject(p.index)?p.index._enabled:'true');
+							var tokenised = (YAHOO.lang.isObject(p.index)?p.index.tokenised:'true');
 							tmpAttributesArray.push({'_name':(p._name.substr(p._name.indexOf(':')+1,p._name.length)), 'title':p.title, 'type':p.type, 'default':p['default'], 'mandatory':p.mandatory, '_enabled':index, 'tokenised':tokenised});
 						}
 					}
@@ -424,13 +424,13 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 						var p = model.types.type.properties.property;
 						if (p instanceof Array) {
 							for ( var i = 0, n = p.length; i < n; i++) {
-								var index = (YAHOO.lang.isObject(p[i].index)?p[i].index._enabled:null);
-								var tokenised = (YAHOO.lang.isObject(p[i].index)?p[i].index.tokenised:null);
+								var index = (YAHOO.lang.isObject(p[i].index)?p[i].index._enabled:'true');
+								var tokenised = (YAHOO.lang.isObject(p[i].index)?p[i].index.tokenised:'true');
 								tmpAttributesArray[i] = {'_name':(p[i]._name.substr(p[i]._name.indexOf(':')+1,p[i]._name.length)), 'title':p[i].title, 'type':p[i].type, 'default':p[i]['default'], 'mandatory':p[i].mandatory, '_enabled':index, 'tokenised':tokenised};//,  'validator':p[i].constraints.constraint.ref};
 							}
 						} else {
-							var index = (YAHOO.lang.isObject(p.index)?p.index._enabled:null);
-							var tokenised = (YAHOO.lang.isObject(p.index)?p.index.tokenised:null);
+							var index = (YAHOO.lang.isObject(p.index)?p.index._enabled:'true');
+							var tokenised = (YAHOO.lang.isObject(p.index)?p.index.tokenised:'true');
 							tmpAttributesArray.push({'_name':(p._name.substr(p._name.indexOf(':')+1,p._name.length)), 'title':p.title, 'type':p.type, 'default':p['default'], 'mandatory':p.mandatory, '_enabled':index, 'tokenised':tokenised});//,  'validator':p[i].constraints.constraint.ref});
 						}
 					}
