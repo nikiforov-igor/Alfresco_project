@@ -68,6 +68,18 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>ru.it.lecm.security</groupId>
+            <artifactId>lecm-security-api</artifactId>
+            <version>${platform.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.notifications</groupId>
+            <artifactId>notifications-repo-api</artifactId>
+            <version>${platform.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>rhino</groupId>
             <artifactId>js</artifactId>
             <version>1.6R7</version>
