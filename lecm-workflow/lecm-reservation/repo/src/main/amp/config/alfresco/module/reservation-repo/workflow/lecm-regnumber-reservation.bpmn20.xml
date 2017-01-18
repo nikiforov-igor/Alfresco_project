@@ -7,14 +7,18 @@
             <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                 <activiti:field name="script">
                     <activiti:string><![CDATA[
-						reservationWorkflow2.setReservationActive(bpm_package, true);
+						var document = bpm_package.children[0];
+						document.properties['lecm-reservation-aspects:isReservationRunning'] = true;
+						document.save();
 					]]></activiti:string>
                 </activiti:field>
             </activiti:executionListener>
             <activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                 <activiti:field name="script">
                     <activiti:string><![CDATA[
-						reservationWorkflow2.setReservationActive(bpm_package, false);
+						var document = bpm_package.children[0];
+						document.properties['lecm-reservation-aspects:isReservationRunning'] = false;
+						document.save();
 					]]></activiti:string>
                 </activiti:field>
             </activiti:executionListener>
@@ -27,7 +31,7 @@
             <extensionElements>
                 <activiti:field name="script">
                     <activiti:string><![CDATA[
-                    	var emptyServiceTask = "Service task";
+                    	var emptyServiceTask = 'Service task';
                     ]]></activiti:string>
                 </activiti:field>
             </extensionElements>
@@ -37,14 +41,28 @@
             <extensionElements>
                 <activiti:field name="script">
                     <activiti:string><![CDATA[
-						var registrars = reservationWorkflow2.getRegistrars(bpm_package, "DA_REGISTRARS");
-						var reservateInitiator = reservationWorkflow2.getCurrentEmployee();
-						execution.setVariableLocal("registrarsList", registrars);
-						execution.setVariableLocal("reservateInitiator", reservateInitiator);
-
                         var document = bpm_package.children[0];
-                        var logText = "#initiator отправил документ #mainobject на резервирование регистрационных данных";
-                        businessJournal.log(document.nodeRef.toString(), "RESERVATION", logText, []);
+                        var currentEmployee = orgstructure.getCurrentEmployee();
+                        var registrars = [];
+                        // Централизованная ли регистрация
+                        if (edsGlobalSettings.isRegistrationCenralized()) {
+                            registrars = orgstructure.getEmployeesByBusinessRoleId('DA_REGISTRARS', true);
+                        }
+                        else {
+                            // Получаем основную должностную позицию
+                            var primaryPosition = orgstructure.getPrimaryPosition(currentEmployee.nodeRef.toString());
+                            if (primaryPosition) {
+                                var unit = orgstructure.getUnitByStaff(primaryPosition.nodeRef.toString());
+                                registrars = edsGlobalSettings.getPotentialWorkers('DA_REGISTRARS', unit.nodeRef.toString());
+                            }
+                        }
+
+                        var registrarsListItems = base.getWorkflowNodeConverter().convertNodes(base.getValueConverter().convertValueForJava(registrars), true);
+						execution.setVariableLocal('registrarsList', registrarsListItems);
+                        execution.setVariable('reservateInitiator', base.getWorkflowNodeConverter().convertNode(currentEmployee.nodeRef));
+
+                        var logText = '#initiator отправил документ #mainobject на резервирование регистрационных данных';
+                        businessJournal.log(document.nodeRef.toString(), 'RESERVATION', logText, []);
 					]]></activiti:string>
                 </activiti:field>
             </extensionElements>
@@ -52,34 +70,171 @@
 
         <exclusiveGateway id="exclusiveGw" name="Check registars amount" />
 
-        <userTask id="regnumReservationTask" name="Резервирование" activiti:assignee="${assignee.properties.userName}" activiti:formKey="lecmRegnumRes:reserveTask">
+        <userTask id="regnumReservationTask" name="Резервирование" activiti:assignee="${assignee.properties['lecm-orgstr:employee-person-login']}" activiti:formKey="lecmRegnumRes:reserveTask">
             <extensionElements>
                 <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
-							reservationWorkflow2.assignTask(assignee, task);
+							var document = bpm_package.children[0];
+							var workflowRole = task.getVariableLocal('registrarDynamicRole');
+
+							// Если роль не указана, то ориентируемся на делегирование всего
+							var delegateAll = workflowRole == null;
+							var employee = assignee;
+							var delegationOpts = delegation.getDelegationOpts(employee.nodeRef.toString());
+							var isDelegationActive = delegation.isDelegationActive(delegationOpts.nodeRef.toString());
+							if (isDelegationActive) {
+							    var effectiveEmployee;
+							    if (delegateAll) {
+							        var potentialEffectiveEmployee = delegationOpts.assocs['lecm-d8n:delegation-opts-trustee-assoc'][0];
+							        if (potentialEffectiveEmployee.typeShort == 'lecm-orgstr:employee') {
+							            effectiveEmployee = potentialEffectiveEmployee;
+							        }
+							    }
+							    else {
+							        effectiveEmployee = delegation.getEffectiveExecutor(employee.nodeRef.toString(), workflowRole);
+							        // Если эффективного исполнителя не нашли по бизнес-ролям, то поискать его через параметры делегирования
+							        if (employee == effectiveEmployee) {
+							            var potentialEffectiveEmployee = delegationOpts.assocs['lecm-d8n:delegation-opts-trustee-assoc'][0];
+							            if (potentialEffectiveEmployee.typeShort == 'lecm-orgstr:employee') {
+							                effectiveEmployee = potentialEffectiveEmployee;
+							            }
+							        }
+							    }
+							    if (effectiveEmployee != null) {
+							        var effectiveUserName = orgstructure.getEmployeeLogin(effectiveEmployee);
+							        if (effectiveUserName && effectiveUserName != '') {
+							            task.setAssignee(effectiveUserName);
+							            task.setOwner(effectiveUserName); //???
+							        }
+							        task.setVariableLocal('assumeExecutor', employee.nodeRef.toString());
+							    }
+							}
+
+                            // Set the message for the reservation task
+                            var currentEmployee = orgstructure.getCurrentEmployee();
+                            var employeeName = currentEmployee.properties['lecm-orgstr:employee-short-name'];
+                            var reserveTaskMessage = '';
+                            var resDate = task.getVariable('lecmRegnumRes_date');
+                            if (resDate) {
+                                // Формат 'dd.MM.yyyy'
+                                var month = resDate.getMonth() + 1;
+                                var year = resDate.getYear() + 1900;
+                                var reservationDate = resDate.getDate() + '.' + (month < 10 ? '0' : '') + month + '.' + year;
+                                reserveTaskMessage = 'Сотрудник ' + employeeName + ' запросил резервирование регистрационного номера на дату ' + reservationDate;
+                            }
+                            else {
+                                reserveTaskMessage = 'Сотрудник ' + employeeName + ' запросил резервирование регистрационного номера без указания желаемой даты регистрации.';
+                            }
+						    document.properties['lecm-reservation-aspects:reserveTaskMessage'] = reserveTaskMessage;
+						    document.save();
+
+                            notifications.sendNotification({
+                                recipients: [employee],
+                                templateCode: 'RESERVATION_REQUEST_STARTED',
+                                templateConfig: {
+                                    mainObject: document,
+                                    employee: currentEmployee
+                                }
+                            });
 						]]></activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
                 <activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
-							reservationWorkflow2.reassignTask(assignee, task);
-							var document, employee;
-							document = bpm_package.children[0];
-							employee = orgstructure.getEmployeeByLogin(assignee.properties['cm:userName']);
-							lecmPermission.grantDynamicRole(document, employee, 'LECM_REGISTRAR_DYN', 'LECM_BASIC_PG_Employee');
+                            var document = bpm_package.children[0];
+                            var employee = assignee;
+
+                            var workflowRole = task.getVariableLocal('registrarDynamicRole');
+                            var workflowRoleName = workflowRole ? workflowRole : 'LECM_REGISTRAR_DYN';
+                            lecmPermission.grantDynamicRole(document, employee, workflowRoleName, 'LECM_BASIC_PG_Employee');
 						]]></activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
                 <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
-							reservationWorkflow2.completeTask(assignee, task);
-							reservationWorkflow2.notifyReservationFinished(bpm_package, task);
-							var document, employee;
-							document = bpm_package.children[0];
-							employee = orgstructure.getEmployeeByLogin(assignee.properties['cm:userName']);
+                            var document = bpm_package.children[0];
+                            var employee = assignee;
+                            var reservateInitiator = execution.getVariable('reservateInitiator');
+
+							var comment = task.getVariableLocal('bpm_comment');
+							var decision = task.getVariableLocal('lecmRegnumRes_decision');
+							var regDate = task.getVariable('lecmRegnumRes_date');
+							var regnumTemplateId = task.getVariable('lecmRegnumRes_regnumberTemplateCode');
+							var documentReservedNumber;
+
+							if (decision == 'RESERVED') {
+							    var presentString = document.properties['lecm-document:present-string'];
+							    document.properties['lecm-reservation-aspects:presentStringBeforeReservation'] = presentString;
+                                document.save();
+
+							    regnumbers.registerDocument(document, regnumTemplateId, true);
+							    // Делаем для того, чтобы из базы перечитались свойства после резервирования
+							    document.reset();
+
+							    document.properties['lecm-reservation-aspects:isReserved'] = true;
+							    if (regDate) {
+							        document.properties['lecm-document-aspects:reg-data-date'] = regDate;
+							    }
+							    document.save();
+
+							    // Запись в бизнес журнал если решение хорошее:
+							    documentReservedNumber = document.properties['lecm-document-aspects:reg-data-number'];
+							    var regInfo = 'Зарезервирован номер: ' + documentReservedNumber;
+							    if (regDate) {
+							        // Формат 'dd.MM.yyyy'
+                                    var month = regDate.getMonth() + 1;
+                                    var year = regDate.getYear() + 1900;
+                                    var documentReservedDate = regDate.getDate() + '.' + (month < 10 ? '0' : '') + month + '.' + year;
+							        regInfo += ' от ' + documentReservedDate;
+							    }
+
+							    var bjMsg = '#initiator выполнил резервирование регистрационного номера для документа #mainobject ' + regInfo;
+							    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
+							}
+							else if (decision == 'REJECTED') {
+							    document.properties['lecm-reservation-aspects:isReserved'] = true;
+							    document.save();
+
+							    // Запись в бизнес журнал если решение плохое:
+							    var commentLink = "<a href='#' title=" + comment + ">отклонил</a>";
+							    var bjMsg = '#initiator ' + commentLink + ' запрос в резервировании номера документа #mainobject';
+							    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
+							}
+
+							// Уведомление при окончании запроса на резервирование рег.номера:
+							var templateCode;
+							var templateConfigObject = {
+							    mainObject: document
+							};
+
+							if (decision == 'RESERVED') {
+							    templateConfigObject.regNumber = documentReservedNumber ? documentReservedNumber : 'none';
+							    if (regDate) {
+							        // Формат 'dd.MM.yyyy'
+                                    var month = regDate.getMonth() + 1;
+                                    var year = regDate.getYear() + 1900;
+                                    var documentReservedDate = regDate.getDate() + '.' + (month < 10 ? '0' : '') + month + '.' + year;
+							        templateCode = 'RESERVATION_REQUEST_FINISHED_APPROVED_WITH_DATE';
+							        templateConfigObject.reserveDate = documentReservedDate;
+							    }
+							    else {
+							        templateCode = 'RESERVATION_REQUEST_FINISHED_APPROVED_WITHOUT_DATE';
+							    }
+							}
+							else {
+							    templateCode = 'RESERVATION_REQUEST_FINISHED_REJECTED';
+							}
+
+                            notifications.sendNotification({
+                                recipients: [reservateInitiator],
+                                templateCode: templateCode,
+                                templateConfig: templateConfigObject
+                            });
+
+                            execution.setVariable('taskDecision', decision);
   							lecmPermission.revokeDynamicRole(document, employee, 'LECM_REGISTRAR_DYN');
   							documentMembers.addMemberWithoutCheckPermission(document, employee, 'LECM_BASIC_PG_Reader', true);
 						]]></activiti:string>
@@ -95,13 +250,19 @@
             <extensionElements>
                 <activiti:field name="script">
                     <activiti:string><![CDATA[
-						reservationWorkflow2.setEmptyRegnum(bpm_package);
-						var reservateInitiator = execution.getVariableLocal("reservateInitiator");
+                        var document = bpm_package.children[0];
+
+						document.properties['lecm-document:regnum'] = '"нет доступных регистраторов"';
+						document.save();
+						var documentString = document.properties['lecm-document:present-string'];
+						logger.warn('Нет доступных регистраторов для документа "'+ documentString + '"');
+
+						var reservateInitiator = execution.getVariable('reservateInitiator');
 						notifications.sendNotification({
 							recipients: [reservateInitiator],
 							templateCode: 'RESERVATION_EMPTY_REGISTRARS',
 							templateConfig: {
-								mainObject: bpm_package.children[0]
+								mainObject: document
 							}
 						});
 					]]></activiti:string>
