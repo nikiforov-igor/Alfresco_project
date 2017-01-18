@@ -562,7 +562,7 @@ i.icon-building {
     max-width: 100%;
 }
 .control.richtext.editmode .container .value-div {  /* чтоб не прыгало во время загрузки страницы */
-    min-height: 155px;
+    min-height: 163px;
 }
 .control.richtext.viewmode .container .value-div p {
     padding: 0;

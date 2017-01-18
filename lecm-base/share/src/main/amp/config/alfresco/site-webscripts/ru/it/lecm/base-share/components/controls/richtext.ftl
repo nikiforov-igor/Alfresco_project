@@ -68,7 +68,7 @@
                         statusbar_location: "bottom",
                         path: false,
                         language: "${locale?substring(0, 2)?js_string}",
-			            plugins: "fullscreen table paste",
+			            plugins: "fullscreen table paste textcolor",
                         paste_remove_styles_if_webkit: false,
                         init_instance_callback : setTabIndex,
                         menu: {},
@@ -76,7 +76,8 @@
                             "bold italic underline strikethrough | fontselect fontsizeselect | fullscreen",
                             "alignleft aligncenter alignright alignjustify | bullist numlist table | undo redo | forecolor backcolor"
                         ],
-						paste_as_text: true
+						paste_as_text: true,
+						resize: false
                     }
                 }).setMessages(${messages});
 			<#if readonly>
