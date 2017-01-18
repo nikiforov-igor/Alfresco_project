@@ -54,7 +54,7 @@ public class ResolutionsExpiredExecutor extends ActionExecuterAbstractBase {
     protected void addParameterDefinitions(List<ParameterDefinition> paramList) {
     }
 
-    private ArrayList<NodeRef> getEmployeeList(NodeRef document) {
+    private List<NodeRef> getEmployeeList(NodeRef document) {
         Set<NodeRef> employee = new HashSet<>();
 
         List<AssociationRef> employeeAssocs = new ArrayList<>();
