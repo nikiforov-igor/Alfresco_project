@@ -55,17 +55,11 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 	private static final String ORD_DOC_NUMBER = "ORD_NUMBER";
 	private static final String CONTRACT_DOC_NUMBER = "CONTRACT_REGNUM";
 
-	private static final String OUTGOING_NAMESPACE_URI = "http://www.it.ru/logicECM/outgoing/1.0";
-	private static final String INTERNAL_NAMESPACE_URI = "http://www.it.ru/logicECM/internal/1.0";
-	private static final String ND_NAMESPACE_URI = "http://www.it.ru/lecm/ND/1.0";
-	private static final String ORD_NAMESPACE_URI = "http://www.it.ru/lecm/ORD/1.0";
-	private static final String CONTRACTS_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/1.0";
-
-	private static final String OUTGOING_DOC = QName.createQName(OUTGOING_NAMESPACE_URI, "document").toString();
-	private static final String INTERNAL_DOC = QName.createQName(INTERNAL_NAMESPACE_URI, "document").toString();
-	private static final String ND_DOC = QName.createQName(ND_NAMESPACE_URI, "document").toString();
-	private static final String ORD_DOC = QName.createQName(ORD_NAMESPACE_URI, "document").toString();
-	private static final String CONTRACT_DOC = QName.createQName(CONTRACTS_NAMESPACE_URI, "document").toString();
+	private static final String OUTGOING_DOC = QName.createQName("http://www.it.ru/logicECM/outgoing/1.0", "document").toString();
+	private static final String INTERNAL_DOC = QName.createQName("http://www.it.ru/logicECM/internal/1.0", "document").toString();
+	private static final String ND_DOC = QName.createQName("http://www.it.ru/lecm/ND/1.0", "document").toString();
+	private static final String ORD_DOC = QName.createQName("http://www.it.ru/lecm/ORD/1.0", "document").toString();
+	private static final String CONTRACT_DOC = QName.createQName("http://www.it.ru/logicECM/contract/1.0", "document").toString();
 	
 	public void setEdsGlobalSettingsService(EDSGlobalSettingsService edsGlobalSettingsService) {
 		this.edsGlobalSettingsService = edsGlobalSettingsService;

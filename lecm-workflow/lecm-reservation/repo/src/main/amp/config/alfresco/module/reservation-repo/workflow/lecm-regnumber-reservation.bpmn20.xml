@@ -31,7 +31,7 @@
             <extensionElements>
                 <activiti:field name="script">
                     <activiti:string><![CDATA[
-                    	var emptyServiceTask = 'Service task';
+                    	(function () {})();
                     ]]></activiti:string>
                 </activiti:field>
             </extensionElements>
@@ -44,12 +44,11 @@
                         var document = bpm_package.children[0];
                         var currentEmployee = orgstructure.getCurrentEmployee();
                         var registrars = [];
-                        // Централизованная ли регистрация
+                        /* Централизованная ли регистрация */
                         if (edsGlobalSettings.isRegistrationCenralized()) {
                             registrars = orgstructure.getEmployeesByBusinessRoleId('DA_REGISTRARS', true);
-                        }
-                        else {
-                            // Получаем основную должностную позицию
+                        } else {
+                            /* Получаем основную должностную позицию */
                             var primaryPosition = orgstructure.getPrimaryPosition(currentEmployee.nodeRef.toString());
                             if (primaryPosition) {
                                 var unit = orgstructure.getUnitByStaff(primaryPosition.nodeRef.toString());
@@ -78,7 +77,7 @@
 							var document = bpm_package.children[0];
 							var workflowRole = task.getVariableLocal('registrarDynamicRole');
 
-							// Если роль не указана, то ориентируемся на делегирование всего
+							/* Если роль не указана, то ориентируемся на делегирование всего */
 							var delegateAll = workflowRole == null;
 							var employee = assignee;
 							var delegationOpts = delegation.getDelegationOpts(employee.nodeRef.toString());
@@ -87,43 +86,42 @@
 							    var effectiveEmployee;
 							    if (delegateAll) {
 							        var potentialEffectiveEmployee = delegationOpts.assocs['lecm-d8n:delegation-opts-trustee-assoc'][0];
-							        if (potentialEffectiveEmployee.typeShort == 'lecm-orgstr:employee') {
+							        if (potentialEffectiveEmployee.typeShort + '' == 'lecm-orgstr:employee') {
 							            effectiveEmployee = potentialEffectiveEmployee;
 							        }
-							    }
-							    else {
+							    } else {
 							        effectiveEmployee = delegation.getEffectiveExecutor(employee.nodeRef.toString(), workflowRole);
-							        // Если эффективного исполнителя не нашли по бизнес-ролям, то поискать его через параметры делегирования
+							        /* Если эффективного исполнителя не нашли по бизнес-ролям, то поискать его через параметры делегирования */
 							        if (employee == effectiveEmployee) {
 							            var potentialEffectiveEmployee = delegationOpts.assocs['lecm-d8n:delegation-opts-trustee-assoc'][0];
-							            if (potentialEffectiveEmployee.typeShort == 'lecm-orgstr:employee') {
+							            if (potentialEffectiveEmployee.typeShort + '' == 'lecm-orgstr:employee') {
 							                effectiveEmployee = potentialEffectiveEmployee;
 							            }
 							        }
 							    }
-							    if (effectiveEmployee != null) {
-							        var effectiveUserName = orgstructure.getEmployeeLogin(effectiveEmployee);
-							        if (effectiveUserName && effectiveUserName != '') {
+							    if (effectiveEmployee) {
+							        /* Приводим к jsString */
+							        var effectiveUserName = '' + orgstructure.getEmployeeLogin(effectiveEmployee);
+							        if (effectiveUserName) {
 							            task.setAssignee(effectiveUserName);
-							            task.setOwner(effectiveUserName); //???
+							            task.setOwner(effectiveUserName);
 							        }
 							        task.setVariableLocal('assumeExecutor', employee.nodeRef.toString());
 							    }
 							}
 
-                            // Set the message for the reservation task
+                            /* Set the message for the reservation task */
                             var currentEmployee = orgstructure.getCurrentEmployee();
                             var employeeName = currentEmployee.properties['lecm-orgstr:employee-short-name'];
                             var reserveTaskMessage = '';
                             var resDate = task.getVariable('lecmRegnumRes_date');
                             if (resDate) {
-                                // Формат 'dd.MM.yyyy'
+                                /* Формат 'dd.MM.yyyy' */
                                 var month = resDate.getMonth() + 1;
                                 var year = resDate.getYear() + 1900;
                                 var reservationDate = resDate.getDate() + '.' + (month < 10 ? '0' : '') + month + '.' + year;
                                 reserveTaskMessage = 'Сотрудник ' + employeeName + ' запросил резервирование регистрационного номера на дату ' + reservationDate;
-                            }
-                            else {
+                            } else {
                                 reserveTaskMessage = 'Сотрудник ' + employeeName + ' запросил резервирование регистрационного номера без указания желаемой даты регистрации.';
                             }
 						    document.properties['lecm-reservation-aspects:reserveTaskMessage'] = reserveTaskMessage;
@@ -142,7 +140,7 @@
                 </activiti:taskListener>
                 <activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
-                        <activiti:string><![CDATA[
+                        <activiti:string><![CDATA[0
                             var document = bpm_package.children[0];
                             var employee = assignee;
 
@@ -165,69 +163,63 @@
 							var regnumTemplateId = task.getVariable('lecmRegnumRes_regnumberTemplateCode');
 							var documentReservedNumber;
 
-							if (decision == 'RESERVED') {
-							    var presentString = document.properties['lecm-document:present-string'];
-							    document.properties['lecm-reservation-aspects:presentStringBeforeReservation'] = presentString;
-                                document.save();
-
-							    regnumbers.registerDocument(document, regnumTemplateId, true);
-							    // Делаем для того, чтобы из базы перечитались свойства после резервирования
-							    document.reset();
-
-							    document.properties['lecm-reservation-aspects:isReserved'] = true;
-							    if (regDate) {
-							        document.properties['lecm-document-aspects:reg-data-date'] = regDate;
-							    }
-							    document.save();
-
-							    // Запись в бизнес журнал если решение хорошее:
-							    documentReservedNumber = document.properties['lecm-document-aspects:reg-data-number'];
-							    var regInfo = 'Зарезервирован номер: ' + documentReservedNumber;
-							    if (regDate) {
-							        // Формат 'dd.MM.yyyy'
-                                    var month = regDate.getMonth() + 1;
-                                    var year = regDate.getYear() + 1900;
-                                    var documentReservedDate = regDate.getDate() + '.' + (month < 10 ? '0' : '') + month + '.' + year;
-							        regInfo += ' от ' + documentReservedDate;
-							    }
-
-							    var bjMsg = '#initiator выполнил резервирование регистрационного номера для документа #mainobject ' + regInfo;
-							    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
-							}
-							else if (decision == 'REJECTED') {
-							    document.properties['lecm-reservation-aspects:isReserved'] = true;
-							    document.save();
-
-							    // Запись в бизнес журнал если решение плохое:
-							    var commentLink = "<a href='#' title=" + comment + ">отклонил</a>";
-							    var bjMsg = '#initiator ' + commentLink + ' запрос в резервировании номера документа #mainobject';
-							    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
-							}
-
-							// Уведомление при окончании запроса на резервирование рег.номера:
 							var templateCode;
 							var templateConfigObject = {
 							    mainObject: document
 							};
 
-							if (decision == 'RESERVED') {
+							if (decision && decision + '' == 'RESERVED') {
+								regnumbers.registerDocument(document, regnumTemplateId, true);
+							    /* Делаем для того, чтобы из базы перечитались свойства после резервирования */
+							    document.reset();
+
+							    var presentString = document.properties['lecm-document:present-string'];
+							    document.properties['lecm-reservation-aspects:presentStringBeforeReservation'] = presentString;
+
+							    document.properties['lecm-reservation-aspects:isReserved'] = true;
+							    if (regDate) {
+							        document.properties['lecm-document-aspects:reg-data-date'] = regDate;
+							    }
+
+							    /* Запись в бизнес журнал если решение хорошее: */
+							    documentReservedNumber = document.properties['lecm-document-aspects:reg-data-number'];
+							    var regInfo = 'Зарезервирован номер: ' + documentReservedNumber;
+							    if (regDate) {
+							        /* Формат 'dd.MM.yyyy' */
+                                    var month = regDate.getMonth() + 1;
+                                    var year = regDate.getYear() + 1900;
+                                    var documentReservedDate = regDate.getDate() + '.' + (month < 10 ? '0' : '') + month + '.' + year;
+							        regInfo += ' от ' + documentReservedDate;
+							    }
+							    var bjMsg = '#initiator выполнил резервирование регистрационного номера для документа #mainobject ' + regInfo;
+							    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
+
+                                /* Подготовка уведомления */
 							    templateConfigObject.regNumber = documentReservedNumber ? documentReservedNumber : 'none';
 							    if (regDate) {
-							        // Формат 'dd.MM.yyyy'
+							        /* Формат 'dd.MM.yyyy' */
                                     var month = regDate.getMonth() + 1;
                                     var year = regDate.getYear() + 1900;
                                     var documentReservedDate = regDate.getDate() + '.' + (month < 10 ? '0' : '') + month + '.' + year;
 							        templateCode = 'RESERVATION_REQUEST_FINISHED_APPROVED_WITH_DATE';
 							        templateConfigObject.reserveDate = documentReservedDate;
-							    }
-							    else {
+							    } else {
 							        templateCode = 'RESERVATION_REQUEST_FINISHED_APPROVED_WITHOUT_DATE';
 							    }
-							}
-							else {
+							} else if (decision && decision + '' == 'REJECTED') {
+							    document.properties['lecm-reservation-aspects:isReserved'] = true;
+
+							    /* Запись в бизнес журнал если решение плохое: */
+							    var commentLink = "<a href='#' title=" + comment + ">отклонил</a>";
+							    var bjMsg = '#initiator ' + commentLink + ' запрос в резервировании номера документа #mainobject';
+							    businessJournal.log(document.nodeRef.toString(), 'RESERVATION', bjMsg, []);
+
+                                /* Подготовка уведомления */
 							    templateCode = 'RESERVATION_REQUEST_FINISHED_REJECTED';
 							}
+							document.save();
 
+							/* Уведомление при окончании запроса на резервирование рег.номера: */
                             notifications.sendNotification({
                                 recipients: [reservateInitiator],
                                 templateCode: templateCode,
