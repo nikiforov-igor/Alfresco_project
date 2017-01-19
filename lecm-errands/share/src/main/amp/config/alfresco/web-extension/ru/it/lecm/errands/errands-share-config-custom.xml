@@ -1503,6 +1503,7 @@
                     <show id="lecm-errands-dic:errand-type-launch-review"/>
                 </field-visibility>
                 <appearance>
+                    <field id="cm:name" label-id="label.errands.type.name"/>
                     <field id="lecm-errands-dic:errand-type-default-title">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
@@ -1531,6 +1532,7 @@
                     <show id="lecm-errands-dic:errand-type-launch-review"/>
                 </field-visibility>
                 <appearance>
+                    <field id="cm:name" label-id="label.errands.type.name"/>
                     <field id="lecm-errands-dic:errand-type-default-title">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
@@ -1550,7 +1552,7 @@
                     <show id="lecm-errands-dic:errand-type-default-title"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" mandatory="false">
+                    <field id="cm:name" label-id="label.errands.type.name" mandatory="false">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
                         </constraint-handlers>
@@ -1576,6 +1578,9 @@
                     <show id="cm:name" force="true"/>
                     <show id="lecm-errands-dic:errand-type-default-title"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.errands.type.name"/>
+                </appearance>
             </form>
         </forms>
     </config>
