@@ -93,7 +93,7 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
 
     @Override
     public Date convertComplexDate(String radio, Date date, String daysType, Integer daysCount) {
-        if (COMPLEX_DATE_RADIO_DATE.equals(radio) && date != null) {
+        if (COMPLEX_DATE_RADIO_DATE.equals(radio)) {
             return date;
         } else if (COMPLEX_DATE_RADIO_DAYS.equals(radio) && daysCount != null && daysType != null) {
             Calendar cal = Calendar.getInstance();

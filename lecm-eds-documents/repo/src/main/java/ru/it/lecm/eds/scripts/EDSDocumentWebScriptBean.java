@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.ParameterCheck;
+import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -68,8 +69,8 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
     public Date convertComplexDateString(String radio, String date, String daysType, String days) {
         ParameterCheck.mandatory("radio", radio);
 
-        Integer daysInt = (days != null && !days.isEmpty()) ? Integer.parseInt(days) : null;
-        Date dateParsed = (date != null && !date.isEmpty()) ? ISO8601DateFormat.parse(date) : null;
+        Integer daysInt = StringUtils.isNotEmpty(days) ? Integer.parseInt(days) : null;
+        Date dateParsed = StringUtils.isNotEmpty(date) ? ISO8601DateFormat.parse(date) : null;
 
         return convertComplexDate(radio, dateParsed, daysType, daysInt);
     }

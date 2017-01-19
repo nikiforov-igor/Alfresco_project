@@ -57,12 +57,12 @@ public interface EDSDocumentService {
     String getComplexDateText(String radio, Date date, String daysType, Integer daysCount);
 
     /**
-     * Формирование настроек срока в текстовом виде
+     * Конвертация относительного срока в дату
      * @param radio значение переключателя
      * @param date дата
      * @param daysCount количество дней
      * @param daysType тип дней
-     * @return настройки срока в текстовом виде
+     * @return сконвертированный относительный срок в дату
      */
     Date convertComplexDate(String radio, Date date, String daysType, Integer daysCount);
 }
