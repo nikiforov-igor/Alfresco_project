@@ -77,16 +77,6 @@
 							var document = bpm_package.children[0];
 							var workflowRole = task.getVariableLocal('registrarDynamicRole');
 
-                            var getEffectiveEmployee = function (delegationOpts) {
-                                var potentialEffectiveEmployee = delegationOpts.assocs['lecm-d8n:delegation-opts-trustee-assoc'][0];
-                                var potentialEffectiveEmployeeTypeShort = potentialEffectiveEmployee.typeShort + '';
-                                if (potentialEffectiveEmployeeTypeShort == 'lecm-orgstr:employee') {
-                                    return potentialEffectiveEmployee;
-                                } else {
-                                    return null;
-                                }
-                            };
-
 							/* Если роль не указана, то ориентируемся на делегирование всего */
 							var delegateAll = workflowRole == null;
 							var employee = assignee;
@@ -99,7 +89,7 @@
 							    } else {
 							        effectiveEmployee = delegation.getEffectiveExecutor(employee.nodeRef.toString(), workflowRole);
 							        /* Если эффективного исполнителя не нашли по бизнес-ролям, то поискать его через параметры делегирования */
-							        if (employee.nodeRef.equals(effectiveEmployee.nodeRef)) {
+							        if (employee && effectiveEmployee && employee.nodeRef.equals(effectiveEmployee.nodeRef)) {
 							            effectiveEmployee = getEffectiveEmployee(delegationOpts);
 							        }
 							    }
@@ -139,6 +129,16 @@
                                     employee: currentEmployee
                                 }
                             });
+
+                            function getEffectiveEmployee (delegationOpts) {
+                                var potentialEffectiveEmployee = delegationOpts.assocs['lecm-d8n:delegation-opts-trustee-assoc'][0];
+                                var potentialEffectiveEmployeeTypeShort = potentialEffectiveEmployee.typeShort + '';
+                                if (potentialEffectiveEmployeeTypeShort == 'lecm-orgstr:employee') {
+                                    return potentialEffectiveEmployee;
+                                } else {
+                                    return null;
+                                }
+                            }
 						]]></activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -162,7 +162,7 @@
                             var reservateInitiator = execution.getVariable('reservateInitiator');
 
 							var comment = task.getVariableLocal('bpm_comment');
-							var decision = task.getVariableLocal('lecmRegnumRes_decision');
+							var decision = task.getVariableLocal('lecmRegnumRes_decision') ? task.getVariableLocal('lecmRegnumRes_decision') + '' : '';
 							var regDate = task.getVariable('lecmRegnumRes_date');
 							var regnumTemplateId = task.getVariable('lecmRegnumRes_regnumberTemplateCode');
 							var documentReservedNumber;
@@ -172,7 +172,7 @@
 							    mainObject: document
 							};
 
-							if (decision && decision + '' == 'RESERVED') {
+							if (decision == 'RESERVED') {
 								regnumbers.registerDocument(document, regnumTemplateId, true);
 							    /* Делаем для того, чтобы из базы перечитались свойства после резервирования */
 							    document.reset();
@@ -210,7 +210,7 @@
 							    } else {
 							        templateCode = 'RESERVATION_REQUEST_FINISHED_APPROVED_WITHOUT_DATE';
 							    }
-							} else if (decision && decision + '' == 'REJECTED') {
+							} else if (decision == 'REJECTED') {
 							    document.properties['lecm-reservation-aspects:isReserved'] = true;
 
 							    /* Запись в бизнес журнал если решение плохое: */
