@@ -128,5 +128,6 @@
 		<property name="nodeService" ref="nodeService"/>
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="documentService" ref="documentService"/>
+		<property name="stateMachineService" ref="stateMachineHelper"/>
 	</bean>
 </beans>

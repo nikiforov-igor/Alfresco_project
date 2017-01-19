@@ -92,7 +92,7 @@
                     <field id="lecm-document:author-assoc" set="common" label-id="label.eds.assoc.compiler" read-only="true"/>
                     <field id="lecm-eds-document:executor-assoc" set="common">
                         <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=INTERNAL_CREATORS</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/INTERNAL_CREATORS/picker</control-param>
                             <control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
                         </control>
                     </field>
@@ -504,7 +504,7 @@
                     </field>
                     <field id="lecm-eds-document:executor-assoc">
                         <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=INTERNAL_CREATORS</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/INTERNAL_CREATORS/picker</control-param>
                             <control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
                         </control>
                     </field>

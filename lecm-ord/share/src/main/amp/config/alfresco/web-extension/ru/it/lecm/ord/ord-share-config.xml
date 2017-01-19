@@ -90,7 +90,7 @@
                     </field>
                     <field id="lecm-eds-document:executor-assoc">
                         <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=ORD_CREATORS</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/ORD_CREATORS/picker</control-param>
                             <control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
                         </control>
                     </field>
@@ -469,7 +469,7 @@
 	                <field id="lecm-document:author-assoc" set="ord-document-form-common-set" label-id="label.eds.assoc.compiler" read-only="true"/>
                     <field id="lecm-eds-document:executor-assoc" set="ord-document-form-common-set">
                         <control>
-                            <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=ORD_CREATORS</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/ORD_CREATORS/picker</control-param>
                             <control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
                         </control>
                     </field>

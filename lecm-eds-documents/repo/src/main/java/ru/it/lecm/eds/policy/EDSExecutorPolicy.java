@@ -16,6 +16,7 @@ import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
@@ -34,6 +35,7 @@ public class EDSExecutorPolicy implements NodeServicePolicies.OnCreateAssociatio
     private AuthenticationService authenticationService;
     private OrgstructureBean orgstructureService;
     private DocumentService documentService;
+    private StateMachineServiceBean stateMachineService;
 
     public DocumentService getDocumentService() {
         return documentService;
@@ -92,11 +94,19 @@ public class EDSExecutorPolicy implements NodeServicePolicies.OnCreateAssociatio
         this.lecmPermissionService = lecmPermissionService;
     }
 
+    public StateMachineServiceBean getStateMachineService() {
+        return stateMachineService;
+    }
+
+    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+        this.stateMachineService = stateMachineService;
+    }
 
     public final void init() {
         PropertyCheck.mandatory(this, "nodeService", nodeService);
         PropertyCheck.mandatory(this, "policyComponent", policyComponent);
         PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
+        PropertyCheck.mandatory(this, "stateMachineService", stateMachineService);
         PropertyCheck.mandatory(this, "lecmPermissionService", lecmPermissionService);
         PropertyCheck.mandatory(this, "notificationsService", notificationsService);
 
@@ -115,7 +125,7 @@ public class EDSExecutorPolicy implements NodeServicePolicies.OnCreateAssociatio
         NodeRef initiator = orgstructureService.getCurrentEmployee();
         Map<String, Object> templateConfig = new HashMap<>();
         templateConfig.put("mainObject", documentRef);
-        lecmPermissionService.grantDynamicRole(GRAND_DYNAMIC_ROLE_CODE_INITIATOR, documentRef, docExecutorRef.getId(), "LECM_BASIC_PG_Initiator");
+        stateMachineService.grandDynamicRoleForEmployee(documentRef, docExecutorRef, GRAND_DYNAMIC_ROLE_CODE_INITIATOR);
         if (nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS) != null) {
             notificationsService.sendNotification(author, initiator, Collections.singletonList(docExecutorRef), "EDS_EXECUTOR_NEW", templateConfig, true);
         }
