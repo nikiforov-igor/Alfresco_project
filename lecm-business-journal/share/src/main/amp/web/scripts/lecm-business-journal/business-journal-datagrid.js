@@ -309,22 +309,8 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
         },
 
 		_setupPaginatior: function DataGrid_setupPaginatior() {
-            if (this.options.usePagination) {
-                var handlePagination = function DataGrid_handlePagination(state, me) {
-                    me.widgets.paginator.setState(state);
-                };
-
-                this.widgets.paginator = new YAHOO.widget.Paginator(
-                    {
-                        containers: [this.id + "-paginatorBottom"],
-                        rowsPerPage: this.options.pageSize,
-                        initialPage: this.options.initialPage,
-                        template: this.msg("pagination.template"),
-                        pageReportTemplate: this.msg("pagination.template.page-report"),
-                        previousPageLinkLabel: this.msg("pagination.previousPageLinkLabel"),
-                        nextPageLinkLabel: this.msg("pagination.nextPageLinkLabel")
-                    });
-
+            LogicECM.module.ARM.DataGrid.superclass._setupPaginatior.call(this);
+            if (this.widgets.paginator) {
                 this.widgets.paginator.setAttributeConfig('pageReportValueGenerator', {
                     value : function (paginator) {
                         var curPage = paginator.getCurrentPage(),
@@ -342,11 +328,6 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                     },
                     validator : YAHOO.lang.isFunction
                 });
-
-                this.widgets.paginator.subscribe("changeRequest" + this.id, handlePagination, this);
-
-                // Display the bottom paginator bar
-                Dom.setStyle(this.id + "-datagridBarBottom", "display", "none");
             }
         }
     }, true);

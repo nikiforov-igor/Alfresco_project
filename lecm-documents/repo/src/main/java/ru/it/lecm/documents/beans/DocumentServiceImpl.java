@@ -648,7 +648,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                                 paramsBuilder.append("&prop_")
                                         .append(propQName.toPrefixString(namespaceService).replace(":", "_"))
                                         .append("=")
-                                        .append(propValue.toString());
+                                        .append(URLEncoder.encodeUriComponent(propValue.toString()));
                             }
                         }
                     } catch (InvalidQNameException invalid) {
