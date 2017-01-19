@@ -350,32 +350,17 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
         },
 
         _setupPaginatior: function () {
-            if (this.options.usePagination) {
-                var handlePagination = function DataGrid_handlePagination(state, me) {
+            LogicECM.module.ARM.DataGrid.superclass._setupPaginatior.call(this);
+            if (this.widgets.paginator) {
+                var handlePagination = function (state, me) {
                     me.pageLoading = true;
                     me._showMessageOnPaginationLoading.call(me);
                     me.widgets.paginator.setState(state);
                 };
-
-                this.widgets.paginator = new YAHOO.widget.Paginator(
-                    {
-                        containers: [this.id + "-paginatorBottom"],
-                        rowsPerPage: this.options.pageSize,
-                        initialPage: this.options.initialPage,
-                        totalRecords: YAHOO.widget.Paginator.VALUE_UNLIMITED, // temporary to allow initialPage config.  Will be overwritten by DataTable
-                        template: this.msg("pagination.template"),
-                        pageReportTemplate: this.msg("pagination.template.page-report"),
-                        previousPageLinkLabel: this.msg("pagination.previousPageLinkLabel"),
-                        nextPageLinkLabel: this.msg("pagination.nextPageLinkLabel")
-                    });
-
                 this.widgets.paginator.subscribe("changeRequest", handlePagination, this);
 
                 this.paginatorSetPage = this.widgets.paginator.setPage;
                 this.widgets.paginator.setPage = this.setPage.bind(this);
-
-                // Display the bottom paginator bar
-                Dom.setStyle(this.id + "-datagridBarBottom", "display", "none");
             }
         },
 

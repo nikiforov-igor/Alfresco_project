@@ -1092,16 +1092,21 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     var handlePagination = function DataGrid_handlePagination(state, me) {
                         me.widgets.paginator.setState(state);
                     };
-
                     this.widgets.paginator = new YAHOO.widget.Paginator(
                         {
                             containers: [this.id + "-paginatorBottom"],
                             rowsPerPage: this.options.pageSize,
                             initialPage: this.options.initialPage,
-                            template: this.msg("pagination.template"),
-                            pageReportTemplate: this.msg("pagination.template.page-report"),
-                            previousPageLinkLabel: this.msg("pagination.previousPageLinkLabel"),
-                            nextPageLinkLabel: this.msg("pagination.nextPageLinkLabel")
+                            totalRecords: YAHOO.widget.Paginator.VALUE_UNLIMITED,
+                            alwaysVisible: false,
+                            template: this.msg("lecm.pagination.template"),
+                            pageReportTemplate: this.msg("lecm.pagination.template.page-report"),
+                            previousPageLinkLabel: this.msg("lecm.pagination.previousPageLinkLabel"),
+                            nextPageLinkLabel: this.msg("lecm.pagination.nextPageLinkLabel"),
+                            firstPageLinkLabel: this.msg("lecm.pagination.firstPageLinkLabel"),
+                            lastPageLinkLabel: this.msg("lecm.pagination.lastPageLinkLabel"),
+                            lastPageLinkTitle: this.msg("lecm.pagination.lastPageLinkLabel.title"),
+                            firstPageLinkTitle: this.msg("lecm.pagination.firstPageLinkLabel.title")
                         });
 
                     this.widgets.paginator.subscribe("changeRequest" + this.id, handlePagination, this);

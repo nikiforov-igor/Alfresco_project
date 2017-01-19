@@ -117,31 +117,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             }
         },
 
-        _setupPaginatior: function () {
-            if (this.options.usePagination) {
-                var handlePagination = function DataGrid_handlePagination(state, me) {
-                    me.widgets.paginator.setState(state);
-                };
-
-                this.widgets.paginator = new YAHOO.widget.Paginator(
-                    {
-                        containers: [this.id + "-paginatorBottom"],
-                        rowsPerPage: this.options.pageSize,
-                        initialPage: this.options.initialPage,
-                        totalRecords:  YAHOO.widget.Paginator.VALUE_UNLIMITED, // temporary to allow initialPage config.  Will be overwritten by DataTable
-                        template: this.msg("pagination.template"),
-                        pageReportTemplate: this.msg("pagination.template.page-report"),
-                        previousPageLinkLabel: this.msg("pagination.previousPageLinkLabel"),
-                        nextPageLinkLabel: this.msg("pagination.nextPageLinkLabel")
-                    });
-
-                this.widgets.paginator.subscribe("changeRequest" + this.id, handlePagination, this);
-
-                // Display the bottom paginator bar
-                Dom.setStyle(this.id + "-datagridBarBottom", "display", "none");
-            }
-        },
-
         sendRequestToUpdateGrid: function () {
             //обновить данные в гриде! перестраивать саму таблицу не нужно
             this._setDefaultDataTableErrors(this.widgets.dataTable);
