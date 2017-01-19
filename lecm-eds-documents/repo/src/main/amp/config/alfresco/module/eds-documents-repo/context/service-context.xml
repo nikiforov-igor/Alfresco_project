@@ -105,6 +105,7 @@
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/arm/eds-documents-settings-arm.xml</value>
+				<value>alfresco/module/${artifactId}/arm/default-arm-sed.xml</value>
             </list>
         </property>
     </bean>
