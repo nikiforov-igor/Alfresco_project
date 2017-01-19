@@ -46,7 +46,7 @@ public class ResolutionsExpiredExecutor extends ActionExecuterAbstractBase {
         } else {
             nodeService.setProperty(nodeRef, ResolutionsService.PROP_IS_EXPIRED, true);
             notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "RESOLUTION_EXPIRED_MESSAGE");
-            businessJournalService.log(nodeRef, "ERRAND_EXPIRED", "Истек срок исполнения для #mainobject");
+            businessJournalService.log(nodeRef, "DOCUMENT_EXPIRED", "Истек срок исполнения для #mainobject");
         }
     }
 

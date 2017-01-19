@@ -30,10 +30,6 @@
                 <property name="cm:name">Отчет соисполнителя</property>
                 <property name="lecm-busjournal:eventCategory-code">ERRAND_СOEXECUTOR_REPORT</property>
             </item>
-            <item name="cm:Просрочка исполнения" type="lecm-busjournal:eventCategory">
-                <property name="cm:name">Просрочка исполнения</property>
-                <property name="lecm-busjournal:eventCategory-code">ERRAND_EXPIRED</property>
-            </item>
         </items>
     </item>
 </items>
