@@ -156,6 +156,7 @@
 
 	<util:list id="ord.groupOperations">
 		<value>alfresco/module/${artifactId}/actions/create-ord-content.xml</value>
+        <value>alfresco/module/${artifactId}/actions/reservation-ord.xml</value>
 	</util:list>
 	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
 		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"

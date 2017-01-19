@@ -49,6 +49,13 @@
           p:dictionaries-ref="nd.dictionaries"
     />
 
+    <util:list id="nd.groupOperations.dictionaries">
+        <value>alfresco/module/${artifactId}/actions/reservation-nd.xml</value>
+    </util:list>
+    <bean id="nd.groupOperations" parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
+          p:rootPath="/Business platform/LECM/Сервис Групповые операции"
+          p:dictionaries-ref="nd.groupOperations.dictionaries"/>
+
     <bean id="nd.statemachine.bootstrap" parent="defaultStatemachines"
           p:statemachineName="lecm-nd:document"
           p:path="alfresco/module/${artifactId}/statemachine/lecm-nd-statemachine-default.xml"/>

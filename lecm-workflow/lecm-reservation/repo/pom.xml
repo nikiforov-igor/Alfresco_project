@@ -101,30 +101,6 @@
 			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.outgoing</groupId>
-			<artifactId>outgoing-repo-api</artifactId>
-			<version>${platform.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.internal</groupId>
-			<artifactId>internal-repo-api</artifactId>
-			<version>${platform.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.nd</groupId>
-			<artifactId>nd-repo-api</artifactId>
-			<version>${platform.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.ord</groupId>
-			<artifactId>ord-repo-api</artifactId>
-			<version>${platform.version}</version>
-			<scope>provided</scope>
-		</dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>
 	<!--
