@@ -135,4 +135,59 @@
         <property name="propDateDaysType" value="lecm-resolutions:limitation-date-type"/>
         <property name="propDateText" value="lecm-resolutions:limitation-date-text"/>
     </bean>
+
+    <bean id="resolutionsExpiredSchedule" class="ru.it.lecm.resolutions.shedule.ResolutionsExpiredShedule">
+        <property name="transactionMode">
+            <value>ISOLATED_TRANSACTIONS</value>
+        </property>
+        <property name="compensatingActionMode">
+            <value>IGNORE</value>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="cronExpression">
+            <value>0 10 5 */1 * ?</value>
+        </property>
+        <property name="firstStartExpression">
+            <value>0 */15 * * * ?</value>
+        </property>
+        <property name="onServerStart">
+            <value>false</value>
+        </property>
+        <property name="jobName">
+            <value>resolutios-sys-agent-status</value>
+        </property>
+        <property name="jobGroup">
+            <value>resolutios-status</value>
+        </property>
+        <property name="triggerName">
+            <value>resolutios-sys-agent-status-trigger</value>
+        </property>
+        <property name="triggerGroup">
+            <value>resolutios-status-trigger</value>
+        </property>
+        <property name="scheduler">
+            <ref bean="schedulerFactory"/>
+        </property>
+        <property name="actionService">
+            <ref bean="ActionService"/>
+        </property>
+        <property name="transactionService">
+            <ref bean="TransactionService"/>
+        </property>
+        <property name="runAsUser">
+            <value>System</value>
+        </property>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="documentService" ref="documentService"/>
+    </bean>
+
+    <bean id="resolutionsExpiredExecutor" class="ru.it.lecm.resolutions.shedule.ResolutionsExpiredExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="notificationsService" ref="notificationsService"/>
+        <property name="businessJournalService" ref="businessJournalService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="publicAction" value="false" />
+    </bean>
 </beans>

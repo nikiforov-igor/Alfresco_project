@@ -36,6 +36,7 @@ public interface DocumentService {
     public static final String CONSTRAINT_ARM_URL = "arm-url-constraint";
     public static final String CONSTRAINT_DOCUMENT_URL = "document-url-constraint";
     public static final String DEFAULT_CREATE_URL = "document-create";
+    String DEFAULT_EDIT_URL = "document-edit";
     public static final String DEFAULT_VIEW_URL = "document";
 
     public static final QName PROP_RATING = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "rating");
@@ -376,6 +377,8 @@ public interface DocumentService {
     String getCreateUrl(QName type);
 
     String getViewUrl(QName type);
+
+    String getEditUrl(QName type);
 
     String getDocumentUrl(NodeRef document);
 

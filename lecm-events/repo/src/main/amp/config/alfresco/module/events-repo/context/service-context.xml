@@ -155,6 +155,7 @@
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
 		<property name="eventService" ref="eventsService"/>
 		<property name="notificationsService" ref="notificationsService"/>
+		<property name="documentMembersService" ref="documentMembersService"/>
 	</bean>
 
 	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService">

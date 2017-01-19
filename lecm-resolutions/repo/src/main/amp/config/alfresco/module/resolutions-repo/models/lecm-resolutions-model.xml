@@ -17,7 +17,7 @@
     <constraints>
         <constraint name="lecm-resolutions:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
             <parameter name="presentString">
-                <value><![CDATA[№ {lecm-resolutions:number} от {lecm-resolutions:transition-to-execution-date?dd.MM.yyyy}, срок {lecm-resolutions:limitation-date-text}]]></value>
+                <value><![CDATA[Резолюция № {lecm-resolutions:number} от {lecm-resolutions:transition-to-execution-date?dd.MM.yyyy}, срок {lecm-resolutions:limitation-date-text}]]></value>
             </parameter>
         </constraint>
         <constraint name="lecm-resolutions:attachment-categories" type="LIST">
@@ -45,6 +45,9 @@
         <constraint name="lecm-resolutions:document-url-constraint" type="ru.it.lecm.documents.constraints.DocumentUrlConstraint">
             <parameter name="createUrl">
                 <value>resolution-create</value>
+            </parameter>
+            <parameter name="editUrl">
+                <value>resolution-edit</value>
             </parameter>
         </constraint>
 
@@ -151,6 +154,11 @@
                 <property name="lecm-resolutions:transition-to-execution-date">
                     <type>d:date</type>
                     <mandatory>false</mandatory>
+                </property>
+                <!-- Просрочено -->
+                <property name="lecm-resolutions:is-expired">
+                    <type>d:boolean</type>
+                    <default>false</default>
                 </property>
 
                 <!-- Служебные -->
