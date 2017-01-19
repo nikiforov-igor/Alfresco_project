@@ -34,6 +34,7 @@ public interface ResolutionsService {
     QName PROP_LIMITATION_DATE_TYPE = QName.createQName(RESOLUTION_NAMESPACE_URI, "limitation-date-type");
     QName PROP_LIMITATION_DATE_TEXT = QName.createQName(RESOLUTION_NAMESPACE_URI, "limitation-date-text");
     QName PROP_CLOSERS = QName.createQName(RESOLUTION_NAMESPACE_URI, "closers");
+    QName PROP_IS_EXPIRED = QName.createQName(RESOLUTION_NAMESPACE_URI, "is-expired");
 
     QName ASSOC_BASE_DOCUMENT = QName.createQName(RESOLUTION_NAMESPACE_URI, "base-document-assoc");
     QName ASSOC_BASE = QName.createQName(RESOLUTION_NAMESPACE_URI, "base-assoc");

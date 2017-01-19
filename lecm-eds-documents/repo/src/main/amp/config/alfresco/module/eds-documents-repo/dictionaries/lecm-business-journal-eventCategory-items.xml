@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Категория события" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Просрочка исполнения" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Просрочка исполнения</property>
+                <property name="lecm-busjournal:eventCategory-code">DOCUMENT_EXPIRED</property>
+            </item>
+        </items>
+    </item>
+</items>
