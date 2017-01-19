@@ -4,12 +4,14 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,6 +59,20 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
         edsService.resetChildChangeSignal(baseDocument.getNodeRef());
     }
 
+    public Date convertComplexDate(String radio, Date date, String daysType, Integer days) {
+        ParameterCheck.mandatory("radio", radio);
+
+        return edsService.convertComplexDate(radio, date, daysType, days);
+    }
+
+    public Date convertComplexDateString(String radio, String date, String daysType, String days) {
+        ParameterCheck.mandatory("radio", radio);
+
+        Integer daysInt = (days != null && !days.isEmpty()) ? Integer.parseInt(days) : null;
+        Date dateParsed = (date != null && !date.isEmpty()) ? ISO8601DateFormat.parse(date) : null;
+
+        return convertComplexDate(radio, dateParsed, daysType, daysInt);
+    }
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;

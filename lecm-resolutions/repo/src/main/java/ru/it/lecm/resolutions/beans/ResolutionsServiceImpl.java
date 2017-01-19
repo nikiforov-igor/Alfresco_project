@@ -10,12 +10,11 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.resolutions.api.ResolutionsService;
-import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -27,40 +26,19 @@ import java.util.List;
 public class ResolutionsServiceImpl extends BaseBean implements ResolutionsService {
     private final static Logger logger = LoggerFactory.getLogger(ResolutionsServiceImpl.class);
 
-    private IWorkCalendar calendarBean;
     private NamespaceService namespaceService;
-
-    public void setCalendarBean(IWorkCalendar calendarBean) {
-        this.calendarBean = calendarBean;
-    }
+    private EDSDocumentService edsDocumentService;
 
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
     }
 
-    @Override
-    public NodeRef getServiceRootFolder() {
-        return null;
+    public void setEdsDocumentService(EDSDocumentService edsDocumentService) {
+        this.edsDocumentService = edsDocumentService;
     }
 
     @Override
-    public Date calculateResolutionExecutionDate(String radio, Integer days, String daysType, Date date) {
-        if (EXECUTION_DATE_RADIO_DATE.equals(radio) && date != null) {
-            return date;
-        } else if (EXECUTION_DATE_RADIO_DAYS.equals(radio) && days != null && daysType != null) {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR, 12);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-
-            if (EXECUTION_DATE_DAYS_WORK.equals(daysType)) {
-                return calendarBean.getNextWorkingDateByDays(cal.getTime(), days);
-            } else if (EXECUTION_DATE_DAYS_CALENDAR.equals(daysType)) {
-                cal.add(Calendar.DAY_OF_YEAR, days);
-                return cal.getTime();
-            }
-        }
+    public NodeRef getServiceRootFolder() {
         return null;
     }
 
@@ -70,11 +48,11 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
             String errandsJsonStr = (String) nodeService.getProperty(resolution, PROP_ERRANDS_JSON);
             if (errandsJsonStr != null) {
                 try {
-                    Date resolutionLimitationDate = calculateResolutionExecutionDate(
+                    Date resolutionLimitationDate = edsDocumentService.convertComplexDate(
                             (String) nodeService.getProperty(resolution, PROP_LIMITATION_DATE_RADIO),
-                            (Integer) nodeService.getProperty(resolution, PROP_LIMITATION_DATE_DAYS),
+                            (Date) nodeService.getProperty(resolution, PROP_LIMITATION_DATE),
                             (String) nodeService.getProperty(resolution, PROP_LIMITATION_DATE_TYPE),
-                            (Date) nodeService.getProperty(resolution, PROP_LIMITATION_DATE));
+                            (Integer) nodeService.getProperty(resolution, PROP_LIMITATION_DATE_DAYS));
 
                     if (resolutionLimitationDate != null) {
                         JSONArray errandsJsonArray = new JSONArray(errandsJsonStr);
@@ -86,10 +64,10 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
                             String errandLimitationDateType = getPropFromJson(errandJson, ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TYPE);
                             String errandLimitationDateDate = getPropFromJson(errandJson, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
 
-                            Date errandLimitationDate = calculateResolutionExecutionDate(errandLimitationDateRadio,
-                                    (errandLimitationDateDays != null && !errandLimitationDateDays.isEmpty()) ? Integer.parseInt(errandLimitationDateDays) : null,
+                            Date errandLimitationDate = edsDocumentService.convertComplexDate(errandLimitationDateRadio,
+                                    (errandLimitationDateDate != null && !errandLimitationDateDate.isEmpty()) ? ISO8601DateFormat.parse(errandLimitationDateDate) : null,
                                     errandLimitationDateType,
-                                    (errandLimitationDateDate != null && !errandLimitationDateDate.isEmpty()) ? ISO8601DateFormat.parse(errandLimitationDateDate) : null);
+                                    (errandLimitationDateDays != null && !errandLimitationDateDays.isEmpty()) ? Integer.parseInt(errandLimitationDateDays) : null);
 
                             if (errandLimitationDate != null && errandLimitationDate.after(resolutionLimitationDate)) {
                                 return false;

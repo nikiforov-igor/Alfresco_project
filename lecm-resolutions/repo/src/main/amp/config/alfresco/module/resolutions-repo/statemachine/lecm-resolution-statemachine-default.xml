@@ -282,13 +282,13 @@
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Срок исполнения поручений не может быть больше срока исполнения резолюции]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -314,13 +314,13 @@
                                                                                 <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Работа по документу-основанию резолюции завершена. Продолжить работу с резолюцией?]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -423,13 +423,13 @@
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Срок исполнения поручений не может быть больше срока исполнения резолюции]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -455,13 +455,13 @@
                                                                                 <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Работа по документу-основанию резолюции завершена. Продолжить работу с резолюцией?]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -1210,6 +1210,18 @@ if (document && !regnumbers.isDocumentRegistered(document)) {
   var document = stm_document;
   if (document) {
     document.properties["lecm-resolutions:transition-to-execution-date"] = new Date();
+
+    var executionDate = edsDocument.convertComplexDate(
+            document.properties["lecm-resolutions:limitation-date-radio"],
+            document.properties["lecm-resolutions:limitation-date"],
+            document.properties["lecm-resolutions:limitation-date-type"],
+            document.properties["lecm-resolutions:limitation-date-days"]);
+
+    if (executionDate) {
+      document.properties["lecm-resolutions:limitation-date-radio"] = "DATE";
+      document.properties["lecm-resolutions:limitation-date"] = executionDate;
+    }
+
     document.save();
   }
 
@@ -2184,13 +2196,13 @@ if (document) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Срок исполнения поручений не может быть больше срока исполнения резолюции]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -3154,13 +3166,13 @@ if (document) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Срок исполнения поручений не может быть больше срока исполнения резолюции]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -3263,13 +3275,13 @@ if (document) {
                                                                                 <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Срок исполнения поручений не может быть больше срока исполнения резолюции]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>

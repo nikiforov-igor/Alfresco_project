@@ -27,15 +27,6 @@ public class ResolutionsWebScriptBean extends BaseWebScript {
         this.resolutionsService = resolutionsService;
     }
 
-    public Date calculateResolutionExecutionDate(String radio, String days, String daysType, String date) {
-        ParameterCheck.mandatory("radio", radio);
-
-        Integer daysInt = (days != null && !days.isEmpty()) ? Integer.parseInt(days) : null;
-        Date dateParsed = (date != null && !date.isEmpty()) ? ISO8601DateFormat.parse(date) : null;
-
-        return resolutionsService.calculateResolutionExecutionDate(radio, daysInt, daysType, dateParsed);
-    }
-
     public Scriptable getResolutionClosers(ScriptNode resolution) {
         List<NodeRef> results = resolutionsService.getResolutionClosers(resolution.getNodeRef());
         if (results != null) {
