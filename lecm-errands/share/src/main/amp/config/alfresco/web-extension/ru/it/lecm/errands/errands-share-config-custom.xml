@@ -54,7 +54,7 @@
                     <!-- Соисполнители -->
                     <show id="lecm-errands:coexecutors-assoc"/>
                     <!-- Автор поручения -->
-                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:author-assoc"/>
                     <!-- Тематика -->
                     <show id="lecm-document:subject-assoc"/>
                     <!-- Без утверждения инициатором -->
@@ -127,7 +127,7 @@
 			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
 		                </control>
 	                </field>
-                    <field id="lecm-document:creator" set="common"/>
+                    <field id="lecm-document:author-assoc" set="common" label-id="label.document.creator"/>
                     <field id="lecm-document:subject-assoc" set="common"/>
                     <field id="lecm-errands:without-initiator-approval" set="common"/>
                     <field id="lecm-errands:line" set="common">
