@@ -10,7 +10,7 @@
 
     function checkPermission(layer, args) {
         var formId = args[1].formId;
-        var componentReadyElId = LogicECM.module.Base.Util.getComponentReadyElementId(formID, "lecm-eds-document:executor-assoc");
+        var componentReadyElId = LogicECM.module.Base.Util.getComponentReadyElementId(formId, "lecm-eds-document:executor-assoc");
         Alfresco.util.Ajax.jsonGet({
             url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/isCurrentEmployeeHasBusinessRole",
             dataObj: {
@@ -21,44 +21,45 @@
                     var isCurrentEmployeeHasBusinessRole = response.json;
                     if (!isCurrentEmployeeHasBusinessRole) {
                         Event.onContentReady(componentReadyElId, function () {
-                            LogicECM.module.Base.Util.readOnlyControl(formId, "lecm-eds-document:executor-assoc", true);
+                            LogicECM.module.Base.Util.readonlyControl(formId, "lecm-eds-document:executor-assoc", true);
                         });
                     } else {
                         if (layer = "editExecutorEditFormScriptLoaded") {
-                            var docRef = Alfresco.util.ComponentManager.get(formID).options.nodeRef;
-                            Alfresco.util.Ajax.jsonGet({
-                                url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getCurrentEmployee",
-                                successCallback: {
-                                    fn: function (response) {
-                                        var me = response.config.scope;
-                                        if (response && response.json.nodeRef) {
-                                            var currentUser = response.json.nodeRef;
-                                            Alfresco.util.Ajax.jsonPost({
-                                                url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
-                                                dataObj: {
-                                                    nodeRef: docRef,
-                                                    substituteString: "{lecm-document:author-assoc}"
-                                                },
-                                                successCallback: {
-                                                    fn: function (response) {
-                                                        var me = response.config.scope;
-                                                        if (response && response.json.formatString) {
-                                                            var documentCompiler = response.json.formatString;
-                                                            if (!currentUser.equals(documentCompiler)) {
-                                                                Event.onContentReady(componentReadyElId, function () {
-                                                                    LogicECM.module.Base.Util.readOnlyControl(formId, "lecm-eds-document:executor-assoc", true);
-                                                                });
+                            var form = Alfresco.util.ComponentManager.get(formId);
+                            if (form) {
+                                var docRef = form.options.nodeRef;
+                                Alfresco.util.Ajax.jsonGet({
+                                    url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getCurrentEmployee",
+                                    successCallback: {
+                                        fn: function (response) {
+                                            if (response && response.json.nodeRef) {
+                                                var currentUser = response.json.nodeRef;
+                                                Alfresco.util.Ajax.jsonPost({
+                                                    url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                                                    dataObj: {
+                                                        nodeRef: docRef,
+                                                        substituteString: "{lecm-document:author-assoc-ref}"
+                                                    },
+                                                    successCallback: {
+                                                        fn: function (response) {
+                                                            if (response && response.json.formatString) {
+                                                                var documentCompiler = response.json.formatString;
+                                                                if (currentUser != documentCompiler) {
+                                                                    Event.onContentReady(componentReadyElId, function () {
+                                                                        LogicECM.module.Base.Util.readonlyControl(formId, "lecm-eds-document:executor-assoc", true);
+                                                                    });
+                                                                }
                                                             }
                                                         }
-                                                    }
-                                                },
-                                                failureMessage: Alfresco.util.message("message.failure")
-                                            });
+                                                    },
+                                                    failureMessage: Alfresco.util.message("message.failure")
+                                                });
+                                            }
                                         }
-                                    }
-                                },
-                                failureMessage: Alfresco.util.message("message.failure")
-                            });
+                                    },
+                                    failureMessage: Alfresco.util.message("message.failure")
+                                });
+                            }
 
                         }
                     }

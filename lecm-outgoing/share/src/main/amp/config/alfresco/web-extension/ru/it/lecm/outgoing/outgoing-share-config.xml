@@ -28,6 +28,7 @@
 					<show id="lecmSignAspects:signingDate" for-mode="view"/>
 					<show id="lecm-document-aspects:registrator-assoc" force="true"/>
 					<show id="lecm-outgoing:is-finishing"/>
+					<show id="editExecutorScript" force="true"/>
 				</field-visibility>
 				<appearance>
 					<set id="common" appearance="" label="Сведения" /> <!-- tab1 -->
@@ -173,6 +174,7 @@
 					<field id="lecm-eds-document:executor-assoc" set="common">
 						<control>
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=OUTGOING_CREATORS</control-param>
+							<control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
 						</control>
 					</field>
 					<field id="lecm-document-aspects:reg-project-data-number" set="common"/>
@@ -200,6 +202,12 @@
 					</field>
 					<field id="lecm-outgoing:is-finishing" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+					</field>
+					<field id="editExecutorScript" set="common">
+						<control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+							<control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
+							<control-param name="scriptLoadedFireAction">editExecutorEditFormScriptLoaded</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>
@@ -484,6 +492,7 @@
 					<show id="lecm-document-aspects:template-ref" force="true"/>
 					<show id="lecm-outgoing:is-finishing"/>
 					<show id="loadAuthorScript" force="true"/>
+					<show id="editExecutorScript" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:title"/>
@@ -625,7 +634,11 @@
 							<control-param name="suppressRefreshEvent">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler" read-only="true"/>
+					<field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler" read-only="true">
+						<control>
+							<control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
+						</control>
+					</field>
 					<field id="lecm-eds-document:executor-assoc">
 						<control>
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=OUTGOING_CREATORS</control-param>
@@ -663,6 +676,12 @@
 						<control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
 							<control-param name="scripts">scripts/lecm-eds-documents/load-default-author-in-readonly-control.js</control-param>
 							<control-param name="scriptLoadedFireAction">loadDefaultAuthorAction</control-param>
+						</control>
+					</field>
+					<field id="editExecutorScript">
+						<control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+							<control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
+							<control-param name="scriptLoadedFireAction">editExecutorCreateFormScriptLoaded</control-param>
 						</control>
 					</field>
 				</appearance>

@@ -13,7 +13,7 @@
                 <field-visibility>
 	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document:author-assoc"/>
-                    <show id="lecm-nd:executor-assoc"/>
+                    <show id="lecm-eds-document:executor-assoc"/>
                     <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
                     <show id="lecm-eds-document:summaryContent"/>
@@ -29,6 +29,7 @@
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>
                     <show id="loadAuthorScript" force="true"/>
+                    <show id="editExecutorScript" force="true"/>
                 </field-visibility>
                 <appearance>
 	                <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
@@ -79,7 +80,7 @@
                             <control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
                         </control>
                     </field>
-                    <field id="lecm-nd:executor-assoc">
+                    <field id="lecm-eds-document:executor-assoc">
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=ND_CREATORS</control-param>
                             <control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
@@ -111,6 +112,12 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/load-default-author-in-readonly-control.js</control-param>
                             <control-param name="scriptLoadedFireAction">loadDefaultAuthorAction</control-param>
+                        </control>
+                    </field>
+                    <field id="editExecutorScript">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">editExecutorCreateFormScriptLoaded</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -203,7 +210,7 @@
                     <show id="lecm-document:creator"/>																	<!-- Автор -->
                     <show id="lecm-document:title"/>																	<!-- Заголовок -->
                     <show id="lecm-eds-document:document-type-assoc"/>
-                    <show id="lecm-ord:executor-assoc"/>
+                    <show id="lecm-eds-document:executor-assoc"/>
                     <!-- Вид документа НД -->
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
@@ -370,6 +377,7 @@
 					<show id="lecmSignAspects:signingDate" for-mode="view"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
 					<show id="lecm-review-ts:review-table-assoc"/>
+                    <show id="editExecutorScript" force="true"/>
                 </field-visibility>
                 <appearance>
 
@@ -431,6 +439,7 @@
                     <field id="lecm-eds-document:executor-assoc" set="afterDates">
                         <control>
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=ND_CREATORS</control-param>
+                            <control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
                         </control>
                     </field>
                     <field id="lecm-document-aspects:reg-project-data-number" set="afterDates"/>
@@ -475,6 +484,12 @@
                             <!--<control-param name="viewFormTitleMsg">stage.view.form.title</control-param>-->
                             <!--<control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>-->
                             <!--<control-param name="expandDataSource">lecm/workflow/review/ts/items/datagrid</control-param>-->
+                        </control>
+                    </field>
+                    <field id="editExecutorScript" set="common">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">editExecutorEditFormScriptLoaded</control-param>
                         </control>
                     </field>
                 </appearance>
