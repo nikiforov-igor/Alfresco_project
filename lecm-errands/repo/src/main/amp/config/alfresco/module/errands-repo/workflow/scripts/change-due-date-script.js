@@ -53,10 +53,10 @@ function processDueDateChanges (dateRadio, newDueDate, processChild, changeDateR
             children = children.concat(childrenResolutions);
         }
         children.forEach(function (child) {
-            child.properties["lecm-errands-aspect:duedate-shift-size"] = shiftSize;
-            child.properties["lecm-errands-aspect:duedate-limitless"] = limitless;
-            child.properties["lecm-errands-aspect:new-limitation-date"] = newLimitationDate;
-            child.properties["lecm-errands-aspect:change-duedate-reason"] = changeDateReason;
+            child.properties["lecm-eds-aspect:duedate-shift-size"] = shiftSize;
+            child.properties["lecm-eds-aspect:duedate-limitless"] = limitless;
+            child.properties["lecm-eds-aspect:new-limitation-date"] = newLimitationDate;
+            child.properties["lecm-eds-aspect:change-duedate-reason"] = changeDateReason;
             child.save();
         });
     }
