@@ -19,6 +19,7 @@
 					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
 					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
 					<show id="lecm-document:author-assoc"/>																<!-- Автор -->
+					<show id="lecm-eds-document:executor-assoc"/>															<!-- Исполнитель -->
 					<show id="lecm-document-aspects:reg-project-data-number"/>
 					<show id="lecm-document-aspects:reg-project-data-date"/>
 					<show id="lecm-contract:approval" force="true"/>
@@ -27,6 +28,7 @@
 					<show id="lecmSignAspects:signingDate" for-mode="view"/>
 					<show id="lecm-document-aspects:registrator-assoc" force="true"/>
 					<show id="lecm-outgoing:is-finishing"/>
+					<show id="editExecutorScript" force="true"/>
 				</field-visibility>
 				<appearance>
 					<set id="common" appearance="" label="Сведения" /> <!-- tab1 -->
@@ -168,8 +170,13 @@
 					</field>
 
 					<field id="lecm-eds-document:file-register-assoc" set="common"/>
-					<field id="lecm-document:author-assoc" set="common" read-only="true"/>
-
+					<field id="lecm-document:author-assoc" set="common" label-id="label.eds.assoc.compiler" read-only="true"/>
+					<field id="lecm-eds-document:executor-assoc" set="common">
+						<control>
+							<control-param name="childrenDataSource">lecm/employees/OUTGOING_CREATORS/picker</control-param>
+							<control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
+						</control>
+					</field>
 					<field id="lecm-document-aspects:reg-project-data-number" set="common"/>
 					<field id="lecm-document-aspects:reg-project-data-date" set="common"/>
 
@@ -193,6 +200,15 @@
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
 						</control>
 					</field>
+					<field id="lecm-outgoing:is-finishing" set="common">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+					</field>
+					<field id="editExecutorScript" set="common">
+						<control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+							<control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
+							<control-param name="scriptLoadedFireAction">editExecutorEditFormScriptLoaded</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 
@@ -202,7 +218,8 @@
 					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
 					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель -->
 					<show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
-					<show id="lecm-document:creator"/>																	<!-- Автор -->
+					<show id="lecm-document:author-assoc"/>																	<!-- Автор -->
+					<show id="lecm-eds-document:executor-assoc"/>
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
 				</field-visibility>
                 <appearance>
@@ -307,6 +324,8 @@
 							<control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
 						</control>
 					</field>
+					<field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler"/>
+					<field id="lecm-eds-document:executor-assoc"/>
                 </appearance>
 			</form>
 
@@ -318,6 +337,8 @@
 					<show id="lecm-document:title"/>																	<!-- Заголовок -->
 					<show id="lecm-statemachine:status"/>																<!-- Статус -->
 					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
+					<show id="lecm-document:author-assoc"/>
+					<show id="lecm-eds-document:executor-assoc"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-statemachine:status">
@@ -424,6 +445,8 @@
 							<control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
 						</control>
 					</field>
+					<field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler"/>
+					<field id="lecm-eds-document:executor-assoc"/>
 				</appearance>
 			</form>
 
@@ -450,6 +473,8 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-document-aspects:attachments-temp-assoc"/>
+					<show id="lecm-document:author-assoc"/>																<!-- Автор -->
+					<show id="lecm-eds-document:executor-assoc"/>
 					<show id="lecm-document:title"/>																	<!-- Заголовок -->
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
 					<show id="lecm-outgoing:delivery-method-assoc"/>													<!-- Способ доставки -->
@@ -466,6 +491,8 @@
 					<show id="lecm-document-aspects:template-name" force="true"/>
 					<show id="lecm-document-aspects:template-ref" force="true"/>
 					<show id="lecm-outgoing:is-finishing"/>
+					<show id="loadAuthorScript" force="true"/>
+					<show id="editExecutorScript" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:title"/>
@@ -607,6 +634,17 @@
 							<control-param name="suppressRefreshEvent">true</control-param>
 						</control>
 					</field>
+					<field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler" read-only="true">
+						<control>
+							<control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
+						</control>
+					</field>
+					<field id="lecm-eds-document:executor-assoc">
+						<control>
+							<control-param name="childrenDataSource">lecm/employees/OUTGOING_CREATORS/picker</control-param>
+							<control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
+						</control>
+					</field>
 					<field id="lecmSignAspects:signerEmployeeAssoc">
 						<control>
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
@@ -631,7 +669,21 @@
 					<field id="lecm-document-aspects:template-ref">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
 					</field>
-
+					<field id="lecm-outgoing:is-finishing">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+					</field>
+					<field id="loadAuthorScript">
+						<control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+							<control-param name="scripts">scripts/lecm-eds-documents/load-default-author-in-readonly-control.js</control-param>
+							<control-param name="scriptLoadedFireAction">loadDefaultAuthorAction</control-param>
+						</control>
+					</field>
+					<field id="editExecutorScript">
+						<control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+							<control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
+							<control-param name="scriptLoadedFireAction">editExecutorCreateFormScriptLoaded</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 			<form id="document-template-fields">
@@ -761,7 +813,9 @@
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
                         </control>
                     </field>
-
+					<field id="lecm-outgoing:is-finishing">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+					</field>
 				</appearance>
 			</form>
 
@@ -914,6 +968,7 @@
 			<form id="statemachine-editable-fields">
 				<field-visibility>
 					<show id="lecm-document:creator"/>																	<!-- Автор -->
+					<show id="lecm-eds-document:executor-assoc"/>
 					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Контрагент -->
 					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель -->
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
