@@ -1457,13 +1457,6 @@
                 <field-visibility>
                     <show id="lecm-errands-dic:errand-cancel-reason-name" force="true"/>
                 </field-visibility>
-                <appearance>
-                    <field id="lecm-errands-dic:errand-cancel-reason-name">
-                        <constraint-handlers>
-                            <constraint validation-handler="Alfresco.forms.validation.length" type="MANDATORY" event="change" message-id="message.reason.cancel.length.wrong"/>
-                        </constraint-handlers>
-                    </field>
-                </appearance>
             </form>
         </forms>
     </config>
@@ -1473,13 +1466,6 @@
                 <field-visibility>
                     <show id="lecm-errands-dic:errand-cancel-reason-name" force="true"/>
                 </field-visibility>
-                <appearance>
-                    <field id="lecm-errands-dic:errand-cancel-reason-name">
-                        <constraint-handlers>
-                            <constraint validation-handler="Alfresco.forms.validation.length" type="MANDATORY" event="change" message-id="message.reason.cancel.length.wrong"/>
-                        </constraint-handlers>
-                    </field>
-                </appearance>
             </form>
             <form id="search">
                 <field-visibility>
@@ -2148,9 +2134,6 @@
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
 		                </control>
-                        <constraint-handlers>
-                            <constraint validation-handler="Alfresco.forms.validation.length" type="MANDATORY" event="change" message-id="message.reason.cancel.length.wrong"/>
-                        </constraint-handlers>
 	                </field>
                 </appearance>
             </form>
@@ -2184,9 +2167,6 @@
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
-                        <constraint-handlers>
-                            <constraint validation-handler="Alfresco.forms.validation.length" type="MANDATORY" event="change" message-id="message.reason.cancel.length.wrong"/>
-                        </constraint-handlers>
                     </field>
                 </appearance>
             </form>
@@ -2274,9 +2254,6 @@
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
-                        <constraint-handlers>
-                            <constraint validation-handler="LogicECM.module.Errands.RequestTaskCancelReasonLengthValidation" type="INVALID" event="change" message-id="message.reason.cancel.length.wrong"/>
-                        </constraint-handlers>
                     </field>
                     <field id="lecmErrandWf:requestCancelTask_1CancelChildren">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
@@ -2439,9 +2416,6 @@
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
-                        <constraint-handlers>
-                            <constraint validation-handler="Alfresco.forms.validation.length" type="MANDATORY" event="change" message-id="message.reason.cancel.length.wrong"/>
-                        </constraint-handlers>
                     </field>
                     <field id="lecmErrandWf:cancel_1CancelChildren">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
