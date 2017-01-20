@@ -194,7 +194,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		            {
 			            id: "document-delete",
 			            onlyForOwn: false
-		            }
+		            },
+                    {
+                        id: "move-to-another-category",
+                        onlyForOwn: false
+                    }
 	            ]
             },
 
@@ -619,7 +623,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 params = YAHOO.lang.substitute("documents/node/" + this.options.nodeRef.replace(":/", ""));
 
                 // View mode and No-cache
-                params += "?view=browse&noCache=" + new Date().getTime();
+                params += "?view=attachment&noCache=" + new Date().getTime();
 
                 return params;
             },
@@ -1674,6 +1678,51 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     singleUpdateConfig.containerId = this.options.containerId;
                 }
                 this.fileUpload.show(singleUpdateConfig);
+            },
+
+            onActionMoveToNewCategory: function (record, owner) {
+                // Get action & params and start create the config for displayForm
+                var action = this.getAction(record, owner),
+                    params = action.params,
+                    config = {
+                        title: this.msg(action.label)
+                    },
+                    displayName = record.displayName;
+
+                // Make sure we don't pass the function as a form parameter
+                delete params["function"];
+
+                config.success = {
+                    fn: function (response, request) {
+                        if (response.json.status && response.json.status != 200) {
+                            var errorText = response.json.message;
+                            if (errorText.indexOf("LECM_ERROR:") >= 0) {
+                                var startIndex = errorText.indexOf("LECM_ERROR:");
+                                response.config.failureMessage = errorText.substring(startIndex + "LECM_ERROR: ".length);
+                            }
+                        } else {
+                            YAHOO.Bubbling.fire("listRefresh", {});
+                        }
+                    },
+                    obj: record,
+                    scope: this
+                };
+                // Add configure success message
+                if (params.successMessage) {
+                    config.successMessage = this.msg(params.successMessage, displayName);
+                    delete params["successMessage"];
+                }
+                // Add configure success message
+                if (params.failureMessage) {
+                    config.failureMessage = this.msg(params.failureMessage, displayName);
+                    delete params["failureMessage"];
+                }
+
+                // Use the remaining properties as form properties
+                config.properties = params;
+
+                // Finally display form as dialog
+                Alfresco.util.PopupManager.displayForm(config);
             }
         }, true);
 })();

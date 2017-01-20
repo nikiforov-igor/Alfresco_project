@@ -7,6 +7,12 @@
 			<#list items as item>
 			{
 				"isInnerAttachment": "${item.isInnerAttachment?string}",
+				"meta": {
+				<#if item.meta??>
+					"category": "${item.meta.category!''}",
+					"document": "${item.meta.document!''}"
+				</#if>
+				},
 				"node": <#noescape>${item.nodeJSON}</#noescape>,
 				<#if item.parent??>"parent": <#noescape>${item.parent.nodeJSON},</#noescape>
 				<#else>

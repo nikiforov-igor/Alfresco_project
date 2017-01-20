@@ -24,6 +24,11 @@ function getAttachmentslist() {
 		thumbnail = null,
 		item;
 
+	var meta = {
+		document: categoryNode ? categoryNode.parent.parent.nodeRef.toString() : "",
+		category: categoryNode ? categoryNode.nodeRef.toString() : ""
+	};
+
 	// Loop through and evaluate each node in this result set
 	for each(node in allNodes) {
 		// Get evaluated properties.
@@ -33,6 +38,7 @@ function getAttachmentslist() {
 			item.likes = Common.getLikes(node);
 			item.location = {};
 			item.isInnerAttachment = documentAttachments.isInnerAttachment(item.node);
+			item.meta = meta;
 
 			// Is our thumbnail type registered?
 			if (isThumbnailNameRegistered && item.node.isSubType("cm:content")) {
