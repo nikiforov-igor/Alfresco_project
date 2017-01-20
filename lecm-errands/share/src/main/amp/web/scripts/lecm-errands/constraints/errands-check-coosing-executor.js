@@ -25,7 +25,7 @@ LogicECM.module.Errands.checkChoosingInitiatorValidation =
 				{
 					url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/isCurrentEmployeeHasBusinessRole",
 					dataObj: {
-						roleId: 'ERRANDS_CHOOSING_INITIATOR'
+						roleId: 'CHOOSING_INITIATOR'
 					},
 					successCallback: {
 						fn: function (response) {
