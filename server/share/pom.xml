@@ -102,13 +102,6 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.contracts</groupId>
-			<artifactId>contracts-share</artifactId>
-			<version>${platform.version}</version>
-			<type>amp</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.statemachine</groupId>
 			<artifactId>statemachine-share</artifactId>
 			<version>${platform.version}</version>
@@ -214,13 +207,6 @@
 			<type>amp</type>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.errands</groupId>
-			<artifactId>errands-share</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.signed-docflow</groupId>
 			<artifactId>signed-docflow-share</artifactId>
 			<version>${platform.version}</version>
@@ -230,13 +216,6 @@
         <dependency>
             <groupId>ru.it.lecm.permission-exp</groupId>
             <artifactId>permission-exp-share</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
-		<dependency>
-            <groupId>ru.it.lecm.eds-documents</groupId>
-            <artifactId>eds-documents-share</artifactId>
             <version>${platform.version}</version>
             <scope>runtime</scope>
             <type>amp</type>
@@ -319,22 +298,8 @@
 			<type>amp</type>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.operative-storage</groupId>
-			<artifactId>operative-storage-share</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.events</groupId>
 			<artifactId>events-share</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.meetings</groupId>
-			<artifactId>meetings-share</artifactId>
 			<version>${platform.version}</version>
 			<scope>runtime</scope>
 			<type>amp</type>
@@ -532,11 +497,6 @@
 							<type>amp</type>
 						</overlay>
 						<overlay>
-							<groupId>ru.it.lecm.contracts</groupId>
-							<artifactId>contracts-share</artifactId>
-							<type>amp</type>
-						</overlay>
-						<overlay>
 							<groupId>ru.it.lecm.statemachine</groupId>
 							<artifactId>statemachine-share</artifactId>
 							<type>amp</type>
@@ -612,11 +572,6 @@
 							<type>amp</type>
 						</overlay>
 						<overlay>
-							<groupId>ru.it.lecm.errands</groupId>
-							<artifactId>errands-share</artifactId>
-							<type>amp</type>
-						</overlay>
-						<overlay>
 							<groupId>ru.it.lecm.signed-docflow</groupId>
 							<artifactId>signed-docflow-share</artifactId>
 							<type>amp</type>
@@ -629,11 +584,6 @@
 						<overlay>
 							<groupId>ru.it.lecm.model-editor</groupId>
 							<artifactId>model-editor-share</artifactId>
-							<type>amp</type>
-						</overlay>
-						<overlay>
-							<groupId>ru.it.lecm.eds-documents</groupId>
-							<artifactId>eds-documents-share</artifactId>
 							<type>amp</type>
 						</overlay>
 						<overlay>
@@ -687,18 +637,8 @@
 							<type>amp</type>
 						</overlay>
 						<overlay>
-							<groupId>ru.it.lecm.operative-storage</groupId>
-							<artifactId>operative-storage-share</artifactId>
-							<type>amp</type>
-						</overlay>
-						<overlay>
 							<groupId>ru.it.lecm.events</groupId>
 							<artifactId>events-share</artifactId>
-							<type>amp</type>
-						</overlay>
-						<overlay>
-							<groupId>ru.it.lecm.meetings</groupId>
-							<artifactId>meetings-share</artifactId>
 							<type>amp</type>
 						</overlay>
 						<overlay>
@@ -766,7 +706,42 @@
         <profile>
             <id>SED</id>
             <dependencies>
-                <dependency>
+				<dependency>
+					<groupId>ru.it.lecm.contracts</groupId>
+					<artifactId>contracts-share</artifactId>
+					<version>${platform.version}</version>
+					<type>amp</type>
+					<scope>runtime</scope>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.errands</groupId>
+					<artifactId>errands-share</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.eds-documents</groupId>
+					<artifactId>eds-documents-share</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.operative-storage</groupId>
+					<artifactId>operative-storage-share</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.meetings</groupId>
+					<artifactId>meetings-share</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
+				<dependency>
                     <groupId>ru.it.lecm.internal</groupId>
                     <artifactId>internal-share</artifactId>
                     <version>${platform.version}</version>
