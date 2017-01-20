@@ -35,7 +35,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 							if (response && response.json) {
 								var roles = response.json;
 								me.canChooseInititator = roles.some(function(role){
-									return "ERRANDS_CHOOSING_INITIATOR" == role.id
+									return "CHOOSING_INITIATOR" == role.id
 								});
 								me.loadSettings();
 							}

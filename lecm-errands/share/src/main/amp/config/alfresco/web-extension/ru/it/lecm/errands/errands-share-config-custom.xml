@@ -282,7 +282,6 @@
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>
 
-                    <show id="change-executors-script" force="true"/>
                     <show id="change-errand-type-script" force="true"/>
                     <show id="report-required-handler-script" force="true"/>
                     <show id="errands-create-form-script" force="true"/>
@@ -479,11 +478,6 @@
                     <field id="report-required-handler-script" >
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-report-required-handler.js</control-param>
-                        </control>
-                    </field>
-                    <field id="change-executors-script" >
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-errands/errands-reinit-executors.js</control-param>
                         </control>
                     </field>
                     <field id="errands-create-form-script">
@@ -733,7 +727,6 @@
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>
 
-                    <show id="change-executors-script" force="true"/>
                     <show id="change-errand-type-script" force="true"/>
                     <show id="report-required-handler-script" force="true"/>
                     <show id="errands-workflow-form-script" force="true"/>
@@ -947,11 +940,6 @@
                     <field id="report-required-handler-script" >
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-report-required-handler.js</control-param>
-                        </control>
-                    </field>
-                    <field id="change-executors-script" >
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-errands/errands-reinit-executors.js</control-param>
                         </control>
                     </field>
                     <field id="errands-workflow-form-script">

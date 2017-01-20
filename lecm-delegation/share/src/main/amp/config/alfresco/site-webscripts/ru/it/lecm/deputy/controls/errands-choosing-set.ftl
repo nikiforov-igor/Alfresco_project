@@ -46,7 +46,7 @@
     }
 
     function init() {
-        var brPermission = "ERRANDS_CHOOSING_INITIATOR";
+        var brPermission = "CHOOSING_INITIATOR";
         Alfresco.util.Ajax.request(
                 {
                     url: Alfresco.constants.PROXY_URI + "lecm/secretary/canChooseInitiator",
