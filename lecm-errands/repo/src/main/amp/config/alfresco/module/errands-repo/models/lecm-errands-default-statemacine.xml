@@ -1857,7 +1857,7 @@ if (document) {
 if(doc){
   var children = [];
   var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
-  var childrenResolutions = documentConnection.getChildResolutions(doc.nodeRef.toString());
+  var childrenResolutions = errands.getChildResolutions(doc.nodeRef.toString());
 
   if(childrenErrands || childrenResolutions){
     if(childrenErrands){
