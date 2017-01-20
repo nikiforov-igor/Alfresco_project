@@ -55,3 +55,10 @@ LogicECM.module.Errands.WFChangeDueDateValidation =
         }
         return true;
     };
+/**
+ * @return {boolean}
+ */
+LogicECM.module.Errands.CancelReasonLengthValidation =
+    function (field, args, event, form, silent, message) {
+        return field.value.length > 0 && field.value.length < 200;
+    };
