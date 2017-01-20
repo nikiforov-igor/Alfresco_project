@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-	<item name="cm:Настройки поручений" type="lecm-arm:html-node">
-		<property name="cm:name"><![CDATA[Настройки поручений]]></property>
+	<item name="cm:Настройки поручений и резолюций" type="lecm-arm:html-node">
+		<property name="cm:name"><![CDATA[Настройки поручений и резолюций]]></property>
 		<property name="lecm-arm:order"><![CDATA[0]]></property>
 		<property name="lecm-arm:html-url"><![CDATA[page/my-errands-settings]]></property>
 	</item>
