@@ -1455,7 +1455,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="lecm-errands-dic:errand-cancel-reason-name" force="true"/>
                 </field-visibility>
             </form>
         </forms>
@@ -1464,17 +1464,17 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="lecm-errands-dic:errand-cancel-reason-name" force="true"/>
                 </field-visibility>
             </form>
             <form id="search">
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="lecm-errands-dic:errand-cancel-reason-name" force="true"/>
                 </field-visibility>
             </form>
             <form id="datagrid">
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="lecm-errands-dic:errand-cancel-reason-name" force="true"/>
                 </field-visibility>
             </form>
         </forms>

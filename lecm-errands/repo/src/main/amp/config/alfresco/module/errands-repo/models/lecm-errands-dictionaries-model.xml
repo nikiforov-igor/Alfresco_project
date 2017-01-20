@@ -10,7 +10,12 @@
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/errands/dictionaries/1.0" prefix="lecm-errands-dic"/>
 	</namespaces>
-
+	<constraints>
+		<constraint name='lecm-errands-dic:cancelReasonLength' type='LENGTH'>
+			<parameter name='minLength'><value>1</value></parameter>
+			<parameter name='maxLength'><value>200</value></parameter>
+		</constraint>
+	</constraints>
 	<types>
 		<type name="lecm-errands-dic:errand-titles">
 			<title>Logic Ecm Dictionary Errands Title</title>
@@ -67,6 +72,20 @@
         </type>
 		<type name="lecm-errands-dic:errand-cancel-reason">
 			<parent>lecm-dic:plane_dictionary_values</parent>
+			<properties>
+				<property name="lecm-errands-dic:errand-cancel-reason-name">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="lecm-errands-dic:cancelReasonLength"/>
+					</constraints>
+				</property>
+			</properties>
 		</type>
 	</types>
 </model>
