@@ -2538,7 +2538,7 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Создать дочернее поручение]]></value>
+                                                                <value><![CDATA[Создать подчиненное поручение]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionIsSystemFormConnection</name>
@@ -4372,7 +4372,7 @@ if(doc){
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Создать дочернее поручение]]></value>
+                                                                <value><![CDATA[Создать подчиненное поручение]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionIsSystemFormConnection</name>
@@ -6593,7 +6593,7 @@ if (document != null) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Создать дочернее поручение]]></value>
+                                                                <value><![CDATA[Создать подчиненное поручение]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionIsSystemFormConnection</name>
