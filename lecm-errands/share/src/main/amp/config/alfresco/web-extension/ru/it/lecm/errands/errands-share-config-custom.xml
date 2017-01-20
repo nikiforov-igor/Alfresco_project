@@ -2287,7 +2287,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint validation-handler="LogicECM.module.Errands.CancelReasonLengthValidation" type="MANDATORY" event="change" message-id="message.reason.cancel.length.wrong"/>
+                            <constraint validation-handler="LogicECM.module.Errands.RequestTaskCancelReasonLengthValidation" type="INVALID" event="change" message-id="message.reason.cancel.length.wrong"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecmErrandWf:requestCancelTask_1CancelChildren">
