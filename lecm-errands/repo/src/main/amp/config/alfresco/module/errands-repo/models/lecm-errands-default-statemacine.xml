@@ -4438,7 +4438,7 @@ if(doc){
                                                                             <property>
                                                                                 <name>formInputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-document:subject-assoc]]></value>
+                                                                                    <![CDATA[lecm-document:subject-assoc-ref]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>formInputToValue</name>
@@ -6659,7 +6659,7 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>formInputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-document:subject-assoc]]></value>
+                                                                                    <![CDATA[lecm-document:subject-assoc-ref]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>formInputToValue</name>
