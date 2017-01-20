@@ -1858,7 +1858,7 @@ if(doc){
   var children = [];
   var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
   var childrenResolutions = documentConnection.getChildResolutions(doc.nodeRef.toString());
- 				
+
   if(childrenErrands || childrenResolutions){
     if(childrenErrands){
     	children = children.concat(childrenErrands);
@@ -1867,7 +1867,7 @@ if(doc){
       children = children.concat(childrenResolutions);
     }
   }
- 
+
 	var hasOnExecution = false;
 	var docExecutor = doc.properties["lecm-errands:executor-assoc-ref"];
 	if(children && children.length){
@@ -1883,11 +1883,11 @@ if(doc){
 		  if(docExecutor && childAuthor && docExecutor == childAuthor){
 			if (!statemachine.isFinal(children[i].nodeRef.toString())) {
 				if(children[i].properties["lecm-statemachine:status"] == "На исполнении"){
-				  hasOnExecution = true;			 			  			 
-				  break;			  
-				}  
-			}  		
-		  }    
+				  hasOnExecution = true;
+				  break;
+				}
+			}
+		  }
 		}
 	}
 
@@ -1895,8 +1895,8 @@ if(doc){
 	doc.properties["lecm-eds-aspect:child-change-signal-count"] = 0;
 	doc.save();
 
-  
-  
+
+
 }]]></value>
                                                             </property>
                                                             <property>
@@ -3794,16 +3794,16 @@ if (document) {
                                                                 <name>transitionDocumentChangeScript</name>
                                                                 <value><![CDATA[var doc = bpm_package.children[0];
 if (doc){
- 
+
   var countFinal = 0;
   var isAllChildOnFinal = false;
   var children = errands.getChildErrands(doc.nodeRef.toString());
   if (children && children.length){
     var docExecutor = doc.properties["lecm-errands:executor-assoc-ref"];
-    for(var i =0; i<children.length; i++){    
+    for(var i =0; i<children.length; i++){
 	  if (statemachine.isFinal(children[i].nodeRef.toString())) {
 		  countFinal++;
-	  }  
+	  }
     }
 	if(countFinal == children.length){
       isAllChildOnFinal = true;
@@ -4071,16 +4071,16 @@ if (document != null) {
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var doc = bpm_package.children[0];
 if(doc){
-  
+
   var parentDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
 
   if (parentDoc && parentDoc.type=="{http:\/\/www.it.ru\/logicECM\/errands\/1.0}document") {
-   	
+
     parentDoc.properties["lecm-errands:children-executing-count"]++;
     parentDoc.save();
-    
+
   }
-    
+
 }]]></value>
                                                             </property>
                                                             <property>
@@ -4438,7 +4438,7 @@ if(doc){
                                                                             <property>
                                                                                 <name>formInputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-document:subject-assoc]]></value>
+                                                                                    <![CDATA[lecm-document:subject-assoc-ref]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>formInputToValue</name>
@@ -5187,7 +5187,7 @@ if(doc){
                                                                             <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-errands:coexecutors-assoc]]></value>
+                                                                                    <![CDATA[lecm-errands:coexecutors-assoc-ref]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputToValue</name>
@@ -6659,7 +6659,7 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>formInputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-document:subject-assoc]]></value>
+                                                                                    <![CDATA[lecm-document:subject-assoc-ref]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>formInputToValue</name>
@@ -7408,7 +7408,7 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-errands:coexecutors-assoc]]></value>
+                                                                                    <![CDATA[lecm-errands:coexecutors-assoc-ref]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputToValue</name>
