@@ -68,6 +68,30 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>ru.it.lecm.security</groupId>
+            <artifactId>lecm-security-api</artifactId>
+            <version>${platform.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.notifications</groupId>
+            <artifactId>notifications-repo-api</artifactId>
+            <version>${platform.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.documents</groupId>
+            <artifactId>documents-repo-api</artifactId>
+            <version>${platform.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.statemachine</groupId>
+            <artifactId>statemachine-api</artifactId>
+            <version>${platform.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>rhino</groupId>
             <artifactId>js</artifactId>
             <version>1.6R7</version>
@@ -78,6 +102,12 @@
             <artifactId>json</artifactId>
             <version>20090211</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.calendar</groupId>
+            <artifactId>lecm-calendar-repo-api</artifactId>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <!--

@@ -62,6 +62,18 @@
 				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
 				<property name="lecm-orgstr:business-role-description">Cотрудник, постоянно или временно выполняющий организационно-распорядительные и административно-хозяйственные функции в организации</property>
 			</item>
+			<item name="cm:Выбирающий Исполнителя" type="lecm-orgstr:business-role">
+				<property name="cm:name">СЭД. Выбирающий Исполнителя</property>
+				<property name="lecm-orgstr:business-role-identifier">DA_CHOOSER_EXECUTOR</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+				<property name="lecm-orgstr:business-role-description">Cотрудник, выбирающий исполнителя</property>
+			</item>
+			<item name="cm:Выбирающий автора поручения и резолюции" type="lecm-orgstr:business-role">
+				<property name="cm:name">Выбирающий автора поручения и резолюции</property>
+				<property name="lecm-orgstr:business-role-identifier">CHOOSING_INITIATOR</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+				<property name="lecm-orgstr:business-role-description">Пользователи, включенные в данную бизнес-роль, и только они имеют право на выбор Автора поручения и резолюции.</property>
+			</item>
 		</items>
 	</item>
 </items>

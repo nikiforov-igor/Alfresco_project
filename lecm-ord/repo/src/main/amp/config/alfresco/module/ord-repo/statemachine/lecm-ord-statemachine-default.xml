@@ -687,6 +687,21 @@
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_executor-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/3555dab6-ebca-4b00-a57d-9cef138996a8</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -1056,6 +1071,44 @@
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value><![CDATA[Выдать права контролеру]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>0a6e77a8-af88-4d81-8f9c-bf1139134839</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/636631db-ebdb-4354-97b9-3d7f579596c4
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var doc = bpm_package.children[0];
+if (doc) {
+  var docCompiler = doc.assocs["lecm-document:author-assoc"][0];
+  var docExecutorAssoc = doc.assocs["lecm-eds-document:executor-assoc"];
+  var docExecutor = null;
+  if (docExecutorAssoc && docExecutorAssoc.length) {
+  	docExecutor = docExecutorAssoc[0];
+  }
+  if (docExecutor && docCompiler && !docExecutor.nodeRef.equals(docCompiler.nodeRef)) {
+  	 notifications.sendNotificationFromCurrentUser({
+        recipients: [docExecutor],
+        templateCode: 'EDS_EXECUTOR_NEW',
+        templateConfig: {
+            mainObject: doc
+        }
+    });
+  }
+}]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Уведомление Исполнителю]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -1938,6 +1991,21 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                             <property>
                                                 <name>editableField</name>
                                                 <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_executor-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/ef677ade-55d8-488b-9ef7-3f549d98963d</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2998,6 +3066,21 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
                                         <type>documentField</type>
                                         <name>lecm-review-ts_review-table-assoc</name>
                                         <nodeRef>workspace://SpacesStore/803cc74d-7b63-40a4-9932-6f9111dddabb</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_executor-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/1e239c84-b12d-4eec-a16e-078e544a0dbf</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4100,6 +4183,21 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
                                         <type>documentField</type>
                                         <name>lecm-review-ts_review-table-assoc</name>
                                         <nodeRef>workspace://SpacesStore/4694a269-494d-477e-83cc-bfd9e39f82c5</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_executor-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/490c07e2-5cdb-4f9d-b212-36ddd81207e8</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5419,6 +5517,21 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_executor-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/9176af7a-e352-481b-8b8f-e52c69043f73</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -6291,6 +6404,21 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_executor-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/a705ec28-89a4-4d93-8625-984b38fc46f3</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -7120,6 +7248,21 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_executor-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/576af77d-12b3-4ac5-9b61-94ba589bc80e</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -7642,13 +7785,13 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                                 <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Не добавлено пунктов или не выбран Контролер, поручения по пунктам созданы не будут.]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -8090,6 +8233,21 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                         <type>documentField</type>
                                         <name>lecm-review-ts_review-table-assoc</name>
                                         <nodeRef>workspace://SpacesStore/3a194e44-2224-4bf8-b0f7-9e1580d3e4b7</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_executor-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/f85eb18f-130f-43f1-a988-0c9b0b956cbd</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -9173,6 +9331,21 @@ if (doc) {
                                             <property>
                                                 <name>editableField</name>
                                                 <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_executor-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/64d99717-1e07-4794-b880-ddeeb2532471</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -10323,6 +10496,21 @@ if (doc) {
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_executor-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/6f6cd514-9967-44e8-969c-1a80b24256ff</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -10878,6 +11066,21 @@ if (doc) {
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_executor-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/87dfe652-58cf-4663-bb5c-6616ed6ff9ee</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -11302,6 +11505,21 @@ if (doc) {
                                         <type>documentField</type>
                                         <name>lecm-review-ts_review-table-assoc</name>
                                         <nodeRef>workspace://SpacesStore/2146d030-21cb-42eb-8bcc-f188cc339fa4</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_executor-assoc</name>
+                                        <nodeRef>workspace://SpacesStore/bb865727-0683-4376-9af7-6e0eacdb0c13</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>

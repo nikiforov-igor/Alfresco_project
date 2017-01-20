@@ -2538,7 +2538,7 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Создать дочернее поручение]]></value>
+                                                                <value><![CDATA[Создать подчиненное поручение]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionIsSystemFormConnection</name>
@@ -3841,7 +3841,7 @@ if (doc){
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.hasAspect("lecm-errands-aspect:changeDueDateSignal")]]></value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:changeDueDateSignal")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -3852,10 +3852,10 @@ if (document) {
     var logObjects = [];
     var logText;
     var dueDateString = "";
-    var limitless = document.properties["lecm-errands-aspect:duedate-limitless"];
-    var shiftSize = document.properties["lecm-errands-aspect:duedate-shift-size"];
-    var newLimitationDate = new Date(document.properties["lecm-errands-aspect:new-limitation-date"].getTime());
-    var reason = document.properties["lecm-errands-aspect:change-duedate-reason"];
+    var limitless = document.properties["lecm-eds-aspect:duedate-limitless"];
+    var shiftSize = document.properties["lecm-eds-aspect:duedate-shift-size"];
+    var newLimitationDate = new Date(document.properties["lecm-eds-aspect:new-limitation-date"].getTime());
+    var reason = document.properties["lecm-eds-aspect:change-duedate-reason"];
     var oldLimitDate = document.properties["lecm-errands:limitation-date"];
     var oldLimitRadio = document.properties["lecm-errands:limitation-date-radio"];
     if (limitless) {
@@ -3939,13 +3939,13 @@ if (document) {
         children = children.concat(childrenResolutions);
     }
     children.forEach(function (child) {
-        child.properties["lecm-errands-aspect:duedate-shift-size"] = shiftSize;
-        child.properties["lecm-errands-aspect:duedate-limitless"] = limitless;
-        child.properties["lecm-errands-aspect:new-limitation-date"] = newLimitationDate;
-        child.properties["lecm-errands-aspect:change-duedate-reason"] = reason;
+        child.properties["lecm-eds-aspect:duedate-shift-size"] = shiftSize;
+        child.properties["lecm-eds-aspect:duedate-limitless"] = limitless;
+        child.properties["lecm-eds-aspect:new-limitation-date"] = newLimitationDate;
+        child.properties["lecm-eds-aspect:change-duedate-reason"] = reason;
         child.save();
     });
-    document.removeAspect("lecm-errands-aspect:changeDueDateSignal");
+    document.removeAspect("lecm-eds-aspect:changeDueDateSignal");
 }]]></value>
                                                             </property>
                                                             <property>
@@ -4372,7 +4372,7 @@ if(doc){
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Создать дочернее поручение]]></value>
+                                                                <value><![CDATA[Создать подчиненное поручение]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionIsSystemFormConnection</name>
@@ -6148,7 +6148,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.hasAspect("lecm-errands-aspect:changeDueDateSignal")]]></value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:changeDueDateSignal")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -6159,10 +6159,10 @@ if (document) {
     var logObjects = [];
     var logText;
     var dueDateString = "";
-    var limitless = document.properties["lecm-errands-aspect:duedate-limitless"];
-    var shiftSize = document.properties["lecm-errands-aspect:duedate-shift-size"];
-    var newLimitationDate = new Date(document.properties["lecm-errands-aspect:new-limitation-date"].getTime());
-    var reason = document.properties["lecm-errands-aspect:change-duedate-reason"];
+    var limitless = document.properties["lecm-eds-aspect:duedate-limitless"];
+    var shiftSize = document.properties["lecm-eds-aspect:duedate-shift-size"];
+    var newLimitationDate = new Date(document.properties["lecm-eds-aspect:new-limitation-date"].getTime());
+    var reason = document.properties["lecm-eds-aspect:change-duedate-reason"];
     var oldLimitDate = document.properties["lecm-errands:limitation-date"];
     var oldLimitRadio = document.properties["lecm-errands:limitation-date-radio"];
     if (limitless) {
@@ -6246,13 +6246,13 @@ if (document) {
         children = children.concat(childrenResolutions);
     }
     children.forEach(function (child) {
-        child.properties["lecm-errands-aspect:duedate-shift-size"] = shiftSize;
-        child.properties["lecm-errands-aspect:duedate-limitless"] = limitless;
-        child.properties["lecm-errands-aspect:new-limitation-date"] = newLimitationDate;
-        child.properties["lecm-errands-aspect:change-duedate-reason"] = reason;
+        child.properties["lecm-eds-aspect:duedate-shift-size"] = shiftSize;
+        child.properties["lecm-eds-aspect:duedate-limitless"] = limitless;
+        child.properties["lecm-eds-aspect:new-limitation-date"] = newLimitationDate;
+        child.properties["lecm-eds-aspect:change-duedate-reason"] = reason;
         child.save();
     });
-    document.removeAspect("lecm-errands-aspect:changeDueDateSignal");
+    document.removeAspect("lecm-eds-aspect:changeDueDateSignal");
 }]]></value>
                                                             </property>
                                                             <property>
@@ -6593,7 +6593,7 @@ if (document != null) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Создать дочернее поручение]]></value>
+                                                                <value><![CDATA[Создать подчиненное поручение]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionIsSystemFormConnection</name>

@@ -35,7 +35,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 							if (response && response.json) {
 								var roles = response.json;
 								me.canChooseInititator = roles.some(function(role){
-									return "ERRANDS_CHOOSING_INITIATOR" == role.id
+									return "CHOOSING_INITIATOR" == role.id
 								});
 								me.loadSettings();
 							}
@@ -89,7 +89,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 								var defaultInitiatorControl = Dom.get("errands-user-settings-edit-form_assoc_lecm-errands_user-settings-default-initiator-assoc-cntrl");
 								if(defaultInitiatorControl) {
 									defaultInitiatorControl.title = Alfresco.util.message("lecm.errands.user-settings.default-initiator.description");
-									if (!this.canChooseInititator) {
+									if (!me.canChooseInititator) {
 										LogicECM.module.Base.Util.disableControl("errands-user-settings-edit-form", "lecm-errands:user-settings-default-initiator-assoc");
 									}
 								}

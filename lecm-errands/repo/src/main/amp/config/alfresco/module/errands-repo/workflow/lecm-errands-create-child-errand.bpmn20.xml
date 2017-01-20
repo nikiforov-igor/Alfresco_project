@@ -3,7 +3,7 @@
              xmlns:activiti="http://activiti.org/bpmn"
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.it.ru/logicECM/errands/workflow/createChildErrand/1.0">
-	<process id="errandsCreateChildErrand" name="Создать дочернее поручение">
+	<process id="errandsCreateChildErrand" name="Создать подчиненное поручение">
         <startEvent id="startCreateChildErrand" name="Start" activiti:formKey="lecmErrandWf:createChildErrand"></startEvent>
         <endEvent id="endCreateChildErrand" name="End"></endEvent>
         <scriptTask id="createChildErrand" name="Controller Decline" scriptFormat="javascript">

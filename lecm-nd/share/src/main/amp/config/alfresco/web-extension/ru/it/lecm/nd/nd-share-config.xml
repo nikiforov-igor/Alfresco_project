@@ -12,6 +12,8 @@
             <form>
                 <field-visibility>
 	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
+                    <show id="lecm-document:author-assoc"/>
+                    <show id="lecm-eds-document:executor-assoc"/>
                     <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
                     <show id="lecm-eds-document:summaryContent"/>
@@ -26,6 +28,8 @@
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>
+                    <show id="loadAuthorScript" force="true"/>
+                    <show id="editExecutorScript" force="true"/>
                 </field-visibility>
                 <appearance>
 	                <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
@@ -71,7 +75,18 @@
 			                <control-param name="suppressRefreshEvent">true</control-param>
 		                </control>
 	                </field>
-					<field id="lecmSignAspects:signerEmployeeAssoc">
+                    <field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler" read-only="true">
+                        <control>
+                            <control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-eds-document:executor-assoc">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/employees/ND_CREATORS/picker</control-param>
+                            <control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmSignAspects:signerEmployeeAssoc">
 						<control>
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
 						</control>
@@ -92,6 +107,18 @@
                     </field>
                     <field id="lecm-document-aspects:template-ref">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+                    </field>
+                    <field id="loadAuthorScript">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/load-default-author-in-readonly-control.js</control-param>
+                            <control-param name="scriptLoadedFireAction">loadDefaultAuthorAction</control-param>
+                        </control>
+                    </field>
+                    <field id="editExecutorScript">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">editExecutorCreateFormScriptLoaded</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
@@ -183,6 +210,7 @@
                     <show id="lecm-document:creator"/>																	<!-- Автор -->
                     <show id="lecm-document:title"/>																	<!-- Заголовок -->
                     <show id="lecm-eds-document:document-type-assoc"/>
+                    <show id="lecm-eds-document:executor-assoc"/>
                     <!-- Вид документа НД -->
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
@@ -341,6 +369,7 @@
 	                <show id="lecm-nd:unlimited" mandatory="true"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
                     <show id="lecm-document:author-assoc"/>
+                    <show id="lecm-eds-document:executor-assoc"/>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
                     <show id="lecm-document-aspects:reg-project-data-date"/>
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
@@ -348,6 +377,7 @@
 					<show id="lecmSignAspects:signingDate" for-mode="view"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
 					<show id="lecm-review-ts:review-table-assoc"/>
+                    <show id="editExecutorScript" force="true"/>
                 </field-visibility>
                 <appearance>
 
@@ -405,7 +435,13 @@
 	                <field id="lecm-nd:begin-date"  label-id="label.nd.period" set="dates"/>
 	                <field id="lecm-nd:end-date" label="" set="dates"/>
 	                <field id="lecm-nd:unlimited" set="dates"/>
-                    <field id="lecm-document:author-assoc" set="afterDates" read-only="true"/>
+                    <field id="lecm-document:author-assoc" set="afterDates" label-id="label.eds.assoc.compiler" read-only="true"/>
+                    <field id="lecm-eds-document:executor-assoc" set="afterDates">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/employees/ND_CREATORS/picker</control-param>
+                            <control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-document-aspects:reg-project-data-number" set="afterDates"/>
                     <field id="lecm-document-aspects:reg-project-data-date" set="afterDates"/>
 					<field id="lecm-contract:approval" set="approvalTab">
@@ -448,6 +484,12 @@
                             <!--<control-param name="viewFormTitleMsg">stage.view.form.title</control-param>-->
                             <!--<control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>-->
                             <!--<control-param name="expandDataSource">lecm/workflow/review/ts/items/datagrid</control-param>-->
+                        </control>
+                    </field>
+                    <field id="editExecutorScript" set="common">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">editExecutorEditFormScriptLoaded</control-param>
                         </control>
                     </field>
                 </appearance>
