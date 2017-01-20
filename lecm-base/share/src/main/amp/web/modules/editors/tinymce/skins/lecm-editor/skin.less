@@ -1486,6 +1486,12 @@ body .@{prefix}-abs-layout-item, .@{prefix}-abs-end {
 	border-top-color: @text-disabled;
 }
 
+// ALFFIVE-101
+// Блокирование тултипов и реакции на hover
+.@{prefix}-disabled {
+	pointer-events: none;
+}
+
 .@{prefix}-caret.@{prefix}-up {
 	border-bottom: 4px solid @btn-caret-border;
 	border-top: 0;
