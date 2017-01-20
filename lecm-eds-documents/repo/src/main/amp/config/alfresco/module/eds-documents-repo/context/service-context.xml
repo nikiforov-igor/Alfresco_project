@@ -119,8 +119,9 @@
         </property>
     </bean>
 
-	<bean id="eds.arm.sed.LogicEcmBootstrap" parent="lecmDictionaryBootstrap" depends-on="arm.LogicEcmModelsBootstrap, armService">
-		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
+	<bean id="eds.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap, documents.LogicEcmConnectionTypesBootstrap">
+		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ"/>
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/arm/default-arm-sed.xml</value>
