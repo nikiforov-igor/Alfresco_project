@@ -8366,6 +8366,31 @@ if (document != null) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>eeadec04-773c-4639-bf2f-f830b8d505d3</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/74252af9-8dac-4a76-9122-f6f943714fbe
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = bpm_package.children[0];
+if (document) {
+  	document.properties["lecm-errands:execution-date"] = new Date();
+	document.save();
+}]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Фиксация даты исполнения]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
