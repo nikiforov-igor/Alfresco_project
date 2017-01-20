@@ -2538,7 +2538,7 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Создать дочернее поручение]]></value>
+                                                                <value><![CDATA[Создать подчиненное поручение]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionIsSystemFormConnection</name>
@@ -4372,7 +4372,7 @@ if(doc){
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Создать дочернее поручение]]></value>
+                                                                <value><![CDATA[Создать подчиненное поручение]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionIsSystemFormConnection</name>
@@ -4438,7 +4438,7 @@ if(doc){
                                                                             <property>
                                                                                 <name>formInputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-document:subject-assoc]]></value>
+                                                                                    <![CDATA[lecm-document:subject-assoc-ref]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>formInputToValue</name>
@@ -6593,7 +6593,7 @@ if (document != null) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Создать дочернее поручение]]></value>
+                                                                <value><![CDATA[Создать подчиненное поручение]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionIsSystemFormConnection</name>
@@ -6659,7 +6659,7 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>formInputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-document:subject-assoc]]></value>
+                                                                                    <![CDATA[lecm-document:subject-assoc-ref]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>formInputToValue</name>
