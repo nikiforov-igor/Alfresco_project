@@ -11,9 +11,12 @@ import java.util.Date;
  * Time: 12:48
  */
 public interface EDSDocumentService {
-    String EXECUTION_DATE_RADIO_DAYS = "DAYS";
-    String EXECUTION_DATE_RADIO_DATE = "DATE";
-    String EXECUTION_DATE_RADIO_LIMITLESS = "LIMITLESS";
+    String COMPLEX_DATE_RADIO_DAYS = "DAYS";
+    String COMPLEX_DATE_RADIO_DATE = "DATE";
+    String COMPLEX_DATE_RADIO_LIMITLESS = "LIMITLESS";
+
+    String COMPLEX_DATE_DAYS_WORK = "WORK";
+    String COMPLEX_DATE_DAYS_CALENDAR = "CALENDAR";
 
     String EDS_NAMESPACE_URI = "http://www.it.ru/logicECM/eds-document/1.0";
 	String EDS_ASPECTS_NAMESPACE_URI = "http://www.it.ru/logicECM/eds-document/aspects/1.0";
@@ -52,4 +55,14 @@ public interface EDSDocumentService {
      * @return настройки срока в текстовом виде
      */
     String getComplexDateText(String radio, Date date, String daysType, Integer daysCount);
+
+    /**
+     * Конвертация относительного срока в дату
+     * @param radio значение переключателя
+     * @param date дата
+     * @param daysCount количество дней
+     * @param daysType тип дней
+     * @return сконвертированный относительный срок в дату
+     */
+    Date convertComplexDate(String radio, Date date, String daysType, Integer daysCount);
 }

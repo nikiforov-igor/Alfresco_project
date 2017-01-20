@@ -79,6 +79,12 @@
             <version>20090211</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.calendar</groupId>
+            <artifactId>lecm-calendar-repo-api</artifactId>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required
