@@ -651,6 +651,44 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 		        return this.id + record.getData("nodeRef");
 	        },
 
+            getCounterCellFormatter: function DataGrid_getCounterCellFormatter(column) {
+				var scope = this;
+				return function(elCell, oRecord, oColumn, oData) {
+					var searchQuery = scope.datagridColumns[oColumn.key]?scope.datagridColumns[oColumn.key].nameSubstituteString:'';
+					if (oRecord){
+						var data = oRecord.getData();
+						if (data) {
+							searchQuery = searchQuery.replace(/#nodeRef/g, data.nodeRef);
+						}
+					}
+					var cell = elCell;
+					Alfresco.util.Ajax.jsonRequest({
+                        method: "POST",
+                        url: Alfresco.constants.PROXY_URI + "lecm/count/by-query",
+                        dataObj: {
+                            query: searchQuery
+                        },
+                        successCallback: {
+                            fn: function (oResponse) {
+                                if (oResponse != null) {
+                                    if (cell) {
+                                        cell.innerHTML = (oResponse.json !== null ? oResponse.json : "-" );
+                                    }
+                                }
+                            }
+                        },
+                        failureCallback: {
+                            fn: function () {
+                                if (cell) {
+                                    cell.innerHTML = '-';
+                                }
+                            }
+                        }
+                    });
+				
+				};
+			},
+			
             /**
              * Returns actions custom datacell formatter
              *
@@ -1239,13 +1277,16 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
                     var column = this.datagridColumns[i],
-                        columnName = column.name.replace(":", "_"),
-                        fieldLookup = ((column.type == "property" || column.formsName.indexOf("prop_") == 0) ? "prop" : "assoc") + "_" + columnName;
-
-                    this.dataRequestFields.push(columnName);
-                    this.dataRequestNameSubstituteStrings.push(column.nameSubstituteString);
-                    this.dataResponseFields.push(fieldLookup);
-                    this.datagridColumns[fieldLookup] = column;
+						columnName = column.name.replace(":", "_"),
+						fieldLookup = "";
+					if (column.type!="counter") {
+							fieldLookup = ((column.type == "property" || column.formsName.indexOf("prop_") == 0) ? "prop_" : "assoc_");
+					} 
+					fieldLookup =  fieldLookup + columnName;
+					this.dataRequestFields.push(columnName);
+					this.dataRequestNameSubstituteStrings.push(column.nameSubstituteString);
+					this.dataResponseFields.push(fieldLookup);
+					this.datagridColumns[fieldLookup] = column;
                 }
 
                 // DataSource definition if not alfready defined
@@ -1303,15 +1344,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 className = "nowrap "
                             }
                             var columnObj = {
-                                key: this.dataResponseFields[i],
-                                label: column.label.length ? column.label : this.msg(column.name.replace(":", "_")),
-                                sortable: sortable,
-                                resizeable: column.resizeable || false,
-                                sortOptions: {
-                                    field: column.formsName,
-                                    sortFunction: this.getSortFunction()
+                                key:column.type=="counter"?column.name:this.dataResponseFields[i],
+                                label:column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
+                                sortable:sortable,
+                                resizeable: column.resizeable === undefined ? false : column.resizeable,
+                                sortOptions:{
+                                    field:column.formsName,
+                                    sortFunction:this.getSortFunction()
                                 },
-                                formatter: this.getCellFormatter(column.dataType),
+                                formatter:column.type=="counter"?this.getCounterCellFormatter(column):this.getCellFormatter(column.dataType),
                                 className: className + ((column.dataType == 'boolean') ? 'centered' : '')
                             };
                             if (!isLinkShown && (column.dataType != "lecm-orgstr:employee")) {

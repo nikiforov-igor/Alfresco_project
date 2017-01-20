@@ -57,6 +57,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
     private static final String COUNTER_LIMIT = "counterLimit";
     private static final String COUNTER_DESC = "counterDesc";
     private static final String SEARCH_TYPE = "searchType";
+    private static final String COUNTER_FIELD_PREFIX = "counter_";
 
 	public static final String CREATE_TYPES = "createTypes";
 	public static final String HTML_URL = "htmlUrl";
@@ -238,28 +239,37 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 				String fieldName = column.getField();
 				if (fieldName != null) {
 					JSONObject columnJSON = new JSONObject();
-					QName fieldQName = QName.createQName(fieldName, namespaceService);
 
 					String type = "";
 					String formsName = "";
 					String dataType = "";
 
-					PropertyDefinition prop = dictionaryService.getProperty(fieldQName);
-					if (prop != null) {
-						type = "property";
-						formsName = "prop_" + fieldName.replace(":", "_");
-						dataType = prop.getDataType().getName().getLocalName();
-					} else {
-						AssociationDefinition assoc = dictionaryService.getAssociation(fieldQName);
-						if (assoc != null) {
-							type = "association";
-							formsName = "assoc_" + fieldName.replace(":", "_");
-							dataType = assoc.getTargetClass().getName().toPrefixString(namespaceService);
-						} else {
-							formsName = "prop_" + fieldName.replace(":", "_");
-						}
-					}
+					if (fieldName.startsWith(COUNTER_FIELD_PREFIX)) 
+					{
+						type = "counter";
+						formsName = fieldName;
+						dataType = "d:text";
+					} else 
+											{
+						QName fieldQName = QName.createQName(fieldName, namespaceService);
 
+						PropertyDefinition prop = dictionaryService.getProperty(fieldQName);
+						if (prop != null) {
+							type = "property";
+							formsName = "prop_" + fieldName.replace(":", "_");
+							dataType = prop.getDataType().getName().getLocalName();
+						} else {
+							AssociationDefinition assoc = dictionaryService.getAssociation(fieldQName);
+							if (assoc != null) {
+								type = "association";
+								formsName = "assoc_" + fieldName.replace(":", "_");
+								dataType = assoc.getTargetClass().getName().toPrefixString(namespaceService);
+							} else {
+								formsName = "prop_" + fieldName.replace(":", "_");
+							}
+						}
+
+					}
 					columnJSON.put("id", column.getId());
 					columnJSON.put("type", type);
 					columnJSON.put("name", fieldName);
