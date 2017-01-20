@@ -1467,12 +1467,12 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="lecm-errands-dic:errand-cancel-reason-name" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name">
+                    <field id="lecm-errands-dic:errand-cancel-reason-name">
                         <constraint-handlers>
-                            <constraint validation-handler="LogicECM.module.Errands.CancelReasonLengthValidation" type="MANDATORY" event="change" message-id="message.reason.cancel.length.wrong"/>
+                            <constraint validation-handler="Alfresco.forms.validation.length" type="MANDATORY" event="change" message-id="message.reason.cancel.length.wrong"/>
                         </constraint-handlers>
                     </field>
                 </appearance>
@@ -1483,24 +1483,24 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="lecm-errands-dic:errand-cancel-reason-name" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name">
+                    <field id="lecm-errands-dic:errand-cancel-reason-name">
                         <constraint-handlers>
-                            <constraint validation-handler="LogicECM.module.Errands.CancelReasonLengthValidation" type="MANDATORY" event="change" message-id="message.reason.cancel.length.wrong"/>
+                            <constraint validation-handler="Alfresco.forms.validation.length" type="MANDATORY" event="change" message-id="message.reason.cancel.length.wrong"/>
                         </constraint-handlers>
                     </field>
                 </appearance>
             </form>
             <form id="search">
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="lecm-errands-dic:errand-cancel-reason-name" force="true"/>
                 </field-visibility>
             </form>
             <form id="datagrid">
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="lecm-errands-dic:errand-cancel-reason-name" force="true"/>
                 </field-visibility>
             </form>
         </forms>
@@ -2161,7 +2161,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
 		                </control>
                         <constraint-handlers>
-                            <constraint validation-handler="LogicECM.module.Errands.CancelReasonLengthValidation" type="MANDATORY" event="change" message-id="message.reason.cancel.length.wrong"/>
+                            <constraint validation-handler="Alfresco.forms.validation.length" type="MANDATORY" event="change" message-id="message.reason.cancel.length.wrong"/>
                         </constraint-handlers>
 	                </field>
                 </appearance>
@@ -2197,7 +2197,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint validation-handler="LogicECM.module.Errands.CancelReasonLengthValidation" type="MANDATORY" event="change" message-id="message.reason.cancel.length.wrong"/>
+                            <constraint validation-handler="Alfresco.forms.validation.length" type="MANDATORY" event="change" message-id="message.reason.cancel.length.wrong"/>
                         </constraint-handlers>
                     </field>
                 </appearance>
@@ -2452,7 +2452,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint validation-handler="LogicECM.module.Errands.CancelReasonLengthValidation" type="MANDATORY" event="change" message-id="message.reason.cancel.length.wrong"/>
+                            <constraint validation-handler="Alfresco.forms.validation.length" type="MANDATORY" event="change" message-id="message.reason.cancel.length.wrong"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecmErrandWf:cancel_1CancelChildren">

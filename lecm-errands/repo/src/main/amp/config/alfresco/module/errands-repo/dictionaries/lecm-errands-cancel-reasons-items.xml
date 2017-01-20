@@ -3,13 +3,13 @@
     <item name="lecm-dic:Причины отмены поручений" type="lecm-dic:dictionary">
         <items updateMode="CreateOrUpdate">
             <item name="cm:Не акутально" type="lecm-errands-dic:errand-cancel-reason">
-                <property name="cm:name"><![CDATA[Не акутально]]></property>
+                <property name="lecm-errands-dic:errand-cancel-reason-name"><![CDATA[Не акутально]]></property>
             </item>
             <item name="cm:Исполнено другим поручением" type="lecm-errands-dic:errand-cancel-reason">
-                <property name="cm:name"><![CDATA[Исполнено другим поручением]]></property>
+                <property name="lecm-errands-dic:errand-cancel-reason-name"><![CDATA[Исполнено другим поручением]]></property>
             </item>
             <item name="cm:Ошибочное направление" type="lecm-errands-dic:errand-cancel-reason">
-                <property name="cm:name"><![CDATA[Ошибочное направление]]></property>
+                <property name="lecm-errands-dic:errand-cancel-reason-name"><![CDATA[Ошибочное направление]]></property>
             </item>
         </items>
     </item>

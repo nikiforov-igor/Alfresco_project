@@ -26,6 +26,10 @@
 				</list>
 			</parameter>
 		</constraint>
+		<constraint name='lecmErrandWf:cancelReasonLength' type='LENGTH'>
+			<parameter name='minLength'><value>1</value></parameter>
+			<parameter name='maxLength'><value>200</value></parameter>
+		</constraint>
 		<constraint name="lecmErrandWf:requestDueDateChangeTaskResultConstraint" type="LIST">
 			<parameter name="allowedValues">
 				<list>
@@ -276,6 +280,9 @@
 				<property name="lecmErrandWf:requestCancelReason">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="lecmErrandWf:cancelReasonLength"/>
+					</constraints>
 				</property>
 			</properties>
 			<mandatory-aspects>
@@ -346,6 +353,9 @@
 				</property>
 				<property name="lecmErrandWf:requestCancelTask_1CancelReason">
 					<type>d:text</type>
+					<constraints>
+						<constraint ref="lecmErrandWf:cancelReasonLength"/>
+					</constraints>
 				</property>
 				<property name="lecmErrandWf:requestCancelTask_1CancelChildren">
 					<type>d:boolean</type>
@@ -427,6 +437,9 @@
 			<properties>
 				<property name="lecmErrandWf:cancel_1CancelReason">
 					<type>d:text</type>
+					<constraints>
+						<constraint ref="lecmErrandWf:cancelReasonLength"/>
+					</constraints>
 				</property>
 				<property name="lecmErrandWf:cancel_1CancelChildren">
 					<type>d:boolean</type>

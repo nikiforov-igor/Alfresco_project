@@ -55,20 +55,3 @@ LogicECM.module.Errands.WFChangeDueDateValidation =
         }
         return true;
     };
-/**
- * @return {boolean}
- */
-LogicECM.module.Errands.CancelReasonLengthValidation =
-    function (field, args, event, form, silent, message) {
-        return field.value.length > 0 && field.value.length <= 200;
-    };
-/**
- * @return {boolean}
- */
-LogicECM.module.Errands.RequestTaskCancelReasonLengthValidation =
-    function (field, args, event, form, silent, message) {
-        if (field.form["prop_lecmErrandWf_requestCancelTask_1Result"].value == "CANCEL_ERRAND") {
-            return field.value.length > 0 && field.value.length <= 200;
-        }
-        return true;
-    };
