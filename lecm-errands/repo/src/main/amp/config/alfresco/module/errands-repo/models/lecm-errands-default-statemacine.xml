@@ -1958,7 +1958,6 @@ if (document) {
                 regNumberCode = "ERRAND_ON_BASIS_NUMBER";
             }
             regnumbers.registerDocument(document, regNumberCode);
-            regnumbers.setDocumentNumber(regNumberCode, document, "lecm-errands:number");
         }
         var initiator = null;
         var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
@@ -2172,6 +2171,32 @@ if (document) {
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value><![CDATA[Операции со сроком поручения]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>ed402734-588b-4f94-b32e-419ad9956a03</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/ef24e295-719d-47a3-aa88-f264cfad5b9e
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = bpm_package.children[0];
+if (document) {
+  document.properties["lecm-errands:number"] = document.properties["lecm-document:regnum"];
+  document.save();
+}]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Установка атрибута номера поручения]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
