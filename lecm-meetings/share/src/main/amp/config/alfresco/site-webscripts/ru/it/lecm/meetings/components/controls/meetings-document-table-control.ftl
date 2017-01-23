@@ -1,11 +1,6 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
-<@markup id="lecm-datagrid-dependencies" target="js" action="after" scope="global">
-	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-toolbar.js"/>
-	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-meetings/components/lecm-meetings-document-table.js"></@script>
-</@>
 <#assign params = field.control.params/>
 
 <#assign controlId = fieldHtmlId + "-cntrl">
@@ -140,6 +135,7 @@
             'modules/simple-dialog.js',
 	        'scripts/lecm-base/components/lecm-datagrid.js',
             'scripts/lecm-base/components/lecm-toolbar.js',
+            'scripts/documents/tables/lecm-document-table.js',
             'scripts/lecm-meetings/components/lecm-meetings-document-table.js',
 	        <#if params.jsDependencies??>
 		        <#list params.jsDependencies?split(",") as js>
