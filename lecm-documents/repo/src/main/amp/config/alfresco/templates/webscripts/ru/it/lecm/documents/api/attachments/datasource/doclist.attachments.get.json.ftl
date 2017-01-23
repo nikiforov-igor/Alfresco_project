@@ -8,10 +8,8 @@
 			{
 				"isInnerAttachment": "${item.isInnerAttachment?string}",
 				"meta": {
-				<#if item.meta??>
-					"category": "${item.meta.category!''}",
-					"document": "${item.meta.document!''}"
-				</#if>
+					"category": "${item.meta.category}",
+					"document": "${item.meta.document}"
 				},
 				"node": <#noescape>${item.nodeJSON}</#noescape>,
 				<#if item.parent??>"parent": <#noescape>${item.parent.nodeJSON},</#noescape>

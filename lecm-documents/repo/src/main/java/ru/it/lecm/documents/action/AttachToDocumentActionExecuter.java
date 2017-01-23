@@ -56,12 +56,12 @@ public class AttachToDocumentActionExecuter extends ActionExecuterAbstractBase {
 		if (nodeService.exists(actionedUponNodeRef)) {
 			NodeRef document = (NodeRef) action.getParameterValue(PARAM_DOCUMENT);
 			String category = (String) action.getParameterValue(PARAM_CATEGORY);
-			Boolean fullMove = (Boolean) action.getParameterValue(PARAM_FULL_MOVE);
+			boolean fullMove = Boolean.TRUE.equals(action.getParameterValue(PARAM_FULL_MOVE));
 
 			NodeRef categoryRef = documentAttachmentsService.getCategory(category, document);
 			if (categoryRef != null) {
 				if (!documentAttachmentsService.isReadonlyCategory(categoryRef)) {
-					if (fullMove != null && fullMove) {
+					if (fullMove) {
 						List<AssociationRef> existAssocs = nodeService.getSourceAssocs(actionedUponNodeRef, DocumentAttachmentsService.ASSOC_CATEGORY_ATTACHMENTS);
 						if (existAssocs != null) {
 							for (AssociationRef assoc : existAssocs) {
