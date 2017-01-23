@@ -202,8 +202,7 @@
        		setExecutionReport = new LogicECM.RichTextControl("${id}-setExecutionReport-textarea").setOptions(
             {
                 editorParameters: {
-                    height: 100,
-                    width: 400,
+                    height: 100,                    
                     inline_styles: false,                    
                     language: "${locale?substring(0, 2)?js_string}",
 					menu: {},
