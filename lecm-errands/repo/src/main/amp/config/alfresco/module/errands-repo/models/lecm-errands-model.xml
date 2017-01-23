@@ -104,6 +104,16 @@
 				</list>
 			</parameter>
 		</constraint>
+		<constraint name="lecm-errands:execution-report-status-const" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>PROJECT</value>
+					<value>ONCONTROL</value>
+					<value>ACCEPT</value>
+					<value>DECLINE</value>
+				</list>
+			</parameter>
+		</constraint>
     </constraints>
 
     <types>
@@ -261,8 +271,25 @@
 				<property name="lecm-errands:half-limit-date">
 					<type>d:date</type>
 				</property>
-				<!-- Отчет об исполнении -->
+				<!-- Текст отчета об исполнении -->
 				<property name="lecm-errands:execution-report">
+					<type>d:text</type>
+				</property>
+				<!-- Статус отчета -->
+				<property name="lecm-errands:execution-report-status">
+					<type>d:text</type>
+					<default>ONCONTROL</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="lecm-errands:execution-report-status-const"/>
+					</constraints>
+				</property>
+				<!-- Причина отклонения -->
+				<property name="lecm-errands:execution-report-decline-reason">
 					<type>d:text</type>
 				</property>
 				<!-- Дата исполнения -->

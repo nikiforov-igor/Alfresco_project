@@ -457,8 +457,47 @@
 				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
 			</mandatory-aspects>
 		</type>
+		<!-- Исполнить поручение -->
 		<type name="lecmErrandWf:execute_1">
 			<parent>bpm:startTask</parent>
+			<properties>
+				<property name="lecmErrandWf:execute_1ReportText">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecmErrandWf:execute_1CloseChild">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<property name="lecmErrandWf:execute_1Execute">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecmErrandWf:execute_1Attachment">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:content</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<association name="lecmErrandWf:execute_1ConnectedDocument">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-document:base</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
 			<mandatory-aspects>
 				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
 			</mandatory-aspects>
