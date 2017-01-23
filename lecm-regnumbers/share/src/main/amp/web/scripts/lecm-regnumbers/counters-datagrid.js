@@ -111,7 +111,7 @@ LogicECM.module.Counters = LogicECM.module.Counters || {};
                             switch (datalistColumn.name) { //  меняем отрисовку для конкретных колонок
                                 case "lecm-regnum:doctype":
                                     if (data.value && (("" + data.value) != "false")) {
-                                        columnContent += (data.value + " (" + grid.getDisplayedType(data.value) + ")");
+                                        columnContent += (data.value + grid.getDisplayedType(data.value));
                                     }
                                     break;
                                 default:
@@ -131,37 +131,7 @@ LogicECM.module.Counters = LogicECM.module.Counters || {};
         },
 
         getDisplayedType: function(docType) {
-            var displayedType = "";
-            switch (docType) {
-                case "lecm-additional-document:additionalDocument":
-                    displayedType = this.msg("type.additionalDocument");
-                    break;
-                case "lecm-contract:document":
-                    displayedType = this.msg("type.contract");
-                    break;
-                case "lecm-nd:document":
-                    displayedType = this.msg("type.nd");
-                    break;
-                case "lecm-ord:document":
-                    displayedType = this.msg("type.ord");
-                    break;
-                case "lecm-outgoing:document":
-                    displayedType = this.msg("type.outgoing");
-                    break;
-                case "lecm-protocol:document":
-                    displayedType = this.msg("type.protocol");
-                    break;
-                case "lecm-errands:document":
-                    displayedType = this.msg("type.errands");
-                    break;
-                case "lecm-incoming:document":
-                    displayedType = this.msg("type.incoming");
-                    break;
-                case "lecm-internal:document":
-                    displayedType = this.msg("type.internal");
-                    break;
-            }
-            return displayedType;
+            return docType ? ' (' + this.msg('page.' + docType.replace(':','_')) + ')' : '';
         }
 
     }, true);
