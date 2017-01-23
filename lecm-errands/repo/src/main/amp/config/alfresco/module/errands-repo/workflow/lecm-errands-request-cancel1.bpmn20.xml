@@ -91,9 +91,9 @@
 											}
 										});
 
-	                                    var logText = "#initiator"
+	                                    var logText = "#initiator "
 	                                    logText += documentScript.wrapperTitle("отклонил", task.getVariable("lecmErrandWf_requestCancelTask_1RejectReason"))
-	                                    logText += "запрос на отмену поручения: #mainobject.";
+	                                    logText += " запрос на отмену поручения: #mainobject.";
 									    businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
 								    } else if (decision == "CANCEL_ERRAND") {
 								        execution.setVariable("requestCancelResult", "cancelErrand");
