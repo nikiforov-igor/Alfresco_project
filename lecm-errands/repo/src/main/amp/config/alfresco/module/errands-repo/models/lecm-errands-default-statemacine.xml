@@ -316,7 +316,7 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Направить поручение]]></value>
+                                                                <value><![CDATA[Направить на исполнение]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -421,7 +421,7 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Направить поручение]]></value>
+                                                                <value><![CDATA[Направить на исполнение]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>workflowId</name>
