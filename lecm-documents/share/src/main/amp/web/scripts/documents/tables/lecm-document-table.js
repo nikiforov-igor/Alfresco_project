@@ -700,7 +700,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                 onSetupActions(this.options.actions, this.id + "-actionSet","datagrid-action-link ");
             }
 
-            if (this.options.otherActions != null && this.options.otherActions.length) {
+            if (this.options.otherActions && this.options.otherActions.length) {
                 onSetupActions(this.options.otherActions, this.id + "-otherActionSet","datagrid-other-action-link ");
             }
         },
@@ -987,12 +987,9 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
 					var createFormTitleMsg = dataGrid.options.createFormTitleMsg;
                     var addMsg = orgMetadata.addMessage;
-                    var contId = p_dialog.id + "-form-container";
-                    Alfresco.util.populateHTML(
-                        [contId + "_h", addMsg ? addMsg : (createFormTitleMsg ? this.msg(createFormTitleMsg) : this.msg("label.create-row.title"))]
-                    );
+					p_dialog.dialog.setHeader(addMsg ? addMsg : (createFormTitleMsg ? this.msg(createFormTitleMsg) : this.msg("label.create-row.title")));
                     if (itemType) {
-                        Dom.addClass(contId, itemType.replace(":", "_") + "_edit");
+                        Dom.addClass(p_dialog.id + "-form-container", itemType.replace(":", "_") + "_edit");
                     }
                     var rowId = p_dialog.options.onSuccess.rowId;
                     var oDataRow = this.widgets.dataTable.getRecord(rowId);

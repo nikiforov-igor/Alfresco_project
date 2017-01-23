@@ -372,11 +372,11 @@ LogicECM.module.MeetingsDocumentTableDataGrid = LogicECM.module.MeetingsDocument
 					}
 				}
 			};
-			if (this.options.actions != null) {
+			if (this.options.actions) {
 				onSetupActions(this.options.actions, this.id + "-actionSet","datagrid-action-link ");
 			}
 
-			if (this.options.otherActions != null && this.options.otherActions.length > 0) {
+			if (this.options.otherActions && this.options.otherActions.length) {
 				onSetupActions(this.options.otherActions, this.id + "-otherActionSet","datagrid-other-action-link ");
 			}
 		},
