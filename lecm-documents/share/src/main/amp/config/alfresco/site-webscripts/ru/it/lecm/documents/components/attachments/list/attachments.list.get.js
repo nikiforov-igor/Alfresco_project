@@ -65,6 +65,13 @@ function main() {
 		});
 	}
 
+	if (hasPermission(model.nodeRef, PERM_CONTENT_COPY)) {
+		allActions.push({
+			id: "move-to-another-category",
+			onlyForOwn: false
+		});
+	}
+
 	if (hasPermission(model.nodeRef, PERM_CONTENT_DELETE)) {
 		allActions.push({
 			id: "document-delete",
