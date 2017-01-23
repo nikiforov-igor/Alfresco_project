@@ -535,9 +535,13 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 								this.busytime = response.json;
 								this.fillBusyTime(response.json);
 							}
-							if (this.prevStartIndex && this.prevEndIndex) {
-								this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex);
-								this._drawSelectorBorder(this.prevStartIndex, this.prevEndIndex);
+							if (this.allDay) {
+								this.requestAllDayMembersTime();
+							} else {
+								if (this.prevStartIndex && this.prevEndIndex) {
+									this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex);
+									this._drawSelectorBorder(this.prevStartIndex, this.prevEndIndex);
+								}
 							}
 						},
 
@@ -1405,9 +1409,6 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					this._reset();
 					this.draw();
 					this.requestMembersTime();
-					if (this.allDay) {
-						this.requestAllDayMembersTime();
-					}
 				} else {
 					this.draw();
 				}
@@ -1445,9 +1446,6 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					this._reset();
 					this.draw();
 					this.requestMembersTime();
-					if (this.allDay) {
-						this.requestAllDayMembersTime();
-					}
 				} else {
 					this.draw();
 				}
