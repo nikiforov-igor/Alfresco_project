@@ -93,18 +93,18 @@ public class EventsWebScriptBean extends BaseWebScript {
                 @Override
                 public List<Map<String, Object>> doWork() throws Exception {
                     List<NodeRef> events = eventService.getEvents(ISO8601DateFormat.parse(fromDate), ISO8601DateFormat.parse(toDate), additionalFilter, false, null, false);
-                    return processEvents(events, false, true, null, TimeZone.getDefault().getRawOffset());
+                    return processEvents(events, false, true, null, -TimeZone.getDefault().getRawOffset()/60000);
                 }
             });
         } else {
             List<NodeRef> events = eventService.getEvents(ISO8601DateFormat.parse(fromDate), ISO8601DateFormat.parse(toDate), additionalFilter, false, null, false);
-            return processEvents(events, false, true, null, TimeZone.getDefault().getRawOffset());
+            return processEvents(events, false, true, null, -TimeZone.getDefault().getRawOffset()/60000);
         }
     }
 
 
     public List<Map<String, Object>> getUserEvents(String fromDate, String toDate, boolean loadActions, String mode) {
-        return getUserEvents(fromDate, toDate, loadActions, mode, TimeZone.getDefault().getRawOffset());
+        return getUserEvents(fromDate, toDate, loadActions, mode, -TimeZone.getDefault().getRawOffset()/60000);
     }
 
     public List<Map<String, Object>> getUserEvents(String fromDate, String toDate, boolean loadActions, String mode, Integer timeZoneOffset) {
