@@ -535,7 +535,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                     return true;
                 };
                 Bubbling.addDefaultAction("datagrid-other-action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnOtherActionHandler, me.options.forceSubscribing);
-                Bubbling.addDefaultAction("show-more", fnOtherActionHandler, me.options.forceSubscribing);
+                Bubbling.addDefaultAction("show-more" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnOtherActionHandler, me.options.forceSubscribing);
             }
 
             // Actions module
@@ -661,6 +661,18 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
          * Добавляет меню для колонок
          */
         setupActions: function() {
+			var moreActionsDiv = document.getElementById(this.id + '-moreActions');
+			var actionMoreDiv, actionMoreA;
+			if (moreActionsDiv) {
+				actionMoreDiv = moreActionsDiv.children[0];
+				if (actionMoreDiv) {
+					actionMoreA = actionMoreDiv.children[0];
+					if (actionMoreA) {
+						actionMoreA.className = 'show-more show-more' + (this.options.bubblingLabel ? "-" + this.options.bubblingLabel : "");
+					}
+				}
+			}
+
             var onSetupActions = function onSetupActions(actions, id, className) {
                 var actionsDiv = document.getElementById(id);
                 if (actionsDiv.children.length == 0) {
@@ -684,11 +696,11 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                     }
                 }
             }
-            if (this.options.actions != null) {
+            if (this.options.actions) {
                 onSetupActions(this.options.actions, this.id + "-actionSet","datagrid-action-link ");
             }
 
-            if (this.options.otherActions != null && this.options.otherActions.length > 0) {
+            if (this.options.otherActions != null && this.options.otherActions.length) {
                 onSetupActions(this.options.otherActions, this.id + "-otherActionSet","datagrid-other-action-link ");
             }
         },
@@ -965,17 +977,19 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
         onAddRow: function(me, asset, owner, actionsConfig, confirmFunction) {
             if (this.doubleClickLock) return;
             this.doubleClickLock = true;
-            var orgMetadata = this.modules.dataGrid.datagridMeta;
+			var dataGrid = this.modules.dataGrid;
+            var orgMetadata = dataGrid.datagridMeta;
             if (orgMetadata && orgMetadata.nodeRef.indexOf(":") > 0) {
                 var destination = orgMetadata.nodeRef;
                 var itemType = orgMetadata.itemType;
 
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
+					var createFormTitleMsg = dataGrid.options.createFormTitleMsg;
                     var addMsg = orgMetadata.addMessage;
                     var contId = p_dialog.id + "-form-container";
                     Alfresco.util.populateHTML(
-                        [contId + "_h", addMsg ? addMsg : this.msg("label.create-row.title") ]
+                        [contId + "_h", addMsg ? addMsg : (createFormTitleMsg ? this.msg(createFormTitleMsg) : this.msg("label.create-row.title"))]
                     );
                     if (itemType) {
                         Dom.addClass(contId, itemType.replace(":", "_") + "_edit");
