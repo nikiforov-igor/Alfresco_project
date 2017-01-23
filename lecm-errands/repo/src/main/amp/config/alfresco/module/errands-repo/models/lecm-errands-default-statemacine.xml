@@ -1956,6 +1956,16 @@ if (document) {
                 regNumberCode = "ERRAND_FREE_NUMBER";
             } else {
                 regNumberCode = "ERRAND_ON_BASIS_NUMBER";
+                if (document.properties["lecm-errands:child-index-counter"] == 0) {
+                    var childAssoc = parentDoc.sourceAssocs["lecm-errands:additional-document-assoc"];
+                    if (childAssoc && childAssoc.length) {
+                       var childIndex = childAssoc.filter(function(child){
+                            return !statemachine.isDraft(child);
+                       }).length;
+                       document.properties["lecm-errands:child-index-counter"] = childIndex;
+                       document.save();
+                    }
+                }
             }
             regnumbers.registerDocument(document, regNumberCode);
         }
