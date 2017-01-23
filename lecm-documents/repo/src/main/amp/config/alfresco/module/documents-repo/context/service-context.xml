@@ -694,6 +694,12 @@
         <property name="publicAction" value="false" />
 	</bean>
 
+    <bean id="move-to-another-category" class="ru.it.lecm.documents.action.AttachToDocumentActionExecuter" parent="action-executer">
+        <property name="nodeService" ref="NodeService"/>
+        <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+        <property name="publicAction" value="false" />
+    </bean>
+
 	<util:list id="documents.groupOperations">
 		<value>alfresco/module/${artifactId}/actions/ga-favourites.xml</value>
 		<value>alfresco/module/${artifactId}/actions/ga-delete.xml</value>

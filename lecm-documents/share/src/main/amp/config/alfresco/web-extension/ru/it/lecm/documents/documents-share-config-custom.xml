@@ -1,6 +1,8 @@
 <alfresco-config>
     <!-- Document Library Actions config section -->
     <config evaluator="string-compare" condition="DocLibActions" replace="true">
+
+        <actionGroupResolver>lecm.resolver.doclib.actionGroup</actionGroupResolver>
         <!--
            Action definitions
         -->
@@ -365,6 +367,23 @@
 		        <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
 		        <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
 	        </action>
+
+            <action id="move-to-another-category" type="javascript" label="label.action.move-to-another-category">
+                <param name="function">onActionMoveToNewCategory</param>
+                <param name="itemKind">action</param>
+                <param name="itemId">move-to-another-category</param>
+                <param name="mode">create</param>
+                <param name="destination">{nodeRef}</param>
+                <param name="category">{meta.category}</param>
+                <param name="document">{meta.document}</param>
+                <permissions>
+                    <permission allow="true">Delete</permission>
+                </permissions>
+                <param name="successMessage">message.moveToCategory.success</param>
+                <param name="failureMessage">message.moveToCategory.failure</param>
+                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
         </actions>
 
         <!--
@@ -372,6 +391,16 @@
         -->
         <actionGroups>
             <actionGroup id="empty"/>
+
+            <actionGroup id="document-attachment">
+                <action index="100" id="document-upload-new-version"/>
+                <action index="110" id="move-to-another-category"/>
+                <action index="120" id="document-edit-online"/>
+                <action index="130" id="document-download"/>
+                <action index="140" id="document-delete"/>
+                <action index="150" id="document-view-content"/>
+                <action index="160" id="document-edit-properties"/>
+            </actionGroup>
 
             <actionGroup id="document-browse">
                 <action index="100" id="document-upload-new-version"/>
@@ -1239,6 +1268,39 @@
 			</form>
 		</forms>
 	</config>
+
+    <config evaluator="string-compare" condition="move-to-another-category">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="document"/>
+                    <show id="category"/>
+                    <show id="fullMove"/>
+                </field-visibility>
+                <appearance>
+                    <set id="set" template="/ru/it/lecm/documents/sets/attach-to-document-set.ftl"/>
+
+                    <field id="document" set="set">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl">
+                            <control-param name="contextProperty">document</control-param>
+                        </control>
+                    </field>
+                    <field id="fullMove" set="set">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl">
+                            <control-param name="fieldValue">true</control-param>
+                        </control>
+                    </field>
+                    <field id="category" label-id="label.attach-to-document.category" set="set">
+                        <control template="/ru/it/lecm/documents/controls/select-document-category-control.ftl">
+                            <control-param name="notSelectedOptionShow">false</control-param>
+                            <control-param name="defaultValueContextProperty">category</control-param>
+                            <control-param name="documentFromArgs">document</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 
     <config evaluator="model-type" condition="lecm-document-stamp:stamp">
         <forms>
