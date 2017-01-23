@@ -85,17 +85,29 @@
             editor: null,
 
 			onReadonlyControl : function (layer, args) {
-				var editorControls, prop, textarea, fn;
+				var textarea, fn;
 				if (!this.options.disabled && this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
 					this.readonly = args[1].readonly;
 					if (this.editor) {
-						this.editor.getEditor().getBody().setAttribute('contenteditable', !args[1].readonly);
-						editorControls = this.editor.getEditor().controlManager.controls;
-						for (prop in editorControls) {
-							if (editorControls.hasOwnProperty(prop)) {
-								editorControls[prop].setDisabled(args[1].readonly);
-							}
-						}
+						// ALFFIVE-101
+						// Текущая версия tinyMCE находится в таком состоянии, когда старое API уже частями удалено
+						// А нового функционала, отвечающего за динамическое изменение режима readonly еще нет.
+						// 
+						// Динамическая смена режима реализована на основании коммита 
+						// https://github.com/tinymce/tinymce/commit/8d6172d4cd3404a2051365b900d67fa305a82520
+						
+						var activeEditor = this.editor.getEditor();
+						
+						this.readonly && activeEditor.selection.controlSelection.hideResizeRect();
+						
+						activeEditor.getBody().contentEditable = !this.readonly;
+						activeEditor.theme.panel.find("*").disabled(this.readonly);
+						
+						!this.readonly && activeEditor.nodeChanged();
+						
+						// Необходимо для блокирования обработки shortcut'ов, никак не влияет на отображение
+						// но потенциально может быть опасно!
+						activeEditor.hidden = this.readonly;
 					}
 					textarea = Dom.get(this.id);
 					if (textarea) {
@@ -144,18 +156,7 @@
                 {
                    this.editor.getEditor().settings.forced_root_block = "p";
                 }
-				this.editor.subscribe("onPostRender", function() {
-					var shortcuts, prop;
-					shortcuts = this.editor.getEditor().shortcuts;
-					for (prop in shortcuts) {
-						if (shortcuts.hasOwnProperty(prop)) {
-							shortcuts[prop].func = (function (obj, func) {
-								return function() {
-									!obj.readonly && func();
-								};
-							})(this, shortcuts[prop].func);
-						}
-					}
+				this.editor.subscribe("PostRender", function() {
 					LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
 				}, this, true);
 
