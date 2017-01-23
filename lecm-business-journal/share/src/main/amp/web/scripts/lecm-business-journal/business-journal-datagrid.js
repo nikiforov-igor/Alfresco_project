@@ -309,7 +309,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
         },
 
 		_setupPaginatior: function DataGrid_setupPaginatior() {
-            LogicECM.module.ARM.DataGrid.superclass._setupPaginatior.call(this);
+            LogicECM.module.BusinessJournal.DataGrid.superclass._setupPaginatior.call(this);
             if (this.widgets.paginator) {
                 this.widgets.paginator.setAttributeConfig('pageReportValueGenerator', {
                     value : function (paginator) {
