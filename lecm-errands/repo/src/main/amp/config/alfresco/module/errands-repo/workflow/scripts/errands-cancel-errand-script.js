@@ -37,8 +37,8 @@ function processCancelErrand(cancelChildren, reason) {
         dontCheckAccessToObject: true
     });
 
-    var logText = "#initiator";
+    var logText = "#initiator ";
     logText += documentScript.wrapperTitle("отменил", reason);
-    logText += "поручение: #mainobject.";
+    logText += " поручение: #mainobject.";
     businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
 }
