@@ -40,7 +40,6 @@
 				<!-- Заголовок по умолчанию -->
                 <property name="lecm-errands-dic:errand-type-default-title">
                     <type>d:text</type>
-                    <mandatory>true</mandatory>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
