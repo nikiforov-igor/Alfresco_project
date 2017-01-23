@@ -68,6 +68,12 @@
 				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
 				<property name="lecm-orgstr:business-role-description">Cотрудник, выбирающий исполнителя</property>
 			</item>
+			<item name="cm:Выбирающий автора поручения и резолюции" type="lecm-orgstr:business-role">
+				<property name="cm:name">Выбирающий автора поручения и резолюции</property>
+				<property name="lecm-orgstr:business-role-identifier">CHOOSING_INITIATOR</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+				<property name="lecm-orgstr:business-role-description">Пользователи, включенные в данную бизнес-роль, и только они имеют право на выбор Автора поручения и резолюции.</property>
+			</item>
 		</items>
 	</item>
 </items>

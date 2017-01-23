@@ -104,7 +104,7 @@ public interface ErrandsService {
     QName ASSOC_ERRANDS_EXECUTION_LINKS = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-links-assoc");
 
     String BUSINESS_ROLE_ERRANDS_INITIATOR_ID = "ERRANDS_INITIATOR";
-    String BUSINESS_ROLE_ERRANDS_CHOOSING_INITIATOR = "ERRANDS_CHOOSING_INITIATOR";
+    String BUSINESS_ROLE_CHOOSING_INITIATOR = "CHOOSING_INITIATOR";
 
     /**
      * Получение папки для черновиков

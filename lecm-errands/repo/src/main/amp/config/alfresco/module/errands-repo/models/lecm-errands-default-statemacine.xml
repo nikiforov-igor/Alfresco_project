@@ -1857,8 +1857,8 @@ if (document) {
 if(doc){
   var children = [];
   var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
-  var childrenResolutions = documentConnection.getChildResolutions(doc.nodeRef.toString());
- 				
+  var childrenResolutions = errands.getChildResolutions(doc.nodeRef.toString());
+
   if(childrenErrands || childrenResolutions){
     if(childrenErrands){
     	children = children.concat(childrenErrands);
@@ -1867,7 +1867,7 @@ if(doc){
       children = children.concat(childrenResolutions);
     }
   }
- 
+
 	var hasOnExecution = false;
 	var docExecutor = doc.properties["lecm-errands:executor-assoc-ref"];
 	if(children && children.length){
@@ -1883,11 +1883,11 @@ if(doc){
 		  if(docExecutor && childAuthor && docExecutor == childAuthor){
 			if (!statemachine.isFinal(children[i].nodeRef.toString())) {
 				if(children[i].properties["lecm-statemachine:status"] == "На исполнении"){
-				  hasOnExecution = true;			 			  			 
-				  break;			  
-				}  
-			}  		
-		  }    
+				  hasOnExecution = true;
+				  break;
+				}
+			}
+		  }
 		}
 	}
 
@@ -1895,8 +1895,8 @@ if(doc){
 	doc.properties["lecm-eds-aspect:child-change-signal-count"] = 0;
 	doc.save();
 
-  
-  
+
+
 }]]></value>
                                                             </property>
                                                             <property>
@@ -1956,9 +1956,18 @@ if (document) {
                 regNumberCode = "ERRAND_FREE_NUMBER";
             } else {
                 regNumberCode = "ERRAND_ON_BASIS_NUMBER";
+                if (document.properties["lecm-errands:child-index-counter"] == 0) {
+                    var childAssoc = parentDoc.sourceAssocs["lecm-errands:additional-document-assoc"];
+                    if (childAssoc && childAssoc.length) {
+                       var childIndex = childAssoc.filter(function(child){
+                            return !statemachine.isDraft(child);
+                       }).length;
+                       document.properties["lecm-errands:child-index-counter"] = childIndex;
+                       document.save();
+                    }
+                }
             }
             regnumbers.registerDocument(document, regNumberCode);
-            regnumbers.setDocumentNumber(regNumberCode, document, "lecm-errands:number");
         }
         var initiator = null;
         var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
@@ -2172,6 +2181,32 @@ if (document) {
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value><![CDATA[Операции со сроком поручения]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>ed402734-588b-4f94-b32e-419ad9956a03</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/ef24e295-719d-47a3-aa88-f264cfad5b9e
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = bpm_package.children[0];
+if (document) {
+  document.properties["lecm-errands:number"] = document.properties["lecm-document:regnum"];
+  document.save();
+}]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Установка атрибута номера поручения]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -2538,7 +2573,7 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Создать дочернее поручение]]></value>
+                                                                <value><![CDATA[Создать подчиненное поручение]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionIsSystemFormConnection</name>
@@ -3794,16 +3829,16 @@ if (document) {
                                                                 <name>transitionDocumentChangeScript</name>
                                                                 <value><![CDATA[var doc = bpm_package.children[0];
 if (doc){
- 
+
   var countFinal = 0;
   var isAllChildOnFinal = false;
   var children = errands.getChildErrands(doc.nodeRef.toString());
   if (children && children.length){
     var docExecutor = doc.properties["lecm-errands:executor-assoc-ref"];
-    for(var i =0; i<children.length; i++){    
+    for(var i =0; i<children.length; i++){
 	  if (statemachine.isFinal(children[i].nodeRef.toString())) {
 		  countFinal++;
-	  }  
+	  }
     }
 	if(countFinal == children.length){
       isAllChildOnFinal = true;
@@ -4071,16 +4106,16 @@ if (document != null) {
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var doc = bpm_package.children[0];
 if(doc){
-  
+
   var parentDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
 
   if (parentDoc && parentDoc.type=="{http:\/\/www.it.ru\/logicECM\/errands\/1.0}document") {
-   	
+
     parentDoc.properties["lecm-errands:children-executing-count"]++;
     parentDoc.save();
-    
+
   }
-    
+
 }]]></value>
                                                             </property>
                                                             <property>
@@ -4372,7 +4407,7 @@ if(doc){
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Создать дочернее поручение]]></value>
+                                                                <value><![CDATA[Создать подчиненное поручение]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionIsSystemFormConnection</name>
@@ -4438,7 +4473,7 @@ if(doc){
                                                                             <property>
                                                                                 <name>formInputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-document:subject-assoc]]></value>
+                                                                                    <![CDATA[lecm-document:subject-assoc-ref]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>formInputToValue</name>
@@ -5187,7 +5222,7 @@ if(doc){
                                                                             <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-errands:coexecutors-assoc]]></value>
+                                                                                    <![CDATA[lecm-errands:coexecutors-assoc-ref]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputToValue</name>
@@ -6593,7 +6628,7 @@ if (document != null) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Создать дочернее поручение]]></value>
+                                                                <value><![CDATA[Создать подчиненное поручение]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionIsSystemFormConnection</name>
@@ -6659,7 +6694,7 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>formInputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-document:subject-assoc]]></value>
+                                                                                    <![CDATA[lecm-document:subject-assoc-ref]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>formInputToValue</name>
@@ -7408,7 +7443,7 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-errands:coexecutors-assoc]]></value>
+                                                                                    <![CDATA[lecm-errands:coexecutors-assoc-ref]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputToValue</name>
