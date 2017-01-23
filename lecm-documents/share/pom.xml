@@ -29,6 +29,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
         </dependency>-->
+		<dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>share</artifactId>
+            <classifier>classes</classifier>
+        </dependency>
         <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-web-framework-commons</artifactId>
