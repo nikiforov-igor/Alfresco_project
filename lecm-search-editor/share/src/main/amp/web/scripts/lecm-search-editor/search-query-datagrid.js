@@ -350,7 +350,7 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
         },
 
         _setupPaginatior: function () {
-            LogicECM.module.ARM.DataGrid.superclass._setupPaginatior.call(this);
+            LogicECM.module.SearchQueries.DataGrid.superclass._setupPaginatior.call(this);
             if (this.widgets.paginator) {
                 var handlePagination = function (state, me) {
                     me.pageLoading = true;
