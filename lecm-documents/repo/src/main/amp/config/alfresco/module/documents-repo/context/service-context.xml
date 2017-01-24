@@ -236,7 +236,6 @@
                 <value>alfresco/module/documents-repo/models/lecm-document-br-items.xml</value>
                 <value>alfresco/module/documents-repo/dictionaries/lecm-document-nt-items.xml</value>
                 <value>alfresco/module/documents-repo/dictionaries/lecm-connection-types-items.xml</value>
-                <value>alfresco/module/documents-repo/dictionaries/lecm-connection-available-types-items.xml</value>
 		    </list>
 	    </property>
     </bean>
