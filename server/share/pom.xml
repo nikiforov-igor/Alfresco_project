@@ -228,13 +228,6 @@
 			<type>amp</type>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.workflow.reservation</groupId>
-			<artifactId>reservation-share</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.workflow</groupId>
 			<artifactId>workflow-share</artifactId>
 			<version>${platform.version}</version>
@@ -592,11 +585,6 @@
 							<type>amp</type>
 						</overlay>
 						<overlay>
-							<groupId>ru.it.lecm.workflow.reservation</groupId>
-							<artifactId>reservation-share</artifactId>
-							<type>amp</type>
-						</overlay>
-						<overlay>
 							<groupId>ru.it.lecm.workflow</groupId>
 							<artifactId>workflow-share</artifactId>
 							<type>amp</type>
@@ -776,6 +764,13 @@
                     <scope>runtime</scope>
                     <type>amp</type>
                 </dependency>
+				<dependency>
+					<groupId>ru.it.lecm.workflow.reservation</groupId>
+					<artifactId>reservation-share</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
             </dependencies>
             <build>
                 <plugins>
