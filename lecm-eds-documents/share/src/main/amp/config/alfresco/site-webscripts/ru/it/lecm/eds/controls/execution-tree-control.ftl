@@ -6,7 +6,7 @@
     function init() {
         LogicECM.module.Base.Util.loadResources([
                     'scripts/lecm-documents/graph-tree-control.js',
-                    'scripts/lecm-errands/controls/errands-tree-control.js'
+                    'scripts/lecm-eds-documents/execution-tree-control.js'
                 ], [
                     'css/lecm-documents/graph-view-control.css'
                 ],
@@ -14,7 +14,7 @@
     }
 
     function createControl() {
-        new LogicECM.module.Errands.TreeControl("${fieldHtmlId}").setOptions({
+        new LogicECM.module.ExecutionTreeControl("${fieldHtmlId}").setOptions({
             documentNodeRef: "${form.arguments.itemId}",
             fieldId: "${field.configName}",
             formId: "${args.htmlid}"
@@ -25,10 +25,10 @@
 })();
 //]]></script>
 
-<div class="control errands-tree-control viewmode">
+<div class="control execution-tree-control viewmode">
     <span id="${fieldHtmlId}"></span>
     <div class="connections-list">
-        <div id="${fieldHtmlId}-errands-graph-tree" class="graph-tree">
+        <div id="${fieldHtmlId}-execution-graph-tree" class="graph-tree">
             <div class ="yui-skin-sam">
                 <div id="${fieldHtmlId}-expandable-table"> </div>
             </div>

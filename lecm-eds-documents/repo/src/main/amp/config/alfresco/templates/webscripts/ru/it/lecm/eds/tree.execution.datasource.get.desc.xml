@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Get Connections</shortname>
+	<description>Get Connections</description>
+	<url>/lecm/eds/tree/execution/datasource?documentNodeRef={documentNodeRef}</url>
+	<authentication runas="admin">user</authentication>
+	<format default="json"/>
+</webscript>

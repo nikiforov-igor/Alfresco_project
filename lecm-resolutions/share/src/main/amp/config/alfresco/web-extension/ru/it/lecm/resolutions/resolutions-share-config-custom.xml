@@ -361,7 +361,7 @@
                     <field id="lecm-resolutions:limitation-date" set="limitation-date"  mandatory="true"/>
 
                     <field id="errands-list" set="execution">
-                        <control template="/ru/it/lecm/errands/controls/errands-tree-control.ftl"/>
+                        <control template="/ru/it/lecm/eds/controls/execution-tree-control.ftl"/>
                     </field>
 
                     <field id="lecm-resolutions:reviewers-assoc" set="reviewers">

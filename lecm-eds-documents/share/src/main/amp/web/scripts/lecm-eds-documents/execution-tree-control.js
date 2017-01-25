@@ -34,24 +34,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
  */
 LogicECM.module = LogicECM.module || {};
 
-/**
- * LogicECM Base module namespace.
- *
- * @namespace LogicECM
- * @class LogicECM.module.Base
- */
-
-LogicECM.module.Errands = LogicECM.module.Errands || {};
-
 (function () {
     var Dom = YAHOO.util.Dom;
 
-    LogicECM.module.Errands.TreeControl = function (htmlId) {
-        LogicECM.module.Errands.TreeControl.superclass.constructor.call(this, "LogicECM.module.Errands.TreeControl", htmlId, ["button", "container"]);
+    LogicECM.module.ExecutionTreeControl = function (htmlId) {
+        LogicECM.module.ExecutionTreeControl.superclass.constructor.call(this, "LogicECM.module.ExecutionTreeControl", htmlId, ["button", "container"]);
         return this;
     };
 
-    YAHOO.extend(LogicECM.module.Errands.TreeControl, Alfresco.component.Base,
+    YAHOO.extend(LogicECM.module.ExecutionTreeControl, Alfresco.component.Base,
         {
             options: {
                 documentNodeRef: null,
@@ -59,14 +50,15 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                 fieldId: null
             },
 
+            folerUrl: Alfresco.constants.PROXY_URI + "/lecm/eds/tree/execution/datasource?documentNodeRef={documentNodeRef}",
             receivedItems: {},
 
             onReady: function () {
                 if (this.options.documentNodeRef) {
                     this.receivedItems[this.options.documentNodeRef] = 0;
-                    var folerUrl = Alfresco.constants.PROXY_URI + "/lecm/document/connections/api/tree-datasource?documentNodeRef="
-                        + this.options.documentNodeRef + "&linkedDocTypes=lecm-errands:document&onlyDirect=true&isErrandCard=true&isFirstLayer=true";
-                    this.layerByLayer(folerUrl, this.id + "-expandable-table");
+                    this.layerByLayer(YAHOO.lang.substitute(this.folerUrl, {
+                        documentNodeRef: this.options.documentNodeRef
+                    }), this.id + "-expandable-table");
                 }
 
                 LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
@@ -117,12 +109,10 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                                     'onerror="this.src = \'/share/res/images/lecm-documents/type-icons/default_document.png\';"> </img>';
 
                                 var linkBlock = '<span class="link-span' + (!oRecord._oData.hasAccess ? ' dont-have-access' : '') + '">';
-                                var directionIconSpan = '<span class="connection-direction ' + (oRecord._oData.direction || '') + '"> </span>';
-                                linkBlock += (oRecord._oData.connectionType ? '<p class="connectionType">' + oRecord._oData.connectionType + '</p>' : '');
                                 linkBlock += '<a target="_blank" href="' + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + nodeRef + '" >' + oData + '</a>';
                                 linkBlock += (oRecord._oData.status ? '<p class="connectionType">' + Alfresco.util.message('msg.status') + ': ' + oRecord._oData.status + '</p>' : '') + '</span>';
 
-                                var descrBlock = '<div class="item-description">' + directionIconSpan + docTypeIcon + linkBlock + '</div>';
+                                var descrBlock = '<div class="item-description">' + docTypeIcon + linkBlock + '</div>';
                                 el.innerHTML = descrBlock || '--[ No description ]--';
                                 if (previousDocRef) {
                                     if (!me.receivedItems[nodeRef])
@@ -146,12 +136,11 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                             var tabId = 'tab-' + nodeRef;
                             linerEl.innerHTML = '<div class="yui-inner-div" id="' + tabId + '"></div>';
                             var pagId = 'pag-' + nodeRef;
-                            var fUrl = Alfresco.constants.PROXY_URI + "/lecm/document/connections/api/tree-datasource?documentNodeRef=" + nodeRef + "&isErrandCard=true"
-                                + "&exclErrands=true&onlySystem=true&connectionTypes=onBasis"
-                                + ((oData.data._oData.previosDocRef) ? "&previosDocRef=" + oData.data._oData.previosDocRef : "");
 
                             YAHOO.util.Event.onContentReady(tabId, function () {
-                                me.layerByLayer(fUrl, tabId, pagId)
+                                me.layerByLayer(YAHOO.lang.substitute(me.folerUrl, {
+                                    documentNodeRef: nodeRef
+                                }), tabId, pagId)
                             }, true);
                         }
                     }
