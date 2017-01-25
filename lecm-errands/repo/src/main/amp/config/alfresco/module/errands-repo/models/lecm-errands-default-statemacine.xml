@@ -4566,7 +4566,7 @@ if(doc){
                                                             <property>
                                                                 <name>workflowLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Запросить изменение срока поручения]]></value>
+                                                                    <![CDATA[Запросить изменение срока исполнения]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -6945,7 +6945,7 @@ if (document != null) {
                                                             <property>
                                                                 <name>workflowLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Запросить изменение срока поручения]]></value>
+                                                                    <![CDATA[Запросить изменение срока исполнения]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
