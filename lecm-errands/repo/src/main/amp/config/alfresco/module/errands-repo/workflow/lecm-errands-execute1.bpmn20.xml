@@ -14,6 +14,8 @@
                             var document = bpm_package.children[0];
                             var currentUser = orgstructure.getCurrentEmployee();
                             if (document) {
+                                var report_required  = document.properties["lecm-errands:report-required"];
+                                if(report_required){
                                 var table = document.assocs["lecm-errands-ts:execution-reports-assoc"][0];
 								if (table) {
 								    var report = null;
