@@ -26,7 +26,7 @@
                                         document.properties["lecm-errands:project-report-ref"] = report.nodeRef.toString();
                                     }
                                     var reportText = execution.getVariable("lecmErrandWf_execute_1ReportText");
-                                    var report_required  = document.properties["lecm-errands:report-required"];
+                                    var reportRequired  = document.properties["lecm-errands:report-required"];
                                     var isExecute = lecmErrandWf_execute_1Execute;
                                     var closeChild = lecmErrandWf_execute_1CloseChild;
 
@@ -160,7 +160,7 @@
                                                 }
                                             });
                                         }
-                                        if (!report_required) {
+                                        if (!reportRequired) {
                                             report.properties["lecm-errands-ts:execution-report-status"] = "ACCEPT";
                                             execution.setVariable("executeResult", "executed");
                                             document.properties["lecm-errands:execute-result"] = "executed";
@@ -168,13 +168,13 @@
                                             recipients = [author, controller];
                                         } else {
                                             report.properties["lecm-errands-ts:execution-report-status"] = "ONCONTROL";
-                                            var report_recipient_type = document.properties["lecm-errands:report-recipient-type"];
+                                            var reportRecipientType = document.properties["lecm-errands:report-recipient-type"];
                                             notificationTemplate = "ERRANDS_EXECUTED_WITH_REPORT";
-                                            if (report_recipient_type == "AUTHOR" && author) {
+                                            if (reportRecipientType == "AUTHOR" && author) {
                                                 recipients = [author];
-                                            }else if (report_recipient_type == "CONTROLLER" && controller) {
+                                            }else if (reportRecipientType == "CONTROLLER" && controller) {
                                                 recipients = [controller];
-                                            }else if (report_recipient_type == "AUTHOR_AND_CONTROLLER") {
+                                            }else if (reportRecipientType == "AUTHOR_AND_CONTROLLER") {
                                                 if (author) {
                                                     recipients.push(author);
                                                 }
