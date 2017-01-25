@@ -66,7 +66,7 @@
 
         <receiveTask id="requestDueDateChangeReceiveTask" name="Receive Task"></receiveTask>
 
-        <userTask id="changeRequestedDueDate" name="Перенести срок поручения" activiti:assignee="${requestDueDateChangeAssignee}" activiti:formKey="lecmErrandWf:requestDueDateChangeTask_1">
+        <userTask id="changeRequestedDueDate" name="Перенести срок исполнения" activiti:assignee="${requestDueDateChangeAssignee}" activiti:formKey="lecmErrandWf:requestDueDateChangeTask_1">
             <extensionElements>
                 <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
