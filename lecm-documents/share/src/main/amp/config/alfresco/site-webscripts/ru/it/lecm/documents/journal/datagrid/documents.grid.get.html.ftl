@@ -16,7 +16,7 @@
 
 <#assign id = args.htmlid>
 
-<div class="yui-t1" id="contracts-grid">
+<div class="yui-t1" id="documents-grid">
     <div id="yui-main-2">
         <div class="yui-b datagrid-content" id="alf-content">
         <@grid.datagrid id=id showViewForm=true>
@@ -34,7 +34,7 @@
 	                    bubblingLabel: "documents-journal",
 	                    attributeForShow: "lecm-document:present-string"
 	                }).setMessages(${messages});
-	
+
 	                YAHOO.Bubbling.fire("activeGridChanged",
 	                        {
 	                            datagridMeta: {
@@ -45,16 +45,16 @@
 	                                    filter: '+PATH:"' + LogicECM.module.DocumentsJournal.SETTINGS.draftsPath + '//*"'
 	                                            + ' OR +PATH:"' + LogicECM.module.DocumentsJournal.SETTINGS.documentsPath + '//*"'
 	                                }
-	
+
 	                            },
 	                            bubblingLabel: "documents-journal"
 	                        });
 	            }
-	
+
 	            function init() {
 	                createDatagrid();
 	            }
-	
+
 	            YAHOO.util.Event.onDOMReady(init);
 			})();
             //]]></script>

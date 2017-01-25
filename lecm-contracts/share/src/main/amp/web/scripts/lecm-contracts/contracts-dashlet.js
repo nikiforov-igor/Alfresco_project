@@ -20,7 +20,7 @@ LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
     var PREFERENCES_CONTRACTS = "ru.it.lecm.contracts",
         PREF_FILTER = ".dashlet-contracts-filter",
         PREF_RANGE = ".dashlet-contracts-range";
-    
+
     LogicECM.module.Contracts.dashlet.Contracts = function Contracts_constructor(htmlId)
     {
         LogicECM.module.Contracts.dashlet.Contracts.superclass.constructor.call(this, "LogicECM.module.Contracts.dashlet.Contracts", htmlId, ["button", "container"]);
@@ -80,7 +80,7 @@ LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
                 this.widgets.range.value = "7";
                 this.widgets.user.set("label", this.msg("filter.my"));
                 this.widgets.user.value = "my";
-                
+
                 this.services.preferences.request(this.buildPreferences(),
                     {
                         successCallback:

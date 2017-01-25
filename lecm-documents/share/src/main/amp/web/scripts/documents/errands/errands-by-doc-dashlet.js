@@ -277,7 +277,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
              * List load failed
              * @method onListLoadFailed
              */
-            onListLoadFailed: function Contracts_onListLoadFailed() {
+            onListLoadFailed: function () {
                 /*Dom.setStyle(this.id + "-issued-errands-loading", "visibility", "hidden");*/
                 if (this.errandsList) {
                     this.errandsList.innerHTML = '<div class="detail-list-item first-item last-item">' + this.msg("label.load-failed") + '</div>';

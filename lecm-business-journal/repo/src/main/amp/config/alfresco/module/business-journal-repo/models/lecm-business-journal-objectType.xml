@@ -162,13 +162,6 @@
                 <property name="lecm-busjournal:objectType-template">отсутствие</property>
                 <property name="lecm-busjournal:objectType-list-template">отсутствие</property>
             </item>
-            <item name="cm:Договор" type="lecm-busjournal:objectType">
-                <property name="cm:name">Договор</property>
-                <property name="lecm-busjournal:objectType-code">CONTRACT</property>
-                <property name="lecm-busjournal:objectType-class">lecm-contract:document</property>
-                <property name="lecm-busjournal:objectType-template">{cm:name}</property>
-                <property name="lecm-busjournal:objectType-list-template">автор : {!~AUTHOR}</property>
-            </item>
         </items>
     </item>
 </items>

@@ -25,7 +25,7 @@
     <bean id="documents.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
           depends-on="dictionaryBootstrap,
                         documents.dictionaries.LogicEcmModelsBootstrap,
-                        links.LogicEcmContractsBootstrap,
+                        links.LogicEcmBootstrap,
                         ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsAspectBootstrap,
                         documents.LogicEcmModelsConnectionAspectBootstrap,
                         documents-members.LogicEcmModelsBootstrap,

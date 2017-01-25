@@ -10,15 +10,15 @@
 
 <@markup id="html">
 	<#assign id = args.htmlid>
-	
-	<div class="yui-t1" id="contracts-grid">
+
+	<div class="yui-t1" id="documents-grid">
 		<div id="yui-main-2">
 			<div class="yui-b datagrid-content" id="alf-content">
 			<@grid.datagrid id=id showViewForm=true>
 				<script type="text/javascript">//<![CDATA[
 				(function(){
 					function createDatagrid() {
-		
+
 		                new LogicECM.module.Documents.DataGrid('${id}').setOptions({
 		                    usePagination: true,
 		                    useDynamicPagination:true,
@@ -52,18 +52,18 @@
 		                    excludeColumns: <#if excludedColumns?? && (excludedColumns?length > 0)>"${excludedColumns}".split(",")<#else>[]</#if>,
 		                    nowrapColumns: <#if nowrapColumns?? && (nowrapColumns?length > 0)>"${nowrapColumns}".split(",")<#else>[]</#if>
 		                }).setMessages(${messages});
-		
+
 		                var query = <#if query?? && (query?length > 0)>"${query}"<#else>""</#if>;
-		
+
 		                var filter = _generatePropertyFilterStr(query.length > 0 ? query : LogicECM.module.Documents.FILTER , "${filterProperty}");
 		                var archiveFolders = _generatePathsFilterStr(LogicECM.module.Documents.SETTINGS.archivePath);
-		
+
 		                var formId = <#if formId?? && (formId?length > 0)>
 		                                (("_" + "${formId}").split(" ").join("_"))
 		                            <#else>
 		                                ""
 		                            </#if>;
-		
+
 		                var statusesFilter = "";
 		                <#if includedStatuses?? && (includedStatuses?length > 0)>
 		                    statusesFilter = _generatePropertyFilterStr ("${includedStatuses}", "lecm-statemachine:status");
@@ -85,18 +85,18 @@
 		                                        + ' OR PATH:"' + LogicECM.module.Documents.SETTINGS.documentPath + '//*"'
 		                                        + ((archiveFolders.length > 0)? (" OR " + archiveFolders + "") : "") + ')'
 		                                        + (statusesFilter.length > 0 ? ' AND ' + statusesFilter : '')
-		
+
 		                            }
 		                        },
 		                        bubblingLabel: "${bubblingLabel!"documents"}"
 		                    });
 		                });
 					}
-		
+
 					function init() {
 						createDatagrid();
 					}
-		
+
 					YAHOO.util.Event.onDOMReady(init);
 				})();
 				//]]></script>
