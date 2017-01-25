@@ -4,5 +4,5 @@
     <url>/lecm/orgstructure/api/getUsersInfo</url>
     <format default="json">extension</format>
     <authentication>admin</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 </webscript>

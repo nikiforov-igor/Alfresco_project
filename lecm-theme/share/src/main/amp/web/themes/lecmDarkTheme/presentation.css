@@ -242,22 +242,22 @@ span.wrapper-title {
 /* Site-wide Styles */
 
 @font-face {
-    font-family: 'Open Sans';
-    font-style: normal;
-    font-weight: 400;
-    src: url(../../js/alfresco/css/opensans.woff) format('woff');
+	font-family: 'Open Sans Old';
+	font-style: normal;
+	font-weight: 400;
+	src: url(../../font/opensans.woff) format('woff');
 }
 @font-face {
-    font-family: 'Open Sans Bold';
-    font-style: normal;
-    font-weight: 600;
-    src: url(../../js/alfresco/css/opensansbold.woff) format('woff');
+	font-family: 'Open Sans Bold Old';
+	font-style: normal;
+	font-weight: 600;
+	src: url(../../font/opensansbold.woff) format('woff');
 }
 @font-face {
-    font-family: 'Open Sans Condensed';
-    font-style: normal;
-    font-weight: 300;
-    src: url(../../js/alfresco/css/opensanscondensed.woff) format('woff');
+	font-family: 'Open Sans Condensed Old';
+	font-style: normal;
+	font-weight: 300;
+	src: url(../../font/opensanscondensed.woff) format('woff');
 }
 
 button::-moz-focus-inner,
@@ -295,10 +295,19 @@ input[type="file"] > input[type="button"]::-moz-focus-inner
     color: #333;
 }
 
+.sticky-wrapper,
+.sticky-footer,
+.yui-overlay,
+#lightbox,
+#ygddfdiv {
+	font-family: Arial, sans-serif;
+	font-size: 81%;
+}
+
 .sticky-wrapper h1,
 .yui-overlay h1
 {
-    font-family: Open Sans Condensed, Arial, sans-serif;
+    font-family: Open Sans Condensed Old, Arial, sans-serif;
     font-size: 230%;
     font-weight: normal;
     top: -4px;
@@ -750,7 +759,7 @@ span.navigation-separator-alt
 
 .create-content-mgr .heading
 {
-    font-family: Open Sans Condensed, Arial, sans-serif;
+    font-family: Open Sans Condensed Old, Arial, sans-serif;
     font-size: 230% !important;
     padding: 0.5em 0.2em 0 !important;
 }
@@ -2350,35 +2359,68 @@ div.currentValueDisplay,
     margin-top: 15px;
 }
 
-.alf-header {
+.yui-skin-lecmDarkTheme.alfresco-share .share-header-title > div.widgets {
+  background-color: inherit;
+}
+
+.yui-skin-lecmDarkTheme.alfresco-share h1.alfresco-header-Title span.alfresco-header-Title__text,
+.yui-skin-lecmDarkTheme.alfresco-share h1.alfresco-header-Title span.alfresco-header-Title__text a {
+  font-family: Open Sans Condensed Old, Arial, sans-serif;
+  line-height: 40px;
+  font-size: 32px;
+  margin-top: -6px;
+}
+
+.yui-skin-lecmDarkTheme.alfresco-share .share-header-title {
+	border: none;
+}
+
+.yui-skin-lecmDarkTheme.alfresco-share .alfresco-header-Header {
     position: fixed;
     width: 100%;
     z-index: 99999; /*Ну уж точно поверх всех*/ /*кроме диалоговых окон*/
     margin-left: 0;
     margin-right: 0;
+	top: 0;
 }
 
-.yui-skin-lecmDarkTheme.alfresco-share .alf-header .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
+.yui-skin-lecmDarkTheme.alfresco-share .share-header-title {
+	margin-top: 25px;
+}
+
+.yui-skin-lecmDarkTheme.alfresco-share #share-header {
+	min-height: 66px;
+}
+
+.yui-skin-lecmDarkTheme.alfresco-share .share-header-title .alfresco-layout-LeftAndRight__right {
+    float: left;
+}
+
+.yui-skin-lecmDarkTheme.alfresco-share .alfresco-header-Header .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
     padding: 1px 5px 5px;
 }
-.yui-skin-lecmDarkTheme.alfresco-share .alf-header .alf-search-box .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
+.yui-skin-lecmDarkTheme.alfresco-share .alfresco-header-Header .alf-search-box .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
     padding: 3px 2px 0;
     margin-right: 2px;
 }
-.yui-skin-lecmDarkTheme.alfresco-share .alf-header .alf-search-box .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem.dijitMenuItemHover {
+.yui-skin-lecmDarkTheme.alfresco-share .alfresco-header-Header .alf-search-box .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem.dijitMenuItemHover {
     background: #cbcbcb;
 }
-.yui-skin-lecmDarkTheme .alf-header div.dijitMenuItem span {
+.yui-skin-lecmDarkTheme .alfresco-header-Header div.dijitMenuItem span {
     display: inline-block;
     vertical-align: middle;
     line-height: 25px;
 }
-.alf-header div.dijitMenuItem span,
-.alf-header div.dijitMenuItem span.alf-menu-bar-label-node a {
+.alfresco-header-Header div.dijitMenuItem span,
+.alfresco-header-Header div.dijitMenuItem span.alf-menu-bar-label-node a {
     font-family: arial, helvetica, sans-serif;
 }
-.yui-skin-lecmDarkTheme.alfresco-share .alf-header .alf-menu-arrow {
-    width: 12px;
+.yui-skin-lecmDarkTheme.alfresco-share .alfresco-header-Header .alf-menu-arrow {
+    font-size: 25px;
+}
+
+.yui-skin-lecmDarkTheme.alfresco-share .alfresco-header-Header .alfresco-menus-AlfMenuBarPopup__text-wrapper {
+	padding-bottom: 3px;
 }
 
 .alfresco-share .logo {
@@ -2387,10 +2429,6 @@ div.currentValueDisplay,
 
 #share-header .alf-menu-title {
     margin-top: 42px !important;
-}
-
-#share-header .title-menu {
-    margin-top: 48px !important;
 }
 
 #no_menu_page #bd #lecm-page {

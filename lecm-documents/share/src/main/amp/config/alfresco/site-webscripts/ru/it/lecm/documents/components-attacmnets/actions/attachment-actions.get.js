@@ -13,7 +13,7 @@ function main() {
 	AlfrescoUtil.param('nodeRef');
 	AlfrescoUtil.param('site', null);
 	AlfrescoUtil.param('container', 'documentLibrary');
-	args.view = "attachment";
+	args.view = "details";
 
 	var attachmentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site,
 		{

@@ -8,7 +8,6 @@ package ru.it.lecm.operativestorage.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -55,6 +54,8 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	private DocumentMembersService documentMembersService;
 	private DocumentAttachmentsService documentAttachmentsService;
 	private BusinessJournalService businessJournalService;
+	
+	private NodeRef settingsNode;
 
 
 	private final static String DOCUMENT_TEMPLATE = "Документ #mainobject полностью удален из системы";
@@ -94,27 +95,13 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	public void setPermissionService(PermissionService permissionService) {
 		this.permissionService = permissionService;
 	}
-
-	public void init() {
+	
+	@Override
+	public void initServiceImpl() {
 		if (getSettings() == null) {
-			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-			transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-
-				@Override
-				public Object execute() throws Throwable {
-					AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-
-						@Override
-						public Object doWork() throws Exception {
-							PropertyMap props = new PropertyMap();
-							props.put(PROP_OPERATIVE_STORAGE_CENRALIZED, true);
-							createNode(getOperativeStorageFolder(), TYPE_OPERATIVE_STORAGE_SETTING, OPERATIVE_STORAGE_GLOBAL_SETTING_NAME, props);
-							return null;
-						}
-					});
-					return null;
-				}
-			}, false, true);
+			PropertyMap props = new PropertyMap();
+			props.put(PROP_OPERATIVE_STORAGE_CENRALIZED, true);
+			settingsNode = createNode(getOperativeStorageFolder(), TYPE_OPERATIVE_STORAGE_SETTING, OPERATIVE_STORAGE_GLOBAL_SETTING_NAME, props);				
 		}
 	}
 
@@ -405,7 +392,10 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 	@Override
 	public NodeRef getSettings() {
-		return nodeService.getChildByName(getOperativeStorageFolder(), ContentModel.ASSOC_CONTAINS, OPERATIVE_STORAGE_GLOBAL_SETTING_NAME);
+		if (settingsNode == null) {
+			settingsNode = nodeService.getChildByName(getOperativeStorageFolder(), ContentModel.ASSOC_CONTAINS, OPERATIVE_STORAGE_GLOBAL_SETTING_NAME);
+		}
+		return settingsNode;
 	}
 
 	@Override

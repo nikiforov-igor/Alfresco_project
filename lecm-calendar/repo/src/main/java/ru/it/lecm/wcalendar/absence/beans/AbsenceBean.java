@@ -50,20 +50,21 @@ public class AbsenceBean extends AbstractCommonWCalendarBean implements IAbsence
             PropertyCheck.mandatory(this, "transactionService", transactionService);
             PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
             PropertyCheck.mandatory(this, "delegationService", delegationService);
+//TODO: Сделать инициализацию переменной в onBootstrap и потом уже не искать по репозиторию
 
-            // Создание контейнера (если не существует).
-            // TODO: DONE Ввиду "устранения" транзакции в AbstractCommonWCalendarBean 
-            // init метод. Транзакции нет. Создаём.
-            // RunAsSystem есть в createWCalendarContainer();
-            if (getWCalendarContainer() == null) {
-                transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-                    @Override
-                    public Object execute() throws Throwable {
-                        createWCalendarContainer();
-                        return null;
-                    }
-                }, false, true);
-            }
+//            // Создание контейнера (если не существует).
+//            // TODO: DONE Ввиду "устранения" транзакции в AbstractCommonWCalendarBean 
+//            // init метод. Транзакции нет. Создаём.
+//            // RunAsSystem есть в createWCalendarContainer();
+//            if (getWCalendarContainer() == null) {
+//                transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+//                    @Override
+//                    public Object execute() throws Throwable {
+//                        createWCalendarContainer();
+//                        return null;
+//                    }
+//                }, false, true);
+//            }
         }
 
 	public void setDelegationService(IDelegation delegationService) {
@@ -219,7 +220,11 @@ public class AbsenceBean extends AbstractCommonWCalendarBean implements IAbsence
 
 	@Override
 	public NodeRef getContainer() {
-		return this.getWCalendarContainer();
+		NodeRef container = this.getWCalendarContainer();
+		if (container==null) {
+			container = this.createWCalendarContainer();
+		}
+		return container;
 	}
 
     @Override

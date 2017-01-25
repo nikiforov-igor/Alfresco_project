@@ -275,16 +275,7 @@
     </bean>
 
     <bean id="contractsInitiatorNotificationSchedule"
-          class="ru.it.lecm.contracts.schedule.InititatorEveryDayNotificationSchedule">
-        <property name="transactionMode">
-            <value>ISOLATED_TRANSACTIONS</value>
-        </property>
-        <property name="compensatingActionMode">
-            <value>IGNORE</value>
-        </property>
-        <property name="nodeService">
-            <ref bean="nodeService"/>
-        </property>
+          class="ru.it.lecm.contracts.schedule.InititatorEveryDayNotificationSchedule" parent="baseTransactionalSchedule">
         <property name="cronExpression">
             <value>0 0 3 */1 * ?</value>
         </property>
@@ -306,17 +297,8 @@
         <property name="triggerGroup">
             <value>contracts-notifications</value>
         </property>
-        <property name="scheduler">
-            <ref bean="schedulerFactory"/>
-        </property>
-        <property name="actionService">
-            <ref bean="ActionService"/>
-        </property>
-        <property name="transactionService">
-            <ref bean="TransactionService"/>
-        </property>
-        <property name="runAsUser">
-            <value>System</value>
+        <property name="actionName">
+            <value>contractsInitiatorNotificationExecutor</value>
         </property>
         <property name="contractsService" ref="contractService"/>
     </bean>
@@ -333,16 +315,7 @@
     </bean>
 
     <bean id="contractsStageDateNotificationSchedule"
-          class="ru.it.lecm.contracts.schedule.ContractStageDateNotificationSchedule">
-        <property name="transactionMode">
-            <value>ISOLATED_TRANSACTIONS</value>
-        </property>
-        <property name="compensatingActionMode">
-            <value>IGNORE</value>
-        </property>
-        <property name="nodeService">
-            <ref bean="nodeService"/>
-        </property>
+          class="ru.it.lecm.contracts.schedule.ContractStageDateNotificationSchedule" parent="baseTransactionalSchedule">
         <property name="onServerStart">
             <value>true</value>
         </property>
@@ -364,17 +337,8 @@
         <property name="triggerGroup">
             <value>contracts-stage-notifications</value>
         </property>
-        <property name="scheduler">
-            <ref bean="schedulerFactory"/>
-        </property>
-        <property name="actionService">
-            <ref bean="ActionService"/>
-        </property>
-        <property name="transactionService">
-            <ref bean="TransactionService"/>
-        </property>
-        <property name="runAsUser">
-            <value>System</value>
+        <property name="actionName">
+            <value>contractsStageDateNotificationExecutor</value>
         </property>
         <property name="documentService" ref="documentService"/>
     </bean>
@@ -474,17 +438,6 @@
         </property>
     </bean>
 
-    <bean id="contracts.view.bootstrap" class="ru.it.lecm.base.dbviews.DBViewBootstrap"
-          parent="lecm.view.bootstrap" depends-on="contracts.LogicEcmContractsBootstrap">
-        <property name="models">
-            <list>
-                <value>lecm-contract:document</value>
-                <value>lecm-additional-document:additionalDocument</value>
-                <value>lecm-contract-table-structure:stage</value>
-            </list>
-        </property>
-    </bean>
-
     <bean id="contracts.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
           reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
@@ -518,7 +471,7 @@
 
     <bean id="contracts.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="arm.settings.LogicEcmBootstrap">
-        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки"/>
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/arm/contracts-settings-arm.xml</value>
@@ -567,18 +520,13 @@
     </bean>
 
     <bean id="contractStageEndDateNotificationSchedule"
-          class="ru.it.lecm.contracts.schedule.ContractStageEndDateNotificationSchedule">
-        <property name="transactionMode" value="ISOLATED_TRANSACTIONS"/>
-        <property name="compensatingActionMode" value="IGNORE"/>
+          class="ru.it.lecm.contracts.schedule.ContractStageEndDateNotificationSchedule" parent="baseTransactionalSchedule">
         <property name="cronExpression" value="0 45 3 * * ?"/>
         <property name="jobName" value="lecm-contracts-stage-end-notifications-job"/>
         <property name="jobGroup" value="lecm-contracts-stage-end-notifications"/>
         <property name="triggerName" value="lecm-contracts-stage-end-notifications-trigger"/>
         <property name="triggerGroup" value="lecm-contracts-stage-end-notifications"/>
-        <property name="scheduler" ref="schedulerFactory"/>
-        <property name="actionService" ref="ActionService"/>
-        <property name="transactionService" ref="TransactionService"/>
-        <property name="runAsUser" value="System"/>
+        <property name="actionName" value="contractStageEndDateNotificationExecutor"/>
         <property name="documentService" ref="documentService"/>
         <property name="notificationsService" ref="notificationsService"/>
     </bean>

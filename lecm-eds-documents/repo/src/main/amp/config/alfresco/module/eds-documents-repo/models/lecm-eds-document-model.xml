@@ -10,7 +10,6 @@
         <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
         <import uri="http://www.it.ru/logicECM/document/dictionaries/docType/1.0" prefix="lecm-doc-dic-dt"/>
-        <import uri="http://www.it.ru/logicECM/document/dictionaries/fileRegister/1.0" prefix="lecm-doc-dic-fr"/>
         <import uri="http://www.it.ru/logicECM/operative-storage/1.0" prefix="lecm-os"/>
     </imports>
 

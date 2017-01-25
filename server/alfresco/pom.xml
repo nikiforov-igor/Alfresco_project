@@ -117,21 +117,18 @@
 			<groupId>ru.it.lecm.base</groupId>
 			<artifactId>base-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.orgstructure</groupId>
 			<artifactId>orgstructure-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.orgstructure.export-import</groupId>
 			<artifactId>orgstructure-export-import-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
@@ -140,77 +137,66 @@
 			<!-- <artifactId>jasperforms-repo</artifactId> -->
 			<artifactId>lecm-reports-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.dictionary</groupId>
 			<artifactId>dictionary-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.contracts</groupId>
 			<artifactId>contracts-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.statemachine</groupId>
 			<artifactId>statemachine-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.statemachine.editor</groupId>
 			<artifactId>statemachine-editor-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.delegation</groupId>
 			<artifactId>lecm-delegation-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.subscriptions</groupId>
 			<artifactId>subscriptions-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.notifications</groupId>
 			<artifactId>notifications-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.notifications.email</groupId>
 			<artifactId>notifications-email-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.notifications.dashlet</groupId>
 			<artifactId>notifications-dashlet-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.notifications.channel.active</groupId>
 			<artifactId>notifications-active-channel-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
@@ -218,55 +204,47 @@
 			<artifactId>business-journal-repo</artifactId>
 			<version>${platform.version}</version>
 			<type>amp</type>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.calendar</groupId>
 			<artifactId>lecm-calendar-repo</artifactId>
 			<version>${platform.version}</version>
 			<type>amp</type>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.security</groupId>
 			<artifactId>lecm-security-repo</artifactId>
 			<version>${platform.version}</version>
 			<type>amp</type>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.documents</groupId>
 			<artifactId>documents-repo</artifactId>
 			<version>${platform.version}</version>
 			<type>amp</type>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.regnumbers</groupId>
 			<artifactId>lecm-regnumbers-repo</artifactId>
 			<version>${platform.version}</version>
 			<type>amp</type>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.contractors</groupId>
 			<artifactId>lecm-contractors-repo</artifactId>
 			<version>${platform.version}</version>
 			<type>amp</type>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.reports-editor</groupId>
 			<artifactId>reports-editor-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.errands</groupId>
 			<artifactId>errands-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
@@ -274,20 +252,17 @@
 			<artifactId>signed-docflow-repo</artifactId>
 			<version>${platform.version}</version>
 			<type>amp</type>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.permission-exp</groupId>
 			<artifactId>permission-exp-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.documents-removal</groupId>
 			<artifactId>documents-removal-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 
@@ -295,119 +270,102 @@
             <groupId>ru.it.lecm.eds-documents</groupId>
             <artifactId>eds-documents-repo</artifactId>
             <version>${platform.version}</version>
-            <scope>runtime</scope>
             <type>amp</type>
         </dependency>
 		<dependency>
 			<groupId>ru.it.lecm.arm</groupId>
 			<artifactId>arm-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.workflow.reservation</groupId>
 			<artifactId>reservation-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.workflow</groupId>
 			<artifactId>workflow-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.workflow.signing</groupId>
 			<artifactId>signing-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.workflow.review</groupId>
 			<artifactId>review-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.workflow.approval</groupId>
 			<artifactId>approval-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.group-actions</groupId>
 			<artifactId>group-actions-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.model-editor</groupId>
 			<artifactId>model-editor-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.workflow.routes</groupId>
 			<artifactId>routes-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.user-profile</groupId>
 			<artifactId>lecm-user-profile-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.types-view</groupId>
 			<artifactId>types-view-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.barcode</groupId>
 			<artifactId>barcode-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.operative-storage</groupId>
 			<artifactId>operative-storage-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.events</groupId>
 			<artifactId>events-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.meetings</groupId>
 			<artifactId>meetings-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.search-editor</groupId>
 			<artifactId>search-editor-repo</artifactId>
 			<version>${platform.version}</version>
-			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
 		<dependency>
@@ -574,6 +532,19 @@
 							<overWriteSnapshots>true</overWriteSnapshots>
 						</configuration>
 					</execution>
+					<execution> 
+						<id>unpack</id> 
+							<phase>generate-sources</phase> 
+						<goals> 
+							<goal>unpack-dependencies</goal> 
+						</goals> 
+						<configuration> 
+							<includeTypes>war</includeTypes> 
+							<includeGroupIds>org.alfresco</includeGroupIds> 
+							<includeArtifactIds>alfresco</includeArtifactIds> 
+							<includes>META-INF/MANIFEST.MF</includes> 
+						</configuration> 
+					</execution>
 				</executions>
 				<dependencies>
 
@@ -605,17 +576,8 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.4</version>
+				<version>2.6</version>
 				<configuration>
-					<!--                    <archiveClasses>false</archiveClasses>
-					<webappDirectory>target/${webapp.name}</webappDirectory>
-					<warSourceExcludes>tools/**</warSourceExcludes>-->
-					<!--  Here is can control the order of overlay of your (WAR, AMP, etc.) dependencies
-				   | NOTE: At least one WAR dependency must be uncompressed first
-				   | NOTE: In order to have a dependency effectively added to the WAR you need to
-				   | explicitly mention it in the overlay section.
-				   | NOTE: First-win resource strategy is used by the WAR plugin
-					-->
 					<overlays>
 						<!-- Current project customizations -->
 						<overlay/>
@@ -627,6 +589,7 @@
 							<excludes>
 								<exclude>WEB-INF/lib/poi-*-beta2-20130720.jar</exclude>
 								<exclude>WEB-INF/lib/xmlbeans-2.3.0.jar</exclude>
+								<exclude>WEB-INF/lib/XmlSchema-1.4.5.jar</exclude>
 							</excludes>
 						</overlay>
 						<!-- Add / order your AMPs here -->
@@ -856,12 +819,16 @@
 							<type>amp</type>
 						</overlay>-->
 					</overlays>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+						<manifestFile>${project.build.directory}/dependency/META-INF/MANIFEST.MF</manifestFile>
+					</archive>
 				</configuration>
 				<dependencies>
 					<dependency>
 						<groupId>org.alfresco.maven.plugin</groupId>
 						<artifactId>alfresco-maven-plugin</artifactId>
-						<version>1.1.1</version>
+						<version>2.2.0</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -870,7 +837,7 @@
 			<plugin>
 				<groupId>org.codehaus.cargo</groupId>
 				<artifactId>cargo-maven2-plugin</artifactId>
-				<version>1.1.1</version>
+				<version>2.2.0</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -1046,6 +1013,7 @@
 									<excludes>
 										<exclude>WEB-INF/lib/poi-*-beta2-20130720.jar</exclude>
 										<exclude>WEB-INF/lib/xmlbeans-2.3.0.jar</exclude>
+										<exclude>WEB-INF/lib/XmlSchema-1.4.5.jar</exclude>
 									</excludes>
                                 </overlay>
                                 <!-- Add / order your AMPs here -->
@@ -1307,6 +1275,10 @@
                                     <type>amp</type>
                                 </overlay>
                             </overlays>
+							<archive>
+								<addMavenDescriptor>false</addMavenDescriptor>
+								<manifestFile>${project.build.directory}/dependency/META-INF/MANIFEST.MF</manifestFile>
+							</archive>
                         </configuration>
                         <dependencies>
                             <dependency>

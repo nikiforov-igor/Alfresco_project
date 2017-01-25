@@ -20,6 +20,8 @@ import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.secretary.SecretaryService;
 import ru.it.lecm.statemachine.bean.UserActionsService;
+import ru.it.lecm.statemachine.StatemachineModel;
+import ru.it.lecm.statemachine.bean.UserActionsService;
 
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.datatype.DatatypeConfigurationException;

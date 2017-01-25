@@ -3,6 +3,6 @@
     <description>Get experts from web service</description>
     <url>/lecm/experts/get/byUri</url>
     <authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
     <format default="json">extension</format>
 </webscript>

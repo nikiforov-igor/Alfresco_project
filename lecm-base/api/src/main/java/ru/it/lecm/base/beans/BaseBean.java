@@ -15,6 +15,8 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.extensions.surf.util.AbstractLifecycleBean;
 import ru.it.lecm.base.ServiceFolder;
 
 import java.io.Serializable;
@@ -22,11 +24,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
+import org.alfresco.repo.model.Repository;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 
 /**
  * User: AIvkin Date: 27.12.12 Time: 15:12
  */
-public abstract class BaseBean implements InitializingBean {
+public abstract class BaseBean extends AbstractLifecycleBean implements InitializingBean, LecmService {
 
     public static final String DICTIONARY_NAMESPACE = "http://www.it.ru/lecm/dictionary/1.0";
     public static final String LINKS_NAMESPACE = "http://www.it.ru/logicECM/links/1.0";
@@ -65,7 +69,17 @@ public abstract class BaseBean implements InitializingBean {
     protected ServiceRegistry serviceRegistry;
     protected AuthenticationService authService;
     protected LecmTransactionHelper lecmTransactionHelper;
+	protected LecmServicesRegistry lecmServicesRegistry;
+	protected Repository repository;
 
+	public void setRepository(Repository repository) {
+		this.repository = repository;
+	}
+
+	public void setLecmServicesRegistry(LecmServicesRegistry lecmServicesRegistry) {
+		this.lecmServicesRegistry = lecmServicesRegistry;
+	}
+	
     public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
         this.lecmTransactionHelper = lecmTransactionHelper;
     }
@@ -101,27 +115,28 @@ public abstract class BaseBean implements InitializingBean {
     }
 
     @Override
+	protected void onBootstrap(ApplicationEvent event)
+	{
+    	// NOOP
+	}
+    
+    @Override
+	protected void onShutdown(ApplicationEvent event)
+	{
+	    // NOOP
+	}
+    
+    @Override
     public void afterPropertiesSet() throws Exception {
-        //когда все проперти проинициализируются, мы пробежимся по карте с папками и создадим их все
-        final ServiceFolderStructureHelper serviceFolderStructureHelper = (ServiceFolderStructureHelper) repositoryStructureHelper;
-        if (folders != null) {
-			transactionService.getRetryingTransactionHelper().doInTransaction(
-				new RetryingTransactionHelper.RetryingTransactionCallback<Object>(){
-					@Override
-					public NodeRef execute() throws Throwable {
-						for (Entry<String, String> entry : folders.entrySet()) {
-							String relativePath = entry.getValue();
-							final ServiceFolder serviceFolder = new ServiceFolder(relativePath, null);
-							//TODO: DONE Требуется транзакция.
-							//Метод вызывается до метода init, после инициализации свойств. Транзакции нет, поэтому создаём. В других ситуациях вызываться не должен.
-							NodeRef folderRef = serviceFolderStructureHelper.getFolderRef(serviceFolder);
-							serviceFolder.setFolderRef(folderRef);
-							serviceFolders.put(entry.getKey(), serviceFolder);
-						}
-						return null;
-					}
-				});
-        }
+		lecmServicesRegistry.register(this);
+		
+    	if (folders != null) {
+	    	for (Entry<String, String> entry : folders.entrySet()) {
+				String relativePath = entry.getValue();
+				final ServiceFolder serviceFolder = new ServiceFolder(relativePath, null);
+				serviceFolders.put(entry.getKey(), serviceFolder);
+			}
+    	}
     }
 
     /**
@@ -488,5 +503,55 @@ public abstract class BaseBean implements InitializingBean {
 	protected QName generateRandomQName() {
 		return QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate());
 	}
+	
+	// "Свой" метод для создания сервисных папок. 
+	// Цель - избавиться от цепочки транзакций и ненужных вызовов
+	// TODO: Попытаться как-то отрефакторить метод, ибо страшный получился
+	private void createServiceFolders() {
+		String rootPath = repositoryStructureHelper.getServicesHomePath();
+		for (Entry<String, ServiceFolder> serviceFolder : serviceFolders.entrySet()) {
+			ServiceFolder folder = serviceFolder.getValue();
+			String relativePath = new StringBuilder(rootPath).append('/').append(folder.getRelativePath()).toString();
+			String[] folders = StringUtils.split(relativePath, '/');
+			NodeRef parent = repository.getCompanyHome();
+			
+			for (String repoFolder : folders) {
+				NodeRef pathDir = nodeService.getChildByName(parent, ContentModel.ASSOC_CONTAINS, repoFolder);
+				if (pathDir == null) {
+					if (StringUtils.isEmpty(repoFolder)) {
+						logger.error("Folder name can't be empty. Folder won't be created.");
+						break;
+					} else {
+						QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, repoFolder);
+						Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+						properties.put(ContentModel.PROP_NAME, repoFolder);
+						ChildAssociationRef childAssoc;
+						NodeRef childRef;
+						try {
+							childAssoc = nodeService.createNode(parent, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
+							childRef = childAssoc.getChildRef();
+						} catch (DuplicateChildNodeNameException e) {
+							//есть вероятность, что папка уже существует или создана другим потоком/транзакцией
+							childRef = nodeService.getChildByName(parent, ContentModel.ASSOC_CONTAINS, repoFolder);
+							logger.debug("!!!!!!!!!!! Получил директорию без создания " + folder, e);
+						}
+						pathDir = childRef;
+					}
+				}
+				
+				parent = pathDir;
+			}
+		}
+	}
 
+	@Override
+	public void initService() {
+		createServiceFolders();	
+		initServiceImpl();
+	}
+	
+	protected void initServiceImpl() {
+		// DO NOTHING
+	};
+	
 }

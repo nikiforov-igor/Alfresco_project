@@ -65,7 +65,7 @@
 	</util:list>
 	<bean id="approve3.arm.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
-		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки/Настройки СЭД"
+		  p:rootPath="/Business platform/LECM/Сервис АРМ"
 		  p:dictionaries-ref="approve3.arm.dictionaries"/>
 
 	<util:constant id="ENGINE_ID" static-field="org.alfresco.repo.workflow.WorkflowDeployer.ENGINE_ID"/>
@@ -89,7 +89,7 @@
 	<util:map id="approval.folders">
 		<entry key="#{approvalFolder}" value="Сервис Согласование документов"/>
 	</util:map>
-	<bean id="approvalWorkflowService" parent="baseBean" init-method="init"
+	<bean id="approvalWorkflowService" parent="baseBean"
 		  class="ru.it.lecm.workflow.approval.ApprovalServiceImpl"
 		  depends-on="lecm.approve3.model.bootstrap"
 		  p:defaultApprovalTerm="#{T(org.apache.commons.lang.math.NumberUtils).isNumber('${lecm.approval.defaultTerm}') ? T(java.lang.Integer).parseInt('${lecm.approval.defaultTerm}') : null}"

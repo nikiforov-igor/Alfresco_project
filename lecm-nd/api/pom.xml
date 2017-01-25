@@ -17,10 +17,10 @@
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-data-model</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-repository</artifactId>
-		</dependency>
+		</dependency> -->
 	</dependencies>
 
 </project>

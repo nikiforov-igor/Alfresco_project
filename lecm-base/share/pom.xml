@@ -21,16 +21,17 @@
 		and include them in the AMP, they are provided by Alfresco
 	-->
 	<dependencies>
-            <dependency>
-		<groupId>org.codehaus.jackson</groupId>
-		<artifactId>jackson-mapper-asl</artifactId>
-		<version>1.9.13</version>
-            </dependency>
+        <dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+        </dependency>
         <dependency>
             <groupId>org.alfresco</groupId>
-            <artifactId>alfresco-share</artifactId>
+            <artifactId>share</artifactId>
+            <classifier>classes</classifier>
         </dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 		</dependency>
@@ -41,10 +42,16 @@
 		<dependency>
 			<groupId>org.springframework.extensions.surf</groupId>
 			<artifactId>spring-webscripts</artifactId>
-		</dependency>
-        <dependency>
+		</dependency> -->
+        <!-- <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-web-framework-commons</artifactId>
+        </dependency> -->
+        <!-- для установки -->
+        <dependency>
+            <groupId>ru.it.lecm.base</groupId>
+            <artifactId>base-share-api</artifactId>
+            <version>${project.version}</version>
         </dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>
@@ -52,7 +59,7 @@
 	<build>
         <plugins>
             <!-- Needed for cross OS compatibility in acp/zip encoding -->
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
             </plugin>
@@ -66,7 +73,7 @@
             </plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
+			</plugin> -->
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>yuicompressor-maven-plugin</artifactId>
@@ -74,7 +81,6 @@
 			<plugin>
 				<groupId>org.alfresco.maven.plugin</groupId>
 				<artifactId>alfresco-maven-plugin</artifactId>
-                <version>1.1.1</version>
                 <extensions>true</extensions>
 			</plugin>
 		</plugins>
@@ -82,10 +88,11 @@
 			Copies and filters resources in build folder so maven-amp-plugin can
 			pick them up
 		-->
-		<resources><resource>
+		<resources>
+			<resource>
                 <filtering>true</filtering>
                 <directory>src/main/amp</directory>
-                <targetPath>../${project.build.finalName}</targetPath>
+                <targetPath>${app.amp.output.folder}</targetPath>
                 <excludes>
                     <exclude>**README-*</exclude>
                 </excludes>

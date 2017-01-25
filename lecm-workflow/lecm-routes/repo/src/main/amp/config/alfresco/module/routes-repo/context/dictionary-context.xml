@@ -15,7 +15,7 @@
 
 	<bean id="routes.arm.myProfile.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
 	      depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap">
-		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Логика ECM. Мой профиль/Настройки"/>
+		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/arm/default-arm-my-profile-items.xml</value>
@@ -25,7 +25,7 @@
 
     <bean id="routes.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="eds.documents.arm.settings.LogicEcmBootstrap">
-        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки/Настройки СЭД"/>
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/arm/routes-settings-arm.xml</value>

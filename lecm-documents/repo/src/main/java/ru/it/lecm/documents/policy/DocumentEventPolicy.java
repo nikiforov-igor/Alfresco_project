@@ -22,7 +22,9 @@ import ru.it.lecm.documents.beans.DocumentEventService;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -74,6 +76,7 @@ public class DocumentEventPolicy implements NodeServicePolicies.OnUpdateProperti
 
     @Override
     public void onCreateAssociation(AssociationRef nodeAssocRef) {
+    	logger.debug("!!!!!!!!! onCreateAssociation");
         NodeRef node = nodeAssocRef.getSourceRef();
         if (nodeService.exists(node) && nodeService.hasAspect(node, DocumentEventService.ASPECT_EVENT_LISTENERS) && !nodeAssocRef.getTypeQName().equals(DocumentEventService.ASSOC_EVENT_LISTENERS)) {
             fireEvent(node);
@@ -82,6 +85,7 @@ public class DocumentEventPolicy implements NodeServicePolicies.OnUpdateProperti
 
     @Override
     public void onCreateChildAssociation(ChildAssociationRef childAssocRef, boolean isNewNode) {
+    	logger.debug("!!!!!!!!! onCreateChildAssociation childAssocRef: "+childAssocRef+" ,isNewNode: "+isNewNode);
         NodeRef node = childAssocRef.getParentRef();
         if (nodeService.exists(node) && nodeService.hasAspect(node, DocumentEventService.ASPECT_EVENT_LISTENERS)) {
             fireEvent(node);
@@ -90,6 +94,7 @@ public class DocumentEventPolicy implements NodeServicePolicies.OnUpdateProperti
 
     @Override
     public void onDeleteAssociation(AssociationRef nodeAssocRef) {
+    	logger.debug("!!!!!!!!! onDeleteAssociation");
         NodeRef node = nodeAssocRef.getSourceRef();
         if (nodeService.exists(node) && nodeService.hasAspect(node, DocumentEventService.ASPECT_EVENT_LISTENERS) && !nodeAssocRef.getTypeQName().equals(DocumentEventService.ASSOC_EVENT_LISTENERS)) {
             fireEvent(node);
@@ -98,6 +103,7 @@ public class DocumentEventPolicy implements NodeServicePolicies.OnUpdateProperti
 
     @Override
     public void onDeleteChildAssociation(ChildAssociationRef childAssocRef) {
+    	logger.debug("!!!!!!!!! onDeleteChildAssociation");
         NodeRef node = childAssocRef.getParentRef();
         if (nodeService.exists(node) && nodeService.hasAspect(node, DocumentEventService.ASPECT_EVENT_LISTENERS)) {
             fireEvent(node);
@@ -106,25 +112,25 @@ public class DocumentEventPolicy implements NodeServicePolicies.OnUpdateProperti
 
     @Override
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+    	logger.debug("!!!!!!!!! onUpdateProperties");
         fireEvent(nodeRef);
     }
 
     private void fireEvent(NodeRef node) {
+    	logger.debug("!!!!!!!!! fireEvent");
         AlfrescoTransactionSupport.bindListener(this.transactionListener);
-
-        // Add the pending action to the transaction resource
-        List<NodeRef> pendingActions = AlfrescoTransactionSupport.getResource(DOCUMENT_EVENTS_TRANSACTION_LISTANER);
-        if (pendingActions == null) {
-            pendingActions = new ArrayList<NodeRef>();
-            AlfrescoTransactionSupport.bindResource(DOCUMENT_EVENTS_TRANSACTION_LISTANER, pendingActions);
-        }
-
-        // Check that action has only been added to the list once
-        if (!pendingActions.contains(node)) {
-            pendingActions.add(node);
-        }
-
+        getPostTxnNodes().add(node);
     }
+    
+    private Set<NodeRef> getPostTxnNodes(){
+		@SuppressWarnings("unchecked")
+		Set<NodeRef> pendingActions = (Set<NodeRef>)AlfrescoTransactionSupport.getResource(DOCUMENT_EVENTS_TRANSACTION_LISTANER);
+		if (pendingActions == null) {
+			pendingActions = new LinkedHashSet<NodeRef>(11);
+			AlfrescoTransactionSupport.bindResource(DOCUMENT_EVENTS_TRANSACTION_LISTANER, pendingActions);
+		}
+		return pendingActions;
+	}
 
     private class DocumentEventPolicyTransactionListener implements TransactionListener {
 
@@ -145,12 +151,19 @@ public class DocumentEventPolicy implements NodeServicePolicies.OnUpdateProperti
 
          @Override
          public void afterCommit() {
-             List<NodeRef> pendingDocs = AlfrescoTransactionSupport.getResource(DOCUMENT_EVENTS_TRANSACTION_LISTANER);
-             if (pendingDocs != null) {
-                 while (!pendingDocs.isEmpty()) {
-                     final NodeRef docRef = pendingDocs.remove(0);
-                     if (nodeService.exists(docRef)) {
-                         List<AssociationRef> listeners = nodeService.getTargetAssocs(docRef, DocumentEventService.ASSOC_EVENT_LISTENERS);
+        	 logger.debug("!!!!!!!!! afterCommit");
+        	 for(final NodeRef nodeRef : getPostTxnNodes()) {
+//                	 logger.debug("!!!!!!!!! afterCommit pendingDocs: "+pendingDocs);
+                    	 List<AssociationRef> listeners = transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<List<AssociationRef>>() {
+                             @Override
+                             public List<AssociationRef> execute() throws Throwable {
+                            	 if (nodeService.exists(nodeRef)) {
+                            		 return nodeService.getTargetAssocs(nodeRef, DocumentEventService.ASSOC_EVENT_LISTENERS);
+                            	 }
+                            	 return new ArrayList<AssociationRef>();
+                             }
+                         },true,true);
+                    	 logger.debug("!!!!!!!!! afterCommit listeners: "+listeners);
                          for (AssociationRef listener : listeners) {
                              final NodeRef node = listener.getTargetRef();
                              Runnable runnable = new Runnable() {
@@ -164,14 +177,15 @@ public class DocumentEventPolicy implements NodeServicePolicies.OnUpdateProperti
                                                      public Void execute() throws Throwable {
                                                          String senders = nodeService.getProperty(node, DocumentEventService.PROP_EVENT_SENDER).toString();
                                                          if ("".equals(senders)) {
-                                                             senders = docRef.toString();
+                                                             senders = nodeRef.toString();
                                                          } else {
-                                                             senders += "," + docRef.toString();
+                                                             senders += "," + nodeRef.toString();
                                                          }
+                                                         logger.debug("!!!!!!!!! afterCommit senders: "+senders);
                                                          nodeService.setProperty(node, DocumentEventService.PROP_EVENT_SENDER, senders);
                                                          return null;
                                                      }
-                                                 }, false, true);
+                                                 }, false,true);
                                              }
                                          });
                                      } catch (Exception e) {
@@ -181,9 +195,7 @@ public class DocumentEventPolicy implements NodeServicePolicies.OnUpdateProperti
                              };
                              threadPoolExecutor.execute(runnable);
                          }
-                     }
                  }
-             }
          }
 
         @Override

@@ -60,7 +60,7 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
     }
 
     @Override
-    public void notify(DelegateTask delegateTask) {
+    public void notify(final DelegateTask delegateTask) {
         String definition = delegateTask.getProcessDefinitionId();
 
         forDraft = Boolean.parseBoolean(draft.getExpressionText());
@@ -80,46 +80,66 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
         final NodeRef stm_document = ((ActivitiScriptNode) delegateTask.getExecution().getVariable("stm_document")).getNodeRef();
         final NodeService nodeService = getServiceRegistry().getNodeService();
 
-        String statusValue = nodeService.getProperty(stm_document, StatemachineModel.PROP_STATUS).toString();
-        if (!status.equals(statusValue)) {
-            nodeService.setProperty(stm_document, StatemachineModel.PROP_STATUS, status);
-//            nodeService.setProperty(stm_document.getChildRef(), StatemachineModel.PROP_STATEMACHINE_VERSION, version);
-            //запись в БЖ
-            try {
-                if (!forDraft) {
-                    String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
-                    List<String> objects = new ArrayList<String>(1);
-                    objects.add(status);
-                    getBusinessJournalService().log(initiator, stm_document,
-                            EventCategory.CHANGE_DOCUMENT_STATUS,
-                            "#initiator перевел(а) документ \"#mainobject\" в статус \"#object1\"", objects);
-                }
-            } catch (Exception e) {
-                logger.error("Не удалось создать запись бизнес-журнала", e);
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+            @Override
+            public Void doWork() throws Exception {
+//                return getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+//                    @Override
+//                    public Void execute() throws Throwable {
+                        try {
+					        String statusValue = nodeService.getProperty(stm_document, StatemachineModel.PROP_STATUS).toString();
+					        if (!status.equals(statusValue)) {
+					            nodeService.setProperty(stm_document, StatemachineModel.PROP_STATUS, status);
+					//            nodeService.setProperty(stm_document.getChildRef(), StatemachineModel.PROP_STATEMACHINE_VERSION, version);
+					            //запись в БЖ
+					            try {
+					                if (!forDraft) {
+					                    String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
+					                    List<String> objects = new ArrayList<String>(1);
+					                    objects.add(status);
+					                    getBusinessJournalService().log(initiator, stm_document,
+					                            EventCategory.CHANGE_DOCUMENT_STATUS,
+					                            "#initiator перевел(а) документ \"#mainobject\" в статус \"#object1\"", objects);
+					                }
+					            } catch (Exception e) {
+					                logger.error("Не удалось создать запись бизнес-журнала", e);
+					            }
+					        }
+					
+					        //Проверяем наличие аспекта указывающего на черновик
+					        if (!nodeService.hasAspect(stm_document, StatemachineModel.ASPECT_IS_DRAFT)) {
+					            nodeService.addAspect(stm_document, StatemachineModel.ASPECT_IS_DRAFT, null);
+					        }
+					        if (!nodeService.hasAspect(stm_document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
+					            nodeService.addAspect(stm_document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK, null);
+					        }
+					        nodeService.setProperty(stm_document, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS, "activiti$" + delegateTask.getId());
+					        //Устанавливаем флаг черновика
+					        nodeService.setProperty(stm_document, StatemachineModel.PROP_IS_DRAFT, forDraft);
+                        } catch (InvalidNodeRefException ex) {
+                            logger.error("Ошибка при изменении изменении статуса", ex);
+                            throw ex;
+                        } catch (Exception e) {
+                            logger.error("Ошибка при изменении изменении статуса", e);
+                            throw e;
+                        }
+                        return null;
+//                    }
+//                }, false, true);
             }
-        }
-
-        //Проверяем наличие аспекта указывающего на черновик
-        if (!nodeService.hasAspect(stm_document, StatemachineModel.ASPECT_IS_DRAFT)) {
-            nodeService.addAspect(stm_document, StatemachineModel.ASPECT_IS_DRAFT, null);
-        }
-        if (!nodeService.hasAspect(stm_document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
-            nodeService.addAspect(stm_document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK, null);
-        }
-        nodeService.setProperty(stm_document, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS, "activiti$" + delegateTask.getId());
-        //Устанавливаем флаг черновика
-        nodeService.setProperty(stm_document, StatemachineModel.PROP_IS_DRAFT, forDraft);
-
+        });
+					
         ((ActivitiScriptNode) delegateTask.getExecution().getVariable("stm_document")).reset();
         //Если стартовый статус, то ничего никуда не перемещаем
         if (forDraft) return;
 
-        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+        final NodeRef storeFolder = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
             @Override
-            public Void doWork() throws Exception {
-                getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+            public NodeRef doWork() throws Exception {
+                return getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
                     @Override
-                    public Object execute() throws Throwable {
+                    public NodeRef execute() throws Throwable {
+                    	NodeRef storeFolder = null;
                         try {
                             RepositoryStructureHelper repositoryStructureHelper = getRepositoryStructureHelper();
                             NodeRef documents = repositoryStructureHelper.getDocumentsRef();
@@ -163,24 +183,43 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
 
                             Date now = new Date();
                             List<String> directoryPaths = repositoryStructureHelper.getDateFolderPath(now);
-                            NodeRef storeFolder = repositoryStructureHelper.createPath(NamespaceService.CONTENT_MODEL_1_0_URI, statusFolder, directoryPaths);
-
-                            //Перемещаем в нужную папку
-                            if (storeFolder != null) {
-                                String name = (String) nodeService.getProperty(stm_document, ContentModel.PROP_NAME);
-                                nodeService.moveNode(stm_document, storeFolder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
-                            } else {
-                                throw new Exception("Папка статуса " + status + "/" + statusDateFormat.format(now) + " для документа " + stm_document + " не создана");
-                            }
-
-                            // Установка динамических ролей для файла
-                            if (processId != null && !"UNKNOWN".equals(status)) {
-                                dynamicPrivileges = getStateMachineHelper().getStateMecheneByName(processId).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(status).getDynamicRoles();
-                                //TODO
-                                execBuildInTransactDynamic(stm_document, dynamicPrivileges);
-                            } else {
-                                logger.error("Ошибка установки динамических прав для документа " + stm_document);
-                            }
+                            storeFolder = repositoryStructureHelper.createPath(NamespaceService.CONTENT_MODEL_1_0_URI, statusFolder, directoryPaths);
+                            
+                            return storeFolder; 
+                        } catch (InvalidNodeRefException ex) {
+                            logger.error("Ошибка при изменении изменении статуса", ex);
+                            throw ex;
+                        } catch (Exception e) {
+                            logger.error("Ошибка при изменении изменении статуса", e);
+                            throw e;
+                        }
+                    }
+                }, false, true);
+            }
+        });
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+            @Override
+            public Void doWork() throws Exception {
+//                return getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+//                    @Override
+//                    public Void execute() throws Throwable {
+                        try {
+                        	// Установка динамических ролей для файла
+					        if (processId != null && !"UNKNOWN".equals(status)) {
+					            dynamicPrivileges = getStateMachineHelper().getStateMecheneByName(processId).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(status).getDynamicRoles();
+					            //TODO
+					            execBuildInTransactDynamic(stm_document, dynamicPrivileges);
+					        } else {
+					            logger.error("Ошибка установки динамических прав для документа " + stm_document);
+					        }
+					        //Перемещаем в нужную папку
+					        if (storeFolder != null) {
+					            String name = (String) nodeService.getProperty(stm_document, ContentModel.PROP_NAME);
+					            nodeService.moveNode(stm_document, storeFolder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
+					        } else {
+					        	Date now = new Date();
+					            throw new Exception("Папка статуса " + status + "/" + statusDateFormat.format(now) + " для документа " + stm_document + " не создана");
+					        }
                         } catch (InvalidNodeRefException ex) {
                             logger.error("Ошибка при изменении изменении статуса", ex);
                             throw ex;
@@ -190,9 +229,8 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
                         }
 
                         return null;
-                    }
-                }, false, false);
-                return null;
+//                    }
+//                }, false, true);
             }
         });
     }

@@ -904,7 +904,8 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
 		            mode:"create",
 		            formId: "addTableRow",
 		            submitType:"json",
-		            showCancelButton: true
+		            showCancelButton: true,
+					showCaption: false
 	            };
 
                 // Using Forms Service, so always create new instance

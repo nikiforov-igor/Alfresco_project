@@ -5,5 +5,5 @@
     <url>/lecm/orgstructure/getOrganizations/picker/{type}/children</url>
     <format default="json"/>
     <authentication runas="admin">user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 </webscript>

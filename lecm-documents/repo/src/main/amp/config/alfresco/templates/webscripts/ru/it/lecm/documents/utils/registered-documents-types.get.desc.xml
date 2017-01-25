@@ -4,4 +4,5 @@
 	<url>/lecm/documents/types</url>
 	<format default="json">extension</format>
 	<authentication>none</authentication>
+	<transaction allow="readonly">required</transaction>
 </webscript>

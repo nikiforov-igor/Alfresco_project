@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Automatic employees sg tie</shortname>
+	<description>Automatic employees sg tie</description>
+	<url>/lecm/orgstructure/api/autoTieEmployees</url>
+	<format default="json">extension</format>
+	<authentication>admin</authentication>
+    <transaction>required</transaction>
+</webscript>

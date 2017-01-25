@@ -2,20 +2,25 @@ package ru.it.lecm.base.beans;
 
 import java.io.IOException;
 import java.util.*;
+import javax.transaction.UserTransaction;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
+import org.alfresco.error.AlfrescoRuntimeException;
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.util.PropertyCheck;
-import javax.xml.parsers.SAXParserFactory;
-import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
 import org.alfresco.service.cmr.security.PermissionService;
+import org.alfresco.service.transaction.TransactionService;
+import org.alfresco.util.PropertyCheck;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.extensions.surf.util.AbstractLifecycleBean;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -31,7 +36,7 @@ import ru.it.lecm.security.Types;
  *
  * @author vlevin
  */
-public class ServiceFolderPermissionHelper {
+public class ServiceFolderPermissionHelper extends AbstractLifecycleBean {
 
 	private NodeService nodeService;
 	private BaseBean serviceBean;
@@ -39,6 +44,7 @@ public class ServiceFolderPermissionHelper {
 	private LecmPermissionService lecmPermissionService;
 	private PermissionService permissionService;
 	private AuthorityService authorityService;
+	private TransactionService transactionService;
 	final private static org.slf4j.Logger logger = LoggerFactory.getLogger(ServiceFolderPermissionHelper.class);
 
 	public void setNodeService(NodeService nodeService) {
@@ -64,6 +70,47 @@ public class ServiceFolderPermissionHelper {
 	public void setAuthorityService(AuthorityService authorityService) {
 		this.authorityService = authorityService;
 	}
+	
+	public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+	
+	@Override
+	protected void onBootstrap(ApplicationEvent event)
+	{
+		Map<String, List<PermissionSettings>> permissions = parsePermissionsList(permissionsList);
+		UserTransaction userTransaction = transactionService.getUserTransaction();
+        try
+        {
+            userTransaction.begin();
+            
+    		applyPermissions(permissions);
+			
+    		userTransaction.commit();
+        }
+        catch(Throwable e)
+        {
+            // rollback the transaction
+            try
+            { 
+                if (userTransaction != null) 
+                {
+                    userTransaction.rollback();
+                }
+            }
+            catch (Exception ex)
+            {
+                // NOOP 
+            }
+            throw new AlfrescoRuntimeException("Service folders [applyPermissions] bootstrap failed", e);
+        }
+	}
+    
+    @Override
+	protected void onShutdown(ApplicationEvent event)
+	{
+	    // NOOP
+	}
 
 	public void bootstrap() {
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
@@ -71,8 +118,6 @@ public class ServiceFolderPermissionHelper {
 		PropertyCheck.mandatory(this, "lecmPermissionService", lecmPermissionService);
 		PropertyCheck.mandatory(this, "serviceBean", serviceBean);
 		PropertyCheck.mandatory(this, "permissionsList", permissionsList);
-		Map<String, List<PermissionSettings>> permissions = parsePermissionsList(permissionsList);
-		applyPermissions(permissions);
 	}
 
 	private Map<String, List<PermissionSettings>> parsePermissionsList(List<String> permissionsList) {

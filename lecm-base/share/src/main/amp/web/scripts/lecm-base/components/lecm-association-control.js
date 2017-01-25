@@ -1629,7 +1629,8 @@ LogicECM.module = LogicECM.module || {};
 					mode: "create",
 					submitType: "json",
 					formId: "association-create-new-node-form",
-					showCancelButton: true
+					showCancelButton: true,
+					showCaption: false
 				};
 			},
 

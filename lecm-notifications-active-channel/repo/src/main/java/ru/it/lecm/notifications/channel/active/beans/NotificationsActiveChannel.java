@@ -17,6 +17,9 @@ import ru.it.lecm.notifications.beans.NotificationsService;
 
 import java.io.Serializable;
 import java.util.*;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * User: AIvkin Date: 17.01.13 Time: 15:19
@@ -273,4 +276,5 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 			}
 		}
 	}
+	
 }

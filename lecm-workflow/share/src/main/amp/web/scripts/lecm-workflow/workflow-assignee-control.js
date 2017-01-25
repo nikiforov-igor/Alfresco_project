@@ -211,7 +211,8 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 					formId: 'save',
 					mode: 'create',
 					submitType: 'json',
-					showCancelButton: 'true'
+					showCancelButton: 'true',
+					showCaption: false
 				},
 				destroyOnHide: true,
 				doBeforeDialogShow: {
@@ -948,7 +949,8 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				formId: this._getFormId(),
 				mode: 'create',
 				submitType: 'json',
-				showCancelButton: 'true'
+				showCancelButton: 'true',
+				showCaption: false
 			};
 			if (ignoreNodesString) {
 				templateRequestParams.ignoreNodes = ignoreNodesString;

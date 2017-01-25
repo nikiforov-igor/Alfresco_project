@@ -90,31 +90,26 @@
 		<property name="transactionService" ref="transactionService"/>
 	</bean>
 
-	<bean id="lifecycleStateMachineHelper" class="ru.it.lecm.statemachine.LifecycleStateMachineHelper">
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
+	<bean id="lifecycleStateMachineHelper" class="ru.it.lecm.statemachine.LifecycleStateMachineHelper" parent="baseBean">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
         <property name="documentMembersService" ref="documentMembersService"/>
         <property name="businessJournalService" ref="businessJournalService" />
-        <property name="transactionService" ref="transactionService" />
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
         <property name="documentConnectionService" ref="documentConnectionService"/>
         <property name="workCalendarService" ref="WorkCalendarService" />
         <property name="statemachenesCache" ref="statemachines.cache" />
+        <property name="namespaceService" ref="namespaceService" />
 	</bean>
 
-	<bean id="simpleStateMachineHelper" class="ru.it.lecm.statemachine.SimpleStatemachineHelper">
-		<property name="simpleDocumentRegistry" ref="simpleDocumentRegistry" />
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="orgstructureBean" ref="serviceOrgstructure"/>
+	<bean id="simpleStateMachineHelper" class="ru.it.lecm.statemachine.SimpleStatemachineHelper" parent="lifecycleStateMachineHelper">
+		<property name="permissionService" ref="permissionService" />
 	</bean>
 
 	<bean id="stateMachineHelper" class="ru.it.lecm.statemachine.StatemachineHelperProxy">
 		<property name="simpleStatemachineHelper" ref="simpleStateMachineHelper" />
 		<property name="lifecycleStateMachineHelper" ref="lifecycleStateMachineHelper" />
-		<property name="simpleDocumentRegistry" ref="simpleDocumentRegistry" />
-		<property name="namespaceService" ref="namespaceService" />
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
 
@@ -157,6 +152,21 @@
         <property name="stateMachineHelper" ref="lifecycleStateMachineHelper"/>
     </bean>
 
+	<bean id="waitForChangeThreadPool" class="org.alfresco.util.ThreadPoolExecutorFactoryBean">
+		<property name="poolName">
+			<value>waitForChangeThread</value>
+		</property>
+		<property name="corePoolSize">
+			<value>5</value>
+		</property>
+		<property name="maximumPoolSize">
+			<value>10</value>
+		</property>
+		<property name="threadPriority">
+			<value>5</value>
+		</property>
+	</bean>
+	
     <bean id="workflowPolicy" class="ru.it.lecm.statemachine.action.document.WaitForDocumentChangeListenerPolicy"
 		  init-method="init">
 		<property name="policyComponent">
@@ -167,7 +177,7 @@
 		</property>
 	    <property name="serviceRegistry" ref="ServiceRegistry"/>
 	    <property name="documentService" ref="documentService"/>
-        <property name="threadPoolExecutor" ref="notificationsAsyncThreadPool"/>
+        <property name="threadPoolExecutor" ref="waitForChangeThreadPool"/>
         <property name="transactionService" ref="transactionService"/>
         <property name="stateMachineHelper" ref="lifecycleStateMachineHelper"/>
     </bean>
@@ -178,17 +188,31 @@
 		</property>
 	</bean>
 
+	<bean id="staretSMThreadPool" class="org.alfresco.util.ThreadPoolExecutorFactoryBean">
+		<property name="poolName">
+			<value>staretSMThread</value>
+		</property>
+		<property name="corePoolSize">
+			<value>5</value>
+		</property>
+		<property name="maximumPoolSize">
+			<value>10</value>
+		</property>
+		<property name="threadPriority">
+			<value>5</value>
+		</property>
+	</bean>
+	
 	<bean id="stateMachineCreateDocumentPolicy"
 		  class="ru.it.lecm.statemachine.policy.StateMachineCreateDocumentPolicy" init-method="init">
         <property name="threadPoolExecutor">
-            <ref bean="defaultAsyncThreadPool"/>
+            <ref bean="staretSMThreadPool"/>
         </property>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="policyComponent" ref="policyComponent"/>
         <property name="businessJournalService" ref="businessJournalService" />
         <property name="stateMachineHelper" ref="stateMachineHelper"/>
 		<property name="documentConnectionService" ref="documentConnectionService"/>
-		<property name="simpleDocumentRegistry" ref="simpleDocumentRegistry" />
 		<property name="documentService" ref="documentService"/>
 		<property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
 	</bean>
@@ -202,6 +226,7 @@
 		  class="ru.it.lecm.statemachine.action.script.StartWorkflowScript"
 		  parent="webscript">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="transactionService" ref="transactionService" />
         <property name="frequencyAnalysisService" ref="frequencyAnalysisService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
         <property name="stateMachineHelper" ref="lifecycleStateMachineHelper"/>
@@ -347,6 +372,9 @@
         <property name="orgstructureService">
             <ref bean="serviceOrgstructure"/>
         </property>
+        <property name="defaultStatemachines">
+            <ref bean="defaultStatemachines"/>
+        </property>
     </bean>
 
     <bean id="defaultStatemachines" class="ru.it.lecm.statemachine.bean.DefaultStatemachinesImpl" init-method="register"/>
@@ -379,12 +407,5 @@
 			</list>
 		</property>
 	</bean>-->
-
-	<bean id="simpleDocumentRegistry" class="ru.it.lecm.statemachine.bean.SimpleDocumentRegistryImpl" parent="baseBean">
-		<property name="repositoryHelper" ref="repositoryHelper" />
-		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
-		<property name="permissionService" ref="permissionService"/>
-        <property name="namespaceService" ref="namespaceService" />
-	</bean>
 
 </beans>

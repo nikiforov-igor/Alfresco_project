@@ -128,7 +128,8 @@ LogicECM.module.DocumentAdmin = LogicECM.module.DocumentAdmin || {};
 					submitType: "json",
 					showCancelButton: true,
 					roleId: role.id,
-					document: me.options.documentNodeRef
+					document: me.options.documentNodeRef,
+					showCaption: false
 				},
 				actionUrl: null,
 				destroyOnHide: true,

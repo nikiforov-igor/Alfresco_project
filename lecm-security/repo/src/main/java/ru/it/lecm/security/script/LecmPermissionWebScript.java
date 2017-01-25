@@ -14,6 +14,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
 import java.util.List;
+import java.util.Collection;
 
 /**
  * User: dbashmakov
@@ -171,4 +172,8 @@ public class LecmPermissionWebScript extends BaseWebScript {
     public void popAuthentication(){
         AuthenticationUtil.popAuthentication();
     }
+	
+	public Collection<LecmPermissionService.LecmPermissionGroup> getPermGroups() {
+		return lecmPermissionService.getPermGroups();
+	}
 }

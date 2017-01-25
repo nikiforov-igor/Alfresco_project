@@ -125,8 +125,9 @@ public interface ErrandsService {
      * @return
      */
     NodeRef getDashletSettingsNode();
+    NodeRef createDashletSettingsNode();
 
-    NodeRef createSettingsNode() throws WriteTransactionNeededException;
+    NodeRef createSettingsNode();
 
     boolean isHideAdditionAttributes();
 

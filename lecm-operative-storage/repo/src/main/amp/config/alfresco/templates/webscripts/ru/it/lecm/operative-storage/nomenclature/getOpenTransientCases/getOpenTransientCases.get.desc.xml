@@ -5,5 +5,5 @@
 	<url>/lecm/os/nomenclature/getOpenTransientCases?nodeRef={nodeRef}</url>
 	<authentication>user</authentication>
 	<format default="json"/>
-	<transaction>none</transaction>
+	<transaction allow="readonly">required</transaction>
 </webscript>

@@ -553,7 +553,11 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                         for (String category : categories) {
                             NodeRef categoryRef = documentAttachmentsService.getCategory(category, document);
                             if (categoryRef != null) {
- 	                            documentAttachmentsService.getCategories(createdNode);
+                            	try{
+                            		documentAttachmentsService.getCategories(createdNode);
+                            	}catch(WriteTransactionNeededException e) {
+                            		logger.error("error: ",e);
+                            	}
 	                            NodeRef errandCategoryFolder = documentAttachmentsService.getCategory(category, createdNode);
                                 // копируем вложения для категории
                                 List<ChildAssociationRef> childs = nodeService.getChildAssocs(categoryRef);

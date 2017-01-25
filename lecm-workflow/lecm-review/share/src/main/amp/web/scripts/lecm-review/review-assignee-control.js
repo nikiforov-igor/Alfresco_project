@@ -108,7 +108,8 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 					mode: 'create',
 					submitType: 'json',
 					ignoreNodes: this._getIgnoreNodes(),
-					showCancelButton: true
+					showCancelButton: true,
+					showCaption: false
 				},
 				destroyOnHide: true,
 				doBeforeDialogShow: {

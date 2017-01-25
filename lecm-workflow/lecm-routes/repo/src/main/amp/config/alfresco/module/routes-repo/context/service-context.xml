@@ -39,20 +39,14 @@
 	/>
 
 	<bean id="routes.delete.temp.schedule"
-	  class="ru.it.lecm.workflow.routes.schedule.DeleteTempRoutesSchedule"
+	  class="ru.it.lecm.workflow.routes.schedule.DeleteTempRoutesSchedule" parent="baseTransactionalSchedule"
 	  depends-on="routes.model.bootstrap"
-	  p:transactionMode="ISOLATED_TRANSACTIONS"
-	  p:compensatingActionMode="IGNORE"
 	  p:jobName="routes-delete-temp"
 	  p:jobGroup="routes"
 	  p:triggerName="routes-delete-temp-trigger"
 	  p:triggerGroup="routes-trigger"
+	  p:actionName="deleteAction"
 	  p:cronExpression="0 0 4 * * ? *"
-	  p:runAsUser="System"
-	  p:scheduler-ref="schedulerFactory"
-	  p:actionService-ref="ActionService"
-	  p:transactionService-ref="TransactionService"
-	  p:searchService-ref="searchService"
 	/>
 
 	<bean id="routesOnCreateAssocPolicy" class="ru.it.lecm.workflow.routes.policy.RoutesOnCreateAssocPolicy"

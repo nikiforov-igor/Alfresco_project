@@ -455,6 +455,19 @@
 							<overWriteSnapshots>true</overWriteSnapshots>
 						</configuration>
 					</execution>
+					<execution> 
+						<id>unpack</id> 
+						<phase>generate-sources</phase> 
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration> 
+							<includeTypes>war</includeTypes> 
+							<includeGroupIds>org.alfresco</includeGroupIds> 
+							<includeArtifactIds>share</includeArtifactIds> 
+							<includes>META-INF/MANIFEST.MF</includes> 
+						</configuration> 
+					</execution> 
 				</executions>
 				<dependencies>
 
@@ -717,12 +730,16 @@
 							<type>amp</type>
 						</overlay>
 					</overlays>
+					<archive> 
+						<addMavenDescriptor>false</addMavenDescriptor> 
+						<manifestFile>${project.build.directory}/dependency/META-INF/MANIFEST.MF</manifestFile> 
+					</archive> 
 				</configuration>
 				<dependencies>
 					<dependency>
 						<groupId>org.alfresco.maven.plugin</groupId>
 						<artifactId>alfresco-maven-plugin</artifactId>
-						<version>1.1.1</version>
+						<version>2.2.0</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -1069,12 +1086,16 @@
                                     <type>amp</type>
                                 </overlay>
                             </overlays>
+							<archive> 
+								<addMavenDescriptor>false</addMavenDescriptor> 
+								<manifestFile>${project.build.directory}/dependency/META-INF/MANIFEST.MF</manifestFile> 
+							</archive> 
                         </configuration>
                         <dependencies>
                             <dependency>
                                 <groupId>org.alfresco.maven.plugin</groupId>
                                 <artifactId>alfresco-maven-plugin</artifactId>
-                                <version>1.1.1</version>
+                                <version>2.2.0</version>
                             </dependency>
                         </dependencies>
                     </plugin>

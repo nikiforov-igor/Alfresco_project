@@ -29,6 +29,6 @@ public class TaggedCounterRegistrator {
 
 	public void init() {
 		PropertyCheck.mandatory(this, "counterFactory", counterFactory);
-		counterFactory.initTaggedCounters(documentType, tags);
+//		counterFactory.initTaggedCounters(documentType, tags);
 	}
 }

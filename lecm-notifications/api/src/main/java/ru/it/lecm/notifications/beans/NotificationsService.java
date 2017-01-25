@@ -173,6 +173,9 @@ public interface NotificationsService {
 	 * @param channels каналы уведомления
 	 * @param initiatorRef Ссылка на инициатора. Если он попадает в список получателей, то ему сообщение не будет отправлено
 	 */
+	
+	NodeRef createGlobalSettingsNode();
+	
 	void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels, NodeRef initiatorRef);
 
     /**

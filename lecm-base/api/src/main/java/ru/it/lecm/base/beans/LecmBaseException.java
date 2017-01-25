@@ -5,7 +5,7 @@ package ru.it.lecm.base.beans;
  * Date: 03.04.14
  * Time: 11:15
  */
-public class LecmBaseException extends Exception {
+public class LecmBaseException extends RuntimeException {
 
     public LecmBaseException() {
         super();

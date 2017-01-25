@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * Полиси, которые регулируют отношения между lecm-orgstr:employee (сотрудником)
@@ -60,6 +61,50 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
     public final void init() {
         super.init();
 
+//        policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+//                OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onCreateEmployeeNode"));
+//        policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+//                OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onCreateEmployeeNodeLog",
+//                Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+//        policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
+//                OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "beforeDeleteEmployeeNode"));
+//        policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+//                OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onUpdateEmployeeProperties"));
+//        policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+//                OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onUpdateEmployeePropertiesLog",
+//                Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+//
+//        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+//                OrgstructureBean.TYPE_EMPLOYEE, OrgstructureBean.ASSOC_EMPLOYEE_PERSON,
+//                new JavaBehaviour(this, "onCreateEmployeePersonAssociation"));
+//        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+//                OrgstructureBean.TYPE_EMPLOYEE, OrgstructureBean.ASSOC_EMPLOYEE_PERSON,
+//                new JavaBehaviour(this, "onDeleteEmployeePersonAssociation"));
+//
+//        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+//                OrgstructureBean.TYPE_EMPLOYEE, OrgstructureBean.ASSOC_EMPLOYEE_PHOTO,
+//                new JavaBehaviour(this, "onCreateEmployeePhotoAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+//        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+//                OrgstructureBean.TYPE_EMPLOYEE, OrgstructureBean.ASSOC_EMPLOYEE_PHOTO,
+//                new JavaBehaviour(this, "onDeleteEmployeePhotoAssociation"));
+//
+//        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+//                ContentModel.TYPE_PERSON, ContentModel.ASSOC_AVATAR,
+//                new JavaBehaviour(this, "onCreatePersonAvatarAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+//		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
+//				ContentModel.TYPE_PERSON, new JavaBehaviour(this, "onDeletePersonNode"));
+//        policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+//                ContentModel.TYPE_PERSON, new JavaBehaviour(this, "onUpdatePersonProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+    }
+
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		
+		// TODO: Не уверен, что стоит переносить сюда, но так оно хотя бы стартует
+		// Скорее всего, правильнее будет установить таки порядок бутстрапа
+		
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onCreateEmployeeNode"));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
@@ -95,8 +140,7 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 //				ContentModel.TYPE_PERSON, new JavaBehaviour(this, "onDeletePersonNode"));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 ContentModel.TYPE_PERSON, new JavaBehaviour(this, "onUpdatePersonProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-
-    }
+	}
 
     /**
      * Вызывается при создании нового сотрудника. Создать персональные данные и
@@ -114,6 +158,9 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
         // Создаем ассоциацию сотруднику на персональные данные
         nodeService.createAssociation(employeeNode, personalDataRef.getChildRef(), OrgstructureBean.ASSOC_EMPLOYEE_PERSON_DATA);
 
+		// Ручное добавление аспекта cm:versionable
+		addVersionableAspect(employeeNode);
+		
         // сообщить 1) создание Сотрудника 2) связывание Сотрудника с Person/User.
         notifyEmploeeTie(employeeNode);
 
@@ -378,6 +425,15 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
      */
     public void onDeletePersonNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
     }
+
+	private void addVersionableAspect(NodeRef nodeRef) {
+		if (!nodeService.hasAspect(nodeRef, ContentModel.ASPECT_VERSIONABLE)) {
+			Map<QName, Serializable> versionProps = new HashMap<>();
+			versionProps.put(ContentModel.PROP_AUTO_VERSION_PROPS, true);
+			
+			nodeService.addAspect(nodeRef, ContentModel.ASPECT_VERSIONABLE, versionProps);
+		}
+	}
 
     /**
      * Изменение атрибутивного состава cm:person. Необходимо обновить атрибуты

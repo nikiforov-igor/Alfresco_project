@@ -68,6 +68,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 								hasStatemachine: this.options.hasStatemachine,
 								showSubmitButton: true,
 								showCancelButton: true,
+								showCaption: false,
 								args: JSON.stringify(this.options.args),
                                 fields: JSON.stringify(this.options.higlightedFields)
 							},

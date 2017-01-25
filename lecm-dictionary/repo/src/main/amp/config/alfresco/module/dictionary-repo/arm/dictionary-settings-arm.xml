@@ -1,42 +1,58 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-	<item name="cm:Справочники" type="lecm-arm:accordion">
-		<property name="cm:name"><![CDATA[Справочники]]></property>
-		<property name="lecm-arm:order"><![CDATA[10]]></property>
-		<property name="lecm-arm:search-type"><![CDATA[]]></property>
-		<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-		<property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
-		<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-		<property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
-		<property name="lecm-arm:search-query"><![CDATA[]]></property>
+	<item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary">
+		<property name="cm:name">Настройки АРМ</property>
+		<property name="lecm-dic:attributeForShow">cm:name</property>
+		<property name="lecm-dic:type">lecm-arm:arm</property>
+		<property name="lecm-dic:active">true</property>
+		<property name="lecm-dic:plane">false</property>
+		<property name="lecm-dic:description">Настройки АРМ</property>
 		<items>
-			<item name="cm:Все справочники" type="lecm-arm:html-node">
-				<property name="cm:name"><![CDATA[Все справочники]]></property>
-				<property name="lecm-arm:order"><![CDATA[10]]></property>
-				<property name="lecm-arm:html-url"><![CDATA[page/allDictionary]]></property>
-			</item>
-			<item name="cm:Список справочников" type="lecm-arm:node">
-				<property name="cm:name"><![CDATA[Список справочников]]></property>
-				<property name="lecm-arm:order"><![CDATA[20]]></property>
-				<property name="lecm-arm:search-type"><![CDATA[]]></property>
-				<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-				<property name="lecm-arm:types"><![CDATA[]]></property>
-				<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-				<property name="lecm-arm:search-query"><![CDATA[]]></property>
-				<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
-				<items>
-					<item name="cm:94eb9df3-95a1-4cea-adb0-fcbade3678b3" type="lecm-arm:query-child-rule">
-						<property name="cm:name"><![CDATA[94eb9df3-95a1-4cea-adb0-fcbade3678b3]]></property>
-						<property name="lecm-arm:list-query-child-rule"><![CDATA[TYPE: "lecm-dic:dictionary" AND PATH:"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/*" AND NOT (=@lecm\-dic\:type:"lecm-contractor:contractor-type" OR =@lecm\-dic\:type:"lecm-legalform:legalform-type" OR =@lecm\-dic\:type:"lecm-specialization:specialization-type" OR =@lecm\-dic\:type:"lecm-contractor:physical-person-type" OR =@lecm\-dic\:type:"lecm-review-list:review-list-item")]]></property>
+		    <item name="cm:Администрирование" type="lecm-arm:arm">
+		        <property name="cm:name"><![CDATA[Администрирование]]></property>
+		        <property name="lecm-arm:code"><![CDATA[ADMIN]]></property>
+		        <items>
+					<item name="cm:Справочники" type="lecm-arm:accordion">
+						<property name="cm:name"><![CDATA[Справочники]]></property>
+						<property name="lecm-arm:order"><![CDATA[10]]></property>
+						<property name="lecm-arm:search-type"><![CDATA[]]></property>
+						<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+						<property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
+						<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+						<property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
+						<property name="lecm-arm:search-query"><![CDATA[]]></property>
+						<items>
+							<item name="cm:Все справочники" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Все справочники]]></property>
+								<property name="lecm-arm:order"><![CDATA[10]]></property>
+								<property name="lecm-arm:html-url"><![CDATA[page/allDictionary]]></property>
+							</item>
+							<item name="cm:Список справочников" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[Список справочников]]></property>
+								<property name="lecm-arm:order"><![CDATA[20]]></property>
+								<property name="lecm-arm:search-type"><![CDATA[]]></property>
+								<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+								<property name="lecm-arm:types"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+								<property name="lecm-arm:search-query"><![CDATA[]]></property>
+								<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+								<items>
+									<item name="cm:94eb9df3-95a1-4cea-adb0-fcbade3678b3" type="lecm-arm:query-child-rule">
+										<property name="cm:name"><![CDATA[94eb9df3-95a1-4cea-adb0-fcbade3678b3]]></property>
+										<property name="lecm-arm:list-query-child-rule"><![CDATA[TYPE: "lecm-dic:dictionary" AND PATH:"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/*" AND NOT @lecm\-dic\:type:("lecm-contractor:contractor-type" "lecm-legalform:legalform-type" "lecm-specialization:specialization-type" "lecm-contractor:physical-person-type" "lecm-review-list:review-list-item")]]></property>
+									</item>
+								</items>
+								<assocs>
+									<assoc type="lecm-arm:node-child-rule-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Справочники/Список справочников/94eb9df3-95a1-4cea-adb0-fcbade3678b3"/>
+								</assocs>
+							</item>
+						</items>
+						<assocs>
+							<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Технолог справочников"/>
+						</assocs>
 					</item>
 				</items>
-				<assocs>
-					<assoc type="lecm-arm:node-child-rule-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Справочники/Список справочников/94eb9df3-95a1-4cea-adb0-fcbade3678b3"/>
-				</assocs>
 			</item>
 		</items>
-		<assocs>
-			<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Технолог справочников"/>
-		</assocs>
 	</item>
 </items>

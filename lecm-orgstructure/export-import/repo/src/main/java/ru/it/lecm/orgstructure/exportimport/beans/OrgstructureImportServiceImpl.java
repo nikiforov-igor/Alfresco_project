@@ -26,6 +26,7 @@ import org.alfresco.util.PropertyMap;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.contractors.api.Contractors;
@@ -107,6 +108,20 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		this.namespaceService = namespaceService;
 	}
 
+	public NodeRef getPositionsRoot() {
+		if (positionsRoot == null) {
+			positionsRoot = dictionaryService.getDictionaryByName(POSITIONS_DICTIONARY_NAME);
+		}
+		return positionsRoot;
+	}
+
+	public NodeRef getBusinessRolesRoot() {
+		if (businessRolesRoot == null) {
+			businessRolesRoot = dictionaryService.getDictionaryByName(OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME);
+		}
+		return businessRolesRoot;
+	}
+
 	public void init() {
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
 		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
@@ -120,13 +135,9 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
 
 		authenticationService = (MutableAuthenticationService) authService;
-
-		positionsRoot = dictionaryService.getDictionaryByName(POSITIONS_DICTIONARY_NAME);
-		businessRolesRoot = dictionaryService.getDictionaryByName(OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME);
-
 		helper = new ExportImportHelper(nodeService, namespaceService, searchService, orgstructureService);
 	}
-
+	
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
@@ -210,7 +221,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 						if (positionNode != null) {
 							positionNode = updatePosition(positionNode, position);
 						} else {
-							positionNode = nodeService.getChildByName(positionsRoot, ContentModel.ASSOC_CONTAINS, positionName);
+							positionNode = nodeService.getChildByName(getPositionsRoot(), ContentModel.ASSOC_CONTAINS, positionName);
 							if (positionNode == null) {
 								positionNode = createPosition(id, position);
 							} else {
@@ -224,7 +235,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 						return true;
 					}
 
-				}, false, true);
+				}, false);
 			} catch (RuntimeException ex) {
 				logger.error("Невозможно выполнить импорт должности {}; причина: {}", position, ex.getMessage());
 				if (logger.isDebugEnabled()) {
@@ -248,7 +259,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		props.put(OrgstructureBean.PROP_STAFF_POSITION_NAME_G, StringUtils.trim(position.getNameGenitive()));
 		props.put(OrgstructureBean.PROP_STAFF_POSITION_CODE, StringUtils.trim(position.getCode()));
 
-		NodeRef createdStaffPosition = nodeService.createNode(positionsRoot, ContentModel.ASSOC_CONTAINS, generateRandomQName(), OrgstructureBean.TYPE_STAFF_POSITION, props).getChildRef();
+		NodeRef createdStaffPosition = nodeService.createNode(getPositionsRoot(), ContentModel.ASSOC_CONTAINS, generateRandomQName(), OrgstructureBean.TYPE_STAFF_POSITION, props).getChildRef();
 
 		helper.addID(createdStaffPosition, id);
 
@@ -936,7 +947,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 
 		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
 
-		NodeRef businessRoleNode = nodeService.createNode(businessRolesRoot, ContentModel.ASSOC_CONTAINS, assocQName, OrgstructureBean.TYPE_BUSINESS_ROLE, props).getChildRef();
+		NodeRef businessRoleNode = nodeService.createNode(getBusinessRolesRoot(), ContentModel.ASSOC_CONTAINS, assocQName, OrgstructureBean.TYPE_BUSINESS_ROLE, props).getChildRef();
 
 		for (NodeRef employee : employeeNodes) {
 			orgstructureService.includeEmployeeIntoBusinessRole(businessRoleNode, employee);

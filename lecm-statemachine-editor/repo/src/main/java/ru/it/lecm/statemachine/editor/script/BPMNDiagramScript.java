@@ -23,7 +23,6 @@ import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
-import ru.it.lecm.statemachine.editor.SimpleDocumentDeployer;
 import ru.it.lecm.statemachine.editor.StatemachineEditorModel;
 import ru.it.lecm.statemachine.editor.export.XMLExporter;
 
@@ -50,7 +49,6 @@ public class BPMNDiagramScript extends AbstractWebScript {
     private LecmBasePropertiesService propertiesService;
 	private ProcessEngine activitiProcessEngine;
 	private StateMachineServiceBean statemachineService;
-	private SimpleDocumentDeployer simpleDocumentDeployer;
 	private WorkflowService workflowService;
 
 	public void setStatemachineService(StateMachineServiceBean statemachineService) {
@@ -136,11 +134,8 @@ public class BPMNDiagramScript extends AbstractWebScript {
 						WorkflowDeployment wd = workflowService.deployDefinition("activiti", bpmnIS, "text/xml", fileName);
 						lastVersion = wd.getDefinition().getVersion();
 						bpmnIS.close();
-						//Сохраняем свойсвтва контейнера версий
-						nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION, lastVersion);
 					} else {
-						simpleDocumentDeployer.appendType(statemachine);
-						Object lastVersionProp = nodeService.getProperty(statemachineVersions, StatemachineEditorModel.PROP_SIMPLE_DOCUMENT_LAST_VERSION);
+						Object lastVersionProp = nodeService.getProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION);
 						long newVersion = 0;
 						if (lastVersionProp != null) {
 							try {
@@ -149,10 +144,12 @@ public class BPMNDiagramScript extends AbstractWebScript {
 						}
 						newVersion++;
 						lastVersion = Long.toString(newVersion);
-						nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_SIMPLE_DOCUMENT_LAST_VERSION, lastVersion);
 					}
+					
+					//Сохраняем свойсвтва контейнера версий
+					nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION, lastVersion);
 
-					String versionFolderName = "version_" + (isSimpleDocument ? "NA_" + lastVersion : lastVersion);
+					String versionFolderName = "version_" + lastVersion;
 		            NodeRef version = nodeService.getChildByName(statemachineVersions, ContentModel.ASSOC_CONTAINS, versionFolderName);
 					if (version == null) {
 						Map<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
@@ -197,6 +194,12 @@ public class BPMNDiagramScript extends AbstractWebScript {
 		            }
 
 		            statemachineService.resetStateMachene();
+					
+					if (isSimpleDocument) {
+						String docType = (String) nodeService.getProperty(statemachineVersions, ContentModel.PROP_NAME);
+						// Проверим папку и перенарежем права
+						statemachineService.checkArchiveFolder(docType, true);
+					}
 		            
 		            logger.debug("Машина состояний развернута");
                 }
@@ -341,10 +344,6 @@ public class BPMNDiagramScript extends AbstractWebScript {
 		ByteArrayInputStream is = new ByteArrayInputStream(backupOut.toByteArray());
 		writer.putContent(is);
 		is.close();
-	}
-
-	public void setSimpleDocumentDeployer(SimpleDocumentDeployer simpleDocumentDeployer) {
-		this.simpleDocumentDeployer = simpleDocumentDeployer;
 	}
 
 }

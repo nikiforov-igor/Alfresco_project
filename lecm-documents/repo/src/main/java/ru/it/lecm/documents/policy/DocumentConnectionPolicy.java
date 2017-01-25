@@ -11,6 +11,8 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.QName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
@@ -31,6 +33,8 @@ import java.util.Map;
  */
 public class DocumentConnectionPolicy implements OnCreateAssociationPolicy/*, OnDeleteAssociationPolicy*/, BeforeDeleteNodePolicy, BeforeCreateNodePolicy, OnCreateNodePolicy {
 
+	final protected Logger logger = LoggerFactory.getLogger(DocumentConnectionPolicy.class);
+	
 	private PolicyComponent policyComponent;
 	private NodeService nodeService;
 	private BusinessJournalService businessJournalService;
@@ -89,6 +93,7 @@ public class DocumentConnectionPolicy implements OnCreateAssociationPolicy/*, On
 
 	@Override
 	public void onCreateAssociation(AssociationRef nodeAssocRef) {
+		logger.debug("ДОКУМЕНТ. onCreateAssociation");
 		NodeRef documentRef = nodeAssocRef.getTargetRef();
 		if (!nodeService.hasAspect(documentRef, DocumentConnectionService.ASPECT_HAS_CONNECTED_DOCUMENTS)) {
 			Map<QName, Serializable> aspectValues = new HashMap<QName, Serializable>();
@@ -123,6 +128,7 @@ public class DocumentConnectionPolicy implements OnCreateAssociationPolicy/*, On
 
 	@Override
 	public void beforeDeleteNode(NodeRef nodeRef) {
+		logger.debug("ДОКУМЕНТ. beforeDeleteNode");
 		List<AssociationRef> connectedDocumentList = nodeService.getTargetAssocs(nodeRef, DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT);
 		if (connectedDocumentList.size() == 1) {
 			NodeRef connectedDocument = connectedDocumentList.get(0).getTargetRef();
@@ -157,6 +163,7 @@ public class DocumentConnectionPolicy implements OnCreateAssociationPolicy/*, On
 
 	@Override
 	public void onCreateNode(ChildAssociationRef childAssociationRef) {
+		logger.debug("ДОКУМЕНТ. onCreateNode");
 		NodeRef connection = childAssociationRef.getChildRef();
 
 		NodeRef primaryDocument = null;
@@ -181,6 +188,7 @@ public class DocumentConnectionPolicy implements OnCreateAssociationPolicy/*, On
 
 	@Override
 	public void beforeCreateNode(NodeRef parentRef, QName assocTypeQName, QName assocQName, QName nodeTypeQName) {
+		logger.debug("ДОКУМЕНТ. beforeCreateNode");
         // ALF-1583
         // При добавлении поручения через блок "Задачи" появляется сообщение "Ваши изменения не удалось сохранить"
         // В транзакцию добавляется переменная DocumentConnectionService.DO_NOT_CHECK_PERMISSION_CREATE_DOCUMENT_LINKS,
@@ -202,6 +210,7 @@ public class DocumentConnectionPolicy implements OnCreateAssociationPolicy/*, On
 	}
 
     public void onCreateTempAssociation(AssociationRef nodeAssocRef) {
+    	logger.debug("ДОКУМЕНТ. onCreateTempAssociation");
         //Текущий документ
         NodeRef primary = nodeAssocRef.getSourceRef();
         //Временная связь

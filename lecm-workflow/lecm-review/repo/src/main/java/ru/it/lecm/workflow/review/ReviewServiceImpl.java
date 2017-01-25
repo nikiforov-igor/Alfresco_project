@@ -2,7 +2,6 @@ package ru.it.lecm.workflow.review;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -38,6 +37,8 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 	private SearchService searchService;
 	private NamespaceService namespaceService;
 	private DictionaryBean dictionaryBean;
+	
+	private NodeRef settingsNode;
 
 	private Integer defaultReviewTerm;
 	private Integer defaultTermToNotify;
@@ -69,26 +70,16 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 	public void setDefaultTermToNotify(Integer defaultTermToNotify) {
 		this.defaultTermToNotify = (defaultTermToNotify != null) ? defaultTermToNotify : DEFAULT_REVIEW_TERM;
 	}
-
-	public void init() {
+	
+	@Override
+	public void initServiceImpl() {
 		if (null == getSettings()) {
-			AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-				@Override
-				public NodeRef doWork() throws Exception {
-					RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-					return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-						@Override
-						public NodeRef execute() throws Throwable {
-							PropertyMap props = new PropertyMap();
-							if (defaultReviewTerm != null) {
-								props.put(PROP_REVIEW_GLOBAL_SETTINGS_DEFAULT_REVIEW_TERM, defaultReviewTerm);
-								props.put(PROP_REVIEW_GLOBAL_SETTINGS_TERM_TO_NOTIFY_BEFORE_DEADLINE, defaultTermToNotify);
-							}
-							return createNode(getServiceRootFolder(), TYPE_REVIEW_GLOBAL_SETTINGS, REVIEW_GLOBAL_SETTINGS_NAME, props);
-						}
-					}, false, true);
-				}
-			});
+			PropertyMap props = new PropertyMap();
+			if (defaultReviewTerm != null) {
+				props.put(PROP_REVIEW_GLOBAL_SETTINGS_DEFAULT_REVIEW_TERM, defaultReviewTerm);
+				props.put(PROP_REVIEW_GLOBAL_SETTINGS_TERM_TO_NOTIFY_BEFORE_DEADLINE, defaultTermToNotify);
+			}
+			createNode(getServiceRootFolder(), TYPE_REVIEW_GLOBAL_SETTINGS, REVIEW_GLOBAL_SETTINGS_NAME, props);
 		}
 	}
 
@@ -290,7 +281,11 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 
 	@Override
 	public NodeRef getSettings() {
-		return nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, REVIEW_GLOBAL_SETTINGS_NAME);
+		if (settingsNode == null) {
+			settingsNode = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, REVIEW_GLOBAL_SETTINGS_NAME);
+		}
+		
+		return settingsNode;
 	}
 
 	@Override
