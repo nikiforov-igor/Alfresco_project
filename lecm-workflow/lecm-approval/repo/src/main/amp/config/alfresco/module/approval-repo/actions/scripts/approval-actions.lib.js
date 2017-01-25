@@ -1,4 +1,4 @@
-function forceApproval() {
+function forceApproval(document, reason) {
     /* получение nodeRef-ы на текущую итерацию */
     var currentIteration = routesService.getDocumentCurrentIteration(document);
 
@@ -21,7 +21,7 @@ function forceApproval() {
     }
 }
 
-function rejectApproval() {
+function rejectApproval(document, reason) {
     /* получение nodeRef-ы на текущую итерацию */
     var currentIteration = routesService.getDocumentCurrentIteration(document);
 

@@ -13,7 +13,7 @@
         <property name="lecm-group-actions:script"><![CDATA[
             <import resource="classpath:alfresco/module/approval-repo/actions/scripts/approval-actions.lib.js">
             (function() {
-                forceApproval();
+                forceApproval(document, reason);
 })();]]></property>
         <items>
             <item name="cm:Причина" type="lecm-group-actions:form-field">
