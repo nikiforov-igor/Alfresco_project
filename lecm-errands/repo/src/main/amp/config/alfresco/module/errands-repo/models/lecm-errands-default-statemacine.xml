@@ -4986,30 +4986,126 @@ if(doc){
                                                                         <subFolders/>
                                                                     </node>
                                                                     <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>b9721f91-936e-48b6-a601-007328938346
+                                                                        <type>inputVariable</type>
+                                                                        <name>15d6a07b-1073-4237-a548-7f9a14636580
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/085f0c86-01a5-4a45-b30b-f341cdd05f72
+                                                                            workspace://SpacesStore/1681e3c1-3db0-4bde-be36-a09b0186efc4
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>conditionErrorMessage</name>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исполнение" или заполнить поле «Отчет об исполнении».]]></value>
+                                                                                    <![CDATA[lecm-errands:project-report-text]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
+                                                                                <name>inputToValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Исполнение") OR (doc.attr("lecm-errands:execution-report") != null AND doc.attr("lecm-errands:execution-report")!= "")]]></value>
+                                                                                    <![CDATA[executionReportText]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>e77cd416-e033-4f85-8143-b081b46cb590
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/a0f4d9f7-0369-4c18-b3ae-7e126b9f6d75
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-errands:project-report-attachment]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[executionAttachmentAssoc]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>dd567e2b-f60b-4a5a-ace8-73b28aab75b3
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/6844c6b2-4126-43d3-9823-818beab98d51
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-errands:project-report-connections]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[executionConnectedDocs]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>3f08f16d-0e8e-45cf-9ecf-a919aa5d9f30
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/150c4b44-cf0c-484c-b0a0-3cbd26f5b08d
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-errands:project-report-ref]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[executionReportRef]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -7177,38 +7273,6 @@ if (document != null) {
                                                                         <subFolders/>
                                                                     </node>
                                                                     <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>bbc704a5-5bf8-4cdc-a102-96b1a3f83bbe
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/82c4548c-2420-4535-b440-e3ca5def9186
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исполнение" или заполнить поле «Отчет об исполнении».]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Исполнение") OR (doc.attr("lecm-errands:execution-report") != null AND doc.attr("lecm-errands:execution-report")!= "")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
                                                                         <type>outputVariable</type>
                                                                         <name>dacbc9c0-3fa0-41da-a2a8-186f5d1ec486
                                                                         </name>
@@ -7231,6 +7295,134 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>outputFromValue</name>
                                                                                 <value><![CDATA[executeResult]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>6211a07d-675d-492e-8f0d-18c9344d8652
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/baf9fcfe-2554-41d5-b29e-8a6f27ebd889
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-errands:project-report-text]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[executionReportText]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>591b91d5-0049-41be-a70e-7483e2b999ac
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/edc28b95-370d-4b3c-94fb-db9a62eac7ac
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-errands:project-report-attachment]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[executionAttachmentAssoc]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>7f6fbded-b569-4f3a-9371-52344016a3f3
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/ca40cf88-5371-4b84-96e1-59b0ac9d9829
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-errands:project-report-connections]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[executionConnectedDocs]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>302d5e25-003e-4db5-8f01-d1d53e55c529
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/acf70ab4-2111-43c4-8b74-8db82e1f7250
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-errands:project-report-ref]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[executionReportRef]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
