@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="cm:Внутренние. Принудительно согласовать" type="lecm-group-actions:script-action">
+        <property name="cm:name"><![CDATA[Внутренние. Принудительно согласовать]]></property>
+        <property name="lecm-group-actions:statuses"><![CDATA[На согласовании]]></property>
+        <property name="lecm-group-actions:type"><![CDATA[[lecm-internal:document]]]></property>
+        <property name="lecm-group-actions:order"><![CDATA[0]]></property>
+        <property name="lecm-group-actions:expression"><![CDATA[]]></property>
+        <property name="lecm-group-actions:availableForReader"><![CDATA[false]]></property>
+        <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
+        <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
+        <property name="cm:title"><![CDATA[Принудительно согласовать]]></property>
+        <property name="lecm-group-actions:script"><![CDATA[
+            <import resource="classpath:alfresco/module/approval-repo/actions/scripts/approval-actions.lib.js">
+            (function() {
+                forceApproval();
+})();]]></property>
+        <items>
+            <item name="cm:Причина" type="lecm-group-actions:form-field">
+                <property name="cm:name"><![CDATA[Причина]]></property>
+                <property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
+                <property name="lecm-group-actions:field-id"><![CDATA[reason]]></property>
+                <property name="lecm-group-actions:field-is-mandatory"><![CDATA[false]]></property>
+                <property name="lecm-group-actions:field-type"><![CDATA[approvalReason]]></property>
+                <property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
+            </item>
+        </items>
+    </item>
+</items>
