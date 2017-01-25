@@ -16,6 +16,7 @@
         formId = args[1].formId;
         formButtons = Dom.get(formId + "-form-buttons");
         processCloseChildCheckbox();
+        processReportTextField();
         var form = Dom.get(formId + "-form");
         Dom.addClass(form, "errands-execute-form");
         formButtons = Dom.get(formId + "-form-buttons");
@@ -37,6 +38,38 @@
         }
     }
 
+    function processReportTextField() {
+        Event.onContentReady(formId + "_assoc_packageItems-added", function () {
+            var errandRef = Dom.get(formId + "_assoc_packageItems-added").value;
+            Alfresco.util.Ajax.jsonPost({
+                url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                dataObj: {
+                    nodeRef: errandRef,
+                    substituteString: "{lecm-errands:report-required}"
+                },
+                successCallback: {
+                    fn: function (response) {
+                        if (response && response.json.formatString) {
+                            var isReportRequired = response.json.formatString;
+                            if(isReportRequired == "true"){
+                                var reportTextReadyElId = LogicECM.module.Base.Util.getComponentReadyElementId(formId,"lecmErrandWf:execute_1ReportText");
+                                Event.onContentReady(reportTextReadyElId, function () {
+                                    YAHOO.Bubbling.fire("registerValidationHandler",
+                                        {
+                                            fieldId: formId + "_prop_lecmErrandWf_execute_1ReportText",
+                                            handler: Alfresco.forms.validation.mandatory,
+                                            when: "change"
+                                        });
+                                });
+                            }
+                        }
+                    }
+                },
+                failureMessage: Alfresco.util.message("message.details.failure")
+            });
+        });
+    }
+
     function processCloseChildCheckbox() {
         Event.onContentReady(formId + "_assoc_packageItems-added", function () {
             var errandRef = Dom.get(formId + "_assoc_packageItems-added").value;
@@ -49,7 +82,7 @@
                     fn: function (response) {
                         var hasChildOnLifeCycle = response.json.hasChildOnLifeCycle;
                         if (!hasChildOnLifeCycle) {
-                            var closeChildField = Dom.get(formId + "_prop_" + "execute_1CloseChild");
+                            var closeChildField = Dom.get(formId + "_prop_" + "lecmErrandWf_execute_1CloseChild");
                             if (closeChildField) {
                                 Dom.setStyle(closeChildField.parentElement.parentElement.parentElement, "display", "none");
                             }
@@ -60,5 +93,4 @@
             });
         });
     }
-
 })();

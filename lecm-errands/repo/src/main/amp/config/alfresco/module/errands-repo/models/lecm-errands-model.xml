@@ -104,16 +104,6 @@
 				</list>
 			</parameter>
 		</constraint>
-		<constraint name="lecm-errands:execution-report-status-const" type="LIST">
-			<parameter name="allowedValues">
-				<list>
-					<value>PROJECT</value>
-					<value>ONCONTROL</value>
-					<value>ACCEPT</value>
-					<value>DECLINE</value>
-				</list>
-			</parameter>
-		</constraint>
     </constraints>
 
     <types>
@@ -271,25 +261,8 @@
 				<property name="lecm-errands:half-limit-date">
 					<type>d:date</type>
 				</property>
-				<!-- Текст отчета об исполнении -->
+				<!-- Отчет об исполнении -->
 				<property name="lecm-errands:execution-report">
-					<type>d:text</type>
-				</property>
-				<!-- Статус отчета -->
-				<property name="lecm-errands:execution-report-status">
-					<type>d:text</type>
-					<default>ONCONTROL</default>
-					<index enabled="true">
-						<atomic>true</atomic>
-						<stored>false</stored>
-						<tokenised>both</tokenised>
-					</index>
-					<constraints>
-						<constraint ref="lecm-errands:execution-report-status-const"/>
-					</constraints>
-				</property>
-				<!-- Причина отклонения -->
-				<property name="lecm-errands:execution-report-decline-reason">
 					<type>d:text</type>
 				</property>
 				<!-- Дата исполнения -->
@@ -337,6 +310,19 @@
 					<type>d:text</type>
 				</property>
 
+				<property name="lecm-errands:project-report-ref">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-errands:project-report-text">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-errands:project-report-attachment">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-errands:project-report-connections">
+					<type>d:text</type>
+				</property>
+
                 <!-- Сигналы -->
                 <!-- Сигнал об отмене -->
                 <property name="lecm-errands:cancellation-signal">
@@ -344,6 +330,10 @@
                     <mandatory>false</mandatory>
                     <default>false</default>
                 </property>
+				<property name="lecm-errands:cancellation-signal-reason">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
 
 				<!-- Поиск/сортировка ассоциаций-->
 				<property name="lecm-errands:initiator-assoc-ref">
@@ -614,6 +604,7 @@
 			</associations>
 			<mandatory-aspects>
 				<aspect>lecm-errands-ts:coexecutor-reports-aspect</aspect>
+				<aspect>lecm-errands-ts:execution-reports-aspect</aspect>
 			</mandatory-aspects>
 		</type>
 

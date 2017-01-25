@@ -3883,7 +3883,7 @@ if (doc){
                                                                 <value><![CDATA[var document = bpm_package.children[0];
 var currentUser = orgstructure.getCurrentEmployee();
 if (document) {
-    var changed = false;
+    var changed = true;
     var logObjects = [];
     var logText;
     var dueDateString = "";
@@ -6190,7 +6190,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                 <value><![CDATA[var document = bpm_package.children[0];
 var currentUser = orgstructure.getCurrentEmployee();
 if (document) {
-    var changed = false;
+    var changed = true;
     var logObjects = [];
     var logText;
     var dueDateString = "";
