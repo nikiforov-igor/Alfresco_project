@@ -47,7 +47,8 @@
                                     templateCode: 'ERRANDS_CHANGE_DUE_DATE_REQUEST',
                                     templateConfig: {
                                         mainObject: document,
-                                        eventExecutor: currentEmployee
+                                        eventExecutor: currentEmployee,
+                                        reason: lecmErrandWf_requestDueDateChange_1Reason
                                     }
                                 });
 
