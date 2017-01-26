@@ -101,7 +101,7 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
     }
 
     @Override
-    public void sendAnnulChildSignal(NodeRef resolution, String reason) {
+    public void sendAnnulSignal(NodeRef resolution, String reason) {
         nodeService.setProperty(resolution, ResolutionsService.PROP_ANNUL_SIGNAL, true);
         nodeService.setProperty(resolution, ResolutionsService.PROP_ANNUL_SIGNAL_REASON, reason);
     }

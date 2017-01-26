@@ -43,5 +43,5 @@ public interface ResolutionsService {
      * @param resolution документ
      * @param reason причина сигнала
      */
-    void sendAnnulChildSignal(NodeRef resolution, String reason);
+    void sendAnnulSignal(NodeRef resolution, String reason);
 }

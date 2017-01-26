@@ -339,7 +339,7 @@ public interface ErrandsService {
      * @param errand документ
      * @param reason причина сигнала
      */
-    void sendCancelChildSignal(NodeRef errand, String reason);
+    void sendCancelSignal(NodeRef errand, String reason);
 
     enum ModeChoosingExecutors {
         ORGANIZATION,

@@ -4,12 +4,12 @@ function processCancelErrand(cancelChildren, reason) {
         var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
         childrenErrands.forEach(function (childErrand) {
             if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
-                errands.sendCancelChildSignal(childErrand.nodeRef.toString(), reason);
+                errands.sendCancelSignal(childErrand.nodeRef.toString(), reason);
             }
         });
         childrenResolutions.forEach(function (childResolution) {
             if (!statemachine.isFinal(childResolution.nodeRef.toString()) && !statemachine.isDraft(childResolution)) {
-                resolutionsScript.sendAnnulChildSignal(childResolution.nodeRef.toString(), reason);
+                resolutionsScript.sendAnnulSignal(childResolution.nodeRef.toString(), reason);
             }
         });
     }
