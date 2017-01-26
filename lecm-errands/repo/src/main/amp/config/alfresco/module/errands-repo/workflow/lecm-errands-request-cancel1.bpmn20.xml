@@ -49,7 +49,7 @@
                     </activiti:field>
                 </activiti:executionListener>
             </extensionElements>
-            <script></script>
+            <script>var test=1;</script>
         </scriptTask>
         <userTask id="requestCancelTask" name="Обработать запрос на отмену" activiti:assignee='${requestCancelAssignee}' activiti:formKey="lecmErrandWf:requestCancelTask_1">
             <extensionElements>

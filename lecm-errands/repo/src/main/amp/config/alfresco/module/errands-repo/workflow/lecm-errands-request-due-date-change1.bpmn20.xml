@@ -61,7 +61,7 @@
                     </activiti:field>
                 </activiti:executionListener>
             </extensionElements>
-            <script></script>
+            <script>var test=1;</script>
         </scriptTask>
 
         <receiveTask id="requestDueDateChangeReceiveTask" name="Receive Task"></receiveTask>
