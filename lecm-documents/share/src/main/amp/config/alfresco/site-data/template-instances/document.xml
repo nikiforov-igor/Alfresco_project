@@ -244,33 +244,6 @@
            </properties>
        </component>
 
-      <!-- Задачи -->
-      <component>
-         <region-id>document-errands</region-id>
-         <url>/lecm/components/document/document-errands</url>
-         <properties>
-            <nodeRef>{nodeRef}</nodeRef>
-         </properties>
-      </component>
-
-       <!-- /Компонент для Поручений (рисуется только для типа "поручение" -->
-       <component>
-           <region-id>errand-form</region-id>
-           <sub-components>
-               <sub-component id="default">
-                   <evaluations>
-                       <evaluation>
-                           <url>/lecm/components/errands/form</url>
-                           <properties>
-                               <nodeRef>{nodeRef}</nodeRef>
-                               <formId>default</formId>
-                           </properties>
-                       </evaluation>
-                   </evaluations>
-               </sub-component>
-           </sub-components>
-       </component>
-
       <!-- Участие в ЮЗД -->
       <component>
          <region-id>document-signed-docflow</region-id>
@@ -284,7 +257,7 @@
 		<component>
 			<region-id>addresser-info</region-id>
 		</component>
-		
+
 		<!-- Информация об обращении -->
 		<component>
 			<region-id>appeal-info</region-id>

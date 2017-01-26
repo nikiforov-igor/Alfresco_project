@@ -1,8 +1,10 @@
+<@script type="text/javascript" src="${url.context}/res/scripts/dashlets/lecm-errands-dashlet.js"></@script>
+<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-errands.js"></@script>
 <@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/errands-links.js"></@script>
 
 <!-- Document Metadata Header -->
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/document-details/document-metadata.css" />
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata-form.css" />
+<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-metadata.css" />
+<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-form.css" />
 <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata-form-edit.css" />
 <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-main-form.css" />
 
@@ -23,13 +25,24 @@
 <#if node??>
 <#assign props = node.properties/>
 
-<script type="text/javascript">
-    //<![CDATA[
-    var errands;
+<script type="text/javascript">//<![CDATA[
+	if (typeof LogicECM == "undefined" || !LogicECM) {
+		LogicECM = {};
+	}
+	LogicECM.module = LogicECM.module || {};
+	LogicECM.module.Documents = LogicECM.module.Documents|| {};
+
     var setExecutionReport = null;
     (function () {
         var Dom = YAHOO.util.Dom,
             Event = YAHOO.util.Event;
+
+		LogicECM.module.Documents.ERRANDS_SETTINGS = LogicECM.module.Documents.ERRANDS_SETTINGS || <#if errandsSettings?? >${errandsSettings?string}<#else>{}</#if>;
+
+		var viewHistory = new LogicECM.module.Document.ViewHistory("save-view-history").setOptions({
+			nodeRef: "${nodeRef}"
+		});
+		viewHistory.save();
 
         function init() {
 			<#if hasAttrEditPerm>
@@ -170,7 +183,7 @@
 		</#if>
 
 	    function initChildErrands(htmlId) {
-		    errands = new LogicECM.module.Errands.dashlet.Errands(htmlId + "-exec-child-errands").setOptions(
+		    var errands = new LogicECM.module.Errands.dashlet.Errands(htmlId + "-exec-child-errands").setOptions(
 				    {
 					    itemType: "lecm-errands:document",
 					    destination: LogicECM.module.Documents.ERRANDS_SETTINGS.nodeRef,
