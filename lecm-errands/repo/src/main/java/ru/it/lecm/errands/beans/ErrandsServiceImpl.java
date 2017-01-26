@@ -635,4 +635,21 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         }
         return childResolutions;
     }
+
+    @Override
+    public List<NodeRef> getChildErrands(NodeRef errand) {
+        List<NodeRef> childErrands = new ArrayList<>();
+        List<AssociationRef> childErrandsAssocs = nodeService.getSourceAssocs(errand, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
+        for (AssociationRef assoc : childErrandsAssocs) {
+            childErrands.add(assoc.getSourceRef());
+        }
+        return childErrands;
+    }
+
+    @Override
+    public void sendCancelSignal(NodeRef errand, String reason) {
+        nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_CANCELLATION_SIGNAL, true);
+        nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_CANCELLATION_SIGNAL_REASON, reason);
+    }
+
 }

@@ -6,12 +6,12 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentTableService;
-import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.List;
@@ -19,15 +19,33 @@ import java.util.List;
 /**
  * Created by APanyukov on 09.12.2016.
  */
-public class ErrandsCoexecutorReportAttachmentAssociationPolicy implements NodeServicePolicies.OnCreateAssociationPolicy, NodeServicePolicies.OnDeleteAssociationPolicy {
+public class ErrandsReportAttachmentAssociationPolicy implements NodeServicePolicies.OnCreateAssociationPolicy, NodeServicePolicies.OnDeleteAssociationPolicy {
 
-    final static protected Logger logger = LoggerFactory.getLogger(ErrandsCoexecutorReportConnectedDocumentAssociationPolicy.class);
+    final static protected Logger logger = LoggerFactory.getLogger(ErrandsReportConnectedDocumentAssociationPolicy.class);
 
     private PolicyComponent policyComponent;
     private NodeService nodeService;
     private DocumentTableService documentTableService;
     private OrgstructureBean orgstructureService;
     private DocumentAttachmentsService documentAttachmentsService;
+    private QName reportTypeQname;
+    private QName associationQname;
+
+    public QName getReportTypeQname() {
+        return reportTypeQname;
+    }
+
+    public void setReportTypeQname(QName reportTypeQname) {
+        this.reportTypeQname = reportTypeQname;
+    }
+
+    public QName getAssociationQname() {
+        return associationQname;
+    }
+
+    public void setAssociationQname(QName associationQname) {
+        this.associationQname = associationQname;
+    }
 
     public PolicyComponent getPolicyComponent() {
         return policyComponent;
@@ -78,9 +96,9 @@ public class ErrandsCoexecutorReportAttachmentAssociationPolicy implements NodeS
 
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-                ErrandsService.TYPE_ERRANDS_TS_COEXECUTOR_REPORT, ErrandsService.ASSOC_ERRANDS_TS_ATTACHMENT, new JavaBehaviour(this, "onCreateAssociation"));
+                reportTypeQname, associationQname, new JavaBehaviour(this, "onCreateAssociation"));
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-                ErrandsService.TYPE_ERRANDS_TS_COEXECUTOR_REPORT, ErrandsService.ASSOC_ERRANDS_TS_ATTACHMENT, new JavaBehaviour(this, "onDeleteAssociation"));
+                reportTypeQname, associationQname, new JavaBehaviour(this, "onDeleteAssociation"));
 
     }
 
@@ -106,7 +124,7 @@ public class ErrandsCoexecutorReportAttachmentAssociationPolicy implements NodeS
         boolean attachmentIsUsed = false;
         for (NodeRef report : allReports) {
             if (!report.equals(reportNodeRef)) {
-                List<AssociationRef> reportAttachmentAssoc = nodeService.getTargetAssocs(report, ErrandsService.ASSOC_ERRANDS_TS_CONNECTED_DOCUMENT);
+                List<AssociationRef> reportAttachmentAssoc = nodeService.getTargetAssocs(report, associationQname);
                 for (AssociationRef reportAttachmentAssocRef : reportAttachmentAssoc) {
                     NodeRef reportAttachment = reportAttachmentAssocRef.getTargetRef();
                     if (reportAttachment.equals(attachment)) {

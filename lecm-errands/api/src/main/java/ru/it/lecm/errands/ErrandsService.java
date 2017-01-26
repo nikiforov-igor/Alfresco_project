@@ -22,7 +22,7 @@ public interface ErrandsService {
         PROJECT,ONCONTROL,APPROVE,DECLINE
     }
 
-    String ERRANDS_COEXECUTOR_REPORT_CONNECTION_TYPE = "docReport";
+    String ERRANDS_REPORT_CONNECTION_TYPE = "docReport";
 
     String ERRANDS_NAMESPACE_URI = "http://www.it.ru/logicECM/errands/1.0";
     String ERRANDS_NAMESPACE_DIC_URI = "http://www.it.ru/logicECM/errands/dictionaries/1.0";
@@ -36,6 +36,7 @@ public interface ErrandsService {
     QName TYPE_ERRANDS_DIC_TITLES = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-titles");
     QName TYPE_ERRANDS_DIC_TYPE = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-type");
     QName TYPE_ERRANDS_TS_COEXECUTOR_REPORT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report");
+    QName TYPE_ERRANDS_TS_EXECUTION_REPORT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"execution-report");
     QName PROP_ERRANDS_INITIATOR_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "initiator-assoc-ref");
     QName PROP_ERRANDS_EXECUTOR_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "executor-assoc-ref");
     QName PROP_ERRANDS_CONTROLLER_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "controller-assoc-ref");
@@ -65,6 +66,9 @@ public interface ErrandsService {
     QName PROP_ERRANDS_HALF_LIMIT_DATE = QName.createQName(ERRANDS_NAMESPACE_URI,"half-limit-date");
     QName PROP_ERRANDS_IS_LIMIT_SHORT_DATE = QName.createQName(ERRANDS_NAMESPACE_URI,"is-limit-short");
 
+    QName PROP_ERRANDS_CANCELLATION_SIGNAL = QName.createQName(ERRANDS_NAMESPACE_URI,"cancellation-signal");
+    QName PROP_ERRANDS_CANCELLATION_SIGNAL_REASON = QName.createQName(ERRANDS_NAMESPACE_URI,"cancellation-signal-reason");
+
     QName PROP_ERRANDS_TS_COEXECUTOR_REPORT_ACCEPT_DATE = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-accept-date");
     QName PROP_ERRANDS_TS_COEXECUTOR_REPORT_ROUTE_DATE = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-route-date");
     QName PROP_ERRANDS_TS_COEXECUTOR_REPORT_STATUS = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-status");
@@ -72,8 +76,11 @@ public interface ErrandsService {
     QName PROP_ERRANDS_TS_COEXECUTOR_REPORT_IS_ROUTE = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-is-route");
 
     QName ASSOC_ERRANDS_TS_COEXECUTOR = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-assoc");
-    QName ASSOC_ERRANDS_TS_ATTACHMENT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-attachment-assoc");
-    QName ASSOC_ERRANDS_TS_CONNECTED_DOCUMENT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-connected-document-assoc");
+    QName ASSOC_ERRANDS_TS_COEXECUTOR_ATTACHMENT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-attachment-assoc");
+    QName ASSOC_ERRANDS_TS_COEXECUTOR_CONNECTED_DOCUMENT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-connected-document-assoc");
+
+    QName ASSOC_ERRANDS_TS_EXECUTOR_ATTACHMENT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"execution-report-attachment-assoc");
+    QName ASSOC_ERRANDS_TS_EXECUTOR_CONNECTED_DOCUMENT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"execution-report-connected-document-assoc");
 
     QName PROP_ERRANDS_DIC_TITLE_CODE = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-title-code");
     QName PROP_ERRANDS_DIC_TYPE_DEFAULT_TITLE = QName.createQName(ERRANDS_NAMESPACE_DIC_URI,"errand-type-default-title");
@@ -320,6 +327,20 @@ public interface ErrandsService {
      * @return список дочерних резолюций
      */
     List<NodeRef> getChildResolutions(NodeRef errand);
+
+    /**
+     * Получение списка дочерних поручений
+     * @param errand документ
+     * @return список дочерних поручений
+     */
+    List<NodeRef> getChildErrands(NodeRef errand);
+
+    /**
+     * Отправить сигнал о необходимости завершения в поручения
+     * @param errand документ
+     * @param reason причина сигнала
+     */
+    void sendCancelSignal(NodeRef errand, String reason);
 
     enum ModeChoosingExecutors {
         ORGANIZATION,

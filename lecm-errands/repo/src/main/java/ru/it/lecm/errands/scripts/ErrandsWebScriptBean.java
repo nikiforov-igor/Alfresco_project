@@ -2,7 +2,6 @@ package ru.it.lecm.errands.scripts;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.repo.jscript.ValueConverter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -658,7 +657,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 		ParameterCheck.mandatory("documentRef", documentRef);
 		NodeRef document = new NodeRef(documentRef);
 		if (nodeService.exists(document)) {
-			List<NodeRef> childErrands = documentConnectionService.getConnectedDocuments(document, DocumentConnectionService.DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE, ErrandsService.TYPE_ERRANDS);
+			List<NodeRef> childErrands = errandsService.getChildErrands(document);
 			return createScriptable(childErrands);
 		}
 		return null;
@@ -882,5 +881,12 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
     public boolean isHideAdditionAttributes() {
         return errandsService.isHideAdditionAttributes();
+    }
+
+    public void sendCancelSignal(String errandRef, String reason) {
+        NodeRef errand = new NodeRef(errandRef);
+        if (nodeService.exists(errand)) {
+            errandsService.sendCancelSignal(errand, reason);
+        }
     }
 }

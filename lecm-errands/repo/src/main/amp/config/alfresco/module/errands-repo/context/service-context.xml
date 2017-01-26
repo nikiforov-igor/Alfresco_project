@@ -206,6 +206,8 @@
 
     <bean id="errandsCoexecutorReportAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsCoexecutorReportAssociationPolicy"
           init-method="init" parent="logicEcmAssociationPolicy" depends-on="errands.tableStructure.LogicEcmModelsBootstrap" />
+    <bean id="errandsExecutionReportAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsExecutionReportAssociationPolicy"
+          init-method="init" parent="logicEcmAssociationPolicy" depends-on="errands.tableStructure.LogicEcmModelsBootstrap" />
 
     <bean id="errandsCoexecutorReportUpdatePolicy" class="ru.it.lecm.errands.policy.ErrandsCoexecutorReportUpdatePolicy"
           init-method="init" depends-on="errands.LogicEcmModelsBootstrap,errands.tableStructure.LogicEcmModelsBootstrap">
@@ -218,20 +220,52 @@
         <property name="authenticationService" ref="authenticationService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
-    <bean id="errandsCoexecutorReportConnectedDocumentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsCoexecutorReportConnectedDocumentAssociationPolicy"
+
+    <util:constant static-field="ru.it.lecm.errands.ErrandsService.TYPE_ERRANDS_TS_COEXECUTOR_REPORT" id="coexecutorReportTypeQname"/>
+    <util:constant static-field="ru.it.lecm.errands.ErrandsService.TYPE_ERRANDS_TS_EXECUTION_REPORT" id="executionReportTypeQname"/>
+    <util:constant static-field="ru.it.lecm.errands.ErrandsService.ASSOC_ERRANDS_TS_COEXECUTOR_CONNECTED_DOCUMENT" id="coexecutorReportConnectedDocAssocQname"/>
+    <util:constant static-field="ru.it.lecm.errands.ErrandsService.ASSOC_ERRANDS_TS_EXECUTOR_CONNECTED_DOCUMENT" id="executionReportConnectedDocAssocQname"/>
+    <util:constant static-field="ru.it.lecm.errands.ErrandsService.ASSOC_ERRANDS_TS_COEXECUTOR_ATTACHMENT" id="coexecutorReportAttachmentAssocQname"/>
+    <util:constant static-field="ru.it.lecm.errands.ErrandsService.ASSOC_ERRANDS_TS_EXECUTOR_ATTACHMENT" id="executionReportAttachmentAssocQname"/>
+
+    <bean id="errandsCoexecutorReportConnectedDocumentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsReportConnectedDocumentAssociationPolicy"
           init-method="init" depends-on="documents.LogicEcmModelsBootstrap,errands.LogicEcmModelsBootstrap,errands.tableStructure.LogicEcmModelsBootstrap">
         <property name="policyComponent" ref="policyComponent"/>
         <property name="documentTableService" ref="documentTableService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="documentConnectionService" ref="documentConnectionService"/>
+        <property name="reportTypeQname" ref="coexecutorReportTypeQname"/>
+        <property name="associationQname" ref="coexecutorReportConnectedDocAssocQname"/>
     </bean>
-    <bean id="errandsCoexecutorReportAttachmentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsCoexecutorReportAttachmentAssociationPolicy"
+    <bean id="errandsCoexecutorReportAttachmentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsReportAttachmentAssociationPolicy"
           init-method="init" depends-on="documents.LogicEcmModelsBootstrap,errands.LogicEcmModelsBootstrap,errands.tableStructure.LogicEcmModelsBootstrap">
         <property name="policyComponent" ref="policyComponent"/>
         <property name="documentTableService" ref="documentTableService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+        <property name="reportTypeQname" ref="coexecutorReportTypeQname"/>
+        <property name="associationQname" ref="coexecutorReportAttachmentAssocQname"/>
+    </bean>
+
+    <bean id="errandsExecutionReportConnectedDocumentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsReportConnectedDocumentAssociationPolicy"
+          init-method="init" depends-on="documents.LogicEcmModelsBootstrap,errands.LogicEcmModelsBootstrap,errands.tableStructure.LogicEcmModelsBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="documentTableService" ref="documentTableService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="documentConnectionService" ref="documentConnectionService"/>
+        <property name="reportTypeQname" ref="executionReportTypeQname"/>
+        <property name="associationQname" ref="executionReportConnectedDocAssocQname"/>
+    </bean>
+    <bean id="errandsExecutionReportAttachmentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsReportAttachmentAssociationPolicy"
+          init-method="init" depends-on="documents.LogicEcmModelsBootstrap,errands.LogicEcmModelsBootstrap,errands.tableStructure.LogicEcmModelsBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="documentTableService" ref="documentTableService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+        <property name="reportTypeQname" ref="executionReportTypeQname"/>
+        <property name="associationQname" ref="executionReportAttachmentAssocQname"/>
     </bean>
 
     <bean id="errandsLimitationDatePolicy" class="ru.it.lecm.eds.policy.ComplexDatePolicy"

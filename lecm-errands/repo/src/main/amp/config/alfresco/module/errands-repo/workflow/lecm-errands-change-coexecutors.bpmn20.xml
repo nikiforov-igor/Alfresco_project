@@ -15,7 +15,7 @@
 	                        if (document) {
                                 var currentUser =  orgstructure.getCurrentEmployee();
                                 var newCoexecutors = [];
-                                if (lecmErrandWf_changeCoexecutorsNewCoexecutors && lecmErrandWf_changeCoexecutorsNewCoexecutors.size()) {
+                                if (execution.getVariable("lecmErrandWf_changeCoexecutorsNewCoexecutors") && lecmErrandWf_changeCoexecutorsNewCoexecutors.size()) {
                                 	for (var i = 0; i < lecmErrandWf_changeCoexecutorsNewCoexecutors.size(); i++){
                                 		newCoexecutors.push(lecmErrandWf_changeCoexecutorsNewCoexecutors.get(i));
 									}
@@ -59,7 +59,7 @@
 
 										});
 										notifications.sendNotificationFromCurrentUser({
-												recipients: [finalNewCoexecutors],
+												recipients: finalNewCoexecutors,
 												templateCode: 'ERRANDS_CO_EXECUTOR',
 												templateConfig: {
 													mainObject: document,
@@ -68,12 +68,12 @@
 											});
 									}
 									if (removedExecutors.length) {
-										finalNewCoexecutors.forEach(function(coexecutor){
+										removedExecutors.forEach(function(coexecutor){
 											document.removeAssociation(coexecutor, "lecm-errands:coexecutors-assoc");
 											lecmPermission.revokeDynamicRole(document, coexecutor, "ERRANDS_COEXECUTOR");
 										});
 										notifications.sendNotificationFromCurrentUser({
-												recipients: [finalNewCoexecutors],
+												recipients: removedExecutors,
 												templateCode: 'ERRANDS_CO_EXECUTOR_REMOVE',
 												templateConfig: {
 													mainObject: document,
@@ -83,13 +83,15 @@
 									}
 
 			                        var logObjects = [];
-
-			                        logObjects.push(newCoexecutors.map(function (coexecutor) {
-    									return documentScript.wrapperLink(coexecutor, coexecutor.properties["lecm-orgstr:employee-short-name"]);
-									}).join());
-			                        var logText = "#initiator изменил состав соисполнителей на: #object1";
+								 	newCoexecutors.forEach(function (coexecutor) {
+    									logObjects.push("" + coexecutor.nodeRef);
+									});
+			                        var logText = "#initiator изменил состав соисполнителей на: "
+			                        for(var i = 1; i < newCoexecutors.length + 1; i++){
+			                        	logText += "#object" + i;
+			                        	logText += (i < newCoexecutors.length) ? ", " : "";
+			                        }
 			                        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_COEXECUTORS", logText, logObjects);
-
 		                        }
 	                        }
                         ]]></activiti:string>

@@ -2,13 +2,10 @@ package ru.it.lecm.resolutions.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.util.ISO8601DateFormat;
-import org.alfresco.util.ParameterCheck;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.resolutions.api.ResolutionsService;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,5 +30,12 @@ public class ResolutionsWebScriptBean extends BaseWebScript {
             return createScriptable(results);
         }
         return null;
+    }
+
+    public void sendAnnulSignal(String resolutionRef, String reason) {
+        NodeRef resolution = new NodeRef(resolutionRef);
+        if (serviceRegistry.getNodeService().exists(resolution)) {
+            resolutionsService.sendAnnulSignal(resolution, reason);
+        }
     }
 }
