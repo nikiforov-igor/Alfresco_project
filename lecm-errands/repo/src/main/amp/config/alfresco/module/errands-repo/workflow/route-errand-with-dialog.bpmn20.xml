@@ -10,9 +10,9 @@
             <extensionElements>
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
-                        <activiti:string>
-                            <![CDATA[]]>
-                        </activiti:string>
+                        <activiti:string><![CDATA[
+                           var emptyServiceTask = "Service task";
+                        ]]></activiti:string>
                     </activiti:field>
                 </activiti:executionListener>
             </extensionElements>

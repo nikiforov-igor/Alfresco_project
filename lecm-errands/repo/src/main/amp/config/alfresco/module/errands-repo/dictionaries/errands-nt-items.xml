@@ -123,7 +123,7 @@
             <item name="cm:ERRANDS_CANCEL" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CANCEL]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("отменил", #comment)} поручение {#mainObject.wrapAsLink(#mainObject.attribute("lecm-errands:title"))}]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("отменил", #comment)} поручение {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Поручение. Отменено]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
@@ -230,7 +230,7 @@
             <item name="cm:ERRANDS_EXECUTED_TO_INITIATOR" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_EXECUTED_TO_INITIATOR]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} исполнил Ваше поручение: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} исполнил ваше поручение: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Исполнено (инициатору)]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -277,7 +277,7 @@
             <item name="cm:ERRANDS_CHANGE_DUE_DATE_REQUEST" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CHANGE_DUE_DATE_REQUEST]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} запросил {wrapTitle("изменение срока", #reason)} исполнения поручения: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} запросил {#wrapTitle("изменение срока", #reason)} исполнения поручения: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Запрос изменения сроков исполнения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -289,7 +289,7 @@
             <item name="cm:ERRANDS_REJECT_CHANGE_DUE_DATE_REQUEST" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_REJECT_CHANGE_DUE_DATE_REQUEST]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Ваш запрос на изменение срока исполнения поручения {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} {wrapTitle("отклонен", #reason)}.]]></property>
+                    <![CDATA[Ваш запрос на изменение срока исполнения поручения {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} {#wrapTitle("отклонен", #reason)}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Запрос изменения сроков исполнения отклонен]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -322,7 +322,7 @@
             <item name="cm:ERRANDS_CHANGE_EXECUTOR_NEW" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CHANGE_EXECUTOR_NEW]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} назначил Вас исполнителем поручения {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} назначил вас исполнителем поручения {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Назначен на исполнение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -334,7 +334,7 @@
             <item name="cm:ERRANDS_CHANGE_EXECUTOR_OLD" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CHANGE_EXECUTOR_OLD]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {wrapTitle("изменил", #reason)} исполнителя по Вашему поручению: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("изменил", #reason)} исполнителя по Вашему поручению: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Снят с исполнения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -346,7 +346,7 @@
             <item name="cm:ERRANDS_CHANGE_EXECUTOR" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CHANGE_EXECUTOR]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {wrapTitle("изменил", #reason)} исполнителя по поручению: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("изменил", #reason)} исполнителя по поручению: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Смена исполнителя]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -358,7 +358,7 @@
             <item name="cm:ERRANDS_CHANGE_DUE_DATE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CHANGE_DUE_DATE]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {wrapTitle("изменил", #reason)} срок исполнения поручения {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} на {#dueDate}.]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("изменил", #reason)} срок исполнения поручения {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} на {#dueDate}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Изменен срок поручения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -370,7 +370,7 @@
             <item name="cm:ERRANDS_CONTROLLER_NEW" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CONTROLLER_NEW]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} назначил Вас контролёром исполнения поручения {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} назначил вас контролёром исполнения поручения {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Назначение контролера]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>

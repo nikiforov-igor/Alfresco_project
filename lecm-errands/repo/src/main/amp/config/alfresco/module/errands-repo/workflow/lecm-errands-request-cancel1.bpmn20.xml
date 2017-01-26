@@ -57,6 +57,7 @@
                     <activiti:field name="script">
                         <activiti:string>
                             task.setVariable("lecmErrandWf_requestCancelTask_1Reason", task.getVariable("lecmErrandWf_requestCancelReason"));
+                            task.setVariable("lecmErrandWf_requestCancelTask_1CancelReason", task.getVariable("lecmErrandWf_requestCancelReason"));
                         </activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -86,17 +87,17 @@
 											templateConfig: {
 												mainObject: document,
 												eventExecutor: currentUser,
-												reason: task.getVariable("lecmErrandWf:requestCancelTask_1RejectReason")
+												reason: task.getVariable("lecmErrandWf_requestCancelTask_1RejectReason")
 											}
 										});
 
-	                                    var logText = "#initiator"
-	                                    logText += documentScript.wrapperTitle("отклонил", task.getVariable("lecmErrandWf:requestCancelTask_1RejectReason"))
-	                                    logText += "запрос на отмену поручения: #mainobject.";
+	                                    var logText = "#initiator "
+	                                    logText += documentScript.wrapperTitle("отклонил", task.getVariable("lecmErrandWf_requestCancelTask_1RejectReason"))
+	                                    logText += " запрос на отмену поручения: #mainobject.";
 									    businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
 								    } else if (decision == "CANCEL_ERRAND") {
 								        execution.setVariable("requestCancelResult", "cancelErrand");
-                                        processCancelErrand(task.getVariable("lecmErrandWf:requestCancelTask_1CancelChildren"), task.getVariable("lecmErrandWf:requestCancelTask_1CancelReason"));
+                                        processCancelErrand(task.getVariable("lecmErrandWf_requestCancelTask_1CancelChildren"), task.getVariable("lecmErrandWf_requestCancelTask_1CancelReason"));
 								    } else if (decision == "CHANGE_EXECUTOR") {
 						                var newExecutor = task.getVariableLocal("lecmErrandWf_requestCancelTask_1NewExecutor");
 						                if (newExecutor) {

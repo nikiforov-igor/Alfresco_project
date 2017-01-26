@@ -10,8 +10,8 @@
             <extensionElements>
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
-                        <activiti:string>
-                            <![CDATA[
+                        <activiti:string><![CDATA[
+                            <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-cancel-errand-script.js">
                             var document = bpm_package.children[0];
                             if (document) {
                                 var executor = null;
@@ -23,7 +23,7 @@
 						        if (executor) {
                                     var recipients = [];
                                     recipients.push(executor);
-                                    processCancelErrand(task.getVariable("lecmErrandWf:cancel_1CancelChildren"), task.getVariable("lecmErrandWf:cancel_1CancelReason"));
+                                    processCancelErrand(lecmErrandWf_cancel_1CancelChildren, lecmErrandWf_cancel_1CancelReason);
                                 }
                             }
                             ]]>

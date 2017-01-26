@@ -1,15 +1,21 @@
 package ru.it.lecm.eds;
 
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.eds.api.EDSDocumentService;
+import ru.it.lecm.wcalendar.IWorkCalendar;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: dbashmakov
@@ -23,6 +29,8 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
     private String workDayTypeString = "р.д.";
     private String limitlessString = "Без срока";
 
+    private IWorkCalendar calendarBean;
+
     public void setCalendarDayTypeString(String calendarDayTypeString) {
         this.calendarDayTypeString = calendarDayTypeString;
     }
@@ -33,6 +41,10 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
 
     public void setLimitlessString(String limitlessString) {
         this.limitlessString = limitlessString;
+    }
+
+    public void setCalendarBean(IWorkCalendar calendarBean) {
+        this.calendarBean = calendarBean;
     }
 
     @Override
@@ -66,20 +78,56 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
     }
 
     @Override
+    public void sendChangeDueDateSignal(NodeRef doc, Long shiftSize, Boolean limitless, Date newDate, String reason) {
+        Map<QName, Serializable> props = new HashMap<>();
+        props.put(PROP_CHANGE_DUE_DATE_SIGNAL_SHIFT_SIZE, shiftSize);
+        props.put(PROP_CHANGE_DUE_DATE_SIGNAL_SHIFT_LIMITLESS, limitless);
+        props.put(PROP_CHANGE_DUE_DATE_SIGNAL_SHIFT_NEW_DATE, newDate);
+        props.put(PROP_CHANGE_DUE_DATE_SIGNAL_SHIFT_REASON, reason);
+        nodeService.addAspect(doc, ASPECT_CHANGE_DUE_DATE_SIGNAL, props);
+    }
+
+    @Override
+    public void resetChangeDueDateSignal(NodeRef doc) {
+        nodeService.removeAspect(doc, ASPECT_CHANGE_DUE_DATE_SIGNAL);
+    }
+
+    @Override
     public String getComplexDateText(String radio, Date date, String daysType, Integer daysCount) {
         String result = null;
-        if ("LIMITLESS".equals(radio)) {
+        if (COMPLEX_DATE_RADIO_LIMITLESS.equals(radio)) {
             result = this.limitlessString;
-        } else if ("DATE".equals(radio) && date != null) {
+        } else if (COMPLEX_DATE_RADIO_DATE.equals(radio) && date != null) {
             DateFormat formater = new SimpleDateFormat("dd.MM.yyyy");
             result = formater.format(date);
-        } else if ("DAYS".equals(radio) && daysType != null && daysCount != null) {
-            if ("WORK".equals(daysType)) {
+        } else if (COMPLEX_DATE_RADIO_DAYS.equals(radio) && daysType != null && daysCount != null) {
+            if (COMPLEX_DATE_DAYS_WORK.equals(daysType)) {
                 result = daysCount + " " + workDayTypeString;
-            } else if ("CALENDAR".equals(daysType)) {
+            } else if (COMPLEX_DATE_DAYS_CALENDAR.equals(daysType)) {
                 result = daysCount + " " + calendarDayTypeString;
             }
         }
         return result;
+    }
+
+    @Override
+    public Date convertComplexDate(String radio, Date date, String daysType, Integer daysCount) {
+        if (COMPLEX_DATE_RADIO_DATE.equals(radio)) {
+            return date;
+        } else if (COMPLEX_DATE_RADIO_DAYS.equals(radio) && daysCount != null && daysType != null) {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR, 12);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+
+            if (COMPLEX_DATE_DAYS_WORK.equals(daysType)) {
+                return calendarBean.getNextWorkingDateByDays(cal.getTime(), daysCount);
+            } else if (COMPLEX_DATE_DAYS_CALENDAR.equals(daysType)) {
+                cal.add(Calendar.DAY_OF_YEAR, daysCount);
+                return cal.getTime();
+            }
+        }
+        return null;
     }
 }

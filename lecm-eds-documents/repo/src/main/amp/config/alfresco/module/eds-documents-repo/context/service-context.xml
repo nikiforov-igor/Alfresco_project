@@ -43,7 +43,9 @@
 	<util:list id="eds.dictionaries">
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-potential-roles.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-br-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-nt-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-objectType-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-business-journal-eventCategory-items.xml</value>
 	</util:list>
 	<bean id="eds.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
@@ -113,8 +115,21 @@
 
     <bean id="edsService" class="ru.it.lecm.eds.EDSDocumentServiceImpl" parent="baseBean"
           depends-on="eds.models.bootstrap">
+        <property name="calendarBean" ref="WorkCalendarService"/>
         <property name="calendarDayTypeString" value="к.д."/>
         <property name="workDayTypeString" value="р.д."/>
         <property name="limitlessString" value="Без срока"/>
     </bean>
+
+	<bean  id="edsExecutorPolicy" class="ru.it.lecm.eds.policy.EDSExecutorPolicy"
+		   init-method="init" depends-on="eds.models.bootstrap, eds.dictionary.bootstrap">
+		<property name="authenticationService" ref="authenticationService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="notificationsService" ref="notificationsService"/>
+		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="documentService" ref="documentService"/>
+		<property name="stateMachineService" ref="stateMachineHelper"/>
+	</bean>
 </beans>

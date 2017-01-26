@@ -3,7 +3,6 @@ package ru.it.lecm.resolutions.api;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,13 +11,6 @@ import java.util.List;
  * Time: 14:40
  */
 public interface ResolutionsService {
-    String EXECUTION_DATE_RADIO_DAYS = "DAYS";
-    String EXECUTION_DATE_RADIO_DATE = "DATE";
-    String EXECUTION_DATE_RADIO_LIMITLESS = "LIMITLESS";
-
-    String EXECUTION_DATE_DAYS_WORK = "WORK";
-    String EXECUTION_DATE_DAYS_CALENDAR = "CALENDAR";
-
     String CLOSERS_AUTHOR = "AUTHOR";
     String CLOSERS_CONTROLLER = "CONTROLLER";
     String CLOSERS_AUTHOR_AND_CONTROLLER = "AUTHOR_AND_CONTROLLER";
@@ -40,8 +32,6 @@ public interface ResolutionsService {
     QName ASSOC_BASE = QName.createQName(RESOLUTION_NAMESPACE_URI, "base-assoc");
     QName ASSOC_AUTHOR = QName.createQName(RESOLUTION_NAMESPACE_URI, "author-assoc");
     QName ASSOC_CONTROLLER = QName.createQName(RESOLUTION_NAMESPACE_URI, "controller-assoc");
-
-    Date calculateResolutionExecutionDate(String radio, Integer days, String daysType, Date date);
 
     boolean checkResolutionErrandsExecutionDate(NodeRef resolution);
 

@@ -13,7 +13,6 @@
                         <activiti:string><![CDATA[
                             var document = bpm_package.children[0];
                             if (document) {
-                                document.properties["lecm-errands:execution-date"] = new Date();
                                 var report_required  = document.properties["lecm-errands:report-required"];
                                 if(report_required){
 

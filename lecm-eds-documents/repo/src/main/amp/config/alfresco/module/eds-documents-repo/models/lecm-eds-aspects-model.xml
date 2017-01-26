@@ -19,5 +19,23 @@
                 </property>
             </properties>
         </aspect>
+        <aspect name="lecm-eds-aspect:changeDueDateSignal">
+            <properties>
+                <property name="lecm-eds-aspect:duedate-shift-size">
+                    <type>d:long</type>
+                    <default>0</default>
+                </property>
+                <property name="lecm-eds-aspect:duedate-limitless">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+                <property name="lecm-eds-aspect:new-limitation-date">
+                    <type>d:date</type>
+                </property>
+                <property name="lecm-eds-aspect:change-duedate-reason">
+                    <type>d:text</type>
+                </property>
+            </properties>
+        </aspect>
     </aspects>
 </model>

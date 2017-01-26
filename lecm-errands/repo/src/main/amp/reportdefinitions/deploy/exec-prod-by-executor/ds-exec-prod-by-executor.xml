@@ -22,7 +22,7 @@
                 <item key="RU_RU" value="b10c1b42-ad46-4694-b85f-cdaced5f9f03"/>
             </l18>
         </datasource.descriptor>
-        <roles>ERRANDS_INITIATOR,ERRANDS_EXECUTOR,ERRANDS_CONTROLLER,ERRANDS_COEXECUTOR,ERRANDS_READER,ERRANDS_CURATOR,ERRANDS_CHOOSING_INITIATOR</roles>
+        <roles>ERRANDS_INITIATOR,ERRANDS_EXECUTOR,ERRANDS_CONTROLLER,ERRANDS_COEXECUTOR,ERRANDS_READER,ERRANDS_CURATOR,CHOOSING_INITIATOR</roles>
     </report.descriptor>
 
     <query.descriptor>

@@ -31,7 +31,7 @@
                             var logText = "#initiator запросил ";
                             logText += documentScript.wrapperTitle("изменение срока", lecmErrandWf_requestDueDateChange_1Reason);
                             logText += "исполнения поручения: #mainobject.";
-                            businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, []);
+                            businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, []);
 
                             var initiator = null;
                             var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
@@ -47,7 +47,8 @@
                                     templateCode: 'ERRANDS_CHANGE_DUE_DATE_REQUEST',
                                     templateConfig: {
                                         mainObject: document,
-                                        eventExecutor: currentEmployee
+                                        eventExecutor: currentEmployee,
+                                        reason: lecmErrandWf_requestDueDateChange_1Reason
                                     }
                                 });
 
@@ -66,7 +67,7 @@
 
         <receiveTask id="requestDueDateChangeReceiveTask" name="Receive Task"></receiveTask>
 
-        <userTask id="changeRequestedDueDate" name="Перенести срок поручения" activiti:assignee="${requestDueDateChangeAssignee}" activiti:formKey="lecmErrandWf:requestDueDateChangeTask_1">
+        <userTask id="changeRequestedDueDate" name="Перенести срок исполнения" activiti:assignee="${requestDueDateChangeAssignee}" activiti:formKey="lecmErrandWf:requestDueDateChangeTask_1">
             <extensionElements>
                 <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
@@ -115,7 +116,7 @@
                                         var logText = "#initiator ";
                                         logText += documentScript.wrapperTitle("отклонил", rejectReason);
                                         logText += " запрос на изменение срока исполнения поручения #mainobject";
-                                        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, []);
+                                        businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, []);
                                     } else if (decision == "APPROVED") {
                                         var dateRadio = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1NewDueDateRadio");
                                         var newDueDate = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1NewDate");

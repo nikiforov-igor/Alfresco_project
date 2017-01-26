@@ -54,7 +54,7 @@
                     <!-- Соисполнители -->
                     <show id="lecm-errands:coexecutors-assoc"/>
                     <!-- Автор поручения -->
-                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:author-assoc"/>
                     <!-- Тематика -->
                     <show id="lecm-document:subject-assoc"/>
                     <!-- Без утверждения инициатором -->
@@ -127,7 +127,7 @@
 			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
 		                </control>
 	                </field>
-                    <field id="lecm-document:creator" set="common"/>
+                    <field id="lecm-document:author-assoc" set="common" label-id="label.document.creator"/>
                     <field id="lecm-document:subject-assoc" set="common"/>
                     <field id="lecm-errands:without-initiator-approval" set="common"/>
                     <field id="lecm-errands:line" set="common">
@@ -282,7 +282,6 @@
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>
 
-                    <show id="change-executors-script" force="true"/>
                     <show id="change-errand-type-script" force="true"/>
                     <show id="report-required-handler-script" force="true"/>
                     <show id="errands-create-form-script" force="true"/>
@@ -479,11 +478,6 @@
                     <field id="report-required-handler-script" >
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-report-required-handler.js</control-param>
-                        </control>
-                    </field>
-                    <field id="change-executors-script" >
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-errands/errands-reinit-executors.js</control-param>
                         </control>
                     </field>
                     <field id="errands-create-form-script">
@@ -733,7 +727,6 @@
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>
 
-                    <show id="change-executors-script" force="true"/>
                     <show id="change-errand-type-script" force="true"/>
                     <show id="report-required-handler-script" force="true"/>
                     <show id="errands-workflow-form-script" force="true"/>
@@ -947,11 +940,6 @@
                     <field id="report-required-handler-script" >
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-report-required-handler.js</control-param>
-                        </control>
-                    </field>
-                    <field id="change-executors-script" >
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-errands/errands-reinit-executors.js</control-param>
                         </control>
                     </field>
                     <field id="errands-workflow-form-script">
@@ -1467,7 +1455,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="lecm-errands-dic:errand-cancel-reason-name" force="true"/>
                 </field-visibility>
             </form>
         </forms>
@@ -1476,17 +1464,17 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="lecm-errands-dic:errand-cancel-reason-name" force="true"/>
                 </field-visibility>
             </form>
             <form id="search">
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="lecm-errands-dic:errand-cancel-reason-name" force="true"/>
                 </field-visibility>
             </form>
             <form id="datagrid">
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="lecm-errands-dic:errand-cancel-reason-name" force="true"/>
                 </field-visibility>
             </form>
         </forms>
@@ -1503,6 +1491,7 @@
                     <show id="lecm-errands-dic:errand-type-launch-review"/>
                 </field-visibility>
                 <appearance>
+                    <field id="cm:name" label-id="label.errands.type.name"/>
                     <field id="lecm-errands-dic:errand-type-default-title">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
@@ -1531,6 +1520,7 @@
                     <show id="lecm-errands-dic:errand-type-launch-review"/>
                 </field-visibility>
                 <appearance>
+                    <field id="cm:name" label-id="label.errands.type.name"/>
                     <field id="lecm-errands-dic:errand-type-default-title">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
@@ -1550,7 +1540,7 @@
                     <show id="lecm-errands-dic:errand-type-default-title"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" mandatory="false">
+                    <field id="cm:name" label-id="label.errands.type.name" mandatory="false">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
                         </constraint-handlers>
@@ -1576,6 +1566,9 @@
                     <show id="cm:name" force="true"/>
                     <show id="lecm-errands-dic:errand-type-default-title"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.errands.type.name"/>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -1889,7 +1882,7 @@
                             <control-param name="rows">5</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestDueDateChangeTaskRejectReasonValidation" event="change"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestDueDateChangeTaskRejectReasonValidation" event="change" message-id="message.reject.reason.mandatory"/>
                         </constraint-handlers>
                     </field>
                     <field id="requestDueDateChangeTaskFormScript">
@@ -2135,7 +2128,7 @@
                         <control  template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отмены_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-cancel-reason</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{lecm-errands-dic:errand-cancel-reason-name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -2168,7 +2161,7 @@
                         <control  template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отмены_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-cancel-reason</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{lecm-errands-dic:errand-cancel-reason-name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -2255,7 +2248,7 @@
                         <control  template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отмены_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-cancel-reason</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{lecm-errands-dic:errand-cancel-reason-name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
@@ -2417,7 +2410,7 @@
                         <control  template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отмены_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-cancel-reason</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{lecm-errands-dic:errand-cancel-reason-name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
