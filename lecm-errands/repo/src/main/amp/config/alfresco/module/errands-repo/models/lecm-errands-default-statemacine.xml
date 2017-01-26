@@ -2792,7 +2792,7 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>workflowLabel</name>
-                                                                <value><![CDATA[Создать отчет соисполнителя]]></value>
+                                                                <value><![CDATA[Создать отчет о соисполнении]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -5035,7 +5035,7 @@ if(doc){
                                                             </property>
                                                             <property>
                                                                 <name>workflowLabel</name>
-                                                                <value><![CDATA[Создать отчет Соисполнителя]]></value>
+                                                                <value><![CDATA[Создать отчет о соисполнении]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -7256,7 +7256,7 @@ if (document != null) {
                                                             </property>
                                                             <property>
                                                                 <name>workflowLabel</name>
-                                                                <value><![CDATA[Создать отчет Соисполнителя]]></value>
+                                                                <value><![CDATA[Создать отчет о соисполнении]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
