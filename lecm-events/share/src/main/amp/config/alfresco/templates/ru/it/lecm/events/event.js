@@ -22,17 +22,6 @@ function main() {
 	} else {
 		model.hasStatemachine = false;
 	}
-
-
-	url = '/api/metadata?nodeRef=' + page.url.args.nodeRef;
-	result = remote.connect("alfresco").get(url);
-	if (result.status == 200) {
-		var metadata = eval('(' + result + ')');
-		if (metadata && (metadata.type)) {
-			model.documentType = metadata.type;
-		}
-	}
-
 }
 
 main();
