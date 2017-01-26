@@ -7,10 +7,13 @@ if (parentNode) {
     } else if (parentNode.type == "{http://www.it.ru/logicECM/errands/1.0}document") {
         baseDocAssoc = parentNode.assocs["lecm-errands:base-assoc"];
     }
-    if (!baseDocAssoc || !baseDocAssoc.size()) {
+    if (!baseDocAssoc || !baseDocAssoc.length) {
         baseDoc = parentNode;
     } else {
         baseDoc = baseDocAssoc[0];
+    }
+    if (!lecmPermission.hasReadAccess(baseDoc)) {
+        lecmPermission.setRunAsUserSystem();
     }
     model.baseDoc = baseDoc;
     model.isFinal = statemachine.isFinal(baseDoc.nodeRef);
