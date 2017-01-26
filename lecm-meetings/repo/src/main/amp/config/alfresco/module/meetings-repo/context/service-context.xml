@@ -211,6 +211,8 @@
 				<value>alfresco/module/${artifactId}/actions/create-protocol.xml</value>
 				<value>alfresco/module/${artifactId}/actions/approve-time.xml</value>
 				<value>alfresco/module/${artifactId}/actions/change-secretary.xml</value>
+				<value>alfresco/module/${artifactId}/actions/force-approval.xml</value>
+				<value>alfresco/module/${artifactId}/actions/reject-approval.xml</value>
 			</list>
 		</property>
 	</bean>

@@ -39,6 +39,8 @@
 		<value>alfresco/module/${artifactId}/actions/print-cover.xml</value>
 		<value>alfresco/module/${artifactId}/actions/register-sending.xml</value>
 		<value>alfresco/module/${artifactId}/actions/reservation-outgoing.xml</value>
+		<value>alfresco/module/${artifactId}/actions/force-approval.xml</value>
+		<value>alfresco/module/${artifactId}/actions/reject-approval.xml</value>
 	</util:list>
 	<bean id="outgoing.groupOperations" parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
 		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
