@@ -4,6 +4,6 @@
 	<url>/lecm/controls-editor/getTypeRoot?doctype={doctype}</url>
 	<format default="json" />
 	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction><transaction>none</transaction>
+	<transaction allow="readonly">required</transaction>
 	<lifecycle>internal</lifecycle>
 </webscript>
