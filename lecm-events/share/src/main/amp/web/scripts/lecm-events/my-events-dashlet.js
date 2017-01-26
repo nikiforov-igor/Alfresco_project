@@ -153,7 +153,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                 }
             },
 
-            onListLoadFailed: function Contracts_onListLoadFailed()
+            onListLoadFailed: function onListLoadFailed_function()
             {
                 this.errandsList.innerHTML = this.msg("label.not-record");
             },

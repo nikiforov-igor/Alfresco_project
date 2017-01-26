@@ -23,7 +23,7 @@
 	      depends-on="dictionaryBootstrap, documents.LogicEcmModelsBootstrap,
 		  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
 		  documents.LogicEcmModelsConnectionsBootstrap,
-		  links.LogicEcmContractsBootstrap,
+		  links.LogicEcmBootstrap,
 		  documents.dictionaries.LogicEcmModelsBootstrap,
 		  errands.tableStructure.LogicEcmModelsBootstrap">
 		<property name="models">
