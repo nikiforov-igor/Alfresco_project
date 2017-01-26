@@ -877,10 +877,10 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return errandsService.isHideAdditionAttributes();
     }
 
-    public void sendCancelChildrenSignal(String errandRef, String reason) {
+    public void sendCancelChildSignal(String errandRef, String reason) {
         NodeRef errand = new NodeRef(errandRef);
         if (nodeService.exists(errand)) {
-            errandsService.sendCancelChildrenSignal(errand, reason);
+            errandsService.sendCancelChildSignal(errand, reason);
         }
     }
 }

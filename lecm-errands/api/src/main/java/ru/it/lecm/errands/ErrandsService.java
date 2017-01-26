@@ -335,11 +335,11 @@ public interface ErrandsService {
     List<NodeRef> getChildErrands(NodeRef errand);
 
     /**
-     * Отправить сигнал о необходимости завершения в дочерние поручения/резолюции
+     * Отправить сигнал о необходимости завершения в поручения
      * @param errand документ
      * @param reason причина сигнала
      */
-    void sendCancelChildrenSignal(NodeRef errand, String reason);
+    void sendCancelChildSignal(NodeRef errand, String reason);
 
     enum ModeChoosingExecutors {
         ORGANIZATION,

@@ -100,6 +100,12 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
         return result;
     }
 
+    @Override
+    public void sendAnnulChildSignal(NodeRef resolution, String reason) {
+        nodeService.setProperty(resolution, ResolutionsService.PROP_ANNUL_SIGNAL, true);
+        nodeService.setProperty(resolution, ResolutionsService.PROP_ANNUL_SIGNAL_REASON, reason);
+    }
+
     private String getPropFromJson(JSONObject json, QName propQName) throws JSONException {
         String propName = "prop_" + propQName.toPrefixString(namespaceService).replace(":", "_");
         if (json.has(propName)) {

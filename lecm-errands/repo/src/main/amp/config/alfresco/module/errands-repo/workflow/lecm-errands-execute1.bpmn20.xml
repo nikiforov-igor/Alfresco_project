@@ -145,7 +145,18 @@
                                         if (closeChild) {
                                             var reason = "Завершено исполнением поручения-основания ";
                                             reason += documentScript.wrapperDocumentLink(document, '{lecm-document:present-string}');
-                                            errands.sendCancelChildrenSignal(document.nodeRef.toString(), reason);
+                                            var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
+                                            var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
+                                            childrenErrands.forEach(function (childErrand) {
+                                                if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
+                                                    errands.sendCancelChildSignal(childErrand.nodeRef.toString(), reason);
+                                                }
+                                            });
+                                            childrenResolutions.forEach(function (childResolution) {
+                                                if (!statemachine.isFinal(childResolution.nodeRef.toString()) && !statemachine.isDraft(childResolution)) {
+                                                    resolutionsScript.sendAnnulChildSignal(childResolution.nodeRef.toString(), reason);
+                                                }
+                                            });
                                         }
                                         if (!reportRequired) {
                                             report.properties["lecm-errands-ts:execution-report-status"] = "ACCEPT";

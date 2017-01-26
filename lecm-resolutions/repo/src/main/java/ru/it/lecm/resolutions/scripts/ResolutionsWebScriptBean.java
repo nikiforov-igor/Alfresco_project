@@ -34,4 +34,11 @@ public class ResolutionsWebScriptBean extends BaseWebScript {
         }
         return null;
     }
+
+    public void sendAnnulChildSignal(String resolutionRef, String reason) {
+        NodeRef resolution = new NodeRef(resolutionRef);
+        if (serviceRegistry.getNodeService().exists(resolution)) {
+            resolutionsService.sendAnnulChildSignal(resolution, reason);
+        }
+    }
 }

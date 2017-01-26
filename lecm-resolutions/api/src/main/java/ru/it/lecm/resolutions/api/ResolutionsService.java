@@ -38,4 +38,10 @@ public interface ResolutionsService {
     boolean checkResolutionErrandsExecutionDate(NodeRef resolution);
 
     List<NodeRef> getResolutionClosers(NodeRef resolution);
+    /**
+     * Отправить сигнал о необходимости аннулирования в резолюцию
+     * @param resolution документ
+     * @param reason причина сигнала
+     */
+    void sendAnnulChildSignal(NodeRef resolution, String reason);
 }
