@@ -31,7 +31,7 @@
 	                        var logText = "#initiator запросил ";
 	                        logText += documentScript.wrapperTitle("изменение срока", lecmErrandWf_requestDueDateChangeReason);
 	                        logText += " поручения: #mainobject.";
-	                        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, []);
+	                        businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, []);
 
 	                        var initiator = null;
 	                        var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
@@ -144,7 +144,7 @@
 											logText += "перенос";
 										}
 				                        logText += " срока поручения: #mainobject.";
-				                        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, []);
+				                        businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, []);
 	                                }
 		                        }
 	                        }

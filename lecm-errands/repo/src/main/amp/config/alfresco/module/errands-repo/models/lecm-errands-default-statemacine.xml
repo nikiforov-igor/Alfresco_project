@@ -3961,7 +3961,7 @@ if (document) {
         logText = "#initiator ";
         logText += documentScript.wrapperTitle("изменил", reason);
         logText += " срок исполнения поручения #mainobject на  #object1";
-        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, logObjects);
+        businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, logObjects);
     }
 
     var children = [];
@@ -4566,7 +4566,7 @@ if(doc){
                                                             <property>
                                                                 <name>workflowLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Запросить изменение срока поручения]]></value>
+                                                                    <![CDATA[Запросить изменение срока исполнения]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -6268,7 +6268,7 @@ if (document) {
         logText = "#initiator ";
         logText += documentScript.wrapperTitle("изменил", reason);
         logText += " срок исполнения поручения #mainobject на  #object1";
-        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, logObjects);
+        businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, logObjects);
     }
 
     var children = [];
@@ -6945,7 +6945,7 @@ if (document != null) {
                                                             <property>
                                                                 <name>workflowLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Запросить изменение срока поручения]]></value>
+                                                                    <![CDATA[Запросить изменение срока исполнения]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>

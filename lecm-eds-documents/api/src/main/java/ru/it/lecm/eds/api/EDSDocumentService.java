@@ -37,6 +37,12 @@ public interface EDSDocumentService {
 
 	QName PROP_CHILD_CHANGE_SIGNAL_COUNT = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "child-change-signal-count");
 
+	QName ASPECT_CHANGE_DUE_DATE_SIGNAL = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "changeDueDateSignal");
+	QName PROP_CHANGE_DUE_DATE_SIGNAL_SHIFT_SIZE = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "duedate-shift-size");
+	QName PROP_CHANGE_DUE_DATE_SIGNAL_SHIFT_LIMITLESS = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "duedate-limitless");
+	QName PROP_CHANGE_DUE_DATE_SIGNAL_SHIFT_NEW_DATE = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "new-limitation-date");
+	QName PROP_CHANGE_DUE_DATE_SIGNAL_SHIFT_REASON = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "change-duedate-reason");
+
     /**
      * Отправка сигнала об изменении дочерних документов
      * @param baseDoc Документ, которому отправляется сигнал
@@ -48,6 +54,22 @@ public interface EDSDocumentService {
      * @param baseDoc Документ, у которого сбрасывается сигнал
      */
     void resetChildChangeSignal(NodeRef baseDoc);
+
+    /**
+     * Отправка сигнала об изменении срока
+     * @param doc Документ, которому отправляется сигнал
+     * @param shiftSize Размер сдвига срока
+     * @param limitless Без срока
+     * @param newDate Новый срок
+     * @param reason Причина изменения срока
+     */
+    void sendChangeDueDateSignal(NodeRef doc, Long shiftSize, Boolean limitless, Date newDate, String reason);
+
+    /**
+     * Сброс сигнала об изменении срока
+     * @param doc Документ, у которого сбрасывается сигнал
+     */
+    void resetChangeDueDateSignal(NodeRef doc);
 
     /**
      * Формирование настроек срока в текстовом виде

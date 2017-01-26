@@ -60,6 +60,16 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
         edsService.resetChildChangeSignal(baseDocument.getNodeRef());
     }
 
+    public void sendChangeDueDateSignal(ScriptNode baseDocument, Long shiftSize, Boolean limitless, Date newDate, String reason) {
+        ParameterCheck.mandatory("baseDocument", baseDocument);
+        edsService.sendChangeDueDateSignal(baseDocument.getNodeRef(), shiftSize, limitless, newDate, reason);
+    }
+
+    public void resetChangeDueDateSignal(ScriptNode baseDocument) {
+        ParameterCheck.mandatory("baseDocument", baseDocument);
+        edsService.resetChangeDueDateSignal(baseDocument.getNodeRef());
+    }
+
     public Date convertComplexDate(String radio, Date date, String daysType, Integer days) {
         ParameterCheck.mandatory("radio", radio);
 
