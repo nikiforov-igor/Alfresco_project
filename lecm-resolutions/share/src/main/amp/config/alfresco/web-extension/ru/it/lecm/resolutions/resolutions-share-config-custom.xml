@@ -18,7 +18,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="view-base-doc" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script9" force="true"/>
 
                     <show id="lecm-resolutions:control"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -62,7 +62,7 @@
                     <set id="reviewers" parent="reviewers-fieldset" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="end"/>
 
-                    <field id="view-base-doc" set="start">
+                    <field id="lecm-base-dummy-aspects:script9" set="start">
                         <control template="/ru/it/lecm/resolutions/controls/resolution-base-doc-control.ftl">
                             <control-param name="documentArgName">assoc_lecm-resolutions_base-document-assoc</control-param>
                             <control-param name="formatString">
