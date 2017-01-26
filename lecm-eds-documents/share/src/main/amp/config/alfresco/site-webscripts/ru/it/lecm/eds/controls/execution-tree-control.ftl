@@ -8,7 +8,8 @@
                     'scripts/lecm-documents/graph-tree-control.js',
                     'scripts/lecm-eds-documents/execution-tree-control.js'
                 ], [
-                    'css/lecm-documents/graph-view-control.css'
+                    'css/lecm-documents/graph-view-control.css',
+                    'css/lecm-eds-documents/execution-tree-control.css'
                 ],
                 createControl);
     }
