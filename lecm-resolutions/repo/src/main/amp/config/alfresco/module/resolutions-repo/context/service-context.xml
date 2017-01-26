@@ -143,6 +143,7 @@
         <property name="jobGroup" value="resolutios-status"/>
         <property name="triggerName" value="resolutios-sys-agent-status-trigger"/>
         <property name="triggerGroup" value="resolutios-status-trigger"/>
+        <property name="actionName" value="resolutionsExpiredExecutor"/>
         <property name="documentService" ref="documentService"/>
     </bean>
 
