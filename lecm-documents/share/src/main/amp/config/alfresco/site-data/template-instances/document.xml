@@ -284,19 +284,11 @@
 		<component>
 			<region-id>addresser-info</region-id>
 		</component>
-		
+
 		<!-- Информация об обращении -->
 		<component>
 			<region-id>appeal-info</region-id>
 		</component>
-	   <!-- Статусная строка -->
-	   <!--<component>-->
-		   <!--<region-id>document-status-string</region-id>-->
-		   <!--<url>/lecm/components/statusString</url>-->
-		   <!--<properties>-->
-			   <!--<nodeRef>{nodeRef}</nodeRef>-->
-		   <!--</properties>-->
-	   <!--</component>-->
 
       <!-- Uploaders -->
       <component>
