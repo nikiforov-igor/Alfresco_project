@@ -66,6 +66,9 @@ public interface ErrandsService {
     QName PROP_ERRANDS_HALF_LIMIT_DATE = QName.createQName(ERRANDS_NAMESPACE_URI,"half-limit-date");
     QName PROP_ERRANDS_IS_LIMIT_SHORT_DATE = QName.createQName(ERRANDS_NAMESPACE_URI,"is-limit-short");
 
+    QName PROP_ERRANDS_CANCELLATION_SIGNAL = QName.createQName(ERRANDS_NAMESPACE_URI,"cancellation-signal");
+    QName PROP_ERRANDS_CANCELLATION_SIGNAL_REASON = QName.createQName(ERRANDS_NAMESPACE_URI,"cancellation-signal-reason");
+
     QName PROP_ERRANDS_TS_COEXECUTOR_REPORT_ACCEPT_DATE = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-accept-date");
     QName PROP_ERRANDS_TS_COEXECUTOR_REPORT_ROUTE_DATE = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-route-date");
     QName PROP_ERRANDS_TS_COEXECUTOR_REPORT_STATUS = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-status");
@@ -323,6 +326,20 @@ public interface ErrandsService {
      * @return список дочерних резолюций
      */
     List<NodeRef> getChildResolutions(NodeRef errand);
+
+    /**
+     * Получение списка дочерних поручений
+     * @param errand документ
+     * @return список дочерних поручений
+     */
+    List<NodeRef> getChildErrands(NodeRef errand);
+
+    /**
+     * Отправить сигнал о необходимости завершения в дочерние поручения/резолюции
+     * @param errand документ
+     * @param reason причина сигнала
+     */
+    void sendCancelChildrenSignal(NodeRef errand, String reason);
 
     enum ModeChoosingExecutors {
         ORGANIZATION,

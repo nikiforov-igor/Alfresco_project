@@ -658,7 +658,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 		ParameterCheck.mandatory("documentRef", documentRef);
 		NodeRef document = new NodeRef(documentRef);
 		if (nodeService.exists(document)) {
-			List<NodeRef> childErrands = documentConnectionService.getConnectedDocuments(document, DocumentConnectionService.DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE, ErrandsService.TYPE_ERRANDS);
+			List<NodeRef> childErrands = errandsService.getChildErrands(document);
 			return createScriptable(childErrands);
 		}
 		return null;
@@ -875,5 +875,12 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
     public boolean isHideAdditionAttributes() {
         return errandsService.isHideAdditionAttributes();
+    }
+
+    public void sendCancelChildrenSignal(String errandRef, String reason) {
+        NodeRef errand = new NodeRef(errandRef);
+        if (nodeService.exists(errand)) {
+            errandsService.sendCancelChildrenSignal(errand, reason);
+        }
     }
 }
