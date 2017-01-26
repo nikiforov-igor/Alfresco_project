@@ -22,7 +22,7 @@ model.documentRef = documentNodeRef;
 function evaluateItem(document, substituteTitle) {
     var itemObj = {};
 
-    if (document != null) {
+    if (document) {
         itemObj.title = substitude.formatNodeTitle(document, substituteTitle);
         itemObj.nodeRef = document.nodeRef.toString();
         itemObj.docType = document.typeShort;
