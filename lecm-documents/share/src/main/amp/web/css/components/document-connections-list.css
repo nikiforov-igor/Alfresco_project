@@ -116,6 +116,6 @@ div.list-action-set .onActionDelete a {
 .connections-list .dont-have-access .theme-color-1,
 /*.doc-right-part .document-connection-set .dont-have-access,*/
 .doc-right-part .document-connection-set .dont-have-access .text-cropped,
-.graph-tree-liner .item-description .dont-have-access a{
+.item-description .dont-have-access a {
 	color: grey;
 }
