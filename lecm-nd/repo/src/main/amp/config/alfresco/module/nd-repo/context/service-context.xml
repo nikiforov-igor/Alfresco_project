@@ -51,6 +51,8 @@
 
     <util:list id="nd.groupOperations.dictionaries">
         <value>alfresco/module/${artifactId}/actions/reservation-nd.xml</value>
+        <value>alfresco/module/${artifactId}/actions/force-approval.xml</value>
+        <value>alfresco/module/${artifactId}/actions/reject-approval.xml</value>
     </util:list>
     <bean id="nd.groupOperations" parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
           p:rootPath="/Business platform/LECM/Сервис Групповые операции"
