@@ -135,7 +135,52 @@
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>ef141e0a-a5a2-41f8-963f-116df2cfe22e</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/a485e2c8-153d-4096-8e6d-8dec38954c5f
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:changeDueDateSignal")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/resolutions-repo/workflow/scripts/resolution-scripts-lib.js">
+
+(function(){
+  var document = bpm_package.children[0];
+  if (document) {
+	LECMResolutionActions.processChangeDueDateSignal(document);
+  }
+})();]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>ScriptAction</type>
@@ -1077,6 +1122,45 @@ if (document) {
                                                                 </reference>
                                                             </association>
                                                         </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>15535c11-82e8-4769-902d-8173e83c884d</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/eb688748-3c44-4d8a-b34a-620d041a1e96
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:changeDueDateSignal")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/resolutions-repo/workflow/scripts/resolution-scripts-lib.js">
+
+(function(){
+  var document = bpm_package.children[0];
+  if (document) {
+	LECMResolutionActions.processChangeDueDateSignal(document);
+  }
+})();]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
@@ -2023,6 +2107,45 @@ if (document) {
                                                                 </reference>
                                                             </association>
                                                         </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>dc048d4f-8531-4ca3-8ca7-0c04a5f84c61</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/00e2f4fd-cb87-4b84-b6c2-653d7378a158
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:changeDueDateSignal")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/resolutions-repo/workflow/scripts/resolution-scripts-lib.js">
+
+(function(){
+  var document = bpm_package.children[0];
+  if (document) {
+	LECMResolutionActions.processChangeDueDateSignal(document);
+  }
+})();]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
@@ -2982,6 +3105,45 @@ if (document) {
                                                                 </reference>
                                                             </association>
                                                         </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>3b604ba5-5448-4184-952a-647935eb6389</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/2b9a7e6f-d5a7-4be7-8850-9aa725684b96
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:changeDueDateSignal")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/resolutions-repo/workflow/scripts/resolution-scripts-lib.js">
+
+(function(){
+  var document = bpm_package.children[0];
+  if (document) {
+	LECMResolutionActions.processChangeDueDateSignal(document);
+  }
+})();]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>

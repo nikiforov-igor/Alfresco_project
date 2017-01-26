@@ -1,6 +1,7 @@
 package ru.it.lecm.eds;
 
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -8,10 +9,13 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: dbashmakov
@@ -71,6 +75,21 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
         } catch (ConcurrencyFailureException ex) {
             logger.warn("Send signal at the same time", ex);
         }
+    }
+
+    @Override
+    public void sendChangeDueDateSignal(NodeRef doc, Long shiftSize, Boolean limitless, Date newDate, String reason) {
+        Map<QName, Serializable> props = new HashMap<>();
+        props.put(PROP_CHANGE_DUE_DATE_SIGNAL_SHIFT_SIZE, shiftSize);
+        props.put(PROP_CHANGE_DUE_DATE_SIGNAL_SHIFT_LIMITLESS, limitless);
+        props.put(PROP_CHANGE_DUE_DATE_SIGNAL_SHIFT_NEW_DATE, newDate);
+        props.put(PROP_CHANGE_DUE_DATE_SIGNAL_SHIFT_REASON, reason);
+        nodeService.addAspect(doc, ASPECT_CHANGE_DUE_DATE_SIGNAL, props);
+    }
+
+    @Override
+    public void resetChangeDueDateSignal(NodeRef doc) {
+        nodeService.removeAspect(doc, ASPECT_CHANGE_DUE_DATE_SIGNAL);
     }
 
     @Override
