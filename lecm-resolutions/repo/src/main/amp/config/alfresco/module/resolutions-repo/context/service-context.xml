@@ -136,50 +136,13 @@
         <property name="propDateText" value="lecm-resolutions:limitation-date-text"/>
     </bean>
 
-    <bean id="resolutionsExpiredSchedule" class="ru.it.lecm.resolutions.shedule.ResolutionsExpiredShedule">
-        <property name="transactionMode">
-            <value>ISOLATED_TRANSACTIONS</value>
-        </property>
-        <property name="compensatingActionMode">
-            <value>IGNORE</value>
-        </property>
-        <property name="nodeService">
-            <ref bean="nodeService"/>
-        </property>
-        <property name="cronExpression">
-            <value>0 10 5 */1 * ?</value>
-        </property>
-        <property name="firstStartExpression">
-            <value>0 */15 * * * ?</value>
-        </property>
-        <property name="onServerStart">
-            <value>false</value>
-        </property>
-        <property name="jobName">
-            <value>resolutios-sys-agent-status</value>
-        </property>
-        <property name="jobGroup">
-            <value>resolutios-status</value>
-        </property>
-        <property name="triggerName">
-            <value>resolutios-sys-agent-status-trigger</value>
-        </property>
-        <property name="triggerGroup">
-            <value>resolutios-status-trigger</value>
-        </property>
-        <property name="scheduler">
-            <ref bean="schedulerFactory"/>
-        </property>
-        <property name="actionService">
-            <ref bean="ActionService"/>
-        </property>
-        <property name="transactionService">
-            <ref bean="TransactionService"/>
-        </property>
-        <property name="runAsUser">
-            <value>System</value>
-        </property>
-        <property name="namespaceService" ref="namespaceService"/>
+    <bean id="resolutionsExpiredSchedule" class="ru.it.lecm.resolutions.shedule.ResolutionsExpiredShedule" parent="baseTransactionalSchedule">
+        <property name="cronExpression" value="0 10 5 */1 * ?"/>
+        <property name="firstStartExpression" value="0 */15 * * * ?"/>
+        <property name="jobName" value="resolutios-sys-agent-status"/>
+        <property name="jobGroup" value="resolutios-status"/>
+        <property name="triggerName" value="resolutios-sys-agent-status-trigger"/>
+        <property name="triggerGroup" value="resolutios-status-trigger"/>
         <property name="documentService" ref="documentService"/>
     </bean>
 
