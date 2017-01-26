@@ -1,0 +1,9 @@
+.yui-panel-container .errands-execute-form .control > .label-div {
+    width: 100px;
+}
+
+.yui-panel-container .errands-execute-form .form-buttons > span:hover {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: #bdbdbd;
+}
+
