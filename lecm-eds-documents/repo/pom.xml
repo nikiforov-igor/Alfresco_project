@@ -72,30 +72,35 @@
             <groupId>ru.it.lecm.security</groupId>
             <artifactId>lecm-security-api</artifactId>
             <version>${platform.version}</version>
-            <type>provided</type>
+            <type>jar</type>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ru.it.lecm.notifications</groupId>
             <artifactId>notifications-repo-api</artifactId>
             <version>${platform.version}</version>
-            <type>provided</type>
+            <type>jar</type>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ru.it.lecm.documents</groupId>
             <artifactId>documents-repo-api</artifactId>
             <version>${platform.version}</version>
-            <type>provided</type>
+            <type>jar</type>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ru.it.lecm.statemachine</groupId>
             <artifactId>statemachine-api</artifactId>
             <version>${platform.version}</version>
-            <type>provided</type>
+            <type>jar</type>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ru.it.lecm.calendar</groupId>
             <artifactId>lecm-calendar-repo-api</artifactId>
             <version>${platform.version}</version>
+            <type>jar</type>
             <scope>provided</scope>
         </dependency>
         <!--rhino-1.7R4-alfresco-patched.jar <dependency>
