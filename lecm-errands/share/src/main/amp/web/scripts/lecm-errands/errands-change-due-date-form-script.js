@@ -9,6 +9,9 @@
 
     Bubbling.on('errandsWFChangeDueDateScriptLoaded', init);
     Bubbling.on('requestDueDateChangeTaskFormScriptLoaded', process);
+    Bubbling.on('changeDueDateRadioEvent', processDueDateSet);
+    Bubbling.on('requestChangeDueDateRadioEvent', processDueDateSet);
+    Bubbling.on('requestTaskChangeDueDateRadioEvent', processDueDateSet);
 
     function init(layer, args) {
         formId = args[1].formId;
@@ -62,5 +65,24 @@
                 });
             });
         });
+    }
+
+    function processDueDateSet(layer, args){
+        var value = args[1].value;
+        var dateFieldName = "";
+        if (layer == "changeDueDateRadioEvent") {
+            dateFieldName = "lecmErrandWf:changeDueDateNewDueDate";
+        } else if (layer == "requestChangeDueDateRadioEvent") {
+            dateFieldName = "lecmErrandWf:requestDueDateChange_1NewDate";
+        } else if (layer == "requestTaskChangeDueDateRadioEvent") {
+            dateFieldName = "lecmErrandWf:requestDueDateChangeTask_1NewDate";
+        }
+        if (formId) {
+            if ("DATE" == value) {
+                LogicECM.module.Base.Util.enableControl(formId, dateFieldName);
+            } else {
+                LogicECM.module.Base.Util.disableControl(formId, dateFieldName);
+            }
+        }
     }
 })();
