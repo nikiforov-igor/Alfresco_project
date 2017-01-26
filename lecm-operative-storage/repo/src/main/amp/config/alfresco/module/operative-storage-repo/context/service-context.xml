@@ -29,11 +29,13 @@
 		<value>alfresco/module/${artifactId}/models/os-aspects-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/operative-storage-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/operative-storage-global-settings.xml</value>
+		<value>alfresco/module/${artifactId}/models/lecm-file-register-dictionary-model.xml</value>
 	</util:list>
 
 	<util:list id="operative.storage.labels">
 		<value>alfresco/module/${artifactId}/messages/operative-storage-settings-model</value>
 		<value>alfresco/module/${artifactId}/messages/operative-storage-model</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-file-register-dictionary-model</value>
 		<!--<value>alfresco/module/${artifactId}/messages/fms-os</value>-->
 	</util:list>
 
@@ -45,6 +47,7 @@
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-os-br-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/os-bj-eventCategory-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/os-objectType-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-file-register-objectType-items.xml</value>
 	</util:list>
 
 	<util:list id="operative.storage.groupOperations">
