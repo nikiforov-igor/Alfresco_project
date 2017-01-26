@@ -136,6 +136,12 @@
                     <control-param name="nameSubstituteString">№ {lecm-os:nomenclature-case-volume-number}</control-param>
                     <control-param name="sortProp">lecm-os:nomenclature-case-volume-number</control-param>
                 </type>
+                <type name="association:lecm-doc-dic-fr:level3" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Номенклатура_x0020_дел</control-param>
+                    <control-param name="nameSubstituteString">{lecm-doc-dic-fr:index} - {lecm-doc-dic-fr:title}</control-param>
+                    <control-param name="treeNodeSubstituteString">{lecm-doc-dic-fr:year}{lecm-doc-dic-fr:organization-unit-assoc/lecm-orgstr:element-short-name}</control-param>
+                    <control-param name="treeItemType">lecm-dic:hierarchical_dictionary_values</control-param>
+                </type>
 			</default-controls>
 		</forms>
 	</config>
@@ -1147,6 +1153,105 @@
                 </appearance>
             </form>
         </forms>
+    </config>
+    <config evaluator="node-type" condition="lecm-doc-dic-fr:level1">
+            <forms>
+                    <form>
+                            <field-visibility>
+                                    <show id="lecm-doc-dic-fr:year" force="true"/>
+                                    <show id="lecm-doc-dic-fr:level1-note" force="true"/>
+                            </field-visibility>
+                    </form>
+            </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-doc-dic-fr:level1">
+            <forms>
+                    <form>
+                            <field-visibility>
+                                    <show id="lecm-doc-dic-fr:year" force="true"/>
+                                    <show id="lecm-doc-dic-fr:level1-note" force="true"/>
+                            </field-visibility>
+                    </form>
+                    <form id="search">
+                            <field-visibility>
+                                    <show id="lecm-doc-dic-fr:year" force="true"/>
+                                    <show id="lecm-doc-dic-fr:level1-note" force="true"/>
+                            </field-visibility>
+            <appearance>
+                <field id="lecm-doc-dic-fr:year" mandatory="false">
+                    <constraint-handlers>
+                        <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                    </constraint-handlers>
+                </field>
+            </appearance>
+                    </form>
+                    <form id="datagrid">
+                            <field-visibility>
+                                    <show id="lecm-doc-dic-fr:year" force="true"/>
+                                    <show id="lecm-doc-dic-fr:level1-note" force="true"/>
+                            </field-visibility>
+                    </form>
+            </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-doc-dic-fr:level2">
+            <forms>
+                    <form>
+                            <field-visibility>
+                                    <show id="lecm-doc-dic-fr:organization-unit-assoc" force="true"/>
+                            </field-visibility>
+                    </form>
+            </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-doc-dic-fr:level2">
+            <forms>
+                    <form>
+                            <field-visibility>
+                                    <show id="lecm-doc-dic-fr:organization-unit-assoc" force="true"/>
+                            </field-visibility>
+                    </form>
+                    <form id="datagrid">
+                            <field-visibility>
+                                    <show id="lecm-doc-dic-fr:organization-unit-assoc" force="true"/>
+                            </field-visibility>
+                    </form>
+            </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-doc-dic-fr:level3">
+            <forms>
+                    <form>
+                            <field-visibility>
+                                    <show id="lecm-doc-dic-fr:index" force="true"/>
+                                    <show id="lecm-doc-dic-fr:title" force="true"/>
+                                    <show id="lecm-doc-dic-fr:storage-period" force="true"/>
+                                    <show id="lecm-doc-dic-fr:level3-note" force="true"/>
+                            </field-visibility>
+                    </form>
+            </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-doc-dic-fr:level3">
+            <forms>
+                    <form>
+                            <field-visibility>
+                                    <show id="lecm-doc-dic-fr:index" force="true"/>
+                                    <show id="lecm-doc-dic-fr:title" force="true"/>
+                                    <show id="lecm-doc-dic-fr:storage-period" force="true"/>
+                                    <show id="lecm-doc-dic-fr:level3-note" force="true"/>
+                            </field-visibility>
+                    </form>
+                    <form id="datagrid">
+                            <field-visibility>
+                                    <show id="lecm-doc-dic-fr:index" force="true"/>
+                                    <show id="lecm-doc-dic-fr:title" force="true"/>
+                                    <show id="lecm-doc-dic-fr:storage-period" force="true"/>
+                                    <show id="lecm-doc-dic-fr:level3-note" force="true"/>
+                            </field-visibility>
+                    </form>
+            </forms>
     </config>
 
 </alfresco-config>
