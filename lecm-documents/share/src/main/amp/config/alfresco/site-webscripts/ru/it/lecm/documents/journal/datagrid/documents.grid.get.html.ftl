@@ -34,7 +34,7 @@
 	                    bubblingLabel: "documents-journal",
 	                    attributeForShow: "lecm-document:present-string"
 	                }).setMessages(${messages});
-
+	
 	                YAHOO.Bubbling.fire("activeGridChanged",
 	                        {
 	                            datagridMeta: {
@@ -45,16 +45,16 @@
 	                                    filter: '+PATH:"' + LogicECM.module.DocumentsJournal.SETTINGS.draftsPath + '//*"'
 	                                            + ' OR +PATH:"' + LogicECM.module.DocumentsJournal.SETTINGS.documentsPath + '//*"'
 	                                }
-
+	
 	                            },
 	                            bubblingLabel: "documents-journal"
 	                        });
 	            }
-
+	
 	            function init() {
 	                createDatagrid();
 	            }
-
+	
 	            YAHOO.util.Event.onDOMReady(init);
 			})();
             //]]></script>
