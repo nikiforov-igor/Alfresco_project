@@ -5009,7 +5009,7 @@ if(doc){
                                                                             <property>
                                                                                 <name>inputToValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[executionReportText]]></value>
+                                                                                    <![CDATA[prop_lecmErrandWf_execute_1ReportText]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -5041,7 +5041,7 @@ if(doc){
                                                                             <property>
                                                                                 <name>inputToValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[executionAttachmentAssoc]]></value>
+                                                                                    <![CDATA[assoc_lecmErrandWf_execute_1Attachment]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -7326,7 +7326,7 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>inputToValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[executionReportText]]></value>
+                                                                                    <![CDATA[prop_lecmErrandWf_execute_1ReportText]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -7358,7 +7358,7 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>inputToValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[executionAttachmentAssoc]]></value>
+                                                                                    <![CDATA[assoc_lecmErrandWf_execute_1Attachment]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>

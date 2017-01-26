@@ -6,12 +6,14 @@ function processCancelErrand(cancelChildren, reason) {
             if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
                 childErrand.properties["lecm-errands:cancellation-signal"] = true;
                 childErrand.properties["lecm-errands:cancellation-signal-reason"] = reason;
+                childErrand.save();
             }
         });
         childrenResolutions.forEach(function (childResolution) {
             if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
                 childResolution.properties["lecm-resolutions:annul-signal"] = true;
                 childResolution.properties["lecm-resolutions:annul-signal-reason"] = reason;
+                childResolution.save();
             }
         });
     }

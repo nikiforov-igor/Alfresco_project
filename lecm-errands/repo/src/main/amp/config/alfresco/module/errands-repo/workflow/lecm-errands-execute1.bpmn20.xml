@@ -151,12 +151,14 @@
                                                 if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
                                                     childErrand.properties["lecm-errands:cancellation-signal"] = true;
                                                     childErrand.properties["lecm-errands:cancellation-signal-reason"] = reason;
+                                                    childErrand.save()
                                                 }
                                             });
                                             childrenResolutions.forEach(function (childResolution) {
                                                 if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
                                                     childResolution.properties["lecm-resolutions:annul-signal"] = true;
                                                     childResolution.properties["lecm-resolutions:annul-signal-reason"] = reason;
+                                                    childResolution.save();
                                                 }
                                             });
                                         }
@@ -165,7 +167,12 @@
                                             execution.setVariable("executeResult", "executed");
                                             document.properties["lecm-errands:execute-result"] = "executed";
                                             notificationTemplate = "ERRANDS_EXECUTED_WITHOUT_REPORT";
-                                            recipients = [author, controller];
+                                            if (author) {
+                                                recipients.push(author);
+                                            }
+                                            if (controller) {
+                                                recipients.push(controller);
+                                            }
                                         } else {
                                             report.properties["lecm-errands-ts:execution-report-status"] = "ONCONTROL";
                                             var reportRecipientType = document.properties["lecm-errands:report-recipient-type"];

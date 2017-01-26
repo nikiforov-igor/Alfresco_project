@@ -2473,16 +2473,13 @@
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
                     <field id="lecmErrandWf:execute_1ReportText">
-                        <control template="/ru/it/lecm/errands/controls/textarea-with-value.ftl">
-                            <control-param name="currentValueFormArg">executionReportText</control-param>
-                        </control>
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
                     <field id="lecmErrandWf:execute_1Attachment">
-                        <control template="/ru/it/lecm/errands/controls/lecm-dnd-uploader-control-with-value.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">Исполнение</control-param>
                             <control-param name="suppressRefreshEvent">true</control-param>
-                            <control-param name="currentValueFormArg">executionAttachmentAssoc</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:execute_1ConnectedDocument">
