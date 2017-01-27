@@ -277,4 +277,17 @@
 		</property>
 	</bean>
 
+	<bean id="eventsService.overrider" class="ru.it.lecm.events.beans.EventsServiceOverrider">
+		<property name="target" value="eventsService"/>
+		<property name="propertyName" value="propsForFilterShowIncalendar"/>
+		<property name="propertyValue">
+			<list>
+				<value>lecm-events:initiator-assoc-ref</value>
+				<value>lecm-events:temp-members-assoc-ref</value>
+				<value>lecm-meetings:chairman-assoc-ref</value>
+				<value>lecm-meetings:secretary-assoc-ref</value>
+			</list>
+		</property>
+	</bean>
+	
 </beans>

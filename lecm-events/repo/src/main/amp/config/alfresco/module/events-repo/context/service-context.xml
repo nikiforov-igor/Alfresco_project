@@ -126,8 +126,6 @@
 			<list>
 				<value>lecm-events:initiator-assoc-ref</value>
 				<value>lecm-events:temp-members-assoc-ref</value>
-				<value>lecm-meetings:chairman-assoc-ref</value>
-				<value>lecm-meetings:secretary-assoc-ref</value>
 			</list>
 		</property>
 	</bean>
