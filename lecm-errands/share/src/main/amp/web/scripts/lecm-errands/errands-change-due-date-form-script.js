@@ -72,7 +72,7 @@
             var dateFieldName = "";
             var dateField = Selector.query(".errands-wf-duedate-set-date .value-div input[type='hidden']", Dom.get(formId), true);
             if (dateField) {
-                dateFieldName = dateField.id.replace(formId + "_prop_lecmErrandWf_", "lecmErrandWf:");
+                dateFieldName = dateField.id.replace(formId + "_prop_", "").replace("_", ":");
             }
             if ("DATE" == value) {
                 LogicECM.module.Base.Util.enableControl(formId, dateFieldName);
