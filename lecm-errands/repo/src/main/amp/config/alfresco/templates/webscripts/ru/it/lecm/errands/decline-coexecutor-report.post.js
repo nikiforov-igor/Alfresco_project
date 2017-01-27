@@ -1,7 +1,8 @@
 model.success = false;
 
 var report = search.findNode(args['nodeRef']);
-var declineReason = args["lecm-errands-ts_coexecutor-report-decline-reason"];
+var requestContent = eval("(" + requestbody.getContent() + ")");
+var declineReason = requestContent["prop_lecm-errands-ts_coexecutor-report-decline-reason"];
 if (report && report.properties["lecm-errands-ts:coexecutor-report-status"] == "ONCONTROL") {
     var document = documentTables.getDocumentByTableDataRow(report);
     var currentEmployee = orgstructure.getCurrentEmployee();
