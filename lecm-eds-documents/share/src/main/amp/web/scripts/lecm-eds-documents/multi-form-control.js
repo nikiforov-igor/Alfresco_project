@@ -222,6 +222,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                     submitType: "json",
                     formUI: true,
                     args: JSON.stringify(sendArgs ? YAHOO.lang.merge(this.options.args, sendArgs) : this.options.args),
+                    showCaption: false,
                     showCancelButton: false,
                     showSubmitButton: false
                 };
