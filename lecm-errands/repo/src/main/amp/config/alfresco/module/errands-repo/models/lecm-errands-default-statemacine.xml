@@ -4787,44 +4787,12 @@ if(doc){
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
                                                                                     <![CDATA[doc.attr("lecm-errands-aspect:isCancelRequested") == null OR !doc.attr("lecm-errands-aspect:isCancelRequested")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>d23b3296-62ee-440d-bf6f-e9c675df14f8
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/e394122f-7f06-44cb-8ed1-c92221155389
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Вы уже запросили изменение срока поручения]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -6977,44 +6945,12 @@ if (document != null) {
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
                                                                                     <![CDATA[doc.attr("lecm-errands-aspect:isCancelRequested") == null OR !doc.attr("lecm-errands-aspect:isCancelRequested")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>f19f32f4-958b-4255-8545-8540d2441325
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/feadda89-8d23-4d55-aa94-45a17e082abf
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Вы уже запросили изменение срока поручения]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -9772,37 +9708,12 @@ if (document) {
 if (document != null) {
    document.properties["lecm-errands:end-date"] = new Date();
    document.save();
-
-   /*ALF-5904 ...нужно исполнителя, контролера, автора и инициатора включать в участники документа*/
-   var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
-   if (executorAssoc != null && executorAssoc.length == 1) {
-     var executor = executorAssoc[0];
-     documentMembers.addMember(document, executor, "ERRANDS_READER");
-   }
-
-   var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
-   if (controllerAssoc != null && controllerAssoc.length == 1) {
-     var controller = controllerAssoc[0];
-     documentMembers.addMember(document, controller, "ERRANDS_READER");
-   }
-
-   var authorAssoc = document.assocs["lecm-document:author-assoc"];
-    if (authorAssoc != null && authorAssoc.length == 1) {
-      var author = authorAssoc[0];
-      documentMembers.addMember(document, author, "ERRANDS_READER");
-    }
-
-   var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
-   if (initiatorAssoc != null && initiatorAssoc.length == 1) {
-      var initiator = initiatorAssoc[0];
-      documentMembers.addMember(document, initiator, "ERRANDS_READER");
-   }
 }]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Сохранение даты завершения поручения и добавление участников]]></value>
+                                                                    <![CDATA[Сохранение даты завершения поручения]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
