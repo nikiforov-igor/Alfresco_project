@@ -104,22 +104,51 @@ LogicECM.module = LogicECM.module || {};
                                 var nodeRef = oRecord._oData.nodeRef;
                                 var previousDocRef = oRecord._oData.previosDocRef;
 
-                                var docTypeIcon = '<img class="document-type" ' +
-                                    'src="/share/res/images/lecm-documents/type-icons/' + (oRecord._oData.docType || '').replace(':', '_') + '.png"' +
-                                    'onerror="this.src = \'/share/res/images/lecm-documents/type-icons/default_document.png\';"> </img>';
+                                var template =
+                                    '<div class="item-description">' +
+                                    '   <img class="document-type" src="/share/res/images/lecm-documents/type-icons/{docTypeIcon}.png" ' +
+                                    '       onerror="this.src = \'/share/res/images/lecm-documents/type-icons/default_document.png\';"/>' +
+                                    '       <span class="link-span{classNotHaveAccess}">' +
+                                    '           <a target="_blank" href="{documentUrl}">{documentName}</a>' +
+                                    '           <div>' +
+                                    '               <span class="connectionType">{documentStatus}</span>' +
+                                    '               <a id="{expandShowId}" href="javascript:void(0);" class="{showExpandClass}">{expandShowMessage}</a>' +
+                                    '               <a id="{expandHideId}" href="javascript:void(0);" class="hidden1">{expandHideMessage}</a>' +
+                                    '           </div>' +
+                                    '           <div id="{expandedDivId}" class="hidden1"/>' +
+                                    '   </span>' +
+                                    '</div>';
 
-                                var linkBlock = '<span class="link-span' + (!oRecord._oData.hasAccess ? ' dont-have-access' : '') + '">';
-                                linkBlock += '<a target="_blank" href="' + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + nodeRef + '" >' + oData + '</a>';
-                                linkBlock += (oRecord._oData.status ? '<p class="connectionType">' + Alfresco.util.message('msg.status') + ': ' + oRecord._oData.status + '</p>' : '') + '</span>';
+                                var expandShowId = "expand-show-" + nodeRef.replace('workspace://SpacesStore/', '');
+                                var expandHideId = "expand-hide-" + nodeRef.replace('workspace://SpacesStore/', '');
+                                var showExpandLink = false;
+                                if ((oRecord._oData.docType == 'lecm-errands:document' && oRecord._oData.status == "Исполнено")
+                                    || (oRecord._oData.docType == 'lecm-resolutions:document' && (oRecord._oData.status == "На исполнении" || oRecord._oData.status == "Завершено"))) {
+                                    showExpandLink = true;
+                                }
 
-                                var descrBlock = '<div class="item-description">' + docTypeIcon + linkBlock + '</div>';
-                                el.innerHTML = descrBlock || '--[ No description ]--';
+                                el.innerHTML = YAHOO.lang.substitute(template, {
+                                    docTypeIcon: oRecord._oData.docType.replace(':', '_'),
+                                    classNotHaveAccess: !oRecord._oData.hasAccess ? ' dont-have-access' : '',
+                                    documentUrl: Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + nodeRef,
+                                    documentName: oData,
+                                    documentStatus: Alfresco.util.message('msg.status') + ': ' + oRecord._oData.status,
+                                    expandShowId: expandShowId,
+                                    expandHideId: expandHideId,
+                                    expandShowMessage: Alfresco.util.message(oRecord._oData.docType == 'lecm-errands:document' ? 'msg.errand.report.show' : 'msg.resolution.statistic.show'),
+                                    expandHideMessage: Alfresco.util.message(oRecord._oData.docType == 'lecm-errands:document' ? 'msg.errand.report.hide' : 'msg.resolution.statistic.hide'),
+                                    showExpandClass: showExpandLink ? '' : 'hidden1',
+                                    expandedDivId: "expanded-block-" + nodeRef.replace('workspace://SpacesStore/', '')
+                                });
                                 if (previousDocRef) {
                                     if (!me.receivedItems[nodeRef])
                                         me.receivedItems[nodeRef] = me.receivedItems[previousDocRef] + 1;
                                 } else {
                                     me.receivedItems[nodeRef] = 1;
                                 }
+
+                                YAHOO.util.Event.on(expandShowId, "click", me.expandedBlockShow, {nodeRef: nodeRef, type: oRecord._oData.docType}, me);
+                                YAHOO.util.Event.on(expandHideId, "click", me.expandedBlockHide, nodeRef, me);
                             }
                         }
                     ],
@@ -188,6 +217,38 @@ LogicECM.module = LogicECM.module || {};
                     } else {
                         YAHOO.util.Dom.addClass(rows[i], 'yui-dt-odd');
                     }
+                }
+            },
+
+            expandedBlockShow: function (e, args) {
+                Dom.addClass("expand-show-" + args.nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
+                Dom.removeClass("expand-hide-" + args.nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
+                Dom.removeClass("expanded-block-" + args.nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
+
+                if (args.type == 'lecm-errands:document') {
+                    this.expandErrandContent(args.nodeRef)
+                } else if (args.type == 'lecm-resolutions:document') {
+                    this.expandResolutionContent(args.nodeRef)
+                }
+            },
+
+            expandedBlockHide: function (e, nodeRef) {
+                Dom.addClass("expand-hide-" + nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
+                Dom.addClass("expanded-block-" + nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
+                Dom.removeClass("expand-show-" + nodeRef.replace('workspace://SpacesStore/', ''), "hidden1");
+            },
+
+            expandErrandContent: function (nodeRef) {
+                var container = Dom.get("expanded-block-" + nodeRef.replace('workspace://SpacesStore/', ''));
+                if (container) {
+                    container.innerHTML = "Errand " + nodeRef;
+                }
+            },
+
+            expandResolutionContent: function (nodeRef) {
+                var container = Dom.get("expanded-block-" + nodeRef.replace('workspace://SpacesStore/', ''));
+                if (container) {
+                    container.innerHTML = "Resolution " + nodeRef;
                 }
             }
         });
