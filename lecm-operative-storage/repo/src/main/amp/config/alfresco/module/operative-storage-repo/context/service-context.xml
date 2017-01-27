@@ -29,13 +29,11 @@
 		<value>alfresco/module/${artifactId}/models/os-aspects-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/operative-storage-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/operative-storage-global-settings.xml</value>
-		<value>alfresco/module/${artifactId}/models/lecm-file-register-dictionary-model.xml</value>
 	</util:list>
 
 	<util:list id="operative.storage.labels">
 		<value>alfresco/module/${artifactId}/messages/operative-storage-settings-model</value>
 		<value>alfresco/module/${artifactId}/messages/operative-storage-model</value>
-		<value>alfresco/module/${artifactId}/messages/lecm-file-register-dictionary-model</value>
 		<!--<value>alfresco/module/${artifactId}/messages/fms-os</value>-->
 	</util:list>
 
@@ -267,5 +265,17 @@
 			</map>
 		</constructor-arg>
 	</bean>
-
+        <bean id="dictionary.fileRegister.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
+	      depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, operative.storage.model.bootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-file-register-dictionary-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-file-register-dictionary-model</value>
+			</list>
+		</property>
+	</bean>
 </beans>
