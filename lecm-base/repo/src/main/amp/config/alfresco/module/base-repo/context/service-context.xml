@@ -40,10 +40,16 @@
 		  p:nodeService-ref="nodeService"
 		  p:transactionService-ref="transactionService"
 		  p:lecmTransactionHelper-ref="lecmTransactionHelper"
+		  p:urlService-ref="urlService"
 		  p:authService-ref="authenticationService"/>
+
+	<bean id="urlService" class="ru.it.lecm.base.beans.LecmURLServiceImpl">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+	</bean>
 
 	<bean id="baseScript" class="ru.it.lecm.base.beans.BaseWebScript" abstract="true" parent="baseJavaScriptExtension">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="urlService" ref="urlService"/>
 	</bean>
 
 	<bean id="ServiceFolderPermissionHelper" init-method="bootstrap" abstract="true"
@@ -116,6 +122,7 @@
 		<property name="workflowNodeConverter" ref="activitiNodeConverter"/>
 		<property name="globalProperties" ref="global-properties"/>
 		<property name="repositoryStructureHelper" ref="repositoryStructureHelper"/>
+		<property name="urlService" ref="urlService"/>
 	</bean>
 
 	<bean id="lecmRepositoryWebScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.LecmRepositoryWebScriptBean">

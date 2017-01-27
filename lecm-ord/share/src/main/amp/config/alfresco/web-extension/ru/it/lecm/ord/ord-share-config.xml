@@ -576,7 +576,7 @@
                     <field id="lecm-ord-table-structure:errand-assoc" set="item4">
                         <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
                             <control-param name="formatString">
-                                <![CDATA[<a href='/share/page/document?nodeRef={lecm-ord-table-structure:errand-assoc/nodeRef}'>{lecm-ord-table-structure:errand-assoc/lecm-document:present-string}</a>]]>
+                                <![CDATA[<a href='/{~SHARE_CONTEXT}/page/document?nodeRef={lecm-ord-table-structure:errand-assoc/nodeRef}'>{lecm-ord-table-structure:errand-assoc/lecm-document:present-string}</a>]]>
                             </control-param>
                         </control>
                     </field>

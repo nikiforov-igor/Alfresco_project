@@ -41,11 +41,6 @@ public abstract class BaseBean implements InitializingBean {
 
     public static final QName TYPE_BASE_DOCUMENT = QName.createQName("http://www.it.ru/logicECM/document/1.0", "base");
 
-    public static final String LINK_URL = "/share/page/view-metadata";
-    public static final String DETAILS_LINK_URL = "/share/page/document-details";
-    public static final String WORKFLOW_LINK_URL = "/share/page/workflow-details";
-    public static final String DOCUMENT_ATTACHMENT_LINK_URL = "/share/page/document-attachment";
-
     public static final QName TYPE_BASE_LINK = QName.createQName(LINKS_NAMESPACE, "link");
     public static final QName PROP_BASE_LINK_URL = QName.createQName(LINKS_NAMESPACE, "url");
 
@@ -65,6 +60,7 @@ public abstract class BaseBean implements InitializingBean {
     protected ServiceRegistry serviceRegistry;
     protected AuthenticationService authService;
     protected LecmTransactionHelper lecmTransactionHelper;
+    private LecmURLService urlService;
 
     public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
         this.lecmTransactionHelper = lecmTransactionHelper;
@@ -98,6 +94,14 @@ public abstract class BaseBean implements InitializingBean {
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
+    }
+
+    public void setUrlService(LecmURLService urlService) {
+        this.urlService = urlService;
+    }
+
+    public LecmURLService getUrlService() {
+        return urlService;
     }
 
     @Override

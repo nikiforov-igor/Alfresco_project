@@ -37,7 +37,7 @@
 		<#list types["meta"] as typeMeta>
 			<tr>
 				<td colspan="6" align="center">
-					<a class="atype" href="/share/proxy/alfresco/lecm/typesView/info?typeName=${typeMeta['name']}" target="_blank">
+					<a class="atype" href="${url.context}/proxy/alfresco/lecm/typesView/info?typeName=${typeMeta['name']}" target="_blank">
 						${typeMeta['name']}
 						<#if typeMeta['desc']??>
 							(${typeMeta['desc']!""})
@@ -77,7 +77,7 @@
 		<#list types["meta"] as typeMeta>
 			<tr>
 				<td colspan="6" align="center">
-					<a class="atype" href="/share/proxy/alfresco/lecm/typesView/info?typeName=${typeMeta['name']}" target="_blank">
+					<a class="atype" href="${url.context}/proxy/alfresco/lecm/typesView/info?typeName=${typeMeta['name']}" target="_blank">
 						${typeMeta['name']}
 						<#if typeMeta['desc']??>
 							(${typeMeta['desc']!""})
@@ -93,7 +93,7 @@
 				<td>${assoc["desc"]!""}</td>
 				<td>
 					<#if assoc["target"]??>
-						<a class="assoctype" href="/share/proxy/alfresco/lecm/typesView/info?typeName=${assoc['target']}" target="_blank">
+						<a class="assoctype" href="${url.context}/proxy/alfresco/lecm/typesView/info?typeName=${assoc['target']}" target="_blank">
 							${assoc['target']}
 							<#if assoc['targetDesc']??>
 								(${assoc['targetDesc']!""})
@@ -122,7 +122,7 @@
 		<#list types["meta"] as typeMeta>
 			<tr>
 				<td colspan="2" align="center">
-					<a class="atype" href="/share/proxy/alfresco/lecm/typesView/info?typeName=${typeMeta['name']}" target="_blank">
+					<a class="atype" href="${url.context}/proxy/alfresco/lecm/typesView/info?typeName=${typeMeta['name']}" target="_blank">
 						${typeMeta['name']}
 						<#if typeMeta['desc']??>
 							(${typeMeta['desc']!""})
@@ -135,7 +135,7 @@
 		<#list aspects as aspect>
 			<tr>
 				<td>
-					<a class="assoctype" href="/share/proxy/alfresco/lecm/typesView/info?typeName=${aspect['name']}" target="_blank">
+					<a class="assoctype" href="${url.context}/proxy/alfresco/lecm/typesView/info?typeName=${aspect['name']}" target="_blank">
 						${aspect["name"]}
 					</a>
 				</td>

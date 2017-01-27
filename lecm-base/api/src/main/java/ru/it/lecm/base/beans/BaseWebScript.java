@@ -32,6 +32,8 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
      * Service registry
      */
     protected ServiceRegistry serviceRegistry;
+	protected LecmURLService urlService;
+
 	private WorkflowNodeConverter workflowNodeConverter;
 	private final ValueConverter valueConverter = new ValueConverter();
 
@@ -45,6 +47,10 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 
 	public void setWorkflowNodeConverter(WorkflowNodeConverter workflowNodeConverter) {
 		this.workflowNodeConverter = workflowNodeConverter;
+	}
+
+	public void setUrlService(LecmURLService urlService) {
+		this.urlService = urlService;
 	}
 
 	public ValueConverter getValueConverter() {
@@ -86,10 +92,7 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 	 * @return
 	 */
 	public String wrapperLink(String nodeRef, String description, String linkUrl) {
-		SysAdminParams params = serviceRegistry.getSysAdminParams();
-		String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
-		return  "<a href=\"" + serverUrl + linkUrl + "?nodeRef=" + nodeRef + "\">"
-				+ description + "</a>";
+		return urlService.wrapperLink(nodeRef, description, linkUrl);
 	}
 
     public String wrapperAttribute(ScriptNode node, String description) {
@@ -122,7 +125,7 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 	 * @return
 	 */
 	public String wrapperLink(ScriptNode node, String description) {
-	 	return wrapperLink(node.getNodeRef().toString(), description, BaseBean.LINK_URL);
+	 	return urlService.wrapperLink(node.getNodeRef().toString(), description);
 	}
 
 	/**
@@ -132,7 +135,7 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 	 * @return
 	 */
 	public String wrapperLink(String nodeRef, String description) {
-		return wrapperLink(nodeRef, description, BaseBean.LINK_URL);
+		return urlService.wrapperLink(nodeRef, description);
 	}
 
 	/**
@@ -143,6 +146,14 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 	 */
 	public String wrapperTitle(String text, String title) {
 		return  "<span class=\"wrapper-title\" title=\"" + StringEscapeUtils.escapeHtml(title) + "\">" + text + "</span>";
+	}
+
+	/**
+	 * Получить значение свойства share.context из global.properties
+	 * @return
+	 */
+	public String getShareContext() {
+		return urlService.getShareContext();
 	}
 
     /**

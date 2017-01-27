@@ -557,7 +557,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	@Override
 	public String wrapAsEventLink(NodeRef documentRef) {
-		return wrapperLink(documentRef, (String) nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING), EVENT_LINK_URL);
+		return wrapperLink(documentRef, (String) nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING), getUrlService().getLinkWithContext(EVENT_LINK_URL));
 	}
 
 	@Override

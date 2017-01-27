@@ -68,7 +68,7 @@
 		<div id="${controlId}-uploader-block" class="big-uploader-block">
 			<fieldset>
 				<legend>${msg("label.add-file")}</legend>
-				<img id="${controlId}-uploader-button" src="/share/res/images/lecm-base/components/plus-big.png" alt="" class="uploader-button">  <br/>
+				<img id="${controlId}-uploader-button" src="${url.context}/res/images/lecm-base/components/plus-big.png" alt="" class="uploader-button">  <br/>
 				<span class="drag-tip">${msg("label.drag-file")}</span>
 			</fieldset>
 		</div>

@@ -21,6 +21,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.LecmURLService;
 import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.NotificationsService;
@@ -493,7 +494,7 @@ public class EventsNotificationsService extends BaseBean {
 	}
 
 	public String wrapAsEventLink(NodeRef documentRef) {
-		return wrapperLink(documentRef, (String) nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING), EventsService.EVENT_LINK_URL);
+		return wrapperLink(documentRef, (String) nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING), getUrlService().getLinkWithContext(EventsService.EVENT_LINK_URL));
 	}
 
 	private VEvent formCancelEvent(Map<String, Object> mailTemplateModel, VEvent basicEvent) {

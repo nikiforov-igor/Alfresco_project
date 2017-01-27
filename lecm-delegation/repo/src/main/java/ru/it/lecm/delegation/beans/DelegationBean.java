@@ -842,7 +842,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 	}
 
 	private void sendNewTaskNotification(final NodeRef employeeRef, final String taskID) {
-		String url = "/share/page/task-edit?taskId=" + taskID;
+		String url = getUrlService().getLinkWithContext("/page/task-edit?taskId=" + taskID);
 		Map<String, Object> templateObjects = new HashMap<>();
 		templateObjects.put("url", url);
 
@@ -962,7 +962,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 					workflowService.updateTask(task.getId(), properties, null, null);
 				}
 
-				String url = "/share/page/my-profile?path=Мое%20делегирование/Распределение%20задач";
+				String url = getUrlService().getLinkWithContext("/page/my-profile?path=Мое%20делегирование/Распределение%20задач");
 				Map<String, Object> templateObjects = new HashMap<>();
 				templateObjects.put("tasksCount", tasks.size());
 				templateObjects.put("url", url);

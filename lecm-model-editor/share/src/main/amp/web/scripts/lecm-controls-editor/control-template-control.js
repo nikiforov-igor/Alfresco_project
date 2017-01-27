@@ -12,7 +12,7 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 		ComponentManager = Alfresco.util.ComponentManager,
 		mandatoryTemplate = '<span class="mandatory-indicator">{mandatoryIndicator}</span>',
 		descriptionTemplate = '<span class="help-icon">' +
-									'<img id="{paramId}-help-icon" src="/share/res/components/form/images/help.png"/>' +
+									'<img id="{paramId}-help-icon" src="' + Alfresco.constants.URL_RESCONTEXT + 'components/form/images/help.png"/>' +
 							'</span>' +
 							'<div class="help-text" id="{paramId}-help">{paramDescription}</div>',
 		paramTemplate = '<div class="control textfield editmode">' +

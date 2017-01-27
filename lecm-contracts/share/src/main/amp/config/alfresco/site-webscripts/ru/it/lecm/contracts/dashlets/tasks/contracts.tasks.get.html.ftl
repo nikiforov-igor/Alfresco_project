@@ -9,7 +9,7 @@
 			<#if myTasks?size == 0>
 				<div class="no-tasks">
 					<div class="img">
-						<img src="/share/res/images/lecm-contracts/alf_dashlet-32_tasks.png" />
+						<img src="${url.context}/res/images/lecm-contracts/alf_dashlet-32_tasks.png" />
 					</div>
 					<div>
 						<h3>${msg("empty.title")}</h3>

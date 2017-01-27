@@ -26,6 +26,7 @@
                 <property name="orgstructureService" ref="serviceOrgstructure"/>
                 <property name="personService" ref="personService"/>
                 <property name="dictionaryService" ref="serviceDictionary"/>
+                <property name="urlService" ref="urlService"/>
 	</bean>
 
 </beans>
