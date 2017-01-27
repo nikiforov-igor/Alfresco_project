@@ -111,7 +111,7 @@
             <item name="cm:ERRANDS_CO_EXECUTOR_DECLINE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CO_EXECUTOR_DECLINE]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} отклонил Ваш отчет по поручению {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("отклонил", #reason)} Ваш отчет по поручению {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Отчет по поручению отклонен]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
