@@ -246,13 +246,6 @@
 					<param id="notSelectedOptionLabel" localName="Надпись для пустого выбора" mandatory="false" visible="true"/>
 				</control>
 			</field-type>
-
-			<field-type id="fake" localName="Фиктивное поле">
-				<control id="document-dashlet-control" template="/ru/it/lecm/documents/controls/document-dashlet-control.ftl" localName="Дашлеты главной формы документа">
-					<param id="first" localName="Первая колонка" mandatory="false" visible="true">/lecm/components/dashlets/document-main;/lecm/components/dashlets/document-members</param>
-					<param id="second" localName="Вторая колонка" mandatory="false" visible="true">/lecm/components/dashlets/document-attachments;/lecm/components/dashlets/errands-by-doc</param>
-				</control>
-			</field-type>
 		</field-types>
 
 		<forms-info>

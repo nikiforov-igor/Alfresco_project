@@ -1,5 +1,5 @@
-<@script type="text/javascript" src="${url.context}/res/scripts/components/document-errands.js"></@script>
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-errands.css" />
+<@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/document-errands.js"></@script>
+<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/document-errands.css" />
 
 <#assign id=containerHtmlId/>
 

@@ -554,7 +554,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                             NodeRef categoryRef = documentAttachmentsService.getCategory(category, document);
                             if (categoryRef != null) {
  	                            documentAttachmentsService.getCategories(createdNode);
-	                            NodeRef errandCategoryFolder = documentAttachmentsService.getCategory(category, createdNode);
+	                            NodeRef categoryFolder = documentAttachmentsService.getCategory(category, createdNode);
                                 // копируем вложения для категории
                                 List<ChildAssociationRef> childs = nodeService.getChildAssocs(categoryRef);
                                 for (ChildAssociationRef child : childs) {
@@ -566,7 +566,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                                         // временно удаляем ассоциацию
                                         nodeService.removeAssociation(childRef, parentDoc, DocumentService.ASSOC_PARENT_DOCUMENT);
                                         try {
-                                            copyService.copyAndRename(childRef, errandCategoryFolder, ContentModel.ASSOC_CONTAINS,
+                                            copyService.copyAndRename(childRef, categoryFolder, ContentModel.ASSOC_CONTAINS,
                                                     QName.createQName(ContentModel.PROP_CONTENT.getNamespaceURI(), nodeService.getProperty(childRef, ContentModel.PROP_NAME).toString()),
                                                     false);
 

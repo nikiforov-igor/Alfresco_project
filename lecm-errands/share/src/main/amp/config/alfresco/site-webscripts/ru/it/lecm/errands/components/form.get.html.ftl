@@ -1,5 +1,5 @@
-<@script type="text/javascript" src="${url.context}/res/scripts/dashlets/lecm-errands-dashlet.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-errands.js"></@script>
+<@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/lecm-errands-dashlet.js"></@script>
+<@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/lecm-document-errands.js"></@script>
 <@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/errands-links.js"></@script>
 
 <!-- Document Metadata Header -->
