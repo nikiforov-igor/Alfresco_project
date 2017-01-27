@@ -266,7 +266,7 @@
 		</constructor-arg>
 	</bean>
 	<bean id="dictionary.fileRegister.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
-	      depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, operative.storage.model.bootstrap">
+	      depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, operative.storage.model.bootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/deprecated/lecm-file-register-dictionary-model.xml</value>
