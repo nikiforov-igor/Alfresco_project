@@ -19,7 +19,7 @@
                 <property name="lecm-arm:filter-query">#value</property>
             </item>
                 <item name="cm:Вид документа" type="lecm-arm:filter">
-                                <property name="cm:name">Вид документа</property>
+                <property name="cm:name">Вид документа</property>
                 <property name="lecm-arm:filter-code">DOCUMENT_TYPE</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
