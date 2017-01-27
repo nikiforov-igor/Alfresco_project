@@ -1744,7 +1744,7 @@
                     <field id="lecmErrandWf:requestDueDateChange_1NewDateRadio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DATE</control-param>
-                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                            <control-param name="fireChangeEventName">changeDueDateRadioEvent</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:requestDueDateChange_1NewDate" set="limitation-date">
@@ -1850,7 +1850,7 @@
                     <field id="lecmErrandWf:requestDueDateChangeTask_1NewDueDateRadio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DATE</control-param>
-                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                            <control-param name="fireChangeEventName">changeDueDateRadioEvent</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:requestDueDateChangeTask_1NewDate" mandatory="true" set="limitation-date">
@@ -1927,7 +1927,7 @@
                     <field id="lecmErrandWf:changeDueDateNewDueDateRadio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DATE</control-param>
-                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                            <control-param name="fireChangeEventName">changeDueDateRadioEvent</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:changeDueDateNewDueDate" set="limitation-date">
