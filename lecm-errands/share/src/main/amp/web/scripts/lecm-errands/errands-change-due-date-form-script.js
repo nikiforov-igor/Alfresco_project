@@ -66,12 +66,12 @@
         });
     }
 
-    function processDueDateSet(layer, args){
+    function processDueDateSet(layer, args) {
         var value = args[1].value;
         if (formId == args[1].formId) {
             var dateFieldName = "";
-            var dateField = Selector.query(".errands-wf-duedate-set-date .value-div input[type='hidden']",Dom.get(formId),true);
-            if(dateField){
+            var dateField = Selector.query(".errands-wf-duedate-set-date .value-div input[type='hidden']", Dom.get(formId), true);
+            if (dateField) {
                 dateFieldName = dateField.id.replace(formId + "_prop_lecmErrandWf_", "lecmErrandWf:");
             }
             if ("DATE" == value) {
