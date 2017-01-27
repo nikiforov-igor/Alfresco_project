@@ -326,7 +326,8 @@
                 showAssocViewForm: ${showAssocViewForm?string},
                 checkType: ${checkType?string},
                 fieldId: "${field.configName}",
-                formId: "${args.htmlid}"
+                formId: "${args.htmlid}",
+                busyTimeMembersFields: "${params.busyTimeMembersFields!'lecm-events:initiator-assoc,lecm-events:temp-members-assoc'}"
             }).setMessages( ${messages} );
 		<#if readonly>
 			LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);

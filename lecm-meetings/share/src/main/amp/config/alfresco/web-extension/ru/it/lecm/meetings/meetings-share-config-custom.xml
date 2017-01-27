@@ -167,6 +167,7 @@
 							<control-param name="pickerItemsScript">/lecm/events/members/picker/items</control-param>
 							<control-param name="sortSelected">true</control-param>
                             <control-param name="verticalList">true</control-param>
+							<control-param name="busyTimeMembersFields">lecm-events:initiator-assoc,lecm-events:temp-members-assoc,lecm-meetings:chairman-assoc,lecm-meetings:secretary-assoc</control-param>
 						</control>
 					</field>
 					<field id="lecm-events:temp-members-assoc-json">
@@ -604,6 +605,7 @@
 							<control-param name="pickerItemsScript">/lecm/events/members/picker/items</control-param>
                             <control-param name="verticalList">true</control-param>
 							<control-param name="sortSelected">true</control-param>
+							<control-param name="busyTimeMembersFields">lecm-events:initiator-assoc,lecm-events:temp-members-assoc,lecm-meetings:chairman-assoc,lecm-meetings:secretary-assoc</control-param>
 						</control>
 					</field>
 					<field id="lecm-events:temp-members-assoc-json" set="createEventSet">

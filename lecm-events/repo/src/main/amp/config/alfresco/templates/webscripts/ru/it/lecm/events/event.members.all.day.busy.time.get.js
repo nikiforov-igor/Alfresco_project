@@ -1,33 +1,49 @@
-if (args["items"]) {
-    var employees = args["items"].split(",");
-    var timeZoneOffset = null;
-    if (args['timeZoneOffset']) {
-        timeZoneOffset = parseInt(args['timeZoneOffset']);
-    }
-    var isBusy = false;
-    for each(var employee in employees) {
-        if (employee) {
-            var additionalFilter = "AND (@lecm\\-events\\:initiator\\-assoc\\-ref: \"*" + employee + "*\" OR ";
-            additionalFilter += "@lecm\\-events\\:temp\\-members\\-assoc\\-ref: \"*" + employee + "*\" OR ";
-            additionalFilter += "@lecm\\-meetings\\:chairman\\-assoc\\-ref: \"*" + employee + "*\" OR ";
-            additionalFilter += "@lecm\\-meetings\\:secretary\\-assoc\\-ref: \"*" + employee + "*\")";
-            var eventsCollection = events.getUserEvents(args["startDate"], args["endDate"], additionalFilter, true);
+function main() {
+    if (args["items"] && args["busyTimeMembersFields"]) {
+        var employees = args["items"].split(",");
+        var timeZoneOffset = null;
+        if (args['timeZoneOffset']) {
+            timeZoneOffset = parseInt(args['timeZoneOffset']);
+        }
+        var isBusy = false;
+        for each(var employee in employees) {
+            if (employee) {
+                var additionalFilter = "AND (";
+                for (var i=0; i < additionalFilterFields.length; ++i) {
+                    var formatedField = additionalFilterFields[i].replace(":","\\:");
+                    formatedField = replaceAll("-", "\\-", formatedField);
+                    formatedField += "\\-ref";
+                    additionalFilter += ("@" + formatedField + ": \"*" + employee + "*\"");
+                    if (i < additionalFilterFields.length - 1) {
+                        additionalFilter += " OR ";
+                    }
+                }
+                additionalFilter += ")";
+                
+                var eventsCollection = events.getUserEvents(args["startDate"], args["endDate"], additionalFilter, true);
 
-            for (var i = 0; i < eventsCollection.size(); i++) {
-                var event = eventsCollection.get(i);
-                if (("" + event["nodeRef"]) != ("" + args["exclude"])) {
-                    isBusy = true;
-                    break;
+                for (var i = 0; i < eventsCollection.size(); i++) {
+                    var event = eventsCollection.get(i);
+                    if (("" + event["nodeRef"]) != ("" + args["exclude"])) {
+                        isBusy = true;
+                        break;
+                    }
                 }
             }
+            if (isBusy) {
+                break;
+            }
         }
-        if (isBusy) {
-            break;
-        }
-    }
-    var result = {
-        isBusy: isBusy
-    };
+        var result = {
+            isBusy: isBusy
+        };
 
-    model.result = jsonUtils.toJSONString(result);
+        model.result = jsonUtils.toJSONString(result);
+    }
 }
+
+function replaceAll(find, replace, str) {
+    return str.replace(new RegExp(find, 'g'), replace);
+}
+
+main();

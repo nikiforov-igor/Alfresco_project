@@ -526,7 +526,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					dataObj: {
 						items: items,
 						date: Alfresco.util.formatDate(this.selectedDate, "yyyy-mm-dd"),
-						exclude: this.isNodeRef(this.options.eventNodeRef) ? this.options.eventNodeRef : ""
+						exclude: this.isNodeRef(this.options.eventNodeRef) ? this.options.eventNodeRef : "",
+                        busyTimeMembersFields: this.options.busyTimeMembersFields
 					},
 					successCallback:
 					{
@@ -558,7 +559,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						items: items,
 						startDate: Alfresco.util.toISO8601(this.startDate),
 						endDate: Alfresco.util.toISO8601(this.endDate),
-						exclude: this.isNodeRef(this.options.eventNodeRef) ? this.options.eventNodeRef : ""
+						exclude: this.isNodeRef(this.options.eventNodeRef) ? this.options.eventNodeRef : "",
+                        busyTimeMembersFields: this.options.busyTimeMembersFields
 					},
 					successCallback:
 					{
