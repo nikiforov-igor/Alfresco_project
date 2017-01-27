@@ -145,6 +145,7 @@ public class EventsWebScriptBean extends BaseWebScript {
             result.put("start", formatDate(start, isAllDay));
             result.put("startDate", start);
             result.put("end", formatDate(end, isAllDay));
+            result.put("endDate", end);
             result.put("legacyDateFrom", formatDate(start, isAllDay, legacyDateFormat));
             result.put("legacyTimeFrom", formatDate(start, isAllDay, legacyTimeFormat));
             result.put("legacyDateTo", formatDate(end, isAllDay, legacyDateFormat));

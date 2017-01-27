@@ -767,8 +767,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				var times = this.busytime[i].busytime;
 				for (var key in times) {
 					var time = times[key];
-					var start = Alfresco.util.fromISO8601(time.start);
-					var end = Alfresco.util.fromISO8601(time.end);
+					var start = Alfresco.util.fromISO8601(time.startDate);
+					var end = Alfresco.util.fromISO8601(time.endDate);
 					var employee = this.busytime[i].employee;
 					var startIndex, endIndex;
 					if (start <= startDayDate) {
