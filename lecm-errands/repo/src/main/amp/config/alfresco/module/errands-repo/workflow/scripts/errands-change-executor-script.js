@@ -19,7 +19,7 @@ function processChangeExecutor(newExecutor, reason) {
         templateConfig: {
             mainObject: document,
             eventExecutor: currentUser,
-            reason: ""
+            reason: reason
         }
     });
     var recipients = [];

@@ -310,6 +310,19 @@
 					<type>d:text</type>
 				</property>
 
+				<property name="lecm-errands:project-report-ref">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-errands:project-report-text">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-errands:project-report-attachment">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-errands:project-report-connections">
+					<type>d:text</type>
+				</property>
+
                 <!-- Сигналы -->
                 <!-- Сигнал об отмене -->
                 <property name="lecm-errands:cancellation-signal">
@@ -317,6 +330,10 @@
                     <mandatory>false</mandatory>
                     <default>false</default>
                 </property>
+				<property name="lecm-errands:cancellation-signal-reason">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
 
 				<!-- Поиск/сортировка ассоциаций-->
 				<property name="lecm-errands:initiator-assoc-ref">
@@ -587,6 +604,7 @@
 			</associations>
 			<mandatory-aspects>
 				<aspect>lecm-errands-ts:coexecutor-reports-aspect</aspect>
+				<aspect>lecm-errands-ts:execution-reports-aspect</aspect>
 			</mandatory-aspects>
 		</type>
 
