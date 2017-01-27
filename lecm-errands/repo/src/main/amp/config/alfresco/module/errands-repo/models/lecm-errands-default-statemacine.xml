@@ -3470,7 +3470,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Initiator]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -5896,7 +5896,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Initiator]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -8213,7 +8213,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Initiator]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -9572,7 +9572,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Initiator]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
