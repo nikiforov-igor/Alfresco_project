@@ -149,12 +149,12 @@
                                             var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
                                             childrenErrands.forEach(function (childErrand) {
                                                 if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
-                                                    errands.sendCancelSignal(childErrand.nodeRef.toString(), reason);
+                                                    //сигнал о завершении
                                                 }
                                             });
                                             childrenResolutions.forEach(function (childResolution) {
                                                 if (!statemachine.isFinal(childResolution.nodeRef.toString()) && !statemachine.isDraft(childResolution)) {
-                                                    resolutionsScript.sendAnnulSignal(childResolution.nodeRef.toString(), reason);
+                                                    //сигнал о завершении?
                                                 }
                                             });
                                         }

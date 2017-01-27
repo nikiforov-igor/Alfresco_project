@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/errands/workflow/approverDecline/1.0">
+    <process id="errandsApproverDecline" name="Получатель отчета: Вернуть на доработку">
+        <startEvent id="startApproverDecline" name="Start" activiti:formKey="lecmErrandWf:approverDecline"></startEvent>
+        <endEvent id="endApproverDecline" name="End"></endEvent>
+        <scriptTask id="approverDecline" name="Approver Decline" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+                            var document = bpm_package.children[0];
+                            var currentUser = orgstructure.getCurrentEmployee();
+                            if (document) {
+                                var currentReport = null;
+                                var reportsTable = document.assocs["lecm-errands-ts:execution-reports-assoc"][0];
+                                var executionReports = documentTables.getTableDataRows(reportsTable.nodeRef.toString());
+                                if (executionReports && executionReports.length){
+                                    var onControlReports = executionReports.filter(function(report) {
+                                        return report.properties["lecm-errands-ts:execution-report-status"] == "ONCONTROL";
+                                    });
+                                     if (onControlReports && onControlReports.length) {
+                                        currentReport = onControlReports[onControlReports.length - 1];
+                                    }
+                                }
+                                if (currentReport) {
+                                    currentReport.properties["lecm-errands-ts:execution-report-decline-reason"] = lecmErrandWf_approverDeclineReason;
+
+                                    var executor = null;
+                                    var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
+                                    if (executorAssoc && executorAssoc.length == 1) {
+                                        executor = executorAssoc[0];
+                                    }
+
+                                    notifications.sendNotificationFromCurrentUser({
+                                        recipients: [executor],
+                                        templateCode: 'ERRANDS_DECLINE_EXEC',
+                                        templateConfig: {
+                                            mainObject: document,
+                                            eventExecutor: currentUser,
+                                            reason: lecmErrandWf_approverDeclineReason
+                                        }
+                                    });
+                                }
+                                document.properties["lecm-errands-aspect:alreadyOnApproval"] = false;
+                            }
+                        ]]></activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script></script>
+        </scriptTask>
+        <receiveTask id="errandReceiveTask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startApproverDecline" targetRef="approverDecline"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="approverDecline" targetRef="errandReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="errandReceiveTask" targetRef="endApproverDecline"></sequenceFlow>
+    </process>
+</definitions>
