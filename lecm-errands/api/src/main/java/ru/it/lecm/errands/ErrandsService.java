@@ -109,6 +109,7 @@ public interface ErrandsService {
     QName ASSOC_ERRANDS_CO_EXECUTORS = QName.createQName(ERRANDS_NAMESPACE_URI, "coexecutors-assoc");
     QName ASSOC_ERRANDS_LINKS = QName.createQName(ERRANDS_NAMESPACE_URI, "links-assoc");
     QName ASSOC_ERRANDS_EXECUTION_LINKS = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-links-assoc");
+    QName ASSOC_ERRANDS_CANCELLATION_SIGNAL_SENDER = QName.createQName(ERRANDS_NAMESPACE_URI, "cancellation-signal-sender-assoc");
 
     String BUSINESS_ROLE_ERRANDS_INITIATOR_ID = "ERRANDS_INITIATOR";
     String BUSINESS_ROLE_CHOOSING_INITIATOR = "CHOOSING_INITIATOR";
@@ -339,7 +340,7 @@ public interface ErrandsService {
      * @param errand документ
      * @param reason причина сигнала
      */
-    void sendCancelSignal(NodeRef errand, String reason);
+    void sendCancelSignal(NodeRef errand, String reason, NodeRef signalSender);
 
     enum ModeChoosingExecutors {
         ORGANIZATION,

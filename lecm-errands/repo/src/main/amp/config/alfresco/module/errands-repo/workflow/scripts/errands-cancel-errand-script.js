@@ -4,7 +4,7 @@ function processCancelErrand(cancelChildren, reason) {
         var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
         childrenErrands.forEach(function (childErrand) {
             if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
-                errands.sendCancelSignal(childErrand.nodeRef.toString(), reason);
+                errands.sendCancelSignal(childErrand.nodeRef.toString(), reason, currentUser.nodeRef.toString());
             }
         });
         childrenResolutions.forEach(function (childResolution) {

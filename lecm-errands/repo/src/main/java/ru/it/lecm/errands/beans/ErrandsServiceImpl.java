@@ -653,7 +653,11 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     }
 
     @Override
-    public void sendCancelSignal(NodeRef errand, String reason) {
+    public void sendCancelSignal(NodeRef errand, String reason, NodeRef signalSender) {
+        if (!nodeService.exists(signalSender)) {
+            signalSender = orgstructureService.getCurrentEmployee();
+        }
+        nodeService.createAssociation(errand, signalSender, ErrandsService.ASSOC_ERRANDS_CANCELLATION_SIGNAL_SENDER);
         nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_CANCELLATION_SIGNAL, true);
         nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_CANCELLATION_SIGNAL_REASON, reason);
     }
