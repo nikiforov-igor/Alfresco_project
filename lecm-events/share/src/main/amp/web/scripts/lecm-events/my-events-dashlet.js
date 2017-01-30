@@ -153,9 +153,9 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                 }
             },
 
-            onListLoadFailed: function onListLoadFailed_function()
-            {
-                this.errandsList.innerHTML = this.msg("label.not-record");
+            onListLoadFailed: function onListLoadFailed_function() {
+				var container = Dom.get(this.id + '-events');
+                container.innerHTML = this.msg("label.not-record");
             },
 
             onMenuItemClick: function onMenuItemClick_function(p_sType, p_aArgs, p_oItem) {

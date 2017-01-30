@@ -38,24 +38,5 @@
 				</control>
 			</field-type>
 		</field-types>
-
-		<forms-info>
-			<form-type id="defaultCreateForm" evaluatorType="model-type" localName="Форма создания по умолчанию" />
-			<form-type id="defaultEditForm" evaluatorType="node-type" localName="Форма редактирования по умолчанию" />
-			<form-type id="createForm" evaluatorType="model-type" localName="Форма создания" />
-			<form-type id="editForm" evaluatorType="node-type" localName="Форма редактирования" />
-			<form-type id="datagridForm" formId="datagrid" evaluatorType="model-type" localName="Таблица" />
-			<form-type id="searchForm" formId="search" evaluatorType="model-type" localName="Атрибутивный поиск" />
-			<form-type id="workflowForm" formId="workflow-form" evaluatorType="model-type" localName="Форма создания из машины состояний" />
-			<form-type id="statemachineEditableFieldsForm" formId="statemachine-editable-fields" evaluatorType="model-type" localName="Настройка машины состояний" />
-			<form-type id="documentDashletForm" formId="document-dashlet" evaluatorType="node-type" localName="Дашлет" />
-			<form-type id="documentForm" formId="document" evaluatorType="node-type" localName="Правая область" />
-			<form-type id="mainPageDashletsForm" formId="main-page-dashlets" evaluatorType="node-type" localName="Главная страница" />
-			<form-type id="documentTemplateFieldsForm" formId="document-template-fields" evaluatorType="model-type" localName="Форма создания шаблона документа" />
-			<form-layout localName="В одну колонку" template=""/>
-			<form-layout localName="В две колонки" template="/ru/it/lecm/controls/2-column-edit-form.ftl" />
-			<form-layout localName="С вкладками" template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
-		</forms-info>
-
 	</config>
 </alfresco-config>
