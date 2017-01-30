@@ -8736,12 +8736,12 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Отправить на доработку]]></value>
+                                                                <value><![CDATA[Вернуть на доработку]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>workflowId</name>
                                                                 <value>
-                                                                    <![CDATA[activiti$errandsControllerDecline]]></value>
+                                                                    <![CDATA[activiti$errandsApproverDecline]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -8781,7 +8781,7 @@ if (document) {
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Данное действие доступно только Контролёру]]></value>
+                                                                                    <![CDATA[Данное действие доступно только Контролёру и Автору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -8790,37 +8790,7 @@ if (document) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>outputVariable</type>
-                                                                        <name>879c4b4a-e349-444d-a8ce-ea401e5f63cb
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/2ed26a95-103b-482a-a82b-89ab0393e7e1
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>outputFromType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>outputToValue</name>
-                                                                                <value><![CDATA[executeResult]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>outputToType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>outputFromValue</name>
-                                                                                <value><![CDATA[executeResult]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER") OR  user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>

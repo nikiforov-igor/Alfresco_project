@@ -2288,6 +2288,27 @@
         </forms>
     </config>
 
+    <config evaluator="string-compare" condition="activiti$errandsApproverDecline">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmErrandWf:approverDeclineReason"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:approverDeclineReason">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">5</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
     <config evaluator="string-compare" condition="activiti$errandsInitiatorDecline">
         <forms>
             <form>
@@ -2786,6 +2807,7 @@
             <workflow name="activiti$errandsCoexecutorReport"/>
             <workflow name="activiti$errandsCoexecutorReport_1"/>
             <workflow name="activiti$routeErrand"/>
+            <workflow name="activiti$errandsApproverDecline"/>
         </hidden-workflows>
     </config>
 
