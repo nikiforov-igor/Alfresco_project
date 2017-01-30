@@ -145,6 +145,76 @@
                 </property>
             </overrides>
         </type>
+        <type name="lecm-errands-ts:execution-report">
+            <parent>lecm-document:tableDataRow</parent>
+                <properties>
+                    <!-- Текст отчета об исполнении -->
+                    <property name="lecm-errands-ts:execution-report-text">
+                        <type>d:text</type>
+                    </property>
+                    <!-- Статус отчета -->
+                    <property name="lecm-errands-ts:execution-report-status">
+                        <type>d:text</type>
+                        <default>ONCONTROL</default>
+                        <index enabled="true">
+                            <atomic>true</atomic>
+                            <stored>false</stored>
+                            <tokenised>both</tokenised>
+                        </index>
+                        <constraints>
+                            <constraint ref="lecm-errands-ts:coexecutor-report-status-const"/>
+                        </constraints>
+                    </property>
+                    <property name="lecm-errands-ts:execution-close-child">
+                        <type>d:boolean</type>
+                    </property>
+                    <!-- Причина отклонения -->
+                    <property name="lecm-errands-ts:execution-report-decline-reason">
+                        <type>d:text</type>
+                    </property>
+                    <property name="lecm-errands-ts:execution-report-attachment-assoc-ref">
+                        <type>d:text</type>
+                    </property>
+                    <property name="lecm-errands-ts:execution-report-connected-document-assoc-ref">
+                        <type>d:text</type>
+                    </property>
+                </properties>
+            <associations>
+                <association name="lecm-errands-ts:execution-report-attachment-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>cm:content</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+                <association name="lecm-errands-ts:execution-report-connected-document-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-document:base</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+            </associations>
+        </type>
+        <type name="lecm-errands-ts:execution-reports-table">
+            <parent>lecm-document:tableData</parent>
+            <overrides>
+                <property name="lecm-document:tableDataRowType">
+                    <default>lecm-errands-ts:execution-report</default>
+                </property>
+                <property name="lecm-document:pageSize">
+                    <default>5</default>
+                </property>
+            </overrides>
+        </type>
     </types>
 
     <aspects>
@@ -166,6 +236,30 @@
                     </source>
                     <target>
                         <class>lecm-errands-ts:coexecutor-reports-table</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+        </aspect>
+        <aspect name="lecm-errands-ts:execution-reports-aspect">
+            <parent>lecm-document:tableDataAspect</parent>
+            <properties>
+                <property name="lecm-errands-ts:execution-reports-assoc-text-content">
+                    <type>d:text</type>
+                </property>
+                <property name="lecm-errands-ts:execution-reports-assoc-ref">
+                    <type>d:text</type>
+                </property>
+            </properties>
+            <associations>
+                <association name="lecm-errands-ts:execution-reports-assoc">
+                    <source>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>lecm-errands-ts:execution-reports-table</class>
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </target>

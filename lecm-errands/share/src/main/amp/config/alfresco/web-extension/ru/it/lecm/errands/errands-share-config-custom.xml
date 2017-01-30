@@ -1744,7 +1744,7 @@
                     <field id="lecmErrandWf:requestDueDateChange_1NewDateRadio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DATE</control-param>
-                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                            <control-param name="fireChangeEventName">changeDueDateRadioEvent</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:requestDueDateChange_1NewDate" set="limitation-date">
@@ -1850,7 +1850,7 @@
                     <field id="lecmErrandWf:requestDueDateChangeTask_1NewDueDateRadio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DATE</control-param>
-                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                            <control-param name="fireChangeEventName">changeDueDateRadioEvent</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:requestDueDateChangeTask_1NewDate" mandatory="true" set="limitation-date">
@@ -1927,7 +1927,7 @@
                     <field id="lecmErrandWf:changeDueDateNewDueDateRadio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DATE</control-param>
-                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                            <control-param name="fireChangeEventName">changeDueDateRadioEvent</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:changeDueDateNewDueDate" set="limitation-date">
@@ -2288,6 +2288,27 @@
         </forms>
     </config>
 
+    <config evaluator="string-compare" condition="activiti$errandsApproverDecline">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmErrandWf:approverDeclineReason"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:approverDeclineReason">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">5</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
     <config evaluator="string-compare" condition="activiti$errandsInitiatorDecline">
         <forms>
             <form>
@@ -2457,16 +2478,54 @@
             <form>
                 <field-visibility>
                     <show id="packageItems"/>
-                    <show id="lecmErrandWf:errandExecuteMessage"/>
+                    <show id="lecmErrandWf:execute_1CloseChild"/>
+                    <show id="lecmErrandWf:execute_1ReportText"/>
+                    <show id="lecmErrandWf:execute_1Attachment"/>
+                    <show id="lecmErrandWf:execute_1ConnectedDocument"/>
+                    <show id="executeErrand_WFScript" force="true"/>
+                    <show id="lecmErrandWf:execute_1Execute"/>
+                    <show id="execute-errand-button" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="packageItems">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
                     </field>
-                    <field id="lecmErrandWf:errandExecuteMessage">
-                        <control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
-                            <control-param name="msg">ru.it.errand.execute.message</control-param>
+                    <field id="lecmErrandWf:execute_1CloseChild">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:execute_1ReportText">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:execute_1Attachment">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
+                            <control-param name="directoryName">Исполнение</control-param>
+                            <control-param name="suppressRefreshEvent">true</control-param>
                         </control>
+                    </field>
+                    <field id="lecmErrandWf:execute_1ConnectedDocument">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
+                            <control-param name="multipleSelectMode">true</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
+                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="itemType">lecm-document:base</control-param>
+                            <control-param name="selectedItemsFormArgs">executionConnectedDocs</control-param>
+                        </control>
+                    </field>
+                    <field id="execute-errand-button" label-id="button.errand.execute">
+                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
+                            <control-param name="clickFireAction">executeErrandButtonClick</control-param>
+                        </control>
+                    </field>
+                    <field id="executeErrand_WFScript">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-execute-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">errandsExecuteWFScriptLoaded</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:execute_1Execute">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
                 </appearance>
             </form>
@@ -2748,6 +2807,7 @@
             <workflow name="activiti$errandsCoexecutorReport"/>
             <workflow name="activiti$errandsCoexecutorReport_1"/>
             <workflow name="activiti$routeErrand"/>
+            <workflow name="activiti$errandsApproverDecline"/>
         </hidden-workflows>
     </config>
 

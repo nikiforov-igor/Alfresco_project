@@ -1974,13 +1974,13 @@ if (document) {
         if (initiatorAssoc && initiatorAssoc.length == 1) {
             initiator = initiatorAssoc[0];
             statemachine.grandDynamicRoleForEmployee(document, initiator, "BR_INITIATOR", task);
-            documentMembers.addMember(document, initiator, "ERRANDS_READER");
+            documentMembers.addMember(document, initiator, "ERRANDS_READER", true);
         }
         var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
         if (controllerAssoc && controllerAssoc.length == 1) {
             var controller = controllerAssoc[0];
             statemachine.grandDynamicRoleForEmployee(document, controller, "ERRANDS_CONTROLLER", task);
-            documentMembers.addMember(document, controller, "ERRANDS_READER");
+            documentMembers.addMember(document, controller, "ERRANDS_READER", true);
 
             if (initiator) {
                 notifications.sendNotificationFromCurrentUser({
@@ -2008,14 +2008,14 @@ if (document) {
                     }
                 });
             }
-            documentMembers.addMember(document, executor, "ERRANDS_READER");
+            documentMembers.addMember(document, executor, "ERRANDS_READER", true);
         }
 
         var soExecutors = document.assocs["lecm-errands:coexecutors-assoc"];
         if (soExecutors) {
             for (var i = 0; i < soExecutors.length; i++) {
                 statemachine.grandDynamicRoleForEmployee(document, soExecutors[i], "ERRANDS_COEXECUTOR", task);
-                documentMembers.addMember(document, soExecutors[i], "ERRANDS_READER");
+                documentMembers.addMember(document, soExecutors[i], "ERRANDS_READER", true);
             }
             if (initiator) {
                 notifications.sendNotificationFromCurrentUser({
@@ -2792,7 +2792,7 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>workflowLabel</name>
-                                                                <value><![CDATA[Создать отчет соисполнителя]]></value>
+                                                                <value><![CDATA[Создать отчет о соисполнении]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -3470,7 +3470,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Initiator]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -3883,7 +3883,7 @@ if (doc){
                                                                 <value><![CDATA[var document = bpm_package.children[0];
 var currentUser = orgstructure.getCurrentEmployee();
 if (document) {
-    var changed = false;
+    var changed = true;
     var logObjects = [];
     var logText;
     var dueDateString = "";
@@ -3961,7 +3961,7 @@ if (document) {
         logText = "#initiator ";
         logText += documentScript.wrapperTitle("изменил", reason);
         logText += " срок исполнения поручения #mainobject на  #object1";
-        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, logObjects);
+        businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, logObjects);
     }
 
     var children = [];
@@ -4629,44 +4629,12 @@ if(doc){
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
                                                                                     <![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>fc3a27f5-1494-4ecb-ae1b-fea4bb6be468
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/ff7ac321-b93b-405f-8315-b81307b9dde3
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Вы уже направили запрос отмены поручения]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isCancelRequested") == null OR !doc.attr("lecm-errands-aspect:isCancelRequested")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4787,44 +4755,12 @@ if(doc){
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
                                                                                     <![CDATA[doc.attr("lecm-errands-aspect:isCancelRequested") == null OR !doc.attr("lecm-errands-aspect:isCancelRequested")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>d23b3296-62ee-440d-bf6f-e9c675df14f8
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/e394122f-7f06-44cb-8ed1-c92221155389
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Вы уже запросили изменение срока поручения]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4986,30 +4922,126 @@ if(doc){
                                                                         <subFolders/>
                                                                     </node>
                                                                     <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>b9721f91-936e-48b6-a601-007328938346
+                                                                        <type>inputVariable</type>
+                                                                        <name>15d6a07b-1073-4237-a548-7f9a14636580
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/085f0c86-01a5-4a45-b30b-f341cdd05f72
+                                                                            workspace://SpacesStore/1681e3c1-3db0-4bde-be36-a09b0186efc4
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>conditionErrorMessage</name>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исполнение" или заполнить поле «Отчет об исполнении».]]></value>
+                                                                                    <![CDATA[lecm-errands:project-report-text]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
+                                                                                <name>inputToValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Исполнение") OR (doc.attr("lecm-errands:execution-report") != null AND doc.attr("lecm-errands:execution-report")!= "")]]></value>
+                                                                                    <![CDATA[prop_lecmErrandWf_execute_1ReportText]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>e77cd416-e033-4f85-8143-b081b46cb590
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/a0f4d9f7-0369-4c18-b3ae-7e126b9f6d75
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-errands:project-report-attachment]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[assoc_lecmErrandWf_execute_1Attachment]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>dd567e2b-f60b-4a5a-ace8-73b28aab75b3
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/6844c6b2-4126-43d3-9823-818beab98d51
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-errands:project-report-connections]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[executionConnectedDocs]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>3f08f16d-0e8e-45cf-9ecf-a919aa5d9f30
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/150c4b44-cf0c-484c-b0a0-3cbd26f5b08d
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-errands:project-report-ref]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[executionReportRef]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -5035,7 +5067,7 @@ if(doc){
                                                             </property>
                                                             <property>
                                                                 <name>workflowLabel</name>
-                                                                <value><![CDATA[Создать отчет Соисполнителя]]></value>
+                                                                <value><![CDATA[Создать отчет о соисполнении]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -5800,7 +5832,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Initiator]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -6190,7 +6222,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                 <value><![CDATA[var document = bpm_package.children[0];
 var currentUser = orgstructure.getCurrentEmployee();
 if (document) {
-    var changed = false;
+    var changed = true;
     var logObjects = [];
     var logText;
     var dueDateString = "";
@@ -6268,7 +6300,7 @@ if (document) {
         logText = "#initiator ";
         logText += documentScript.wrapperTitle("изменил", reason);
         logText += " срок исполнения поручения #mainobject на  #object1";
-        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, logObjects);
+        businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, logObjects);
     }
 
     var children = [];
@@ -6881,44 +6913,12 @@ if (document != null) {
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
                                                                                     <![CDATA[doc.attr("lecm-errands-aspect:isCancelRequested") == null OR !doc.attr("lecm-errands-aspect:isCancelRequested")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>f19f32f4-958b-4255-8545-8540d2441325
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/feadda89-8d23-4d55-aa94-45a17e082abf
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Вы уже запросили изменение срока поручения]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -7008,44 +7008,12 @@ if (document != null) {
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
                                                                                     <![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>680f6729-7a62-445c-ba5b-ea7aa95c530e
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/1397fda4-f52d-4197-93c1-553fc746c0c3
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Вы уже направили запрос отмены поручения]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isCancelRequested") == null OR !doc.attr("lecm-errands-aspect:isCancelRequested")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -7177,38 +7145,6 @@ if (document != null) {
                                                                         <subFolders/>
                                                                     </node>
                                                                     <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>bbc704a5-5bf8-4cdc-a102-96b1a3f83bbe
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/82c4548c-2420-4535-b440-e3ca5def9186
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исполнение" или заполнить поле «Отчет об исполнении».]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Исполнение") OR (doc.attr("lecm-errands:execution-report") != null AND doc.attr("lecm-errands:execution-report")!= "")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
                                                                         <type>outputVariable</type>
                                                                         <name>dacbc9c0-3fa0-41da-a2a8-186f5d1ec486
                                                                         </name>
@@ -7238,6 +7174,134 @@ if (document != null) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>6211a07d-675d-492e-8f0d-18c9344d8652
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/baf9fcfe-2554-41d5-b29e-8a6f27ebd889
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-errands:project-report-text]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[prop_lecmErrandWf_execute_1ReportText]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>591b91d5-0049-41be-a70e-7483e2b999ac
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/edc28b95-370d-4b3c-94fb-db9a62eac7ac
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-errands:project-report-attachment]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[assoc_lecmErrandWf_execute_1Attachment]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>7f6fbded-b569-4f3a-9371-52344016a3f3
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/ca40cf88-5371-4b84-96e1-59b0ac9d9829
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-errands:project-report-connections]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[executionConnectedDocs]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>302d5e25-003e-4db5-8f01-d1d53e55c529
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/acf70ab4-2111-43c4-8b74-8db82e1f7250
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[FIELD]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[lecm-errands:project-report-ref]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[executionReportRef]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -7256,7 +7320,7 @@ if (document != null) {
                                                             </property>
                                                             <property>
                                                                 <name>workflowLabel</name>
-                                                                <value><![CDATA[Создать отчет Соисполнителя]]></value>
+                                                                <value><![CDATA[Создать отчет о соисполнении]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -8021,7 +8085,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Initiator]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -8672,12 +8736,12 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Отправить на доработку]]></value>
+                                                                <value><![CDATA[Вернуть на доработку]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>workflowId</name>
                                                                 <value>
-                                                                    <![CDATA[activiti$errandsControllerDecline]]></value>
+                                                                    <![CDATA[activiti$errandsApproverDecline]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -8717,7 +8781,7 @@ if (document) {
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Данное действие доступно только Контролёру]]></value>
+                                                                                    <![CDATA[Данное действие доступно только Контролёру и Автору]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -8726,37 +8790,7 @@ if (document) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>outputVariable</type>
-                                                                        <name>879c4b4a-e349-444d-a8ce-ea401e5f63cb
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/2ed26a95-103b-482a-a82b-89ab0393e7e1
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>outputFromType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>outputToValue</name>
-                                                                                <value><![CDATA[executeResult]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>outputToType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>outputFromValue</name>
-                                                                                <value><![CDATA[executeResult]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER") OR  user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -9380,7 +9414,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Initiator]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -9580,37 +9614,12 @@ if (document) {
 if (document != null) {
    document.properties["lecm-errands:end-date"] = new Date();
    document.save();
-
-   /*ALF-5904 ...нужно исполнителя, контролера, автора и инициатора включать в участники документа*/
-   var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
-   if (executorAssoc != null && executorAssoc.length == 1) {
-     var executor = executorAssoc[0];
-     documentMembers.addMember(document, executor, "ERRANDS_READER");
-   }
-
-   var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
-   if (controllerAssoc != null && controllerAssoc.length == 1) {
-     var controller = controllerAssoc[0];
-     documentMembers.addMember(document, controller, "ERRANDS_READER");
-   }
-
-   var authorAssoc = document.assocs["lecm-document:author-assoc"];
-    if (authorAssoc != null && authorAssoc.length == 1) {
-      var author = authorAssoc[0];
-      documentMembers.addMember(document, author, "ERRANDS_READER");
-    }
-
-   var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
-   if (initiatorAssoc != null && initiatorAssoc.length == 1) {
-      var initiator = initiatorAssoc[0];
-      documentMembers.addMember(document, initiator, "ERRANDS_READER");
-   }
 }]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Сохранение даты завершения поручения и добавление участников]]></value>
+                                                                    <![CDATA[Сохранение даты завершения поручения]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>

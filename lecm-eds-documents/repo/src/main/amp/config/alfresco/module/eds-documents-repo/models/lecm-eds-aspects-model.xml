@@ -30,8 +30,7 @@
                     <default>false</default>
                 </property>
                 <property name="lecm-eds-aspect:new-limitation-date">
-                    <type>d:boolean</type>
-                    <default>false</default>
+                    <type>d:date</type>
                 </property>
                 <property name="lecm-eds-aspect:change-duedate-reason">
                     <type>d:text</type>

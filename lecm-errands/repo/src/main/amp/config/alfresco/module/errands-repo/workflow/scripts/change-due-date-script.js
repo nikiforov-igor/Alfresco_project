@@ -92,6 +92,6 @@ function processDueDateChanges (dateRadio, newDueDate, processChild, changeDateR
         logText = "#initiator ";
         logText += documentScript.wrapperTitle("изменил", changeDateReason);
         logText += " срок исполнения поручения #mainobject на  #object1";
-        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, logObjects);
+        businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, logObjects);
     }
 }

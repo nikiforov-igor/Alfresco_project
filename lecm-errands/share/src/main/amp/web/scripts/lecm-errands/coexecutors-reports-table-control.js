@@ -31,6 +31,7 @@ LogicECM.errands = LogicECM.errands || {};
             var actionType = "datagrid-action-link-" + this.options.bubblingLabel;
             var currentUser = {
                 isExecutor: false,
+                isCoexecutor: false,
                 nodeRef: null
             };
             Alfresco.util.Ajax.jsonRequest(
@@ -75,6 +76,7 @@ LogicECM.errands = LogicECM.errands || {};
                                             label: me.msg("actions.edit"),
                                             evaluator: me.editActionEvaluator
                                         });
+                                        currentUser.isCoexecutor = true;
                                     }
                                 }
                             }
@@ -148,20 +150,21 @@ LogicECM.errands = LogicECM.errands || {};
             if (this.tableData != null && this.tableData.rowType != null) {
                 var defaultFilter, changedFilter;
                 var filters = {
-                    EMPTY: '',
-                    DECLINED: 'NOT @lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"DECLINE"',
+                    COMMON: '@lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"DECLINE" OR @lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"ACCEPT" OR (@lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"PROJECT" AND @lecm\\-errands\\-ts\\:coexecutor\\-assoc\\-ref:"' + currentUser.nodeRef + '")' +
+                    ' OR @lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"ONCONTROL"',
+                    DECLINED: '@lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"ACCEPT" OR (@lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"PROJECT" AND @lecm\\-errands\\-ts\\:coexecutor\\-assoc\\-ref:"' + currentUser.nodeRef + '")' +
+                    ' OR @lecm\\-errands\\-ts\\:coexecutor\\-report\\-status:"ONCONTROL"',
                     OWN: '@lecm\\-errands\\-ts\\:coexecutor\\-assoc\\-ref:"' + currentUser.nodeRef + '"'
                 };
                 // Фильтры для текущего пользвателя
-                if (currentUser.isExecutor) {
-                    defaultFilter = filters.DECLINED;
-                    changedFilter = filters.EMPTY;
-                    Dom.get(this.id + "-cntrl-change-filter-label").innerHTML = Alfresco.util.message("errands.label.showDeclined");
-
-                } else {
+                if (currentUser.isCoexecutor && !currentUser.isExecutor) {
                     defaultFilter = filters.OWN;
-                    changedFilter = filters.EMPTY;
+                    changedFilter = filters.COMMON;
                     Dom.get(this.id + "-cntrl-change-filter-label").innerHTML = Alfresco.util.message("errands.label.showAll");
+                } else {
+                    defaultFilter = filters.DECLINED;
+                    changedFilter = filters.COMMON;
+                    Dom.get(this.id + "-cntrl-change-filter-label").innerHTML = Alfresco.util.message("errands.label.showDeclined");
                 }
 
                 var datagrid = new LogicECM.errands.CoexecutorsReportsDatagrid(this.options.containerId).setOptions({
