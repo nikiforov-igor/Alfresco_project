@@ -1302,8 +1302,6 @@
                     <show id="lecm-errands-ts:coexecutor-assoc"/>
                     <show id="lecm-errands-ts:coexecutor-report-status"/>
                     <show id="lecm-errands-ts:coexecutor-report-route-date"/>
-                    <show id="lecm-errands-ts:coexecutor-report-attachment-assoc"/>
-                    <show id="lecm-errands-ts:coexecutor-report-is-transferred"/>
                 </field-visibility>
             </form>
         </forms>
@@ -1312,11 +1310,16 @@
         <forms>
             <form id="table-structure-expand">
                 <field-visibility>
-                    <show id="lecm-errands-ts:coexecutor-report-text" force="true"/>
+                    <show id="lecm-errands-ts:coexecutor-report-text"/>
+                    <show id="lecm-errands-ts:coexecutor-report-attachment-assoc"/>
                     <show id="lecm-errands-ts:coexecutor-report-connected-document-assoc"/>
+
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-errands-ts:coexecutor-report-connected-document-assoc">
+                    <set id="coexecutor-reports-set" template="/ru/it/lecm/errands/controls/errands-coexecutor-reports-set.ftl"/>
+                    <field id="lecm-errands-ts:coexecutor-report-text" set="coexecutor-reports-set"/>
+                    <field id="lecm-errands-ts:coexecutor-report-attachment-assoc" set="coexecutor-reports-set"/>
+                    <field id="lecm-errands-ts:coexecutor-report-connected-document-assoc" set="coexecutor-reports-set">
                         <control>
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">Отчет об исполнении: {lecm-document:ext-present-string}</control-param>
