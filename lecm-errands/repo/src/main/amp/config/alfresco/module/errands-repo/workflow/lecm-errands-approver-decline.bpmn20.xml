@@ -27,7 +27,8 @@
                                 }
                                 if (currentReport) {
                                     currentReport.properties["lecm-errands-ts:execution-report-decline-reason"] = lecmErrandWf_approverDeclineReason;
-
+                                    currentReport.properties["lecm-errands-ts:execution-report-status"] = "DECLINE";
+                                    currentReport.save();
                                     var executor = null;
                                     var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
                                     if (executorAssoc && executorAssoc.length == 1) {
@@ -44,7 +45,6 @@
                                         }
                                     });
                                 }
-                                document.properties["lecm-errands-aspect:alreadyOnApproval"] = false;
                             }
                         ]]></activiti:string>
                     </activiti:field>
