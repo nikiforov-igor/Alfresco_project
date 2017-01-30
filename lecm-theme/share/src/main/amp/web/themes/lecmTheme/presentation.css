@@ -1880,7 +1880,7 @@ a.remove-item {
 a.up-item {
   width: 20px;
   height: 16px;
-  background-image :url("/share/res/images/lecm-base/components/triangle_up.png");
+  background-image :url("../../images/lecm-base/components/triangle_up.png");
   float: right;
   margin-top: 3px;
 }
@@ -1888,7 +1888,7 @@ a.up-item {
 a.down-item {
   width: 20px;
   height: 16px;
-  background-image :url("/share/res/images/lecm-base/components/triangle_down.png");
+  background-image :url("../../images/lecm-base/components/triangle_down.png");
   float: right;
   margin-top: 3px;
 }
@@ -1960,11 +1960,11 @@ span.person a {
     (помимо тултипа у "а") */
 .yui-skin-lecmTheme span.person.employee-available {
     padding-left: 20px;
-    background: url("/share/res/images/lecm-base/components/user-green-16.png") no-repeat 0 -1px;
+    background: url("../../images/lecm-base/components/user-green-16.png") no-repeat 0 -1px;
 }
 .yui-skin-lecmTheme span.person.employee-unavailable {
     padding-left: 20px;
-    background: url("/share/res/images/lecm-base/components/user-red-16.png") no-repeat 0 -1px;
+    background: url("../../images/lecm-base/components/user-red-16.png") no-repeat 0 -1px;
 }
 .yui-skin-lecmTheme span.person.employee-available a,
 .yui-skin-lecmTheme span.person.employee-unavailable a {
@@ -2271,14 +2271,14 @@ span.person a div.description:empty {
 }
 
 .view-signatures {
-   background-image: url(/share/res/themes/lecmTheme/images/document.png);
+   background-image: url(../../themes/lecmTheme/images/document.png);
    background-repeat: no-repeat;
    display: inline-block;
    width: 16px;
 }
 
 .refresh-sent-document {
-   background-image: url(/share/res/themes/lecmTheme/images/refresh-16.png);
+   background-image: url(../../themes/lecmTheme/images/refresh-16.png);
    background-repeat: no-repeat;
    display: inline-block;
    width: 16px;
@@ -2492,18 +2492,18 @@ div#lightbox {
 
 /* arm menu : start */
 .yui-skin-lecmTheme .arm-menu-item {
-    background-image: url("/share/components/images/header/docs_16_light.png");
+    background-image: url("../../components/images/header/docs_16_light.png");
 }
 .yui-skin-lecmTheme .arm-menu-item.orgstructure {
-    background-image: url("/share/components/images/header/orgstructure_light.png");
+    background-image: url("../../components/images/header/orgstructure_light.png");
 }
 .yui-skin-lecmTheme .arm-menu-item.ADMIN {
-    background-image: url("/share/components/images/header/settings_16_light.png");
+    background-image: url("../../components/images/header/settings_16_light.png");
 }
 /* arm menu : end */
 
 .yui-skin-lecmTheme .alf-files-icon {
-    background-image: url("/share/components/images/header/docs_16_light.png");
+    background-image: url("../../components/images/header/docs_16_light.png");
 }
 
 /* Controls colors : start */
