@@ -81,6 +81,18 @@
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
                 </assocs>
             </item>
+            <item name="cm:RESOLUTION_CHANGE_LIMITATION_DATE" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[RESOLUTION_CHANGE_LIMITATION_DATE]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Резолюция. Изменение срока резолюции]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Срок исполнения резолюции {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} {#wrapTitle("измененён", #reason)}]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
         </items>
     </item>
 </items>
