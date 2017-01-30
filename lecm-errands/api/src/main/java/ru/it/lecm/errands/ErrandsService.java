@@ -109,6 +109,8 @@ public interface ErrandsService {
     QName ASSOC_ERRANDS_CO_EXECUTORS = QName.createQName(ERRANDS_NAMESPACE_URI, "coexecutors-assoc");
     QName ASSOC_ERRANDS_LINKS = QName.createQName(ERRANDS_NAMESPACE_URI, "links-assoc");
     QName ASSOC_ERRANDS_EXECUTION_LINKS = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-links-assoc");
+    QName ASSOC_ERRANDS_EXECUTION_CONNECTED_DOCS = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-connected-document-assoc");
+    QName ASSOC_ERRANDS_EXECUTION_ATTACHMENT = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-report-attachment-assoc");
 
     String BUSINESS_ROLE_ERRANDS_INITIATOR_ID = "ERRANDS_INITIATOR";
     String BUSINESS_ROLE_CHOOSING_INITIATOR = "CHOOSING_INITIATOR";
