@@ -1974,13 +1974,13 @@ if (document) {
         if (initiatorAssoc && initiatorAssoc.length == 1) {
             initiator = initiatorAssoc[0];
             statemachine.grandDynamicRoleForEmployee(document, initiator, "BR_INITIATOR", task);
-            documentMembers.addMember(document, initiator, "ERRANDS_READER");
+            documentMembers.addMember(document, initiator, "ERRANDS_READER", true);
         }
         var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
         if (controllerAssoc && controllerAssoc.length == 1) {
             var controller = controllerAssoc[0];
             statemachine.grandDynamicRoleForEmployee(document, controller, "ERRANDS_CONTROLLER", task);
-            documentMembers.addMember(document, controller, "ERRANDS_READER");
+            documentMembers.addMember(document, controller, "ERRANDS_READER", true);
 
             if (initiator) {
                 notifications.sendNotificationFromCurrentUser({
@@ -2008,14 +2008,14 @@ if (document) {
                     }
                 });
             }
-            documentMembers.addMember(document, executor, "ERRANDS_READER");
+            documentMembers.addMember(document, executor, "ERRANDS_READER", true);
         }
 
         var soExecutors = document.assocs["lecm-errands:coexecutors-assoc"];
         if (soExecutors) {
             for (var i = 0; i < soExecutors.length; i++) {
                 statemachine.grandDynamicRoleForEmployee(document, soExecutors[i], "ERRANDS_COEXECUTOR", task);
-                documentMembers.addMember(document, soExecutors[i], "ERRANDS_READER");
+                documentMembers.addMember(document, soExecutors[i], "ERRANDS_READER", true);
             }
             if (initiator) {
                 notifications.sendNotificationFromCurrentUser({
