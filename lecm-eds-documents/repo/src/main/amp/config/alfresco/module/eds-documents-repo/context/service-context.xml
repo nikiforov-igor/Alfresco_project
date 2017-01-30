@@ -50,7 +50,7 @@
 		  p:dictionaries-ref="eds.dictionaries"/>
 
 	<bean id="eds.arm.filters.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
-		  depends-on="arm.LogicEcmModelsBootstrap, armService, arm.LogicEcmBootstrap">
+		  depends-on="arm.LogicEcmModelsBootstrap, armService, arm.LogicEcmBootstrap, arm.filters.LogicEcmBootstrap">
 		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
 		<property name="dictionaries">
 			<list>

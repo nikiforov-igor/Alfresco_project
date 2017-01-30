@@ -1,0 +1,61 @@
+<alfresco-config>
+	<!--Ридер для кастомного корневого элемента типов полей-->
+	<plug-ins>
+		<element-readers>
+			<element-reader element-name="field-types" class="ru.it.lecm.base.formsConfig.elements.fieldsElement.FieldTypesReader"/>
+			<element-reader element-name="forms-info" class="ru.it.lecm.base.formsConfig.elements.formsInfoElement.FormsInfoElementReader"/>
+		</element-readers>
+	</plug-ins>
+	<config>
+		<field-types>
+			<field-type id="lecm-errands-dic:errand-titles" localName="Заголовки поручений">
+				<control id="lecm-errands-dic:errand-titles-default-control" template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl" localName="Выбор заголовка">
+					<param id="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</param>
+					<param id="itemType">lecm-errands-dic:errand-titles</param>
+					<param id="nameSubstituteString">{cm:name}</param>
+					<param id="notSelectedOptionShow">true</param>
+					<param id="notSelectedOptionLabel"> </param>
+					<param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания нового">false</param>
+					<param id="showCreateNewButton" visible="true" localName="Показывать кнопку создания нового">false</param>
+				</control>
+			</field-type>
+			<field-type id="lecm-contract-dic:contract-type" localName="Вид договора">
+				<control id="lecm-contract-dic:contract-type-default-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор вида договора">
+					<param id="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</param>
+					<param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания нового">false</param>
+					<param id="showCreateNewButton" visible="true" localName="Показывать кнопку создания нового">false</param>
+					<param id="nameSubstituteString">{cm:name}</param>
+					<param id="itemType">lecm-contract-dic:contract-type</param>
+				</control>
+			</field-type>
+			<field-type id="lecm-contract-dic:contract-documents-type" localName="Вид документа к договору">
+				<control id="lecm-contract-dic:contract-documents-type-default-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор вида документа к договору">
+					<param id="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа_x0020_к_x0020_договору</param>
+					<param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания нового">false</param>
+					<param id="showCreateNewButton" visible="true" localName="Показывать кнопку создания нового">false</param>
+					<param id="nameSubstituteString">{cm:name}</param>
+					<param id="itemType">lecm-contract-dic:contract-documents-type</param>
+				</control>
+			</field-type>
+		</field-types>
+
+		<forms-info>
+			<form-type id="defaultCreateForm" evaluatorType="model-type" localName="Форма создания по умолчанию" />
+			<form-type id="defaultEditForm" evaluatorType="node-type" localName="Форма редактирования по умолчанию" />
+			<form-type id="createForm" evaluatorType="model-type" localName="Форма создания" />
+			<form-type id="editForm" evaluatorType="node-type" localName="Форма редактирования" />
+			<form-type id="datagridForm" formId="datagrid" evaluatorType="model-type" localName="Таблица" />
+			<form-type id="searchForm" formId="search" evaluatorType="model-type" localName="Атрибутивный поиск" />
+			<form-type id="workflowForm" formId="workflow-form" evaluatorType="model-type" localName="Форма создания из машины состояний" />
+			<form-type id="statemachineEditableFieldsForm" formId="statemachine-editable-fields" evaluatorType="model-type" localName="Настройка машины состояний" />
+			<form-type id="documentDashletForm" formId="document-dashlet" evaluatorType="node-type" localName="Дашлет" />
+			<form-type id="documentForm" formId="document" evaluatorType="node-type" localName="Правая область" />
+			<form-type id="mainPageDashletsForm" formId="main-page-dashlets" evaluatorType="node-type" localName="Главная страница" />
+			<form-type id="documentTemplateFieldsForm" formId="document-template-fields" evaluatorType="model-type" localName="Форма создания шаблона документа" />
+			<form-layout localName="В одну колонку" template=""/>
+			<form-layout localName="В две колонки" template="/ru/it/lecm/controls/2-column-edit-form.ftl" />
+			<form-layout localName="С вкладками" template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+		</forms-info>
+
+	</config>
+</alfresco-config>

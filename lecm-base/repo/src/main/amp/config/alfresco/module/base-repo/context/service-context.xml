@@ -213,7 +213,7 @@
 		</property>
 	</bean>
 
-	<bean id="links.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap"
+	<bean id="links.LogicEcmBootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap">
 		<property name="models">
 			<list>

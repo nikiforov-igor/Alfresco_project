@@ -25,7 +25,7 @@
     <bean id="documents.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
           depends-on="dictionaryBootstrap,
                         documents.dictionaries.LogicEcmModelsBootstrap,
-                        links.LogicEcmContractsBootstrap,
+                        links.LogicEcmBootstrap,
                         ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsAspectBootstrap,
                         documents.LogicEcmModelsConnectionAspectBootstrap,
                         documents-members.LogicEcmModelsBootstrap,
@@ -90,20 +90,6 @@
 				<value>alfresco/module/${artifactId}/messages/lecm-document-dictionaries-model</value>
 				<value>alfresco/module/${artifactId}/messages/lecm-delivery-method-dictionary-model</value>
 				<value>alfresco/module/${artifactId}/messages/lecm-doc-type-dictionary-model</value>
-			</list>
-		</property>
-	</bean>
-
-	<bean id="dictionary.fileRegister.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
-	      depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, operative.storage.model.bootstrap">
-		<property name="models">
-			<list>
-				<value>alfresco/module/${artifactId}/models/lecm-file-register-dictionary-model.xml</value>
-			</list>
-		</property>
-		<property name="labels">
-			<list>
-				<value>alfresco/module/${artifactId}/messages/lecm-file-register-dictionary-model</value>
 			</list>
 		</property>
 	</bean>
@@ -227,7 +213,6 @@
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-document-subjects.xml</value>
 	            <value>alfresco/module/${artifactId}/dictionaries/lecm-delivery-method.xml</value>
 	            <value>alfresco/module/${artifactId}/dictionaries/lecm-document-type.xml</value>
-			    <value>alfresco/module/${artifactId}/dictionaries/lecm-file-register-objectType-items.xml</value>
 			    <value>alfresco/module/${artifactId}/dictionaries/lecm-reg-data-objectType-items.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-document-type-items.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-delivery-method-items.xml</value>

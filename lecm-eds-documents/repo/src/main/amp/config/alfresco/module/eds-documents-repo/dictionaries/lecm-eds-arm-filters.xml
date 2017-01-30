@@ -1,15 +1,25 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items updateMode="CreateOrUpdate">
-	<item name="lecm-dic:Фильтры АРМ" type="lecm-dic:dictionary">
-		<property name="cm:name">Фильтры АРМ</property>
-		<property name="lecm-dic:attributeForShow">cm:name</property>
-		<property name="lecm-dic:type">lecm-arm:filter</property>
-		<property name="lecm-dic:active">true</property>
-		<property name="lecm-dic:plane">true</property>
-		<property name="lecm-dic:description">Фильтры АРМ</property>
+    <item name="lecm-dic:Фильтры АРМ" type="lecm-dic:dictionary">
         <items>
-	        <item name="cm:Вид документа" type="lecm-arm:filter">
-				<property name="cm:name">Вид документа</property>
+            <item name="cm:По автору" type="lecm-arm:filter">
+                <property name="cm:name">По принадлежности</property>
+                <property name="lecm-arm:filter-code">AUTHOR_FILTER</property>
+                <property name="lecm-arm:filter-class">authorArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">MY|Мои,DEPARTMENT|Мое подразделение,ALL|Все</property>
+                <property name="lecm-arm:filter-query">lecm-document:author-assoc-ref,lecm-eds-document:recipients-assoc-ref,lecm-eds-document:reviewers-assoc-ref,lecm-ord:controller-assoc-ref</property>
+            </item>
+                <item name="cm:По срокам" type="lecm-arm:filter">
+                <property name="cm:name">По срокам</property>
+                <property name="lecm-arm:filter-code">DATE_FILTER</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">(@lecm\\-eds\\-document:execution\\-date:[MIN TO NOW]) OR (@lecm\\-errands\\:limitation\\-date:[MIN TO NOW]) OR (lecm\\-errands:is\\-expired:true)|Просроченные;(@lecm\\-eds\\-document:execution\\-date:[NOW TO MAX]) OR (@lecm\\-errands\\:limitation\\-date:[NOW TO MAX])|В работе;(@lecm\\-eds\\-document:execution\\-date:{{TIME_OFFSET({metricUnit:'DAY',value:2})}}) OR (@lecm\\-errands\\:limitation\\-date:{{TIME_OFFSET({metricUnit:'DAY',value:2})}})|С приближающимся сроком; |Все</property>
+                <property name="lecm-arm:filter-query">#value</property>
+            </item>
+                <item name="cm:Вид документа" type="lecm-arm:filter">
+                <property name="cm:name">Вид документа</property>
                 <property name="lecm-arm:filter-code">DOCUMENT_TYPE</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
@@ -17,5 +27,5 @@
                 <property name="lecm-arm:filter-query">+TYPE:'#value'</property>
             </item>
         </items>
-	</item>
+    </item>
 </items>

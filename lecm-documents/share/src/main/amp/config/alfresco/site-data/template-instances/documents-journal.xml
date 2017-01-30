@@ -8,7 +8,7 @@
             <url>/lecm/base/title-with-filter-label</url>
             <properties>
                 <title>page.lecm.documents-journal.title</title>
-                <filteredLabel>page.contracts.filter.label</filteredLabel>
+                <filteredLabel>page.lecm.documents-journal.filter.label</filteredLabel>
             </properties>
         </component>
         <!-- Toolbar -->

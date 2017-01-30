@@ -45,6 +45,7 @@
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-os-br-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/os-bj-eventCategory-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/os-objectType-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/deprecated/lecm-file-register-objectType-items.xml</value>
 	</util:list>
 
 	<util:list id="operative.storage.groupOperations">
@@ -264,5 +265,17 @@
 			</map>
 		</constructor-arg>
 	</bean>
-
+	<bean id="dictionary.fileRegister.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
+	      depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, operative.storage.model.bootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/deprecated/lecm-file-register-dictionary-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/deprecated/lecm-file-register-dictionary-model</value>
+			</list>
+		</property>
+	</bean>
 </beans>

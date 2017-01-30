@@ -21,7 +21,7 @@
 		</property>
 	</bean>
 
-	<bean id="events.LogicEcmContractsTableStructureBootstrap" parent="modelsToRepositoryLoader"
+	<bean id="events.LogicEcmTableStructureBootstrap" parent="modelsToRepositoryLoader"
 	      depends-on="documents.LogicEcmModelsBootstrap,
 		      events.dictionaries.LogicEcmModelsBootstrap,
 		      ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
@@ -43,7 +43,7 @@
 					 documents.LogicEcmModelsConnectionsBootstrap,
 					 documents.dictionaries.LogicEcmModelsBootstrap,
 					 events.dictionaries.LogicEcmModelsBootstrap,
-					 events.LogicEcmContractsTableStructureBootstrap">
+					 events.LogicEcmTableStructureBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-events-model.xml</value>
