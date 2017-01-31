@@ -65,10 +65,8 @@
 <#assign readonly = false>
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
-<#if (params.busyTimeMembersFields)?has_content>
+<#if params.busyTimeMembersFields??>
     <#assign busyTimeMembersFields = params.busyTimeMembersFields>
-<#else>
-    <#assign busyTimeMembersFields = "lecm-events:initiator-assoc,lecm-events:temp-members-assoc">
 </#if>
 
 <#if disabled>
@@ -329,11 +327,13 @@
             </#if>
                 itemType: "${params.endpointType ! field.endpointType}",
                 additionalFilter: "${params.additionalFilter!''}",
+            <#if busyTimeMembersFields??>
+                busyTimeMembersFields: "${busyTimeMembersFields}",
+            </#if>
                 showAssocViewForm: ${showAssocViewForm?string},
                 checkType: ${checkType?string},
                 fieldId: "${field.configName}",
-                formId: "${args.htmlid}",
-                busyTimeMembersFields: "${busyTimeMembersFields}"
+                formId: "${args.htmlid}"
             }).setMessages( ${messages} );
 		<#if readonly>
 			LogicECM.module.Base.Util.readonlyControl('${args.htmlid}', '${field.configName}', true);

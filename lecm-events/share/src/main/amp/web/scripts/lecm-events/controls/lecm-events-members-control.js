@@ -77,6 +77,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			components.forEach(function(component) {
 				this._formControlUpdated(component);
 			}, this);
+			this.loadBusyTimeMembersFieldsFromService();
 		},
 
 		_loadSelectedItems: function (clearCurrentDisplayValue, updateForms) {
@@ -527,7 +528,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						items: items,
 						date: Alfresco.util.formatDate(this.selectedDate, "yyyy-mm-dd"),
 						exclude: this.isNodeRef(this.options.eventNodeRef) ? this.options.eventNodeRef : "",
-                        busyTimeMembersFields: this.options.busyTimeMembersFields
+                        busyTimeMembersFields: this.options.busyTimeMembersFields ? this.options.busyTimeMembersFields : this.options.busyTimeMembersFieldsFromService
 					},
 					successCallback:
 					{
@@ -560,7 +561,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						startDate: Alfresco.util.toISO8601(this.startDate),
 						endDate: Alfresco.util.toISO8601(this.endDate),
 						exclude: this.isNodeRef(this.options.eventNodeRef) ? this.options.eventNodeRef : "",
-                        busyTimeMembersFields: this.options.busyTimeMembersFields
+                        busyTimeMembersFields: this.options.busyTimeMembersFields ? this.options.busyTimeMembersFields : this.options.busyTimeMembersFieldsFromService
 					},
 					successCallback:
 					{
@@ -1484,7 +1485,26 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				this.prevStartIndex = null;
 				this.prevEndIndex = null;
 			}
-		}
+		},
+
+        loadBusyTimeMembersFieldsFromService: function () {
+            this.options.busyTimeMembersFieldsFromService = "";
+            Alfresco.util.Ajax.jsonRequest(
+                {
+                    url: Alfresco.constants.PROXY_URI + "lecm/events/getPropsForFilterShowInCalendar",
+                    method: "GET",
+                    successCallback:
+                        {
+                            fn: function(response) {
+                                if (response.json && response.json) {
+                                    this.options.busyTimeMembersFieldsFromService = response.json.propsString;
+                                }
+                            },
+
+                            scope: this
+                        }
+            	});
+        }
 		///////////////////////////////////////
 	}, true);
 })();

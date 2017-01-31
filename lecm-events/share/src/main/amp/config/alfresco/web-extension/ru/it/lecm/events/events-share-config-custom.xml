@@ -107,7 +107,6 @@
                             <control-param name="useStrictFilterByOrg">true</control-param>
                             <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
                             <control-param name="pickerItemsScript">/lecm/events/members/picker/items</control-param>
-                            <control-param name="busyTimeMembersFields">lecm-events:initiator-assoc,lecm-events:temp-members-assoc</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:temp-members-assoc-json">
@@ -342,7 +341,6 @@
                             <control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
                             <control-param name="useStrictFilterByOrg">true</control-param>
                             <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
-                            <control-param name="busyTimeMembersFields">lecm-events:initiator-assoc,lecm-events:temp-members-assoc</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:temp-members-assoc-json" set="createEventSet">

@@ -182,4 +182,8 @@ public interface EventsService {
 	NodeRef createCurrentUserSettingsNode() throws WriteTransactionNeededException;
 
 	boolean isShowDeclined();
+	
+	void addPropsForFilterShowInCalendar(List<String> props);
+
+	List<String> getPropsForFilterShowInCalendar();
 }

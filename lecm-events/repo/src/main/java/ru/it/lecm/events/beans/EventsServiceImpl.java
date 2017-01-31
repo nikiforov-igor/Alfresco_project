@@ -62,9 +62,21 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	private final static String WEEK_DAYS = "week-days";
 	private final static String MONTH_DAYS = "month-days";
+	
+	private List<String> propsForFilterShowInCalendar = new ArrayList<>();
 
-	private List<String> propsForFilterShowIncalendar = new ArrayList<>();
-
+	@Override
+	public List<String> getPropsForFilterShowInCalendar() {
+		return propsForFilterShowInCalendar;
+	}
+	
+	@Override
+	public void addPropsForFilterShowInCalendar(List<String> props) {
+		if (props != null) {
+			propsForFilterShowInCalendar.addAll(props);
+		}
+	}
+	
 	public void setEventsNotificationsService(EventsNotificationsService eventsNotificationsService) {
 		this.eventsNotificationsService = eventsNotificationsService;
 	}
@@ -158,8 +170,8 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		this.documentTableService = documentTableService;
 	}
 
-	public void setPropsForFilterShowIncalendar(List<String> propsForFilterShowIncalendar) {
-		this.propsForFilterShowIncalendar = propsForFilterShowIncalendar;
+	public void setPropsForFilterShowInCalendar(List<String> propsForFilterShowInCalendar) {
+		this.propsForFilterShowInCalendar = propsForFilterShowInCalendar;
 	}
 
 	@Override
@@ -818,10 +830,10 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
 		StringBuilder result = new StringBuilder();
 		if (currentEmployee != null && !orgstructureBean.isEmployeeHasBusinessRole(currentEmployee, EVENTS_ENGINEER_ROLE)
-				&& this.propsForFilterShowIncalendar != null && this.propsForFilterShowIncalendar.size() > 0) {
+				&& this.propsForFilterShowInCalendar != null && this.propsForFilterShowInCalendar.size() > 0) {
 			result.append(" AND (");
 			int i = 0;
-			for (String prop : this.propsForFilterShowIncalendar) {
+			for (String prop : this.propsForFilterShowInCalendar) {
 				if (i > 0) {
 					result.append(" OR ");
 				}
