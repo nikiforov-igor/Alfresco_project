@@ -1,5 +1,13 @@
 <webscript>
-  <shortname>document-attachments</shortname>
-  <description>Document Attachments Component</description>
-  <url>/lecm/components/document/document-attachments</url>
+	<shortname>document-attachments</shortname>
+	<description>
+		Document Attachments Component
+
+		Дополнительные необязательные параметры для получения вложений документа-основания
+		Если задали additionalType нужно также задать additionalAssoc
+
+		additionalType - тип документа для проверки соответствия
+		additionalAssoc - ассоциация на документ основания
+	</description>
+	<url>/lecm/components/document/document-attachments?additionalType={additionalType}&amp;additionalAssoc={additionalAssoc}</url>
 </webscript>

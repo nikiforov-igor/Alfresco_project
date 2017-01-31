@@ -1,6 +1,14 @@
 <webscript>
     <shortname>Вложения</shortname>
-    <description>Компонент "Вложения"</description>
+    <description>
+		Компонент "Вложения"
+
+		Дополнительные необязательные параметры для получения вложений документа-основания
+		Если задали additionalType нужно также задать additionalAssoc
+
+		additionalType - тип документа для проверки соответствия
+		additionalAssoc - ассоциация на документ основания
+	</description>
     <family>document-dashlet</family>
-    <url>/lecm/components/dashlets/document-attachments</url>
+    <url>/lecm/components/dashlets/document-attachments?additionalType={additionalType}&amp;additionalAssoc={additionalAssoc}</url>
 </webscript>

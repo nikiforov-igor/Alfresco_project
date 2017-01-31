@@ -43,6 +43,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
         {
 	        newId: null,
             options: {
+				additionalType: null,
+				additionalAssoc: null,
 		        showAfterReady: false
 	        },
 
@@ -94,7 +96,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/document-attachments",
 				        dataObj: {
 					        nodeRef: this.options.nodeRef,
-					        htmlid: newId
+					        htmlid: newId,
+							additionalType: this.options.additionalType,
+							additionalAssoc: this.options.additionalAssoc
 				        },
 				        successCallback: {
 					        fn:function(response){

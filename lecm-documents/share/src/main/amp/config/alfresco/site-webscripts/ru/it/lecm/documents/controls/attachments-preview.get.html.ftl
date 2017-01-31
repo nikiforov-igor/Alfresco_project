@@ -31,13 +31,15 @@
 			control.setOptions({
 				itemId: "${nodeRef}",
 				forTask: ${forTask?string},
-                                selectedAttachmentNodeRef: "${selectedAttachmentNodeRef}"
+				additionalType: "${additionalType!""}",
+				additionalAssoc: "${additionalAssoc!""}",
+                selectedAttachmentNodeRef: "${selectedAttachmentNodeRef}"
 			});
-                        control.onReady();
-                }
+            control.onReady();
+        }
 		YAHOO.util.Event.onDOMReady(init);
  	})();
-            
+
         function redirectToAttachmentPage() {
             window.location = Alfresco.constants.URL_PAGECONTEXT + "document-attachment?nodeRef=" + document.getElementById("modalWindow-attachment-select").value;
         }
@@ -45,7 +47,7 @@
 
     <form class="bd">
         <div class="form-fields">
-            
+
             <div>
                 <div class="label-div">
                     <select id="modalWindow-attachment-select"></select>
@@ -56,7 +58,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div id="modalWindow-preview-container" class="document-preview body"></div> <#-- не удалять! класс 'body' важен для расчета высоты области просмотра -->
         </div>
         <div align="center" id="modalWindow-buttons" class="form-buttons">

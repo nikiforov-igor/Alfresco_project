@@ -1,5 +1,13 @@
 <webscript>
-  <shortname>document-attachment-header</shortname>
-  <description>Document Attachment Header Component</description>
-  <url>/lecm/components/document/attachment/header</url>
+	<shortname>document-attachment-header</shortname>
+	<description>
+		Document Attachment Header Component
+
+		Дополнительные необязательные параметры для получения вложений документа-основания
+		Если задали additionalType нужно также задать additionalAssoc
+
+		additionalType - тип документа для проверки соответствия
+		additionalAssoc - ассоциация на документ основания
+	</description>
+	<url>/lecm/components/document/attachment/header?additionalType={additionalType}&amp;additionalAssoc={additionalAssoc}</url>
 </webscript>

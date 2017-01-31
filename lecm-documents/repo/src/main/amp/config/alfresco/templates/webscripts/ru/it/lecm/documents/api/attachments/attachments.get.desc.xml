@@ -1,7 +1,18 @@
 <webscript>
     <shortname>Get document attachments</shortname>
-    <description>Document Attachments</description>
-    <url>/lecm/document/attachments/api/get?documentNodeRef={documentNodeRef}&amp;count={count}</url>
+    <description>
+		Document Attachments
+		documentNodeRef - nodeRef документа для которого получаем вложения
+		count - кол-во запрашиваемых вложений
+		showEmptyCategory - отображать пустые категории вложений
+
+		Дополнительные необязательные параметры для получения вложений документа-основания
+		Если задали additionalType нужно также задать additionalAssoc
+		
+		additionalType - тип документа для проверки соответствия
+		additionalAssoc - ассоциация на документ основания
+	</description>
+    <url>/lecm/document/attachments/api/get?documentNodeRef={documentNodeRef}&amp;count={count}&amp;showEmptyCategory={showEmptyCategory}&amp;additionalType={additionalType}&amp;additionalAssoc={additionalAssoc}</url>
     <authentication>user</authentication>
     <transaction>none</transaction>
     <format default="json"/>
