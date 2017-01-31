@@ -104,6 +104,16 @@
 				</list>
 			</parameter>
 		</constraint>
+		<constraint name="lecm-errands:execution-report-status-const" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>ACCEPT</value>
+					<value>DECLINE</value>
+					<value>ONCONTROL</value>
+					<value>PROJECT</value>
+				</list>
+			</parameter>
+		</constraint>
     </constraints>
 
     <types>
@@ -263,6 +273,22 @@
 				</property>
 				<!-- Отчет об исполнении -->
 				<property name="lecm-errands:execution-report">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-errands:execution-report-attachment-assoc-ref">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-errands:execution-connected-document-assoc-ref">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-errands:execution-report-status">
+					<type>d:text</type>
+					<default>PROJECT</default>
+					<constraints>
+						<constraint ref="lecm-errands:execution-report-status-const"/>
+					</constraints>
+				</property>
+				<property name="lecm-errands:execution-report-decline-reason">
 					<type>d:text</type>
 				</property>
 				<!-- Дата исполнения -->
@@ -604,6 +630,17 @@
 					</source>
 					<target>
 						<class>lecm-document:base</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<association name="lecm-errands:execution-report-attachment-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:content</class>
 						<mandatory>false</mandatory>
 						<many>true</many>
 					</target>

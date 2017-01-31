@@ -97,9 +97,12 @@ public class ErrandsReportConnectedDocumentAssociationPolicy implements NodeServ
 
         NodeRef reportNodeRef = associationRef.getSourceRef();
         NodeRef connectedDoc = associationRef.getTargetRef();
-        NodeRef errandNodeRef = documentTableService.getDocumentByTableDataRow(reportNodeRef);
-        String connectedDocName = (String) nodeService.getProperty(connectedDoc, ContentModel.PROP_NAME);
-
+        NodeRef errandNodeRef = null;
+        if (nodeService.getType(reportNodeRef).equals(ErrandsService.TYPE_ERRANDS)){
+            errandNodeRef = reportNodeRef;
+        } else {
+            errandNodeRef = documentTableService.getDocumentByTableDataRow(reportNodeRef);
+        }
         //создаем связь если не было.
         boolean conExist = false;
         List<NodeRef> connections = documentConnectionService.getConnectionsWithDocument(errandNodeRef, ErrandsService.ERRANDS_REPORT_CONNECTION_TYPE);
@@ -118,24 +121,19 @@ public class ErrandsReportConnectedDocumentAssociationPolicy implements NodeServ
     public void onDeleteAssociation(AssociationRef associationRef) {
         NodeRef reportNodeRef = associationRef.getSourceRef();
         NodeRef connectedDoc = associationRef.getTargetRef();
-        NodeRef errandNodeRef = documentTableService.getDocumentByTableDataRow(reportNodeRef);
+        NodeRef errandNodeRef = null;
 
-        //проверяем использование документа в других отчетах
-        NodeRef tableData = nodeService.getParentAssocs(reportNodeRef).get(0).getParentRef();
-        List<NodeRef> allReports = documentTableService.getTableDataRows(tableData);
-        boolean docIsUsed = false;
-        for (NodeRef report : allReports) {
-            if (!report.equals(reportNodeRef)) {
-                List<AssociationRef> reportConnectedDocumentAssoc = nodeService.getTargetAssocs(report, associationQname);
-                for (AssociationRef reportConnectedDocumentAssocRef : reportConnectedDocumentAssoc) {
-                    NodeRef reportConnectedDocument = reportConnectedDocumentAssocRef.getTargetRef();
-                    if (reportConnectedDocument.equals(connectedDoc)) {
-                        docIsUsed = true;
-                    }
-                }
-            }
-
+        if (nodeService.getType(reportNodeRef).equals(ErrandsService.TYPE_ERRANDS)) {
+            errandNodeRef = reportNodeRef;
+        } else {
+            errandNodeRef = documentTableService.getDocumentByTableDataRow(reportNodeRef);
         }
+        //проверяем использование документа в других отчетах
+        NodeRef coexecutorsTableData = nodeService.getTargetAssocs(errandNodeRef, ErrandsService.ASSOC_ERRANDS_TS_COEXECUTOR_REPORTS).get(0).getTargetRef();
+        NodeRef executionTableData = nodeService.getTargetAssocs(errandNodeRef, ErrandsService.ASSOC_ERRANDS_TS_EXECUTION_REPORTS).get(0).getTargetRef();
+        Boolean docIsUsed = isDocumentUsedInTable(coexecutorsTableData, ErrandsService.ASSOC_ERRANDS_TS_COEXECUTOR_CONNECTED_DOCUMENT, reportNodeRef, connectedDoc) ||
+                isDocumentUsedInTable(executionTableData, ErrandsService.ASSOC_ERRANDS_TS_EXECUTOR_CONNECTED_DOCUMENT, reportNodeRef, connectedDoc);
+
         //удаляем связь если не нужна
         if (!docIsUsed) {
             //ищем нужную связь
@@ -147,5 +145,26 @@ public class ErrandsReportConnectedDocumentAssociationPolicy implements NodeServ
                 }
             }
         }
+    }
+
+    private boolean isDocumentUsedInTable(NodeRef tableData, QName associationQname, NodeRef reportNodeRef, NodeRef connectedDoc) {
+        List<NodeRef> allReports = documentTableService.getTableDataRows(tableData);
+        boolean docIsUsed = false;
+        for (NodeRef report : allReports) {
+            if (!report.equals(reportNodeRef)) {
+                List<AssociationRef> reportConnectedDocumentAssoc = nodeService.getTargetAssocs(report, associationQname);
+                for (AssociationRef reportConnectedDocumentAssocRef : reportConnectedDocumentAssoc) {
+                    NodeRef reportConnectedDocument = reportConnectedDocumentAssocRef.getTargetRef();
+                    if (reportConnectedDocument.equals(connectedDoc)) {
+                        docIsUsed = true;
+                        break;
+                    }
+                }
+            }
+            if (docIsUsed) {
+                break;
+            }
+        }
+        return docIsUsed;
     }
 }

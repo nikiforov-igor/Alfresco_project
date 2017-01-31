@@ -16,19 +16,30 @@
                             if (document) {
                                 var currentReport = null;
                                 var reportsTable = document.assocs["lecm-errands-ts:execution-reports-assoc"][0];
-                                var executionReports = documentTables.getTableDataRows(reportsTable.nodeRef.toString());
-                                if (executionReports && executionReports.length){
-                                    var onControlReports = executionReports.filter(function(report) {
-                                        return report.properties["lecm-errands-ts:execution-report-status"] == "ONCONTROL";
-                                    });
-                                     if (onControlReports && onControlReports.length) {
-                                        currentReport = onControlReports[onControlReports.length - 1];
+                                if (reportsTable){
+                                    var props = [];
+                                    props["lecm-errands-ts:execution-report-text"] = document.properties["lecm-errands:execution-report"];
+                                    props["lecm-errands-ts:execution-report-status"] = "DECLINE";
+                                    props["lecm-errands-ts:execution-report-decline-reason"] = lecmErrandWf_approverDeclineReason;
+                                    var report = reportsTable.createNode(null, "lecm-errands-ts:execution-report", props);
+
+                                    var executionAttachmentAssoc = document.assocs["lecm-errands:execution-report-attahcment-assoc"];
+                                    if (executionAttachmentAssoc && executionAttachmentAssoc.length) {
+                                        executionAttachmentAssoc.forEach(function(attachment){
+                                            report.createAssociation(attachment, "lecm-errands-ts:execution-report-attachment-assoc");
+                                        });
                                     }
-                                }
-                                if (currentReport) {
-                                    currentReport.properties["lecm-errands-ts:execution-report-decline-reason"] = lecmErrandWf_approverDeclineReason;
-                                    currentReport.properties["lecm-errands-ts:execution-report-status"] = "DECLINE";
-                                    currentReport.save();
+                                    var executionConnectedDocAssoc = document.assocs["lecm-errands:execution-connected-document-assoc"];
+                                    if (executionConnectedDocAssoc && executionConnectedDocAssoc.length) {
+                                        executionConnectedDocAssoc.forEach(function(doc){
+                                            report.createAssociation(doc, "lecm-errands-ts:execution-report-connected-document-assoc");
+                                        });
+                                    }
+                                    report.save();
+                                    document.properties["lecm-errands:execution-report-decline-reason"] = lecmErrandWf_approverDeclineReason;
+                                    document.properties["lecm-errands:execution-report-status"] = "DECLINE";
+                                    document.save();
+
                                     var executor = null;
                                     var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
                                     if (executorAssoc && executorAssoc.length == 1) {
