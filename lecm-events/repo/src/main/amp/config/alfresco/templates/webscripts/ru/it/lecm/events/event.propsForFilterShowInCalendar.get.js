@@ -1,5 +1,3 @@
-function main() {
+(function() {
     model.propsString = events.getPropsForFilterShowInCalendar();
-}
-
-main();
+}());

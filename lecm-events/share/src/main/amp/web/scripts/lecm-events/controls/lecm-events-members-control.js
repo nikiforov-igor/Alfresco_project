@@ -60,24 +60,40 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		cellBounds: null,
 
 		onReady: function ConsoleGroups_onReady() {
-			LogicECM.module.AssociationTokenControl.prototype.onReady.call(this);
-			var prevDate = Dom.get(this.id + "-date-cntrl-prevDate");
-			if (prevDate) {
-				prevDate.addEventListener("click", this.prevDay.bind(this));
-			}
-			var nextDate = Dom.get(this.id + "-date-cntrl-nextDate");
-			if (nextDate) {
-				nextDate.addEventListener("click", this.nextDay.bind(this));
-			}
-			var pointDate = Dom.get(this.id + "-date-cntrl-pointDate");
-			if (pointDate) {
-				pointDate.addEventListener("click", this.resetDate.bind(this));
-			}
-			var components = Alfresco.util.ComponentManager.list();
-			components.forEach(function(component) {
-				this._formControlUpdated(component);
-			}, this);
-			this.loadBusyTimeMembersFieldsFromService();
+            this.options.busyTimeMembersFieldsFromService = "";
+            Alfresco.util.Ajax.jsonRequest(
+                {
+                    url: Alfresco.constants.PROXY_URI + "lecm/events/getPropsForFilterShowInCalendar",
+                    method: "GET",
+                    successCallback:
+                        {
+                            fn: function(response) {
+                                if (response.json && response.json) {
+                                    this.options.busyTimeMembersFieldsFromService = response.json.propsString;
+                                    
+                                    LogicECM.module.AssociationTokenControl.prototype.onReady.call(this);
+                                    var prevDate = Dom.get(this.id + "-date-cntrl-prevDate");
+                                    if (prevDate) {
+                                        prevDate.addEventListener("click", this.prevDay.bind(this));
+                                    }
+                                    var nextDate = Dom.get(this.id + "-date-cntrl-nextDate");
+                                    if (nextDate) {
+                                        nextDate.addEventListener("click", this.nextDay.bind(this));
+                                    }
+                                    var pointDate = Dom.get(this.id + "-date-cntrl-pointDate");
+                                    if (pointDate) {
+                                        pointDate.addEventListener("click", this.resetDate.bind(this));
+                                    }
+                                    var components = Alfresco.util.ComponentManager.list();
+                                    components.forEach(function(component) {
+                                        this._formControlUpdated(component);
+                                    }, this);
+                                }
+                            },
+
+                            scope: this
+                        }
+                });
 		},
 
 		_loadSelectedItems: function (clearCurrentDisplayValue, updateForms) {
@@ -1485,26 +1501,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				this.prevStartIndex = null;
 				this.prevEndIndex = null;
 			}
-		},
-
-        loadBusyTimeMembersFieldsFromService: function () {
-            this.options.busyTimeMembersFieldsFromService = "";
-            Alfresco.util.Ajax.jsonRequest(
-                {
-                    url: Alfresco.constants.PROXY_URI + "lecm/events/getPropsForFilterShowInCalendar",
-                    method: "GET",
-                    successCallback:
-                        {
-                            fn: function(response) {
-                                if (response.json && response.json) {
-                                    this.options.busyTimeMembersFieldsFromService = response.json.propsString;
-                                }
-                            },
-
-                            scope: this
-                        }
-            	});
-        }
+		}
 		///////////////////////////////////////
 	}, true);
 })();
