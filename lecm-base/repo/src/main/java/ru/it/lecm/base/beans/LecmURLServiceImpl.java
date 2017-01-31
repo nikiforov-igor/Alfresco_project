@@ -1,9 +1,9 @@
 package ru.it.lecm.base.beans;
 
 
-import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.util.UrlUtil;
 
 /**
  * User: dbashmakov
@@ -38,12 +38,11 @@ public class LecmURLServiceImpl implements LecmURLService {
      * @return
      */
     public String wrapperLink(String nodeRef, String description, String linkUrl) {
-        SysAdminParams params = serviceRegistry.getSysAdminParams();
-        String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
-        if (!linkUrl.startsWith(getShareContext())) {
-            linkUrl = getLinkWithContext(linkUrl);
+        if (linkUrl.startsWith("/" + getShareContext())
+                || linkUrl.startsWith(getShareContext())) {
+            linkUrl = linkUrl.replace("/" + getShareContext(), "").replace(getShareContext(), "");
         }
-        return "<a href=\"" + serverUrl + linkUrl + "?nodeRef=" + nodeRef + "\">"
+        return "<a href=\"" + UrlUtil.getShareUrl(serviceRegistry.getSysAdminParams()) + linkUrl + "?nodeRef=" + nodeRef + "\">"
                 + description + "</a>";
     }
 
@@ -54,7 +53,7 @@ public class LecmURLServiceImpl implements LecmURLService {
      * @return
      */
     public String wrapperLink(String node, String description) {
-        return wrapperLink(node, description, getLinkWithContext(LINK_URL));
+        return "<a href=\"" + UrlUtil.getShareUrl(serviceRegistry.getSysAdminParams()) + LINK_URL + "?nodeRef=" + node + "\">" + description + "</a>";
     }
 
     /**
@@ -81,8 +80,6 @@ public class LecmURLServiceImpl implements LecmURLService {
      * @return
      */
     public String wrapAsWorkflowLink(String executionId, String description) {
-        SysAdminParams params = serviceRegistry.getSysAdminParams();
-        String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
-        return "<a href=\"" + serverUrl + getLinkWithContext(WORKFLOW_LINK_URL) + "?workflowId=" + executionId + "\">" + description + "</a>";
+        return "<a href=\"" + UrlUtil.getShareUrl(serviceRegistry.getSysAdminParams()) + WORKFLOW_LINK_URL + "?workflowId=" + executionId + "\">" + description + "</a>";
     }
 }
