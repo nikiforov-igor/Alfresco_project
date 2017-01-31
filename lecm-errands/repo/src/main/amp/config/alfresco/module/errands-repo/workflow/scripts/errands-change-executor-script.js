@@ -2,8 +2,9 @@ function processChangeExecutor(newExecutor, reason) {
     document.removeAssociation(executor, "lecm-errands:executor-assoc");
     document.createAssociation(newExecutor, "lecm-errands:executor-assoc");
     statemachine.grandDynamicRoleForEmployee(document, newExecutor, "ERRANDS_EXECUTOR");
-    documentMembers.addMember(document, executor, "ERRANDS_READER");
     lecmPermission.revokeDynamicRole(document, executor, "ERRANDS_EXECUTOR");
+    documentMembers.addMember(document, executor, "ERRANDS_READER", true);
+    documentMembers.addMember(document, newExecutor, "ERRANDS_READER", true);
 
     notifications.sendNotificationFromCurrentUser({
         recipients: [newExecutor],
