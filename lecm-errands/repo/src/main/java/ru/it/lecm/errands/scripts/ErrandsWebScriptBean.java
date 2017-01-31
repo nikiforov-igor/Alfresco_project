@@ -876,10 +876,11 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return errandsService.isHideAdditionAttributes();
     }
 
-    public void sendCancelSignal(String errandRef, String reason) {
+    public void sendCancelSignal(String errandRef, String reason, String senderRef) {
         NodeRef errand = new NodeRef(errandRef);
+        NodeRef signalSender = new NodeRef(senderRef);
         if (nodeService.exists(errand)) {
-            errandsService.sendCancelSignal(errand, reason);
+            errandsService.sendCancelSignal(errand, reason, signalSender);
         }
     }
 }
