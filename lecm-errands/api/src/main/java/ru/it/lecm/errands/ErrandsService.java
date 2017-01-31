@@ -79,6 +79,8 @@ public interface ErrandsService {
     QName ASSOC_ERRANDS_TS_COEXECUTOR_ATTACHMENT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-attachment-assoc");
     QName ASSOC_ERRANDS_TS_COEXECUTOR_CONNECTED_DOCUMENT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"coexecutor-report-connected-document-assoc");
 
+    QName TYPE_ERRANDS_TS_EXECUTOR_REPORT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"execution-reports-table");
+    QName PROP_ERRANDS_TS_EXECUTOR_REPORT_STATUS = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"execution-report-status");
     QName ASSOC_ERRANDS_TS_EXECUTOR_ATTACHMENT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"execution-report-attachment-assoc");
     QName ASSOC_ERRANDS_TS_EXECUTOR_CONNECTED_DOCUMENT = QName.createQName(ERRANDS_TS_NAMESPACE_URI,"execution-report-connected-document-assoc");
 
@@ -340,6 +342,13 @@ public interface ErrandsService {
      * @param reason причина сигнала
      */
     void sendCancelSignal(NodeRef errand, String reason);
+
+    /**
+     * ПОлучение принятого отчёта соисполнителя
+     * @param errand поручение
+     * @return табличные данные принятого отчёта исполнителя
+     */
+    NodeRef getAcceptedExecutorReport(NodeRef errand);
 
     enum ModeChoosingExecutors {
         ORGANIZATION,

@@ -882,4 +882,13 @@ public class ErrandsWebScriptBean extends BaseWebScript {
             errandsService.sendCancelSignal(errand, reason);
         }
     }
+
+    public ScriptNode getAcceptedExecutorReport(ScriptNode errand){
+        ParameterCheck.mandatory("errand", errand);
+        NodeRef report = errandsService.getAcceptedExecutorReport(errand.getNodeRef());
+        if (report != null) {
+            return new ScriptNode(report, serviceRegistry, getScope());
+        }
+        return null;
+    }
 }

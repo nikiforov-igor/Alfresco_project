@@ -24,6 +24,7 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.resolutions.api.ResolutionsService;
@@ -60,6 +61,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     private NamespaceService namespaceService;
     private BusinessJournalService businessJournalService;
 	private LecmPermissionService lecmPermissionService;
+	private DocumentTableService documentTableService;
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
@@ -91,6 +93,10 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
     public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
         this.documentConnectionService = documentConnectionService;
+    }
+
+    public void setDocumentTableService(DocumentTableService documentTableService) {
+        this.documentTableService = documentTableService;
     }
 
     public void init() {
@@ -656,6 +662,22 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     public void sendCancelSignal(NodeRef errand, String reason) {
         nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_CANCELLATION_SIGNAL, true);
         nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_CANCELLATION_SIGNAL_REASON, reason);
+    }
+
+    @Override
+    public NodeRef getAcceptedExecutorReport(NodeRef errand) {
+        NodeRef table = documentTableService.getTable(errand, TYPE_ERRANDS_TS_EXECUTOR_REPORT);
+        if (table != null) {
+            List<NodeRef> rows = documentTableService.getTableDataRows(table);
+            if (rows != null) {
+                for (NodeRef report: rows) {
+                    if ("ACCEPT".equals(nodeService.getProperty(report, PROP_ERRANDS_TS_EXECUTOR_REPORT_STATUS))) {
+                        return report;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
 }

@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Получение отчёта исполнителя</shortname>
+    <description>Получение отчёта исполнителя</description>
+    <url>/lecm/errands/getExecutorReport</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+</webscript>

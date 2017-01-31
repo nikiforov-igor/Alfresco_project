@@ -108,14 +108,14 @@ LogicECM.module = LogicECM.module || {};
                                     '<div class="item-description">' +
                                     '   <img class="document-type" src="/share/res/images/lecm-documents/type-icons/{docTypeIcon}.png" ' +
                                     '       onerror="this.src = \'/share/res/images/lecm-documents/type-icons/default_document.png\';"/>' +
-                                    '       <span class="link-span{classNotHaveAccess}">' +
-                                    '           <a target="_blank" href="{documentUrl}">{documentName}</a>' +
-                                    '           <div>' +
-                                    '               <span class="connectionType">{documentStatus}</span>' +
-                                    '               <a id="{expandShowId}" href="javascript:void(0);" class="{showExpandClass}">{expandShowMessage}</a>' +
-                                    '               <a id="{expandHideId}" href="javascript:void(0);" class="hidden1">{expandHideMessage}</a>' +
-                                    '           </div>' +
-                                    '           <div id="{expandedDivId}" class="hidden1"/>' +
+                                    '   <span class="link-span{classNotHaveAccess}">' +
+                                    '       <a target="_blank" href="{documentUrl}">{documentName}</a>' +
+                                    '       <div>' +
+                                    '           <span class="connectionType">{documentStatus}</span>' +
+                                    '           <a id="{expandShowId}" href="javascript:void(0);" class="{showExpandClass}">{expandShowMessage}</a>' +
+                                    '           <a id="{expandHideId}" href="javascript:void(0);" class="hidden1">{expandHideMessage}</a>' +
+                                    '       </div>' +
+                                    '       <div id="{expandedDivId}" class="hidden1"></div>' +
                                     '   </span>' +
                                     '</div>';
 
@@ -240,16 +240,82 @@ LogicECM.module = LogicECM.module || {};
 
             expandErrandContent: function (nodeRef) {
                 var container = Dom.get("expanded-block-" + nodeRef.replace('workspace://SpacesStore/', ''));
-                if (container) {
-                    container.innerHTML = "Errand " + nodeRef;
+                if (container && !container.innerHTML.length) {
+                    Alfresco.util.Ajax.jsonGet({
+                        url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/errands/getExecutorReport',
+                        dataObj: {
+                            nodeRef: nodeRef
+                        },
+                        successCallback: {
+                            scope: this,
+                            fn: function (response) {
+                                if (response.json) {
+                                    var content = "";
+                                    content += "<table class='execution-expanded-content type-errand'>";
+                                    content += "    <tr>";
+                                    content += "        <td class='label-column'>{reportTextLabel}</td>";
+                                    content += "        <td>{reportTextContent}</td>";
+                                    content += "    </tr>";
+                                    content += "    <tr>";
+                                    content += "        <td class='label-column'>{connectionsLabel}</td>";
+                                    content += "        <td>{connectionsContent}</td>";
+                                    content += "    </tr>";
+                                    content += "    <tr>";
+                                    content += "        <td class='label-column'>{attachmentLabel}</td>";
+                                    content += "        <td>{attachmentContent}</td>";
+                                    content += "    </tr>";
+                                    content += "</table>";
+
+                                    container.innerHTML = YAHOO.lang.substitute(content, {
+                                        reportTextLabel: this.msg("msg.errand.report.text.label"),
+                                        connectionsLabel: this.msg("msg.errand.report.connections.label"),
+                                        attachmentLabel: this.msg("msg.errand.report.attachment.label"),
+                                        reportTextContent: "Готов документ и аннотация к нему2",
+                                        connectionsContent: "Исходящий документ №3",
+                                        attachmentContent: "Аннотацияю.docx4"
+                                    });
+                                }
+                            }
+                        },
+                        failureMessage: this.msg('message.failure')
+                    });
                 }
             },
 
             expandResolutionContent: function (nodeRef) {
                 var container = Dom.get("expanded-block-" + nodeRef.replace('workspace://SpacesStore/', ''));
-                if (container) {
-                    container.innerHTML = "Resolution " + nodeRef;
+                if (container && !container.innerHTML.length) {
+                    var content = "";
+                    content += "<table class='execution-expanded-content type-resolution'>";
+                    content += "    <tr>";
+                    content += "        <td class='label-column'>{errandsStatisticLabel}</td>";
+                    content += "        <td>{errandsStatisticList}";
+                    content += "    </tr>";
+                    content += "    <tr>";
+                    content += "        <td class='label-column'>{reviewStatisticLabel}</td>";
+                    content += "        <td>{reviewStatisticList}";
+                    content += "        </td>";
+                    content += "    </tr>";
+                    content += "</table>";
+
+                    container.innerHTML = YAHOO.lang.substitute(content, {
+                        errandsStatisticLabel: this.msg("msg.resolution.errands.statistic.label"),
+                        reviewStatisticLabel: this.msg("msg.resolution.review.statistic.label"),
+                        errandsStatisticList: this.getTableListLayout(["На исполнении: 1", "Исполнено: 4"]), //todo заглушка
+                        reviewStatisticList: this.getTableListLayout(["На ознакомлении: 4", "Ознакомлены: 20"]) //todo заглушка
+                    });
                 }
+            },
+
+            getTableListLayout: function (values) {
+                var result = "<ul>";
+                if (values) {
+                    values.forEach(function (value) {
+                        result += "<li>" + value + "</li>";
+                    });
+                }
+                result += "</ul>";
+                return result;
             }
         });
 })();
