@@ -1930,8 +1930,8 @@ if(doc){
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
                                                                 <value><![CDATA[
-                                                                <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-process-cancel-signal.js">
-                                                                processCancelSignal();
+                                                                <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-cancel-errand-script.js">
+                                                                ErrandCancelScript.processCancelSignal();
                                                             ]]></value>
                                                             </property>
                                                             <property>
@@ -3923,8 +3923,8 @@ if (doc){
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
                                                                 <value><![CDATA[
-                                                                <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-process-cancel-signal.js">
-                                                                processCancelSignal();
+                                                                <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-cancel-errand-script.js">
+                                                                ErrandCancelScript.processCancelSignal();
                                                             ]]></value>
                                                             </property>
                                                             <property>
@@ -6265,8 +6265,8 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
                                                                 <value><![CDATA[
-                                                                <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-process-cancel-signal.js">
-                                                                processCancelSignal();
+                                                                <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-cancel-errand-script.js">
+                                                                ErrandCancelScript.processCancelSignal();
                                                             ]]></value>
                                                             </property>
                                                             <property>
@@ -8521,8 +8521,8 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
                                                                 <value><![CDATA[
-                                                                <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-process-cancel-signal.js">
-                                                                processCancelSignal();
+                                                                <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-cancel-errand-script.js">
+                                                                ErrandCancelScript.processCancelSignal();
                                                             ]]></value>
                                                             </property>
                                                             <property>
