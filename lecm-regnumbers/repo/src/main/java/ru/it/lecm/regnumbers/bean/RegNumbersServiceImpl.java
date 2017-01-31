@@ -142,11 +142,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 		}
 		sp.setQuery(query);
 
-        if (documentType.toPrefixString(namespaceService).equals("lecm-contract:document")) {
-            sp.addQueryTemplate("regnumberTemplate", "%lecm\\-contract:regNumSystem");
-        } else {
-            sp.addQueryTemplate("regnumberTemplate", REGNUMBER_SEARCH_TEMPLATE);
-        }
+        sp.addQueryTemplate("regnumberTemplate", REGNUMBER_SEARCH_TEMPLATE);
 
 		ResultSet results = null;
 		try {
