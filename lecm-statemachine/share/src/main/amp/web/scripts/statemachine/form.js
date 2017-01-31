@@ -291,7 +291,7 @@ LogicECM.module = LogicECM.module || {};
 			for (i in errors) {
 				message += errors[i] + '<br>';
 			}
-			if (!action.doNotAskForConfirmation) {
+			if (!action.doNotAskForConfirmation || errors.length) {
 				Alfresco.util.PopupManager.displayPrompt({
 					title: Alfresco.util.message('title.execute_action'),
 					text: message + Alfresco.util.message('msg.action_document_confirm', this.name, action.label),

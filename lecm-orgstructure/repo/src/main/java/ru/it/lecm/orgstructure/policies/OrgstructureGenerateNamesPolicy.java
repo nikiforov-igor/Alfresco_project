@@ -7,9 +7,9 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.FileNameValidator;
 import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.FileNameValidator;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;

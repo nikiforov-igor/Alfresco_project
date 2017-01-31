@@ -61,6 +61,11 @@
 <#if field.control.params.datagridNoWrapValues??>
     <#assign noWrapValues = field.control.params.datagridNoWrapValues == "true"/>
 </#if>
+
+<#assign includePath = false/>
+<#if field.control.params.datagridInclPathInQuery??>
+    <#assign includePath = field.control.params.datagridInclPathInQuery == "true"/>
+</#if>
 <#-- Datagrid Config End-->
 
 <#-- Toolbar Config Start -->
@@ -231,7 +236,8 @@
             repeating: ${field.repeating?string},
             expandable:${allowExpand?string},
             collapseAllOnExpand: ${collapseAllOnExpand?string},
-            noWrapValues:${noWrapValues?string}
+            noWrapValues:${noWrapValues?string},
+            pathToNodes: "<#if includePath && field.control.params.startLocation??>${field.control.params.startLocation}</#if>"
         }).setMessages(${messages});
 
         datagrid._setSearchConfigFilter('${defaultValue!''}');
