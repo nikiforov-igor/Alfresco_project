@@ -20,7 +20,7 @@
                                 var isExecute = lecmErrandWf_execute_1Execute;
                                 var closeChild = lecmErrandWf_execute_1CloseChild;
 
-                                document.properties["lecm-errands-ts:execution-report"] = reportText;
+                                document.properties["lecm-errands:execution-report"] = reportText;
                                 document.save();
 
                                 var attachments = [];
@@ -107,7 +107,7 @@
                                     document.createAssociation(doc, "lecm-errands:execution-connected-document-assoc");
                                 });
                                 totalRemovedConnectedDocs.forEach(function(doc){
-                                    document.removeAssociation(doc, "lecm-errands:executiont-connected-document-assoc");
+                                    document.removeAssociation(doc, "lecm-errands:execution-connected-document-assoc");
                                 });
 
                                 if (!isExecute) {
@@ -192,7 +192,6 @@
                                     document.properties["lecm-errands:project-report-connections"] = null;
                                 }
                                 document.save();
-
                             }
                         ]]></activiti:string>
                     </activiti:field>

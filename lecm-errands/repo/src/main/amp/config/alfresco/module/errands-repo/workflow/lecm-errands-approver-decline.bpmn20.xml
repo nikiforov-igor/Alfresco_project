@@ -19,21 +19,21 @@
                                 if (reportsTable){
                                     var props = [];
                                     props["lecm-errands-ts:execution-report-text"] = document.properties["lecm-errands:execution-report"];
-                                    props["lecm-errands-ts:execution-report-status"]  = "DECLINE";
+                                    props["lecm-errands-ts:execution-report-status"] = "DECLINE";
                                     props["lecm-errands-ts:execution-report-decline-reason"] = lecmErrandWf_approverDeclineReason;
-                                    var report = table.createNode(null, "lecm-errands-ts:execution-report", props);
+                                    var report = reportsTable.createNode(null, "lecm-errands-ts:execution-report", props);
 
                                     var executionAttachmentAssoc = document.assocs["lecm-errands:execution-report-attahcment-assoc"];
-                                    if (executionAttachmentAssoc && executionAttachmentAssoc.length){
+                                    if (executionAttachmentAssoc && executionAttachmentAssoc.length) {
                                         executionAttachmentAssoc.forEach(function(attachment){
                                             report.createAssociation(attachment, "lecm-errands-ts:execution-report-attachment-assoc");
-                                        }
+                                        });
                                     }
                                     var executionConnectedDocAssoc = document.assocs["lecm-errands:execution-connected-document-assoc"];
-                                    if (executionConnectedDocAssoc && executionConnectedDocAssoc.length){
+                                    if (executionConnectedDocAssoc && executionConnectedDocAssoc.length) {
                                         executionConnectedDocAssoc.forEach(function(doc){
                                             report.createAssociation(doc, "lecm-errands-ts:execution-report-connected-document-assoc");
-                                        }
+                                        });
                                     }
                                     report.save();
                                     document.properties["lecm-errands:execution-report-decline-reason"] = lecmErrandWf_approverDeclineReason;
@@ -55,7 +55,6 @@
                                             reason: lecmErrandWf_approverDeclineReason
                                         }
                                     });
-
                                 }
                             }
                         ]]></activiti:string>
