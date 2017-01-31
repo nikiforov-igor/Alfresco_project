@@ -75,7 +75,7 @@ public class PermissionExpJavaScriptExtension extends BaseScopableProcessorExten
     }
 
     private String getLink(NodeRef nodeRef, String name) {
-        String Url = urlService.getLinkWithContext(LecmURLService.LINK_URL + "?nodeRef=" + nodeRef);
+        String Url = urlService.getLinkWithContext(urlService.getLinkURL() + "?nodeRef=" + nodeRef);
         return "<a href=\"" + Url + "\">" + name + "</a>";
     }
 

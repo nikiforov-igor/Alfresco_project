@@ -167,10 +167,11 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
         }
         String description = isInititator ? getInitiatorDescription(link) : getObjectDescription(link);
         if (link != null) {
+            LecmURLService urlService = getUrlService();
             String linkUrl = isLECMDocument(link) ?
                     documentService.getDocumentUrl(link) :
-                    getUrlService().getLinkWithContext(isLECMDocumentAttachment(link) ? LecmURLService.DOCUMENT_ATTACHMENT_LINK_URL : LecmURLService.LINK_URL);
-            return getUrlService().wrapperLink(link.toString(),description, linkUrl);
+                    isLECMDocumentAttachment(link) ? urlService.getDocumentAttachmentLinkUrl() : urlService.getLinkURL();
+            return urlService.wrapperLink(link.toString(), description, linkUrl);
         } else {
             return description;
         }

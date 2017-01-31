@@ -4,18 +4,55 @@ package ru.it.lecm.base.beans;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.UrlUtil;
+import org.springframework.beans.factory.InitializingBean;
+
+import java.util.Properties;
 
 /**
  * User: dbashmakov
  * Date: 26.01.2017
  * Time: 15:05
  */
-public class LecmURLServiceImpl implements LecmURLService {
+public class LecmURLServiceImpl implements LecmURLService, InitializingBean {
+    private String linkURL;
+    private String detailsLinkUrl;
+    private String workflowLinkUrl;
+    private String documentAttachmentLinkUrl;
 
-    protected ServiceRegistry serviceRegistry;
+    private ServiceRegistry serviceRegistry;
+    private Properties globalProperties;
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
+    }
+
+    public void setGlobalProperties(Properties globalProperties) {
+        this.globalProperties = globalProperties;
+    }
+
+    public String getLinkURL() {
+        return linkURL;
+    }
+
+    public String getDetailsLinkUrl() {
+        return detailsLinkUrl;
+    }
+
+    public String getWorkflowLinkUrl() {
+        return workflowLinkUrl;
+    }
+
+    public String getDocumentAttachmentLinkUrl() {
+        return documentAttachmentLinkUrl;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        String PAGE_PREFIX = "/page/";
+        linkURL = PAGE_PREFIX + this.globalProperties.getProperty("lecm.page.view-metadata", "view-metadata");
+        detailsLinkUrl = PAGE_PREFIX + this.globalProperties.getProperty("lecm.page.document-details", "document-details");
+        workflowLinkUrl = PAGE_PREFIX + this.globalProperties.getProperty("lecm.page.workflow-details", "workflow-details");
+        documentAttachmentLinkUrl = PAGE_PREFIX + this.globalProperties.getProperty("lecm.page.document-attachment", "document-attachment");
     }
 
     /**
@@ -38,10 +75,8 @@ public class LecmURLServiceImpl implements LecmURLService {
      * @return
      */
     public String wrapperLink(String nodeRef, String description, String linkUrl) {
-        if (linkUrl.startsWith("/" + getShareContext())
-                || linkUrl.startsWith(getShareContext())) {
-            linkUrl = linkUrl.replace("/" + getShareContext(), "").replace(getShareContext(), "");
-        }
+        /*убираем /share или share - чтобы избежать дублирования*/
+        linkUrl = linkUrl.replaceAll("^//?" + getShareContext(), "");
         return "<a href=\"" + UrlUtil.getShareUrl(serviceRegistry.getSysAdminParams()) + linkUrl + "?nodeRef=" + nodeRef + "\">"
                 + description + "</a>";
     }
@@ -53,7 +88,7 @@ public class LecmURLServiceImpl implements LecmURLService {
      * @return
      */
     public String wrapperLink(String node, String description) {
-        return "<a href=\"" + UrlUtil.getShareUrl(serviceRegistry.getSysAdminParams()) + LINK_URL + "?nodeRef=" + node + "\">" + description + "</a>";
+        return wrapperLink(node, description, getLinkURL());
     }
 
     /**
@@ -80,6 +115,6 @@ public class LecmURLServiceImpl implements LecmURLService {
      * @return
      */
     public String wrapAsWorkflowLink(String executionId, String description) {
-        return "<a href=\"" + UrlUtil.getShareUrl(serviceRegistry.getSysAdminParams()) + WORKFLOW_LINK_URL + "?workflowId=" + executionId + "\">" + description + "</a>";
+        return "<a href=\"" + UrlUtil.getShareUrl(serviceRegistry.getSysAdminParams()) + getWorkflowLinkUrl() + "?workflowId=" + executionId + "\">" + description + "</a>";
     }
 }

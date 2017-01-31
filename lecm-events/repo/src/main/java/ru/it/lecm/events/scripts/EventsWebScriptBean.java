@@ -368,7 +368,7 @@ public class EventsWebScriptBean extends BaseWebScript {
 	}
 	
     public String wrapperEventLink(ScriptNode node, String description) {
-        return wrapperLink(node.getNodeRef().toString(), description, urlService.getLinkWithContext(EventsService.EVENT_LINK_URL));
+        return wrapperLink(node.getNodeRef().toString(), description, EventsService.EVENT_LINK_URL);
     }
 
     public void onAfterUpdate(String event, String updateRepeated, boolean sendToInvitedMembers, Boolean forceNotifications) {

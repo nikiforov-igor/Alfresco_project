@@ -70,7 +70,7 @@ public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 
 		if (presentString == null || presentString.length() == 0) {
 			presentString = "Документ";
-			documentURL = workflowFoldersService.wrapperLink(documentRef, presentString, urlService.getLinkWithContext(LecmURLService.DETAILS_LINK_URL));
+			documentURL = workflowFoldersService.wrapperLink(documentRef, presentString, urlService.getDetailsLinkUrl());
 		} else {
 			documentURL = workflowFoldersService.wrapperLink(documentRef, presentString, documentService.getDocumentUrl(documentRef));
 		}

@@ -392,10 +392,7 @@ public abstract class BaseBean implements InitializingBean {
      * @return
      */
     public String wrapperLink(NodeRef nodeRef, String description, String linkUrl) {
-        SysAdminParams params = serviceRegistry.getSysAdminParams();
-        String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
-        return "<a href=\"" + serverUrl + linkUrl + "?nodeRef=" + nodeRef + "\">"
-                + description + "</a>";
+        return getUrlService().wrapperLink(nodeRef, description, linkUrl);
     }
 
     /**

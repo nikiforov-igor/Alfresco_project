@@ -1057,9 +1057,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     @Override
     public String getDocumentUrl(NodeRef document) {
         QName type = nodeService.getType(document);
-        SysAdminParams params = serviceRegistry.getSysAdminParams();
-        String context = params.getShareContext();
-        return "/" + context + "/page/" + getViewUrl(type);
+        return getUrlService().getLinkWithContext("/page/" + getViewUrl(type));
     }
 
     @Override

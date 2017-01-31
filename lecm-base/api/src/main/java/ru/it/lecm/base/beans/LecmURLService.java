@@ -8,11 +8,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
  * Time: 15:04
  */
 public interface LecmURLService {
-    String LINK_URL = "/page/view-metadata";
-    String DETAILS_LINK_URL = "/page/document-details";
-    String WORKFLOW_LINK_URL = "/page/workflow-details";
-    String DOCUMENT_ATTACHMENT_LINK_URL = "/page/document-attachment";
-
     /**
      * Оборачиваем узел в ссылку html страницы
      *
@@ -52,4 +47,13 @@ public interface LecmURLService {
      * @return
      */
     String wrapAsWorkflowLink(String executionId, String description);
+
+    /**
+     * Получить значения различных ссылок
+     * @return
+     */
+    String getLinkURL();
+    String getDetailsLinkUrl();
+    String getWorkflowLinkUrl();
+    String getDocumentAttachmentLinkUrl();
 }
