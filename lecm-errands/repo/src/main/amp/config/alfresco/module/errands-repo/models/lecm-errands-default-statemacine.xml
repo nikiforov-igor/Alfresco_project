@@ -1911,6 +1911,48 @@ if(doc){
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>d4c59892-1038-400e-b755-74f3b5f3f3e2</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/9f704406-1e8c-42ca-80f0-a2882491a1e6
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-errands:cancellation-signal")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[
+                                                                <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-cancel-errand-script.js">
+                                                                ErrandCancelScript.processCancelSignal();
+                                                            ]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/b181ff5c-de14-43dc-bc3a-b1edca3842bf
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -3859,6 +3901,48 @@ if (doc){
                                                             <transitionStatusAspect/>
                                                         </aspects>
                                                         <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>d4c59892-1038-400e-b755-74f3b5f3f3e2</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/9f704406-1e8c-42ca-80f0-a2882491a1e6
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-errands:cancellation-signal")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[
+                                                                <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-cancel-errand-script.js">
+                                                                ErrandCancelScript.processCancelSignal();
+                                                            ]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/b181ff5c-de14-43dc-bc3a-b1edca3842bf
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
@@ -6164,6 +6248,48 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                     </node>
                                                     <node>
                                                         <type>transition</type>
+                                                        <name>d4c59892-1038-400e-b755-74f3b5f3f3e2</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/9f704406-1e8c-42ca-80f0-a2882491a1e6
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-errands:cancellation-signal")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[
+                                                                <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-cancel-errand-script.js">
+                                                                ErrandCancelScript.processCancelSignal();
+                                                            ]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/b181ff5c-de14-43dc-bc3a-b1edca3842bf
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
                                                         <name>21d0ff1f-9f02-43b5-9348-9a75db0f3fdf</name>
                                                         <nodeRef>
                                                             workspace://SpacesStore/474324b6-c546-4355-badf-1d3a6f0b1ebc
@@ -8376,6 +8502,48 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                             <subFolder>
                                                 <name>transitions</name>
                                                 <nodes>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>d4c59892-1038-400e-b755-74f3b5f3f3e2</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/9f704406-1e8c-42ca-80f0-a2882491a1e6
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-errands:cancellation-signal")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[
+                                                                <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-cancel-errand-script.js">
+                                                                ErrandCancelScript.processCancelSignal();
+                                                            ]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/b181ff5c-de14-43dc-bc3a-b1edca3842bf
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                     <node>
                                                         <type>transition</type>
                                                         <name>c43d46c3-fbf4-4426-a8d5-38904c560a4e</name>
