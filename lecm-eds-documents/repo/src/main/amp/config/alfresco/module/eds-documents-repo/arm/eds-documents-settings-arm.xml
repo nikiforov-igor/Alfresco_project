@@ -1,9 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-    <item name="cm:Настройки СЭД" type="lecm-arm:html-node">
+    <item name="cm:Настройки СЭД" type="lecm-arm:accordion">
         <property name="cm:name"><![CDATA[Настройки СЭД]]></property>
-        <property name="lecm-arm:order"><![CDATA[60]]></property>
-        <property name="lecm-arm:html-url"><![CDATA[page/lecm/arm/blank?title=Настройки СЭД&description=Общие настройки СЭД и настройки маршрутов]]></property>
+        <property name="lecm-arm:order"><![CDATA[300]]></property>
+        <property name="lecm-arm:search-type"><![CDATA[]]></property>
+        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+        <property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
+        <property name="lecm-arm:search-query"><![CDATA[]]></property>
         <items>
             <item name="cm:Общие настройки" type="lecm-arm:html-node">
                 <property name="cm:name"><![CDATA[Общие настройки]]></property>

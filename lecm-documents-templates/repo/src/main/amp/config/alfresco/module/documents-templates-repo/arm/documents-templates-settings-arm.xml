@@ -1,15 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-	<item name="cm:Настройки СЭД" type="lecm-arm:html-node">
-		<property name="cm:name"><![CDATA[Настройки СЭД]]></property>
-		<property name="lecm-arm:order"><![CDATA[60]]></property>
-		<property name="lecm-arm:html-url"><![CDATA[page/lecm/arm/blank?title=Настройки СЭД&description=Общие настройки СЭД и настройки маршрутов]]></property>
-		<items>
-			<item name="cm:Шаблоны создания документов" type="lecm-arm:html-node">
-				<property name="cm:name"><![CDATA[Шаблоны создания документов]]></property>
-				<property name="lecm-arm:order"><![CDATA[40]]></property>
-				<property name="lecm-arm:html-url"><![CDATA[page/documents-templates]]></property>
-			</item>
-		</items>
+	<item name="cm:Шаблоны создания документов" type="lecm-arm:html-node">
+		<property name="cm:name"><![CDATA[Шаблоны создания документов]]></property>
+		<property name="lecm-arm:order"><![CDATA[40]]></property>
+		<property name="lecm-arm:html-url"><![CDATA[page/documents-templates]]></property>
 	</item>
 </items>

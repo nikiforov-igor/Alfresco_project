@@ -111,7 +111,7 @@
 
     <bean id="eds.documents.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="arm.settings.LogicEcmBootstrap">
-        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки"/>
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование"/>
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/arm/eds-documents-settings-arm.xml</value>

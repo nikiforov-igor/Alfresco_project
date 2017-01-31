@@ -106,7 +106,7 @@
 	</util:list>
 	<bean id="review.admin.arm.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
-		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки/Настройки СЭД"
+		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки"
 		  p:dictionaries-ref="review.admin.arm.dictionaries"/>
 
 	<util:list id="review.my-profile.arm.dictionaries">
