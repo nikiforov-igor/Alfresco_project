@@ -6,13 +6,19 @@ import org.alfresco.model.ForumModel;
 import org.alfresco.model.RenditionModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.content.MimetypeMap;
+import org.alfresco.repo.dictionary.M2Label;
+import org.alfresco.repo.i18n.MessageService;
+import org.alfresco.repo.i18n.StaticMessageLookup;
+import org.alfresco.repo.node.MLPropertyInterceptor;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.service.cmr.dictionary.*;
+import org.alfresco.service.cmr.i18n.MessageLookup;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.cmr.security.AuthenticationService;
@@ -21,15 +27,12 @@ import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.base.beans.LecmMessageService;
-import ru.it.lecm.base.beans.SubstitudeBean;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.base.beans.*;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.documents.beans.*;
@@ -46,13 +49,6 @@ import ru.it.lecm.statemachine.StatemachineModel;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
-import org.alfresco.repo.dictionary.M2Label;
-import org.alfresco.repo.i18n.MessageService;
-import org.alfresco.repo.i18n.StaticMessageLookup;
-import org.alfresco.repo.node.MLPropertyInterceptor;
-import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
-import org.alfresco.service.cmr.i18n.MessageLookup;
-import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * User: dbashmakov
@@ -599,7 +595,7 @@ public class DocumentPolicy extends BaseBean
 		NodeRef result = null;
 		Object extPresentString = nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING);
 		if (extPresentString != null) {
-			final String fileName = FileNameValidator.getValidFileName((String) extPresentString).trim();
+			final String fileName = FileNameValidator.getValidFileName((String) extPresentString);
 			result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
 			if (result == null) {
 				AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
@@ -660,7 +656,7 @@ public class DocumentPolicy extends BaseBean
             @Override
             public Object doWork() throws Exception {
                 if (objectRef != null) {
-                    String newFileName = FileNameValidator.getValidFileName((String) nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING)).trim();
+                    String newFileName = FileNameValidator.getValidFileName((String) nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING));
                     nodeService.setProperty(objectRef, ContentModel.PROP_NAME, newFileName);
 
                     ContentService contentService = serviceRegistry.getContentService();

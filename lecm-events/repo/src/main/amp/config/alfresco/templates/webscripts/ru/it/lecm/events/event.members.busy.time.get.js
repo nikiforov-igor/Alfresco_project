@@ -15,7 +15,9 @@ if (args["items"] && args["date"]) {
                     busytime.push({
                         title: event["title"],
                         start: event["start"],
-                        end: event["end"]
+                        end: event["end"],
+                        startDate: utils.toISO8601(event["startDate"]),
+                        endDate: utils.toISO8601(event["endDate"])
                     })
                 }
             }

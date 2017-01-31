@@ -320,18 +320,24 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
             this.filterValues = values;
 
             var filter = "";
-            if (this.filterValues != null && this.filterValues != "") {
+            if (this.filterValues) {
                 var items = this.filterValues.split(",");
                 for (var item in items) {
-                    if (items[item] != "") {
-                        filter = filter + " ID:" + items[item].replace(":", "\\:");
+                    if (items[item]) {
+                        if (filter.length) {
+                            filter += " OR ";
+                        }
+                        filter += "ID:" + items[item].replace(":", "\\:");
                     }
                 }
+                if (filter && this.options.pathToNodes) {
+                    filter = "PATH:\"" + this.options.pathToNodes + "//*\" AND (" + filter + ")";
+                }
             }
-            if (filter == "") {
-                filter += "ID:NOT_REF";
+            if (!filter) {
+                filter += "ID:\"NOT_REF\"";
             }
-            this.options.datagridMeta.searchConfig = {filter: (filter.length > 0 ? filter : "")};
+            this.options.datagridMeta.searchConfig = {filter: (filter.length ? filter : "")};
         },
 
         getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {

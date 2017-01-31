@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import org.alfresco.repo.web.scripts.content.StreamContent;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.util.FileNameValidator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import ru.it.lecm.base.beans.FileNameValidator;
 import ru.it.lecm.signed.docflow.ZipSignedContentService;
 
 /**
