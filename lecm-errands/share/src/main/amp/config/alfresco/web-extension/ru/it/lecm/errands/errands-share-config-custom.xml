@@ -1316,10 +1316,9 @@
 
                 </field-visibility>
                 <appearance>
-                    <set id="coexecutor-reports-set" template="/ru/it/lecm/errands/controls/errands-coexecutor-reports-set.ftl"/>
-                    <field id="lecm-errands-ts:coexecutor-report-text" set="coexecutor-reports-set"/>
-                    <field id="lecm-errands-ts:coexecutor-report-attachment-assoc" set="coexecutor-reports-set"/>
-                    <field id="lecm-errands-ts:coexecutor-report-connected-document-assoc" set="coexecutor-reports-set">
+                    <field id="lecm-errands-ts:coexecutor-report-text"/>
+                    <field id="lecm-errands-ts:coexecutor-report-attachment-assoc" />
+                    <field id="lecm-errands-ts:coexecutor-report-connected-document-assoc">
                         <control>
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">Отчет об исполнении: {lecm-document:ext-present-string}</control-param>

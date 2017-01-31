@@ -190,7 +190,7 @@ LogicECM.errands = LogicECM.errands || {};
                         }
                     },
                     bubblingLabel: this.options.bubblingLabel,
-                    showActionColumn: this.options.showActions,
+                    showActionColumn: true,
                     showOtherActionColumn: true,
                     showCheckboxColumn: true,
                     attributeForShow: this.options.attributeForShow,
@@ -288,7 +288,8 @@ LogicECM.errands = LogicECM.errands || {};
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
         Selector = YAHOO.util.Selector,
-        Bubbling = YAHOO.Bubbling;
+        Bubbling = YAHOO.Bubbling,
+        Substitute = YAHOO.lang.substitute;
 
     LogicECM.errands.CoexecutorsReportsDatagrid = function (htmlId) {
         return LogicECM.errands.CoexecutorsReportsDatagrid.superclass.constructor.call(this, htmlId);
@@ -297,6 +298,183 @@ LogicECM.errands = LogicECM.errands || {};
     YAHOO.lang.extend(LogicECM.errands.CoexecutorsReportsDatagrid, LogicECM.module.DocumentTableDataGrid);
 
     YAHOO.lang.augmentObject(LogicECM.errands.CoexecutorsReportsDatagrid.prototype, {
+
+        addExpandedRow: function(record, text){
+            var me = this;
+            var colSpan = this.datagridColumns.length;
+            if (this.options.showCheckboxColumn) {
+                colSpan++;
+            }
+            if (this.options.expandable) {
+                colSpan++;
+            }
+            if (this.options.showActionColumn) {
+                colSpan++;
+            }
+
+            var newRow = Dom.get(this.getExpandedRecordId(record));
+
+            var newColumn = document.createElement('td');
+            newColumn.colSpan = colSpan;
+            newColumn.innerHTML = text;
+            newRow.appendChild(newColumn);
+
+            var actions = this.options.actions;
+            if (actions) {
+                var userAccess = record.getData("permissions").userAccess;
+                var acessibleActions = actions.filter(function(action){
+                    return userAccess[action["permission"]] && action.evaluator.call(me, record.getData());
+                });
+                if (acessibleActions && acessibleActions.length){
+                    var actionsColumn = document.createElement('td');
+                    var actionsDiv = document.createElement('div');
+                    actionsDiv.id=this.id+"coexutor-report-actions-div";
+                    //var div = '<div class="coexutor-report-actions-div">{actions}</div>';
+                    var onSetupActions = function onSetupActions(actions, id, className) {
+
+                        if (actionsDiv.children.length == 0) {
+                            for (var i = 0; i < actions.length; i++) {
+                                var action = actions[i];
+
+                                var actionDiv = document.createElement("div");
+                                actionDiv.className = action.id;
+
+                                var actionA = document.createElement("a");
+                                actionA.rel = action.permission;
+                                actionA.className = className + action.type;
+                                actionA.title = action.label;
+
+                                var actionSpan = document.createElement("span");
+                                actionSpan.innerHTML = action.label;
+
+                                actionA.appendChild(actionSpan);
+                                actionDiv.appendChild(actionA);
+                                actionsDiv.appendChild(actionDiv);
+                            }
+                        }
+                    }
+                    if (this.options.actions != null) {
+                        onSetupActions(this.options.actions, actionsDiv.id,"datagrid-action-link ");
+                    }
+
+                    if (this.options.otherActions != null && this.options.otherActions.length > 0) {
+                        onSetupActions(this.options.otherActions, actionsDiv.id,"datagrid-other-action-link ");
+                    }
+                    actionsColumn.appendChild(actionsDiv);
+                    newRow.appendChild(actionsColumn);
+                   /* var actions = '';
+                    acessibleActions.forEach(function(action){
+                        actions += Substitute(me.getActionHtml(), {
+                            label: action.label,
+                            className: action.id
+                        });
+                    });
+                    actionsColumn.innerHTML = Substitute(div, {
+                        actions:actions
+                    });
+                    newRow.appendChild(actionsColumn);*/
+                }
+            }
+
+            newRow.style.display="";
+        },
+        onReady: function DataGrid_onReady()
+        {
+            var me = this;
+
+            if (this.options.actions.length > this.showActionsCount) {
+                this.showActionsCount = this.options.splitActionsAt;
+            }
+            this.splitActionsAtStore = this.options.splitActionsAt;
+
+            if (this.options.showActionColumn){
+                // Hook action events
+                var fnActionHandler = function DataGrid_fnActionHandler(layer, args)
+                {
+                    var owner = Bubbling.getOwnerByTagName(args[1].anchor, "div");
+                    if (owner !== null)
+                    {
+                        if (typeof me[owner.className] == "function")
+                        {
+                            args[1].stop = true;
+                            var row = me.widgets.dataTable.getRecord(args[1].target.offsetParent);
+                            if (row) {
+                                var asset = row.getData();
+
+                                var confirmFunction = null;
+                                if (me.options.actions != null) {
+                                    for (var i = 0; i < me.options.actions.length; i++) {
+                                        if (me.options.actions[i].id == owner.className && me.options.actions[i].confirmFunction != null) {
+                                            confirmFunction = me.options.actions[i].confirmFunction;
+                                        }
+                                    }
+                                }
+
+                                me[owner.className].call(me, asset, owner, me.datagridMeta.actionsConfig, confirmFunction);
+                            }
+                        }
+                    }
+                    return true;
+                };
+                Bubbling.addDefaultAction("datagrid-action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler, me.options.forceSubscribing);
+                Bubbling.addDefaultAction("show-more"  + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler, me.options.forceSubscribing);
+            }
+
+            if (!this.options.overrideSortingWith && me.options.otherActions != null && me.options.otherActions.length > 0){
+                // Hook action events
+                var fnOtherActionHandler = function DataGrid_fnActionHandler(layer, args)
+                {
+                    var owner = Bubbling.getOwnerByTagName(args[1].anchor, "div");
+                    if (owner !== null)
+                    {
+                        if (typeof me[owner.className] == "function")
+                        {
+                            args[1].stop = true;
+                            var row = me.widgets.dataTable.getRecord(args[1].target.offsetParent.parentElement.previousElementSibling);
+                            if (row) {
+                                var asset = row.getData();
+
+                                var confirmFunction = null;
+                                if (me.options.otherActions != null) {
+                                    for (var i = 0; i < me.options.otherActions.length; i++) {
+                                        if (me.options.otherActions[i].id == owner.className && me.options.otherActions[i].confirmFunction != null) {
+                                            confirmFunction = me.options.otherActions[i].confirmFunction;
+                                        }
+                                    }
+                                }
+
+                                me[owner.className].call(me, asset, owner, me.datagridMeta.actionsConfig, confirmFunction);
+                            }
+                        }
+                    }
+                    return true;
+                };
+                Bubbling.addDefaultAction("datagrid-other-action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnOtherActionHandler, me.options.forceSubscribing);
+                Bubbling.addDefaultAction("show-more", fnOtherActionHandler, me.options.forceSubscribing);
+            }
+
+            // Actions module
+            this.modules.actions = new LogicECM.module.Base.Actions();
+
+            // Reference to Data Grid component (required by actions module)
+            this.modules.dataGrid = this;
+
+            this.deferredListPopulation.fulfil("onReady");
+
+            // Finally show the component body here to prevent UI artifacts on YUI button decoration
+            Dom.setStyle(this.id + "-body", "visibility", "visible");
+
+            Bubbling.fire("initDatagrid",
+                {
+                    datagrid:this
+                });
+        },
+        getActionHtml: function(){
+            var html = '<span class="yui-button yui-push-button {className}">';
+            html += '<span class="first-child"><button type="button" onclick="{handler}">{label}</button>';
+            html += '</span></span>';
+            return html;
+        },
 
         onActionAcceptCoexecutorReport: function (me, asset, owner, actionsConfig, confirmFunction) {
             var nodeRef = arguments[0].nodeRef;
