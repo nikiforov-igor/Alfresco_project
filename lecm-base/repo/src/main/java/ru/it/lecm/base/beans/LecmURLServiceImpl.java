@@ -40,6 +40,9 @@ public class LecmURLServiceImpl implements LecmURLService {
     public String wrapperLink(String nodeRef, String description, String linkUrl) {
         SysAdminParams params = serviceRegistry.getSysAdminParams();
         String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+        if (!linkUrl.startsWith(getShareContext())) {
+            linkUrl = getLinkWithContext(linkUrl);
+        }
         return "<a href=\"" + serverUrl + linkUrl + "?nodeRef=" + nodeRef + "\">"
                 + description + "</a>";
     }
@@ -54,23 +57,21 @@ public class LecmURLServiceImpl implements LecmURLService {
         return wrapperLink(node, description, getLinkWithContext(LINK_URL));
     }
 
-
     /**
      * Получить значение свойства share.context из global.properties
      * @return
      */
     public String getShareContext() {
-        SysAdminParams params = serviceRegistry.getSysAdminParams();
-        return params.getShareContext();
+        return serviceRegistry.getSysAdminParams().getShareContext();
     }
 
     /**
      * Обернуть @param link в контекст.
-     * Пример: /{share.context}link
+     * Пример: /{share.context}/link
      * @return
      */
     public String getLinkWithContext(String link) {
-        return "/" + getShareContext() + link;
+        return "/" + getShareContext() + (link.startsWith("/") ? link : "/" + link);
     }
 
     /**
