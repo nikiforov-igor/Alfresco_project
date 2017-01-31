@@ -19,7 +19,7 @@
     border-bottom: none;
 }
 .dashlet.contracts .titleBarActions .arm {
-    background-image: url('/share/res/images/lecm-base/arm.png');
+    background-image: url('/share/res/images/lecm-contracts/arm.png');
 }
 .dashlet.contracts .scrollableList {
     padding: 0;
