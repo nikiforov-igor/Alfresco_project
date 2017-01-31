@@ -64,6 +64,7 @@
 			<parent>lecm-document:base</parent>
 			<properties>
 				<!-- Регистрационный номер проекта договора-->
+				<!-- ### DEPRECATED ### -->
 				<property name="lecm-contract:regNumProject">
 					<type>d:text</type>
 					<default>Не присвоено</default>
@@ -74,6 +75,7 @@
 					</index>
 				</property>
 				<!-- Регистрационный номер договора в системе-->
+				<!-- ### DEPRECATED ### -->
 				<property name="lecm-contract:regNumSystem">
 					<type>d:text</type>
 					<default>Не присвоено</default>
@@ -88,10 +90,12 @@
 					<type>d:text</type>
 				</property>
 				<!-- Дата регистрации проекта договра-->
+				<!-- ### DEPRECATED ### -->
 				<property name="lecm-contract:dateRegProjectContracts">
 					<type>d:date</type>
 				</property>
 				<!-- Дата регистрации договора -->
+				<!-- ### DEPRECATED ### -->
 				<property name="lecm-contract:dateRegContracts">
 					<type>d:date</type>
 				</property>

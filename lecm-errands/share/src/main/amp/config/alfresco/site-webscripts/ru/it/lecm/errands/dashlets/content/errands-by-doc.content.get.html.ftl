@@ -6,12 +6,12 @@
 	(function() {
         function init() {
             LogicECM.module.Base.Util.loadCSS([
-                'css/components/document-errands-dashlet.css',
+                'css/lecm-errands/document-errands-dashlet.css',
                 'css/lecm-errands/errands-dashlet.css'
             ]);
 
             LogicECM.module.Base.Util.loadScripts([
-                'scripts/documents/errands/errands-by-doc-dashlet.js'
+                'scripts/lecm-errands/errands-by-doc-dashlet.js'
             ], createObject);
 
         }

@@ -4,10 +4,8 @@
 	<@script type="text/javascript" src="${url.context}/res/yui/resize/resize.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/components/document-details/document-metadata.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/scripts/dashlets/lecm-errands-dashlet.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/graph-tree-control.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/graph-tree.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-errands.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-ajax-content.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-save-last.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-component-base.js"></@script>
@@ -31,29 +29,7 @@
 <link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-events/event-page.css" />
 <link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-events/agenda-list.css" />
 
-	<#if documentType?? && documentType == "{http://www.it.ru/logicECM/errands/1.0}document">
-    <link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-metadata.css" />
-	</#if>
-<link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-form.css" />
-
 	<@templateHtmlEditorAssets />
-<script type="text/javascript">//<![CDATA[
-if (typeof LogicECM == "undefined" || !LogicECM) {
-    LogicECM = {};
-}
-LogicECM.module = LogicECM.module || {};
-LogicECM.module.Documents = LogicECM.module.Documents|| {};
-(function() {
-    LogicECM.module.Documents.ERRANDS_SETTINGS = LogicECM.module.Documents.ERRANDS_SETTINGS || <#if errandsSettings?? >${errandsSettings}<#else>{}</#if>;
-
-    var viewHistory = new LogicECM.module.Document.ViewHistory("save-view-history").setOptions({
-        nodeRef: "${page.url.args.nodeRef}"
-    });
-
-    viewHistory.save();
-
-})();
-//]]></script>
 </@>
 
 <@templateBody>
