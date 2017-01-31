@@ -68,7 +68,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
                     successCallback:
                         {
                             fn: function(response) {
-                                if (response.json && response.json) {
+                                if (response.json && response.json.propsString) {
                                     this.options.busyTimeMembersFieldsFromService = response.json.propsString;
                                     
                                     LogicECM.module.AssociationTokenControl.prototype.onReady.call(this);

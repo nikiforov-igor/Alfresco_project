@@ -64,18 +64,6 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	private final static String MONTH_DAYS = "month-days";
 	
 	private List<String> propsForFilterShowInCalendar = new ArrayList<>();
-
-	@Override
-	public List<String> getPropsForFilterShowInCalendar() {
-		return propsForFilterShowInCalendar;
-	}
-	
-	@Override
-	public void addPropsForFilterShowInCalendar(List<String> props) {
-		if (props != null) {
-			propsForFilterShowInCalendar.addAll(props);
-		}
-	}
 	
 	public void setEventsNotificationsService(EventsNotificationsService eventsNotificationsService) {
 		this.eventsNotificationsService = eventsNotificationsService;
@@ -172,6 +160,18 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	public void setPropsForFilterShowInCalendar(List<String> propsForFilterShowInCalendar) {
 		this.propsForFilterShowInCalendar = propsForFilterShowInCalendar;
+	}
+
+	@Override
+	public List<String> getPropsForFilterShowInCalendar() {
+		return propsForFilterShowInCalendar;
+	}
+
+	@Override
+	public void addPropsForFilterShowInCalendar(List<String> props) {
+		if (props != null) {
+			propsForFilterShowInCalendar.addAll(props);
+		}
 	}
 
 	@Override
