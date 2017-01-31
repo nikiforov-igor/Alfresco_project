@@ -79,7 +79,7 @@
 
 	<bean id="errands.arm.myProfile.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
 	      depends-on="userProfile.arm.LogicEcmBootstrap">
-		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Логика ECM. Мой профиль/Настройки"/>
+		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/arm/default-arm-my-profile-items.xml</value>
@@ -89,7 +89,7 @@
 
     <bean id="errands.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="userProfile.arm.LogicEcmBootstrap, arm.settings.LogicEcmBootstrap">
-        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки"/>
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/arm/errands-settings-arm.xml</value>
@@ -101,7 +101,7 @@
 	<util:constant id="ERRANDS_ROOT_NAME" static-field="ru.it.lecm.errands.ErrandsService.ERRANDS_ROOT_NAME"/>
 
 	<bean id="errandsService" class="ru.it.lecm.errands.beans.ErrandsServiceImpl" parent="baseBean"
-	      depends-on="nodeService, documentService, errands.LogicEcmModelsBootstrap" init-method="init">
+	      depends-on="nodeService, documentService, errands.LogicEcmModelsBootstrap">
 		<property name="documentService" ref="documentService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
         <!-- TODO: Разобраться с машиной состояний-->
@@ -221,12 +221,15 @@
         <property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
 
+    <util:constant static-field="ru.it.lecm.errands.ErrandsService.TYPE_ERRANDS" id="errandsTypeQname"/>
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.TYPE_ERRANDS_TS_COEXECUTOR_REPORT" id="coexecutorReportTypeQname"/>
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.TYPE_ERRANDS_TS_EXECUTION_REPORT" id="executionReportTypeQname"/>
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.ASSOC_ERRANDS_TS_COEXECUTOR_CONNECTED_DOCUMENT" id="coexecutorReportConnectedDocAssocQname"/>
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.ASSOC_ERRANDS_TS_EXECUTOR_CONNECTED_DOCUMENT" id="executionReportConnectedDocAssocQname"/>
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.ASSOC_ERRANDS_TS_COEXECUTOR_ATTACHMENT" id="coexecutorReportAttachmentAssocQname"/>
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.ASSOC_ERRANDS_TS_EXECUTOR_ATTACHMENT" id="executionReportAttachmentAssocQname"/>
+    <util:constant static-field="ru.it.lecm.errands.ErrandsService.ASSOC_ERRANDS_EXECUTION_ATTACHMENT" id="executionAttachmentAssocQname"/>
+    <util:constant static-field="ru.it.lecm.errands.ErrandsService.ASSOC_ERRANDS_EXECUTION_CONNECTED_DOCS" id="executionConnectedDocAssocQname"/>
 
     <bean id="errandsCoexecutorReportConnectedDocumentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsReportConnectedDocumentAssociationPolicy"
           init-method="init" depends-on="documents.LogicEcmModelsBootstrap,errands.LogicEcmModelsBootstrap,errands.tableStructure.LogicEcmModelsBootstrap">
@@ -246,6 +249,26 @@
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
         <property name="reportTypeQname" ref="coexecutorReportTypeQname"/>
         <property name="associationQname" ref="coexecutorReportAttachmentAssocQname"/>
+    </bean>
+
+    <bean id="errandsExecutionConnectedDocumentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsReportConnectedDocumentAssociationPolicy"
+          init-method="init" depends-on="documents.LogicEcmModelsBootstrap,errands.LogicEcmModelsBootstrap,errands.tableStructure.LogicEcmModelsBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="documentTableService" ref="documentTableService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="documentConnectionService" ref="documentConnectionService"/>
+        <property name="reportTypeQname" ref="errandsTypeQname"/>
+        <property name="associationQname" ref="executionConnectedDocAssocQname"/>
+    </bean>
+    <bean id="errandsExecutionAttachmentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsReportAttachmentAssociationPolicy"
+          init-method="init" depends-on="documents.LogicEcmModelsBootstrap,errands.LogicEcmModelsBootstrap,errands.tableStructure.LogicEcmModelsBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="documentTableService" ref="documentTableService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+        <property name="reportTypeQname" ref="errandsTypeQname"/>
+        <property name="associationQname" ref="executionAttachmentAssocQname"/>
     </bean>
 
     <bean id="errandsExecutionReportConnectedDocumentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsReportConnectedDocumentAssociationPolicy"
@@ -437,6 +460,12 @@
                     <prop key="mimetype">text/xml</prop>
                     <prop key="redeploy">${redeploy.process.definitions}</prop>
                 </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-approver-decline.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
             </list>
         </property>
         <property name="models">
@@ -460,24 +489,9 @@
     <property name="publicAction" value="false" />
     </bean>
 
-    <bean id="errandsEveryDayStatusSchedule" class="ru.it.lecm.errands.shedule.EveryDayStatusShedule">
-        <property name="transactionMode">
-            <value>ISOLATED_TRANSACTIONS</value>
-        </property>
-        <property name="compensatingActionMode">
-            <value>IGNORE</value>
-        </property>
-        <property name="nodeService">
-            <ref bean="nodeService"/>
-        </property>
+    <bean id="errandsEveryDayStatusSchedule" class="ru.it.lecm.errands.shedule.EveryDayStatusShedule" parent="baseTransactionalSchedule">
         <property name="cronExpression">
             <value>0 0 5 */1 * ?</value>
-        </property>
-        <property name="firstStartExpression">
-            <value>0 */15 * * * ?</value>
-        </property>
-        <property name="onServerStart">
-            <value>false</value>
         </property>
         <property name="jobName">
             <value>errands-sys-agent-status</value>
@@ -491,17 +505,8 @@
         <property name="triggerGroup">
             <value>errands-status-trigger</value>
         </property>
-        <property name="scheduler">
-            <ref bean="schedulerFactory"/>
-        </property>
-        <property name="actionService">
-            <ref bean="ActionService"/>
-        </property>
-        <property name="transactionService">
-            <ref bean="TransactionService"/>
-        </property>
-        <property name="runAsUser">
-            <value>System</value>
+        <property name="actionName">
+            <value>errandsEveryDayStatusExecutor</value>
         </property>
         <property name="namespaceService" ref="namespaceService"/>
         <property name="documentService" ref="documentService"/>
@@ -514,21 +519,12 @@
     <property name="publicAction" value="false" />
     </bean>
 
-    <bean id="errandsEveryDayNotificationSchedule" class="ru.it.lecm.errands.shedule.EveryDayNotificationShedule">
-        <property name="transactionMode">
-            <value>ISOLATED_TRANSACTIONS</value>
-        </property>
-        <property name="compensatingActionMode">
-            <value>IGNORE</value>
-        </property>
-        <property name="nodeService">
-            <ref bean="nodeService"/>
-        </property>
+    <bean id="errandsEveryDayNotificationSchedule" class="ru.it.lecm.errands.shedule.EveryDayNotificationShedule" parent="baseTransactionalSchedule">
         <property name="cronExpression">
             <value>0 15 5 */1 * ?</value>
         </property>
         <property name="firstStartExpression">
-            <value>0 */15 * * * ?</value>
+            <value>0 */10 * * * ?</value>
         </property>
         <property name="onServerStart">
             <value>true</value>
@@ -545,17 +541,8 @@
         <property name="triggerGroup">
             <value>errands-notifications-trigger</value>
         </property>
-        <property name="scheduler">
-            <ref bean="schedulerFactory"/>
-        </property>
-        <property name="actionService">
-            <ref bean="ActionService"/>
-        </property>
-        <property name="transactionService">
-            <ref bean="TransactionService"/>
-        </property>
-        <property name="runAsUser">
-            <value>System</value>
+        <property name="actionName">
+            <value>errandsEveryDayNotificationExecutor</value>
         </property>
         <property name="documentService" ref="documentService"/>
     </bean>

@@ -45,15 +45,15 @@
 	   and include them in the AMP, they are provided by Alfresco
    -->
 	<dependencies>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-core</artifactId>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-data-model</artifactId>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-repository</artifactId>
 		</dependency>
@@ -67,7 +67,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.extensions.surf</groupId>
-			<artifactId>spring-surf</artifactId>
+			<artifactId>spring-surf-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.extensions.surf</groupId>
@@ -76,23 +76,18 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-		</dependency>
+		</dependency> -->
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>
 	<!--
 	   The scm is required for the buildnumber-maven-plugin which is required
 	   for AMP version numbering
    -->
-	<scm>
-		<connection>scm:svn:http://domain.com/svn/trunk/</connection>
-		<developerConnection>scm:svn:https://${user.name}@domain.com/svn/trunk/</developerConnection>
-		<url>http://domain.com/svn/trunk/</url>
-	</scm>
 
 	<build>
-		<plugins>
+		<!-- <plugins>-->
 			<!-- Needed for cross OS compatibility in acp/zip encoding -->
-			<plugin>
+			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 			</plugin>
@@ -110,14 +105,13 @@
 			<plugin>
 				<groupId>org.alfresco.maven.plugin</groupId>
 				<artifactId>alfresco-maven-plugin</artifactId>
-                <version>1.1.1</version>
                 <extensions>true</extensions>
 			</plugin>
-		</plugins>
+		</plugins>-->
 		<resources><resource>
                 <filtering>true</filtering>
                 <directory>src/main/amp</directory>
-                <targetPath>../${project.build.finalName}</targetPath>
+                <targetPath>${app.amp.output.folder}</targetPath>
                 <excludes>
                     <exclude>**README-*</exclude>
                 </excludes>
@@ -133,7 +127,7 @@
 			 Copies and filters AMP config in the proper package
 			 'alfresco/module/${project.artifactId}' so to enforce full module
 			 naming single sourcing from POM properties
-		 -->
+		 	-->
 			<resource>
 				<filtering>true</filtering>
 				<directory>src/main/config</directory>

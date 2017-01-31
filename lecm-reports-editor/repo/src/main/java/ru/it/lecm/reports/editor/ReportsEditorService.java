@@ -13,8 +13,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
@@ -40,12 +43,6 @@ public class ReportsEditorService extends BaseBean {
     public static final String RE_TEMPLATES_FILES_ROOT_ID = "RE_TEMPLATES_FILES_ROOT_ID";
 
     private ReportsManager reportsManager;
-
-    /**
-     * Метод инициализвции сервиса
-     */
-    public void init() {
-    }
 
     @Override
     public NodeRef getServiceRootFolder() {
@@ -127,4 +124,5 @@ public class ReportsEditorService extends BaseBean {
     public ReportsManager getReportsManager() {
         return reportsManager;
     }
+	
 }

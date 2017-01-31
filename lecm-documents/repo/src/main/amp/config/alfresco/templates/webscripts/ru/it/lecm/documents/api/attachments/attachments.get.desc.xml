@@ -3,6 +3,6 @@
     <description>Document Attachments</description>
     <url>/lecm/document/attachments/api/get?documentNodeRef={documentNodeRef}&amp;count={count}</url>
     <authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
     <format default="json"/>
 </webscript>

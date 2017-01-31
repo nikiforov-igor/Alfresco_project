@@ -679,7 +679,14 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     }
 
     public ScriptNode getDashletSettings() {
-        return new ScriptNode(errandsService.getDashletSettingsNode(), serviceRegistry, getScope());
+        NodeRef settings = errandsService.getDashletSettingsNode();
+        if(settings == null){
+        	settings = errandsService.createDashletSettingsNode();
+        }
+        if(settings != null) {
+        	return new ScriptNode(settings, serviceRegistry, getScope());
+        }
+        return null;
     }
 
     public void createErrands(final Map<String, Object> properties, ScriptNode parentErrandNode) {
@@ -876,10 +883,11 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return errandsService.isHideAdditionAttributes();
     }
 
-    public void sendCancelSignal(String errandRef, String reason) {
+    public void sendCancelSignal(String errandRef, String reason, String senderRef) {
         NodeRef errand = new NodeRef(errandRef);
+        NodeRef signalSender = new NodeRef(senderRef);
         if (nodeService.exists(errand)) {
-            errandsService.sendCancelSignal(errand, reason);
+            errandsService.sendCancelSignal(errand, reason, signalSender);
         }
     }
 }

@@ -407,7 +407,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					itemKind: 'type',
 					mode: 'create',
 					showCancelButton: true,
-					submitType: 'json'
+					submitType: 'json',
+					showCaption: false
 				},
 				destroyOnHide: true,
 				doBeforeDialogShow: {
@@ -571,7 +572,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					itemKind: 'node',
 					mode: 'edit',
 					showCancelButton: true,
-					submitType: 'json'
+					submitType: 'json',
+					showCaption: false
 				},
 				destroyOnHide: true,
 				doBeforeDialogShow: {
@@ -801,7 +803,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					mode: 'edit',
 					itemKind: 'node',
 					showCancelButton: true,
-					documentNodeRef: this.documentNodeRef
+					documentNodeRef: this.documentNodeRef,
+					showCaption: false
 				},
 				destroyOnHide: true,
 				doBeforeDialogShow: {
@@ -878,10 +881,14 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				if (!hasComment) {
 					return null;
 				}
-				return "<a href=\"javascript:void(0);\" onclick=\"LogicECM.module.Base.Util.viewAttributes(" +
-					"{itemId:\'" + nodeRef + "\'," +
-					"title: \'label.view.stage.details\', " +
-					"formId: \'viewStageResult\' })>" + decisionData.displayValue + "</a>";
+				return YAHOO.lang.substitute("<a href=\'javascript:void(0);\' onclick=\'LogicECM.module.Base.Util.viewAttributes({config})\'>{displayValue}</a>", {
+					config: YAHOO.lang.JSON.stringify({
+						itemId: nodeRef,
+						title: 'label.view.stage.details',
+						formId: 'viewStageResult'
+					}),
+					displayValue: decisionData.displayValue
+				});
 			}
 			var html = null;
 
@@ -933,12 +940,14 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			if (decisionData.value === 'NO_DECISION') {
 				return null;
 			}
-			return "<a href=\"javascript:void(0);\" onclick=\"LogicECM.module.Base.Util.viewAttributes(" +
-				"{itemId:\'" + nodeRef + "\'," +
-				"title: \'label.view.approval.details\', " +
-				"formId: \'viewApprovalResult\' })>"
-				+ decisionData.displayValue + (hasComment ? commentIcon : '')+ "</a>";
-
+			return YAHOO.lang.substitute("<a href=\'javascript:void(0);\' onclick=\'LogicECM.module.Base.Util.viewAttributes({config})\'>{displayValue}</a>", {
+				config: YAHOO.lang.JSON.stringify({
+					itemId: nodeRef,
+					title: 'label.view.approval.details',
+					formId: 'viewApprovalResult'
+				}),
+				displayValue: decisionData.displayValue + (hasComment ? ' ' + commentIcon : '')
+			});
 		}
 		var html = '', i, oDataLength, datalistColumn, data, decision, hasComment, nodeRef;
 

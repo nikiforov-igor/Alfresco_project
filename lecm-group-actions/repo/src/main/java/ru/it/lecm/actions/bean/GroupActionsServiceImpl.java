@@ -16,7 +16,10 @@ import ru.it.lecm.statemachine.StatemachineModel;
 import java.io.Serializable;
 import java.util.*;
 import java.util.Map.Entry;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.namespace.NamespaceException;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * User: pmelnikov
@@ -33,14 +36,6 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
     private NamespaceService namespaceService;
     private DocumentService documentService;
     private LecmPermissionService lecmPermissionService;
-
-    /**
-     * Метод инициализвции сервиса
-     * Создает рабочую директорию - если она еще не создана.
-     * Записыывает в свойства сервиса nodeRef директории с бизнес-журналами
-     */
-    public void init() {
-    }
 
     @Override
     public NodeRef getHomeRef() {
@@ -280,5 +275,5 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
         }
         return result;
     }
-
+	
 }

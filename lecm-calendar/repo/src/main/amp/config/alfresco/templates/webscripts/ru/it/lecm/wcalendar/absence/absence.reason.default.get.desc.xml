@@ -4,6 +4,6 @@
 	<description>Get nodeRef for default absence reason</description>
 	<url>/lecm/wcalendar/absence/get/absenceReasonDefault</url>
 	<authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 	<format default="json"/>
 </webscript>

@@ -4,6 +4,6 @@
     <url>/lecm/dictionary/action/isDependents</url>
     <format default="json">argument</format>
     <authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
     <lifecycle>internal</lifecycle>
 </webscript>

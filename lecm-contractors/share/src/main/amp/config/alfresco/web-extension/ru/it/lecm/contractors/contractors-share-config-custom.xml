@@ -89,7 +89,7 @@
             <form>
                 <create-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
                 <field-visibility>
-                    <show id="submit-function"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-contractor:fullname" force="true"/>
                     <!-- Полное наименование -->
                     <show id="lecm-contractor:shortname" force="true"/>
@@ -141,7 +141,7 @@
                 <appearance>
                     <!-- Вкладка: Контактные данные -->
                     <set id="contacts" label-id="tabs.contractor.contacts" appearance=""/>
-                    <field id="submit-function" set="contacts">
+                    <field id="lecm-base-dummy-aspects:script" set="contacts">
                         <control template="/ru/it/lecm/base-share/components/controls/submit-function-control.ftl">
                             <control-param name="scripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <control-param name="submitFunction">LogicECM.checkDuplicatesForContractor</control-param>
@@ -250,7 +250,7 @@
             <form id="contractorOrg" submission-url="/lecm/contractors/organization/type/lecm-contractor%3Acontractor-type/formprocessor">
                 <create-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
                 <field-visibility>
-                    <show id="submit-function"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-contractor:fullname" force="true"/>
                     <!-- Полное наименование -->
                     <show id="lecm-contractor:shortname" force="true"/>
@@ -302,7 +302,7 @@
                 <appearance>
                     <!-- Вкладка: Контактные данные -->
                     <set id="contacts" label-id="tabs.contractor.contacts" appearance=""/>
-                    <field id="submit-function" set="contacts">
+                    <field id="lecm-base-dummy-aspects:script" set="contacts">
                         <control template="/ru/it/lecm/base-share/components/controls/submit-function-control.ftl">
                             <control-param name="scripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <control-param name="submitFunction">LogicECM.checkDuplicatesForContractor</control-param>
@@ -516,6 +516,7 @@
                             <control-param name="datagridStrippedCols">lecm-contractor:fullname</control-param>
                             <control-param name="datagridMaxSColWidth">21</control-param>
                             <control-param name="datagridStyles">middle-align max-height65</control-param>
+                            <control-param name="datagridInclPathInQuery">true</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -531,7 +532,7 @@
                 <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
 
                 <field-visibility>
-                    <show id="submit-function"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-contractor:computed-parent"/>
                     <!-- Наименование материнской компании -->
                     <show id="lecm-contractor:fullname" force="true"/>
@@ -590,7 +591,7 @@
                 <appearance>
                     <!-- Вкладка: Контактные данные -->
                     <set id="contacts" label-id="tabs.contractor.contacts" appearance=""/>
-                    <field id="submit-function" set="contacts">
+                    <field id="lecm-base-dummy-aspects:script" set="contacts">
                         <control template="/ru/it/lecm/base-share/components/controls/submit-function-control.ftl">
                             <control-param name="scripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <control-param name="submitFunction">LogicECM.checkDuplicatesForContractor</control-param>
@@ -1137,7 +1138,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="submit-function"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-contractor:lastName"/>
                     <show id="lecm-contractor:firstName"/>
                     <show id="lecm-contractor:middleName"/>
@@ -1163,7 +1164,7 @@
                     <show id="lecm-contractor:region-association"/>
                 </field-visibility>
                 <appearance>
-                    <field id="submit-function">
+                    <field id="lecm-base-dummy-aspects:script">
                         <control template="/ru/it/lecm/base-share/components/controls/submit-function-control.ftl">
                             <control-param name="scripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <control-param name="submitFunction">LogicECM.checkDuplicatesForPerson</control-param>
@@ -1281,6 +1282,7 @@
                             <control-param name="datagridStrippedCols">lecm-contractor:physical-address</control-param>
                             <control-param name="datagridMaxSColWidth">21</control-param>
                             <control-param name="datagridStyles">middle-align max-height65</control-param>
+                            <control-param name="datagridInclPathInQuery">true</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1292,7 +1294,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="submit-function"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-contractor:lastName"/>
                     <show id="lecm-contractor:firstName"/>
                     <show id="lecm-contractor:middleName"/>
@@ -1318,7 +1320,7 @@
                     <show id="lecm-contractor:region-association"/>
                 </field-visibility>
                 <appearance>
-                    <field id="submit-function">
+                    <field id="lecm-base-dummy-aspects:script">
                         <control template="/ru/it/lecm/base-share/components/controls/submit-function-control.ftl">
                             <control-param name="scripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <control-param name="submitFunction">LogicECM.checkDuplicatesForPerson</control-param>

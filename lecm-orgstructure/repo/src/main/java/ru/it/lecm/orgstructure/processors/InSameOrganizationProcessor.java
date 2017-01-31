@@ -59,7 +59,8 @@ public class InSameOrganizationProcessor extends SearchQueryProcessor {
                 sbQuery.append("\"NOT_REF\"");
             }
         } else {
-            sbQuery.append("\"").append(organizationParam != null && NodeRef.isNodeRef(organizationParam) ? organizationParam.replace(":", "\\:") : "?*").append("\"");
+        	sbQuery.append("\"").append(organizationParam != null && NodeRef.isNodeRef(organizationParam) ? organizationParam.replace(":", "\\:") : "?*").append("\"");
+//        	sbQuery.append("ISNODE:T");
         }
         if (!useStrictAccess) {
                 sbQuery.append(" OR (ISNULL:").append("\"").append(organizationProperty).append("\"");

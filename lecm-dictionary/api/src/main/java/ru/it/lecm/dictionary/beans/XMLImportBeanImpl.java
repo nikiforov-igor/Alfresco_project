@@ -10,10 +10,10 @@ import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.apache.axiom.om.util.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.extensions.surf.util.Base64;
 import ru.it.lecm.dictionary.export.ExportNamespace;
 
 import javax.xml.stream.XMLInputFactory;

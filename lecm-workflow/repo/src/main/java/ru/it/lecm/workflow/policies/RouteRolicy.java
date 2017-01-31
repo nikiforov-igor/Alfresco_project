@@ -14,9 +14,9 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
-import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.lang.StringUtils;
+import ru.it.lecm.base.beans.FileNameValidator;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
 

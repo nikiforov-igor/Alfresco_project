@@ -94,7 +94,8 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         mode:"create",
                         formId: this.id + "-create-form",
 		            submitType:"json",
-		            showCancelButton: true
+		            showCancelButton: true,
+					showCaption: false
 	            };
 
                 var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");

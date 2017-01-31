@@ -380,6 +380,19 @@
 			</associations>
 		</type>
 
+		<type name="lecmErrandWf:approverDecline">
+			<parent>bpm:startTask</parent>
+			<properties>
+				<property name="lecmErrandWf:approverDeclineReason">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+
 		<type name="lecmErrandWf:initiatorDecline">
 			<parent>bpm:startTask</parent>
 			<properties>

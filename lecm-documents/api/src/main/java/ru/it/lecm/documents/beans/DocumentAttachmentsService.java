@@ -44,7 +44,7 @@ public interface DocumentAttachmentsService {
      * @param documentRef Ссылка на документ
      * @return Список ссылок на папки с категориями вложений
      */
-	List<NodeRef> getCategories(final NodeRef documentRef);
+	List<NodeRef> getCategories(final NodeRef documentRef) throws WriteTransactionNeededException;
 
     /**
      * Получения папок с категориями вложений

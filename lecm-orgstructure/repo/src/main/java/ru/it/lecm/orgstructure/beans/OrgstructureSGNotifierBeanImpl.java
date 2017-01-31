@@ -9,6 +9,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.policies.PolicyUtils;
 import ru.it.lecm.security.LecmPermissionService;
@@ -37,26 +38,16 @@ public class OrgstructureSGNotifierBeanImpl
 		PropertyCheck.mandatory(this, "nodeService", this.nodeService);
 		PropertyCheck.mandatory(this, "sgNotifier", this.sgNotifier);
 		PropertyCheck.mandatory(this, "orgstructureService", this.orgstructureService);
-
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
-		transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
-			@Override
-			public Void execute () throws Throwable {
-				autoTieAllEmployeers();
-				return null;
-			}
-		});
-
 		logger.info("initialized");
 	}
-
 
 	// public static QName TYPE_EMPLOYEE = QName.createQName( OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee");
 
 	/**
 	 * Привязать для всех активных Сотрудников Login/userId к sgME группам ...
 	 */
-	void autoTieAllEmployeers() {
+	@Override
+	public void autoTieAllEmployeers() {
 		final long start = System.currentTimeMillis();
 
 		final Set<QName> typEmpl = new HashSet<QName>();

@@ -802,4 +802,9 @@ public interface OrgstructureBean {
     boolean hasGlobalOrganizationsAccess();
 
 	public List<NodeRef> getCurrentEmployeeHighestUnits();
+	
+	/**
+	 *  Привязать для всех активных Сотрудников Login/userId к sgME группам
+	 */
+	public void autoEmployeesTie();
 }

@@ -3,6 +3,6 @@
     <description>Document Attachments Categories</description>
     <url>/lecm/document/attachments/api/categories?documentNodeRef={documentNodeRef}</url>
     <authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
     <format default="json"/>
 </webscript>

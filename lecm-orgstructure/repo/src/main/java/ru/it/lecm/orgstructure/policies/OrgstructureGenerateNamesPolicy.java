@@ -7,9 +7,9 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.FileNameValidator;
 import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.FileNameValidator;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
@@ -110,6 +110,7 @@ public class OrgstructureGenerateNamesPolicy extends BaseBean
 
     private String generateOrgElementName(NodeRef parent, NodeRef element) {
         String newName = (String) nodeService.getProperty(element, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME);
+        if(OrgstructureBean.HOLDING_ROOT_NAME.equals(newName)){ return newName; }
 	    newName = FileNameValidator.getValidFileName(newName);
 	    return getUniqueNodeName(parent, newName);
     }

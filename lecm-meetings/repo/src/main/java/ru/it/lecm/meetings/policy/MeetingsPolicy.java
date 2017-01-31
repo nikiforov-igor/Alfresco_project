@@ -14,6 +14,8 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
@@ -34,6 +36,7 @@ import java.util.Map;
  * @author vkuprin
  */
 public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUpdatePropertiesPolicy {
+	private final static Logger logger = LoggerFactory.getLogger(MeetingsPolicy.class);
 
 	public static final String FILE_PREFIX_STRING = "Пункт_";
 	public static final String FILE_DEFAULT_CATEGORY = "Вложения";
@@ -223,7 +226,11 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 				nodeService.moveNode(item, table, ContentModel.ASSOC_CONTAINS, itemAssocQName);
 				nodeService.setProperty(item, DocumentTableService.PROP_INDEX_TABLE_ROW, index);
 				//нужно дёрнуть, чтоб создать папки категорий вложений
-				documentAttachmentsService.getCategories(document);
+				try{
+					documentAttachmentsService.getCategories(document);
+				}catch(WriteTransactionNeededException e){
+					logger.error("error: ",e);
+				}
 				moveFiles(document, item);
 
 				documentTableService.recalculateSearchDescription(table);

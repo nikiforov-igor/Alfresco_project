@@ -37,7 +37,8 @@ LogicECM.module.Secretary.SecretaryList = LogicECM.module.Secretary.SecretaryLis
 				mode: 'edit',
 				formId: 'employee-sec-edit',
 				submitType: 'json',
-				showCancelButton: true
+				showCancelButton: true,
+				showCaption: false
 			};
 
 			// Using Forms Service, so always create new instance

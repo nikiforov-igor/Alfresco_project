@@ -18,7 +18,6 @@ import org.alfresco.service.namespace.InvalidQNameException;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
-import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.GUID;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -29,10 +28,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.extensions.surf.util.I18NUtil;
 import org.springframework.extensions.surf.util.URLEncoder;
 import org.springframework.util.StringUtils;
-import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.base.beans.SearchQueryProcessorService;
-import ru.it.lecm.base.beans.TransactionNeededException;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.base.beans.*;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
@@ -553,7 +549,11 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                         for (String category : categories) {
                             NodeRef categoryRef = documentAttachmentsService.getCategory(category, document);
                             if (categoryRef != null) {
- 	                            documentAttachmentsService.getCategories(createdNode);
+                            	try{
+                            		documentAttachmentsService.getCategories(createdNode);
+                            	}catch(WriteTransactionNeededException e) {
+                            		logger.error("error: ",e);
+                            	}
 	                            NodeRef errandCategoryFolder = documentAttachmentsService.getCategory(category, createdNode);
                                 // копируем вложения для категории
                                 List<ChildAssociationRef> childs = nodeService.getChildAssocs(categoryRef);

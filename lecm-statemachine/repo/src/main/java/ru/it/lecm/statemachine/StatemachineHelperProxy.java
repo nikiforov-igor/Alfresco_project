@@ -7,7 +7,6 @@ import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import ru.it.lecm.statemachine.bean.SimpleDocumentRegistryImpl;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,8 +22,6 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
 
     private SimpleStatemachineHelper simpleStatemachineHelper;
     private LifecycleStateMachineHelper lifecycleStateMachineHelper;
-    private SimpleDocumentRegistryImpl simpleDocumentRegistry;
-    private NamespaceService namespaceService;
     private NodeService nodeService;
 
     public void setSimpleStatemachineHelper(SimpleStatemachineHelper simpleStatemachineHelper) {
@@ -33,14 +30,6 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
 
     public void setLifecycleStateMachineHelper(LifecycleStateMachineHelper lifecycleStateMachineHelper) {
         this.lifecycleStateMachineHelper = lifecycleStateMachineHelper;
-    }
-
-    public void setSimpleDocumentRegistry(SimpleDocumentRegistryImpl simpleDocumentRegistry) {
-        this.simpleDocumentRegistry = simpleDocumentRegistry;
-    }
-
-    public void setNamespaceService(NamespaceService namespaceService) {
-        this.namespaceService = namespaceService;
     }
 
     public void setNodeService(NodeService nodeService) {
@@ -77,6 +66,11 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
         return getHelper(type).isStarter(type);
     }
 
+	@Override
+	public boolean isStarter(QName type) {
+		return getHelper(type).isStarter(type);
+	}
+
     @Override
     public NodeRef getTaskDocument(WorkflowTask task, List<String> documentTypes) {
         return lifecycleStateMachineHelper.getTaskDocument(task, documentTypes);
@@ -92,10 +86,20 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
         return getHelper(type).isNotArmCreate(type);
     }
 
+	@Override
+	public boolean isNotArmCreate(QName type) {
+		return getHelper(type).isNotArmCreate(type);
+	}
+
     @Override
     public List<String> getStatuses(String documentType, boolean includeActive, boolean includeFinal) {
         return getHelper(documentType).getStatuses(documentType, includeActive, includeFinal);
     }
+
+	@Override
+	public List<String> getStatuses(QName documentType, boolean includeActive, boolean includeFinal) {
+		return getHelper(documentType).getStatuses(documentType, includeActive, includeFinal);
+	}
 
     @Override
     public List<String> getAllDynamicRoles(NodeRef document) {
@@ -141,6 +145,11 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
     public Set<String> getStarterRoles(String documentType) {
         return getHelper(documentType).getStarterRoles(documentType);
     }
+
+	@Override
+	public Set<String> getStarterRoles(QName documentType) {
+		return getHelper(documentType).getStarterRoles(documentType);
+	}
 
     @Override
     public void checkReadOnlyCategory(NodeRef document, String category) {
@@ -242,6 +251,21 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
         return getHelper(documentType).getArchiveFolders(documentType);
     }
 
+	@Override
+	public Set<String> getArchiveFolders(QName documentType) {
+		return getHelper(documentType).getArchiveFolders(documentType);
+	}
+
+	@Override
+	public String getArchiveFolder(String documentType) {
+		return getHelper(documentType).getArchiveFolder(documentType);
+	}
+
+	@Override
+	public String getArchiveFolder(QName documentType) {
+		return getHelper(documentType).getArchiveFolder(documentType);
+	}
+
     @Override
     public void resetStateMachene() {
         lifecycleStateMachineHelper.resetStateMachene();
@@ -257,8 +281,28 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
         getHelper(documentRef).disconnectFromStatemachine(documentRef, processInstanceID);
     }
 
+	@Override
+	public Map<String, String> getPermissions(String type) {
+		return lifecycleStateMachineHelper.getPermissions(type);
+	}
+
+	@Override
+	public Map<String, String> getPermissions(QName type) {
+		return getHelper(type).getPermissions(type);
+	}
+
+	@Override
+	public boolean isSimpleDocument(String type) {
+		return lifecycleStateMachineHelper.isSimpleDocument(type);
+	}
+
+	@Override
+	public boolean isSimpleDocument(QName type) {
+		return lifecycleStateMachineHelper.isSimpleDocument(type);
+	}
+
     private StateMachineServiceBean getHelper(String type) {
-        return getHelper(QName.createQName(type, namespaceService));
+        return getHelper(lifecycleStateMachineHelper.isSimpleDocument(type));
     }
 
     private StateMachineServiceBean getHelper(NodeRef document) {
@@ -266,11 +310,25 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
     }
 
     private StateMachineServiceBean getHelper(QName type) {
-        if (simpleDocumentRegistry.isSimpleDocument(type)) {
+        return getHelper(lifecycleStateMachineHelper.isSimpleDocument(type));
+    }
+	
+	private StateMachineServiceBean getHelper(boolean isSimpleDocument) {
+		if (isSimpleDocument) {
             return simpleStatemachineHelper;
         } else {
-            return lifecycleStateMachineHelper;
-        }
-    }
+			return lifecycleStateMachineHelper;
+		}
+	}
 
+	@Override
+	public void checkArchiveFolder(String type, boolean forceRebuildACL) {
+		getHelper(type).checkArchiveFolder(type, forceRebuildACL);
+	}
+
+	@Override
+	public void checkArchiveFolder(QName type, boolean forceRebuildACL) {
+		getHelper(type).checkArchiveFolder(type, forceRebuildACL);
+	}
+	
 }

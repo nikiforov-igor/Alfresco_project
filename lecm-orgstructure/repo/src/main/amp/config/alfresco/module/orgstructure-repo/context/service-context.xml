@@ -77,13 +77,14 @@
 
 	<util:constant id="ORGANIZATION_ROOT_ID" static-field="ru.it.lecm.orgstructure.beans.OrgstructureBeanImpl.ORGANIZATION_ROOT_ID"/>
 
-	<bean id="serviceOrgstructure" class="ru.it.lecm.orgstructure.beans.OrgstructureBeanImpl" init-method="init" parent="baseBean"
+	<bean id="serviceOrgstructure" class="ru.it.lecm.orgstructure.beans.OrgstructureBeanImpl" parent="baseBean"
 		  depends-on="${groupId}.${artifactId}.orgStructureBootstrap, auditModel.extractor.simpleValue, auditModel.extractor.nullValue, auditModel.generator.user, CMISChangeLogDataExtractor">
 		<property name="personService" ref="personService"/>
 		<property name="dictionaryService" ref="serviceDictionary"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="authorityService" ref="authorityService" />
 		<property name="userOrganizationsCache" ref="userOrganizationsCache"/>
+		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean"/>
 		<property name="folders">
 			<map>
 				<entry key="#{ORGANIZATION_ROOT_ID}" value="Сервис Структура организации и сотрудников"/>
@@ -345,7 +346,7 @@
 
     <bean id="orgstructure.arm.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap">
-        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ"/>
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/dictionary/arm-orgstructure.xml</value>
@@ -355,7 +356,7 @@
 
     <bean id="orgstructure.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="arm.settings.LogicEcmBootstrap">
-        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование"/>
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/arm/orgstructure-settings-arm.xml</value>

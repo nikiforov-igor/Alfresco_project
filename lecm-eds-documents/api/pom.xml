@@ -16,10 +16,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.alfresco</groupId>
-			<artifactId>alfresco-data-model</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-repository</artifactId>
 		</dependency>
 		<dependency>
@@ -29,5 +25,4 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-    <groupId>ru.it.lecm.eds-documents</groupId>
 </project>

@@ -22,7 +22,7 @@
                     </activiti:field>
                 </activiti:executionListener>
             </extensionElements>
-            <script></script>
+            <script>var test=1;</script>
         </scriptTask>
         <sequenceFlow id="flow2" sourceRef="signContractorTask" targetRef="receivetask"></sequenceFlow>
         <receiveTask id="receivetask" name="Receive Task"></receiveTask>

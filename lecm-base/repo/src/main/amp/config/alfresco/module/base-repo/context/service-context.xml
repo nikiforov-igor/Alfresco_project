@@ -31,6 +31,10 @@
 		<property name="lecmTransactionHelper" ref="lecmTransactionHelper"/>
 	</bean>
 
+	<bean id="lecmServicesRegistry" class="ru.it.lecm.base.beans.LecmServicesRegistryImpl"
+		  p:lecmTransactionHelper-ref="lecmTransactionHelper"
+	/>
+
 	<!--TODO: проверить, что поломается, если использовать секьюрные сервисы (NodeService, TransactionService и т.п).
 	по возможности нужно использовать именно секьюрные сервисы-->
 	<bean id="baseBean" class="ru.it.lecm.base.beans.BaseBean" abstract="true"
@@ -40,7 +44,9 @@
 		  p:nodeService-ref="nodeService"
 		  p:transactionService-ref="transactionService"
 		  p:lecmTransactionHelper-ref="lecmTransactionHelper"
-		  p:authService-ref="authenticationService"/>
+		  p:authService-ref="authenticationService"
+		  p:lecmServicesRegistry-ref="lecmServicesRegistry"
+		  p:repository-ref="repositoryHelper"/>
 
 	<bean id="baseScript" class="ru.it.lecm.base.beans.BaseWebScript" abstract="true" parent="baseJavaScriptExtension">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
@@ -52,6 +58,7 @@
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 		<property name="permissionService" ref="permissionService"/>
 		<property name="authorityService" ref="authorityService"/>
+		<property name="transactionService" ref="transactionService"/>
 	</bean>
 
 	<bean id="substitudeService" class="ru.it.lecm.base.beans.SubstitudeBeanImpl" parent="baseBean"
@@ -204,6 +211,7 @@
 		<property name="models">
 			<list>
 				<value>alfresco/module/base-repo/models/lecm-base-aspects-model.xml</value>
+				<value>alfresco/module/base-repo/models/lecm-base-dummy-script-aspects-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
@@ -276,21 +284,12 @@
 		</property>
 	</bean>
 
-	<bean id="userTempDirectoryCleanSchedule" class="ru.it.lecm.base.schedule.UserTempDirectoryCleanSchedule">
+	<bean id="userTempDirectoryCleanSchedule" class="ru.it.lecm.base.schedule.UserTempDirectoryCleanSchedule" parent="baseTransactionalSchedule">
 		<property name="repositoryStructureHelper">
 			<ref bean="repositoryStructureHelper" />
 		</property>
 		<property name="orgstructureService">
 			<ref bean="serviceOrgstructure" />
-		</property>
-		<property name="nodeService">
-			<ref bean="nodeService" />
-		</property>
-		<property name="transactionMode">
-			<value>ISOLATED_TRANSACTIONS</value>
-		</property>
-		<property name="compensatingActionMode">
-			<value>IGNORE</value>
 		</property>
 		<property name="cronExpression">
 			<value>0 0 4 * * ?</value>
@@ -307,17 +306,8 @@
 		<property name="triggerGroup">
 			<value>usertemp-directory-trigger</value>
 		</property>
-		<property name="scheduler">
-			<ref bean="schedulerFactory"/>
-		</property>
-		<property name="actionService">
-			<ref bean="ActionService"/>
-		</property>
-		<property name="transactionService">
-			<ref bean="TransactionService"/>
-		</property>
-		<property name="runAsUser">
-			<value>System</value>
+		<property name="actionName">
+			<value>deleteAction</value>
 		</property>
 	</bean>
 
@@ -355,13 +345,6 @@
 	<bean id="webscript.ru.it.lecm.formsConfig.getTypeParents.get" class="ru.it.lecm.base.scripts.FormsConfigWebScriptBean" parent="webscript">
 		<property name="dictionaryService" ref="DictionaryService" />
 		<property name="nameSpaceService" ref="NamespaceService" />
-	</bean>
-
-	<bean id="lecm.view.bootstrap" class="ru.it.lecm.base.dbviews.DBViewBootstrap"
-		  abstract="true" init-method="bootstrapViews">
-		<property name="dataSource" ref="dataSource"/>
-		<property name="dictionaryService" ref="DictionaryService" />
-		<property name="namespaceService" ref="NamespaceService" />
 	</bean>
 
 	<bean id="propertiesImpl" class="ru.it.lecm.base.beans.LecmBasePropertiesServiceImpl"></bean>
@@ -484,7 +467,7 @@
 
 	<bean id="base.arm.myProfile.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="userProfile.arm.LogicEcmBootstrap">
-		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Логика ECM. Мой профиль/Мое делегирование"/>
+		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/arm/default-arm-my-profile-items.xml</value>
@@ -498,10 +481,8 @@
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
-	<util:constant id="LECM_MESSAGE_FOLDER_ID" static-field="ru.it.lecm.base.beans.LecmMessageServiceImpl.LECM_MESSAGE_FOLDER_ID"/>
 	<bean id="lecmMessageService"
 	      parent="baseBean"
-	      init-method="init"
 	      depends-on="dictionaryBootstrap"
 	      class="ru.it.lecm.base.beans.LecmMessageServiceImpl">
 		<property name="messageService" ref="messageService"/>
@@ -509,11 +490,6 @@
 		<property name="repoMessagesLocation" ref="customMessagesRepositoryLocation"/>
 		<property name="searchService" ref="searchService"/>
 		<property name="locales" value="${lecm.mlLocales}"/>
-		<property name="folders">
-			<map>
-				<entry key="#{LECM_MESSAGE_FOLDER_ID}" value="Сервис Сообщения"/>
-			</map>
-		</property>
 	</bean>
 
 	<bean id="lecmMessagesLoader"
@@ -530,5 +506,18 @@
 		<property name="extensionName" value="lecmMessages"/>
 		<property name="lecmMessageService" ref="lecmMessageService"/>
 	</bean>
+	
+	<bean id="baseTransactionalSchedule" class="ru.it.lecm.base.beans.BaseTransactionalSchedule" abstract="true"
+		p:transactionMode="ISOLATED_TRANSACTIONS"
+		p:compensatingActionMode="IGNORE"
+		p:scheduler-ref="schedulerFactory"
+		p:actionService-ref="ActionService"
+		p:transactionService-ref="TransactionService"
+		p:lecmTransactionHelper-ref="lecmTransactionHelper"
+		p:nodeService-ref="nodeService"
+		p:searchService-ref="searchService"
+		p:onServerStart="false"
+		p:runAsUser="System"
+	/>
 
 </beans>

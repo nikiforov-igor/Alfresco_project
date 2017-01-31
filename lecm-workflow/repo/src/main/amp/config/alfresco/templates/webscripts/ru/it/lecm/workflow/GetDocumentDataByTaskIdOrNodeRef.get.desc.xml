@@ -6,5 +6,5 @@
 	<url>/lecm/workflow/GetDocumentDataByTaskId</url>
 	<authentication>user</authentication>
 	<format default="json"/>
-	<transaction>none</transaction>
+	<transaction allow="readonly">required</transaction>
 </webscript>

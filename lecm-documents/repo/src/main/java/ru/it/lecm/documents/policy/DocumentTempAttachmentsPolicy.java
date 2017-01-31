@@ -12,6 +12,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentService;
 
@@ -51,13 +52,19 @@ public class DocumentTempAttachmentsPolicy implements NodeServicePolicies.OnCrea
 	 */
 	@Override
 	public void onCreateAssociation(AssociationRef associationRef) {
+		logger.debug("ДОКУМЕНТ. onCreateAssociation");
 		NodeRef documentRef = associationRef.getSourceRef();
 		NodeRef attachmentRef = associationRef.getTargetRef();
 
 		if (!nodeService.hasAspect(attachmentRef, DocumentAttachmentsService.ASPECT_SKIP_ON_CREATE_DOCUMENT)) {
 			NodeRef categoryRef = null;
 
-			List<NodeRef> categories = documentAttachmentsService.getCategories(documentRef);
+			List<NodeRef> categories = null;
+			try{
+				categories = documentAttachmentsService.getCategories(documentRef);
+			} catch (WriteTransactionNeededException e) {
+				logger.error("error: ",e);
+			}
 
 			if (categories != null) {
 				for (NodeRef category: categories) {

@@ -92,12 +92,12 @@ public abstract class OOTemplateGenerator {
         // Closing the converted document. Use XCloseable.close if the
         // interface is supported, otherwise use XComponent.dispose
         com.sun.star.util.XCloseable xCloseable =
-                UnoRuntime.queryInterface(com.sun.star.util.XCloseable.class, xCompDoc);
+                (com.sun.star.util.XCloseable) UnoRuntime.queryInterface(com.sun.star.util.XCloseable.class, xCompDoc);
         if (xCloseable != null) {
             xCloseable.close(false);
         } else {
             com.sun.star.lang.XComponent xComp =
-                    UnoRuntime.queryInterface(com.sun.star.lang.XComponent.class, xCompDoc);
+                    (com.sun.star.lang.XComponent)UnoRuntime.queryInterface(com.sun.star.lang.XComponent.class, xCompDoc);
             xComp.dispose();
         }
     }
@@ -141,7 +141,7 @@ public abstract class OOTemplateGenerator {
 
 			/* (2) добавление свойств */
             stage = String.format("Get openOffice properties of document '%s'", srcOODocUrl);
-            final XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xCompDoc);
+            final XDocumentPropertiesSupplier xDocPropsSuppl = (XDocumentPropertiesSupplier)UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xCompDoc);
             final XDocumentProperties xDocProps = xDocPropsSuppl.getDocumentProperties();
             final XPropertyContainer userPropsContainer = xDocProps.getUserDefinedProperties();
 

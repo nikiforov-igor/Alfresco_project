@@ -525,6 +525,7 @@ LogicECM.errands = LogicECM.errands || {};
                         itemId: nodeRef,
                         mode: "edit",
                         showCancelButton: true,
+                        showCaption: false,
                         submitType: 'json'
                     },
                     width: '50em',

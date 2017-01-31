@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentTableService;
+import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.List;
@@ -105,8 +106,12 @@ public class ErrandsReportAttachmentAssociationPolicy implements NodeServicePoli
     @Override
     public void onCreateAssociation(AssociationRef associationRef) {
         NodeRef attachment = associationRef.getTargetRef();
-        NodeRef report = associationRef.getSourceRef();
-        NodeRef errandDoc = documentTableService.getDocumentByTableDataRow(report);
+        NodeRef errandDoc = null;
+        if (nodeService.getType(associationRef.getSourceRef()).equals(ErrandsService.TYPE_ERRANDS)){
+            errandDoc = associationRef.getSourceRef();
+        } else {
+            errandDoc = documentTableService.getDocumentByTableDataRow(associationRef.getSourceRef());
+        }
         NodeRef category = documentAttachmentsService.getCategory("Исполнение", errandDoc);
         if (category != null) {
             documentAttachmentsService.addAttachment(attachment, category);
@@ -117,9 +122,24 @@ public class ErrandsReportAttachmentAssociationPolicy implements NodeServicePoli
     public void onDeleteAssociation(AssociationRef associationRef) {
         NodeRef attachment = associationRef.getTargetRef();
         NodeRef reportNodeRef = associationRef.getSourceRef();
-
+        NodeRef errandDoc = null;
+        if (nodeService.getType(reportNodeRef).equals(ErrandsService.TYPE_ERRANDS)) {
+            errandDoc = reportNodeRef;
+        } else {
+            errandDoc = documentTableService.getDocumentByTableDataRow(reportNodeRef);
+        }
         //проверяем использование вложения в других отчетах
-        NodeRef tableData = nodeService.getParentAssocs(reportNodeRef).get(0).getParentRef();
+        NodeRef coexecutorsTableData = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_TS_COEXECUTOR_REPORTS).get(0).getTargetRef();
+        NodeRef executionTableData = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_TS_EXECUTION_REPORTS).get(0).getTargetRef();
+        Boolean attachmentIsUsed = isAttachmentUsedInTable(coexecutorsTableData, ErrandsService.ASSOC_ERRANDS_TS_COEXECUTOR_ATTACHMENT, reportNodeRef, attachment) ||
+                isAttachmentUsedInTable(executionTableData, ErrandsService.ASSOC_ERRANDS_TS_EXECUTOR_ATTACHMENT, reportNodeRef, attachment);
+
+        if (!attachmentIsUsed) {
+            documentAttachmentsService.deleteAttachment(attachment);
+        }
+    }
+
+    private boolean isAttachmentUsedInTable(NodeRef tableData, QName associationQname, NodeRef reportNodeRef, NodeRef attachment) {
         List<NodeRef> allReports = documentTableService.getTableDataRows(tableData);
         boolean attachmentIsUsed = false;
         for (NodeRef report : allReports) {
@@ -137,8 +157,6 @@ public class ErrandsReportAttachmentAssociationPolicy implements NodeServicePoli
                 break;
             }
         }
-        if (!attachmentIsUsed) {
-            documentAttachmentsService.deleteAttachment(attachment);
-        }
+        return attachmentIsUsed;
     }
 }

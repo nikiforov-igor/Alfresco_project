@@ -9,7 +9,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
  * @author vmalygin
  */
 public interface LecmMessageService {
-	NodeRef getDocumentMessageFolder();
 	List<Locale> getMlLocales();
 	List<Locale> getFallbackLocales();
 	boolean isMlSupported();

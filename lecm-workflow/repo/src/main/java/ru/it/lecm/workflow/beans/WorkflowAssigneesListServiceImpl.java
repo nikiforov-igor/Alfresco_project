@@ -10,13 +10,13 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
-import org.alfresco.util.FileNameValidator;
 import org.apache.commons.lang.time.DateUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.FileNameValidator;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
@@ -29,6 +29,9 @@ import ru.it.lecm.workflow.api.WorkflowFoldersService;
 
 import java.io.Serializable;
 import java.util.*;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 /**
  *
@@ -425,7 +428,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	@Override
 	public NodeRef getServiceRootFolder() {
-		return getAssigneesListsFolder();
+		return null;
 	}
 
 	private NodeRef createEmptyAssigneesList(final NodeRef parentRef, final NodeRef employeeRef, final String name, final boolean isAnonymous) {
@@ -612,4 +615,5 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		Integer daysToComplete = (Integer) nodeService.getProperty(assigneesListRef, LecmWorkflowModel.PROP_ASSIGNEE_DAYS_TO_COMPLETE);
 		return (daysToComplete != null) ? daysToComplete : 0;
 	}
+	
 }

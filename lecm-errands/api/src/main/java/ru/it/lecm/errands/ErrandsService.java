@@ -109,7 +109,12 @@ public interface ErrandsService {
     QName ASSOC_ERRANDS_CO_EXECUTORS = QName.createQName(ERRANDS_NAMESPACE_URI, "coexecutors-assoc");
     QName ASSOC_ERRANDS_LINKS = QName.createQName(ERRANDS_NAMESPACE_URI, "links-assoc");
     QName ASSOC_ERRANDS_EXECUTION_LINKS = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-links-assoc");
+    QName ASSOC_ERRANDS_CANCELLATION_SIGNAL_SENDER = QName.createQName(ERRANDS_NAMESPACE_URI, "cancellation-signal-sender-assoc");
+    QName ASSOC_ERRANDS_EXECUTION_CONNECTED_DOCS = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-connected-document-assoc");
+    QName ASSOC_ERRANDS_EXECUTION_ATTACHMENT = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-report-attachment-assoc");
 
+    QName ASSOC_ERRANDS_TS_COEXECUTOR_REPORTS = QName.createQName(ERRANDS_TS_NAMESPACE_URI, "coexecutor-reports-assoc");
+    QName ASSOC_ERRANDS_TS_EXECUTION_REPORTS = QName.createQName(ERRANDS_TS_NAMESPACE_URI, "execution-reports-assoc");
     String BUSINESS_ROLE_ERRANDS_INITIATOR_ID = "ERRANDS_INITIATOR";
     String BUSINESS_ROLE_CHOOSING_INITIATOR = "CHOOSING_INITIATOR";
 
@@ -132,8 +137,9 @@ public interface ErrandsService {
      * @return
      */
     NodeRef getDashletSettingsNode();
+    NodeRef createDashletSettingsNode();
 
-    NodeRef createSettingsNode() throws WriteTransactionNeededException;
+    NodeRef createSettingsNode();
 
     boolean isHideAdditionAttributes();
 
@@ -339,7 +345,7 @@ public interface ErrandsService {
      * @param errand документ
      * @param reason причина сигнала
      */
-    void sendCancelSignal(NodeRef errand, String reason);
+    void sendCancelSignal(NodeRef errand, String reason, NodeRef signalSender);
 
     enum ModeChoosingExecutors {
         ORGANIZATION,

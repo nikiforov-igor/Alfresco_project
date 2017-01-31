@@ -49,7 +49,7 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
         // сохранение ...
         com.sun.star.frame.XStorable resultStorable = null;
         if (xCompDoc != null) {
-            resultStorable = UnoRuntime.queryInterface(com.sun.star.frame.XStorable.class, xCompDoc);
+            resultStorable = (com.sun.star.frame.XStorable)UnoRuntime.queryInterface(com.sun.star.frame.XStorable.class, xCompDoc);
 
             final PropertyValue[] storeProps = new PropertyValue[2];
             storeProps[0] = newPropertyValue("Overwrite", Boolean.TRUE);
@@ -97,11 +97,11 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
             /* (2) обновление существующих свойств ... */
             stage = String.format("Get openOffice calc properties of document '%s'", srcOODocUrl);
 
-            final XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xCompDoc);
+            final XDocumentPropertiesSupplier xDocPropsSuppl = (XDocumentPropertiesSupplier)UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xCompDoc);
             final XDocumentProperties xDocProps = xDocPropsSuppl.getDocumentProperties();
             final XPropertyContainer userProperties = xDocProps.getUserDefinedProperties();
 
-            final XPropertySet docProperties = UnoRuntime.queryInterface(XPropertySet.class, userProperties);
+            final XPropertySet docProperties = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, userProperties);
 
             if (author != null) {
                 stage = String.format("Set openOffice property Author='%s'\n\t of document '%s'", author, srcOODocUrl);
@@ -227,14 +227,14 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
     public void assignTableProperty(final XComponent xDoc, final XPropertySet docProps, final String propName, final List<Map> listObjects, final Map<String, Object> settingProps) {
         try {
             XSpreadsheet xSpreadsheet = OpenOfficeCalcTemplateGenerator.SpreadsheetManager.getSpreadsheet(xDoc, 0);
-            XCellRangeMovement xMovement = UnoRuntime.queryInterface(XCellRangeMovement.class, xSpreadsheet);
+            XCellRangeMovement xMovement = (XCellRangeMovement)UnoRuntime.queryInterface(XCellRangeMovement.class, xSpreadsheet);
 
             XCellRange namedRowCellRange = xSpreadsheet.getCellRangeByName(propName);
-            XCellRangeAddressable namedRowCellRangeAddressable = UnoRuntime.queryInterface(XCellRangeAddressable.class, namedRowCellRange);
+            XCellRangeAddressable namedRowCellRangeAddressable = (XCellRangeAddressable)UnoRuntime.queryInterface(XCellRangeAddressable.class, namedRowCellRange);
 
-            XPropertySet xDocProp = UnoRuntime.queryInterface(XPropertySet.class, xDoc);
+            XPropertySet xDocProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, xDoc);
             Object aRangesObj = xDocProp.getPropertyValue("NamedRanges");
-            XNamedRanges xNamedRanges = UnoRuntime.queryInterface(XNamedRanges.class, aRangesObj);
+            XNamedRanges xNamedRanges = (XNamedRanges)UnoRuntime.queryInterface(XNamedRanges.class, aRangesObj);
 
             CellRangeAddress namedRowCellRangeAddress = namedRowCellRangeAddressable.getRangeAddress();
 
@@ -270,7 +270,7 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
                         if (shiftedDown){
                             if (rowIndex > 0) {
                                 XCellRange rowCellRange = xSpreadsheet.getCellRangeByPosition(startCol, startRow + rowIndex, endCol, startRow + rowIndex);
-                                XCellRangeAddressable rowRangeAddr = UnoRuntime.queryInterface(XCellRangeAddressable.class, rowCellRange);
+                                XCellRangeAddressable rowRangeAddr = (XCellRangeAddressable)UnoRuntime.queryInterface(XCellRangeAddressable.class, rowCellRange);
                                 xMovement.insertCells(rowRangeAddr.getRangeAddress(), CellInsertMode.DOWN);
                             }
                         }
@@ -304,7 +304,7 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
                                 if (xNamedRanges.hasByName(subRangeCode)) {
                                     //увеличим range столбца
                                     XCellRange colCellRange = xSpreadsheet.getCellRangeByPosition(startCol + j, startRow, startCol + j, startRow + rowIndex);
-                                    XPropertySet colCellRangeProperties = UnoRuntime.queryInterface(XPropertySet.class, colCellRange);
+                                    XPropertySet colCellRangeProperties = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, colCellRange);
                                     CellAddress startColRangePos = new CellAddress();
                                     startColRangePos.Sheet = 0;
                                     startColRangePos.Column = j;
@@ -340,11 +340,11 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
     protected static class SpreadsheetManager {
         protected static XSpreadsheet getSpreadsheet(XComponent xDoc, Integer ind) {
             try {
-                XSpreadsheetDocument xSpreadsheetDocument = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xDoc);
+                XSpreadsheetDocument xSpreadsheetDocument = (XSpreadsheetDocument)UnoRuntime.queryInterface(XSpreadsheetDocument.class, xDoc);
                 XSpreadsheets xSpreadsheets = xSpreadsheetDocument.getSheets();
                 List<String> sheetNames = Arrays.asList(xSpreadsheets.getElementNames());
                 Object sheet = xSpreadsheets.getByName(sheetNames.get(ind));
-                return UnoRuntime.queryInterface(XSpreadsheet.class, sheet);
+                return (XSpreadsheet)UnoRuntime.queryInterface(XSpreadsheet.class, sheet);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             }

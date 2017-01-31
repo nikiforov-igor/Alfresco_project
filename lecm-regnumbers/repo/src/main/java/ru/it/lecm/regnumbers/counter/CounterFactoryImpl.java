@@ -12,6 +12,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.regnumbers.RegNumbersService;
 
@@ -169,11 +170,11 @@ public class CounterFactoryImpl extends BaseBean implements CounterFactory {
 	 * Создать (если его еще нет) глобальный сквозной счетчик. Запомнить NodeRef
 	 */
 	private NodeRef initPlainCounter() {
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-		return transactionHelper.doInTransaction(new RetryingTransactionCallback<NodeRef>() {
-
-			@Override
-			public NodeRef execute() throws Throwable {
+//		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//		return transactionHelper.doInTransaction(new RetryingTransactionCallback<NodeRef>() {
+//
+//			@Override
+//			public NodeRef execute() throws Throwable {
 				NodeRef counter = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, CounterType.PLAIN.objectName());
 				if (counter == null) {
 					counter = createNewCounter(CounterType.PLAIN, null, null);
@@ -185,19 +186,19 @@ public class CounterFactoryImpl extends BaseBean implements CounterFactory {
 					}
 				}
 				return counter;
-			}
-		}, false, true);
+//			}
+//		}, false, true);
 	}
 
 	/**
 	 * Создать (если его еще нет) глобальный годовой счетчик. Запомнить NodeRef
 	 */
 	private NodeRef initYearCounter() {
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-		return transactionHelper.doInTransaction(new RetryingTransactionCallback<NodeRef>() {
-
-			@Override
-			public NodeRef execute() throws Throwable {
+//		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//		return transactionHelper.doInTransaction(new RetryingTransactionCallback<NodeRef>() {
+//
+//			@Override
+//			public NodeRef execute() throws Throwable {
 				NodeRef counter = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, CounterType.YEAR.objectName());
 				if (counter == null) {
 					counter = createNewCounter(CounterType.YEAR, null, null);
@@ -209,19 +210,19 @@ public class CounterFactoryImpl extends BaseBean implements CounterFactory {
 					}
 				}
 				return counter;
-			}
-		}, false, true);
+//			}
+//		}, false, true);
 	}
 
 	/**
 	 * Создать (если его еще нет) счетчик для документооборота. Запомнить NodeRef
 	 */
 	private NodeRef initSignedDocflowCounter() {
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-		return transactionHelper.doInTransaction(new RetryingTransactionCallback<NodeRef>() {
-
-			@Override
-			public NodeRef execute() throws Throwable {
+//		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//		return transactionHelper.doInTransaction(new RetryingTransactionCallback<NodeRef>() {
+//
+//			@Override
+//			public NodeRef execute() throws Throwable {
 				NodeRef counter = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, CounterType.SIGNED_DOCFLOW.objectName());
 				if (counter == null) {
 					counter = createNewCounter(CounterType.SIGNED_DOCFLOW, null, null);
@@ -233,16 +234,16 @@ public class CounterFactoryImpl extends BaseBean implements CounterFactory {
 					}
 				}
 				return counter;
-			}
-		}, false, true);
+//			}
+//		}, false, true);
 	}
 
 	private NodeRef getDocTypePlainCounter(final String docType, final String tag) {
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-		return transactionHelper.doInTransaction(new RetryingTransactionCallback<NodeRef>() {
-
-			@Override
-			public NodeRef execute() throws Throwable {
+//		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//		return transactionHelper.doInTransaction(new RetryingTransactionCallback<NodeRef>() {
+//
+//			@Override
+//			public NodeRef execute() throws Throwable {
 				String childName;
 				if (tag == null) {
 					childName = String.format(CounterType.DOCTYPE_PLAIN.objectName(), docType.replace(':', COLON_REPLACER));
@@ -255,16 +256,16 @@ public class CounterFactoryImpl extends BaseBean implements CounterFactory {
 					logger.info(String.format("Plain counter node '%s' for doctype '%s' with tag '%s' created", counterNodeRef, docType, tag));
 				}
 				return counterNodeRef;
-			}
-		}, false, true);
+//			}
+//		}, false, true);
 	}
 
 	private NodeRef getDocTypeYearCounter(final String docType, final String tag) {
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-		return transactionHelper.doInTransaction(new RetryingTransactionCallback<NodeRef>() {
-
-			@Override
-			public NodeRef execute() throws Throwable {
+//		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//		return transactionHelper.doInTransaction(new RetryingTransactionCallback<NodeRef>() {
+//
+//			@Override
+//			public NodeRef execute() throws Throwable {
 				String childName;
 				if (tag == null) {
 					childName = String.format(CounterType.DOCTYPE_YEAR.objectName(), docType.replace(':', COLON_REPLACER));
@@ -277,8 +278,8 @@ public class CounterFactoryImpl extends BaseBean implements CounterFactory {
 					logger.info(String.format("Year counter node '%s' for doctype '%s' with tag '%s' created", counterNodeRef, docType, tag));
 				}
 				return counterNodeRef;
-			}
-		}, false, true);
+//			}
+//		}, false, true);
 	}
 
 	/**

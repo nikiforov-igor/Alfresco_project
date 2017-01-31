@@ -10,13 +10,13 @@ import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.cmr.version.VersionType;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.PropertyCheck;
 import org.alfresco.util.PropertyMap;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.FileNameValidator;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -37,13 +37,14 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import ru.it.lecm.base.beans.BaseBean;
 
 /**
  * Биновый интерфейс для работы с шаблонами зарегистрированных отчётов.
  *
  * @author rabdullin
  */
-public class ReportsManager{
+public class ReportsManager extends BaseBean {
 
     public static final String EXTENSION_PATTERN = "^.+(\\.[A-z]+$)";
 
@@ -109,7 +110,7 @@ public class ReportsManager{
     }
 
     public void setContentRepositoryDAO(ReportContentDAO value) {
-        logger.debug(String.format("contentRepositoryDAO assigned: %s", value));
+//        logger.debug(String.format("contentRepositoryDAO assigned: %s", value));
         this.contentRepositoryDAO = value;
     }
 
@@ -170,15 +171,6 @@ public class ReportsManager{
     @SuppressWarnings("unused")
     public void setReportGenerators(Map<String, ReportGenerator> map) {
         this.reportGenerators = map;
-    }
-
-    public void init() {
-        scanResources();
-        // добавим обработку подотчетов из репозитория!
-        // нам нужно скопировать их в файловую систему, если их там нет
-        for (String reportCode : getDescriptors().getKeys()) {
-            copySubreportsTemplatesInternal(getDescriptors().get(reportCode));
-        }
     }
 
     private void copySubreportsTemplatesInternal(ReportDescriptor availableDescriptor) {
@@ -360,7 +352,7 @@ public class ReportsManager{
             return true;
         }
         for (String reportRole : reportRoles) {
-            if (auth.contains("GROUP__LECM$BR%" + reportRole)) {
+            if (auth.contains("GROUP__LECM$BR!" + reportRole)) {
                 return true;
             }
         }
@@ -1442,4 +1434,21 @@ public class ReportsManager{
 
         return matcher.find();
     }
+	
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
+	}
+
+	@Override
+	protected void initServiceImpl() {
+        scanResources();
+        // добавим обработку подотчетов из репозитория!
+        // нам нужно скопировать их в файловую систему, если их там нет
+        for (String reportCode : getDescriptors().getKeys()) {
+            copySubreportsTemplatesInternal(getDescriptors().get(reportCode));
+        }
+	}
+	
+	
 }

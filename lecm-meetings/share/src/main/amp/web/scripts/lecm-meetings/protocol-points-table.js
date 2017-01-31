@@ -228,7 +228,8 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                 itemId: item.nodeRef,
                 mode: "edit",
                 submitType: "json",
-                showCancelButton: true
+                showCancelButton: true,
+				showCaption: false
             };
             if (this.options.reportersFilterEnabled) {
                 templateRequestParams.args = JSON.stringify({
@@ -311,7 +312,8 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                 mode: "create",
                 formId: meta.createFormId != null ? meta.createFormId : "",
                 submitType: "json",
-                showCancelButton: true
+                showCancelButton: true,
+				showCaption: false
             };
             if (this.options.reportersFilterEnabled) {
                 templateRequestParams.args = JSON.stringify({

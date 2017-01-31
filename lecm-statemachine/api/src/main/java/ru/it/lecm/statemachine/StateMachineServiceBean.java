@@ -45,6 +45,8 @@ public interface StateMachineServiceBean {
 	 * @return
 	 */
 	boolean isStarter(String type);
+	
+	boolean isStarter(QName type);
 
 	/*
      * Используется в
@@ -67,6 +69,8 @@ public interface StateMachineServiceBean {
 	 * @return true - если нельзя создавать из АРМ-а
 	 */
 	boolean isNotArmCreate(String type);
+	
+	boolean isNotArmCreate(QName type);
 
 	/**
 	 * Возвращает список возможных статусов для определенного типа документа
@@ -75,6 +79,8 @@ public interface StateMachineServiceBean {
 	 * @return
 	 */
 	List<String> getStatuses(String documentType, boolean includeActive, boolean includeFinal);
+	
+	List<String> getStatuses(QName documentType, boolean includeActive, boolean includeFinal);
 
 	/**
 	 * Получение всех динамических ролей по документу
@@ -120,6 +126,8 @@ public interface StateMachineServiceBean {
 	 * @return
 	 */
 	Set<String> getStarterRoles(String documentType);
+
+	Set<String> getStarterRoles(QName documentType);
 
 	void checkReadOnlyCategory(NodeRef document, String category);
 
@@ -221,6 +229,18 @@ public interface StateMachineServiceBean {
      */
 	Set<String> getArchiveFolders(String documentType);
 
+	Set<String> getArchiveFolders(QName documentType);
+	
+	/**
+	 * TODO: Сейчас это костыль, чтобы обойти проблемы с макросами
+	 * Нужно понять нужен ли будет этот метод в будущем и стоит ли чинить getArchiveFolders
+	 * @param documentType
+	 * @return 
+	 */
+	String getArchiveFolder(String documentType);
+	
+	String getArchiveFolder(QName documentType);
+
 	void resetStateMachene();
 
 	/**
@@ -240,5 +260,34 @@ public interface StateMachineServiceBean {
 	 */
 	void disconnectFromStatemachine(final NodeRef documentRef, final String processInstanceID);
 
-
+	/**
+	 * Получить БР с уровнями привелегий по умолчанию 
+	 * @param type
+	 * @return 
+	 */
+	Map<String, String> getPermissions(String type);
+	
+	Map<String, String> getPermissions(QName type);
+	
+	/**
+	 * Проверка имеет ли документ флаг simpleDocument
+	 * @param type
+	 * @return 
+	 */
+	boolean isSimpleDocument(String type);
+	
+	boolean isSimpleDocument(QName type);
+	
+	/**
+	 * Проверка на наличие корневой папки для типа документа
+	 * Создаёт папку, если её нет и нарезает права в соответствии с указанными
+	 * в МС
+	 * 
+	 * @param type - текстовое представление типа документа
+	 * @param forceRebuildACL - если true, то права будут перенарезаны 
+	 *							даже при наличии папки 
+	 */
+	void checkArchiveFolder(String type, boolean forceRebuildACL);
+	
+	void checkArchiveFolder(QName type, boolean forceRebuildACL);
 }

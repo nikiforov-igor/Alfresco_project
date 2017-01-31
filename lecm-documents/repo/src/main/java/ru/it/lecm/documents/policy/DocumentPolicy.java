@@ -6,13 +6,19 @@ import org.alfresco.model.ForumModel;
 import org.alfresco.model.RenditionModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.content.MimetypeMap;
+import org.alfresco.repo.dictionary.M2Label;
+import org.alfresco.repo.i18n.MessageService;
+import org.alfresco.repo.i18n.StaticMessageLookup;
+import org.alfresco.repo.node.MLPropertyInterceptor;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.service.cmr.dictionary.*;
+import org.alfresco.service.cmr.i18n.MessageLookup;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.cmr.security.AuthenticationService;
@@ -21,15 +27,12 @@ import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.base.beans.LecmMessageService;
-import ru.it.lecm.base.beans.SubstitudeBean;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.base.beans.*;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.documents.beans.*;
@@ -46,13 +49,6 @@ import ru.it.lecm.statemachine.StatemachineModel;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
-import org.alfresco.repo.dictionary.M2Label;
-import org.alfresco.repo.i18n.MessageService;
-import org.alfresco.repo.i18n.StaticMessageLookup;
-import org.alfresco.repo.node.MLPropertyInterceptor;
-import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
-import org.alfresco.service.cmr.i18n.MessageLookup;
-import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * User: dbashmakov
@@ -169,7 +165,6 @@ public class DocumentPolicy extends BaseBean
         PropertyCheck.mandatory(this, "authenticationService", authenticationService);
         PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
 
-
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
@@ -180,6 +175,7 @@ public class DocumentPolicy extends BaseBean
      * Метод переназначает документ новому сотруднику и выделяем ему соответствующие права
      */
     public void documentTransmit(NodeRef documentRef, Map<QName, Serializable> before, Map<QName, Serializable> after, QName authorPropertyQName) throws WriteTransactionNeededException {
+    	logger.debug("ДОКУМЕНТ. documentTransmit");
         NodeRef beforeAuthor = new NodeRef(before.get(authorPropertyQName).toString());
         NodeRef afterAuthor = new NodeRef(after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF).toString());
         Set<AccessPermission> permissionsDoc = permissionService.getAllSetPermissions(documentRef);
@@ -255,6 +251,7 @@ public class DocumentPolicy extends BaseBean
     }
 
     private QName getAuthorProperty(NodeRef nodeRef) {
+    	logger.debug("ДОКУМЕНТ. getAuthorProperty");
         QName type = nodeService.getType(nodeRef);
         ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(type.getNamespaceURI(), DocumentService.CONSTRAINT_AUTHOR_PROPERTY));
         return (constraint == null) ? null : QName.createQName(((AuthorPropertyConstraint)constraint.getConstraint()).getAuthorProperty(), namespaceService);
@@ -263,6 +260,7 @@ public class DocumentPolicy extends BaseBean
     //TODO сложная длинная логика. Нужно разобраться, попытаться упростить.
     @Override
     public void onUpdateProperties(final NodeRef nodeRef, final Map<QName, Serializable> before, Map<QName, Serializable> after) {
+    	logger.debug("ДОКУМЕНТ. onUpdateProperties");
         //изменилась одна из дат регистрации (проекта или документа)
         if (isChangeProperty(before, after, DocumentService.PROP_REG_DATA_DOC_DATE)
                 || isChangeProperty(before, after, DocumentService.PROP_REG_DATA_PROJECT_DATE)) {
@@ -413,6 +411,7 @@ public class DocumentPolicy extends BaseBean
 
     //TODO сложная длинная логика. Нужно разобраться, попытаться упростить.
     private void updatePresentString(final NodeRef nodeRef) {
+    	logger.debug("ДОКУМЕНТ. updatePresentString");
         String presentString = "{cm:name}";
 
         QName type = nodeService.getType(nodeRef);
@@ -465,6 +464,7 @@ public class DocumentPolicy extends BaseBean
     }
 
 	private void updateMLPresentString(final TypeDefinition typeDef, final NodeRef nodeRef, final String presentStringValue) {
+		logger.debug("ДОКУМЕНТ. updateMLPresentString");
 		if (lecmMessageService.isMlSupported()) {
 			String typename = typeDef.getName().toPrefixString(namespaceService).replace(':', '_');
 			String propname = DocumentService.PROP_ML_PRESENT_STRING.toPrefixString(namespaceService).replace(':', '_');
@@ -505,6 +505,7 @@ public class DocumentPolicy extends BaseBean
 	}
 
     private boolean changeIgnoredProperties(Map<QName, Serializable> before, Map<QName, Serializable> after) {
+    	logger.debug("ДОКУМЕНТ. changeIgnoredProperties");
         for (QName ignored : IGNORED_PROPERTIES) {
             if (isChangeProperty(before, after, ignored)) return true;
         }
@@ -512,6 +513,7 @@ public class DocumentPolicy extends BaseBean
     }
 
     private boolean isChangeProperty(Map<QName, Serializable> before, Map<QName, Serializable> after, QName prop) {
+    	logger.debug("ДОКУМЕНТ. isChangeProperty");
         Object prev = before.get(prop);
         Object cur = after.get(prop);
         return cur != null && !cur.equals(prev);
@@ -520,6 +522,7 @@ public class DocumentPolicy extends BaseBean
     @Override
     //TODO сложная длинная логика. Нужно разобраться, попытаться упростить.
     public void onCreateNode(ChildAssociationRef childAssocRef) {
+    	logger.debug("ДОКУМЕНТ. onCreateNode");
 	    NodeRef document = childAssocRef.getChildRef();
 
         final QName type = nodeService.getType(document);
@@ -588,10 +591,11 @@ public class DocumentPolicy extends BaseBean
 	}
 
 	public NodeRef getDocumentSearchObject(final NodeRef documentRef) {
+		logger.debug("ДОКУМЕНТ. getDocumentSearchObject");
 		NodeRef result = null;
 		Object extPresentString = nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING);
 		if (extPresentString != null) {
-			final String fileName = FileNameValidator.getValidFileName((String) extPresentString).trim();
+			final String fileName = FileNameValidator.getValidFileName((String) extPresentString);
 			result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
 			if (result == null) {
 				AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
@@ -647,11 +651,12 @@ public class DocumentPolicy extends BaseBean
 	}
 
     public void updateDocumentSearchObject(final NodeRef documentRef, final NodeRef objectRef) {
+    	logger.debug("ДОКУМЕНТ. updateDocumentSearchObject");
         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
             @Override
             public Object doWork() throws Exception {
                 if (objectRef != null) {
-                    String newFileName = FileNameValidator.getValidFileName((String) nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING)).trim();
+                    String newFileName = FileNameValidator.getValidFileName((String) nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING));
                     nodeService.setProperty(objectRef, ContentModel.PROP_NAME, newFileName);
 
                     ContentService contentService = serviceRegistry.getContentService();
@@ -678,6 +683,7 @@ public class DocumentPolicy extends BaseBean
     }
 
 	public Map<String, Serializable> getDocumentSearchProperties(NodeRef documentRef) {
+		logger.debug("ДОКУМЕНТ. getDocumentSearchProperties");
 		Map<String, Serializable> result = new HashMap<String, Serializable>();
 
 		Map<QName, Serializable> doumentProperties = nodeService.getProperties(documentRef);
@@ -711,6 +717,7 @@ public class DocumentPolicy extends BaseBean
 	}
 
 	public NodeRef createDocumentSearchObjectThumbnail(final NodeRef objectRef, final NodeRef documentRef) {
+		logger.debug("ДОКУМЕНТ. createDocumentSearchObjectThumbnail");
 			AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 				@Override
 				public NodeRef doWork() throws Exception {

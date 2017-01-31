@@ -13,6 +13,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -105,29 +106,25 @@ public class ContractsBeanImpl extends BaseBean {
     }
 
     public final void init() {
-        PropertyCheck.mandatory(this, "nodeService", nodeService);
-
-        final NodeRef serviceRoot = getFolder(CONTRACTS_ROOT_ID);
-        dashletSettings = nodeService.getChildByName(serviceRoot, ContentModel.ASSOC_CONTAINS, CONTRACTS_DASHLET_SETTINGS_ID);
-        if (dashletSettings == null) {
-            dashletSettings = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-                @Override
-                public NodeRef doWork() throws Exception {
-                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                        @Override
-                        public NodeRef execute() throws Throwable {
-                            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, CONTRACTS_DASHLET_SETTINGS_ID);
-                            Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-                            properties.put(ContentModel.PROP_NAME, CONTRACTS_DASHLET_SETTINGS_ID);
-                            ChildAssociationRef childAssoc = nodeService.createNode(serviceRoot, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_DASHLET_SETTINGS, properties);
-                            return childAssoc.getChildRef();
-                        }
-
-                    });
-                }
-            });
-        }
+		PropertyCheck.mandatory(this, "nodeService", nodeService);
     }
+    
+	@Override
+	public void initServiceImpl() {
+		final NodeRef serviceRoot = getFolder(CONTRACTS_ROOT_ID);
+		dashletSettings = nodeService.getChildByName(serviceRoot, ContentModel.ASSOC_CONTAINS, CONTRACTS_DASHLET_SETTINGS_ID);
+		if (dashletSettings == null) {
+			try {
+				QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, CONTRACTS_DASHLET_SETTINGS_ID);
+				Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+				properties.put(ContentModel.PROP_NAME, CONTRACTS_DASHLET_SETTINGS_ID);
+				ChildAssociationRef childAssoc = nodeService.createNode(serviceRoot, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_DASHLET_SETTINGS, properties);
+				dashletSettings = childAssoc.getChildRef();
+			} catch(Exception e) {
+				dashletSettings = nodeService.getChildByName(serviceRoot, ContentModel.ASSOC_CONTAINS, CONTRACTS_DASHLET_SETTINGS_ID);
+			}
+		}
+	}
 
     /**
      * Поиск договоров

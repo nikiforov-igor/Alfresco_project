@@ -609,8 +609,8 @@ if (document != null) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
-                                        <nodeRef>workspace://SpacesStore/23faf0c3-a0e5-42aa-aada-87c03aed7eff</nodeRef>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
+                                        <nodeRef>workspace://SpacesStore/a24d7013-7a93-4552-afdb-d014ea43d88c</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1877,8 +1877,8 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
-                                        <nodeRef>workspace://SpacesStore/7aead0ca-1461-43a0-b9fa-3de779b0eeea</nodeRef>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
+                                        <nodeRef>workspace://SpacesStore/d79f841e-8d24-44f5-a029-5ea8874ff6f6</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2387,8 +2387,8 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
-                                        <nodeRef>workspace://SpacesStore/6b26c500-495b-4547-912c-90b20bebde3e</nodeRef>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
+                                        <nodeRef>workspace://SpacesStore/700f2b94-ba5f-4c95-a339-2366b625521a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -3286,8 +3286,8 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
-                                        <nodeRef>workspace://SpacesStore/c6b463dd-a9f8-427a-8ea6-76c790c18409</nodeRef>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
+                                        <nodeRef>workspace://SpacesStore/eb2ade67-ee95-4f54-a836-7ac28cb54e8b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4283,8 +4283,8 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
-                                        <nodeRef>workspace://SpacesStore/a45f59bf-6715-4b0f-8b05-cb8198e21088</nodeRef>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
+                                        <nodeRef>workspace://SpacesStore/335d5314-5b68-4046-9b75-3599c540656a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5494,8 +5494,8 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
-                                        <nodeRef>workspace://SpacesStore/54a41460-6a74-4abe-acc8-a45c5181c2be</nodeRef>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
+                                        <nodeRef>workspace://SpacesStore/7ef25ec3-f2f0-4485-810a-3855ac7cb72a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -6321,8 +6321,8 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
-                                        <nodeRef>workspace://SpacesStore/f389b5a0-b227-4cbe-9ef5-f4ed1b84fa97</nodeRef>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
+                                        <nodeRef>workspace://SpacesStore/c00c55d2-14a8-4fbe-a6e1-fe9d043a8ec8</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -7186,8 +7186,8 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
-                                        <nodeRef>workspace://SpacesStore/a04c2302-c41a-4c45-a5c9-ecaf2582cee1</nodeRef>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
+                                        <nodeRef>workspace://SpacesStore/3754f384-cb6b-42e7-8ee1-a432aa7d2284</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -8159,8 +8159,8 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
-                                        <nodeRef>workspace://SpacesStore/eab3ac5b-9cc5-47ee-ac1c-3b4e62bc7a40</nodeRef>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
+                                        <nodeRef>workspace://SpacesStore/e2e6816f-62a8-460e-90e6-ec93e635210e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -9232,8 +9232,8 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
-                                        <nodeRef>workspace://SpacesStore/b3ec73ac-6a5a-4a77-aa7d-ee26584ed7cd</nodeRef>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
+                                        <nodeRef>workspace://SpacesStore/474e1844-2e17-4178-9382-9ff717c6bcab</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -9682,8 +9682,8 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_approval</name>
-                                        <nodeRef>workspace://SpacesStore/e2a09333-c45d-4fb2-b2ab-4ae0b10a58a8</nodeRef>
+                                        <name>lecmApproveAspects_approvalFolderRef</name>
+                                        <nodeRef>workspace://SpacesStore/a3f54bec-ef60-4298-b328-bb94999a8f70</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>

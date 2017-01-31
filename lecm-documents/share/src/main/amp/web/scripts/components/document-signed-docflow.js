@@ -124,7 +124,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 									formId: "auth-form",
 									mode: "create",
 									showCancelButton: "true",
-									submitType: "json"
+									submitType: "json",
+									showCaption: false
 								},
 								actionUrl: null,
 								destroyOnHide: true,
@@ -207,7 +208,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					submitType: "json",
 					showCancelButton: "true",
 					formId: "signs-info-all",
-					signedContentRef: this.options.nodeRef
+					signedContentRef: this.options.nodeRef,
+					showCaption: false
 				},
 				destroyOnHide: true,
 				doBeforeDialogShow:{

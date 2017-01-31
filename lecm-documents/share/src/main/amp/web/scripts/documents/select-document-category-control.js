@@ -34,15 +34,20 @@ LogicECM.module = LogicECM.module || {};
 		{
 			options: {
 				mandatory: false,
-				notSelectedOptionShow: false
+				notSelectedOptionShow: false,
+				selectedValue: null,
+				documentNodeRef: null
 			},
 
 			selectItem: null,
-			currentSelectedDocument: null,
 
 			onReady: function () {
 				this.selectItem = Dom.get(this.id);
 				Event.on(this.id, "change", this.onSelectChange, this, true);
+
+				if (this.options.documentNodeRef) {
+					this.loadCategories();
+				}
 			},
 
 			onSelectChange: function () {
@@ -53,16 +58,17 @@ LogicECM.module = LogicECM.module || {};
 
 			onChangeAttachToDocument: function (layer, args) {
 				this.clearSelect();
-				if (args[1] != null && args[1].selectedItems != null) {
+				if (args[1] && args[1].selectedItems) {
 					var keys = Object.keys(args[1].selectedItems);
 					if (keys.length == 1) {
-						this.loadCategories(keys[0]);
+						this.options.documentNodeRef = keys[0];
+						this.loadCategories();
 					}
 				}
 			},
 
 			populateSelect: function (items) {
-				if (items != null && items.length > 0) {
+				if (items && items.length) {
 					for (var i = 0; i < items.length; i++) {
 						var item = items[i];
 						var opt = document.createElement('option');
@@ -70,6 +76,9 @@ LogicECM.module = LogicECM.module || {};
 						opt.value = item.name;
 						if (item.isReadOnly) {
 							opt.disabled = "disabled";
+						}
+						if (item.nodeRef == this.options.selectedValue) {
+							opt.selected = true;
 						}
 						this.selectItem.appendChild(opt);
 					}
@@ -90,9 +99,9 @@ LogicECM.module = LogicECM.module || {};
 				}
 			},
 
-			loadCategories: function (documentNodeRef) {
-				if (documentNodeRef != null) {
-					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/attachments/api/categories?documentNodeRef=" + encodeURIComponent(documentNodeRef);
+			loadCategories: function () {
+				if (this.options.documentNodeRef) {
+					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/attachments/api/categories?documentNodeRef=" + encodeURIComponent(this.options.documentNodeRef);
 					var me = this;
 					var callback = {
 						success:function (oResponse) {

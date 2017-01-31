@@ -3,6 +3,6 @@
 	<description>Document Table Data</description>
 	<url>/lecm/document/tables/api/getData?nodeRef={nodeRef}</url>
 	<authentication>user</authentication>
-	<transaction>none</transaction>
+	<transaction allow="readonly">required</transaction>
 	<format default="json"/>
 </webscript>

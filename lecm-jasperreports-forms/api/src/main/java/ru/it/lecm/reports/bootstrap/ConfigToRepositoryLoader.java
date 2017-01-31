@@ -22,13 +22,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.extensions.surf.util.AbstractLifecycleBean;
 
 /**
  * User: dbashmakov
  * Date: 12.02.2015
  * Time: 16:17
  */
-public class ConfigToRepositoryLoader {
+public class ConfigToRepositoryLoader extends AbstractLifecycleBean {
     private final Logger logger = LoggerFactory.getLogger(ConfigToRepositoryLoader.class);
 
     private boolean loadConfigs = true;
@@ -84,7 +86,7 @@ public class ConfigToRepositoryLoader {
      * Размещение конфигов в репозиторий
      */
     public void init() {
-        loadConfigs();
+        //loadConfigs();
     }
 
     private void loadConfigs() {
@@ -104,7 +106,7 @@ public class ConfigToRepositoryLoader {
                         return null;
                     }
 
-                }, false, true);
+                }, false);
             }
         });
     }
@@ -185,4 +187,13 @@ public class ConfigToRepositoryLoader {
         logger.debug("Config from location '{}' successfully loaded", location);
         logger.debug("################################################################################");
     }
+
+	@Override
+	protected void onBootstrap(ApplicationEvent ae) {
+		loadConfigs();
+	}
+
+	@Override
+	protected void onShutdown(ApplicationEvent ae) {
+	}
 }

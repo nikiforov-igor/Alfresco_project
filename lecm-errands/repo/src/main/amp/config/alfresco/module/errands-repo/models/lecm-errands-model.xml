@@ -104,6 +104,16 @@
 				</list>
 			</parameter>
 		</constraint>
+		<constraint name="lecm-errands:execution-report-status-const" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>ACCEPT</value>
+					<value>DECLINE</value>
+					<value>ONCONTROL</value>
+					<value>PROJECT</value>
+				</list>
+			</parameter>
+		</constraint>
     </constraints>
 
     <types>
@@ -265,6 +275,22 @@
 				<property name="lecm-errands:execution-report">
 					<type>d:text</type>
 				</property>
+				<property name="lecm-errands:execution-report-attachment-assoc-ref">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-errands:execution-connected-document-assoc-ref">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-errands:execution-report-status">
+					<type>d:text</type>
+					<default>PROJECT</default>
+					<constraints>
+						<constraint ref="lecm-errands:execution-report-status-const"/>
+					</constraints>
+				</property>
+				<property name="lecm-errands:execution-report-decline-reason">
+					<type>d:text</type>
+				</property>
 				<!-- Дата исполнения -->
 				<property name="lecm-errands:execution-date">
 					<type>d:date</type>
@@ -334,7 +360,14 @@
 					<type>d:text</type>
 					<mandatory>false</mandatory>
 				</property>
-
+				<property name="lecm-errands:cancellation-signal-sender-assoc-ref">
+					<type>d:text</type>
+				</property>
+				<!-- Отменить подчиненные поручения/резолюции -->
+				<property name="lecm-errands:cancel-children">
+					<type>d:boolean</type>
+					<default>true</default>
+				</property>
 				<!-- Поиск/сортировка ассоциаций-->
 				<property name="lecm-errands:initiator-assoc-ref">
 					<type>d:text</type>
@@ -599,6 +632,28 @@
 						<class>lecm-document:base</class>
 						<mandatory>false</mandatory>
 						<many>true</many>
+					</target>
+				</association>
+				<association name="lecm-errands:execution-report-attachment-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:content</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<association name="lecm-errands:cancellation-signal-sender-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
 					</target>
 				</association>
 			</associations>

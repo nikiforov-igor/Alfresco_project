@@ -87,25 +87,25 @@ public class RecordsListener implements MessageListener {
 
 	@Override
 	public void onMessage(final Message message) {
-		final ObjectMapper mapper = new ObjectMapper().disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
-
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-		transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-
-			@Override
-			public Object execute() throws Throwable {
-				AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-
-					@Override
-					public Object doWork() throws Exception {
-						BusinessJournalRecord rec = (BusinessJournalRecord) ((ObjectMessage) message).getObject();
-						executeSubscription(rec);
-						return null;
-					}
-				});
-				return null;
-			}
-		}, false, true);
+//		final ObjectMapper mapper = new ObjectMapper().disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
+//
+//		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//		transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+//
+//			@Override
+//			public Object execute() throws Throwable {
+//				AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+//
+//					@Override
+//					public Object doWork() throws Exception {
+//						BusinessJournalRecord rec = (BusinessJournalRecord) ((ObjectMessage) message).getObject();
+//						executeSubscription(rec);
+//						return null;
+//					}
+//				});
+//				return null;
+//			}
+//		}, false, true);
 
 	}
 

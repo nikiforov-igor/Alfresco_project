@@ -111,4 +111,10 @@ public interface RepositoryStructureHelper {
     NodeRef getFolder( NodeRef parentRef, String folder);
 
     List<String> getDateFolderPath(Date date);
+	
+	/**
+	 * Возвращает текстовое представление пути Business Platform/LECM
+	 * @return 
+	 */
+	String getServicesHomePath();
 }

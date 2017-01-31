@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.LecmTransactionHelper;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.documents.constraints.ArmUrlConstraint;
 
@@ -216,7 +217,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
      * @param rootType тип документов
      */
     @SuppressWarnings("unused")
-    public ScriptNode getDraftRoot(String rootType) {
+    public ScriptNode getDraftRoot(String rootType) throws WriteTransactionNeededException {
         ParameterCheck.mandatory("rootType", rootType);
         final QName rootQNameType = QName.createQName(rootType, namespaceService);
         if (rootQNameType != null) {
@@ -225,15 +226,16 @@ public class DocumentWebScriptBean extends BaseWebScript {
             NodeRef ref = documentService.getDraftRootByType(rootQNameType);
 //			TODO: В случае, если папки черновиков ещё нет - создадим в транзакции.
             if (ref == null) {
-                RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-                ref = transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-
-                    @Override
-                    public NodeRef execute() throws Throwable {
-                        return documentService.createDraftRoot(rootQNameType);
-                    }
-
-                });
+//                RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//                ref = transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+//
+//                    @Override
+//                    public NodeRef execute() throws Throwable {
+//                        return 
+            	ref = documentService.createDraftRoot(rootQNameType);
+//                    }
+//
+//                },false,true);
             }
 
             return new ScriptNode(ref, serviceRegistry, getScope());
@@ -713,5 +715,9 @@ public class DocumentWebScriptBean extends BaseWebScript {
             }
         }
         return results;
+    }
+    
+    public String getDocumentTypeLabel(String docType) {
+    	return documentService.getDocumentTypeLabel(docType);
     }
 }

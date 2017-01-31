@@ -256,7 +256,8 @@ define(["dojo/_base/declare",
                     "&destination={destination}" +
                     "&mode={mode}" +
                     "&submitType={submitType}" +
-                    "&showCancelButton=true",
+                    "&showCancelButton=true" +
+					"&showCaption=false",
                 templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url, {
                     itemKind: "type",
                     itemId: itemType,
