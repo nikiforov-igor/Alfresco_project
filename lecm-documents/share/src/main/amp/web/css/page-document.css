@@ -346,7 +346,7 @@ div.metadata-form div.lecm-dashlet-actions + div {
 .lecm-dashlet-actions .add {
     display: inline-block;
     height: 18px;
-    background: url("/share/res/images/lecm-base/docs-common/alf_contract_add.png") 1px 1px no-repeat;
+    background: url("/share/res/images/lecm-base/docs-common/alf_document_add.png") 1px 1px no-repeat;
     padding: 2px 20px;
     margin-left: 40px;
 }
