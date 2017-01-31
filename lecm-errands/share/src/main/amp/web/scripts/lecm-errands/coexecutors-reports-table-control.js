@@ -190,8 +190,9 @@ LogicECM.errands = LogicECM.errands || {};
                         }
                     },
                     bubblingLabel: this.options.bubblingLabel,
-                    showActionColumn: true,
-                    showOtherActionColumn: true,
+                    showActionColumn: this.options.showActions,
+                    showExpandActionsColumn: this.options.showExpandActions,
+                    showOtherActionColumn: false,
                     showCheckboxColumn: true,
                     attributeForShow: this.options.attributeForShow,
                     pageSize: this.tableData.pageSize != null && this.tableData.pageSize > 0 ? this.tableData.pageSize : 10,
@@ -202,8 +203,7 @@ LogicECM.errands = LogicECM.errands || {};
                     createFormTitleMsg: this.options.createFormTitleMsg,
                     viewFormTitleMsg: this.options.viewFormTitleMsg,
                     expandable: this.options.expandable,
-                    expandDataSource: this.options.expandDataSource,
-                    excludeColumns: ["lecm-errands-ts:coexecutor-report-is-transferred"]
+                    expandDataSource: this.options.expandDataSource
                 }).setMessages(this.options.messages);
             }
 
@@ -298,8 +298,9 @@ LogicECM.errands = LogicECM.errands || {};
     YAHOO.lang.extend(LogicECM.errands.CoexecutorsReportsDatagrid, LogicECM.module.DocumentTableDataGrid);
 
     YAHOO.lang.augmentObject(LogicECM.errands.CoexecutorsReportsDatagrid.prototype, {
+        expandActionTypePrefix: "datagrid-expand-action-link",
 
-        addExpandedRow: function(record, text){
+        addExpandedRow: function (record, text) {
             var me = this;
             var colSpan = this.datagridColumns.length;
             if (this.options.showCheckboxColumn) {
@@ -308,171 +309,180 @@ LogicECM.errands = LogicECM.errands || {};
             if (this.options.expandable) {
                 colSpan++;
             }
-            if (this.options.showActionColumn) {
-                colSpan++;
-            }
-
             var newRow = Dom.get(this.getExpandedRecordId(record));
-
             var newColumn = document.createElement('td');
-            newColumn.colSpan = colSpan;
             newColumn.innerHTML = text;
             newRow.appendChild(newColumn);
 
             var actions = this.options.actions;
+            var expandActionType = this.expandActionTypePrefix + "-" + this.options.bubblingLabel;
             if (actions) {
                 var userAccess = record.getData("permissions").userAccess;
-                var acessibleActions = actions.filter(function(action){
+                var acessibleActions = actions.filter(function (action) {
                     return userAccess[action["permission"]] && action.evaluator.call(me, record.getData());
                 });
-                if (acessibleActions && acessibleActions.length){
+                if (acessibleActions && acessibleActions.length) {
                     var actionsColumn = document.createElement('td');
                     var actionsDiv = document.createElement('div');
-                    actionsDiv.id=this.id+"coexutor-report-actions-div";
-                    //var div = '<div class="coexutor-report-actions-div">{actions}</div>';
-                    var onSetupActions = function onSetupActions(actions, id, className) {
-
-                        if (actionsDiv.children.length == 0) {
-                            for (var i = 0; i < actions.length; i++) {
-                                var action = actions[i];
-
-                                var actionDiv = document.createElement("div");
-                                actionDiv.className = action.id;
-
-                                var actionA = document.createElement("a");
-                                actionA.rel = action.permission;
-                                actionA.className = className + action.type;
-                                actionA.title = action.label;
-
-                                var actionSpan = document.createElement("span");
-                                actionSpan.innerHTML = action.label;
-
-                                actionA.appendChild(actionSpan);
-                                actionDiv.appendChild(actionA);
-                                actionsDiv.appendChild(actionDiv);
-                            }
-                        }
-                    }
-                    if (this.options.actions != null) {
-                        onSetupActions(this.options.actions, actionsDiv.id,"datagrid-action-link ");
-                    }
-
-                    if (this.options.otherActions != null && this.options.otherActions.length > 0) {
-                        onSetupActions(this.options.otherActions, actionsDiv.id,"datagrid-other-action-link ");
-                    }
-                    actionsColumn.appendChild(actionsDiv);
-                    newRow.appendChild(actionsColumn);
-                   /* var actions = '';
-                    acessibleActions.forEach(function(action){
-                        actions += Substitute(me.getActionHtml(), {
+                    actionsDiv.id = this.id + "-coexutor-report-actions-div";
+                    actionsDiv.className = "coexutor-report-actions-div";
+                    var actionsHtml = '';
+                    acessibleActions.forEach(function (action) {
+                        actionsHtml += Substitute(me.getActionHtml(), {
                             label: action.label,
-                            className: action.id
+                            aClass: this.expandActionTypePrefix + " " + expandActionType,
+                            rel: action.permission,
+                            actionDivClass: action.id
                         });
                     });
-                    actionsColumn.innerHTML = Substitute(div, {
-                        actions:actions
-                    });
-                    newRow.appendChild(actionsColumn);*/
+                    actionsDiv.innerHTML = actionsHtml;
+                    actionsColumn.appendChild(actionsDiv);
+                    newRow.appendChild(actionsColumn);
+                } else if (this.options.showActionColumn || this.options.showExpandActionsColumn) {
+                    colSpan++;
                 }
             }
-
-            newRow.style.display="";
+            newColumn.colSpan = colSpan;
+            newRow.style.display = "";
         },
-        onReady: function DataGrid_onReady()
-        {
-            var me = this;
 
-            if (this.options.actions.length > this.showActionsCount) {
-                this.showActionsCount = this.options.splitActionsAt;
+        customTableSetup: function () {
+            if (this.options.showExpandActionsColumn) {
+                this.setupExpandActionEvents(this.expandActionTypePrefix);
             }
-            this.splitActionsAtStore = this.options.splitActionsAt;
+        },
 
-            if (this.options.showActionColumn){
-                // Hook action events
-                var fnActionHandler = function DataGrid_fnActionHandler(layer, args)
-                {
-                    var owner = Bubbling.getOwnerByTagName(args[1].anchor, "div");
-                    if (owner !== null)
-                    {
-                        if (typeof me[owner.className] == "function")
-                        {
-                            args[1].stop = true;
-                            var row = me.widgets.dataTable.getRecord(args[1].target.offsetParent);
-                            if (row) {
-                                var asset = row.getData();
-
-                                var confirmFunction = null;
-                                if (me.options.actions != null) {
-                                    for (var i = 0; i < me.options.actions.length; i++) {
-                                        if (me.options.actions[i].id == owner.className && me.options.actions[i].confirmFunction != null) {
-                                            confirmFunction = me.options.actions[i].confirmFunction;
-                                        }
-                                    }
-                                }
-
-                                me[owner.className].call(me, asset, owner, me.datagridMeta.actionsConfig, confirmFunction);
-                            }
-                        }
-                    }
-                    return true;
-                };
-                Bubbling.addDefaultAction("datagrid-action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler, me.options.forceSubscribing);
-                Bubbling.addDefaultAction("show-more"  + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler, me.options.forceSubscribing);
-            }
-
-            if (!this.options.overrideSortingWith && me.options.otherActions != null && me.options.otherActions.length > 0){
-                // Hook action events
-                var fnOtherActionHandler = function DataGrid_fnActionHandler(layer, args)
-                {
-                    var owner = Bubbling.getOwnerByTagName(args[1].anchor, "div");
-                    if (owner !== null)
-                    {
-                        if (typeof me[owner.className] == "function")
-                        {
-                            args[1].stop = true;
-                            var row = me.widgets.dataTable.getRecord(args[1].target.offsetParent.parentElement.previousElementSibling);
-                            if (row) {
-                                var asset = row.getData();
-
-                                var confirmFunction = null;
-                                if (me.options.otherActions != null) {
-                                    for (var i = 0; i < me.options.otherActions.length; i++) {
-                                        if (me.options.otherActions[i].id == owner.className && me.options.otherActions[i].confirmFunction != null) {
-                                            confirmFunction = me.options.otherActions[i].confirmFunction;
-                                        }
-                                    }
-                                }
-
-                                me[owner.className].call(me, asset, owner, me.datagridMeta.actionsConfig, confirmFunction);
-                            }
-                        }
-                    }
-                    return true;
-                };
-                Bubbling.addDefaultAction("datagrid-other-action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnOtherActionHandler, me.options.forceSubscribing);
-                Bubbling.addDefaultAction("show-more", fnOtherActionHandler, me.options.forceSubscribing);
-            }
-
-            // Actions module
-            this.modules.actions = new LogicECM.module.Base.Actions();
-
-            // Reference to Data Grid component (required by actions module)
-            this.modules.dataGrid = this;
-
-            this.deferredListPopulation.fulfil("onReady");
-
-            // Finally show the component body here to prevent UI artifacts on YUI button decoration
-            Dom.setStyle(this.id + "-body", "visibility", "visible");
-
-            Bubbling.fire("initDatagrid",
-                {
-                    datagrid:this
+        getDataTableColumnDefinitions: function DataGrid_getDataTableColumnDefinitions() {
+            // YUI DataTable column definitions
+            var columnDefinitions = [];
+            if (this.options.expandable) {
+                columnDefinitions.push({
+                    key: "expand",
+                    label: "",
+                    sortable: false,
+                    formatter: this.fnRenderCellExpand(),
+                    width: 16
                 });
+            }
+            if (this.options.showCheckboxColumn) {
+                columnDefinitions.push({
+                    key: "nodeRef",
+                    label: "<input type='checkbox' id='" + this.id + "-select-all-records'>",
+                    sortable: false,
+                    formatter: this.fnRenderCellSelected(),
+                    width: 16
+                });
+            }
+
+            var inArray = function (value, array) {
+                for (var i = 0; i < array.length; i++) {
+                    if (array[i] == value) return true;
+                }
+                return false;
+            };
+
+            var column, sortable;
+            for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
+                column = this.datagridColumns[i];
+
+                if (this.options.overrideSortingWith === null) {
+                    sortable = column.sortable;
+                } else {
+                    sortable = this.options.overrideSortingWith;
+                }
+
+                if (!(this.options.excludeColumns.length > 0 && inArray(column.name, this.options.excludeColumns))) {
+                    var className = "";
+                    if (column.dataType == "lecm-orgstr:employee" || (this.options.nowrapColumns.length > 0 && inArray(column.name, this.options.nowrapColumns))) {
+                        className = "nowrap "
+                    }
+
+                    columnDefinitions.push({
+                        key: this.dataResponseFields[i],
+                        label: column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
+                        sortable: sortable,
+                        sortOptions: {
+                            field: column.formsName,
+                            sortFunction: this.getSortFunction()
+                        },
+                        formatter: this.getCellFormatter(column.dataType),
+                        className: className + ((column.dataType == 'boolean') ? 'centered' : '')
+                    });
+                }
+            }
+            if (this.options.showActionColumn) {
+                // Add actions as last column
+                columnDefinitions.push(
+                    {
+                        key: this.options.showExpandActionColumn ? "expand-actions" : "actions",
+                        label: this.msg("label.column.actions"),
+                        sortable: false,
+                        formatter: this.fnRenderCellActions(),
+                        width: this.options.showExpandActionColumn ? 150 : Math.round(26.7 * this.showActionsCount)
+                    }
+                );
+            }
+            if (this.options.showExpandActionsColumn && !this.options.showActionColumn) {
+                columnDefinitions.push(
+                    {
+                        key: "expand-actions",
+                        label: "",
+                        sortable: false,
+                        formatter: this.getCellFormatter(column.dataType),
+                        width: 150
+                    }
+                );
+            }
+            if (!this.options.overrideSortingWith && this.options.otherActions != null && this.options.otherActions.length > 0) {
+                // Add actions as last column
+                columnDefinitions.push(
+                    {
+                        key: "other-actions",
+                        label: "",
+                        sortable: false,
+                        formatter: this.fnRenderCellOtherActions(),
+                        width: 80
+                    }
+                );
+            }
+            return columnDefinitions;
         },
-        getActionHtml: function(){
-            var html = '<span class="yui-button yui-push-button {className}">';
-            html += '<span class="first-child"><button type="button" onclick="{handler}">{label}</button>';
-            html += '</span></span>';
+
+        setupExpandActionEvents: function (actionTypePrefix) {
+            var me = this;
+            var fnActionHandler = function DataGrid_fnActionHandler(layer, args) {
+                var owner = Bubbling.getOwnerByTagName(args[1].anchor, "div");
+                if (owner) {
+                    if (typeof me[owner.className] == "function") {
+                        args[1].stop = true;
+                        var row = me.widgets.dataTable.getRecord(args[1].target.offsetParent.parentElement.previousElementSibling);
+                        if (row) {
+                            var asset = row.getData();
+
+                            var confirmFunction = null;
+                            if (me.options.actions) {
+                                for (var i = 0; i < me.options.actions.length; i++) {
+                                    if (me.options.actions[i].id == owner.className && me.options.actions[i].confirmFunction) {
+                                        confirmFunction = me.options.actions[i].confirmFunction;
+                                    }
+                                }
+                            }
+
+                            me[owner.className].call(me, asset, owner, me.datagridMeta.actionsConfig, confirmFunction);
+                        }
+                    }
+                }
+                return true;
+            };
+            Bubbling.addDefaultAction(actionTypePrefix + (me.options.bubblingLabel ? "-" + me.options.bubblingLabel : ""), fnActionHandler, me.options.forceSubscribing);
+        },
+
+        getActionHtml: function () {
+            var html = '<div class="{actionDivClass}">';
+            html += '<span class="yui-button yui-push-button">';
+            html += '<span class="first-child">';
+            html += '<a rel="{rel}" class="{aClass}">{label}</a>';
+            html += '</span></span></div>';
             return html;
         },
 
