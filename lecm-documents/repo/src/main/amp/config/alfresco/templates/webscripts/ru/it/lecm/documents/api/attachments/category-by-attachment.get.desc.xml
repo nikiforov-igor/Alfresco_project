@@ -4,5 +4,5 @@
 	<url>/lecm/document/attachments/api/getCategoryByAttachment?nodeRef={nodeRef}</url>
 	<authentication runas="admin">none</authentication>
 	<format default="json"/>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 </webscript>

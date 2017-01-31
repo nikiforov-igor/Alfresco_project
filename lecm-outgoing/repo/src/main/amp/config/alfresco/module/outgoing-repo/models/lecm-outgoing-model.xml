@@ -10,13 +10,7 @@
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
-		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
-		<import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
 		<import uri="http://www.it.ru/logicECM/document/dictionaries/deliveryMethod/1.0" prefix="lecm-doc-dic-dm"/>
-		<import uri="http://www.it.ru/logicECM/document/dictionaries/docType/1.0" prefix="lecm-doc-dic-dt"/>
-		<import uri="http://www.it.ru/logicECM/document/dictionaries/fileRegister/1.0" prefix="lecm-doc-dic-fr"/>
-		<import uri="http://www.it.ru/lecm/contractors/model/representative/1.0" prefix="lecm-representative"/>
-		<import uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
 		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
 	</imports>
 

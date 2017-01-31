@@ -4,6 +4,11 @@
 <#assign fieldValue=field.value!"">
 <#assign fieldId=field.id!"">
 
+<#assign documentNodeRef="">
+<#if field.control.params.documentFromArgs?has_content>
+	<#assign documentNodeRef = args[field.control.params.documentFromArgs]>
+</#if>
+
 <#if fieldValue?string == "" && field.control.params.defaultValueContextProperty??>
 	<#if context.properties[field.control.params.defaultValueContextProperty]??>
 		<#assign fieldValue = context.properties[field.control.params.defaultValueContextProperty]>
@@ -29,14 +34,16 @@
 	};
 
 	function createControl() {
-		var typeSelector = new LogicECM.module.SelectDocumentCategory("${fieldHtmlId}").setOptions(
+		new LogicECM.module.SelectDocumentCategory("${fieldHtmlId}").setOptions(
 				{
 				<#if field.mandatory??>
 					mandatory: ${field.mandatory?string},
 				<#elseif field.endpointMandatory??>
 					mandatory: ${field.endpointMandatory?string},
 				</#if>
-					notSelectedOptionShow: ${notSelectedOptionShow?string}
+					notSelectedOptionShow: ${notSelectedOptionShow?string},
+					documentNodeRef: "${documentNodeRef}",
+                    selectedValue: "${fieldValue}"
 				}).setMessages(${messages});
 	};
 

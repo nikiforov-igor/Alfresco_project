@@ -49,7 +49,7 @@
                     </activiti:field>
                 </activiti:executionListener>
             </extensionElements>
-            <script></script>
+            <script>var test=1;</script>
         </scriptTask>
         <userTask id="requestCancelTask" name="Обработать запрос на отмену" activiti:assignee='${requestCancelAssignee}' activiti:formKey="lecmErrandWf:requestCancelTask_1">
             <extensionElements>
@@ -97,7 +97,7 @@
 									    businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
 								    } else if (decision == "CANCEL_ERRAND") {
 								        execution.setVariable("requestCancelResult", "cancelErrand");
-                                        processCancelErrand(task.getVariable("lecmErrandWf_requestCancelTask_1CancelChildren"), task.getVariable("lecmErrandWf_requestCancelTask_1CancelReason"));
+                                        ErrandCancelScript.processCancelErrand(task.getVariable("lecmErrandWf_requestCancelTask_1CancelChildren"), task.getVariable("lecmErrandWf_requestCancelTask_1CancelReason"));
 								    } else if (decision == "CHANGE_EXECUTOR") {
 						                var newExecutor = task.getVariableLocal("lecmErrandWf_requestCancelTask_1NewExecutor");
 						                if (newExecutor) {

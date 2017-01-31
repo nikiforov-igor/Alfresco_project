@@ -134,19 +134,13 @@
 		  p:notificationsService-ref="notificationsService"/>
 
 	<!--notification scheduler-->
-	<bean id="ord.notification.schedule" class="ru.it.lecm.ord.scheduler.ORDNotificationScheduler"
-          p:transactionMode="ISOLATED_TRANSACTIONS"
-          p:compensatingActionMode="IGNORE"
+	<bean id="ord.notification.schedule" class="ru.it.lecm.ord.scheduler.ORDNotificationScheduler" parent="baseTransactionalSchedule"
           p:jobName="ord-notification"
           p:jobGroup="ord"
           p:triggerName="ord-notification-trigger"
           p:triggerGroup="ord-trigger"
           p:cronExpression="0 0 8/12 * * ? *"
-          p:scheduler-ref="schedulerFactory"
-          p:actionService-ref="ActionService"
-          p:transactionService-ref="TransactionService"
-          p:searchService-ref="searchService"
-          p:runAsUser="System"/>
+		  p:actionName="ordNotificationExecutor"/>
 
 	<!--notification executor for scheduler-->
     <bean id="ordNotificationExecutor" class="ru.it.lecm.ord.scheduler.ORDNotificationExecutor" parent="action-executer"

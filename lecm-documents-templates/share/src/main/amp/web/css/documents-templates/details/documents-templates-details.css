@@ -1,10 +1,10 @@
-.templateDetails .yui-u {
+.templateDetails .form-container .alf-g .alf-u {
 	float: none;
 	width: auto;
 	overflow: hidden;
 }
 
-.templateDetails .yui-u.first {
+.templateDetails .form-container .alf-g .alf-u.first {
 	float: right;
 	width: 310px;
 }

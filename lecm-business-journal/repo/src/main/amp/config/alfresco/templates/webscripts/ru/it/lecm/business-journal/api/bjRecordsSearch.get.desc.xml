@@ -3,7 +3,7 @@
     <description>BJ Records search</description>
     <url>/lecm/business-journal/api/search</url>
     <authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
     <format default="json">extension</format>
     <lifecycle>internal</lifecycle>
 </webscript>

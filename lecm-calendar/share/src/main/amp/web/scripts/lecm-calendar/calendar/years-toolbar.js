@@ -36,7 +36,8 @@ LogicECM.module.WCalendar.Calendar.Years = LogicECM.module.WCalendar.Calendar.Ye
 						"&destination={destination}" +
 						"&mode={mode}" +
 						"&submitType={submitType}" +
-						"&showCancelButton=true";
+						"&showCancelButton=true" +
+						"&showCaption=false";
 				var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url, {
 					itemKind: "type", //The "kind" of item the form is for, the only supported kind currently is "node".
 					itemId: itemType, //The identifier of the item the form is for, this will be different for each "kind" of item, for "node" it will be a NodeRef.

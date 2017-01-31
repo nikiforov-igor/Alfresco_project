@@ -110,7 +110,8 @@ LogicECM.module = LogicECM.module || {};
                     mode: "create",
                     submitType: "json",
                     ignoreNodes: response.json.join(),
-                    showCancelButton: "true"
+                    showCancelButton: "true",
+					showCaption: false
                 },
                 // Создание формы добавления адресанта.
                 addRepresentativeForm = new Alfresco.module.SimpleDialog(this.id + "-add-representative-form"),

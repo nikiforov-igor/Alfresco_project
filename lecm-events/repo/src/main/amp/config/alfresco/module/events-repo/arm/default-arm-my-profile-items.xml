@@ -1,8 +1,34 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-	<item name="cm:Настройки мероприятий и совещаний" type="lecm-arm:html-node">
-		<property name="cm:name"><![CDATA[Настройки мероприятий и совещаний]]></property>
-		<property name="lecm-arm:order"><![CDATA[5]]></property>
-		<property name="lecm-arm:html-url"><![CDATA[page/lecm/events-user-settings/content]]></property>
+	<item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary">
+		<property name="cm:name">Настройки АРМ</property>
+		<property name="lecm-dic:attributeForShow">cm:name</property>
+		<property name="lecm-dic:type">lecm-arm:arm</property>
+		<property name="lecm-dic:active">true</property>
+		<property name="lecm-dic:plane">false</property>
+		<property name="lecm-dic:description">Настройки АРМ</property>
+		<items>
+			<item name="cm:Логика ECM. Мой профиль" type="lecm-arm:arm">
+				<property name="cm:name"><![CDATA[Логика ECM. Мой профиль]]></property>
+				<property name="lecm-arm:code"><![CDATA[lecm_my_profile]]></property>
+				<items>
+					<item name="cm:Настройки" type="lecm-arm:accordion">
+						<property name="cm:name"><![CDATA[Настройки]]></property>
+						<property name="lecm-arm:order"><![CDATA[2]]></property>
+						<property name="lecm-arm:search-type"><![CDATA[]]></property>
+						<property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
+						<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+						<property name="lecm-arm:search-query"><![CDATA[]]></property>
+						<items>
+							<item name="cm:Настройки мероприятий и совещаний" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Настройки мероприятий и совещаний]]></property>
+								<property name="lecm-arm:order"><![CDATA[5]]></property>
+								<property name="lecm-arm:html-url"><![CDATA[page/lecm/events-user-settings/content]]></property>
+							</item>
+						</items>
+					</item>
+				</items>
+			</item>
+		</items>
 	</item>
 </items>

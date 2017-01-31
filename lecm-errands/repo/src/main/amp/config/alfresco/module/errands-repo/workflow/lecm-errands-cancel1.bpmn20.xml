@@ -23,7 +23,7 @@
 						        if (executor) {
                                     var recipients = [];
                                     recipients.push(executor);
-                                    processCancelErrand(lecmErrandWf_cancel_1CancelChildren, lecmErrandWf_cancel_1CancelReason);
+                                    ErrandCancelScript.processCancelErrand(lecmErrandWf_cancel_1CancelChildren, lecmErrandWf_cancel_1CancelReason);
                                 }
                             }
                             ]]>
@@ -31,7 +31,7 @@
                     </activiti:field>
                 </activiti:executionListener>
             </extensionElements>
-            <script></script>
+            <script>var test=1;</script>
         </scriptTask>
         <receiveTask id="errandReceiveTask" name="Receive Task"></receiveTask>
         <sequenceFlow id="flow1" name="" sourceRef="startCancel" targetRef="cancelErrand"></sequenceFlow>

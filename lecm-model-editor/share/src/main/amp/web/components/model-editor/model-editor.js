@@ -556,7 +556,6 @@ IT.component = IT.component || {};
 				args.modelObject.model.imports = {"import" : []};
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.alfresco.org/model/dictionary/1.0","_prefix":"d"});
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.alfresco.org/model/content/1.0","_prefix":"cm"});
-				args.modelObject.model.imports["import"].push({"_uri":"http://www.alfresco.org/model/system/1.0","_prefix":"sys"});
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/logicECM/document/1.0","_prefix":"lecm-document"});
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/logicECM/eds-document/1.0","_prefix":"lecm-eds-document"});
 			}

@@ -108,47 +108,19 @@
 
     <bean id="internalService" class="ru.it.lecm.internal.beans.InternalServiceImpl" parent="baseBean"/>
 
-    <bean id="internalNotificationTrigger" class="org.alfresco.util.CronTriggerBean">
-        <property name="jobDetail">
-            <bean id="internalNotificationJobDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
-                <property name="jobClass">
-                    <value>ru.it.lecm.internal.schedule.InternalNotificationExecutor</value>
-                </property>
-                <property name="jobDataAsMap">
-                    <map>
-                        <entry key="documentService">
-                            <ref bean="documentService"/>
-                        </entry>
-                        <entry key="transactionService">
-                            <ref bean="transactionService"/>
-                        </entry>
-                        <entry key="nodeService">
-                            <ref bean="nodeService"/>
-                        </entry>
-                        <entry key="calendarBean">
-                            <ref bean="WorkCalendarService"/>
-                        </entry>
-                        <entry key="notificationsService">
-                            <ref bean="notificationsService"/>
-                        </entry>
-                        <entry key="internalService">
-                            <ref bean="internalService"/>
-                        </entry>
-                        <entry key="connectionService">
-                            <ref bean="documentConnectionService"/>
-                        </entry>
-                    </map>
-                </property>
-            </bean>
-        </property>
-        <property name="scheduler">
-            <ref bean="schedulerFactory" />
-        </property>
-        <property name="cronExpression">
-            <value>0 0 3 */1 * ?</value>
-        </property>
-    </bean>
-
+	<bean id="internalNotificationSchedule" class="ru.it.lecm.internal.schedule.InternalNotificationSchedule" parent="baseTransactionalSchedule">
+		<property name="documentService" ref="documentService"/>
+		<property name="calendarBean" ref="WorkCalendarService"/>
+		<property name="notificationsService" ref="notificationsService"/>
+		<property name="connectionService" ref="documentConnectionService"/>
+		<property name="cronExpression" value="0 0 3 */1 * ?"/>
+		<property name="jobName" value="internal-notification"/>
+		<property name="jobGroup" value="internal"/>
+		<property name="triggerName" value="internal-notification-trigger"/>
+		<property name="triggerGroup" value="internal-triggers"/>
+		<property name="actionName" value="internalNotificationExecutor"/>
+	</bean>
+	
     <bean id="internalCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
         <property name="propsToCopy">
             <list>

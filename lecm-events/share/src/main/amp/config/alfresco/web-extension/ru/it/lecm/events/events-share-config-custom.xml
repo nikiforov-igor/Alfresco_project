@@ -222,7 +222,7 @@
                 <field-visibility>
                     <!--Вложения-->
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
-                    <show id="save-event-script" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <!-- Заголовок -->
                     <show id="lecm-events:title"/>
                     <!-- Весь день -->
@@ -268,7 +268,7 @@
                             <control-param name="suppressRefreshEvent">true</control-param>
                         </control>
                     </field>
-                    <field id="save-event-script" set="createEventSet">
+                    <field id="lecm-base-dummy-aspects:script" set="createEventSet">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-events/save-created-event-to-storage.js</control-param>
                         </control>

@@ -53,19 +53,13 @@
           p:statemachineName="lecm-nd:document"
           p:path="alfresco/module/${artifactId}/statemachine/lecm-nd-statemachine-default.xml"/>
 
-    <bean id="nd.start.schedule" class="ru.it.lecm.nd.scheduler.InWorkScheduler"
-          p:transactionMode="ISOLATED_TRANSACTIONS"
-          p:compensatingActionMode="IGNORE"
+    <bean id="nd.start.schedule" class="ru.it.lecm.nd.scheduler.InWorkScheduler" parent="baseTransactionalSchedule"
           p:jobName="switch-nd-status"
           p:jobGroup="nd"
           p:triggerName="switch-nd-status-trigger"
           p:triggerGroup="nd-trigger"
+          p:actionName="inWorkExecutor"
           p:cronExpression="0 15 * * * ? *"
-          p:scheduler-ref="schedulerFactory"
-          p:actionService-ref="actionService"
-          p:transactionService-ref="transactionService"
-          p:searchService-ref="searchService"
-          p:runAsUser="System"
     />
 
     <bean id="inWorkExecutor" class="ru.it.lecm.nd.scheduler.InWorkExecutor" parent="action-executer"
@@ -75,18 +69,13 @@
           p:policyFilter-ref="policyBehaviourFilter"
     />
 
-    <bean id="nd.outOfDate.schedule" class="ru.it.lecm.nd.scheduler.OutOfDateScheduler"
-          p:transactionMode="ISOLATED_TRANSACTIONS"
-          p:compensatingActionMode="IGNORE"
+    <bean id="nd.outOfDate.schedule" class="ru.it.lecm.nd.scheduler.OutOfDateScheduler" parent="baseTransactionalSchedule"
           p:jobName="out-of-date-nd-status"
           p:jobGroup="nd-out-of-date"
           p:triggerName="out-of-date-nd-status-trigger"
           p:triggerGroup="out-of-date-nd-trigger"
+		  p:actionName="outOfDateExecutor"
           p:cronExpression="0 30 * * * ? *"
-          p:scheduler-ref="schedulerFactory"
-          p:actionService-ref="actionService"
-          p:transactionService-ref="transactionService"
-          p:searchService-ref="searchService"
           p:runAsUser="System"
     />
 

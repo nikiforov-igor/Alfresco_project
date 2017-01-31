@@ -96,6 +96,7 @@ public class RepositoryStructureHelperJavascriptExtension extends BaseScopablePr
 
 					@Override
 					public NodeRef execute() throws Throwable {
+						// TODO: Зачем убрали транзакцию?
 						return repositoryStructureHelper.createUserTemp();
 					}
 

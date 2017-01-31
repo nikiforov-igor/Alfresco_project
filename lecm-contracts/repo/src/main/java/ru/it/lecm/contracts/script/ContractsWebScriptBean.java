@@ -166,7 +166,9 @@ public class ContractsWebScriptBean extends BaseWebScript {
                     return null;
                 }
             };
-            lecmTransactionHelper.doInTransaction(cb, false);
+            // TODO: В чём смысл заворачит в readonly транзакцию?
+            // lecmTransactionHelper.doInTransaction(cb, false);
+            lecmTransactionHelper.doInRWTransaction(cb);
         }
         return createScriptable(contractService.getAllMembers(sortColumnName, sortAscending));
     }

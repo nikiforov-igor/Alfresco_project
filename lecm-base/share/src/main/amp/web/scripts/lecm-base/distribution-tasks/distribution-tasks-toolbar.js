@@ -35,7 +35,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					mode: "create",
 					submitType: "json",
 					showCancelButton: true,
-					taskIds: this.selectedTasks.toString()
+					taskIds: this.selectedTasks.toString(),
+					showCaption: false
 				},
 				actionUrl: null,
 				destroyOnHide: true,

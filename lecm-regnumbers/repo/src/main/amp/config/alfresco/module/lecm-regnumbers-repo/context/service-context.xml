@@ -31,7 +31,7 @@
 
 	<bean id="regNumbers.resetCountersArm" parent="lecmDictionaryBootstrap"
 		  depends-on="arm.settings.LogicEcmBootstrap">
-		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки"/>
+		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/arm/documents-counters-reset-arm.xml</value>

@@ -16,6 +16,7 @@ import org.alfresco.util.FileFilterMode;
 import org.alfresco.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmObjectsService;
 import ru.it.lecm.base.beans.TransactionNeededException;
@@ -24,7 +25,6 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.resolutions.api.ResolutionsService;
@@ -61,7 +61,8 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     private NamespaceService namespaceService;
     private BusinessJournalService businessJournalService;
 	private LecmPermissionService lecmPermissionService;
-	private DocumentTableService documentTableService;
+	private NodeRef settingsNode;
+	private NodeRef dashletSettingsNode;
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
@@ -94,34 +95,16 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
         this.documentConnectionService = documentConnectionService;
     }
-
-    public void setDocumentTableService(DocumentTableService documentTableService) {
-        this.documentTableService = documentTableService;
-    }
-
-    public void init() {
-        //Думаю, самое подходящее место для проверки существования и создания глобальных настроек, это при инициализации бина
-        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-
-            @Override
-            public Void doWork() throws Exception {
-                lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-
-                    @Override
-                    public Void execute() throws Throwable {
-                        if (null == getSettingsNode()) {
-                            createSettingsNode();
-                        }
-                        if (null == getDashletSettingsNode()) {
-                            createDashletSettingsNode();
-                        }
-                        return null;
-                    }
-                });
-                return null;
-            }
-        });
-    }
+    
+    @Override
+	public void initServiceImpl() {
+		if (null == getSettingsNode()) {
+			settingsNode = createSettingsNode();
+		}
+		if (null == getDashletSettingsNode()) {
+			dashletSettingsNode = createDashletSettingsNode();
+		}
+	}
 
     @Override
     public NodeRef getServiceRootFolder() {
@@ -136,24 +119,28 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     @Override
     public NodeRef getSettingsNode() {
 //		TODO: Метод разделён. Создание вынесено в метод createSettingsNode
-        final NodeRef rootFolder = this.getServiceRootFolder();
-
-        return nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
+		if (settingsNode == null) {
+			settingsNode = nodeService.getChildByName(this.getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
+		}
+		
+		return settingsNode;
     }
 
     @Override
     public NodeRef getDashletSettingsNode() {
-        final NodeRef rootFolder = this.getServiceRootFolder();
-        return nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_DASHLET_SETTINGS_NODE_NAME);
+		if (dashletSettingsNode == null) {
+			dashletSettingsNode = nodeService.getChildByName(this.getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, ERRANDS_DASHLET_SETTINGS_NODE_NAME);
+		}
+		return dashletSettingsNode;
     }
 
     @Override
-    public NodeRef createSettingsNode() throws WriteTransactionNeededException {
-        try {
-            lecmTransactionHelper.checkTransaction();
-        } catch (TransactionNeededException ex) {
-            throw new WriteTransactionNeededException("Can't create settings node");
-        }
+    public NodeRef createSettingsNode() {
+//        try {
+//            lecmTransactionHelper.checkTransaction();
+//        } catch (TransactionNeededException ex) {
+//            throw new WriteTransactionNeededException("Can't create settings node");
+//        }
 
         final NodeRef rootFolder = this.getServiceRootFolder();
         NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
@@ -170,12 +157,13 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return settingsRef;
     }
 
-    public NodeRef createDashletSettingsNode() throws WriteTransactionNeededException {
-        try {
-            lecmTransactionHelper.checkTransaction();
-        } catch (TransactionNeededException ex) {
-            throw new WriteTransactionNeededException("Can't create settings node");
-        }
+    @Override
+    public NodeRef createDashletSettingsNode() {
+//        try {
+//            lecmTransactionHelper.checkTransaction();
+//        } catch (TransactionNeededException ex) {
+//            throw new WriteTransactionNeededException("Can't create settings node");
+//        }
 
         final NodeRef rootFolder = this.getServiceRootFolder();
         NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_DASHLET_SETTINGS_NODE_NAME);
@@ -659,25 +647,13 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     }
 
     @Override
-    public void sendCancelSignal(NodeRef errand, String reason) {
+    public void sendCancelSignal(NodeRef errand, String reason, NodeRef signalSender) {
+        if (!nodeService.exists(signalSender)) {
+            signalSender = orgstructureService.getCurrentEmployee();
+        }
+        nodeService.createAssociation(errand, signalSender, ErrandsService.ASSOC_ERRANDS_CANCELLATION_SIGNAL_SENDER);
         nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_CANCELLATION_SIGNAL, true);
         nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_CANCELLATION_SIGNAL_REASON, reason);
-    }
-
-    @Override
-    public NodeRef getAcceptedExecutorReport(NodeRef errand) {
-        NodeRef table = documentTableService.getTable(errand, TYPE_ERRANDS_TS_EXECUTOR_REPORT);
-        if (table != null) {
-            List<NodeRef> rows = documentTableService.getTableDataRows(table);
-            if (rows != null) {
-                for (NodeRef report: rows) {
-                    if ("ACCEPT".equals(nodeService.getProperty(report, PROP_ERRANDS_TS_EXECUTOR_REPORT_STATUS))) {
-                        return report;
-                    }
-                }
-            }
-        }
-        return null;
     }
 
 }

@@ -35,6 +35,7 @@
 					<show id="lecmSign2:decision"/>
 					<show id="bpm:comment"/>
 					<show id="lecmSign2:bpmCommentValidator" force="true"/>
+					<show id="transitions" force="true" />
 					<!--<show id="bpm:reassignable"/>-->
 				</field-visibility>
 				<appearance>
@@ -64,6 +65,11 @@
 					<!--<field id="bpm:reassignable" set="right-set">
 						<control template="/ru/it/lecm/base-share/components/controls/reassign-task-control.ftl"/>
 					</field>-->
+					<field id="transitions">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl">
+							<control-param name="fieldValue">Next</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 		</forms>

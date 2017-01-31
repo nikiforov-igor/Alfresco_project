@@ -3,6 +3,6 @@
     <description>Document Page Name</description>
     <url>/lecm/document/attachments/api/getDocumentPage?documentNodeRef={documentNodeRef}</url>
     <authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
     <format default="json"/>
 </webscript>

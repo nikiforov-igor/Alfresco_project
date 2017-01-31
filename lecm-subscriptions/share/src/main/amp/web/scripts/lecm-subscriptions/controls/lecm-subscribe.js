@@ -214,7 +214,8 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 						mode:"create",
 						formId: this.id + "-create-form",
 					submitType:"json",
-					showCancelButton: true
+					showCancelButton: true,
+					showCaption: false
 				};
 
 				// Using Forms Service, so always create new instance

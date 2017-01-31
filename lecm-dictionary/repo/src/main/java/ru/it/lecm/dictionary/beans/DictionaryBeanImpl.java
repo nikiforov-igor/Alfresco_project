@@ -22,6 +22,9 @@ import ru.it.lecm.base.beans.BaseBean;
 
 import java.io.Serializable;
 import java.util.*;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * User: ORakovskaya
@@ -232,7 +235,7 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 	public NodeRef getDictionaryByDictionaryValue(NodeRef nodeRef) {
 		if (isDictionaryValue(nodeRef)) {
 			ChildAssociationRef parent = nodeService.getPrimaryParent(nodeRef);
-			while (parent != null && !isDictionary(parent.getParentRef())) {
+			while (parent != null && parent.getParentRef() !=null && !isDictionary(parent.getParentRef())) {
 				parent = nodeService.getPrimaryParent(parent.getParentRef());
 			}
 			if (parent != null) {

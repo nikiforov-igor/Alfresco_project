@@ -207,7 +207,7 @@
 	</bean>
 
 	<bean parent="lecmDictionaryBootstrap" depends-on="arm.settings.LogicEcmBootstrap">
-		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование"/>
+		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/arm/contractors-settings-arm.xml</value>

@@ -13,6 +13,7 @@ import org.alfresco.util.PropertyCheck;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.wcalendar.CalendarCategory;
 import ru.it.lecm.wcalendar.ICommonWCalendar;
 import ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean;
@@ -66,32 +67,48 @@ public class CalendarBean extends AbstractCommonWCalendarBean implements ICalend
 		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
 		PropertyCheck.mandatory(this, "authService", authService);
 
-		// Создание контейнера (если не существует).
-		// Обертка для эскалации прав.
-		AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
-			@Override
-			public Object doWork() throws Exception {
-				// Транзакция.
-				transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-					@Override
-					public Object execute() throws Throwable {
-						// Создание контейнера (если не существует).
-						if(getWCalendarContainer() == null){
-							createWCalendarContainer();
-						}
-						// Собственно генерация
-						int yearsCreated = generateYearsList(yearsNumberToCreate);
-						logger.info(String.format("Created %d calendars", yearsCreated));
-						return "ok";
-					}
-				}, false, true);
-				return null;
-			}
-		};
-
+//		// Создание контейнера (если не существует).
+//		// Обертка для эскалации прав.
+//		AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
+//			@Override
+//			public Object doWork() throws Exception {
+//				// Транзакция.
+//				transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+//					@Override
+//					public Object execute() throws Throwable {
+//						// Создание контейнера (если не существует).
+//						if(getWCalendarContainer() == null){
+//							createWCalendarContainer();
+//						}
+//						// Собственно генерация
+//						int yearsCreated = generateYearsList(yearsNumberToCreate);
+//						logger.info(String.format("Created %d calendars", yearsCreated));
+//						return "ok";
+//					}
+//				}, false, true);
+//				return null;
+//			}
+//		};
+//
+//		// Генерация календарей на yearsAmountToCreate вперед.
+//		if (yearsNumberToCreate > 0) {
+//			AuthenticationUtil.runAsSystem(raw);
+//		}
+	}
+	
+	@Override
+	public void initServiceImpl()
+	{
+		// TODO: Надо привести сервис календарей к обычной системе папок и избавиться это этой странной логики
 		// Генерация календарей на yearsAmountToCreate вперед.
 		if (yearsNumberToCreate > 0) {
-			AuthenticationUtil.runAsSystem(raw);
+			// Создание контейнера (если не существует).
+			if(getWCalendarContainer() == null){
+				createWCalendarContainer();
+			}
+			// Собственно генерация
+			int yearsCreated = generateYearsList(yearsNumberToCreate);
+			logger.info(String.format("Created %d calendars", yearsCreated));
 		}
 	}
 

@@ -14,26 +14,26 @@
     <name>Logic ECM Errands Repo</name>
     <description>Errands Repo project</description>
     <properties>
-        <module.log.level>debug</module.log.level>
+        <module.log.level>info</module.log.level>
     </properties>
     <!--
        need to list these as a provided so that Maven doesn't download them
        and include them in the AMP, they are provided by Alfresco
    -->
     <dependencies>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-core</artifactId>
         </dependency>
 	    <dependency>
 		    <groupId>org.alfresco</groupId>
 		    <artifactId>alfresco-data-model</artifactId>
-	    </dependency>
+	    </dependency>-->
         <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-repository</artifactId>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
         </dependency>
@@ -43,7 +43,7 @@
         </dependency>
 	    <dependency>
 		    <groupId>org.springframework.extensions.surf</groupId>
-		    <artifactId>spring-surf</artifactId>
+		    <artifactId>spring-surf-core</artifactId>
 	    </dependency>
 	    <dependency>
 		    <groupId>org.springframework.extensions.surf</groupId>
@@ -52,16 +52,94 @@
 	    <dependency>
 		    <groupId>org.slf4j</groupId>
 		    <artifactId>slf4j-api</artifactId>
-	    </dependency>
+	    </dependency>-->
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-beanutils</groupId>
+  					<artifactId>commons-beanutils</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-collections</groupId>
+  					<artifactId>commons-collections</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-digester</groupId>
+					<artifactId>commons-digester</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-lang</groupId>
+					<artifactId>commons-lang</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+            		<artifactId>spring-context</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+            		<artifactId>jackson-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+  					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+            		<artifactId>jackson-annotations</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.xml.stream</groupId>
+					<artifactId>stax-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.inject</groupId>
+					<artifactId>javax.inject</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.lucene</groupId>
+					<artifactId>lucene-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.lucene</groupId>
+					<artifactId>lucene-analyzers-common</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.lucene</groupId>
+					<artifactId>lucene-queryparser</artifactId>
+				</exclusion>
+    			<exclusion>
+    				<groupId>com.lowagie</groupId>
+    				<artifactId>itext</artifactId>
+    			</exclusion>
+    			<exclusion>
+    				<groupId>com.google.zxing</groupId>
+    				<artifactId>core</artifactId>
+    			</exclusion>
+    			<exclusion>
+    				<groupId>org.olap4j</groupId>
+    				<artifactId>olap4j</artifactId>
+    			</exclusion>
+    			<exclusion>
+    				<groupId>org.codehaus.castor</groupId>
+    				<artifactId>castor-xml</artifactId>
+    			</exclusion>
+    			<exclusion>
+    				<groupId>org.eclipse.jdt.core.compiler</groupId>
+    				<artifactId>ecj</artifactId>
+    			</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- we can use any version of jasperfonts cause it has only resources data -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports-fonts</artifactId>
-		</dependency>
+		</dependency> -->
 	    <dependency>
 		    <groupId>ru.it.lecm.errands</groupId>
 		    <artifactId>errands-repo-api</artifactId>
@@ -71,19 +149,19 @@
 		    <groupId>ru.it.lecm.base</groupId>
 		    <artifactId>base-repo-api</artifactId>
 		    <version>${project.version}</version>
-                    <scope>provided</scope>
+            <scope>provided</scope>
 	    </dependency>
 	    <dependency>
 		    <groupId>ru.it.lecm.business-journal</groupId>
 		    <artifactId>business-journal-repo-api</artifactId>
 		    <version>${project.version}</version>
-                    <scope>provided</scope>
+            <scope>provided</scope>
 	    </dependency>
 	    <dependency>
 		    <groupId>ru.it.lecm.documents</groupId>
 		    <artifactId>documents-repo-api</artifactId>
 		    <version>${project.version}</version>
-                    <scope>provided</scope>
+            <scope>provided</scope>
 	    </dependency>
         <dependency>
             <groupId>ru.it.lecm.orgstructure</groupId>
@@ -91,17 +169,17 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>ru.it.lecm.dictionary</groupId>
             <artifactId>dictionary-repo-api</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency>-->
 	    <dependency>
 		    <groupId>ru.it.lecm.security</groupId>
 		    <artifactId>lecm-security-api</artifactId>
 		    <version>${project.version}</version>
-                    <scope>provided</scope>
+            <scope>provided</scope>
 	    </dependency>
         <dependency>
             <groupId>ru.it.lecm.notifications</groupId>
@@ -109,10 +187,10 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>ru.it.lecm.calendar</groupId>
             <artifactId>lecm-calendar-repo-api</artifactId>
@@ -122,12 +200,6 @@
         <dependency>
             <groupId>ru.it.lecm.statemachine</groupId>
             <artifactId>statemachine-api</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.reports</groupId>
-            <artifactId>lecm-reports-api</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
@@ -149,22 +221,23 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!--<dependency>
+            <groupId>ru.it.lecm.reports</groupId>
+            <artifactId>lecm-reports-api</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency> -->
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required
        for AMP version numbering
    -->
-    <scm>
-        <connection>scm:svn:http://domain.com/svn/trunk/</connection>
-        <developerConnection>scm:svn:https://${user.name}@domain.com/svn/trunk/</developerConnection>
-        <url>http://domain.com/svn/trunk/</url>
-    </scm>
 
     <build>
         <plugins>
             <!-- Needed for cross OS compatibility in acp/zip encoding -->
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
             </plugin>
@@ -178,26 +251,26 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
+            </plugin>-->
             <plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jasperreports-maven-plugin</artifactId>
                 <configuration>
                     <sourceDirectory>src/main/amp/reportdefinitions</sourceDirectory>
-                    <outputDirectory>${project.build.directory}/${project.build.finalName}/reportdefinitions</outputDirectory>
+                    <outputDirectory>${app.amp.output.folder}/reportdefinitions</outputDirectory>
                 </configuration>
 			</plugin>
 			<plugin>
                 <groupId>org.alfresco.maven.plugin</groupId>
                 <artifactId>alfresco-maven-plugin</artifactId>
-                <version>1.1.1</version>
                 <extensions>true</extensions>
             </plugin>
         </plugins>
-        <resources><resource>
+        <resources>
+        	<resource>
                 <filtering>true</filtering>
                 <directory>src/main/amp</directory>
-                <targetPath>../${project.build.finalName}</targetPath>
+                <targetPath>${app.amp.output.folder}</targetPath>
                 <excludes>
                     <exclude>**README-*</exclude>
                 </excludes>
@@ -225,7 +298,7 @@
 			<resource>
 				<filtering>true</filtering>
 				<directory>src/main/amp/reportdefinitions</directory>
-				<targetPath>reportdefinitions</targetPath>
+				<targetPath>${app.amp.output.folder}/reportdefinitions</targetPath>
 			</resource>
         </resources>
     </build>

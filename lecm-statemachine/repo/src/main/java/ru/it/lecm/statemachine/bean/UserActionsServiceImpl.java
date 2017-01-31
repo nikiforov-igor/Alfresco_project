@@ -400,18 +400,18 @@ public class UserActionsServiceImpl implements UserActionsService {
         final NodeService nodeService = serviceRegistry.getNodeService();
         final HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
         props.put(ContentModel.PROP_NAME, name);
-        ChildAssociationRef childAssocRef = serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef>() {
-            @Override
-            public ChildAssociationRef execute() throws Throwable {
+//        ChildAssociationRef childAssocRef = serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef>() {
+//            @Override
+//            public ChildAssociationRef execute() throws Throwable {
                 ChildAssociationRef childAssocRef = nodeService.createNode(
                         parent,
                         ContentModel.ASSOC_CONTAINS,
                         QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)),
                         ContentModel.TYPE_FOLDER,
                         props);
-                return childAssocRef;
-            }
-        }, false, true);
+//                return childAssocRef;
+//            }
+//        }, false, true);
         return childAssocRef.getChildRef();
     }
 }

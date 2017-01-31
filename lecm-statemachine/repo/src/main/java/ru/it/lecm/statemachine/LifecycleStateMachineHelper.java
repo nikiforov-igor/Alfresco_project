@@ -14,10 +14,12 @@ import org.activiti.engine.impl.bpmn.behavior.ReceiveTaskActivityBehavior;
 import org.activiti.engine.impl.calendar.CycleBusinessCalendar;
 import org.activiti.engine.impl.calendar.DueDateBusinessCalendar;
 import org.activiti.engine.impl.calendar.MapBusinessCalendarManager;
+import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.impl.el.FixedValue;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.runtime.ClockReader;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
@@ -38,6 +40,7 @@ import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.ContentReader;
+import org.alfresco.service.cmr.repository.DuplicateChildNodeNameException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.*;
@@ -74,6 +77,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import ru.it.lecm.base.beans.BaseBean;
+import org.activiti.engine.impl.util.DefaultClockImpl;
 
 //import org.joda.time.Days;
 
@@ -88,32 +93,28 @@ import java.util.concurrent.locks.ReentrantLock;
  * 1. Запускать пользовательские процессы из машины состояний
  * 2. Передавать сигнал о завершении пользовательского процесс машине состояний с передачей переменных из пользовательского процесса
  */
-public class LifecycleStateMachineHelper implements StateMachineServiceBean, InitializingBean {
+public class LifecycleStateMachineHelper extends BaseBean implements StateMachineServiceBean, InitializingBean {
 	private final static Logger logger = LoggerFactory.getLogger(LifecycleStateMachineHelper.class);
 
     public static String ACTIVITI_PREFIX = "activiti$";
 
-    private ServiceRegistry serviceRegistry;
-    private Repository repositoryHelper;
-    private AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
-    private OrgstructureBean orgstructureBean;
-    private DocumentMembersService documentMembersService;
-    private BusinessJournalService businessJournalService;
-    private TransactionService transactionService;
-    private DocumentConnectionService documentConnectionService;
-    private LecmPermissionService lecmPermissionService;
-    private IWorkCalendar workCalendarService;
+    protected Repository repositoryHelper;
+    protected AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
+    protected OrgstructureBean orgstructureBean;
+    protected DocumentMembersService documentMembersService;
+    protected BusinessJournalService businessJournalService;
+    protected DocumentConnectionService documentConnectionService;
+    protected LecmPermissionService lecmPermissionService;
+    protected IWorkCalendar workCalendarService;
+	protected NamespaceService namespaceService;
+
 
     Lock lock = new ReentrantLock();
-
-    public void setTransactionService(TransactionService transactionService) {
-    	this.transactionService = transactionService;
-    }
-
-    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-    	this.serviceRegistry = serviceRegistry;
-    }
-
+    
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
+	}
+	
     public void setRepositoryHelper(Repository repositoryHelper) {
         this.repositoryHelper = repositoryHelper;
     }
@@ -148,11 +149,13 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 
     @Override
     public void afterPropertiesSet() {
+		ClockReader cr = new DefaultClockImpl();
+    	//ClockReader cr = Context.getProcessEngineConfiguration().getClock();
     	MapBusinessCalendarManager mapBusinessCalendarManager = new MapBusinessCalendarManager();
         //mapBusinessCalendarManager.addBusinessCalendar(DurationBusinessCalendar.NAME, new DurationBusinessCalendar());
-    	mapBusinessCalendarManager.addBusinessCalendar(LecmBusinessCalendar.NAME, new LecmBusinessCalendar(workCalendarService));
-        mapBusinessCalendarManager.addBusinessCalendar(DueDateBusinessCalendar.NAME, new DueDateBusinessCalendar());
-        mapBusinessCalendarManager.addBusinessCalendar(CycleBusinessCalendar.NAME, new CycleBusinessCalendar());
+    	mapBusinessCalendarManager.addBusinessCalendar(LecmBusinessCalendar.NAME, new LecmBusinessCalendar(cr, workCalendarService));
+        mapBusinessCalendarManager.addBusinessCalendar(DueDateBusinessCalendar.NAME, new DueDateBusinessCalendar(cr));
+        mapBusinessCalendarManager.addBusinessCalendar(CycleBusinessCalendar.NAME, new CycleBusinessCalendar(cr));
 
     	activitiProcessEngineConfiguration.setBusinessCalendarManager(mapBusinessCalendarManager);
     }
@@ -237,6 +240,11 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         return isStarter(type, employee);
     }
 
+	@Override
+	public boolean isStarter(QName type) {
+		return isStarter(type.toPrefixString(namespaceService));
+	}
+
     /*
      * Выборка статусов для всех экземпляров процессов для определенного типа документа
      * @param documentType - тип документа
@@ -259,10 +267,15 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         return statusesList;
     }
 
+	@Override
+	public List<String> getStatuses(QName documentType, boolean includeActive, boolean includeFinal) {
+		return getStatuses(documentType.toPrefixString(namespaceService), includeActive, includeFinal);
+	}
+
     @Override
     public List<String> getAllDynamicRoles(NodeRef document) {
          if (!isDraft(document)) {
-             String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+             String executionId = (String) nodeService.getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
              if (executionId != null) {
                  TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
                  TaskQuery taskQuery = taskService.createTaskQuery();
@@ -294,6 +307,12 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         accessRoles.addAll(getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().getStarterRoles());
         return accessRoles;
     }
+
+	@Override
+	public Set<String> getStarterRoles(QName documentType) {
+		return getStarterRoles(documentType.toPrefixString(namespaceService));
+	}
+	
     /*
      * Возвращает текущий Task процесса по processInstanceId
      * Если процесс на переходе, то вернет предидущую Task-у
@@ -330,7 +349,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
      */
     @Override
     public boolean grandDynamicRoleForEmployee(NodeRef document, NodeRef employee, String roleName) {
-    	 String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+    	 String executionId = (String) nodeService.getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
     	 boolean result = false;
          if (executionId != null) {
          	TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
@@ -405,7 +424,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
      */
     @Override
     public boolean isDraft(NodeRef document) {
-        NodeService nodeService = serviceRegistry.getNodeService();
+        //NodeService nodeService = serviceRegistry.getNodeService();
         if (nodeService.hasAspect(document, StatemachineModel.ASPECT_IS_DRAFT)) {
             return (Boolean) nodeService.getProperty(document, StatemachineModel.PROP_IS_DRAFT);
         } else {
@@ -420,7 +439,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
      */
     @Override
     public boolean hasActiveStatemachine(NodeRef document) {
-        String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        String statemachineId = (String) nodeService.getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         Execution execution = null;
         if (statemachineId != null) {
             execution = activitiProcessEngineConfiguration.getRuntimeService().createExecutionQuery().executionId(statemachineId.replace(ACTIVITI_PREFIX, "")).singleResult();
@@ -438,7 +457,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
      */
     @Override
     public String getStatemachineId(NodeRef document) {
-        String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        String statemachineId = (String) nodeService.getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         if (statemachineId != null) {
         	Execution execution = activitiProcessEngineConfiguration.getRuntimeService().createExecutionQuery().executionId(statemachineId.replace(ACTIVITI_PREFIX, "")).singleResult();
             return execution != null ? execution.getId() : "Не запущен";
@@ -522,7 +541,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
      */
 	@Override
 	public List<String> getPreviousStatusesNames(NodeRef document) {
-		String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+		String statemachineId = (String) nodeService.getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         HistoryService historyService = activitiProcessEngineConfiguration.getHistoryService();
         List<HistoricActivityInstance> activities = historyService.createHistoricActivityInstanceQuery().processInstanceId(statemachineId.replace(ACTIVITI_PREFIX, "")).orderByHistoricActivityInstanceStartTime().desc().list();
         List<String> result = new ArrayList<>();
@@ -549,7 +568,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     public boolean isFinal(NodeRef document) {
 //        Object statemachineId = serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
 //        return statemachineId != null && getExecution((String) statemachineId) == null;
-    	return serviceRegistry.getNodeService().hasAspect(document, StatemachineModel.ASPECT_IS_FINAL);
+    	return nodeService.hasAspect(document, StatemachineModel.ASPECT_IS_FINAL);
     }
 
     /*
@@ -657,7 +676,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         }
 
         List<WorkflowInstance> activeWorkflows = serviceRegistry.getWorkflowService().getWorkflowsForContent(nodeRef, isActive);
-        String procesId = (String) serviceRegistry.getNodeService().getProperty(nodeRef, StatemachineModel.PROP_STATEMACHINE_ID);
+        String procesId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATEMACHINE_ID);
         List<WorkflowInstance> result = new ArrayList<WorkflowInstance>();
         NodeRef workflowSysUser = serviceRegistry.getPersonService().getPerson("workflow");
 	    for (WorkflowInstance instance : activeWorkflows) {
@@ -718,7 +737,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 
         Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
 
-        NodeService nodeService = serviceRegistry.getNodeService();
+        //NodeService nodeService = serviceRegistry.getNodeService();
         List<ChildAssociationRef> documents = nodeService.getChildAssocs(bpm_package);
 
         NodeRef subprocessPackage = workflowService.createPackage(null);
@@ -758,13 +777,13 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
                 @Override
                 public NodeRef doWork() throws Exception {
 					//TODO transaction in loop!!!
-                    RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-                    return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                        @Override
-                        public NodeRef execute() throws Throwable {
+//                    RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//                    return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+//                        @Override
+//                        public NodeRef execute() throws Throwable {
                             return documentMembersService.addMember(packageDocument, assigneeRef, new HashMap<QName, Serializable>());
-                        }
-                    });
+//                        }
+//                    });
                 }
             });
         }
@@ -782,7 +801,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 				public String doWork() throws Exception {
 					String result = null;
 					try {
-						NodeService nodeService = serviceRegistry.getNodeService();
+						//NodeService nodeService = serviceRegistry.getNodeService();
 						NodeRef folderRef = repositoryHelper.getCompanyHome();
 						StringTokenizer tokenizer = new StringTokenizer(archiveFolderPath, "/");
 						while (tokenizer.hasMoreTokens()) {
@@ -820,9 +839,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         for (QName qName : documentTypeQName.getDefaultAspectNames()) {
             if (DocumentService.ASPECT_FINALIZE_TO_UNIT.equals(qName)) {
                 NodeRef companyHome = repositoryHelper.getCompanyHome();
-                NodeRef companyArchive = serviceRegistry.getNodeService().getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, OrgstructureBean.DOCUMENT_ROOT_NAME);
+                NodeRef companyArchive = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, OrgstructureBean.DOCUMENT_ROOT_NAME);
                 if (companyArchive != null) {
-                    folders.add(serviceRegistry.getNodeService().getPath(companyArchive).toPrefixString(serviceRegistry.getNamespaceService()));
+                    folders.add(nodeService.getPath(companyArchive).toPrefixString(serviceRegistry.getNamespaceService()));
                 }
                 break;
             }
@@ -830,6 +849,24 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         return folders;
     }
 
+	@Override
+	public Set<String> getArchiveFolders(QName documentType) {
+		return getArchiveFolders(documentType.toPrefixString(namespaceService));
+	}
+	
+	
+
+	@Override
+	public String getArchiveFolder(String documentType) {
+		String statmachene = documentType.replace(":", "_");
+        return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().getArchiveFolder();
+	}
+
+	@Override
+	public String getArchiveFolder(QName documentType) {
+		return getArchiveFolder(documentType.toPrefixString(namespaceService));
+	}
+	
     private NodeRef serviceRoot = null;
     private NodeRef versionsRoot = null;
     //TODO Передеалть в Map?
@@ -844,8 +881,45 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
          * 		- helper - getVersionsRoot
          */
     private NodeRef getServiceRoot() {
-    	if(serviceRoot==null) serviceRoot = repositoryHelper.findNodeRef("path","workspace/SpacesStore/Company Home/Business platform/LECM/statemachines".split("/"));
+    	if(serviceRoot==null) serviceRoot = createPath(repositoryHelper.getCompanyHome(),"/Business platform/LECM/statemachines");
     	return serviceRoot;
+    }
+    
+    public NodeRef createPath(NodeRef root, String path) {
+    	List<String> directoryPaths = new ArrayList<String>();
+    	StringTokenizer t = new StringTokenizer(path, "/");
+        if (t.hasMoreTokens())
+        {
+            while (t.hasMoreTokens())
+            {
+            	String name = t.nextToken();
+            	directoryPaths.add(name);
+            }
+        }
+    	//NodeService nodeService = serviceRegistry.getNodeService();
+        NodeRef directoryRef = root;
+        for (String pathString : directoryPaths) {
+        	logger.info("!!!!!!!!!!!!!! pathString: "+pathString);
+            NodeRef pathDir = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
+            if (pathDir == null) {
+                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, pathString);
+                Map<QName, Serializable> properties = new HashMap<>(1);
+                properties.put(ContentModel.PROP_NAME, pathString);
+                try {
+                	logger.info("!!!!!!!!!!!!!! properties: "+properties);
+                    directoryRef = nodeService.createNode(directoryRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties).getChildRef();
+                } catch (DuplicateChildNodeNameException e) {
+                    //есть вероятность, что папка создана другим потоком/транзакцией
+                	logger.info("!!!!!!!!!!!!!! pathString 2: "+pathString);
+                    directoryRef = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
+                }
+            } else {
+            	logger.info("!!!!!!!!!!!!!! pathDir : "+pathDir);
+                directoryRef = pathDir;
+            }
+            logger.info("!!!!!!!!!!!!!! directoryRef: "+directoryRef);
+        }
+        return directoryRef;
     }
 
     /*
@@ -854,7 +928,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
      */
     private NodeRef getVersionsRoot() {
         if (versionsRoot == null) {
-            versionsRoot = serviceRegistry.getNodeService().getChildByName(getServiceRoot(), ContentModel.ASSOC_CONTAINS, "versions");
+            versionsRoot = createPath(getServiceRoot(), "/versions");
         }
         return versionsRoot;
     }
@@ -875,7 +949,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
                 NodeRef versionsRoot = getVersionsRoot();
                 //Проверяем versionsRoot, если существует, то хотя бы одна машина была развернута в системе
                 if (versionsRoot != null) {
-                    List<ChildAssociationRef> statemacheneRefs = serviceRegistry.getNodeService().getChildAssocs(versionsRoot);
+                    List<ChildAssociationRef> statemacheneRefs = nodeService.getChildAssocs(versionsRoot);
                     for (ChildAssociationRef child : statemacheneRefs) {
                         StateMachene machine = new StateMachene(child.getChildRef());
                         statemachenesCache.put(machine.getName(), machine);
@@ -918,7 +992,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     	public String getName() {
     		if(nodeRef==null) return null;
     		if(name==null) {
-    			name = (String)serviceRegistry.getNodeService().getProperty(nodeRef, nameQN);
+    			name = (String)nodeService.getProperty(nodeRef, nameQN);
     		}
     		return name;
     	}
@@ -927,7 +1001,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
                 @Override
                 public Long doWork() throws Exception {
                 	if(nodeRef==null) return null;
-                	return (Long)serviceRegistry.getNodeService().getProperty(nodeRef, lastVersionQN);
+                	return (Long)nodeService.getProperty(nodeRef, lastVersionQN);
                 }
     		});
     	}
@@ -936,9 +1010,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
                 @Override
                 public Map<String, StateMacheneVersion> doWork() throws Exception {
 		    		if(versions.get("version_"+getLastVersionNumber())==null&&nodeRef!=null) {
-			    		List<ChildAssociationRef> versionsRefs = serviceRegistry.getNodeService().getChildAssocs(nodeRef);
+			    		List<ChildAssociationRef> versionsRefs = nodeService.getChildAssocs(nodeRef);
 			    		for(ChildAssociationRef child:versionsRefs) {
-			    			String ver =  (String)serviceRegistry.getNodeService().getProperty(child.getChildRef(), nameQN);
+			    			String ver =  (String)nodeService.getProperty(child.getChildRef(), nameQN);
 			    			versions.put(ver, new StateMacheneVersion(child.getChildRef()));
 			    		}
 		    		}
@@ -972,7 +1046,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
                 public StateMacheneSettings doWork() throws Exception {
 			   		if(versionRef==null) return new StateMacheneSettings();
 			   		if(settings == null) {
-			   			NodeRef settingsRef = serviceRegistry.getNodeService().getChildByName(versionRef, ContentModel.ASSOC_CONTAINS, "backup.xml");
+			   			NodeRef settingsRef = nodeService.getChildByName(versionRef, ContentModel.ASSOC_CONTAINS, "backup.xml");
 			   			settings = new StateMacheneSettings(settingsRef);
 			    	}
 			    	return settings;
@@ -990,7 +1064,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     	private List<String> staticRoles = new ArrayList<String>();
     	private List<String> dinamicRoles = new ArrayList<String>();
     	private List<String> starterRoles = new ArrayList<String>();
+		private Map<String, String> permissions = new HashMap<>();
     	private boolean notArmCreate = false;
+		private boolean simpleDocument = false;
 
         private boolean initialized = false;
         private Lock lock = new ReentrantLock();
@@ -1041,6 +1117,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 									    if("name".equals(stateMachineProp.getFirstChild().getLocalName())&&"notArmCreate".equals(stateMachineProp.getFirstChild().getTextContent())){
 										    notArmCreate = Boolean.valueOf(stateMachineProp.getLastChild().getTextContent());
 			    						}
+									    if("name".equals(stateMachineProp.getFirstChild().getLocalName())&&"simple-document".equals(stateMachineProp.getFirstChild().getTextContent())){
+										    simpleDocument = Boolean.valueOf(stateMachineProp.getLastChild().getTextContent());
+			    						}
 			    					}
 			    				}
 			    				if("subFolders".equals(stateMachineNode.getLocalName())){
@@ -1057,6 +1136,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 			    									Boolean isCreator = false;
 			    									Boolean isStatic = false;
 			    									String roleName = "";
+													String rolePrivilege = "";
 			    									for(int l=0;l<rolesListProps.getLength();l++) {
 			    										Node rolesListProp = rolesListProps.item(l);
 			    										if("type".equals(rolesListProp.getLocalName())&&"static-role-item".equals(rolesListProp.getTextContent())) {
@@ -1069,6 +1149,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
                                                                 if("name".equals(n11.getFirstChild().getLocalName())&&"isCreator".equals(n11.getFirstChild().getTextContent())){
                                                                     isCreator = Boolean.parseBoolean(n11.getLastChild().getTextContent());
                                                                 }
+                                                                if("name".equals(n11.getFirstChild().getLocalName())&&"static-role-privilege".equals(n11.getFirstChild().getTextContent())){
+                                                                    rolePrivilege = n11.getLastChild().getTextContent();
+                                                                }
                                                             }
 			    										}
 			    										if("roleAssociations".equals(rolesListProp.getLocalName())&&rolesListProp.getFirstChild()!=null) {
@@ -1080,6 +1163,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 			    									if(isStatic)staticRoles.add(roleName);
 			    									if(!isStatic)dinamicRoles.add(roleName);
 			    									if(isCreator)starterRoles.add(roleName);
+													permissions.put(roleName, rolePrivilege);
 			    								}
 			    							}
 			    						}
@@ -1604,6 +1688,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     	public List<String>  getStarterRoles() {
     		return starterRoles;
     	}
+    	public Map getPermissions() {
+    		return permissions;
+    	}
     	public String getArchiveFolder() {
     		return archiveFolder;
     	}
@@ -1612,6 +1699,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     	}
         public boolean isNotArmCreate() {
 		    return notArmCreate;
+	    }
+        public boolean isSimpleDocument() {
+		    return simpleDocument;
 	    }
 
 	    public StateMachineStatus getStatusByName(String name) {
@@ -1683,15 +1773,19 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
      */
     public List<StateMachineAction> getTaskActionsByName(String taskId, String actionType) {
     	List<StateMachineAction> result = new ArrayList<StateMachineAction>();
+    	logger.info("!!!!!!!! {taskId: "+taskId+", actionType: "+actionType+"}");
         if (taskId != null) {
         	TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
             TaskQuery taskQuery = taskService.createTaskQuery();
             Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
+            logger.info("!!!!!!!! {task: "+task+"}");
             if (task != null) {
             	String smName = task.getProcessDefinitionId();
             	String version = smName.substring(smName.indexOf(":")+1, smName.lastIndexOf(":"));
             	smName = smName.substring(0, smName.indexOf(":"));
+            	logger.info("!!!!!!!! {smName: "+smName+", version: "+version+", taskName: "+task.getName()+", actionType: "+actionType+"}");
             	StateMachineAction action = getStateMecheneByName(smName).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(task.getName()).getActionByName(actionType);
+            	logger.info("!!!!!!!! {action: "+action+"}");
             	if(action!=null) result.add(action);
             }
         }
@@ -1776,7 +1870,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     //TODO По возможности "выпилить" или объединить с isEditableField
     @Override
     public StateFields getStateFields(NodeRef document) {
-    	String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+    	String executionId = (String) nodeService.getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         if (executionId != null) {
         	TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
             TaskQuery taskQuery = taskService.createTaskQuery();
@@ -1798,7 +1892,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     //TODO Выпилить ?? или объединить с getStateFields
     @Override
     public boolean isEditableField(NodeRef document, String field) {
-    	String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+    	String executionId = (String) nodeService.getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
     	field = field.replace(":", "_");
         if (executionId != null) {
         	TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
@@ -1848,7 +1942,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
                 if (variable.getFromType() == WorkflowVariables.Type.VARIABLE) {
                     value = (String)runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFromValue());
                 } else if (variable.getFromType() == WorkflowVariables.Type.FIELD) {
-                    NodeService nodeService = serviceRegistry.getNodeService();
+                    //NodeService nodeService = serviceRegistry.getNodeService();
 
                     NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
                     List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
@@ -1868,7 +1962,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
             if (variable.getToType() == WorkflowVariables.Type.VARIABLE) {
                 runtimeService.setVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getToValue(), value);
             } else if (variable.getToType() == WorkflowVariables.Type.FIELD) {
-                NodeService nodeService = serviceRegistry.getNodeService();
+                //NodeService nodeService = serviceRegistry.getNodeService();
 
                 NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
                 List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
@@ -1891,7 +1985,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
      * 		- ActionsScript
      */
     public Map<String, String> getInputVariablesMap(String stateMachineExecutionId, List<WorkflowVariables.WorkflowVariable> variables) {
-        NodeService nodeService = serviceRegistry.getNodeService();
+        //NodeService nodeService = serviceRegistry.getNodeService();
         RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
         NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
         List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
@@ -1906,7 +2000,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 	public Map<String, String> getInputVariablesMap(String stateMachineExecutionId, NodeRef document, List<WorkflowVariables.WorkflowVariable> variables) {
         HashMap<String, String> result = new HashMap<String, String>();
         RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
-        NodeService nodeService = serviceRegistry.getNodeService();
+        //NodeService nodeService = serviceRegistry.getNodeService();
         for (WorkflowVariables.WorkflowVariable variable : variables) {
             String value = "";
             if (variable.getFromType() == WorkflowVariables.Type.VARIABLE) {
@@ -1947,7 +2041,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
             if (variable.getFromType() == WorkflowVariables.Type.VARIABLE) {
                 value = executionVariables.get(variable.getFromValue());
             } else if (variable.getFromType() == WorkflowVariables.Type.FIELD) {
-                NodeService nodeService = serviceRegistry.getNodeService();
+                //NodeService nodeService = serviceRegistry.getNodeService();
 
                 NodeRef wPackage = ((ActivitiScriptNode) executionVariables.get("bpm_package")).getNodeRef();
                 List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
@@ -1967,7 +2061,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
                     runtimeService.setVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getToValue(), value);
                 }
             } else if (variable.getToType() == WorkflowVariables.Type.FIELD) {
-                NodeService nodeService = serviceRegistry.getNodeService();
+                //NodeService nodeService = serviceRegistry.getNodeService();
 
                 NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
                 List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
@@ -1988,7 +2082,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
         ActivitiScriptNode s = (ActivitiScriptNode) runtimeService.getVariable(executionId.replace(ACTIVITI_PREFIX, ""), "bpm_package");
         NodeRef nodeRef = s.getNodeRef();
-        List<ChildAssociationRef> documents = serviceRegistry.getNodeService().getChildAssocs(nodeRef);
+        List<ChildAssociationRef> documents = nodeService.getChildAssocs(nodeRef);
         if (documents.size() > 0) {
             return documents.get(0).getChildRef();
         } else {
@@ -2022,7 +2116,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
      */
     @Override
     public boolean hasStatemachine(NodeRef document) {
-        Object statemachineId = serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        Object statemachineId = nodeService.getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         return statemachineId != null;
     }
 
@@ -2036,7 +2130,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     @Override
     public String getStatemachineVersion(NodeRef document) {
         String result = null;
-        String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        String statemachineId = (String) nodeService.getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         Execution execution = activitiProcessEngineConfiguration.getRuntimeService().createExecutionQuery().executionId(statemachineId.replace(ACTIVITI_PREFIX, "")).singleResult();
         if (execution != null) {
         	result = ((DelegateExecution) execution).getProcessDefinitionId();
@@ -2085,7 +2179,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
      * 		- helper - executeUserAction
      */
     public TransitionResponse executeUserAction(NodeRef document, String taskId, String actionId, Class<? extends StateMachineAction> actionType, String persistedResponse) {
-        String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        String statemachineId = (String) nodeService.getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         TransitionResponse response = new TransitionResponse();
         if (FinishStateWithTransitionAction.class.equals(actionType)) {
         	//TODO Сразу передавать нужные параметры
@@ -2125,7 +2219,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
      */
     @Override
     public void executeTransitionAction(NodeRef document, String actionName, String persistedResponse) {
-        String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        String statemachineId = (String) nodeService.getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         String taskId = getCurrentTaskId(statemachineId);
         //TODO Сразу передавать нужные параметры
         List<StateMachineAction> actions = getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class));
@@ -2316,13 +2410,13 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     @Override
     public NodeRef getTaskDocument(WorkflowTask task, List<String> documentTypes) {
         NodeRef wfPackage = (NodeRef) task.getProperties().get(WorkflowModel.ASSOC_PACKAGE);
-        List<ChildAssociationRef> childAssocs = serviceRegistry.getNodeService().getChildAssocs(wfPackage);
+        List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(wfPackage);
         for (ChildAssociationRef childAssoc : childAssocs) {
             NodeRef document = childAssoc.getChildRef();
             if (documentTypes == null) {
                 return document;
             }
-            QName documentType = serviceRegistry.getNodeService().getType(document);
+            QName documentType = nodeService.getType(document);
             if (documentTypes.contains(documentType.getLocalName())) {
                 return document;
             }
@@ -2345,7 +2439,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         WorkflowService workflowService = serviceRegistry.getWorkflowService();
 
         List<WorkflowInstance> activeWorkflows = workflowService.getWorkflowsForContent(documentRef, true);
-        String executionId = (String) serviceRegistry.getNodeService().getProperty(documentRef, StatemachineModel.PROP_STATEMACHINE_ID);
+        String executionId = (String) nodeService.getProperty(documentRef, StatemachineModel.PROP_STATEMACHINE_ID);
         for (WorkflowInstance workflow : activeWorkflows) {
         	if(!workflow.getId().equals(executionId)) {
         		List<WorkflowTask> tasks = getWorkflowTasks(workflow, activeTasks);
@@ -2470,6 +2564,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
                 String dependencyExecution = parseExecutionId(persistedResponse);
                 if (dependencyExecution != null) {
                     WorkflowDescriptor descriptor = new WorkflowDescriptor(dependencyExecution, statemachineId, nextState.getWorkflowId(), taskId, StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class), nextState.getActionId(), ExecutionListener.EVENTNAME_TAKE);
+                    logger.info("!!!!!!!!!!! executeTransitionAction: "+descriptor);
                     new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
                     setInputVariables(statemachineId, dependencyExecution, nextState.getVariables().getInput());
 
@@ -2480,13 +2575,13 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
                             @Override
                             public NodeRef doWork() throws Exception {
 								//TODO transaction in loop!!!
-                                RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-                                return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                                    @Override
-                                    public NodeRef execute() throws Throwable {
+//                                RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//                                return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+//                                    @Override
+//                                    public NodeRef execute() throws Throwable {
                                         return documentMembersService.addMember(document, assignee, new HashMap<QName, Serializable>(), true);
-                                    }
-                                });
+//                                    }
+//                                });
                             }
                         });
                     }
@@ -2536,6 +2631,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
             String dependencyExecution = parseExecutionId(persistedResponse);
             WorkflowDescriptor descriptor = new WorkflowDescriptor(dependencyExecution, statemachineId, workflow.getWorkflowId(), taskId, StateMachineActionsImpl.getActionNameByClass(UserWorkflow.class), actionId, ExecutionListener.EVENTNAME_TAKE);
             /*Добавляет workflow в документ???*/
+            logger.info("!!!!!!!!!!! executeUserWorkflowAction: "+descriptor);
             new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
 
             setInputVariables(statemachineId, dependencyExecution, workflow.getVariables().getInput());
@@ -2547,13 +2643,13 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
                     @Override
                     public NodeRef doWork() throws Exception {
 						//TODO transaction in loop!!!
-                        RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-                        return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                            @Override
-                            public NodeRef execute() throws Throwable {
+//                        RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//                        return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+//                            @Override
+//                            public NodeRef execute() throws Throwable {
                                 return documentMembersService.addMember(document, assignee, new HashMap<QName, Serializable>(), true);
-                            }
-                        });
+//                            }
+//                        });
                     }
                 });
             }
@@ -2572,7 +2668,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     }
 
     private StateFields getStateCategories(NodeRef document) {
-        String procesId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        String procesId = (String) nodeService.getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         if (procesId != null) {
         	TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
             TaskQuery taskQuery = taskService.createTaskQuery();
@@ -2624,13 +2720,13 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         });
 
         for (String accessRole : accessRoles) {
-            if (auth.contains("GROUP__LECM$BR%" + accessRole)) {
+            if (auth.contains("GROUP__LECM$BR!" + accessRole)) {
                 return true;
             }
         }
 		return false;
 	}
-
+	
 	/**
      * Возвращает можно ли создавать документ из АРМ-а
      * @param type - тип документа
@@ -2640,6 +2736,11 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 	public boolean isNotArmCreate(String type) {
     	String statmachene = type.replace(":", "_");
         return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().isNotArmCreate();
+    }
+	
+	@Override
+	public boolean isNotArmCreate(QName type) {
+        return isNotArmCreate(type.toPrefixString(namespaceService));
     }
 
 
@@ -2695,6 +2796,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 		String stateMachineExecutionId = ACTIVITI_PREFIX + getStatemachineId(documentRef);
 		String currentTaskId = getCurrentTaskId(stateMachineExecutionId);
 		WorkflowDescriptor descriptor = new WorkflowDescriptor(processInstanceID, stateMachineExecutionId, processDefinitionID, currentTaskId, "", "", "");
+		logger.info("!!!!!!!!!!! connectToStatemachine: "+descriptor);
 		new DocumentWorkflowUtil().addWorkflow(documentRef, processInstanceID, descriptor);
 	}
 
@@ -2702,6 +2804,47 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 	public void disconnectFromStatemachine(final NodeRef documentRef, final String processInstanceID) {
 		new DocumentWorkflowUtil().removeWorkflow(documentRef, processInstanceID);
 	}
+	
+	@Override
+	public Map<String, String> getPermissions(String type) {
+		String statmachene = type.replace(":", "_");
+        return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().getPermissions();
+	}
+
+	@Override
+	public Map<String, String> getPermissions(QName type) {
+		return getPermissions(type.toPrefixString(namespaceService));
+	}
+	
+	@Override
+	public boolean isSimpleDocument(String type) {
+		String statmachene = type.replace(":", "_");
+        return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().isSimpleDocument();
+	}
+
+	@Override
+	public boolean isSimpleDocument(QName type) {
+		return isSimpleDocument(type.toPrefixString(namespaceService));
+	}
+	
+	@Override
+	public void checkArchiveFolder(String type, boolean forceRebuildACL) {
+		// Не реализовано, т.к такой функционал пока что нужен только для документов без ЖЦ
+	}
+
+	@Override
+	public void checkArchiveFolder(QName type, boolean forceRebuildACL) {
+		checkArchiveFolder(type.toPrefixString(namespaceService), forceRebuildACL);
+	}
+	
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
+	}
+	
+
 ///////////////////////////////////////////////////////// Statemachine Structure start ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////// Statemachine Structure end ////////////////////////////////////////////////////////////////
+
+
 }

@@ -3,6 +3,6 @@
 	<description>Document Attachments By Category</description>
 	<url>/lecm/document/attachments/api/getAttachmentsByCategory?documentNodeRef={documentNodeRef}&amp;category={category}</url>
 	<authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 	<format default="json"/>
 </webscript>

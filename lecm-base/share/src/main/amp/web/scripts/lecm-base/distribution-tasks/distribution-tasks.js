@@ -168,7 +168,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 							mode: "create",
 							submitType: "json",
 							showCancelButton: true,
-							taskIds: oRecord.getData('id')
+							taskIds: oRecord.getData('id'),
+							showCaption: false
 						},
 						actionUrl: null,
 						destroyOnHide: true,

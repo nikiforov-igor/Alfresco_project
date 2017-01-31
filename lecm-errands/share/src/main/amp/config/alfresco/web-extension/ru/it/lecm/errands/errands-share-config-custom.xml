@@ -246,7 +246,7 @@
                     <!-- Срок исполнения -->
                     <show id="limitation-date-script" force="true"/>
                     <show id="lecm-errands:limitation-date-radio" />
-                    <show id="errand-limitless" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-errands:limitation-date-days" />
                     <show id="lecm-errands:limitation-date-type"/>
                     <show id="lecm-errands:limitation-date" />
@@ -260,7 +260,7 @@
                     <show id="lecm-errands:period-during-type"/>
                     <show id="lecm-errands:reiteration-count"/>
                     <show id="reiteration-count-label" force="true"/>
-                    <show id="lecm-errand-period-endless" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
 
                     <!-- Контролер-->
                     <show id="lecm-errands:controller-assoc"/>
@@ -369,7 +369,7 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
-                    <field id="errand-limitless" set="limitation-date">
+                    <field id="lecm-base-dummy-aspects:script" set="limitation-date">
                         <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
                             <control-param name="textCode">label.errand.limitless</control-param>
                         </control>
@@ -406,7 +406,7 @@
                             <control-param name="textCode">label.errand.reiterationCount</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errand-period-endless" set="errand-validity">
+                    <field id="lecm-base-dummy-aspects:script2" set="errand-validity">
                         <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
                             <control-param name="textCode">label.errand.period-endless</control-param>
                         </control>
@@ -447,7 +447,7 @@
                     </field>
 
                     <field id="lecm-errands:is-short" >
-                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
                     <field id="lecm-errands:links-assoc" >
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
@@ -690,7 +690,7 @@
                     <!-- Срок исполнения -->
                     <show id="limitation-date-script" force="true"/>
                     <show id="lecm-errands:limitation-date-radio" />
-                    <show id="errand-limitless" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-errands:limitation-date-days" />
                     <show id="lecm-errands:limitation-date-type"/>
                     <show id="lecm-errands:limitation-date" />
@@ -704,7 +704,7 @@
                     <show id="lecm-errands:period-during-type"/>
                     <show id="lecm-errands:reiteration-count"/>
                     <show id="reiteration-count-label" force="true"/>
-                    <show id="lecm-errand-period-endless" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
                     <!-- Закрывать вышестоящее поручение -->
                     <show id="lecm-errands:auto-close"/>
                     <!-- Контролер-->
@@ -823,7 +823,7 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
-                    <field id="errand-limitless" set="limitation-date">
+                    <field id="lecm-base-dummy-aspects:script" set="limitation-date">
                         <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
                             <control-param name="textCode">label.errand.limitless</control-param>
                         </control>
@@ -860,7 +860,7 @@
                             <control-param name="textCode">label.errand.reiterationCount</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errand-period-endless" set="errand-validity">
+                    <field id="lecm-base-dummy-aspects:script2" set="errand-validity">
                         <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
                             <control-param name="textCode">label.errand.period-endless</control-param>
                         </control>
@@ -909,7 +909,7 @@
                         </control>
                     </field>
                     <field id="lecm-errands:is-short" >
-                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
                     <field id="lecm-errands:links-assoc" >
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
@@ -963,7 +963,7 @@
                     <show id="lecm-errands:title"/>
                     <!-- Срок исполнения -->
                     <show id="lecm-errands:limitation-date-radio"/>
-                    <show id="errand-limitless" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-errands:limitation-date-days"/>
                     <show id="lecm-errands:limitation-date-type"/>
                     <show id="lecm-errands:limitation-date"/>
@@ -1002,7 +1002,7 @@
                             <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
                         </control>
                     </field>
-                    <field id="errand-limitless" set="limitation-date">
+                    <field id="lecm-base-dummy-aspects:script" set="limitation-date">
                         <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
                             <control-param name="textCode">label.errand.limitless</control-param>
                         </control>
@@ -1038,7 +1038,7 @@
                     <show id="lecm-errands:title"/>
                     <!-- Срок исполнения -->
                     <show id="lecm-errands:limitation-date-radio"/>
-                    <show id="errand-limitless" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-errands:limitation-date-days"/>
                     <show id="lecm-errands:limitation-date-type"/>
                     <show id="lecm-errands:limitation-date"/>
@@ -1080,7 +1080,7 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
-                    <field id="errand-limitless" set="limitation-date">
+                    <field id="lecm-base-dummy-aspects:script" set="limitation-date">
                         <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
                             <control-param name="textCode">label.errand.limitless</control-param>
                         </control>
@@ -1117,7 +1117,7 @@
                     <show id="lecm-errands:controller-assoc"/>
                     <!-- Срок исполнения -->
                     <show id="lecm-errands:limitation-date-radio"/>
-                    <show id="errand-limitless" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-errands:limitation-date-days"/>
                     <show id="lecm-errands:limitation-date-type"/>
                     <show id="lecm-errands:limitation-date"/>
@@ -1172,7 +1172,7 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
-                    <field id="errand-limitless" set="limitation-date">
+                    <field id="lecm-base-dummy-aspects:script" set="limitation-date">
                         <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
                             <control-param name="textCode">label.errand.limitless</control-param>
                         </control>
@@ -1744,7 +1744,7 @@
                     <field id="lecmErrandWf:requestDueDateChange_1NewDateRadio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DATE</control-param>
-                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                            <control-param name="fireChangeEventName">changeDueDateRadioEvent</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:requestDueDateChange_1NewDate" set="limitation-date">
@@ -1850,7 +1850,7 @@
                     <field id="lecmErrandWf:requestDueDateChangeTask_1NewDueDateRadio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DATE</control-param>
-                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                            <control-param name="fireChangeEventName">changeDueDateRadioEvent</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:requestDueDateChangeTask_1NewDate" mandatory="true" set="limitation-date">
@@ -1927,7 +1927,7 @@
                     <field id="lecmErrandWf:changeDueDateNewDueDateRadio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DATE</control-param>
-                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                            <control-param name="fireChangeEventName">changeDueDateRadioEvent</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:changeDueDateNewDueDate" set="limitation-date">
@@ -2281,6 +2281,27 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-cancel-form-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">requestCancelTaskFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$errandsApproverDecline">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmErrandWf:approverDeclineReason"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:approverDeclineReason">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">5</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -2786,6 +2807,7 @@
             <workflow name="activiti$errandsCoexecutorReport"/>
             <workflow name="activiti$errandsCoexecutorReport_1"/>
             <workflow name="activiti$routeErrand"/>
+            <workflow name="activiti$errandsApproverDecline"/>
         </hidden-workflows>
     </config>
 

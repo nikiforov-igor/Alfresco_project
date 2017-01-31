@@ -17,39 +17,39 @@
 		and include them in the AMP, they are provided by Alfresco
 	-->
 	<dependencies>
-        <dependency>
-            <groupId>org.alfresco</groupId>
-            <artifactId>alfresco-share</artifactId>
-        </dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-		</dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.alfresco</groupId>-->
+            <!--<artifactId>alfresco-share</artifactId>-->
+        <!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>org.springframework</groupId>-->
+			<!--<artifactId>spring-core</artifactId>-->
+		<!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework</groupId>-->
+            <!--<artifactId>spring-beans</artifactId>-->
+        <!--</dependency>-->
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>
 
 	<build>
         <plugins>
             <!-- Needed for cross OS compatibility in acp/zip encoding -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-            </plugin>
-            <plugin>
-				<artifactId>maven-nosnapshot-plugin</artifactId>
-				<groupId>org.alfresco.maven</groupId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>buildnumber-maven-plugin</artifactId>
-            </plugin>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-resources-plugin</artifactId>-->
+            <!--</plugin>-->
+            <!--<plugin>-->
+				<!--<artifactId>maven-nosnapshot-plugin</artifactId>-->
+				<!--<groupId>org.alfresco.maven</groupId>-->
+            <!--</plugin>-->
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>buildnumber-maven-plugin</artifactId>-->
+            <!--</plugin>-->
+			<!--<plugin>-->
+				<!--<artifactId>maven-compiler-plugin</artifactId>-->
+			<!--</plugin>-->
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>yuicompressor-maven-plugin</artifactId>

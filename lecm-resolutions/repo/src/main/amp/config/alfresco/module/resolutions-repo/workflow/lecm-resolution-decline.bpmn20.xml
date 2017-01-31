@@ -36,7 +36,7 @@
                     </activiti:field>
                 </activiti:executionListener>
             </extensionElements>
-            <script></script>
+            <script>var test=1;</script>
         </scriptTask>
         <receiveTask id="resolutionsReceiveTask" name="Receive Task"></receiveTask>
         <sequenceFlow id="flow1" name="" sourceRef="startResolutionsDecline" targetRef="declineResolution"></sequenceFlow>

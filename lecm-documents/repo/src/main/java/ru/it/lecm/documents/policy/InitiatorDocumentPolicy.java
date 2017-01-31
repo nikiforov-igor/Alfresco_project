@@ -83,6 +83,7 @@ public class InitiatorDocumentPolicy implements NodeServicePolicies.OnCreateNode
 
     @Override
     public void onCreateNode(ChildAssociationRef childAssocRef) {
+    	logger.debug("ДОКУМЕНТ. onCreateNode");
 	    // Добавление прав инициатора
 	    NodeRef docRef = childAssocRef.getChildRef();
 	    //TODO Возможно здесь не текущий пользовател а кто-то еще - String authorLogin = (String) nodeService.getProperty(docRef, ContentModel.PROP_MODIFIER);

@@ -16,8 +16,9 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.logging.Level;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * User: mShafeev
@@ -261,4 +262,5 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 	public NodeRef getServiceRootFolder() {
 		return getSubscriptionRootRef();
 	}
+	
 }

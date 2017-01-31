@@ -57,7 +57,7 @@ public class OpenOfficeTemplateGenerator extends OOTemplateGenerator {
         // сохранение ...
         com.sun.star.frame.XStorable resultStorable = null;
         if (xCompDoc != null) {
-            resultStorable = UnoRuntime.queryInterface(com.sun.star.frame.XStorable.class, xCompDoc);
+            resultStorable = (com.sun.star.frame.XStorable)UnoRuntime.queryInterface(com.sun.star.frame.XStorable.class, xCompDoc);
 
             final PropertyValue[] storeProps = new PropertyValue[2];
             storeProps[0] = newPropertyValue("Overwrite", Boolean.TRUE);
@@ -101,12 +101,12 @@ public class OpenOfficeTemplateGenerator extends OOTemplateGenerator {
             /* (2) обновление существующих свойств ... */
             stage = String.format("Get openOffice properties of document '%s'", srcOODocUrl);
 
-            final XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xCompDoc);
+            final XDocumentPropertiesSupplier xDocPropsSuppl = (XDocumentPropertiesSupplier)UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xCompDoc);
             final XDocumentProperties xDocProps = xDocPropsSuppl.getDocumentProperties();
             final XPropertyContainer userProperties = xDocProps.getUserDefinedProperties();
 
-            final XPropertySet docProperties = UnoRuntime.queryInterface(XPropertySet.class, userProperties);
-            final XPropertyContainer docPropertyContainer = UnoRuntime.queryInterface(XPropertyContainer.class, docProperties);
+            final XPropertySet docProperties = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, userProperties);
+            final XPropertyContainer docPropertyContainer = (XPropertyContainer) UnoRuntime.queryInterface(XPropertyContainer.class, docProperties);
 
             if (author != null) {
                 stage = String.format("Set openOffice property Author='%s'\n\t of document '%s'", author, srcOODocUrl);
@@ -208,7 +208,7 @@ public class OpenOfficeTemplateGenerator extends OOTemplateGenerator {
 
     @Override
     public void assignTableProperty(final XComponent xDoc, final XPropertySet docProps, final String propName, final List<Map> listObjects, final Map<String, Object> settingProps) {
-        XTextTablesSupplier tablesSupplier = UnoRuntime.queryInterface(XTextTablesSupplier.class, xDoc);
+        XTextTablesSupplier tablesSupplier = (XTextTablesSupplier)UnoRuntime.queryInterface(XTextTablesSupplier.class, xDoc);
 
         XTextTable xDocTable = TableManager.getTable(tablesSupplier, propName);
         if (xDocTable != null) {
@@ -220,7 +220,7 @@ public class OpenOfficeTemplateGenerator extends OOTemplateGenerator {
                 String cellName = TableManager.getColumnName(i, firstRowIndex + 1); // нумерация имен начинается с 1, а не 0
 
                 XCell cell = xDocTable.getCellByName(cellName);
-                XText text = UnoRuntime.queryInterface(XText.class, cell);
+                XText text = (XText)UnoRuntime.queryInterface(XText.class, cell);
 
                 String cellText = text.getString();
                 columnsExpressions[i] = cellText;
@@ -242,7 +242,7 @@ public class OpenOfficeTemplateGenerator extends OOTemplateGenerator {
                         for (int j = 0; j < xDocTable.getColumns().getCount(); j++) {
                             String cellName = TableManager.getColumnName(j, rowIndex);
                             XCell cell = xDocTable.getCellByName(cellName);
-                            XText text = UnoRuntime.queryInterface(XText.class, cell);
+                            XText text = (XText)UnoRuntime.queryInterface(XText.class, cell);
 
                             // в строке должно находиться выражение вида: {SR_CODE.SR_COLUMN_CODE}
                             // SR_CODE - код подотчета, SR_COLUMN_CODE - код колонки в подотчете
@@ -289,7 +289,7 @@ public class OpenOfficeTemplateGenerator extends OOTemplateGenerator {
             Object table;
             try {
                 table = xNamedTables.getByName(tableName);
-                return UnoRuntime.queryInterface(XTextTable.class, table);
+                return (XTextTable)UnoRuntime.queryInterface(XTextTable.class, table);
             } catch (Exception e) {
                 logger.debug(e.getMessage(), e);
             }

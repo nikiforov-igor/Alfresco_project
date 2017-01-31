@@ -25,7 +25,8 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 					destination: this.options.destination,
 					mode: 'create',
 					submitType: 'json',
-					showCancelButton: true
+					showCancelButton: true,
+					showCaption: false
 				};
 
 			if (this.createNewControlClicked) {

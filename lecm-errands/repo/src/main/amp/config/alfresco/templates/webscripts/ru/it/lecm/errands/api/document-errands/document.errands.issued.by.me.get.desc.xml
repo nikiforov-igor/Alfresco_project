@@ -4,5 +4,5 @@
 	<url>/lecm/errands/api/documentErrandsIssuedByMe</url>
 	<authentication>user</authentication>
 	<format default="json"/>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 </webscript>

@@ -4,4 +4,5 @@
 	<url>/lecm/signed/docflow/signPermission</url>
 	<format default="json" />
 	<authentication runas="admin">none</authentication>
+	<transaction allow="readonly">required</transaction>
 </webscript>

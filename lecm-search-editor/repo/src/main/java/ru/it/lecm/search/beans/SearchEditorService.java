@@ -19,6 +19,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * User: DBashmakov
@@ -376,6 +378,7 @@ public class SearchEditorService extends BaseBean {
     * Если дериктории нет, то создаем ее с именем идентификатора текущего пользователя.
     *
     * */
+	// TODO: Может, стоит всё-таки избавиться от getOrCreate?
     public NodeRef getStoreFolder() {
         final NodeRef nodeRefParent = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, "Личные поисковые запросы");
         NodeRef nodeRefChild = getFolder(nodeRefParent, orgstructureBean.getCurrentEmployee().getId());
@@ -500,4 +503,5 @@ public class SearchEditorService extends BaseBean {
         }
         return queryBuilder.toString();
     }
+	
 }

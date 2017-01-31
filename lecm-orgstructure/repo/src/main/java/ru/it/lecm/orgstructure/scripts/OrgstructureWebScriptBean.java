@@ -1230,4 +1230,8 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 			return null;
 		}
 	}
+	
+	public void autoEmployeesTie() {
+		orgstructureService.autoEmployeesTie();
+	}
 }

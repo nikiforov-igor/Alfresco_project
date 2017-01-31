@@ -42,24 +42,11 @@ public class ReportsBootstrapListener implements XMLImportListener {
             return; //пропускаем
         }
 
-        AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
-            @Override
-            public Object doWork() throws Exception {
-                transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-                    @Override
-                    public Object execute() throws Throwable {
-                        for (String code : reportsForDeploy) {
-                            NodeRef reportDescriptorRef = manager.getReportEditorDAO().getReportDescriptorNodeByCode(code);
-                            if (reportDescriptorRef != null) { // нашли отчет - деплоем его
-                                manager.registerReportDescriptor(reportDescriptorRef);
-                            }
-                        }
-                        return null;
-                    }
-                });
-                return null;
-            }
-        };
-        AuthenticationUtil.runAsSystem(raw);
+		for (String code : reportsForDeploy) {
+			NodeRef reportDescriptorRef = manager.getReportEditorDAO().getReportDescriptorNodeByCode(code);
+			if (reportDescriptorRef != null) { // нашли отчет - деплоем его
+				manager.registerReportDescriptor(reportDescriptorRef);
+			}
+		}
     }
 }

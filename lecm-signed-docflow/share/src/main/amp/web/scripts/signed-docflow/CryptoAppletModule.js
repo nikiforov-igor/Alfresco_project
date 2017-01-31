@@ -892,7 +892,8 @@ function checkForApplet() {
 						mode: 'create',
 						submitType: 'json',
 						formId: 'auth-form',
-						showCancelButton: 'true'
+						showCancelButton: 'true',
+						showCaption: false
 					};
 
 				form = new Alfresco.module.SimpleDialog(params.htmlId);
@@ -973,7 +974,8 @@ function checkForApplet() {
 						submitType: 'json',
 						formId: 'multiple-sign-form',
 						showCancelButton: 'true',
-						obj: JSON.stringify(response.json)
+						obj: JSON.stringify(response.json),
+						showCaption: false
 					};
 					var url = Alfresco.constants.URL_SERVICECONTEXT + 'components/form';
 					var dialog = new Alfresco.module.SimpleDialog(params.htmlId);

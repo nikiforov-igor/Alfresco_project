@@ -2,6 +2,7 @@
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
         Bubbling = YAHOO.Bubbling;
+        Selector = YAHOO.util.Selector;
     var formId;
     LogicECM.module.Base.Util.loadCSS([
         'css/lecm-errands/errands-change-duedate-form.css'
@@ -9,6 +10,7 @@
 
     Bubbling.on('errandsWFChangeDueDateScriptLoaded', init);
     Bubbling.on('requestDueDateChangeTaskFormScriptLoaded', process);
+    Bubbling.on('changeDueDateRadioEvent', processDueDateSet);
 
     function init(layer, args) {
         formId = args[1].formId;
@@ -62,5 +64,21 @@
                 });
             });
         });
+    }
+
+    function processDueDateSet(layer, args) {
+        var value = args[1].value;
+        if (formId == args[1].formId) {
+            var dateFieldName = "";
+            var dateField = Selector.query(".errands-wf-duedate-set-date .value-div input[type='hidden']", Dom.get(formId), true);
+            if (dateField) {
+                dateFieldName = dateField.id.replace(formId + "_prop_", "").replace("_", ":");
+            }
+            if ("DATE" == value) {
+                LogicECM.module.Base.Util.enableControl(formId, dateFieldName);
+            } else {
+                LogicECM.module.Base.Util.disableControl(formId, dateFieldName);
+            }
+        }
     }
 })();

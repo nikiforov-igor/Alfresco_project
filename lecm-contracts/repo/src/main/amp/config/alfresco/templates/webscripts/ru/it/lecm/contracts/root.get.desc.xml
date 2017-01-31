@@ -4,5 +4,5 @@
 	<url>/lecm/contracts/root</url>
 	<format default="html">extension</format>
 	<authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 </webscript>

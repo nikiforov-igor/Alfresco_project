@@ -60,7 +60,8 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 						destination: destination,
 						mode: "create",
 						submitType: "json",
-						showCancelButton: true
+						showCancelButton: true,
+						showCaption: false
 					},
 					destroyOnHide: true,
 					doBeforeDialogShow: {
@@ -119,7 +120,8 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 						destination: destination,
 						mode: "create",
 						submitType: "json",
-						showCancelButton: true
+						showCancelButton: true,
+						showCaption: false
 					},
 					actionUrl: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/schedule/set/createSpecialSchedule",
 					destroyOnHide: true,

@@ -4,6 +4,6 @@
 	<description>Get Engineer or Boss  roles for Schedule module</description>
 	<url>/lecm/wcalendar/schedule/get/roles</url>
 	<authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 	<format default="json"/>
 </webscript>

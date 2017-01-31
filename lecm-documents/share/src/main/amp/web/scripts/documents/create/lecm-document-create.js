@@ -98,6 +98,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 				formId: this.options.formId,
 				showSubmitButton: true,
 				showCancelButton: true,
+				showCaption: false,
 				args: JSON.stringify(this.options.args)
 			};
 			var successCallback = {

@@ -101,7 +101,8 @@ LogicECM.module.Review.ReviewList = LogicECM.module.Review.ReviewList || {};
 					mode: 'create',
 					formId: 'saveReviewList',
 					submitType: 'json',
-					showCancelButton: true
+					showCancelButton: true,
+					showCaption: false
 				},
 				destroyOnHide: true,
 				doBeforeDialogShow: {

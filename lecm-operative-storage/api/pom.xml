@@ -18,15 +18,15 @@
        and include them in the AMP, they are provided by Alfresco
    -->
     <dependencies>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-core</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-repository</artifactId>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
         </dependency>
@@ -47,7 +47,7 @@
 			<artifactId>orgstructure-repo-api</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
-		</dependency>
+		</dependency> -->
 
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
@@ -55,15 +55,10 @@
        The scm is required for the buildnumber-maven-plugin which is required
        for AMP version numbering
    -->
-    <scm>
-        <connection>scm:svn:http://domain.com/svn/trunk/</connection>
-        <developerConnection>scm:svn:https://${user.name}@domain.com/svn/trunk/</developerConnection>
-        <url>http://domain.com/svn/trunk/</url>
-    </scm>
 
     <build>
-        <plugins>
-            <!-- Needed for cross OS compatibility in acp/zip encoding -->
+        <!-- <plugins>
+            Needed for cross OS compatibility in acp/zip encoding
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -82,14 +77,15 @@
             <plugin>
                 <groupId>org.alfresco.maven.plugin</groupId>
                 <artifactId>alfresco-maven-plugin</artifactId>
-                <version>1.1.1</version>
+                <version>2.2.0</version>
                 <extensions>true</extensions>
             </plugin>
-        </plugins>
-        <resources><resource>
+        </plugins> -->
+        <resources>
+        	<resource>
                 <filtering>true</filtering>
                 <directory>src/main/amp</directory>
-                <targetPath>../${project.build.finalName}</targetPath>
+                <targetPath>${app.amp.output.folder}</targetPath>
                 <excludes>
                     <exclude>**README-*</exclude>
                 </excludes>

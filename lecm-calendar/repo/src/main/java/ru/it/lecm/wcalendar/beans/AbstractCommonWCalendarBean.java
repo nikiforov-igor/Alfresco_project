@@ -16,6 +16,8 @@ import ru.it.lecm.wcalendar.ICommonWCalendar;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 /**
  *
@@ -120,4 +122,13 @@ public abstract class AbstractCommonWCalendarBean extends BaseBean implements IC
 	public NodeRef getServiceRootFolder() {
             return getFolder(WORK_CALENDAR_FOLDER_ID);
 	}
+
+	@Override
+	public void initServiceImpl() {
+		// TODO: Надо привести сервис календарей к обычной системе папок и избавиться это этой странной логики
+		if(getWCalendarContainer() == null){
+			createWCalendarContainer();
+		}
+	}
+	
 }
