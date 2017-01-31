@@ -56,7 +56,7 @@
 										finalNewCoexecutors.forEach(function(coexecutor){
 											document.createAssociation(coexecutor, "lecm-errands:coexecutors-assoc");
 											statemachine.grandDynamicRoleForEmployee(document, coexecutor, "ERRANDS_COEXECUTOR");
-
+											documentMembers.addMember(document, coexecutor, "ERRANDS_READER", true);
 										});
 										notifications.sendNotificationFromCurrentUser({
 												recipients: finalNewCoexecutors,
@@ -78,7 +78,8 @@
 												templateConfig: {
 													mainObject: document,
 													eventExecutor: currentUser
-												}
+												},
+												dontCheckAccessToObject: true
 											});
 									}
 

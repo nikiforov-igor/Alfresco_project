@@ -221,12 +221,15 @@
         <property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
 
+    <util:constant static-field="ru.it.lecm.errands.ErrandsService.TYPE_ERRANDS" id="errandsTypeQname"/>
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.TYPE_ERRANDS_TS_COEXECUTOR_REPORT" id="coexecutorReportTypeQname"/>
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.TYPE_ERRANDS_TS_EXECUTION_REPORT" id="executionReportTypeQname"/>
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.ASSOC_ERRANDS_TS_COEXECUTOR_CONNECTED_DOCUMENT" id="coexecutorReportConnectedDocAssocQname"/>
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.ASSOC_ERRANDS_TS_EXECUTOR_CONNECTED_DOCUMENT" id="executionReportConnectedDocAssocQname"/>
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.ASSOC_ERRANDS_TS_COEXECUTOR_ATTACHMENT" id="coexecutorReportAttachmentAssocQname"/>
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.ASSOC_ERRANDS_TS_EXECUTOR_ATTACHMENT" id="executionReportAttachmentAssocQname"/>
+    <util:constant static-field="ru.it.lecm.errands.ErrandsService.ASSOC_ERRANDS_EXECUTION_ATTACHMENT" id="executionAttachmentAssocQname"/>
+    <util:constant static-field="ru.it.lecm.errands.ErrandsService.ASSOC_ERRANDS_EXECUTION_CONNECTED_DOCS" id="executionConnectedDocAssocQname"/>
 
     <bean id="errandsCoexecutorReportConnectedDocumentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsReportConnectedDocumentAssociationPolicy"
           init-method="init" depends-on="documents.LogicEcmModelsBootstrap,errands.LogicEcmModelsBootstrap,errands.tableStructure.LogicEcmModelsBootstrap">
@@ -246,6 +249,26 @@
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
         <property name="reportTypeQname" ref="coexecutorReportTypeQname"/>
         <property name="associationQname" ref="coexecutorReportAttachmentAssocQname"/>
+    </bean>
+
+    <bean id="errandsExecutionConnectedDocumentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsReportConnectedDocumentAssociationPolicy"
+          init-method="init" depends-on="documents.LogicEcmModelsBootstrap,errands.LogicEcmModelsBootstrap,errands.tableStructure.LogicEcmModelsBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="documentTableService" ref="documentTableService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="documentConnectionService" ref="documentConnectionService"/>
+        <property name="reportTypeQname" ref="errandsTypeQname"/>
+        <property name="associationQname" ref="executionConnectedDocAssocQname"/>
+    </bean>
+    <bean id="errandsExecutionAttachmentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsReportAttachmentAssociationPolicy"
+          init-method="init" depends-on="documents.LogicEcmModelsBootstrap,errands.LogicEcmModelsBootstrap,errands.tableStructure.LogicEcmModelsBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="documentTableService" ref="documentTableService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+        <property name="reportTypeQname" ref="errandsTypeQname"/>
+        <property name="associationQname" ref="executionAttachmentAssocQname"/>
     </bean>
 
     <bean id="errandsExecutionReportConnectedDocumentAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsReportConnectedDocumentAssociationPolicy"
@@ -434,6 +457,12 @@
                 <props>
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-change-coexecutors.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-approver-decline.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
                     <prop key="redeploy">${redeploy.process.definitions}</prop>
                 </props>

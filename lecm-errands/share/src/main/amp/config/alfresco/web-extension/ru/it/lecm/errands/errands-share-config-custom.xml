@@ -1744,7 +1744,7 @@
                     <field id="lecmErrandWf:requestDueDateChange_1NewDateRadio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DATE</control-param>
-                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                            <control-param name="fireChangeEventName">changeDueDateRadioEvent</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:requestDueDateChange_1NewDate" set="limitation-date">
@@ -1850,7 +1850,7 @@
                     <field id="lecmErrandWf:requestDueDateChangeTask_1NewDueDateRadio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DATE</control-param>
-                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                            <control-param name="fireChangeEventName">changeDueDateRadioEvent</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:requestDueDateChangeTask_1NewDate" mandatory="true" set="limitation-date">
@@ -1927,7 +1927,7 @@
                     <field id="lecmErrandWf:changeDueDateNewDueDateRadio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DATE</control-param>
-                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                            <control-param name="fireChangeEventName">changeDueDateRadioEvent</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:changeDueDateNewDueDate" set="limitation-date">
@@ -2281,6 +2281,27 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-cancel-form-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">requestCancelTaskFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$errandsApproverDecline">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmErrandWf:approverDeclineReason"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:approverDeclineReason">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">5</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -2786,6 +2807,7 @@
             <workflow name="activiti$errandsCoexecutorReport"/>
             <workflow name="activiti$errandsCoexecutorReport_1"/>
             <workflow name="activiti$routeErrand"/>
+            <workflow name="activiti$errandsApproverDecline"/>
         </hidden-workflows>
     </config>
 
