@@ -486,6 +486,18 @@ LogicECM.errands = LogicECM.errands || {};
             return html;
         },
 
+        getRowFormater: function () {
+            var scope = this;
+
+            return function (elTr, oRecord) {
+                var status = oRecord.getData().itemData["prop_lecm-errands-ts_coexecutor-report-status"];
+                if (status.value == "DECLINE") {
+                    elTr.classList.add("declined");
+                }
+                return true;
+            }
+        },
+
         onActionAcceptCoexecutorReport: function (me, asset, owner, actionsConfig, confirmFunction) {
             var nodeRef = arguments[0].nodeRef;
             if (nodeRef != null) {

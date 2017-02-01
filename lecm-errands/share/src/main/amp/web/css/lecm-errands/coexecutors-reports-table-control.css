@@ -70,3 +70,7 @@
 .form-field.with-grid.coexecutors-report .datagrid {
     clear: both;
 }
+
+.datagrid .grid table tbody tr.declined {
+    background-color: #ffe1e1;
+}
