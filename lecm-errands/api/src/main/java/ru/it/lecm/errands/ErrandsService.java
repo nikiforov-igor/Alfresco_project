@@ -349,13 +349,6 @@ public interface ErrandsService {
      */
     void sendCancelSignal(NodeRef errand, String reason, NodeRef signalSender);
 
-    /**
-     * ПОлучение принятого отчёта соисполнителя
-     * @param errand поручение
-     * @return табличные данные принятого отчёта исполнителя
-     */
-    NodeRef getAcceptedExecutorReport(NodeRef errand);
-
     enum ModeChoosingExecutors {
         ORGANIZATION,
         UNIT

@@ -109,7 +109,6 @@
         <property name="lecmObjectsService" ref="lecmObjectsService"/>
         <property name="namespaceService" ref="namespaceService"/>
         <property name="businessJournalService" ref="businessJournalService"/>
-        <property name="documentTableService" ref="documentTableService"/>
 		<property name="folders">
 			<map>
 				<entry key="#{ERRANDS_ROOT_ID}" value="#{ERRANDS_ROOT_NAME}"/>

@@ -1,24 +1,25 @@
 <#escape x as jsonUtils.encodeJSONString(x)>
-<#if report??>
-    {
-        "nodeRef": "${report.nodeRef}",
-        "text": "${report.properties["lecm-errands-ts:execution-report-text"]!""}",
-        "connectedDocuments": [
-            <#list report.assocs["lecm-errands-ts:execution-report-connected-document-assoc"] as connectedDocs>
+{
+    "text": "${reportText!""}",
+    "connectedDocuments": [
+        <#if connectedDocuments??>
+            <#list connectedDocuments as connectedDoc>
                 {
-                    "nodeRef": "${connectedDocs.nodeRef}",
-                    "presentString": "${connectedDocs.properties["lecm-document:present-string"]!""}"
-                }<#if connectedDocs_has_next>,</#if>
+                "nodeRef": "${connectedDoc.nodeRef}",
+                "presentString": "${connectedDoc.properties["lecm-document:present-string"]!""}"
+                }<#if connectedDoc_has_next>,</#if>
             </#list>
-        ],
-        "attachments": [
-            <#list report.assocs["lecm-errands-ts:execution-report-attachment-assoc"] as attachment>
+        </#if>
+    ],
+    "attachments": [
+        <#if attachments??>
+            <#list attachments as attachment>
                 {
-                    "nodeRef": "${attachment.nodeRef}",
-                    "name": "${attachment.name!""}"
+                "nodeRef": "${attachment.nodeRef}",
+                "name": "${attachment.name!""}"
                 }<#if attachment_has_next>,</#if>
             </#list>
-        ]
-    }
-</#if>
+        </#if>
+    ]
+}
 </#escape>

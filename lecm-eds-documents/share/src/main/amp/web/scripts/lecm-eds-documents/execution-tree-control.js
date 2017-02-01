@@ -266,13 +266,26 @@ LogicECM.module = LogicECM.module || {};
                                     content += "    </tr>";
                                     content += "</table>";
 
+                                    var connectedDocsList = [];
+                                    if (response.json.connectedDocuments) {
+                                        response.json.connectedDocuments.forEach(function (doc) {
+                                            connectedDocsList.push(doc.presentString);
+                                        });
+                                    }
+                                    var attachmentsList = [];
+                                    if (response.json.attachments) {
+                                        response.json.attachments.forEach(function (attachment) {
+                                            attachmentsList.push(attachment.name);
+                                        });
+                                    }
+
                                     container.innerHTML = YAHOO.lang.substitute(content, {
                                         reportTextLabel: this.msg("msg.errand.report.text.label"),
                                         connectionsLabel: this.msg("msg.errand.report.connections.label"),
                                         attachmentLabel: this.msg("msg.errand.report.attachment.label"),
-                                        reportTextContent: "Готов документ и аннотация к нему2",
-                                        connectionsContent: "Исходящий документ №3",
-                                        attachmentContent: "Аннотацияю.docx4"
+                                        reportTextContent: response.json.text,
+                                        connectionsContent: this.getTableListLayout(connectedDocsList),
+                                        attachmentContent: this.getTableListLayout(attachmentsList)
                                     });
                                 }
                             }
