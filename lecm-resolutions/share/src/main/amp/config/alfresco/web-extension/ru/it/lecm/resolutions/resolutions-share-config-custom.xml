@@ -326,7 +326,7 @@
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-resolutions:limitation-date"/>
 
-                    <show id="errands-list" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
 
                     <show id="lecm-resolutions:reviewers-assoc"/>
                 </field-visibility>
@@ -360,8 +360,8 @@
                     </field>
                     <field id="lecm-resolutions:limitation-date" set="limitation-date"  mandatory="true"/>
 
-                    <field id="errands-list" set="execution">
-                        <control template="/ru/it/lecm/errands/controls/errands-tree-control.ftl"/>
+                    <field id="lecm-base-dummy-aspects:script2" set="execution">
+                        <control template="/ru/it/lecm/eds/controls/execution-tree-control.ftl"/>
                     </field>
 
                     <field id="lecm-resolutions:reviewers-assoc" set="reviewers">
