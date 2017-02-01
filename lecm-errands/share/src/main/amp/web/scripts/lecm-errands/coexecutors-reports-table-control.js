@@ -385,7 +385,7 @@ LogicECM.errands = LogicECM.errands || {};
             for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
                 column = this.datagridColumns[i];
 
-                if (this.options.overrideSortingWith === null) {
+                if (!this.options.overrideSortingWith) {
                     sortable = column.sortable;
                 } else {
                     sortable = this.options.overrideSortingWith;
@@ -433,7 +433,7 @@ LogicECM.errands = LogicECM.errands || {};
                     }
                 );
             }
-            if (!this.options.overrideSortingWith && this.options.otherActions != null && this.options.otherActions.length > 0) {
+            if (!this.options.overrideSortingWith && this.options.otherActions && this.options.otherActions.length > 0) {
                 // Add actions as last column
                 columnDefinitions.push(
                     {
