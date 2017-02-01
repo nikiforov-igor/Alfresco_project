@@ -1,4 +1,4 @@
-function main() {
+(function() {
     if (args["items"] && args["date"] && args["busyTimeMembersFields"]) {
         var employees = args["items"].split(",");
         var result = [];
@@ -7,8 +7,7 @@ function main() {
             if (employee) {
                 var additionalFilter = "AND (";
                 for (var i=0; i < additionalFilterFields.length; ++i) {
-                    var formatedField = additionalFilterFields[i].replace(":","\\:");
-                    formatedField = replaceAll("-", "\\-", formatedField);
+                    var formatedField = additionalFilterFields[i].replace(/:/g, "\\:").replace(/-/g, "\\-");
                     formatedField += "\\-ref";
                     additionalFilter += ("@" + formatedField + ": \"*" + employee + "*\"");
                     if (i < additionalFilterFields.length - 1) {
@@ -37,10 +36,4 @@ function main() {
         }
         model.result = jsonUtils.toJSONString(result);
     }
-}
-
-function replaceAll(find, replace, str) {
-    return str.replace(new RegExp(find, 'g'), replace);
-}
-
-main();
+}());
