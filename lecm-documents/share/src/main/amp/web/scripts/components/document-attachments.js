@@ -73,7 +73,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/attachments-list",
                         dataObj: {
                             nodeRef: this.options.nodeRef,
-                            htmlid: this.id + Alfresco.util.generateDomId()
+                            htmlid: this.id + Alfresco.util.generateDomId(),
+							inclBaseDoc: !!this.options.baseDocAssocName
                         },
                         successCallback: {
                             fn:function(response){
