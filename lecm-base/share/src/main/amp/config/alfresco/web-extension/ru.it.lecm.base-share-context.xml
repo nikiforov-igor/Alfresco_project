@@ -47,4 +47,9 @@
 	<bean id="evaluator.ru.it.lecm.base.evaluators.DocumentTypeEvaluator" class="ru.it.lecm.base.evaluators.DocumentTypeEvaluator">
 		<property name="connectorService" ref="connector.service"/>
 	</bean>
+
+	<bean id="evaluator.ru.it.lecm.base.evaluators.DocumentTypeByAttachmentEvaluator" class="ru.it.lecm.base.evaluators.DocumentTypeByAttachmentEvaluator">
+		<property name="connectorService" ref="connector.service"/>
+		<property name="evaluator" ref="evaluator.ru.it.lecm.base.evaluators.DocumentTypeEvaluator"/>
+	</bean>
 </beans>

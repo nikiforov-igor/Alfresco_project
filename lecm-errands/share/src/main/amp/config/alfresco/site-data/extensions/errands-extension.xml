@@ -112,18 +112,7 @@
 							<evaluations>
 								<evaluation id="errand-attachment-header">
 									<evaluators>
-										<!-- ============================================= -->
-										<!-- ===============  ==========  ================ -->
-										<!-- =================  ======  ================== -->
-										<!-- ===============              ================ -->
-										<!-- =============                  ============== -->
-										<!-- ===========                      ============ -->
-										<!-- ===========  ==              ==  ============ -->
-										<!-- ===========  ==  ==========  ==  ============ -->
-										<!-- =================    ==    ================== -->
-										<!-- ============================================= -->
-										<!-- тут нужен другой евалюатор потому что {nodeRef} это вложение, а проверять нужно родителя -->
-										<evaluator type="evaluator.ru.it.lecm.base.evaluators.DocumentTypeEvaluator">
+										<evaluator type="evaluator.ru.it.lecm.base.evaluators.DocumentTypeByAttachmentEvaluator">
 											<params>
 												<nodeRef>{nodeRef}</nodeRef>
 												<type>{http://www.it.ru/logicECM/errands/1.0}document</type>
