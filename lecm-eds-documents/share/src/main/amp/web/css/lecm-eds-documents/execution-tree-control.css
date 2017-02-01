@@ -1,0 +1,29 @@
+.item-description .dont-have-access a{
+    color: grey;
+}
+
+.yui-skin-lecmTheme .yui-dt table.execution-expanded-content {
+    color: #999999;
+    margin-left: 70px;
+}
+
+.execution-tree-control .graph-tree .yui-dt-data td {
+    vertical-align: top;
+    top: 10px;
+}
+
+.execution-expanded-content .label-column {
+    vertical-align: top;
+}
+
+.execution-expanded-content.type-errand .label-column {
+    width: 150px;
+}
+
+.execution-expanded-content.type-resolution .label-column {
+    width: 220px;
+}
+
+.execution-expanded-content ul li {
+    margin-bottom: 5px;
+}
