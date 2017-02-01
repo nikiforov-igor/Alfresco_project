@@ -38,7 +38,6 @@ public class DocumentTypeByAttachmentEvaluator extends DefaultSubComponentEvalua
 	@Override
 	public boolean evaluate(RequestContext context, Map<String, String> params) {
 		String attachmentRef = params.get("nodeRef");
-		String type = params.get("type");
 		String url = "/lecm/document/attachments/api/getDocumentByAttachment?nodeRef=" + attachmentRef;
 		try {
 			Connector connector = connectorService.getConnector("alfresco", context.getUserId(), ServletUtil.getSession());
