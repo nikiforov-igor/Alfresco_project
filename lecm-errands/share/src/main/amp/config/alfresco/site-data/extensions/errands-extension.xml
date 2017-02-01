@@ -140,6 +140,24 @@
 						</sub-component>
 					</sub-components>
 				</component>
+				<component>
+					<scope>template</scope>
+					<region-id>document-connections</region-id>
+					<source-id>document</source-id>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="connections-for-errands">
+									<url>/lecm/components/document/connections</url>
+									<properties>
+										<nodeRef>{nodeRef}</nodeRef>
+										<excludeType>lecm-errands:document</excludeType>
+									</properties>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
 			</components>
 		</module>
 	</modules>

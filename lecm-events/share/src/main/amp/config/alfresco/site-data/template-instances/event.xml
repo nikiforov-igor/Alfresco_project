@@ -172,7 +172,6 @@
             <url>/lecm/components/document/connections</url>
             <properties>
                 <nodeRef>{nodeRef}</nodeRef>
-				<excludeType>lecm-errands:document</excludeType>
             </properties>
         </component>
 
