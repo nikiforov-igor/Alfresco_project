@@ -1,19 +1,18 @@
 var documentNodeRef = args['documentNodeRef'];
 var count = parseInt(args['count']);
 var showEmptyCategory = ('' + args['showEmptyCategory']).toLowerCase() == 'true';
-var additionalType = '' + args['additionalType'];
-var additionalAssoc = '' + args['additionalAssoc'];
+var baseDocAssocName = '' + args['baseDocAssocName'];
 var lockStatus = {};
 
 var categories = documentAttachments.getCategories(documentNodeRef);
 var items = [];
 var hasNext = false;
 var k = 0;
-if (categories != null) {
+if (categories) {
 	for (var i = 0; i < categories.length; i++) {
 		if (k <= count || isNaN(count)) {
 			var attachments = documentAttachments.getAttachmentsByCategory(categories[i]);
-			if (attachments != null && (attachments.length > 0 || showEmptyCategory)) {
+			if (attachments && (attachments.length || showEmptyCategory)) {
 				var showAttachments = [];
 				for (var j = 0; j < attachments.length; j++) {
 					if (k < count || isNaN(count)) {
@@ -38,20 +37,19 @@ if (categories != null) {
 	}
 
 	var document = utils.getNodeFromString(documentNodeRef);
-	var docType = '' + document.typeShort;
-	if (document != null && docType == additionalType) {
-		while (document != null && docType == additionalType && document.hasPermission("Read")) {
-			var baseDocAssoc = document.assocs[additionalAssoc];
-			if (baseDocAssoc != null && baseDocAssoc.length > 0) {
-				document = baseDocAssoc[0];
+	if (document && baseDocAssocName) {
+		while (document && document.hasPermission("Read")) {
+			var baseDocs = document.assocs[baseDocAssocName];
+			if (baseDocs && baseDocs.length) {
+				document = baseDocs[0];
 			} else {
 				document = null;
 			}
 		}
 
-		if (document != null) {
+		if (document) {
 			var categories = documentAttachments.getCategories(document.nodeRef.toString());
-			if (categories != null) {
+			if (categories) {
 				var showAttachments = [];
 				for (var i = 0; i < categories.length; i++) {
 					var attachments = documentAttachments.getAttachmentsByCategory(categories[i]);
@@ -66,7 +64,7 @@ if (categories != null) {
 						k++;
 					}
 				}
-				if (showAttachments != null && (showAttachments.length > 0 || showEmptyCategory)) {
+				if (showAttachments && (showAttachments.length || showEmptyCategory)) {
 					items.push({
 						category: {
 							node: {

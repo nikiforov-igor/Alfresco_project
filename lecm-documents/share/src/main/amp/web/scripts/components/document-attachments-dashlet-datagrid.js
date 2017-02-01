@@ -33,8 +33,7 @@ var $html = Alfresco.util.encodeHTML,
 		fileUpload: null,
 
 		options: {
-			additionalType: null,
-			additionalAssoc: null
+			baseDocAssocName: null
 		},
 
 		getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
@@ -118,12 +117,11 @@ var $html = Alfresco.util.encodeHTML,
 							}
 
 							if (oColumn.field == "prop_cm_name") {
-								var href = '<a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.showAttachmentsModalForm(\'{documentRef}\', \'{attachmentRef}\', \'{additionalType}\', \'{additionalAssoc}\')">{columnContent}</a>';
+								var href = '<a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.showAttachmentsModalForm(\'{documentRef}\', \'{attachmentRef}\', \'{baseDocAssocName}\')">{columnContent}</a>';
 								html += YAHOO.lang.substitute(href, {
 									documentRef: grid.options.documentRef,
 									attachmentRef: oRecord.getData("nodeRef"),
-									additionalType: grid.options.additionalType,
-									additionalAssoc: grid.options.additionalAssoc,
+									baseDocAssocName: grid.options.baseDocAssocName,
 									columnContent: columnContent
 								});
 								oColumn.maxAutoWidth = oColumn.getColEl().offsetWidth;

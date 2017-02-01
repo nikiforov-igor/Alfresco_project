@@ -43,8 +43,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
         {
 	        newId: null,
             options: {
-				additionalType: null,
-				additionalAssoc: null,
+				baseDocAssocName: null,
 		        showAfterReady: false
 	        },
 
@@ -97,8 +96,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				        dataObj: {
 					        nodeRef: this.options.nodeRef,
 					        htmlid: newId,
-							additionalType: this.options.additionalType,
-							additionalAssoc: this.options.additionalAssoc
+							baseDocAssocName: this.options.baseDocAssocName
 				        },
 				        successCallback: {
 					        fn:function(response){

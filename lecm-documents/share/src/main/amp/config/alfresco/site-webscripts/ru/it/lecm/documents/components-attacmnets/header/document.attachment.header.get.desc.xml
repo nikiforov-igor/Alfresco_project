@@ -4,10 +4,7 @@
 		Document Attachment Header Component
 
 		Дополнительные необязательные параметры для получения вложений документа-основания
-		Если задали additionalType нужно также задать additionalAssoc
-
-		additionalType - тип документа для проверки соответствия
-		additionalAssoc - ассоциация на документ основания
+		baseDocAssocName - имя ассоциации указывающей на документ основание
 	</description>
-	<url>/lecm/components/document/attachment/header?additionalType={additionalType}&amp;additionalAssoc={additionalAssoc}</url>
+	<url>/lecm/components/document/attachment/header?baseDocAssocName={baseDocAssocName}</url>
 </webscript>

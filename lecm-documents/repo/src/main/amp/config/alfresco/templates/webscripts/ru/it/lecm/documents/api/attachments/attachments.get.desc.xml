@@ -7,12 +7,9 @@
 		showEmptyCategory - отображать пустые категории вложений
 
 		Дополнительные необязательные параметры для получения вложений документа-основания
-		Если задали additionalType нужно также задать additionalAssoc
-		
-		additionalType - тип документа для проверки соответствия
-		additionalAssoc - ассоциация на документ основания
+		baseDocAssocName - имя ассоциации указывающей на документ основание
 	</description>
-    <url>/lecm/document/attachments/api/get?documentNodeRef={documentNodeRef}&amp;count={count}&amp;showEmptyCategory={showEmptyCategory}&amp;additionalType={additionalType}&amp;additionalAssoc={additionalAssoc}</url>
+    <url>/lecm/document/attachments/api/get?documentNodeRef={documentNodeRef}&amp;count={count}&amp;showEmptyCategory={showEmptyCategory}&amp;baseDocAssocName={baseDocAssocName}</url>
     <authentication>user</authentication>
     <transaction>none</transaction>
     <format default="json"/>

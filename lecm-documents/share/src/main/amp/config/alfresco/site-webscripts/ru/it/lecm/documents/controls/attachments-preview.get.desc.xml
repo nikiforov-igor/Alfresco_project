@@ -10,10 +10,7 @@ and open the template in the editor.
 		This web scripts should be used to show attachments modal form
 
 		Дополнительные необязательные параметры для получения вложений документа-основания
-		Если задали additionalType нужно также задать additionalAssoc
-
-		additionalType - тип документа для проверки соответствия
-		additionalAssoc - ассоциация на документ основания
+		baseDocAssocName - имя ассоциации указывающей на документ основание
 	</description>
-	<url>/lecm/components/document/attachments-preview?additionalType={additionalType}&amp;additionalAssoc={additionalAssoc}</url>
+	<url>/lecm/components/document/attachments-preview?baseDocAssocName={baseDocAssocName}</url>
 </webscript>

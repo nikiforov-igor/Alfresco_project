@@ -3,6 +3,5 @@
 	AlfrescoUtil.param("nodeRef");
 	AlfrescoUtil.param("forTask");
 	AlfrescoUtil.param("selectedAttachmentNodeRef");
-	AlfrescoUtil.param("additionalType");
-	AlfrescoUtil.param("additionalAssoc");
+	AlfrescoUtil.param("baseDocAssocName");
 })();

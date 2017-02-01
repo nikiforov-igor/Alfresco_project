@@ -31,8 +31,7 @@
 			control.setOptions({
 				itemId: "${nodeRef}",
 				forTask: ${forTask?string},
-				additionalType: "${additionalType!""}",
-				additionalAssoc: "${additionalAssoc!""}",
+				baseDocAssocName: "${baseDocAssocName!""}",
                 selectedAttachmentNodeRef: "${selectedAttachmentNodeRef}"
 			});
             control.onReady();

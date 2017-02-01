@@ -34,8 +34,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 				itemId: "",
 				forTask: true,
                 selectedAttachmentNodeRef: "",
-				additionalType: null,
-				additionalAssoc: null
+				baseDocAssocName: null
 			},
 
 			documentNodeRef: null,
@@ -84,8 +83,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 						dataObj: {
 							documentNodeRef: this.documentNodeRef,
 							showEmptyCategory: true,
-							additionalType: this.options.additionalType,
-							additionalAssoc: this.options.additionalAssoc
+							baseDocAssocName: this.options.baseDocAssocName
 						},
 						successCallback: {
 							fn: function (response) {
