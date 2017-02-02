@@ -10,7 +10,7 @@ function processDueDateChanges (dateRadio, newDueDate, processChild, changeDateR
     var oldLimitRadio = document.properties["lecm-errands:limitation-date-radio"];
     if (dateRadio == "DATE") {
         document.properties["lecm-errands:limitation-date"] = newDueDate;
-        newLimitationDate = new Date(newDueDate);
+        newLimitationDate = new Date(newDueDate.getTime());
         if (oldLimitDate && oldLimitRadio != "LIMITLESS") {
             shiftSize = new Date(newLimitationDate.getTime() - oldLimitDate.getTime());
         }
