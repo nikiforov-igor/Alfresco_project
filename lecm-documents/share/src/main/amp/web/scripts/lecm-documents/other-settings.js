@@ -37,7 +37,7 @@ LogicECM.module = LogicECM.module || {};
 				var me = this;
 				Alfresco.util.Ajax.request(
 					{
-						url: Alfresco.constants.PROXY_URI + "lecm/eds/global-settings/api/getSettingsNode",
+						url: Alfresco.constants.PROXY_URI + "lecm/documents/global-settings/api/getSettingsNode",
 						successCallback: {
 							fn: function (response) {
 								var oResults = eval("(" + response.serverResponse.responseText + ")");
@@ -56,9 +56,9 @@ LogicECM.module = LogicECM.module || {};
 					var container = Dom.get(me.id + "-settings");
 					container.innerHTML = response.serverResponse.responseText;
 
-					Dom.get("eds-global-settings-edit-form-form-submit").value = me.msg("label.save");
+					Dom.get("documents-global-settings-edit-form-form-submit").value = me.msg("label.save");
 
-					var form = new Alfresco.forms.Form("eds-global-settings-edit-form-form");
+					var form = new Alfresco.forms.Form("documents-global-settings-edit-form-form");
 					form.setSubmitAsJSON(true);
 					form.setAJAXSubmit(true,
 						{
@@ -74,7 +74,7 @@ LogicECM.module = LogicECM.module || {};
 					{
 						url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 						dataObj: {
-							htmlid: "eds-global-settings-edit-form",
+							htmlid: "documents-global-settings-edit-form",
 							itemKind:"node",
 							itemId: settingsNode,
 							mode: "edit",

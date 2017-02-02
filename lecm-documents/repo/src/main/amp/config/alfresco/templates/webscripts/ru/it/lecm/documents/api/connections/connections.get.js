@@ -1,6 +1,6 @@
 var ERRAND_TYPE = 'lecm-errands:document';
 var IS_SYSTEM = 'lecm-connect:is-system';
-var viewLinksMode = '' + edsGlobalSettings.getLinksViewMode(); /*VIEW_ALL, VIEW_DIRECT, VIEW_NO*/
+var viewLinksMode = '' + documentGlobalSettings.getLinksViewMode(); /*VIEW_ALL, VIEW_DIRECT, VIEW_NO*/
 
 var documentNodeRef = args['documentNodeRef'];
 var count = parseInt(args['count']);

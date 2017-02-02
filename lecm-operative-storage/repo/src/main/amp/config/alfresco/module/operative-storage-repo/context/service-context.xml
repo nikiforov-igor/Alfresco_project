@@ -116,7 +116,7 @@
 	/>
 
 	<bean id="operative.storage.arm.bootstrap" parent="lecmDictionaryBootstrap"
-		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
+		  depends-on="arm.settings.LogicEcmBootstrap,eds.documents.arm.settings.LogicEcmBootstrap"
 		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Настройки СЭД"
 		  p:dictionaries-ref="operative.storage.arm.dictionaries"/>
 

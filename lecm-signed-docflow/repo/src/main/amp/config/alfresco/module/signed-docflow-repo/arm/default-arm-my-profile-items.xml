@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<items>
-	<item name="cm:Крипто-апплет" type="lecm-arm:html-node">
-		<property name="cm:name"><![CDATA[Крипто-апплет]]></property>
-		<property name="lecm-arm:order"><![CDATA[3]]></property>
-		<property name="lecm-arm:html-url"><![CDATA[page/my-applet-settings]]></property>
-	</item>
-</items>

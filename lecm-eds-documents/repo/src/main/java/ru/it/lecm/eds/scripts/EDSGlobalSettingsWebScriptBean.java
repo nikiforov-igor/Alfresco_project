@@ -122,25 +122,7 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 	public Boolean isRegistrationCenralized() {
 		return edsGlobalSettingsService.isRegistrationCenralized();
 	}
-
-    /**
-     * Проверка, скрывать ли свойства для получателей
-     */
-    public Boolean isHidePropsForRecipients() {
-//		TODO: Метод isHideProperties в итоге дёргает метод getSettingsNode, который ранее был getOrCreate.
-//		Теперь метод разделён и необходимо провести проверку на существование ноды и создать её при необходимости
-//              нода настроек создаётся при инициализации бина. проверять не будем.
-//		if(edsGlobalSettingsService.getSettingsNode() == null) {
-//			try {
-////			Используется только в скриптах машины состояний, должно быть уже в транзакции
-//				edsGlobalSettingsService.createSettingsNode();
-//			} catch (WriteTransactionNeededException ex) {
-//				throw new RuntimeException("Can't create settings node", ex);
-//			}
-//		}
-		return edsGlobalSettingsService.isHideProperties();
-	}
-
+	
     /**
      * Получение узла АРМ для Дашлета «Моя работа»
      */
@@ -194,8 +176,4 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
         }
         return null;
     }
-
-	public String getLinksViewMode() {
-		return edsGlobalSettingsService.getLinksViewMode();
-	}
 }

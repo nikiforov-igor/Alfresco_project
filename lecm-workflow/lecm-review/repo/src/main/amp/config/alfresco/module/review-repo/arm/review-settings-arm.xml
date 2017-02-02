@@ -2,7 +2,7 @@
 <items>
 	<item name="cm:Настройки ознакомления" type="lecm-arm:html-node">
 		<property name="cm:name"><![CDATA[Настройки ознакомления]]></property>
-		<property name="lecm-arm:order"><![CDATA[30]]></property>
+		<property name="lecm-arm:order"><![CDATA[20]]></property>
 		<property name="lecm-arm:html-url"><![CDATA[page/review-settings]]></property>
 		<items>
 			<item name="cm:Списки ознакомления" type="lecm-arm:node">

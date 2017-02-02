@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-    <item name="cm:Включить пассивные уведомления" type="lecm-arm:html-node">
-        <property name="cm:name"><![CDATA[Включить пассивные уведомления]]></property>
+    <item name="cm:Настройки уведомлений" type="lecm-arm:html-node">
+        <property name="cm:name"><![CDATA[Настройки уведомлений]]></property>
         <property name="lecm-arm:order"><![CDATA[50]]></property>
         <property name="lecm-arm:html-url">
             <![CDATA[page/components/console/notifications-settings]]></property>

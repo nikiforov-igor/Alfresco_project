@@ -1,8 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-	<item name="cm:Настройки поручений" type="lecm-arm:html-node">
-		<property name="cm:name"><![CDATA[Настройки поручений]]></property>
-		<property name="lecm-arm:order"><![CDATA[0]]></property>
-		<property name="lecm-arm:html-url"><![CDATA[page/my-errands-settings]]></property>
+	<item name="cm:СЭД" type="lecm-arm:accordion">
+		<property name="cm:name"><![CDATA[СЭД]]></property>
+		<property name="lecm-arm:order"><![CDATA[3]]></property>
+		<property name="lecm-arm:search-type"><![CDATA[]]></property>
+		<property name="lecm-arm:types"><![CDATA[lecm-document:base]]></property>
+		<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+		<property name="lecm-arm:search-query"><![CDATA[]]></property>
+		<items>
+			<item name="cm:Настройки поручений" type="lecm-arm:html-node">
+				<property name="cm:name"><![CDATA[Настройки поручений]]></property>
+				<property name="lecm-arm:order"><![CDATA[0]]></property>
+				<property name="lecm-arm:html-url"><![CDATA[page/my-errands-settings]]></property>
+			</item>
+		</items>
 	</item>
 </items>

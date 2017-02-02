@@ -1260,5 +1260,36 @@
         </hidden-workflows>
     </config>
 
+    <config evaluator="node-type" condition="lecm-document-global-settings:settings">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-document-global-settings:links-view-mode"/>
+                    <show id="lecm-document-global-settings:hide-properties-for-recipients"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-global-settings:links-view-mode">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 
+    <config evaluator="model-type" condition="lecm-document-global-settings:settings">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-document-global-settings:links-view-mode"/>
+                    <show id="lecm-document-global-settings:hide-properties-for-recipients"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-global-settings:links-view-mode">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+    
 </alfresco-config>

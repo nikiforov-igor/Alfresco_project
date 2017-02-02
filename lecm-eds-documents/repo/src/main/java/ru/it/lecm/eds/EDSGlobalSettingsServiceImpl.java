@@ -241,15 +241,6 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
         return false;
     }
 
-    @Override
-    public Boolean isHideProperties() {
-        NodeRef settings = getSettingsNode();
-        if (settings != null) {
-            return (Boolean) nodeService.getProperty(settings, PROP_SETTINGS_HIDE_PROPS);
-        }
-        return false;
-    }
-
 	@Override
     public NodeRef getArmDashletNode() {
         NodeRef settings = getSettingsNode();
@@ -283,15 +274,5 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 			}
 		}
 		return registrars;
-	}
-
-	@Override
-	public String getLinksViewMode() {
-		String mode = null;
-		NodeRef settings = getSettingsNode();
-		if (settings != null) {
-			mode = (String) nodeService.getProperty(settings, PROP_SETTINGS_LINKS_VIEW_MODE);
-		}
-		return mode != null ? mode : "VIEW_ALL";
 	}
 }

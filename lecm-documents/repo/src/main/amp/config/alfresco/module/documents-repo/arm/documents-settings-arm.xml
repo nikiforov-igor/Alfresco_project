@@ -2,7 +2,7 @@
 <items>
     <item name="cm:Прочие настройки" type="lecm-arm:html-node">
         <property name="cm:name"><![CDATA[Прочие настройки]]></property>
-        <property name="lecm-arm:order"><![CDATA[10]]></property>
+        <property name="lecm-arm:order"><![CDATA[100]]></property>
         <property name="lecm-arm:html-url">
             <![CDATA[page/components/console/platform-other-settings]]></property>
     </item>

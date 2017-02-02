@@ -74,7 +74,7 @@
                         var userName = orgstructure.getEmployeeLogin(effectiveEmployee);
 
 
-                        var businessRole = (("" + edsGlobalSettings.isHidePropsForRecipients()) == "true") ? "LECM_BASIC_PG_ActionPerformer_Lite" : "LECM_BASIC_PG_ActionPerformer"; 
+                        var businessRole = (("" + documentGlobalSettings.isHidePropsForRecipients()) == "true") ? "LECM_BASIC_PG_ActionPerformer_Lite" : "LECM_BASIC_PG_ActionPerformer"; 
                         documentMembers.addMemberWithoutCheckPermission(document, employee, businessRole, true);
 
                         var initiator = orgstructure.getCurrentEmployee();

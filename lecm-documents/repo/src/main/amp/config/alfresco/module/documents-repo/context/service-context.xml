@@ -199,6 +199,19 @@
 		</property>
     </bean>
 
+    <bean id="documents.logicEcmModelsDocumentsGlobalSettingsBootstrap" parent="dictionaryModelBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-document-global-settings-model.xml</value>
+            </list>
+        </property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/lecm-document-global-settings-model</value>
+            </list>
+        </property>
+    </bean>
+    
     <bean id="documents.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="documents.LogicEcmModelsConnectionTypesBootstrap,
                         documents.LogicEcmModelsStampsBootstrap,
@@ -233,6 +246,26 @@
                 <value>alfresco/module/documents-repo/arm/documents-settings-arm.xml</value>
             </list>
         </property>
+    </bean>
+
+    <util:constant id="DOCUMENT_GLOBAL_SETTINGS_FOLDER_ID" static-field="ru.it.lecm.documents.beans.DocumentGlobalSettingsService.DOCUMENT_GLOBAL_SETTINGS_FOLDER_ID"/>
+    <util:constant id="DOCUMENT_GLOBAL_SETTINGS_FOLDER_NAME" static-field="ru.it.lecm.documents.beans.DocumentGlobalSettingsService.DOCUMENT_GLOBAL_SETTINGS_FOLDER_NAME"/>
+    <util:map id="documents.global-settings.folders">
+        <entry key="#{DOCUMENT_GLOBAL_SETTINGS_FOLDER_ID}" value="#{DOCUMENT_GLOBAL_SETTINGS_FOLDER_NAME}"/>
+    </util:map>
+    <bean id="documents.global-settings.service" init-method="init" parent="baseBean"
+          depends-on="documents.logicEcmModelsDocumentsGlobalSettingsBootstrap"
+          class="ru.it.lecm.documents.beans.DocumentGlobalSettingsServiceImpl">
+        <property name="folders" ref="documents.global-settings.folders"/>
+    </bean>
+
+    <bean id="documents.global-settings.script" parent="baseScript"
+          class="ru.it.lecm.documents.scripts.DocumentGlobalSettingsWebScriptBean"
+          depends-on="documents.global-settings.service">
+        <property name="extensionName">
+            <value>documentGlobalSettings</value>
+        </property>
+        <property name="documentGlobalSettingsService" ref="documents.global-settings.service"/>
     </bean>
     
     <bean id="documentConnectionService" class="ru.it.lecm.documents.beans.DocumentConnectionServiceImpl" parent="baseBean">

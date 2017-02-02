@@ -2,7 +2,7 @@
 <items>
 	<item name="cm:Счетчики регистрационных номеров" type="lecm-arm:html-node">
 		<property name="cm:name"><![CDATA[Счетчики регистрационных номеров]]></property>
-		<property name="lecm-arm:order"><![CDATA[70]]></property>
+		<property name="lecm-arm:order"><![CDATA[40]]></property>
 		<property name="lecm-arm:html-url"><![CDATA[page/documents-counters-reset]]></property>
 	</item>
 </items>

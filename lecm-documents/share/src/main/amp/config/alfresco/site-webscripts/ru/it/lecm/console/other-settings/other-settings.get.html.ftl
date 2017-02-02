@@ -10,14 +10,11 @@
 
     function init() {
         LogicECM.module.Base.Util.loadResources([
-            'scripts/lecm-base/components/association-tree/association-tree-view.js',
-            'scripts/lecm-eds-documents/components/global-settings/potential-role-tree-picker.js',
             'components/form/form.js',
             'components/console/consoletool.js',
             'scripts/lecm-documents/other-settings.js'
         ], [
-            'css/lecm-documents/other-settings.css',
-            'yui/treeview/assets/skins/sam/treeview.css'
+            'css/lecm-documents/other-settings.css'
         ], createPage);
     }
 

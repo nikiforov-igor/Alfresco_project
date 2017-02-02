@@ -2,8 +2,7 @@
 {
     <#if node??>
         nodeRef: "${node.getNodeRef().toString()}",
-        isRegCenralized : <#if node.properties["lecm-eds-globset:centralized-registration"]??>${node.properties["lecm-eds-globset:centralized-registration"]?string!false}<#else>false</#if>,
-        isHideProps: <#if node.properties["lecm-eds-globset:hide-properties-for-recipients"]??>${node.properties["lecm-eds-globset:hide-properties-for-recipients"]?string!false}<#else>false</#if>
+        isRegCenralized : <#if node.properties["lecm-eds-globset:centralized-registration"]??>${node.properties["lecm-eds-globset:centralized-registration"]?string!false}<#else>false</#if>
         <#if node.assocs["lecm-eds-globset:arm-for-dashlet-assoc"]??>
         ,"armCode": "${node.assocs["lecm-eds-globset:arm-for-dashlet-assoc"][0]["lecm-arm:code"]!"SED"}"
         </#if>
