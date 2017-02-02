@@ -165,7 +165,6 @@
                 <!-- Имя атрибута документа основания для срока исполнения -->
                 <property name="lecm-resolutions:base-doc-execution-date-attr-name">
                     <type>d:text</type>
-                    <default>false</default>
                 </property>
                 <property name="lecm-resolutions:auto-complete">
                     <type>d:boolean</type>
