@@ -30,14 +30,14 @@
 
 <div class="errands-dashlet-content" id="${id}">
     <span class="my-errands">
-        <img src="/share/res/images/lecm-documents/errands/in.png" width="24" title="${msg('label.to-me-errand')}" id="${id}-in-img">
+        <img src="${url.context}/res/images/lecm-documents/errands/in.png" width="24" title="${msg('label.to-me-errand')}" id="${id}-in-img">
     </span>
     <div class="body issued-to-me-errands-block">
         <div id="${id}-errand"></div>
     </div>
     <span>
         <span class="assigned-errand-img">
-            <img src="/share/res/images/lecm-documents/errands/out.png" width="24" title="${msg('label.my-errands')}" id="${id}-out-img">
+            <img src="${url.context}/res/images/lecm-documents/errands/out.png" width="24" title="${msg('label.my-errands')}" id="${id}-out-img">
         </span>
         <div class="total-tasks-count">
             <#if mayCreateReErrand && hasStatemachine && hasPermission && isErrandsStarter && errand??>
@@ -50,8 +50,5 @@
     </span>
     <div class="body issued-by-me-errands-block" id="${id}-issued-paginator">
         <div id="${id}-issued-errands"></div>
-<#--        <div id="${id}-issued-errands-loading" class="loading-image-container">
-            <img src="/share/res/components/images/lightbox/loading.gif">
-        </div>-->
     </div>
 </div>

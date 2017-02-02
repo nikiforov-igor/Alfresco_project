@@ -8,13 +8,13 @@
 }
 
 .printApprovalReport {
-	background: url("/share/res/components/images/printer-16.png") no-repeat;
+	background: url("../../components/images/printer-16.png") no-repeat;
 	background-position: bottom;
 	vertical-align: bottom;
 	display: table-cell;
 }
 .editIteration {
-	background: url("/share/res/components/images/edit-16.png") no-repeat;
+	background: url("../../components/images/edit-16.png") no-repeat;
 	background-position: bottom;
 	vertical-align: bottom;
 	display: table-cell;

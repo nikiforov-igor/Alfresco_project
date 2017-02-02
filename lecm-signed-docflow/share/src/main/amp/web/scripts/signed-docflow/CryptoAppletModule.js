@@ -666,7 +666,7 @@ function checkForApplet() {
 					}
 
 					for (i = 0; i < contentFailure.length; i++) {
-						template = '<a style=align: left; href=/share/page/document-attachment?nodeRef={signedContentNodeRef}>{signedContentName}</a><br/>';
+						template = '<a style=align: left; href=\"' + Alfresco.constants.URL_PAGECONTEXT + 'document-attachment?nodeRef={signedContentNodeRef}\">{signedContentName}</a><br/>';
 						badContent += YAHOO.lang.substitute(template, contentFailure[i]);
 					}
 

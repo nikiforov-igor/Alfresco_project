@@ -1,22 +1,19 @@
 package ru.it.lecm.workflow.webscripts;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.extensions.webscripts.Cache;
-import org.springframework.extensions.webscripts.DeclarativeWebScript;
-import org.springframework.extensions.webscripts.Status;
-import org.springframework.extensions.webscripts.WebScriptException;
-import org.springframework.extensions.webscripts.WebScriptRequest;
-import ru.it.lecm.base.beans.BaseBean;
+import org.springframework.extensions.webscripts.*;
+import ru.it.lecm.base.beans.LecmURLService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.beans.WorkflowFoldersServiceImpl;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -27,8 +24,8 @@ public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 	private WorkflowService workflowService;
 	private NodeService nodeService;
 	private WorkflowFoldersServiceImpl workflowFoldersService;
-	private static final String DOCUMENT_DETAILS_URL = "/share/page/document-details";
 	private DocumentService documentService;
+	private LecmURLService urlService;
 
 	public void setWorkflowService(WorkflowService workflowService) {
 		this.workflowService = workflowService;
@@ -40,6 +37,10 @@ public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 
 	public void setWorkflowFoldersService(WorkflowFoldersServiceImpl workflowFoldersService) {
 		this.workflowFoldersService = workflowFoldersService;
+	}
+
+	public void setUrlService(LecmURLService urlService) {
+		this.urlService = urlService;
 	}
 
 	@Override
@@ -69,7 +70,7 @@ public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 
 		if (presentString == null || presentString.length() == 0) {
 			presentString = "Документ";
-			documentURL = workflowFoldersService.wrapperLink(documentRef, presentString, DOCUMENT_DETAILS_URL);
+			documentURL = workflowFoldersService.wrapperLink(documentRef, presentString, urlService.getDetailsLinkUrl());
 		} else {
 			documentURL = workflowFoldersService.wrapperLink(documentRef, presentString, documentService.getDocumentUrl(documentRef));
 		}

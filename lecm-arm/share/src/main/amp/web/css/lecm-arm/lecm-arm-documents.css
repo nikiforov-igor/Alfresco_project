@@ -1,5 +1,5 @@
-@import "/share/res/css/lecm-arm/lecm-arm-admin-page.css";
-@import "/share/res/css/lecm-arm/lecm-arm-orgstructure-page.css";
+@import "../../css/lecm-arm/lecm-arm-admin-page.css";
+@import "../../css/lecm-arm/lecm-arm-orgstructure-page.css";
 
 #bd #lecm-content-main #arm-tree {
     margin: 0 5px;
@@ -82,7 +82,7 @@
 }
 
 .datalist-toolbar .filters span.first-child {
-    background: url('/share/res/images/lecm-arm/filter-16.png') no-repeat 4px 4px;
+    background: url('../../images/lecm-arm/filter-16.png') no-repeat 4px 4px;
     padding-left: 0;
 }
 .datalist-toolbar .filters span.first-child button {
@@ -100,7 +100,7 @@ div.arm-tree-menu ul.arm-accordion > li {
 
 div.arm-tree-menu .arm-accordion div.accordion-head {
 	cursor: pointer;
-	/*background: url('/share/res/images/lecm-arm/accordion_button.png') repeat-x;*/
+	/*background: url('../../images/lecm-arm/accordion_button.png') repeat-x;*/
 	font-size: 13px;
 	font-weight: bold;
 	font-style: normal;
@@ -210,14 +210,14 @@ div.arm-tree-menu .arm-accordion .wait-container {
 
 div.noerror-item
 {
-    background: url('/share/res/images/lecm-arm/noerror.png') no-repeat 0 0;
+    background: url('../../images/lecm-arm/noerror.png') no-repeat 0 0;
     padding: 0 0 10px 20px;
     text-align: left;
 }
 
 div.error-item
 {
-    background: url('/share/res/images/lecm-arm/error.png') no-repeat 0 0;
+    background: url('../../images/lecm-arm/error.png') no-repeat 0 0;
     padding: 0 0 10px 20px;
     text-align: left;
 }
@@ -312,11 +312,11 @@ div.error-item
 }
 
 #columnsForm .columns-list .moveUpColumn {
-    background-image: url("/share/res/images/lecm-base/components/triangle_up.png");
+    background-image: url("../../images/lecm-base/components/triangle_up.png");
     padding-right: 16px
 }
 #columnsForm .columns-list .moveDownColumn {
-    background-image: url("/share/res/images/lecm-base/components/triangle_down.png");
+    background-image: url("../../images/lecm-base/components/triangle_down.png");
     padding-right: 16px
 }
 

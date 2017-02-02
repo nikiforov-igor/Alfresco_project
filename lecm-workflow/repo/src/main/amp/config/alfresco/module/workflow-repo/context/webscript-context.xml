@@ -8,6 +8,7 @@
 		  class="ru.it.lecm.workflow.webscripts.GetDocumentDataByTaskIdOrNodeRef" parent="webscript"
 		  p:workflowService-ref="WorkflowService"
 		  p:nodeService-ref="nodeService"
+		  p:urlService-ref="urlService"
 		  p:workflowFoldersService-ref="lecm.workflow.folders.bootstrap"
 		  p:documentService-ref="documentService" />
 

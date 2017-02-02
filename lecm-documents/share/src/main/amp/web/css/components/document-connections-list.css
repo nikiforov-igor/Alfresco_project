@@ -93,7 +93,7 @@ div.list-action-set a.list-action-link:hover
 }
 
 div.list-action-set .onActionDelete a {
-	background-image:url(/share/res/components/documentlibrary/actions/document-delete-16.png);
+	background-image:url(../../components/documentlibrary/actions/document-delete-16.png);
 }
 
 .connections-list .space {

@@ -3,17 +3,17 @@
 }
 
 .datagrid .onActionCancelReview a {
-	background: url("/share/res/components/images/edit-cancel-16.png") no-repeat;
+	background: url("../../components/images/edit-cancel-16.png") no-repeat;
 }
 
 .printReviewReport {
-	background: url("/share/res/components/images/printer-16.png") no-repeat;
+	background: url("../../components/images/printer-16.png") no-repeat;
 	background-position: bottom;
 	vertical-align: bottom;
 	display: table-cell;
 }
 .rejectReview {
-	background: url("/share/res/components/images/edit-cancel-16.png") no-repeat;
+	background: url("../../components/images/edit-cancel-16.png") no-repeat;
 	background-position: bottom;
 	vertical-align: bottom;
 	display: table-cell;

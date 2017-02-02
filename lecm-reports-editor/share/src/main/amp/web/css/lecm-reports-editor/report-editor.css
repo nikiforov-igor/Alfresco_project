@@ -1,11 +1,11 @@
 /* Work groups */
 
 .datagrid .action-set .onActionSelectTemplate a {
-    background-image: url("/share/res/images/lecm-reports-editor/select-template-16.png");
+    background-image: url("../../images/lecm-reports-editor/select-template-16.png");
 }
 
 .datagrid .action-set .onActionSelectSource a {
-    background-image: url("/share/res/images/lecm-reports-editor/select-source-16.png");
+    background-image: url("../../images/lecm-reports-editor/select-source-16.png");
 }
 
 .datagrid .action-set .onActionExport a {
@@ -13,7 +13,7 @@
 }
 
 .datagrid .action-set .onActionSave a {
-    background-image: url("/share/res/images/lecm-reports-editor/select-source-16.png");
+    background-image: url("../../images/lecm-reports-editor/select-source-16.png");
 }
 
 .reports-editor-panel {
@@ -34,7 +34,7 @@
     cursor: pointer;
     display: block;
     min-height: 16px;
-    background-image: url("/share/res/images/lecm-reports-editor/select-template-16.png");
+    background-image: url("../../images/lecm-reports-editor/select-template-16.png");
 }
 
 .title h3 {
@@ -54,11 +54,11 @@
 }
 
 .datagrid .action-set .onActionRemove a {
-       background-image: url('/share/res/components/images/delete-row-16.png');
+       background-image: url('../../components/images/delete-row-16.png');
  }
 
 .datagrid .action-set .onActionAdd a {
-    background-image: url('/share/res/images/lecm-reports-editor/column-add-16.png');
+    background-image: url('../../images/lecm-reports-editor/column-add-16.png');
 }
 
 #bd #lecm-content-main div[id*="reports-editor"] .reports {
@@ -87,12 +87,12 @@ div[id*="reports-editor-navigation-toolbar"] .toolbar
 }
 
 #yui-main div.datalist-toolbar div.header-bar div.select-row span.first-child {
-    background: url('/share/res/components/images/add-icon-16.png') no-repeat 12px 4px;
+    background: url('../../components/images/add-icon-16.png') no-repeat 12px 4px;
     padding-left: 24px;
 }
 
 #yui-main div.datalist-toolbar div.header-bar div.select-source span.first-child {
-    background: url('/share/res/components/images/select-invert-16.png') no-repeat 12px 4px;
+    background: url('../../components/images/select-invert-16.png') no-repeat 12px 4px;
     padding-left: 24px;
 }
 #yui-main #reports-editor-panel .datalist-toolbar .import-xml span.first-child {
@@ -100,11 +100,11 @@ div[id*="reports-editor-navigation-toolbar"] .toolbar
 }
 
 .datagrid .action-set .onActionDeploy a {
-    background-image: url("/share/res/images/lecm-reports-editor/deploy-report-16.png");
+    background-image: url("../../images/lecm-reports-editor/deploy-report-16.png");
 }
 
 .datagrid .action-set .onActionUnDeploy a {
-    background-image: url("/share/res/components/images/header/trashcan.png");
+    background-image: url("../../components/images/header/trashcan.png");
 }
 
 /*.datalist-toolbar .export-template button {
@@ -160,7 +160,7 @@ div[id*="report-settings"] .yui-skin-lecmTheme .yui-panel div.form-field textare
 
 span.insitu-deploy-report
 {
-    background-image: url('/share/res/images/lecm-reports-editor/deploy-report-16.png');
+    background-image: url('../../images/lecm-reports-editor/deploy-report-16.png');
     background-repeat: no-repeat;
     cursor: pointer;
     height: 16px;
@@ -185,14 +185,14 @@ span.insitu-deploy-report
 
 div.noerror-item
 {
-    background: url('/share/res/images/lecm-arm/noerror.png') no-repeat 0 0;
+    background: url('../../images/lecm-arm/noerror.png') no-repeat 0 0;
     padding: 0 0 10px 20px;
     text-align: left;
 }
 
 div.error-item
 {
-    background: url('/share/res/images/lecm-arm/error.png') no-repeat 0 0;
+    background: url('../../images/lecm-arm/error.png') no-repeat 0 0;
     padding: 0 0 10px 20px;
     text-align: left;
 }

@@ -1,7 +1,7 @@
 .dashlet .lecm-dashlet-actions .semantic-list {
     width: 16px;
     height: 16px;
-    background-image: url("/share/res/images/lecm-semantic-assist/semantic-list-16.png");
+    background-image: url("../../images/lecm-semantic-assist/semantic-list-16.png");
     padding: 0;
     display: inline-block;
     opacity: .5;

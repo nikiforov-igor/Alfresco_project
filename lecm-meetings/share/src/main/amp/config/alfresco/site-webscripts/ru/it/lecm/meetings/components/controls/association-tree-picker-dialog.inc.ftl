@@ -31,7 +31,7 @@
                     <div id="${pickerId}-picker-items" class="picker-items">
 	                    <div id="${pickerId}-group-members"></div>
 	                    <div id="${pickerId}-picker-items-loading" class="loading-image-container">
-		                    <img src="/share/res/components/images/lightbox/loading.gif">
+		                    <img src="${url.context}/res/components/images/lightbox/loading.gif">
 	                    </div>
                     </div>
                 </div>

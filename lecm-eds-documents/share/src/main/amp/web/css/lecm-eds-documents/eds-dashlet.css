@@ -28,7 +28,7 @@
 }
 
 .dashlet .titleBarActions .arm {
-    background-image: url('/share/res/images/lecm-eds-documents/arm.png');
+    background-image: url('../../images/lecm-eds-documents/arm.png');
 }
 
 .arm-documents .loading-image-container {

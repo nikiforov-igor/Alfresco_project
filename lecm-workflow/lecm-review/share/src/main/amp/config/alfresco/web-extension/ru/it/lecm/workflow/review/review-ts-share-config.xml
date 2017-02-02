@@ -202,7 +202,7 @@
 					<field id="lecm-review-ts-link" label-id="label.document">
 						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
 							<control-param name="formatString"><![CDATA[
-					                <a href='/share/page/document?nodeRef={../../nodeRef}'>
+					                <a href='/{~SHARE_CONTEXT}/page/document?nodeRef={../../nodeRef}'>
 					                    {../../lecm-document:present-string}
 					                </a>
 				                ]]>
