@@ -48,9 +48,6 @@
         <div class="yui-gc">
             <div class="bordered-panel doc-right-part">
 				<@region id="document-actions" scope="template"/>
-				<#if documentType?? && documentType == "{http://www.it.ru/logicECM/meetings/1.0}document">
-				<@region id="meeting-agenda" scope="template"/>
-				</#if>
                 <@region id="document-attachments" scope="template"/>
                 <@region id="document-connections" scope="template"/>
             </div>
