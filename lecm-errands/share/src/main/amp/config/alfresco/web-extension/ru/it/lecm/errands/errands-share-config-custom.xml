@@ -1881,7 +1881,7 @@
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestChangeDueDateTask_1NewDateValidation" event="change"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestChangeDueDateTask_1NewDateValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
