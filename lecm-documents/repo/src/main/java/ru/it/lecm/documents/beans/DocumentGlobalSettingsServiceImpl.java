@@ -16,6 +16,7 @@ import ru.it.lecm.base.beans.WriteTransactionNeededException;
 public class DocumentGlobalSettingsServiceImpl extends BaseBean implements DocumentGlobalSettingsService {
 
     private final static Logger logger = LoggerFactory.getLogger(DocumentGlobalSettingsServiceImpl.class);
+    private NodeRef settingsNode;
     
     @Override
     public NodeRef getServiceRootFolder() {
@@ -35,7 +36,10 @@ public class DocumentGlobalSettingsServiceImpl extends BaseBean implements Docum
 
     @Override
     public NodeRef getSettingsNode() {
-        return nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, DOCUMENT_GLOBAL_SETTINGS_NODE_NAME);
+        if (null == this.settingsNode) {
+            this.settingsNode = this.settingsNode = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, DOCUMENT_GLOBAL_SETTINGS_NODE_NAME);
+        }
+        return this.settingsNode;
     }
 
     private NodeRef createSettingsNode() throws WriteTransactionNeededException {
@@ -45,8 +49,8 @@ public class DocumentGlobalSettingsServiceImpl extends BaseBean implements Docum
     @Override
     public Boolean isHideProperties() {
         NodeRef settings = getSettingsNode();
-        if (settings != null) {
-            return (Boolean) nodeService.getProperty(settings, PROP_SETTINGS_HIDE_PROPS);
+        if (nodeService.exists(settings)) {
+            return Boolean.TRUE.equals(nodeService.getProperty(settings, PROP_SETTINGS_HIDE_PROPS));
         }
         return false;
     }
@@ -55,7 +59,7 @@ public class DocumentGlobalSettingsServiceImpl extends BaseBean implements Docum
     public String getLinksViewMode() {
         String mode = null;
         NodeRef settings = getSettingsNode();
-        if (settings != null) {
+        if (nodeService.exists(settings)) {
             mode = nodeService.getProperty(settings, PROP_SETTINGS_LINKS_VIEW_MODE).toString();
         }
         return mode != null ? mode : "VIEW_ALL";

@@ -260,8 +260,7 @@
     </bean>
 
     <bean id="documents.global-settings.script" parent="baseScript"
-          class="ru.it.lecm.documents.scripts.DocumentGlobalSettingsWebScriptBean"
-          depends-on="documents.global-settings.service">
+          class="ru.it.lecm.documents.scripts.DocumentGlobalSettingsWebScriptBean">
         <property name="extensionName">
             <value>documentGlobalSettings</value>
         </property>

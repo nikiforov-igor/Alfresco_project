@@ -1,7 +1,17 @@
 <#if allowEdit >
-<#include "/org/alfresco/components/component.head.inc">
 
 <#assign el=args.htmlid?html>
+
+<div id="${el}-body" class="platform-other-settings">
+	<div class="yui-g">
+		<div class="yui-u first">
+			<div class="title">${msg("label.title")}</div>
+		</div>
+	</div>
+
+	<div id="${el}-body-settings"></div>
+</div>
+
 <script type="text/javascript">//<![CDATA[
 (function(){
     function createPage() {
@@ -22,15 +32,6 @@
 })();
 //]]></script>
 
-<div id="${el}-body" class="platform-other-settings">
-	<div class="yui-g">
-		<div class="yui-u first">
-			<div class="title">${msg("label.title")}</div>
-		</div>
-	</div>
-
-	<div id="${el}-body-settings"></div>
-</div>
 <#else>
     <#include "/ru/it/lecm/base-share/components/forbidden.get.html.ftl">
 </#if>

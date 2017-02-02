@@ -1,6 +1,3 @@
-function main()
-{
+(function(){
     model.allowEdit = user.isAdmin
-}
-
-main();
+})();
