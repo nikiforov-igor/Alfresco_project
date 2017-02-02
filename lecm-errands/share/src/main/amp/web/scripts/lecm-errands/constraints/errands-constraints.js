@@ -33,12 +33,13 @@ LogicECM.module.Errands.limitationDateValidation =
     };
 LogicECM.module.Errands.WFChangeDueDateValidation =
     function (field, args, event, form, silent, message) {
-        if (field.name != "prop_lecmErrandWf_changeDueDateNewDueDate") {
+        var dateField = Selector.query(".errands-wf-duedate-set-date .value-div input[type='hidden']", YAHOO.util.Dom.get(field.form.id), true);
+        if (field.name != dateField.name) {
             return true;
         }
         if (field.form) {
-            var radio = field.form["prop_lecmErrandWf_changeDueDateNewDueDateRadio"];
-            var limitationDate = field.form["prop_lecmErrandWf_changeDueDateNewDueDate"];
+            var radio = Selector.query(".errands-wf-duedate-set-radio .value-div input[type='radio']", YAHOO.util.Dom.get(field.form.id));
+            var limitationDate = dateField;
             var radioValue = null;
             if (radio) {
                 for (var i = 0; i < radio.length; i++) {
