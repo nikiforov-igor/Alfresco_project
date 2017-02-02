@@ -299,8 +299,11 @@ LogicECM.errands = LogicECM.errands || {};
 
     YAHOO.lang.augmentObject(LogicECM.errands.CoexecutorsReportsDatagrid.prototype, {
         expandActionTypePrefix: "datagrid-expand-action-link",
+        getExpandedFormId: function(record) {
+            return this.id + encodeURIComponent(record.getData("nodeRef"));
+        },
 
-        addExpandedRow: function (record, text) {
+       /* addExpandedRow: function (record, text) {
             var me = this;
             var colSpan = this.datagridColumns.length;
             if (this.options.showCheckboxColumn) {
@@ -309,37 +312,39 @@ LogicECM.errands = LogicECM.errands || {};
             if (this.options.expandable) {
                 colSpan++;
             }
+            if (this.options.showActionColumn || this.options.showExpandActionsColumn) {
+                colSpan++;
+            }
             var newRow = Dom.get(this.getExpandedRecordId(record));
             var newColumn = document.createElement('td');
             newColumn.innerHTML = text;
             newRow.appendChild(newColumn);
-
-            var actions = this.options.actions;
-            var expandActionType = this.expandActionTypePrefix + "-" + this.options.bubblingLabel;
-            if (actions) {
-                var userAccess = record.getData("permissions").userAccess;
-                var acessibleActions = actions.filter(function (action) {
-                    return userAccess[action["permission"]] && action.evaluator.call(me, record.getData());
-                });
-                if (acessibleActions && acessibleActions.length) {
-                    var actionsColumn = document.createElement('td');
-                    var actionsDiv = document.createElement('div');
-                    actionsDiv.id = this.id + "-coexutor-report-actions-div";
-                    actionsDiv.className = "coexutor-report-actions-div";
-                    var actionsHtml = '';
-                    acessibleActions.forEach(function (action) {
-                        actionsHtml += Substitute(me.getActionHtml(), {
-                            label: action.label,
-                            aClass: this.expandActionTypePrefix + " " + expandActionType,
-                            rel: action.permission,
-                            actionDivClass: action.id
-                        });
+            if (this.options.showExpandActionsColumn) {
+                var actions = this.options.actions;
+                var expandActionType = this.expandActionTypePrefix + "-" + this.options.bubblingLabel;
+                if (actions) {
+                    var userAccess = record.getData("permissions").userAccess;
+                    var acessibleActions = actions.filter(function (action) {
+                        return userAccess[action["permission"]] && action.evaluator.call(me, record.getData());
                     });
-                    actionsDiv.innerHTML = actionsHtml;
-                    actionsColumn.appendChild(actionsDiv);
-                    newRow.appendChild(actionsColumn);
-                } else if (this.options.showActionColumn || this.options.showExpandActionsColumn) {
-                    colSpan++;
+                    if (acessibleActions && acessibleActions.length) {
+                        var actionsColumn = document.createElement('td');
+                        var actionsDiv = document.createElement('div');
+                        actionsDiv.id = this.id + "-coexutor-report-actions-div";
+                        actionsDiv.className = "coexutor-report-actions-div";
+                        var actionsHtml = '';
+                        acessibleActions.forEach(function (action) {
+                            actionsHtml += Substitute(me.getActionHtml(), {
+                                label: action.label,
+                                aClass: this.expandActionTypePrefix + " " + expandActionType,
+                                rel: action.permission,
+                                actionDivClass: action.id
+                            });
+                        });
+                        actionsDiv.innerHTML = actionsHtml;
+                        actionsColumn.appendChild(actionsDiv);
+                        newRow.appendChild(actionsColumn);
+                    }
                 }
             }
             newColumn.colSpan = colSpan;
@@ -485,7 +490,7 @@ LogicECM.errands = LogicECM.errands || {};
             html += '</span></span></div>';
             return html;
         },
-
+*/
         getRowFormater: function () {
             var scope = this;
 

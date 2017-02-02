@@ -1313,18 +1313,54 @@
                     <show id="lecm-errands-ts:coexecutor-report-text"/>
                     <show id="lecm-errands-ts:coexecutor-report-attachment-assoc"/>
                     <show id="lecm-errands-ts:coexecutor-report-connected-document-assoc"/>
-
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script3" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script4" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script5" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-errands-ts:coexecutor-report-text"/>
-                    <field id="lecm-errands-ts:coexecutor-report-attachment-assoc" />
-                    <field id="lecm-errands-ts:coexecutor-report-connected-document-assoc">
+                    <set id="fieldsAndButtons" template="/ru/it/lecm/errands/controls/errands-coexecutor-reports-expand-set.ftl"/>
+                    <field id="lecm-errands-ts:coexecutor-report-text" set="fieldsAndButtons"/>
+                    <field id="lecm-errands-ts:coexecutor-report-attachment-assoc" set="fieldsAndButtons"/>
+                    <field id="lecm-errands-ts:coexecutor-report-connected-document-assoc" set="fieldsAndButtons">
                         <control>
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">Отчет об исполнении: {lecm-document:ext-present-string}</control-param>
                             <control-param name="showInaccessible">true</control-param>
                         </control>
                     </field>
+                    <field id="lecm-base-dummy-aspects:script" label-id="actions.coexecutor.report.accept" set="fieldsAndButtons">
+                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
+                            <control-param name="clickFireAction">approveCoexecutorReportButtonClick</control-param>
+                            <control-param name="insertToDiv">form-fields</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script2" label-id="actions.coexecutor.report.decline" set="fieldsAndButtons">
+                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
+                            <control-param name="clickFireAction">declineCoexecutorReportButtonClick</control-param>
+                            <control-param name="insertToDiv">form-fields</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script3" label-id="actions.coexecutor.report.transfer" set="fieldsAndButtons">
+                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
+                            <control-param name="clickFireAction">transferCoexecutorReportButtonClick</control-param>
+                            <control-param name="insertToDiv">form-fields</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script4" label-id="actions.edit" set="fieldsAndButtons">
+                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
+                            <control-param name="clickFireAction">editCoexecutorReportButtonClick</control-param>
+                            <control-param name="insertToDiv">form-fields</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script5" set="fieldsAndButtons">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl" >
+                            <control-param name="scripts">scripts/lecm-errands/errands-coexecutor-expand-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">errandCoexecutorReportExpandScriptLoaded</control-param>
+                        </control>
+                    </field>
+
                 </appearance>
             </form>
             <form id="decline-coexecutor-report">
