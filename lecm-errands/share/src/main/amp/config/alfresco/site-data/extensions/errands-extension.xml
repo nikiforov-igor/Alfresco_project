@@ -11,6 +11,25 @@
 					<region-id>document-attachments</region-id>
 					<source-id>document</source-id>
 					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="errand-attachments">
+									<evaluators>
+										<evaluator type="evaluator.ru.it.lecm.base.evaluators.DocumentTypeEvaluator">
+											<params>
+												<nodeRef>{nodeRef}</nodeRef>
+												<type>{http://www.it.ru/logicECM/errands/1.0}document</type>
+											</params>
+										</evaluator>
+									</evaluators>
+									<url>/lecm/components/document/document-attachments</url>
+									<properties>
+										<nodeRef>{nodeRef}</nodeRef>
+										<baseDocAssocName>lecm-errands:additional-document-assoc</baseDocAssocName>
+									</properties>
+								</evaluation>
+							</evaluations>
+						</sub-component>
 						<sub-component id="document-errands">
 							<evaluations>
 								<evaluation id="document-errands-add">
@@ -51,6 +70,77 @@
 									<properties>
 										<nodeRef>{nodeRef}</nodeRef>
 										<formId>default</formId>
+									</properties>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+				<component>
+					<scope>template</scope>
+					<region-id>attachments</region-id>
+					<source-id>document</source-id>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="attachments-for-errands">
+									<evaluators>
+										<evaluator type="evaluator.ru.it.lecm.base.evaluators.DocumentTypeEvaluator">
+											<params>
+												<nodeRef>{nodeRef}</nodeRef>
+												<type>{http://www.it.ru/logicECM/errands/1.0}document</type>
+											</params>
+										</evaluator>
+									</evaluators>
+									<url>/lecm/components/dashlets/document-attachments</url>
+									<properties>
+										<nodeRef>{nodeRef}</nodeRef>
+										<view>{view}</view>
+										<baseDocAssocName>lecm-errands:additional-document-assoc</baseDocAssocName>
+									</properties>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+				<component>
+					<scope>template</scope>
+					<region-id>document-attachment-header</region-id>
+					<source-id>document-attachment</source-id>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="errand-attachment-header">
+									<evaluators>
+										<evaluator type="evaluator.ru.it.lecm.base.evaluators.DocumentTypeByAttachmentEvaluator">
+											<params>
+												<nodeRef>{nodeRef}</nodeRef>
+												<type>{http://www.it.ru/logicECM/errands/1.0}document</type>
+											</params>
+										</evaluator>
+									</evaluators>
+									<url>/lecm/components/document/attachment/header</url>
+									<properties>
+										<nodeRef>{nodeRef}</nodeRef>
+										<baseDocAssocName>lecm-errands:additional-document-assoc</baseDocAssocName>
+									</properties>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+				<component>
+					<scope>template</scope>
+					<region-id>document-connections</region-id>
+					<source-id>document</source-id>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="connections-for-errands">
+									<url>/lecm/components/document/connections</url>
+									<properties>
+										<nodeRef>{nodeRef}</nodeRef>
+										<excludeType>lecm-errands:document</excludeType>
 									</properties>
 								</evaluation>
 							</evaluations>

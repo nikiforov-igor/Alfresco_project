@@ -1,5 +1,10 @@
 <webscript>
-  <shortname>document-attachments</shortname>
-  <description>Document Attachments Component</description>
-  <url>/lecm/components/document/document-attachments</url>
+	<shortname>document-attachments</shortname>
+	<description>
+		Document Attachments Component
+
+		Дополнительные необязательные параметры для получения вложений документа-основания
+		baseDocAssocName - имя ассоциации указывающей на документ основание
+	</description>
+	<url>/lecm/components/document/document-attachments?baseDocAssocName={baseDocAssocName}</url>
 </webscript>

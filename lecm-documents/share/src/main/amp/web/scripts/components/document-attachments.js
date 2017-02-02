@@ -43,6 +43,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
         {
 	        newId: null,
             options: {
+				baseDocAssocName: null,
 		        showAfterReady: false
 	        },
 
@@ -72,7 +73,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/attachments-list",
                         dataObj: {
                             nodeRef: this.options.nodeRef,
-                            htmlid: this.id + Alfresco.util.generateDomId()
+                            htmlid: this.id + Alfresco.util.generateDomId(),
+							inclBaseDoc: !!this.options.baseDocAssocName
                         },
                         successCallback: {
                             fn:function(response){
@@ -94,7 +96,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/document-attachments",
 				        dataObj: {
 					        nodeRef: this.options.nodeRef,
-					        htmlid: newId
+					        htmlid: newId,
+							baseDocAssocName: this.options.baseDocAssocName
 				        },
 				        successCallback: {
 					        fn:function(response){
