@@ -17,10 +17,6 @@
 <#if params.showActions?? && params.showActions == "true">
 	<#assign showActions = true/>
 </#if>
-<#assign showExpandActions = true/>
-<#if params.showExpandActions?? && params.showExpandActions == "false">
-	<#assign showExpandActions = false/>
-</#if>
 
 <#assign isTableSortable = false/>
 <#if field.control.params.isTableSortable??>
@@ -59,8 +55,7 @@
 					expandable: true,
 					expandDataSource: "components/form?formId=table-structure-expand",
 					documentNodeRef: "${form.arguments.itemId}",
-					showActions: ${showActions?string},
-                    showExpandActions: ${showExpandActions?string}
+					showActions: ${showActions?string}
 				});
 	}
 	function init() {

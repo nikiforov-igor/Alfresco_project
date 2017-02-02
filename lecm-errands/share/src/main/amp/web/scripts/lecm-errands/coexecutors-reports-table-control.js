@@ -191,7 +191,6 @@ LogicECM.errands = LogicECM.errands || {};
                     },
                     bubblingLabel: this.options.bubblingLabel,
                     showActionColumn: this.options.showActions,
-                    showExpandActionsColumn: this.options.showExpandActions,
                     showOtherActionColumn: false,
                     showCheckboxColumn: true,
                     attributeForShow: this.options.attributeForShow,
@@ -288,8 +287,7 @@ LogicECM.errands = LogicECM.errands || {};
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
         Selector = YAHOO.util.Selector,
-        Bubbling = YAHOO.Bubbling,
-        Substitute = YAHOO.lang.substitute;
+        Bubbling = YAHOO.Bubbling;
 
     LogicECM.errands.CoexecutorsReportsDatagrid = function (htmlId) {
         return LogicECM.errands.CoexecutorsReportsDatagrid.superclass.constructor.call(this, htmlId);
@@ -298,199 +296,11 @@ LogicECM.errands = LogicECM.errands || {};
     YAHOO.lang.extend(LogicECM.errands.CoexecutorsReportsDatagrid, LogicECM.module.DocumentTableDataGrid);
 
     YAHOO.lang.augmentObject(LogicECM.errands.CoexecutorsReportsDatagrid.prototype, {
-        expandActionTypePrefix: "datagrid-expand-action-link",
+
         getExpandedFormId: function(record) {
             return this.id + encodeURIComponent(record.getData("nodeRef"));
         },
 
-       /* addExpandedRow: function (record, text) {
-            var me = this;
-            var colSpan = this.datagridColumns.length;
-            if (this.options.showCheckboxColumn) {
-                colSpan++;
-            }
-            if (this.options.expandable) {
-                colSpan++;
-            }
-            if (this.options.showActionColumn || this.options.showExpandActionsColumn) {
-                colSpan++;
-            }
-            var newRow = Dom.get(this.getExpandedRecordId(record));
-            var newColumn = document.createElement('td');
-            newColumn.innerHTML = text;
-            newRow.appendChild(newColumn);
-            if (this.options.showExpandActionsColumn) {
-                var actions = this.options.actions;
-                var expandActionType = this.expandActionTypePrefix + "-" + this.options.bubblingLabel;
-                if (actions) {
-                    var userAccess = record.getData("permissions").userAccess;
-                    var acessibleActions = actions.filter(function (action) {
-                        return userAccess[action["permission"]] && action.evaluator.call(me, record.getData());
-                    });
-                    if (acessibleActions && acessibleActions.length) {
-                        var actionsColumn = document.createElement('td');
-                        var actionsDiv = document.createElement('div');
-                        actionsDiv.id = this.id + "-coexutor-report-actions-div";
-                        actionsDiv.className = "coexutor-report-actions-div";
-                        var actionsHtml = '';
-                        acessibleActions.forEach(function (action) {
-                            actionsHtml += Substitute(me.getActionHtml(), {
-                                label: action.label,
-                                aClass: this.expandActionTypePrefix + " " + expandActionType,
-                                rel: action.permission,
-                                actionDivClass: action.id
-                            });
-                        });
-                        actionsDiv.innerHTML = actionsHtml;
-                        actionsColumn.appendChild(actionsDiv);
-                        newRow.appendChild(actionsColumn);
-                    }
-                }
-            }
-            newColumn.colSpan = colSpan;
-            newRow.style.display = "";
-        },
-
-        customTableSetup: function () {
-            if (this.options.showExpandActionsColumn) {
-                this.setupExpandActionEvents(this.expandActionTypePrefix);
-            }
-        },
-
-        getDataTableColumnDefinitions: function DataGrid_getDataTableColumnDefinitions() {
-            // YUI DataTable column definitions
-            var columnDefinitions = [];
-            if (this.options.expandable) {
-                columnDefinitions.push({
-                    key: "expand",
-                    label: "",
-                    sortable: false,
-                    formatter: this.fnRenderCellExpand(),
-                    width: 16
-                });
-            }
-            if (this.options.showCheckboxColumn) {
-                columnDefinitions.push({
-                    key: "nodeRef",
-                    label: "<input type='checkbox' id='" + this.id + "-select-all-records'>",
-                    sortable: false,
-                    formatter: this.fnRenderCellSelected(),
-                    width: 16
-                });
-            }
-
-            var inArray = function (value, array) {
-                for (var i = 0; i < array.length; i++) {
-                    if (array[i] == value) return true;
-                }
-                return false;
-            };
-
-            var column, sortable;
-            for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
-                column = this.datagridColumns[i];
-
-                if (!this.options.overrideSortingWith) {
-                    sortable = column.sortable;
-                } else {
-                    sortable = this.options.overrideSortingWith;
-                }
-
-                if (!(this.options.excludeColumns.length > 0 && inArray(column.name, this.options.excludeColumns))) {
-                    var className = "";
-                    if (column.dataType == "lecm-orgstr:employee" || (this.options.nowrapColumns.length > 0 && inArray(column.name, this.options.nowrapColumns))) {
-                        className = "nowrap "
-                    }
-
-                    columnDefinitions.push({
-                        key: this.dataResponseFields[i],
-                        label: column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
-                        sortable: sortable,
-                        sortOptions: {
-                            field: column.formsName,
-                            sortFunction: this.getSortFunction()
-                        },
-                        formatter: this.getCellFormatter(column.dataType),
-                        className: className + ((column.dataType == 'boolean') ? 'centered' : '')
-                    });
-                }
-            }
-            if (this.options.showActionColumn) {
-                // Add actions as last column
-                columnDefinitions.push(
-                    {
-                        key: this.options.showExpandActionColumn ? "expand-actions" : "actions",
-                        label: this.msg("label.column.actions"),
-                        sortable: false,
-                        formatter: this.fnRenderCellActions(),
-                        width: this.options.showExpandActionColumn ? 150 : Math.round(26.7 * this.showActionsCount)
-                    }
-                );
-            }
-            if (this.options.showExpandActionsColumn && !this.options.showActionColumn) {
-                columnDefinitions.push(
-                    {
-                        key: "expand-actions",
-                        label: "",
-                        sortable: false,
-                        formatter: this.getCellFormatter(column.dataType),
-                        width: 150
-                    }
-                );
-            }
-            if (!this.options.overrideSortingWith && this.options.otherActions && this.options.otherActions.length > 0) {
-                // Add actions as last column
-                columnDefinitions.push(
-                    {
-                        key: "other-actions",
-                        label: "",
-                        sortable: false,
-                        formatter: this.fnRenderCellOtherActions(),
-                        width: 80
-                    }
-                );
-            }
-            return columnDefinitions;
-        },
-
-        setupExpandActionEvents: function (actionTypePrefix) {
-            var me = this;
-            var fnActionHandler = function DataGrid_fnActionHandler(layer, args) {
-                var owner = Bubbling.getOwnerByTagName(args[1].anchor, "div");
-                if (owner) {
-                    if (typeof me[owner.className] == "function") {
-                        args[1].stop = true;
-                        var row = me.widgets.dataTable.getRecord(args[1].target.offsetParent.parentElement.previousElementSibling);
-                        if (row) {
-                            var asset = row.getData();
-
-                            var confirmFunction = null;
-                            if (me.options.actions) {
-                                for (var i = 0; i < me.options.actions.length; i++) {
-                                    if (me.options.actions[i].id == owner.className && me.options.actions[i].confirmFunction) {
-                                        confirmFunction = me.options.actions[i].confirmFunction;
-                                    }
-                                }
-                            }
-
-                            me[owner.className].call(me, asset, owner, me.datagridMeta.actionsConfig, confirmFunction);
-                        }
-                    }
-                }
-                return true;
-            };
-            Bubbling.addDefaultAction(actionTypePrefix + (me.options.bubblingLabel ? "-" + me.options.bubblingLabel : ""), fnActionHandler, me.options.forceSubscribing);
-        },
-
-        getActionHtml: function () {
-            var html = '<div class="{actionDivClass}">';
-            html += '<span class="yui-button yui-push-button">';
-            html += '<span class="first-child">';
-            html += '<a rel="{rel}" class="{aClass}">{label}</a>';
-            html += '</span></span></div>';
-            return html;
-        },
-*/
         getRowFormater: function () {
             var scope = this;
 

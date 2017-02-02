@@ -17,13 +17,6 @@
 .datagrid .action-set .onActionEditCoexecutorReport a {
     background-image: url(/share/res/components/images/edit-16.png);
 }
-.datagrid .action-set .onActionEditCoexecutorReport a {
-    background-image: url(/share/res/components/images/edit-16.png);
-}
-
-.datagrid .onActionEdit .yui-push-button a {
-    background: none !important;
-}
 
 .datagrid .grid {
     overflow: hidden;
@@ -32,27 +25,6 @@
 .datagrid .grid table .expand-row .label-div {
     width: 130px;
     padding-left: 50px;
-}
-
-.datagrid .grid table .yui-dt-col-expand-actions {
-    width: 150px;;
-}
-
-.datagrid .grid.yui-dt .yui-dt-data .expand-row td:nth-child(2) {
-    border-left: 1px solid #ccc;
-}
-
-.datagrid .grid table tbody tr td .coexutor-report-actions-div {
-    padding-left: 5px;
-}
-
-.datagrid .grid table tbody tr td .coexutor-report-actions-div div {
-    padding: 2px;
-    text-align: center;
-}
-
-.datagrid .grid table tbody tr td .coexutor-report-actions-div div span {
-    width: 134px;
 }
 
 .form-field.with-grid.coexecutors-report .coexecutors-reports-additional-block .reports-filter-block {

@@ -1332,29 +1332,25 @@
                     </field>
                     <field id="lecm-base-dummy-aspects:script" label-id="actions.coexecutor.report.accept" set="fieldsAndButtons">
                         <control template="/ru/it/lecm/eds/controls/button-control.ftl">
-                            <control-param name="clickFireAction">approveCoexecutorReportButtonClick</control-param>
-                            <control-param name="insertToDiv">form-fields</control-param>
+                            <control-param name="insertToDiv">acceptActionBlock</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script2" label-id="actions.coexecutor.report.decline" set="fieldsAndButtons">
                         <control template="/ru/it/lecm/eds/controls/button-control.ftl">
-                            <control-param name="clickFireAction">declineCoexecutorReportButtonClick</control-param>
-                            <control-param name="insertToDiv">form-fields</control-param>
+                            <control-param name="insertToDiv">declineActionBlock</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script3" label-id="actions.coexecutor.report.transfer" set="fieldsAndButtons">
                         <control template="/ru/it/lecm/eds/controls/button-control.ftl">
-                            <control-param name="clickFireAction">transferCoexecutorReportButtonClick</control-param>
-                            <control-param name="insertToDiv">form-fields</control-param>
+                            <control-param name="insertToDiv">transferActionBlock</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script4" label-id="actions.edit" set="fieldsAndButtons">
                         <control template="/ru/it/lecm/eds/controls/button-control.ftl">
-                            <control-param name="clickFireAction">editCoexecutorReportButtonClick</control-param>
-                            <control-param name="insertToDiv">form-fields</control-param>
+                            <control-param name="insertToDiv">editActionBlock</control-param>
                         </control>
                     </field>
-                    <field id="lecm-base-dummy-aspects:script5" set="fieldsAndButtons">
+                    <field id="lecm-base-dummy-aspects:script5">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl" >
                             <control-param name="scripts">scripts/lecm-errands/errands-coexecutor-expand-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">errandCoexecutorReportExpandScriptLoaded</control-param>
@@ -1932,7 +1928,7 @@
                 </appearance>
             </form>
         </forms>
-    </config>
+    </config>ta
 
     <config evaluator="string-compare" condition="activiti$errandsChangeDueDate">
         <forms>
