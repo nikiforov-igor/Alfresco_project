@@ -4316,7 +4316,7 @@ if (document) {
                     </node>
                     <node>
                         <type>endEvent</type>
-                        <name>Аннлировано</name>
+                        <name>Аннулировано</name>
                         <nodeRef>workspace://SpacesStore/df908165-a113-4a8d-85d9-a0d023b2f45d</nodeRef>
                         <properties/>
                         <aspects/>
