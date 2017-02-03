@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Resolution prepare errands json</shortname>
+    <description>Resolution prepare errands json</description>
+    <url>/lecm/resolutions/prepareErrandsJson</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+</webscript>

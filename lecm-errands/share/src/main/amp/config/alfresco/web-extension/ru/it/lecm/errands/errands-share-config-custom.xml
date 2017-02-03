@@ -1217,6 +1217,7 @@
             </form>
             <form id="resolution-execution-datagrid">
                 <field-visibility>
+                    <show id="lecm-errands:child-index-counter"/>
                     <show id="lecm-errands:type-assoc"/>
                     <show id="lecm-errands:title"/>
                     <show id="lecm-errands:executor-assoc"/>
