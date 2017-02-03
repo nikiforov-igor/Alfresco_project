@@ -2,7 +2,8 @@
 {
     <#if node??>
         "nodeRef": "${node.getNodeRef().toString()}",
-        "isRegCenralized" : <#if node.properties["lecm-eds-globset:centralized-registration"]??>${node.properties["lecm-eds-globset:centralized-registration"]?string!false}<#else>false</#if>
+        "isRegCenralized": <#if node.properties["lecm-eds-globset:centralized-registration"]??>${node.properties["lecm-eds-globset:centralized-registration"]?string!false}<#else>false</#if>,
+        "isHideProps:": ${isHideProps?string}
         <#if node.assocs["lecm-eds-globset:arm-for-dashlet-assoc"]??>
         ,"armCode": "${node.assocs["lecm-eds-globset:arm-for-dashlet-assoc"][0]["lecm-arm:code"]!"SED"}"
         </#if>

@@ -70,7 +70,8 @@
 		  p:orgstructureService-ref="serviceOrgstructure"
 		  p:namespaceService-ref="namespaceService"
 		  p:dictionaryService-ref="serviceDictionary"
-		  p:folders-ref="eds.global-settings.folders"/>
+		  p:folders-ref="eds.global-settings.folders"
+		  p:documentGlobalSettingsService-ref="documents.global-settings.service"/>
 
     <bean id="eds.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,

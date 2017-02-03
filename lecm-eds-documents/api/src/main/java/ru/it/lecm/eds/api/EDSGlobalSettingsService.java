@@ -49,9 +49,15 @@ public interface EDSGlobalSettingsService {
 
 	Boolean isRegistrationCenralized();
 
+	@Deprecated
+	Boolean isHideProperties();
+
 	NodeRef getArmDashletNode();
 
     NodeRef getArm();
 
 	List<NodeRef> getRegistras(NodeRef employeeRef, String businessRoleId);
+
+	@Deprecated
+	String getLinksViewMode();
 }

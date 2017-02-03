@@ -41,7 +41,7 @@ LogicECM.module = LogicECM.module || {};
 						successCallback: {
 							fn: function (response) {
 								var oResults = eval("(" + response.serverResponse.responseText + ")");
-								if (oResults != null && oResults.nodeRef != null ) {
+								if (oResults && oResults.nodeRef) {
 									me.loadForm(oResults.nodeRef);
 								}
 							}

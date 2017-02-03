@@ -1,1 +1,4 @@
-model.node = edsGlobalSettings.getSettingsNode();
+(function() {
+    model.node = edsGlobalSettings.getSettingsNode();
+    model.isHideProps = documentGlobalSettings.isHidePropsForRecipients();
+}());
