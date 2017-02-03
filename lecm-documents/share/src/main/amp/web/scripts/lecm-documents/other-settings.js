@@ -20,13 +20,13 @@ LogicECM.module = LogicECM.module || {};
 {
 	var Dom = YAHOO.util.Dom;
 
-	LogicECM.module.PlatformOtherSettings = function(htmlId)
+    LogicECM.module.MiscellaneousSettings = function(htmlId)
 	{
-		LogicECM.module.PlatformOtherSettings.superclass.constructor.call(this, "LogicECM.module.PlatformOtherSettings", htmlId, ["container", "json"]);
+        LogicECM.module.MiscellaneousSettings.superclass.constructor.call(this, "LogicECM.module.MiscellaneousSettings", htmlId, ["container", "json"]);
 		return this;
 	};
 
-	YAHOO.extend(LogicECM.module.PlatformOtherSettings, Alfresco.component.Base,
+	YAHOO.extend(LogicECM.module.MiscellaneousSettings, Alfresco.component.Base,
 		{
 			onReady: function ()
 			{

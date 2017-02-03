@@ -15,7 +15,7 @@
 <script type="text/javascript">//<![CDATA[
 (function(){
     function createPage() {
-        new LogicECM.module.PlatformOtherSettings("${el}-body").setMessages(${messages});
+        new LogicECM.module.MiscellaneousSettings("${el}-body").setMessages(${messages});
     }
 
     function init() {
