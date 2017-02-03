@@ -650,9 +650,12 @@
         <property name="stateMachineService" ref="stateMachineHelper"/>
     </bean>
 
-    <bean id="lecmBPExpression" class="ru.it.lecm.documents.expression.Expression">
+    <bean id="baseSpellExpression" class="ru.it.lecm.documents.expression.BaseSpellExpression" abstract="true">
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
         <property name="documentService" ref="documentService"/>
+    </bean>
+
+    <bean id="lecmBPExpression" class="ru.it.lecm.documents.expression.Expression" parent="baseSpellExpression">
         <property name="stateMachineService" ref="stateMachineHelper"/>
     </bean>
 

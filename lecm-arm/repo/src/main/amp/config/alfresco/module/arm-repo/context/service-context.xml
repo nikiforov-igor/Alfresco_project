@@ -390,4 +390,14 @@
         <property name="sharedCache" ref="arm.rules.shared.cache"/>
         <property name="name" value="ru.it.lecm.cache.arm.rules"/>
     </bean>
+
+    <bean id="armBPExpression" class="ru.it.lecm.arm.expression.ExpressionForArm" parent="baseSpellExpression">
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+    </bean>
+
+    <bean id="armNodeExpression" class="ru.it.lecm.arm.expression.ExpressionArmNode">
+        <property name="armService" ref="armService"/>
+        <property name="armWrraper" ref="armWrapperService"/>
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+    </bean>
 </beans>
