@@ -29,7 +29,7 @@
 		    <title>Logic Ecm Global Documents Settings</title>
 		    <parent>cm:cmobject</parent>
 		    <properties>
-                <!-- Скрывать свойтсва для получателей -->
+                <!-- Скрывать свойства для получателей -->
                 <property name="lecm-document-global-settings:hide-properties-for-recipients">
                     <type>d:boolean</type>
                     <mandatory>true</mandatory>
