@@ -42,6 +42,7 @@
 		    <groupId>ru.it.lecm.eds-documents</groupId>
 		    <artifactId>eds-documents-repo-api</artifactId>
 		    <version>${platform.version}</version>
+            <scope>provided</scope>
 	    </dependency>
         <dependency>
             <groupId>ru.it.lecm.documents</groupId>
