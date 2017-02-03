@@ -1,42 +1,42 @@
 .models .yui-dt-liner a.delete
 {
-   background: transparent url(/share/res/components/images/delete-16.png) no-repeat scroll center center;
+   background: transparent url(../../components/images/delete-16.png) no-repeat scroll center center;
    cursor: pointer;
    padding-right: 15px;
 }
 .models .yui-dt-liner a.edit-model
 {
-   background: transparent url(/share/res/images/lecm-model-list/model_edit.png) no-repeat scroll center center;
+   background: transparent url(../../images/lecm-model-list/model_edit.png) no-repeat scroll center center;
    cursor: pointer;
 }
 .models .yui-dt-liner a.restore-model
 {
-   background: transparent url(/share/res/images/lecm-model-list/model_restore.png) no-repeat scroll center center;
+   background: transparent url(../../images/lecm-model-list/model_restore.png) no-repeat scroll center center;
    cursor: pointer;
 }
 .models .yui-dt-liner a.edit-control
 {
-   background: transparent url(/share/res/images/lecm-statemachine-editor/properties.png) no-repeat scroll center center;
+   background: transparent url(../../images/lecm-statemachine-editor/properties.png) no-repeat scroll center center;
    cursor: pointer;
 }
 .models .yui-dt-liner a.edit-form
 {
-   background: transparent url(/share/res/images/lecm-model-list/form_edit.png) no-repeat scroll center center;
+   background: transparent url(../../images/lecm-model-list/form_edit.png) no-repeat scroll center center;
    cursor: pointer;
 }
 .models .yui-dt-liner a.edit-statemachine
 {
-   background: transparent url(/share/res/images/lecm-model-list/statemachine_edit.png) no-repeat scroll center center;
+   background: transparent url(../../images/lecm-model-list/statemachine_edit.png) no-repeat scroll center center;
    cursor: pointer;
 }
 .models .yui-dt-liner a.expand
 {
-   background: transparent url(/share/res/images/lecm-model-list/expand.png) no-repeat scroll center center;
+   background: transparent url(../../images/lecm-model-list/expand.png) no-repeat scroll center center;
    cursor: pointer;
 }
 .models .yui-dt-liner a.collapse
 {
-   background: transparent url(/share/res/images/lecm-model-list/collapse.png) no-repeat scroll center center;
+   background: transparent url(../../images/lecm-model-list/collapse.png) no-repeat scroll center center;
    cursor: pointer;
 }
 .models .yui-dt-liner a

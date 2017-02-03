@@ -190,6 +190,12 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                 return DocumentService.DEFAULT_REG_NUM;
             }
         },
+        SHARE_CONTEXT {
+            @Override
+            public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
+                return services.getSysAdminParams().getShareContext();
+            }
+        },
         EMPTY {
             @Override
             public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
@@ -634,10 +640,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
 
         if (showNode != null && result != null && !returnRealTypes) {//если возвращаем строку и надо обернуть как ссылку
             if (wrapAsLink && !result.toString().isEmpty()) {
-                SysAdminParams params = serviceRegistry.getSysAdminParams();
-                String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
-                result = "<a href=\"" + serverUrl + LINK_URL + "?nodeRef=" + showNode.toString() + "\">"
-                        + result + "</a>";
+                result = getUrlService().wrapperLink(showNode.toString(), result.toString());
             }
         }
 

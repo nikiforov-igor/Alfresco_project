@@ -25,13 +25,13 @@
 
 .lecm_tbl_action_edit {
 	width: 16px;
-	background-image: url('/share/res/components/images/edit-16.png');
+	background-image: url('../../components/images/edit-16.png');
 	cursor: pointer;
 }
 
 .lecm_tbl_action_delete {
 	width: 16px;
-	background-image: url('/share/res/components/images/delete-16.png');
+	background-image: url('../../components/images/delete-16.png');
 	cursor: pointer;
 }
 
@@ -48,7 +48,7 @@
 }
 
 .datagrid .action-set .onVersionRestore a {
-    background-image: url("/share/res/components/document-details/images/revert-16.png");
+    background-image: url("../../components/document-details/images/revert-16.png");
 }
 
 .yui-skin-lecmTheme .lecm-checkboxtable div.grid table.fixedHeader tbody {

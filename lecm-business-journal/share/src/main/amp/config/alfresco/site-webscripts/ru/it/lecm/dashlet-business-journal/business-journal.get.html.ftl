@@ -348,7 +348,7 @@
 		<div class="body scrollableList" id="${id}-results-container">
 			<div id="${id}_results"></div>
 			<div id="${id}-results-loading" class="loading-image-container">
-				<img src="/share/res/components/images/lightbox/loading.gif">
+				<img src="${url.context}/res/components/images/lightbox/loading.gif">
 			</div>
 		</div>
 	<#else>

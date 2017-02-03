@@ -1100,7 +1100,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             totalRecords: YAHOO.widget.Paginator.VALUE_UNLIMITED,
                             alwaysVisible: false,
                             template: this.msg("lecm.pagination.template"),
-                            pageReportTemplate: this.msg("lecm.pagination.template.page-report"),
+                            pageReportTemplate: this.msg("pagination.template.page-report"),
                             previousPageLinkLabel: this.msg("lecm.pagination.previousPageLinkLabel"),
                             nextPageLinkLabel: this.msg("lecm.pagination.nextPageLinkLabel"),
                             firstPageLinkLabel: this.msg("lecm.pagination.firstPageLinkLabel"),

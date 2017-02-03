@@ -15,46 +15,46 @@
 
 /* Orgstructure menu */
 #lecm-menu #menu-buttons #menu-buttons-employeesBtn span.first-child {
-    background: url('/share/res/images/lecm-orgstructure/alf_orgstructure_sotrudniki_32.png') no-repeat 4px 4px;
+    background: url('../../../../images/lecm-orgstructure/alf_orgstructure_sotrudniki_32.png') no-repeat 4px 4px;
 }
 #lecm-menu #menu-buttons #menu-buttons-staffBtn span.first-child {
-    background: url('/share/res/images/lecm-orgstructure/alf_orgstructure_sht-rasp_32.png') no-repeat 4px 4px;
+    background: url('../../../../images/lecm-orgstructure/alf_orgstructure_sht-rasp_32.png') no-repeat 4px 4px;
 }
 #lecm-menu #menu-buttons #menu-buttons-orgstructureBtn span.first-child {
-    background: url('/share/res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
+    background: url('../../../../images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
 }
 #lecm-menu #menu-buttons #menu-buttons-workGroupBtn span.first-child {
-    background: url('/share/res/images/lecm-orgstructure/alf_orgstructure_work-groups_32.png') no-repeat 4px 4px;
+    background: url('../../../../images/lecm-orgstructure/alf_orgstructure_work-groups_32.png') no-repeat 4px 4px;
 }
 #lecm-menu #menu-buttons #menu-buttons-positionsBtn span.first-child {
-    background: url('/share/res/images/lecm-orgstructure/alf_orgstructure_dolgnosti_32.png') no-repeat 4px 4px;
+    background: url('../../../../images/lecm-orgstructure/alf_orgstructure_dolgnosti_32.png') no-repeat 4px 4px;
 }
 #lecm-menu #menu-buttons #menu-buttons-rolesBtn span.first-child {
-    background: url('/share/res/images/lecm-orgstructure/alf_orgstructure_work-group-roles_32.png') no-repeat 4px 4px;
+    background: url('../../../../images/lecm-orgstructure/alf_orgstructure_work-group-roles_32.png') no-repeat 4px 4px;
 }
 #lecm-menu #menu-buttons #menu-buttons-organizationBtn span.first-child {
-    background: url('/share/res/images/lecm-orgstructure/alf_orgstructure_org-profile_32.png') no-repeat 4px 4px;
+    background: url('../../../../images/lecm-orgstructure/alf_orgstructure_org-profile_32.png') no-repeat 4px 4px;
 }
 #lecm-menu #menu-buttons #menu-buttons-businessRolesBtn span.first-child {
-    background: url('/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-24.png') no-repeat 4px 4px;
+    background: url('../../../../images/lecm-orgstructure/icons_alfresco_top-menu-24.png') no-repeat 4px 4px;
 }
 
 /* Dictionary menu */
 #lecm-menu #menu-buttons #menu-buttons-dictionariesBtn span.first-child {
-    background: url('/share/res/images/lecm-dictionary/dictionary_32.png') no-repeat 4px 4px;
+    background: url('../../../../images/lecm-dictionary/dictionary_32.png') no-repeat 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-bj-summaryBtn span.first-child {
-    background: url('/share/res/images/lecm-dictionary/dictionary_32.png') no-repeat 4px 4px;
+    background: url('../../../../images/lecm-dictionary/dictionary_32.png') no-repeat 4px 4px;
 }
 #lecm-menu #menu-buttons #menu-buttons-bj-settingsBtn span.first-child {
-    background: url('/share/res/images/lecm-dictionary/dictionary_32.png') no-repeat 4px 4px;
+    background: url('../../../../images/lecm-dictionary/dictionary_32.png') no-repeat 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-bj-archiver-settingsBtn span.first-child {
-    background: url('/share/res/images/lecm-dictionary/dictionary_32.png') no-repeat 4px 4px;
+    background: url('../../../../images/lecm-dictionary/dictionary_32.png') no-repeat 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-bj-logger-settingsBtn span.first-child {
-    background: url('/share/res/images/lecm-dictionary/dictionary_32.png') no-repeat 4px 4px;
+    background: url('../../../../images/lecm-dictionary/dictionary_32.png') no-repeat 4px 4px;
 }

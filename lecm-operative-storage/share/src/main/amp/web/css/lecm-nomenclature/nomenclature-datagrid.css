@@ -44,5 +44,5 @@
 }
 .datagrid .onPrintVolumes a, .datagrid .onPrintInventory a
 {
-    background: url("/share/res/components/images/printer-16.png") no-repeat;
+    background: url("../../components/images/printer-16.png") no-repeat;
 }

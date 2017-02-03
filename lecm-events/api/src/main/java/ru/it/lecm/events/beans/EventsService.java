@@ -89,7 +89,7 @@ public interface EventsService {
 
 	public static final QName TYPE_EVENT_RESOURCE = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "resources");
 
-	public static final String EVENT_LINK_URL = "/share/page/event";
+	public static final String EVENT_LINK_URL = "/page/event";
 
 	public static final String EVENTS_ENGINEER_ROLE = "EVENTS_ENGINEER";
 

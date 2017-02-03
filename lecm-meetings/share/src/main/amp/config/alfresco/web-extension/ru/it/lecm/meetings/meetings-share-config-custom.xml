@@ -1240,7 +1240,7 @@
 					<field id="lecm-meetings-ts:site-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
                             <control-param name="formatString">
-                                <![CDATA[<a href='/share/page/site/{lecm-meetings-ts:site-assoc/cm:name}/dashboard'>{lecm-meetings-ts:site-assoc/cm:title}</a>]]>
+                                <![CDATA[<a href='/{~SHARE_CONTEXT}/page/site/{lecm-meetings-ts:site-assoc/cm:name}/dashboard'>{lecm-meetings-ts:site-assoc/cm:title}</a>]]>
                             </control-param>
                         </control>
 					</field>

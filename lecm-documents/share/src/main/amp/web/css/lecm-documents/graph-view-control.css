@@ -26,13 +26,13 @@ div.connections-list div#expandable_table table thead {
 	cursor:pointer;
 }
 .yui-dt-expanded .yui-dt-expandablerow-trigger a{
-	background:url(/share/res/images/lecm-documents/graph-tree/arrow_open.png) 0 6px no-repeat;
+	background:url(../../images/lecm-documents/graph-tree/arrow_open.png) 0 6px no-repeat;
 }
 .yui-dt-expandablerow-trigger a, .yui-dt-collapsed .yui-dt-expandablerow-trigger a {
-	background:url(/share/res/images/lecm-documents/graph-tree/arrow_closed.png) 0 4px no-repeat;
+	background:url(../../images/lecm-documents/graph-tree/arrow_closed.png) 0 4px no-repeat;
 }
 .yui-dt-expanded .yui-dt-expandablerow-trigger.spinner a {
-	background:url(/share/res/images/lecm-documents/graph-tree/spinner.gif) 0 4px no-repeat;
+	background:url(../../images/lecm-documents/graph-tree/spinner.gif) 0 4px no-repeat;
 	padding-right: 10px;
 }
 .yui-dt-expandablerow-trigger-inner {
@@ -69,10 +69,10 @@ div.connections-list div#expandable_table table thead {
 }
 
 .item-description .connection-direction.direct {
-	background: url('/share/res/images/lecm-documents/graph-tree/arrow_right_blue.png') 0 6px no-repeat;
+	background: url('../../images/lecm-documents/graph-tree/arrow_right_blue.png') 0 6px no-repeat;
 }
 .item-description .connection-direction.reverse {
-	background: url('/share/res/images/lecm-documents/graph-tree/arrow_left_blue.png') 0 6px no-repeat;
+	background: url('../../images/lecm-documents/graph-tree/arrow_left_blue.png') 0 6px no-repeat;
 }
 
 .item-description .document-type {

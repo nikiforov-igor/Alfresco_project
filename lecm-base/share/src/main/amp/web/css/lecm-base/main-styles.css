@@ -68,13 +68,13 @@ tr.active,
 }
 
 .search-button button {
-    background: transparent url('/share/res/themes/lecmTheme/images/search.png') no-repeat center center;
+    background: transparent url('../../themes/lecmTheme/images/search.png') no-repeat center center;
 }
 .create-new-button button {
-    background: transparent url('/share/res/themes/lecmTheme/images/create-new-button.png') no-repeat center center;
+    background: transparent url('../../themes/lecmTheme/images/create-new-button.png') no-repeat center center;
 }
 .calendar-icon {
-    background: transparent url('/share/res/components/form/images/calendar.png') no-repeat center center;
+    background: transparent url('../../components/form/images/calendar.png') no-repeat center center;
 }
 i.icon-male,
 i.icon-building {
@@ -88,10 +88,10 @@ i.icon-building:before {
     content: "";
 }
 i.icon-male {
-    background: url("/share/res/components/images/filetypes/generic-user-16.png") no-repeat;
+    background: url("../../components/images/filetypes/generic-user-16.png") no-repeat;
 }
 i.icon-building {
-    background: url("/share/res/images/lecm-base/components/organisation_16.png") no-repeat;
+    background: url("../../images/lecm-base/components/organisation_16.png") no-repeat;
 }
 
 .control span.help-icon {
@@ -196,7 +196,7 @@ i.icon-building {
     top: 7px;
     right: 7px;
     border-radius: 0;
-    background: url("/share/res/images/lecm-base/components/window_close_16.png") no-repeat;
+    background: url("../../images/lecm-base/components/window_close_16.png") no-repeat;
     opacity: .5;
 }
 .yui-skin-lecmTheme .yui-panel a.container-close:hover,

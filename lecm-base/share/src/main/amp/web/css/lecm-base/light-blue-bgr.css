@@ -1,5 +1,5 @@
 .alfresco-share {
-    background: url("/share/res/images/lecm-base/alf_texture_back.png") repeat;
+    background: url("../../images/lecm-base/alf_texture_back.png") repeat;
 }
 .alfresco-share .sticky-wrapper,
 #alf-hd .page-title {

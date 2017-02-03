@@ -19,6 +19,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.json.JSONException;
+import ru.it.lecm.base.beans.LecmURLService;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -34,6 +35,7 @@ public class PermissionExpJavaScriptExtension extends BaseScopableProcessorExten
     private PersonService personService;
     private NodeService nodeService;
     private DictionaryBean dictionaryService;
+    private LecmURLService urlService;
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -55,6 +57,10 @@ public class PermissionExpJavaScriptExtension extends BaseScopableProcessorExten
         this.dictionaryService = dictionaryService;
     }
 
+    public void setUrlService(LecmURLService urlService) {
+        this.urlService = urlService;
+    }
+
     public JSONArray getEmployees() throws JSONException {
         nodeService = serviceRegistry.getNodeService();
         List<NodeRef> employees = orgstructureService.getAllEmployees();
@@ -69,8 +75,7 @@ public class PermissionExpJavaScriptExtension extends BaseScopableProcessorExten
     }
 
     private String getLink(NodeRef nodeRef, String name) {
-
-        String Url = "/share/page/view-metadata?nodeRef=" + nodeRef;
+        String Url = urlService.getLinkWithContext(urlService.getLinkURL() + "?nodeRef=" + nodeRef);
         return "<a href=\"" + Url + "\">" + name + "</a>";
     }
 

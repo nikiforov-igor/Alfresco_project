@@ -31,7 +31,7 @@ LogicECM.module = LogicECM.module || {};
 		return this;
 	};
 
-	YAHOO.extend(LogicECM.module.Checkbox, Alfresco.component.Base,
+	YAHOO.extend(LogicECM.module.AgendaCheckbox, Alfresco.component.Base,
 			{
 				options:
 						{
