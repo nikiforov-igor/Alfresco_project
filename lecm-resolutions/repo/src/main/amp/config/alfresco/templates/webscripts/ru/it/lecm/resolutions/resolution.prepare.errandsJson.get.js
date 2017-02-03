@@ -10,7 +10,9 @@ if (resolution) {
         var items = [];
         var jsonValue = resolution.properties["lecm-resolutions:errands-json"];
         if (jsonValue && jsonValue.length) {
+            var i = 1;
             eval(jsonValue).forEach(function(errandJson) {
+                errandJson["prop_lecm-errands_child-index-counter"] = i++;
                 var fields = Object.keys(errandJson);
                 var itemData = {};
                 fields.forEach(function(field) {
