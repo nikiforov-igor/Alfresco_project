@@ -2763,6 +2763,7 @@
                             <control-param name="fixSimpleDialogId">workflow-form</control-param>
                             <control-param name="defaultValueFromId">incoming-default-primary-routing</control-param>
                             <control-param name="defaultValueDataSource">lecm/incoming/primaryRouting/defaultErrands/datasource</control-param>
+                            <control-param name="additionalCss">css/lecm-errands/errands-limitation-date-set.css</control-param>
                         </control>
                     </field>
                     <field id="change-errand-type-script">

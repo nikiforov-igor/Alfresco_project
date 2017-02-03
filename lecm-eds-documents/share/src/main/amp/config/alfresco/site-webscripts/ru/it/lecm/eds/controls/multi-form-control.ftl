@@ -9,6 +9,11 @@
         LogicECM.module.Base.Util.loadResources([
             'scripts/lecm-eds-documents/multi-form-control.js'
         ], [
+            <#if params.additionalCss??>
+                <#list params.additionalCss?split(",") as css>
+                    '${css}',
+                </#list>
+            </#if>
             'css/lecm-eds-documents/multi-form-control.css'
         ], createControl);
     }
