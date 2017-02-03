@@ -1,27 +1,26 @@
-var ERRAND_TYPE = 'lecm-errands:document';
 var IS_SYSTEM = 'lecm-connect:is-system';
 var viewLinksMode = '' + documentGlobalSettings.getLinksViewMode();  /*VIEW_ALL, VIEW_DIRECT, VIEW_NO*/
 
 var documentNodeRef = args['documentNodeRef'];
-var exclude = args['exclErrands'] ? ("" + args['exclErrands']) == "true" : true;
+var excludeType = args['excludeType'] ? ('' + args['excludeType']) : null;
 var applyViewMode = args['applyViewMode'] ? ("" + args['applyViewMode']) == "true" : true;
 
 var itemsSystem = [];
 var itemsUser = [];
 
-var document = search.findNode(documentNodeRef);
+var document = utils.getNodeFromString(documentNodeRef);
 if (document) {
     var connections = documentConnection.getConnectionsWithDocument(documentNodeRef, false);
 
     for (var i = 0; i < connections.length; i++) {
         var connectedDocumentAssoc = connections[i].assocs["lecm-connect:primary-document-assoc"];
-        if (connectedDocumentAssoc != null && connectedDocumentAssoc.length == 1 && connectedDocumentAssoc[0].exists()) {
+        if (connectedDocumentAssoc && connectedDocumentAssoc.length == 1 && connectedDocumentAssoc[0].exists()) {
             var connectedDocument = connectedDocumentAssoc[0];
 
             if (lecmPermission.hasReadAccess(connectedDocument) || (applyViewMode && 'VIEW_ALL' == viewLinksMode)){ /*фильтр по доступу*/
                 /*Системные связи с документами всех типов, кроме поручений*/
                 if (connections[i].properties[IS_SYSTEM]) {
-                    if (!exclude || !connectedDocument.isSubType(ERRAND_TYPE)) {
+                    if (!excludeType || !connectedDocument.isSubType(excludeType)) {
                         itemsSystem.push(connections[i]);
                     }
                 } else {

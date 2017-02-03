@@ -22,6 +22,10 @@
 		        <property name="cm:name">Смена контроллера</property>
 		        <property name="lecm-busjournal:eventCategory-code">ERRAND_CHANGE_CONTROLLER</property>
 	        </item>
+            <item name="cm:Создание поручения по документу" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Создание поручения по документу</property>
+                <property name="lecm-busjournal:eventCategory-code">CREATE_ERRAND_BASED_ON_DOC</property>
+            </item>
         </items>
     </item>
 </items>

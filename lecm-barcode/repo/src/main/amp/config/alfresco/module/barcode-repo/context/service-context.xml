@@ -95,24 +95,4 @@
 		  p:reportsForDeploy-ref="lecm.barcode.reports.ids"
 	/>
 
-
-	<util:list id="lecm.errands.barcode.reports.files">
-		<value>alfresco/module/barcode-repo/reports/errands-barcode-generic.xml</value>
-	</util:list>
-	<bean id="lecm.errands.barcode.reports.bootstrap" parent="lecmDictionaryBootstrap"
-		  depends-on="reportsEditorService, reportsEditor.LogicEcmDictionariesBootstrap,
-		  reportsEditorOnCreateAssocsPolicy, reportsEditorTemplatePolicy,
-		  dataSourcePolicy, reportDescriptorPolicy"
-		  p:rootPath="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"
-		  p:dictionaries-ref="lecm.errands.barcode.reports.files"
-		  p:xmlImportListener-ref="lecm.errands.barcode.reports.deployer"
-	/>
-	
-	<util:list id="lecm.errands.barcode.reports.ids">
-		<value>errands-barcode-generic</value>
-	</util:list>
-	<bean id="lecm.errands.barcode.reports.deployer" parent="reportsDeployer"
-		  p:reportsForDeploy-ref="lecm.errands.barcode.reports.ids"
-	/>
-
 </beans>

@@ -3,17 +3,17 @@
 }
 
 #lecm-menu #menu-buttons #menu-buttons-listBtn span.first-child {
-    background: url('/share/res/images/lecm-contracts/alf_contracts_list_32.png') no-repeat 4px 4px;
+    background: url('/share/res/images/lecm-base/docs-common/alf_documents_list_32.png') no-repeat 4px 4px;
 }
 
 #lecm-menu #menu-buttons-reportsBtn span.first-child {
-    background: url('/share/res/images/lecm-contracts/alf_contracts_reports_32.png') no-repeat 4px 4px;
+    background: url('/share/res/images/lecm-base/docs-common/alf_documents_reports_32.png') no-repeat 4px 4px;
 }
 
 #lecm-menu #menu-buttons-tasksBtn span.first-child {
-    background: url('/share/res/images/lecm-contracts/alf_contracts_main_32.png') no-repeat 4px 4px;
+    background: url('/share/res/images/lecm-base/docs-common/alf_documents_main_32.png') no-repeat 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-archiveBtn span.first-child {
-    background: url('/share/res/images/lecm-contracts/alf_contracts_list_32.png') no-repeat 4px 4px;
+    background: url('/share/res/images/lecm-base/docs-common/alf_documents_list_32.png') no-repeat 4px 4px;
 }

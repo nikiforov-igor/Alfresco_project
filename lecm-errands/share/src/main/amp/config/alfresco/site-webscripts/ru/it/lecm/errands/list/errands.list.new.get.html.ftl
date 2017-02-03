@@ -4,15 +4,14 @@
     //<![CDATA[
     (function () {
         function init() {
-            new LogicECM.module.Errands.Lists("${id}").setOptions(
-                {
-                    itemType: "lecm-errands:document",
-                    nodeRef: "${nodeRef}",
-	                filter: "${filter}",
-                    <#if isAnchor == "true">
-                        anchorId: "${id}"
-                    </#if>
-                }).setMessages(${messages});
+            new LogicECM.module.Errands.Lists("${id}").setOptions({
+                itemType: "lecm-errands:document",
+                nodeRef: "${nodeRef}",
+                filter: "${filter}",
+            <#if isAnchor == "true">
+                anchorId: "${id}"
+            </#if>
+            }).setMessages(${messages});
         }
         YAHOO.util.Event.onContentReady("${id}-meErrands",init);
     })();

@@ -10,6 +10,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.ParameterCheck;
+import org.apache.commons.lang.StringUtils;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.actions.bean.GroupActionsService;
@@ -495,5 +496,13 @@ public class EventsWebScriptBean extends BaseWebScript {
         };
         AuthenticationUtil.runAsSystem(memberAccept);
 	}
+	
+	public String getPropsForFilterShowInCalendar() {
+	    List<String> propsForFilterShowInCalendar = eventService.getPropsForFilterShowInCalendar();
+	    if (propsForFilterShowInCalendar != null && propsForFilterShowInCalendar.size() > 0) {
+	        return StringUtils.join(propsForFilterShowInCalendar, ",");
+        }
+        return "";
+    }
 	
 }

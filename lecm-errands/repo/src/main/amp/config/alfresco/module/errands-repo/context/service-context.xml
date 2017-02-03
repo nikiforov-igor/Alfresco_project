@@ -528,6 +528,7 @@
                 <value>alfresco/module/${artifactId}/reports/exec-discipline-by-creator.xml</value>
                 <value>alfresco/module/${artifactId}/reports/exec-discipline-by-unit.xml</value>
                 <value>alfresco/module/${artifactId}/reports/exec-discipline-by-executor.xml</value>
+				<value>alfresco/module/${artifactId}/reports/errands-barcode-generic.xml</value>
             </list>
         </property>
         <property name="xmlImportListener" ref="errands.reportsDeployer"/>
@@ -540,6 +541,7 @@
                 <value>exec-discipline-by-creator</value>
                 <value>exec-discipline-by-unit</value>
                 <value>exec-discipline-by-executor</value>
+				<value>errands-barcode-generic</value>
             </list>
         </property>
     </bean>

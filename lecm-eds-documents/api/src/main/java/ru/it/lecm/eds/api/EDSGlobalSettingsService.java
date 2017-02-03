@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  *

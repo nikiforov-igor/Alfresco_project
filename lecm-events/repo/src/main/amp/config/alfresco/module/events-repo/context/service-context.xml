@@ -122,12 +122,10 @@
 		<property name="organizationQueryProcessor" ref="inUserOrganizationProcessor"/>
 		<property name="eventsNotificationsService" ref="eventsNotificationsService" />
 		<property name="documentConnectionService" ref="documentConnectionService" />
-		<property name="propsForFilterShowIncalendar">
+		<property name="propsForFilterShowInCalendar">
 			<list>
 				<value>lecm-events:initiator-assoc-ref</value>
 				<value>lecm-events:temp-members-assoc-ref</value>
-				<value>lecm-meetings:chairman-assoc-ref</value>
-				<value>lecm-meetings:secretary-assoc-ref</value>
 			</list>
 		</property>
 	</bean>

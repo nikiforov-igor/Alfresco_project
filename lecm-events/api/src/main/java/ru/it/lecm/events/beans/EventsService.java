@@ -169,7 +169,7 @@ public interface EventsService {
 	
 	void notifyAttendeeRemoved(NodeRef event, NodeRef attendee);
 	
-	void addUpdateType(QName TYPE_MEETINGS_DOCUMENT, List<QName> propertiesToCopy, List<QName> assocsToCopy);
+	void addUpdateType(QName type, List<QName> propertiesToCopy, List<QName> assocsToCopy);
 
 	String getAdditionalFilterForCalendarShow();
 
@@ -182,4 +182,8 @@ public interface EventsService {
 	NodeRef createCurrentUserSettingsNode() throws WriteTransactionNeededException;
 
 	boolean isShowDeclined();
+	
+	void addPropsForFilterShowInCalendar(List<String> props);
+
+	List<String> getPropsForFilterShowInCalendar();
 }

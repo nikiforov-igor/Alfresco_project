@@ -43,4 +43,13 @@
 	<bean id="webscript.ru.it.lecm.base-share.formsConfig.getFormsConfig.get" class="ru.it.lecm.base.scripts.FormsConfigWebscript" parent="webscript">
 		<property name="formsConfigService" ref="formsConfigService" />
 	</bean>
+
+	<bean id="evaluator.ru.it.lecm.base.evaluators.DocumentTypeEvaluator" class="ru.it.lecm.base.evaluators.DocumentTypeEvaluator">
+		<property name="connectorService" ref="connector.service"/>
+	</bean>
+
+	<bean id="evaluator.ru.it.lecm.base.evaluators.DocumentTypeByAttachmentEvaluator" class="ru.it.lecm.base.evaluators.DocumentTypeByAttachmentEvaluator">
+		<property name="connectorService" ref="connector.service"/>
+		<property name="evaluator" ref="evaluator.ru.it.lecm.base.evaluators.DocumentTypeEvaluator"/>
+	</bean>
 </beans>

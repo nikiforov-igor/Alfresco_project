@@ -243,21 +243,21 @@ public class MailReciever extends BaseBean {
 
 	private void processReply(CalendarReply reply) {
 		String id = reply.getUid().split("@")[0];
-		NodeRef meeting = new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, id);
-		if (nodeService.exists(meeting)) {
+		NodeRef event = new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, id);
+		if (nodeService.exists(event)) {
 			String mail = reply.getAttendeeMail();
-			List<NodeRef> members = eventsService.getEventMembers(meeting);
+			List<NodeRef> members = eventsService.getEventMembers(event);
 			for (NodeRef member : members) {
 				String memberMail = nodeService.getProperty(member, OrgstructureBean.PROP_EMPLOYEE_EMAIL).toString();
 				if (memberMail.equalsIgnoreCase(mail)) {
 					Date time = null;
-					if (null != answers.get(meeting)) {
-						time = answers.get(meeting).get(mail);
+					if (null != answers.get(event)) {
+						time = answers.get(event).get(mail);
 					} else {
-						answers.put(meeting, new HashMap<String, Date>());
+						answers.put(event, new HashMap<String, Date>());
 					}
 					if (null == time || time.before(reply.getTimeStamp())) {
-						NodeRef tableRow = eventsService.getMemberTableRow(meeting, member);
+						NodeRef tableRow = eventsService.getMemberTableRow(event, member);
 						if (reply.getAnswer().equals(PartStat.ACCEPTED.getValue())) {
 							nodeService.setProperty(tableRow, EventsService.PROP_EVENT_MEMBERS_STATUS, EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_CONFIRMED);
 						} else if (reply.getAnswer().equals(PartStat.DECLINED.getValue())) {
@@ -265,21 +265,21 @@ public class MailReciever extends BaseBean {
 						} else if (reply.getAnswer().equals(PartStat.TENTATIVE.getValue())) {
 							nodeService.setProperty(tableRow, EventsService.PROP_EVENT_MEMBERS_STATUS, EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY);
 						}
-						eventsNotificationsService.notifyOrganizerMemberStatusChanged(meeting, member);
-						answers.get(meeting).put(memberMail, reply.getTimeStamp());
+						eventsNotificationsService.notifyOrganizerMemberStatusChanged(event, member);
+						answers.get(event).put(memberMail, reply.getTimeStamp());
 					}
 
 				}
 			}
-			List<NodeRef> invitedMembers = eventsService.getEventInvitedMembers(meeting);
+			List<NodeRef> invitedMembers = eventsService.getEventInvitedMembers(event);
 			for (NodeRef member : invitedMembers) {
 				String memberMail = nodeService.getProperty(member, Contractors.PROP_REPRESENTATIVE_EMAIL).toString();
 				if (memberMail.equalsIgnoreCase(mail)) {
 					Date time = null;
-					if (null != answers.get(meeting)) {
-						time = answers.get(meeting).get(mail);
+					if (null != answers.get(event)) {
+						time = answers.get(event).get(mail);
 					} else {
-						answers.put(meeting, new HashMap<String, Date>());
+						answers.put(event, new HashMap<String, Date>());
 					}
 					if (null == time || time.before(reply.getTimeStamp())) {
 						String status = null;
@@ -290,8 +290,8 @@ public class MailReciever extends BaseBean {
 						} else if (reply.getAnswer().equals(PartStat.TENTATIVE.getValue())) {
 							status = EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY;
 						}
-						eventsNotificationsService.notifyOrganizerInvitedMemberStatusChanged(meeting, member, status);
-						answers.get(meeting).put(memberMail, reply.getTimeStamp());
+						eventsNotificationsService.notifyOrganizerInvitedMemberStatusChanged(event, member, status);
+						answers.get(event).put(memberMail, reply.getTimeStamp());
 					}
 				}
 			}

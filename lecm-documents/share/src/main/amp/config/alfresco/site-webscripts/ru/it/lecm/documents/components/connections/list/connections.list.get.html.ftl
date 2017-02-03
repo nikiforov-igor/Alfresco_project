@@ -150,10 +150,10 @@
 	</div>
 
 		<script type="text/javascript">//<![CDATA[
-			new LogicECM.DocumentConnectionsList("${el}").setOptions(
-					{
-						documentNodeRef: "${nodeRef}"
-					}).setMessages(${messages});
+			new LogicECM.DocumentConnectionsList("${el}").setOptions({
+				documentNodeRef: "${nodeRef}",
+				excludeType: "${excludeType!""}"
+			}).setMessages(${messages});
 		YAHOO.util.Event.onContentReady("${el}-graph-tree", function() {
 			YAHOO.Bubbling.fire("graphContainerReady");
 		});
