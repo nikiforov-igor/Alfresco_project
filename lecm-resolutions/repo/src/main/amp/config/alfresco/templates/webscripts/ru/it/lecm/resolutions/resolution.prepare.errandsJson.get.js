@@ -13,6 +13,12 @@ if (resolution) {
             var i = 1;
             eval(jsonValue).forEach(function(errandJson) {
                 errandJson["prop_lecm-errands_child-index-counter"] = i++;
+                errandJson["prop_lecm-errands_limitation-date-text"] = edsDocument.getComplexDateText(
+                    errandJson["prop_lecm-errands_limitation-date-radio"],
+                    errandJson["prop_lecm-errands_limitation-date"] ? errandJson["prop_lecm-errands_limitation-date"] : null,
+                    errandJson["prop_lecm-errands_limitation-date-type"] ? errandJson["prop_lecm-errands_limitation-date-type"] : null,
+                    errandJson["prop_lecm-errands_limitation-date-days"] ? errandJson["prop_lecm-errands_limitation-date-days"] : null);
+
                 var fields = Object.keys(errandJson);
                 var itemData = {};
                 fields.forEach(function(field) {
