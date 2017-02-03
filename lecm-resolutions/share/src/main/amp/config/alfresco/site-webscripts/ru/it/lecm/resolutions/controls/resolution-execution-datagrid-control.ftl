@@ -1,48 +1,35 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
 <#assign aDateTime = .now>
-<#assign controlId = fieldHtmlId + "-cntrl">
 <#assign containerId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
 
-<div class="control with-grid resolution-execution-datagrid-control" id="${controlId}">
+<div class="control with-grid resolution-execution-datagrid-control" id="${fieldHtmlId}">
 <@grid.datagrid containerId false>
     <script type="text/javascript">//<![CDATA[
     (function () {
         function init() {
             LogicECM.module.Base.Util.loadResources([
                 'scripts/lecm-base/components/advsearch.js',
-                'scripts/lecm-base/components/lecm-datagrid.js'
+                'scripts/lecm-base/components/lecm-datagrid.js',
+                'scripts/lecm-resolution/resolution-execution-datagrid-control.js'
             ], [
                 'css/lecm-resolution/resolution-execution-datagrid-control.css'
-            ], createDatagrid);
+            ], createControl);
         }
+
         YAHOO.util.Event.onDOMReady(init);
-        function createDatagrid() {
-            var datagrid = new LogicECM.module.Base.DataGrid('${containerId}').setOptions({
-                usePagination: false,
-                showExtendSearchBlock: false,
-                actions: [],
-                expandable: true,
+        function createControl() {
+            new LogicECM.module.Resolutions.ExecutionTable("${fieldHtmlId}").setOptions({
                 <#if field.control.params.expandFormId??>
-                    expandDataObj: {
-                        formId: "${field.control.params.expandFormId}"
-                    },
+                    expandFormId: "${field.control.params.expandFormId}",
                 </#if>
-                datagridMeta: {
-                    itemType: "lecm-errands:document",
-                    useChildQuery: false,
-                    useFilterByOrg: false,
-                    datagridFormId: "${field.control.params.datagridFormId!"datagrid"}",
-                    searchConfig: {
-                        filter: "@lecm\\-errands\\:additional\\-document\\-assoc\\-ref:'${form.arguments.itemId}'"
-                    }
-                },
-                bubblingLabel: "${containerId}",
-                allowCreate: false,
-                showActionColumn: false,
-                showCheckboxColumn: false
+                <#if field.control.params.datagridFormId??>
+                    datagridFormId: "${field.control.params.datagridFormId}",
+                </#if>
+                datagridContainerId: "${containerId}",
+                documentNodeRef: "${form.arguments.itemId}",
+                jsonValue: '${field.value}'
             }).setMessages(${messages});
-            datagrid.draw();
         }
     })();
     //]]></script>
