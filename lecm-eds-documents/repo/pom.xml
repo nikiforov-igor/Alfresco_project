@@ -41,17 +41,19 @@
 		<dependency>
 		    <groupId>ru.it.lecm.eds-documents</groupId>
 		    <artifactId>eds-documents-repo-api</artifactId>
-		    <version>${project.version}</version>
+		    <version>${platform.version}</version>
+            <scope>provided</scope>
 	    </dependency>
 	    <dependency>
 		    <groupId>ru.it.lecm.base</groupId>
 		    <artifactId>base-repo-api</artifactId>
-		    <version>${project.version}</version>
+		    <version>${platform.version}</version>
+            <scope>provided</scope>
 	    </dependency>
 		<dependency>
             <groupId>ru.it.lecm.dictionary</groupId>
             <artifactId>dictionary-repo-api</artifactId>
-            <version>${project.version}</version>
+            <version>${platform.version}</version>
             <scope>provided</scope>
         </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
@@ -59,25 +61,13 @@
             <groupId>ru.it.lecm.orgstructure</groupId>
             <artifactId>orgstructure-repo-api</artifactId>
             <version>${platform.version}</version>
-            <type>jar</type>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ru.it.lecm.business-journal</groupId>
             <artifactId>business-journal-repo-api</artifactId>
             <version>${platform.version}</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>rhino</groupId>
-            <artifactId>js</artifactId>
-            <version>1.6R7</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20090211</version>
-            <type>jar</type>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <!--
