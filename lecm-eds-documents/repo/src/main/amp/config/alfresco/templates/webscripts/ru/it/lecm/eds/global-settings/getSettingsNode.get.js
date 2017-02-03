@@ -1,5 +1,5 @@
 (function() {
     model.node = edsGlobalSettings.getSettingsNode();
-    model.isRegCenralized = edsGlobalSettings.isRegistrationCenralized() ? edsGlobalSettings.isRegistrationCenralized() : false;
+    model.isRegCenralized = !!edsGlobalSettings.isRegistrationCenralized();
     model.isHideProps = documentGlobalSettings.isHidePropsForRecipients();
 }());

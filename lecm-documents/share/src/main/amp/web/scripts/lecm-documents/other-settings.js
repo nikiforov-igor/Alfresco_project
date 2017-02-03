@@ -30,8 +30,7 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		loadSettings: function() {
-			Alfresco.util.Ajax.request({
-				method: "GET",
+            Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.PROXY_URI + "lecm/documents/global-settings/api/getSettingsNode",
 				successCallback: {
 					scope: this,
@@ -46,29 +45,7 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		loadForm: function(settingsNode) {
-			var successCallback = function(response) {
-				var container = Dom.get(this.id + "-settings"),
-                    markupAndScripts = Alfresco.util.Ajax.sanitizeMarkup(response.serverResponse.responseText),
-                    markup = markupAndScripts[0],
-                    scripts = markupAndScripts[1];
-                container.innerHTML = markup;
-                // Run the js code from the webscript's <script> elements
-                setTimeout(scripts, 0);
-				
-				Dom.get("documents-global-settings-edit-form-form-submit").value = this.msg("label.save");
-
-				var form = new Alfresco.forms.Form("documents-global-settings-edit-form-form");
-				form.setSubmitAsJSON(true);
-				form.setAJAXSubmit(true, {
-					successCallback: {
-                        scope: this,
-						fn: this.onSuccess
-					}
-				});
-				form.init();
-			};
-			Alfresco.util.Ajax.request({
-				method: "GET",
+            Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 				dataObj: {
 					htmlid: "documents-global-settings-edit-form",
@@ -81,7 +58,27 @@ LogicECM.module = LogicECM.module || {};
 				},
 				successCallback: {
 					scope: this,
-					fn: successCallback
+					fn: function (response) {
+                        var container = Dom.get(this.id + "-settings"),
+                            markupAndScripts = Alfresco.util.Ajax.sanitizeMarkup(response.serverResponse.responseText),
+                            markup = markupAndScripts[0],
+                            scripts = markupAndScripts[1];
+                        container.innerHTML = markup;
+                        // Run the js code from the webscript's <script> elements
+                        setTimeout(scripts, 0);
+
+                        Dom.get("documents-global-settings-edit-form-form-submit").value = this.msg("label.save");
+
+                        var form = new Alfresco.forms.Form("documents-global-settings-edit-form-form");
+                        form.setSubmitAsJSON(true);
+                        form.setAJAXSubmit(true, {
+                            successCallback: {
+                                scope: this,
+                                fn: this.onSuccess
+                            }
+                        });
+                        form.init();
+					}
 				},
 				failureMessage: this.msg("message.failure"),
 				execScripts: true
