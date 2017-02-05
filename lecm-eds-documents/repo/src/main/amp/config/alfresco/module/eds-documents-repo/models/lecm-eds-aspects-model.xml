@@ -5,6 +5,7 @@
     <version>1.0</version>
     <imports>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
@@ -36,6 +37,30 @@
                     <type>d:text</type>
                 </property>
             </properties>
+        </aspect>
+        <aspect name="lecm-eds-aspect:completion-signal-aspect">
+            <properties>
+                <property name="lecm-eds-aspect:completion-signal">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+                <property name="lecm-eds-aspect:completion-signal-reason">
+                    <type>d:text</type>
+                </property>s
+            </properties>
+            <associations>
+                <association name="lecm-eds-aspect:completion-signal-sender-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
         </aspect>
     </aspects>
 </model>

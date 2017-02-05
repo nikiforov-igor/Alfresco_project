@@ -119,6 +119,7 @@
         <property name="calendarDayTypeString" value="к.д."/>
         <property name="workDayTypeString" value="р.д."/>
         <property name="limitlessString" value="Без срока"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
 
 	<bean  id="edsExecutorPolicy" class="ru.it.lecm.eds.policy.EDSExecutorPolicy"

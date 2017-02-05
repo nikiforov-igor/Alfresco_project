@@ -139,12 +139,12 @@
                                         var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
                                         childrenErrands.forEach(function (childErrand) {
                                             if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
-                                                //сигнал о завершении
+                                                edsDocument.sendCompletionSignal(childErrand.nodeRef.toString(), reason, currentUser.nodeRef.toString());
                                             }
                                         });
                                         childrenResolutions.forEach(function (childResolution) {
                                             if (!statemachine.isFinal(childResolution.nodeRef.toString()) && !statemachine.isDraft(childResolution)) {
-                                                //сигнал о завершении?
+                                                edsDocument.sendCompletionSignal(childResolution.nodeRef.toString(), reason, currentUser.nodeRef.toString());
                                             }
                                         });
                                     }

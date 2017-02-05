@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.eds.api.EDSDocumentService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
@@ -30,6 +31,15 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
     private String limitlessString = "Без срока";
 
     private IWorkCalendar calendarBean;
+    private OrgstructureBean orgstructureService;
+
+    public OrgstructureBean getOrgstructureService() {
+        return orgstructureService;
+    }
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
 
     public void setCalendarDayTypeString(String calendarDayTypeString) {
         this.calendarDayTypeString = calendarDayTypeString;
@@ -129,5 +139,14 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
             }
         }
         return null;
+    }
+    @Override
+    public void sendCompletionSignal(NodeRef document, String reason, NodeRef signalSender){
+        nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL, true);
+        nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL_REASON, reason);
+        if (!nodeService.exists(signalSender)) {
+            signalSender = orgstructureService.getCurrentEmployee();
+        }
+        nodeService.createAssociation(document, signalSender, EDSDocumentService.ASSOC_COMPLETION_SIGNAL_SENDER);
     }
 }

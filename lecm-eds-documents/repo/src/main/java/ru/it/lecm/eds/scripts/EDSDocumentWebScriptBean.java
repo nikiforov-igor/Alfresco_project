@@ -97,4 +97,18 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
+
+    /**
+     * Отправка сигнала о необходимости завершения
+     * @param nodeRef документ, которому направляется сигнал
+     * @param reason причина сигнала
+     * @param senderRef отправитель сигнала
+     */
+    public void sendCompletionSignal(String nodeRef, String reason, String senderRef){
+        NodeRef doc = new NodeRef(nodeRef);
+        NodeRef signalSender = new NodeRef(senderRef);
+        if (nodeService.exists(doc)) {
+            edsService.sendCompletionSignal(doc, reason, signalSender);
+        }
+    }
 }
