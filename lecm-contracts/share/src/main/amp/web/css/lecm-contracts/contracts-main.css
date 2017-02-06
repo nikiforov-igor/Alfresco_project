@@ -60,7 +60,7 @@
     margin-left: 5px;
 }
 #yui-main #doc-bd div.datalist-toolbar div.header-bar div.new-row span.first-child {
-    background: url("../../images/lecm-base/docs-common/alf_document_add.png") no-repeat 5px 5px;
+    background: url("../../images/lecm-base/components/docs-common/alf_document_add.png") no-repeat 5px 5px;
     padding-left: 0;
 }
 #yui-main #doc-bd div.datalist-toolbar div.header-bar div.new-row span.first-child button {
