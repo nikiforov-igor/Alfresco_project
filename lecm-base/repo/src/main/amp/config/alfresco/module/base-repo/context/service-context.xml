@@ -52,6 +52,7 @@
 	<bean id="urlService" class="ru.it.lecm.base.beans.LecmURLServiceImpl">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="globalProperties" ref="global-properties"/>
+		<property name="adminParams" ref="sysAdminParams"/>
 	</bean>
 
 	<bean id="baseScript" class="ru.it.lecm.base.beans.BaseWebScript" abstract="true" parent="baseJavaScriptExtension">

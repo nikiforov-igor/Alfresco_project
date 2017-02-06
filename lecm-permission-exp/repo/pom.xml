@@ -32,13 +32,13 @@
             <artifactId>spring-beans</artifactId>
         </dependency> -->
         <!-- Don't add here amp dependencies as it will break amp packaging -->
-        <!-- <dependency>
+        <dependency>
             <groupId>ru.it.lecm.base</groupId>
             <artifactId>base-repo-api</artifactId>
             <version>${platform.version}</version>
 			<scope>provided</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
         </dependency>-->
