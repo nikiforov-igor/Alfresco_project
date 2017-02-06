@@ -1,5 +1,6 @@
 package ru.it.lecm.eds;
 
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
@@ -13,10 +14,7 @@ import ru.it.lecm.wcalendar.IWorkCalendar;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: dbashmakov
@@ -148,6 +146,22 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
         if (!nodeService.exists(signalSender)) {
             signalSender = orgstructureService.getCurrentEmployee();
         }
-        nodeService.createAssociation(document, signalSender, EDSDocumentService.ASSOC_COMPLETION_SIGNAL_SENDER);
+        if (signalSender != null) {
+            nodeService.createAssociation(document, signalSender, EDSDocumentService.ASSOC_COMPLETION_SIGNAL_SENDER);
+        }
+    }
+
+    @Override
+    public void resetCompletionSignal(NodeRef document) {
+        nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL, false);
+        nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL_REASON, null);
+        List<AssociationRef> signalSenderAssoc = nodeService.getTargetAssocs(document, EDSDocumentService.ASSOC_COMPLETION_SIGNAL_SENDER);
+        NodeRef signalSender = null;
+        if (signalSenderAssoc != null && signalSenderAssoc.size() != 0) {
+            signalSender = signalSenderAssoc.get(0).getTargetRef();
+        }
+        if (signalSender != null) {
+            nodeService.removeAssociation(document, signalSender, EDSDocumentService.ASSOC_COMPLETION_SIGNAL_SENDER);
+        }
     }
 }

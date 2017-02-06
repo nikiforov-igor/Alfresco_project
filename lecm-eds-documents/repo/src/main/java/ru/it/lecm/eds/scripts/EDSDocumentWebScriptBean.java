@@ -100,15 +100,26 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
 
     /**
      * Отправка сигнала о необходимости завершения
-     * @param nodeRef документ, которому направляется сигнал
+     * @param doc документ, которому направляется сигнал
      * @param reason причина сигнала
-     * @param senderRef отправитель сигнала
+     * @param sender отправитель сигнала
      */
-    public void sendCompletionSignal(String nodeRef, String reason, String senderRef) {
-        NodeRef doc = new NodeRef(nodeRef);
-        NodeRef signalSender = new NodeRef(senderRef);
-        if (nodeService.exists(doc)) {
-            edsService.sendCompletionSignal(doc, reason, signalSender);
+    public void sendCompletionSignal(ScriptNode doc, String reason, ScriptNode sender) {
+        NodeRef document = doc.getNodeRef();
+        NodeRef signalSender = sender.getNodeRef();
+        if (document != null && signalSender != null && nodeService.exists(document)) {
+            edsService.sendCompletionSignal(document, reason, signalSender);
+        }
+    }
+
+    /**
+     * Сброс сигнала завершения
+     * @param doc нода документа
+     */
+    public void resetCompletionSignal(ScriptNode doc) {
+        NodeRef document = doc.getNodeRef();
+        if (document != null && nodeService.exists(document)) {
+            edsService.resetCompletionSignal(document);
         }
     }
 }

@@ -46,7 +46,7 @@
                 </property>
                 <property name="lecm-eds-aspect:completion-signal-reason">
                     <type>d:text</type>
-                </property>s
+                </property>
             </properties>
             <associations>
                 <association name="lecm-eds-aspect:completion-signal-sender-assoc">

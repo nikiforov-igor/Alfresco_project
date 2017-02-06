@@ -101,4 +101,10 @@ public interface EDSDocumentService {
      * @param signalSender отправитель сигнала
      */
     void sendCompletionSignal(NodeRef document, String reason, NodeRef signalSender);
+
+    /**
+     * Сброс сигнала завершения
+     * @param document документ
+     */
+    void resetCompletionSignal(NodeRef document);
 }
