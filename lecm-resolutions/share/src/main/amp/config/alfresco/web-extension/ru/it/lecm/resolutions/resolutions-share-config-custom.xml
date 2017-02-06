@@ -326,7 +326,7 @@
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-resolutions:limitation-date"/>
 
-                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
+                    <show id="lecm-resolutions:errands-json" force="true"/>
 
                     <show id="lecm-resolutions:reviewers-assoc"/>
                 </field-visibility>
@@ -360,8 +360,11 @@
                     </field>
                     <field id="lecm-resolutions:limitation-date" set="limitation-date"  mandatory="true"/>
 
-                    <field id="lecm-base-dummy-aspects:script2" set="execution">
-                        <control template="/ru/it/lecm/eds/controls/execution-tree-control.ftl"/>
+                    <field id="lecm-resolutions:errands-json" set="execution">
+                        <control template="/ru/it/lecm/resolutions/controls/resolution-execution-datagrid-control.ftl">
+                            <control-param name="datagridFormId">resolution-execution-datagrid</control-param>
+                            <control-param name="expandFormId">resolution-execution-datagrid-expand</control-param>
+                        </control>
                     </field>
 
                     <field id="lecm-resolutions:reviewers-assoc" set="reviewers">

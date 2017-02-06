@@ -59,7 +59,7 @@
 					toJS = ko.mapping.toJS;
 
 				function processSignValues(key, value) {
-					var date = fromISO8601(value);
+					var date = value && fromISO8601(value);
 
 					if (key == "isValid") {
 						return value ? Alfresco.util.message('lecm.signdoc.msg.valid') : Alfresco.util.message('lecm.signdoc.msg.invalid');

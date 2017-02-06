@@ -1,8 +1,8 @@
 package ru.it.lecm.businessjournal.beans;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.cache.SimpleCache;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.LecmURLService;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -29,7 +30,6 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import java.io.IOException;
 import java.util.*;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 
 /**
  * User: pmelnikov
@@ -160,15 +160,16 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
     }
 
     protected String wrapAsLink(NodeRef link, boolean isInititator) {
-        SysAdminParams params = serviceRegistry.getSysAdminParams();
-        String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
         if (link != null && !nodeService.exists(link)) {
             return "";
         }
         String description = isInititator ? getInitiatorDescription(link) : getObjectDescription(link);
         if (link != null) {
-            String linkUrl = isLECMDocument(link) ? documentService.getDocumentUrl(link) : (isLECMDocumentAttachment(link) ? DOCUMENT_ATTACHMENT_LINK_URL : LINK_URL);
-            return "<a href=\"" + serverUrl + linkUrl + "?nodeRef=" + link.toString() + "\">" + description + "</a>";
+            LecmURLService urlService = getUrlService();
+            String linkUrl = isLECMDocument(link) ?
+                    documentService.getDocumentUrl(link) :
+                    isLECMDocumentAttachment(link) ? urlService.getDocumentAttachmentLinkUrl() : urlService.getLinkURL();
+            return urlService.wrapperLink(link.toString(), description, linkUrl);
         } else {
             return description;
         }
@@ -316,10 +317,7 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
     }
 
     protected String wrapAsWorkflowLink(String executionId) {
-        SysAdminParams params = serviceRegistry.getSysAdminParams();
-        String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
-        String description = getWorkflowDescription(executionId);
-        return "<a href=\"" + serverUrl + WORKFLOW_LINK_URL + "?workflowId=" + executionId + "\">" + description + "</a>";
+        return getUrlService().wrapAsWorkflowLink(executionId, getWorkflowDescription(executionId));
     }
 
     public void log(final Date date, final NodeRef initiator, NodeRef mainObject, final String eventCategory, final String defaultDescription, final List<String> objects) {

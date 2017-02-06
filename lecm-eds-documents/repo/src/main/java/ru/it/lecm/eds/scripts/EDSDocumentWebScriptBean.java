@@ -85,7 +85,37 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
         return convertComplexDate(radio, dateParsed, daysType, daysInt);
     }
 
+    public String getComplexDateText(String radio, String date, String daysType, String days) {
+        ParameterCheck.mandatory("radio", radio);
+
+        Integer daysInt = StringUtils.isNotEmpty(days) ? Integer.parseInt(days) : null;
+        Date dateParsed = StringUtils.isNotEmpty(date) ? ISO8601DateFormat.parse(date) : null;
+
+        return edsService.getComplexDateText(radio, dateParsed, daysType, daysInt);
+    }
+
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
+    }
+
+    /**
+     * Отправка сигнала о необходимости завершения
+     * @param doc документ, которому направляется сигнал
+     * @param reason причина сигнала
+     * @param sender отправитель сигнала
+     */
+    public void sendCompletionSignal(ScriptNode doc, String reason, ScriptNode sender) {
+        NodeRef document = doc.getNodeRef();
+        NodeRef signalSender = sender.getNodeRef();
+        edsService.sendCompletionSignal(document, reason, signalSender);
+    }
+
+    /**
+     * Сброс сигнала завершения
+     * @param doc нода документа
+     */
+    public void resetCompletionSignal(ScriptNode doc) {
+        NodeRef document = doc.getNodeRef();
+        edsService.resetCompletionSignal(document);
     }
 }

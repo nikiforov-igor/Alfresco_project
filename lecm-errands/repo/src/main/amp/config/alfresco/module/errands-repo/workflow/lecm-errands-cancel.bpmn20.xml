@@ -33,7 +33,7 @@
                                         countChildErrands = connectedDocuments.length;
                                     }
                                     var documentRefLink = document.nodeRef.toString().replace("://", "/");
-                                    var url = "/share/page/errands-list?query=" + encodeURIComponent("!Отменено, !Удалено, !Исполнено, !Не исполнено");
+                                    var url = "/" + base.getShareContext() + "/page/errands-list?query=" + encodeURIComponent("!Отменено, !Удалено, !Исполнено, !Не исполнено");
                                     url += "&formId=" + encodeURIComponent("Все");
                                     url += "#filter=errandsChildFilter|" + documentRefLink;
 

@@ -39,7 +39,7 @@
 }
 
 .dashlet .titleBarActions .arm {
-    background-image: url('/share/res/images/lecm-errands/arm.png');
+    background-image: url('../../images/lecm-errands/arm.png');
 }
 
 .expired {

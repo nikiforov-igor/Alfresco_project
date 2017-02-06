@@ -1,5 +1,5 @@
 .datagrid .onEditWorkspace a {
-    background-image: url("/share/res/components/images/site-16.png");
+    background-image: url("../../components/images/site-16.png");
 }
 
 div.flat-button  div.new-row span.addAgendaItemSpanNewRow{

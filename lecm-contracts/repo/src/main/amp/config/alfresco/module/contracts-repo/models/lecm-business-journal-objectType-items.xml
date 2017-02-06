@@ -7,14 +7,14 @@
                 <property name="lecm-busjournal:objectType-code">LECM_CONTRACT</property>
                 <property name="lecm-busjournal:objectType-class">lecm-contract:document</property>
                 <property name="lecm-busjournal:objectType-template">{lecm-document:present-string}</property>
-                <property name="lecm-busjournal:objectType-list-template"><![CDATA[статус: {lecm-statemachine:status}, автор: <a href='/share/page/view-metadata?nodeRef={lecm-document:creator-ref}'>{~AUTHOR}</a>]]></property>
+                <property name="lecm-busjournal:objectType-list-template"><![CDATA[статус: {lecm-statemachine:status}, автор: <a href='/{~SHARE_CONTEXT}/page/view-metadata?nodeRef={lecm-document:creator-ref}'>{~AUTHOR}</a>]]></property>
             </item>
             <item name="cm:Документ к договору" type="lecm-busjournal:objectType">
                 <property name="cm:name">Документ к договору</property>
                 <property name="lecm-busjournal:objectType-code">LECM_CONTRACT_ADDITIONAL_DOCUMENT</property>
                 <property name="lecm-busjournal:objectType-class">lecm-additional-document:additionalDocument</property>
                 <property name="lecm-busjournal:objectType-template">{lecm-document:present-string}</property>
-                <property name="lecm-busjournal:objectType-list-template"><![CDATA[статус: {lecm-statemachine:status}, автор: <a href='/share/page/view-metadata?nodeRef={lecm-document:creator-ref}'>{~AUTHOR}</a>]]></property>
+                <property name="lecm-busjournal:objectType-list-template"><![CDATA[статус: {lecm-statemachine:status}, автор: <a href='/{~SHARE_CONTEXT}/page/view-metadata?nodeRef={lecm-document:creator-ref}'>{~AUTHOR}</a>]]></property>
             </item>
             <item name="cm:Этап договора" type="lecm-busjournal:objectType">
                 <property name="cm:name">Этап договора</property>

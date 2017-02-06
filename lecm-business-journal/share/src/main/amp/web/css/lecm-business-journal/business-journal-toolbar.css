@@ -1,5 +1,5 @@
 .datalist-toolbar .archive-rows span.first-child {
-    background: url('/share/res/components/images/delete-row-16.png') no-repeat 12px 4px;
+    background: url('../../components/images/delete-row-16.png') no-repeat 12px 4px;
     padding-left: 24px;
 }
 

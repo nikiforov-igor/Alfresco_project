@@ -66,7 +66,7 @@
 	    <div id="${fieldHtmlId}-uploader-block" class="uploader-block <#if checkRights>hidden</#if>">
 	        <fieldset>
 	            <legend>${msg("label.add-file")}</legend>
-	            <img id="${fieldHtmlId}-uploader-button" src="/share/res/images/lecm-base/components/plus.png" alt="" class="uploader-button">  <br/>
+	            <img id="${fieldHtmlId}-uploader-button" src="${url.context}/res/images/lecm-base/components/plus.png" alt="" class="uploader-button">  <br/>
 	            <span class="drag-tip">${msg("label.drag-file")}</span>
 	        </fieldset>
 	    </div>

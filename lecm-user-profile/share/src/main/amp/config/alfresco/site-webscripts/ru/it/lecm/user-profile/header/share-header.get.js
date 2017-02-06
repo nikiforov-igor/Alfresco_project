@@ -5,7 +5,7 @@ var lecmProfile = {
 	        id: "LECM_PROFILE_MENU_ITEM",
 	        label: msg.get("label.ECM.my_profile"),
 	        targetUrl: "my-profile",
-	        iconImage: "/share/res/components/images/header/user-profile_light.png"
+	        iconImage: url.context + "/res/components/images/header/user-profile_light.png"
 
 	    }
 };

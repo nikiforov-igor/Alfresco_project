@@ -79,7 +79,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
 						doBeforeFormSubmit: {
 							fn: function InstantAbsence_doBeforeSubmit() {
 								var form = Dom.get(this.id + "-createDetails-" + postfix + "-form");
-								form.setAttribute("action", "/share/proxy/alfresco/api/type/lecm-rpeditor%3areportTemplate/formprocessor");
+								form.setAttribute("action", Alfresco.constants.PROXY_URI_RELATIVE + "api/type/lecm-rpeditor%3areportTemplate/formprocessor");
 								
 								var input = document.createElement('input');
 								input.setAttribute("id", this.id + "-createDetails-form-destination");

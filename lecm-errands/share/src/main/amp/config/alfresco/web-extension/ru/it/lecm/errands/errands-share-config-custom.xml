@@ -224,6 +224,16 @@
                     </field>
                 </appearance>
             </form>
+            <form id="resolution-execution-datagrid-expand">
+                <field-visibility>
+                    <show id="lecm-base-dummy-aspects:script2"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-base-dummy-aspects:script2">
+                        <control template="/ru/it/lecm/eds/controls/execution-tree-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 
@@ -1205,6 +1215,20 @@
                     </field>
                 </appearance>
             </form>
+            <form id="resolution-execution-datagrid">
+                <field-visibility>
+                    <show id="lecm-errands:child-index-counter"/>
+                    <show id="lecm-errands:type-assoc"/>
+                    <show id="lecm-errands:title"/>
+                    <show id="lecm-errands:executor-assoc"/>
+                    <show id="lecm-errands:coexecutors-assoc"/>
+                    <show id="lecm-errands:controller-assoc"/>
+                    <show id="lecm-errands:limitation-date-text"/>
+                    <show id="lecm-errands:report-required"/>
+                    <show id="lecm-errands:report-recipient-type"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                </field-visibility>
+            </form>
             <form id="statemachine-editable-fields">
                 <field-visibility>
                     <!-- Важное -->
@@ -1870,7 +1894,7 @@
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestChangeDueDateTask_1NewDateValidation" event="change"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestChangeDueDateTask_1NewDateValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
@@ -1991,7 +2015,7 @@
 		                <control template="/ru/it/lecm/documents/controls/workflow/format-packageItems-document.ftl">
 			                <control-param name="substituteString">
 				                <![CDATA[
-					                <a href='/share/page/view-metadata?nodeRef={lecm-errands:executor-assoc/nodeRef}'>
+					                <a href='/{~SHARE_CONTEXT}/page/view-metadata?nodeRef={lecm-errands:executor-assoc/nodeRef}'>
 					                    {lecm-errands:executor-assoc/lecm-orgstr:employee-short-name} {lecm-errands:executor-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}
 					                </a>
 				                ]]>
@@ -2102,7 +2126,7 @@
                         <control template="/ru/it/lecm/documents/controls/workflow/format-packageItems-document.ftl">
                             <control-param name="substituteString">
                                 <![CDATA[
-					                <a href='/share/page/view-metadata?nodeRef={lecm-errands:controller-assoc/nodeRef}'>
+					                <a href='/{~SHARE_CONTEXT}/page/view-metadata?nodeRef={lecm-errands:controller-assoc/nodeRef}'>
 					                    {lecm-errands:controller-assoc/lecm-orgstr:employee-short-name} {lecm-errands:controller-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}
 					                </a>
 				                ]]>
@@ -2752,6 +2776,7 @@
                             <control-param name="fixSimpleDialogId">workflow-form</control-param>
                             <control-param name="defaultValueFromId">incoming-default-primary-routing</control-param>
                             <control-param name="defaultValueDataSource">lecm/incoming/primaryRouting/defaultErrands/datasource</control-param>
+                            <control-param name="additionalCss">css/lecm-errands/errands-limitation-date-set.css</control-param>
                         </control>
                     </field>
                     <field id="change-errand-type-script">

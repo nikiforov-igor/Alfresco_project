@@ -1975,11 +1975,11 @@ span.person a {
     (помимо тултипа у "а") */
 .yui-skin-lecmDarkTheme span.person.employee-available {
     padding-left: 20px;
-    background: url("/share/res/images/lecm-base/components/user-green-16.png") no-repeat 0 -1px;
+    background: url("../../images/lecm-base/components/user-green-16.png") no-repeat 0 -1px;
 }
 .yui-skin-lecmDarkTheme span.person.employee-unavailable {
     padding-left: 20px;
-    background: url("/share/res/images/lecm-base/components/user-red-16.png") no-repeat 0 -1px;
+    background: url("../../images/lecm-base/components/user-red-16.png") no-repeat 0 -1px;
 }
 .yui-skin-lecmDarkTheme span.person.employee-available a,
 .yui-skin-lecmDarkTheme span.person.employee-unavailable a {
@@ -2286,14 +2286,14 @@ span.person a div.description:empty {
 }
 
 .view-signatures {
-    background-image: url(/share/res/themes/lecmTheme/images/document.png);
+    background-image: url(../../themes/lecmTheme/images/document.png);
     background-repeat: no-repeat;
     display: inline-block;
     width: 16px;
 }
 
 .refresh-sent-document {
-    background-image: url(/share/res/themes/lecmTheme/images/refresh-16.png);
+    background-image: url(../../themes/lecmTheme/images/refresh-16.png);
     background-repeat: no-repeat;
     display: inline-block;
     width: 16px;
@@ -2533,17 +2533,17 @@ div#lightbox {
 
 /* arm menu : start */
 .yui-skin-lecmDarkTheme .arm-menu-item {
-    background-image: url("/share/components/images/header/docs_16_light.png");
+    background-image: url("../../components/images/header/docs_16_light.png");
 }
 .yui-skin-lecmDarkTheme .arm-menu-item.orgstructure {
-    background-image: url("/share/components/images/header/orgstructure_light.png");
+    background-image: url("../../components/images/header/orgstructure_light.png");
 }
 .yui-skin-lecmDarkTheme .arm-menu-item.ADMIN {
-    background-image: url("/share/components/images/header/settings_16_light.png");
+    background-image: url("../../components/images/header/settings_16_light.png");
 }
 /* arm menu : end */
 .yui-skin-lecmDarkTheme .alf-files-icon {
-    background-image: url("/share/components/images/header/docs_16_light.png");
+    background-image: url("../../components/images/header/docs_16_light.png");
 }
 
 .yui-skin-lecmDarkTheme .ygtv-highlight .ygtv-highlight1,
@@ -2665,7 +2665,7 @@ div#lightbox {
 }
 .yui-skin-lecmDarkTheme .document-header .document-action .favorite.enabled .yui-button .first-child {
     background: url('images/LECM_C-style-icons-6-16.png') no-repeat center,
-    url('/share/res/components/images/star-selected_16x16.png') no-repeat center;
+    url('../../components/images/star-selected_16x16.png') no-repeat center;
 }
 .yui-skin-lecmDarkTheme .document-header .document-action .favorite.disabled .first-child,
 .yui-skin-lecmDarkTheme .document-header .document-action .favorite .yui-button-disabled .first-child {

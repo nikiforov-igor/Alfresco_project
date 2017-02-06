@@ -636,7 +636,7 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 		SysAdminParams params = serviceRegistry.getSysAdminParams();
 		Map<String, Object> objects = new HashMap<>();
 		String url = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
-		url = url + "/share/page/site/" + siteShortName + "/dashboard";
+		url = url + getUrlService().getLinkWithContext("/page/site/" + siteShortName + "/dashboard");
 		objects.put("url", url);
 		objects.put("eventExecutor", orgstructureService.getCurrentEmployee());
 

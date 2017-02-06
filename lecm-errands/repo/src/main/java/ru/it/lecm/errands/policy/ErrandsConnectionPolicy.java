@@ -111,14 +111,16 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
             }
         }
 
-        String regNum = documentService.getDocumentActualNumber(additionalDoc);
+        if (nodeService.getProperty(errandDoc, ErrandsService.PROP_ADDITIONAL_DOC_NUMBER) == null) {
+            String regNum = documentService.getDocumentActualNumber(additionalDoc);
 
-        if (regNum == null) {
-            regNum = documentService.getProjectRegNumber(additionalDoc);
-        }
+            if (regNum == null) {
+                regNum = documentService.getProjectRegNumber(additionalDoc);
+            }
 
-        if (regNum != null && !regNum.isEmpty()) {
-            nodeService.setProperty(errandDoc, ErrandsService.PROP_ADDITIONAL_DOC_NUMBER, regNum);
+            if (regNum != null && !regNum.isEmpty()) {
+                nodeService.setProperty(errandDoc, ErrandsService.PROP_ADDITIONAL_DOC_NUMBER, regNum);
+            }
         }
 
         //установка ассоциации документа-основания
