@@ -1930,7 +1930,7 @@
                 </appearance>
             </form>
         </forms>
-    </config>ta
+    </config>
 
     <config evaluator="string-compare" condition="activiti$errandsChangeDueDate">
         <forms>
