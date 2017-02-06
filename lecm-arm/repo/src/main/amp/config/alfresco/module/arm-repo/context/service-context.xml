@@ -398,7 +398,7 @@
         <property name="serviceRegistry" ref="ServiceRegistry"/>
     </bean>
 
-    <bean id="armNodeExpression" class="ru.it.lecm.arm.expression.ExpressionArmNode">
+    <bean id="armNodeExpression" class="ru.it.lecm.arm.expression.ExpressionArmNode" parent="baseNodeExpression">
         <property name="armService" ref="armService"/>
         <property name="armWrraper" ref="armWrapperService"/>
         <property name="serviceRegistry" ref="ServiceRegistry"/>

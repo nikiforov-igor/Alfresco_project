@@ -1,23 +1,22 @@
 package ru.it.lecm.arm.expression;
 
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.arm.beans.ArmService;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.documents.expression.ExpressionNode;
 
 /**
  * User: dbashmakov
  * Date: 03.02.2017
  * Time: 11:10
  */
-public class ExpressionArmNode {
+public class ExpressionArmNode extends ExpressionNode {
 
-    private static ServiceRegistry serviceRegistry;
     private static ArmService armService;
     private static ArmWrapperService armWrraper;
 
-    private ArmNode node;
+    private ArmNode armNode;
 
     public void setArmService(ArmService armService) {
         ExpressionArmNode.armService = armService;
@@ -27,14 +26,19 @@ public class ExpressionArmNode {
         ExpressionArmNode.armWrraper = armWrraper;
     }
 
-    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-        ExpressionArmNode.serviceRegistry = serviceRegistry;
-    }
-
     public ExpressionArmNode() {
     }
 
-    public ExpressionArmNode(NodeRef node) {
-        this.node = armWrraper.wrapArmNodeAsObject(node, armService.isArmAccordion(node));
+    public ExpressionArmNode(NodeRef nodeRef) {
+        super(nodeRef);
+        this.armNode = armWrraper.wrapArmNodeAsObject(nodeRef, armService.isArmAccordion(nodeRef));
+    }
+
+    public ArmNode getArmNode() {
+        return armNode;
+    }
+
+    public long count() {
+        return 0;
     }
 }

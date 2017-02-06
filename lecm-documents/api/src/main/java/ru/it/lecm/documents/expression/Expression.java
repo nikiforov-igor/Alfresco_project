@@ -25,7 +25,7 @@ public class Expression extends BaseSpellExpression {
 
     public Expression(NodeRef document, ServiceRegistry serviceRegistry, ApplicationContext applicationContext) {
         super(applicationContext);
-        this.doc = new ExpressionDocument(document, serviceRegistry);
+        this.doc = new ExpressionDocument(document);
         this.user = new ExpressionUser(document, serviceRegistry, orgstructureBean, documentService);
         String executionId = stateMachineService.getStatemachineId(document);
         if (!"Не запущен".equals(executionId)) {

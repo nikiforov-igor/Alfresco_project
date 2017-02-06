@@ -642,7 +642,11 @@
 		<property name="documentConnectionService" ref="documentConnectionService"/>
 	</bean>
 
-    <bean id="documentExpression" class="ru.it.lecm.documents.expression.ExpressionDocument">
+    <bean id="baseNodeExpression" class="ru.it.lecm.documents.expression.ExpressionNode">
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+    </bean>
+
+    <bean id="documentExpression" class="ru.it.lecm.documents.expression.ExpressionDocument" parent="baseNodeExpression">
         <property name="documentService" ref="documentService"/>
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
         <property name="documentConnectionService" ref="documentConnectionService"/>
