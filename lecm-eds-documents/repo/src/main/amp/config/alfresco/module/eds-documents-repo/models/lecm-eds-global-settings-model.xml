@@ -39,18 +39,23 @@
 				    <mandatory>true</mandatory>
 				    <default>true</default>
 			    </property>
+                
                 <!-- Скрывать свойтсва для получателей -->
+                <!-- This property has been DEPRECATED: for backwards compatibility only -->
                 <property name="lecm-eds-globset:hide-properties-for-recipients">
                     <type>d:boolean</type>
                     <mandatory>true</mandatory>
                     <default>false</default>
                 </property>
+                
                 <!-- Код АРМ для дашлета "Моя работа"-->
                 <property name="lecm-eds-globset:arm-for-dashlet">
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                     <default>SED</default>
                 </property>
+                
+                <!-- This property has been DEPRECATED: for backwards compatibility only -->
                 <property name="lecm-eds-globset:links-view-mode">
                     <type>d:text</type>
                     <mandatory>false</mandatory>

@@ -2,7 +2,7 @@
 <items>
 	<item name="cm:Настройки уведомлений" type="lecm-arm:html-node">
 		<property name="cm:name"><![CDATA[Настройки уведомлений]]></property>
-		<property name="lecm-arm:order"><![CDATA[2]]></property>
+		<property name="lecm-arm:order"><![CDATA[30]]></property>
 		<property name="lecm-arm:html-url"><![CDATA[page/my-notifications-settings]]></property>
 	</item>
 </items>

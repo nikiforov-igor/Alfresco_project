@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-	<item name="cm:Маршруты СЭД" type="lecm-arm:html-node">
-		<property name="cm:name"><![CDATA[Маршруты СЭД]]></property>
-		<property name="lecm-arm:order"><![CDATA[1]]></property>
+	<item name="cm:Маршруты согласования" type="lecm-arm:html-node">
+		<property name="cm:name"><![CDATA[Маршруты согласования]]></property>
+		<property name="lecm-arm:order"><![CDATA[10]]></property>
 		<property name="lecm-arm:html-url"><![CDATA[page/routes]]></property>
 	</item>
 </items>

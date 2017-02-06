@@ -1,7 +1,7 @@
 var ERRAND_TYPE = 'lecm-errands:document';
 var IS_SYSTEM = 'lecm-connect:is-system';
 /*VIEW_ALL, VIEW_DIRECT, VIEW_NO*/
-var viewLinksMode = '' + edsGlobalSettings.getLinksViewMode();
+var viewLinksMode = '' + documentGlobalSettings.getLinksViewMode();
 var isMlSupported = lecmMessages.isMlSupported();
 
 var documentNodeRef = args['documentNodeRef'];
