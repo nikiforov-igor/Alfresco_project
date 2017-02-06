@@ -140,8 +140,9 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
         }
         return null;
     }
+
     @Override
-    public void sendCompletionSignal(NodeRef document, String reason, NodeRef signalSender){
+    public void sendCompletionSignal(NodeRef document, String reason, NodeRef signalSender) {
         nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL, true);
         nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL_REASON, reason);
         if (!nodeService.exists(signalSender)) {
