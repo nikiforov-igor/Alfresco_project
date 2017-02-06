@@ -30,7 +30,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      */
     LogicECM.DocumentAttachments = function DocumentAttachments_constructor(htmlId) {
         LogicECM.DocumentAttachments.superclass.constructor.call(this, htmlId);
-
+		this.options.baseDocAssocName = null;
+		this.options.showAfterReady = false;
 	    YAHOO.Bubbling.on("metadataRefresh", this.onAttachmentsUpdate, this);
 	    YAHOO.Bubbling.on("fileRenamed", this.onAttachmentsUpdate, this);
 	    YAHOO.Bubbling.on("fileDeleted", this.onAttachmentsUpdate, this);
@@ -42,10 +43,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
     YAHOO.lang.augmentObject(LogicECM.DocumentAttachments.prototype,
         {
 	        newId: null,
-            options: {
-				baseDocAssocName: null,
-		        showAfterReady: false
-	        },
 
             /**
              * Fired by YUI when parent element is available for scripting.

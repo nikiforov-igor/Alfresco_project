@@ -4,7 +4,7 @@
 
 function main() {
     AlfrescoUtil.param("nodeRef");
-	var baseDocAssocName = AlfrescoUtil.param("baseDocAssocName");
+	var baseDocAssocName = AlfrescoUtil.param("baseDocAssocName", null);
 	var hasViewListPerm = false;
 	var isMlSupported;
 	var mlValue;

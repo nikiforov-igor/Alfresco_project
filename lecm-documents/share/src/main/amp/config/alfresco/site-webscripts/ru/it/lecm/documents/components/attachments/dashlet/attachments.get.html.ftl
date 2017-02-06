@@ -1,8 +1,5 @@
 <#if categories??>
     <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
-	<@markup id="js">
-		<@script type="text/javascript" src="${url.context}/res/scripts/components/document-attachments-dashlet-datagrid.js"></@script>
-	</@>
     <#assign id = args.htmlid>
     <#assign containerId = id + "-container">
 

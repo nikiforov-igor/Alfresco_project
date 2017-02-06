@@ -18,7 +18,9 @@ var $html = Alfresco.util.encodeHTML,
 (function () {
 
 	LogicECM.DocumentAttachments.DataGrid = function (containerId) {
-		return LogicECM.DocumentAttachments.DataGrid.superclass.constructor.call(this, containerId);
+		LogicECM.DocumentAttachments.DataGrid.superclass.constructor.call(this, containerId);
+		this.options.baseDocAssocName = null;
+		return this;
 	};
 
 	/**
@@ -31,10 +33,6 @@ var $html = Alfresco.util.encodeHTML,
 	 */
 	YAHOO.lang.augmentObject(LogicECM.DocumentAttachments.DataGrid.prototype, {
 		fileUpload: null,
-
-		options: {
-			baseDocAssocName: null
-		},
 
 		getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
 			var html = "";

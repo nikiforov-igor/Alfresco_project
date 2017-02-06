@@ -2,7 +2,7 @@
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 function main() {
     AlfrescoUtil.param("nodeRef");
-	var excludeType = AlfrescoUtil.param("excludeType");
+	var excludeType = AlfrescoUtil.param("excludeType", null);
 
 	model.hasViewPerm = hasPermission(model.nodeRef, PERM_LINKS_VIEW);
 	model.hasCreatePerm = hasPermission(model.nodeRef, PERM_LINKS_CREATE);

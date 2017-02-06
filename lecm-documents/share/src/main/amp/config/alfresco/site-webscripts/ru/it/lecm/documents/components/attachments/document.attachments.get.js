@@ -5,7 +5,7 @@
 function main() {
 	AlfrescoUtil.param("nodeRef");
 	AlfrescoUtil.param("view", "");
-	var baseDocAssocName = AlfrescoUtil.param("baseDocAssocName");
+	var baseDocAssocName = AlfrescoUtil.param("baseDocAssocName", null);
 	var hasPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
 	if (hasPerm) {
 		var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);

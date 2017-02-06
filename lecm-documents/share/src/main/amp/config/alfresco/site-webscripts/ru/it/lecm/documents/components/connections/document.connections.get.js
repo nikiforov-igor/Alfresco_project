@@ -2,7 +2,7 @@
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 function main() {
     AlfrescoUtil.param("nodeRef");
-	var excludeType = AlfrescoUtil.param("excludeType");
+	var excludeType = AlfrescoUtil.param("excludeType", null);
 	var hasPerm = hasPermission(model.nodeRef, PERM_LINKS_VIEW);
 	if (hasPerm) {
         var conns = getConnections(model.nodeRef, null, excludeType);

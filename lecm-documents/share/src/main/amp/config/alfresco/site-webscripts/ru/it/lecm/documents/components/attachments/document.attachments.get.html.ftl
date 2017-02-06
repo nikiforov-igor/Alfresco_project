@@ -8,6 +8,7 @@
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-attachments.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-attachments-list.js"></@script>
+	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-attachments-dashlet-datagrid.js"></@script>
 </@>
 
 <@markup id="html">

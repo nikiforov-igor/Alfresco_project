@@ -30,7 +30,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      */
     LogicECM.DocumentConnections = function DocumentConnections_constructor(htmlId) {
         LogicECM.DocumentConnections.superclass.constructor.call(this, htmlId);
-
+		this.options.excludeType = null;
 	    YAHOO.Bubbling.on("connectionsUpdate", this.onConnectionsUpdate, this);
         return this;
     };
@@ -39,9 +39,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
     YAHOO.lang.augmentObject(LogicECM.DocumentConnections.prototype,
         {
-			options: {
-				excludeType: null
-			},
             /**
              * Fired by YUI when parent element is available for scripting.
              * Template initialisation, including instantiation of YUI widgets and event listener binding.
