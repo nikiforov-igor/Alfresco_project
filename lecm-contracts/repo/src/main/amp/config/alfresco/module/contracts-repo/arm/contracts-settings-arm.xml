@@ -2,7 +2,7 @@
 <items>
     <item name="cm:Настройки дашлета «Договоры»" type="lecm-arm:html-node">
         <property name="cm:name"><![CDATA[Настройки дашлета «Договоры»]]></property>
-        <property name="lecm-arm:order"><![CDATA[30]]></property>
+        <property name="lecm-arm:order"><![CDATA[40]]></property>
         <property name="lecm-arm:html-url">
             <![CDATA[page/components/console/contract-dashlet-settings]]></property>
     </item>

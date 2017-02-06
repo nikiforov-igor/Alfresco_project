@@ -4,6 +4,7 @@
 
 function main() {
     AlfrescoUtil.param("nodeRef");
+	var inclBaseDoc = ('' + AlfrescoUtil.param("inclBaseDoc", "false")) == "true";
 
 	model.hasViewListPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
 	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
@@ -29,17 +30,14 @@ function main() {
         if (cats != null) {
             model.categories = cats.categories;
 
-	        var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
-	        if (nodeDetails != null && nodeDetails.item != null && nodeDetails.item.node != null &&
-		            nodeDetails.item.node.type == "lecm-errands:document") {
-
+	        if (inclBaseDoc) {
 		        model.categories.push({
-			        nodeRef: "errands-base-document-attachments/" + model.nodeRef.replace(":/", ""),
-			        name: msg.get("label.errands.base-document"),
+			        nodeRef: "base-document-attachments/" + model.nodeRef.replace(":/", ""),
+			        name: msg.get("label.attachments.base-document"),
 			        path: "",
 			        isReadOnly: true
 		        });
-	        }
+			}
         }
 	}
 

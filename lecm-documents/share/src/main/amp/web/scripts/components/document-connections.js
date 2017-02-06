@@ -39,6 +39,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
     YAHOO.lang.augmentObject(LogicECM.DocumentConnections.prototype,
         {
+			options: {
+				excludeType: null
+			},
             /**
              * Fired by YUI when parent element is available for scripting.
              * Template initialisation, including instantiation of YUI widgets and event listener binding.
@@ -59,7 +62,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			            url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/connections-list",
 			            dataObj: {
 				            nodeRef: this.options.nodeRef,
-				            htmlid: this.id + Alfresco.util.generateDomId()
+				            htmlid: this.id + Alfresco.util.generateDomId(),
+							excludeType: this.options.excludeType
 			            },
 			            successCallback: {
 				            fn:function(response){
@@ -80,7 +84,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/connections",
 				        dataObj: {
 					        nodeRef: this.options.nodeRef,
-					        htmlid: this.id + "-" + Alfresco.util.generateDomId()
+					        htmlid: this.id + "-" + Alfresco.util.generateDomId(),
+							excludeType: this.options.excludeType
 				        },
 				        successCallback: {
 					        fn:function(response){

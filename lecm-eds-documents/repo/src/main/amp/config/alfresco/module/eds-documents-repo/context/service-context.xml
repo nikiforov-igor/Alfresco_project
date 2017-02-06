@@ -49,6 +49,16 @@
 					  businessJournalLogEventsPolicy"
 		  p:dictionaries-ref="eds.dictionaries"/>
 
+	<bean id="eds.arm.filters.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="arm.LogicEcmModelsBootstrap, armService, arm.LogicEcmBootstrap, arm.filters.LogicEcmBootstrap">
+		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-arm-filters.xml</value>
+			</list>
+		</property>
+	</bean>
+
 	<util:constant id="EDS_GLOBAL_SETTINGS_FOLDER_ID" static-field="ru.it.lecm.eds.api.EDSGlobalSettingsService.EDS_GLOBAL_SETTINGS_FOLDER_ID"/>
 	<util:constant id="EDS_GLOBAL_SETTINGS_FOLDER_NAME" static-field="ru.it.lecm.eds.api.EDSGlobalSettingsService.EDS_GLOBAL_SETTINGS_FOLDER_NAME"/>
 	<util:map id="eds.global-settings.folders">
@@ -60,7 +70,8 @@
 		  p:orgstructureService-ref="serviceOrgstructure"
 		  p:namespaceService-ref="namespaceService"
 		  p:dictionaryService-ref="serviceDictionary"
-		  p:folders-ref="eds.global-settings.folders"/>
+		  p:folders-ref="eds.global-settings.folders"
+		  p:documentGlobalSettingsService-ref="documents.global-settings.service"/>
 
     <bean id="eds.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
@@ -101,12 +112,22 @@
 
     <bean id="eds.documents.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="arm.settings.LogicEcmBootstrap">
-        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки"/>
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование"/>
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/arm/eds-documents-settings-arm.xml</value>
             </list>
         </property>
     </bean>
+
+	<bean id="eds.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap, eds.arm.filters.LogicEcmBootstrap, documents.LogicEcmConnectionTypesBootstrap">
+		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ"/>
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/arm/default-arm-sed.xml</value>
+			</list>
+		</property>
+	</bean>
 
 </beans>

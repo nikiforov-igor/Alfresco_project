@@ -11,7 +11,7 @@
 <@markup id="html">
 	<#assign id = args.htmlid>
 	
-	<div class="yui-t1" id="contracts-grid">
+	<div class="yui-t1" id="documents-grid">
 		<div id="yui-main-2">
 			<div class="yui-b datagrid-content" id="alf-content">
 			<@grid.datagrid id=id showViewForm=true>

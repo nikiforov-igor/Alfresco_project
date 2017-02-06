@@ -43,7 +43,6 @@
         <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ"/>
 		<property name="dictionaries">
 			<list>
-                <value>alfresco/module/${artifactId}/dictionary/default-arm-sed.xml</value>
                 <value>alfresco/module/${artifactId}/dictionary/default-arm-admin.xml</value>
 			</list>
 		</property>

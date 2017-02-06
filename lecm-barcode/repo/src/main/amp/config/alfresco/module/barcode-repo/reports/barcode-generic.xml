@@ -1,8 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items updateMode="RewriteChildren">
 	<item name="cm:Штрихкод документа" type="lecm-rpeditor:reportDescriptor">
-		<property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-additional-document:additionalDocument,lecm-contract:document,lecm-internal:document,lecm-nd:document,lecm-ord:document,lecm-outgoing:document,lecm-protocol:document,lecm-incoming:document]]>
-		</property>
+		<property name="lecm-rpeditor:reportDocType"><![CDATA[]]></property>
 		<property name="lecm-rpeditor:reportIsDeployed"><![CDATA[true]]></property>
 		<property name="cm:name"><![CDATA[Штрихкод документа]]></property>
 		<property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
