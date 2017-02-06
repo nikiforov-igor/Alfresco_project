@@ -107,9 +107,7 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
     public void sendCompletionSignal(ScriptNode doc, String reason, ScriptNode sender) {
         NodeRef document = doc.getNodeRef();
         NodeRef signalSender = sender.getNodeRef();
-        if (document != null && signalSender != null && nodeService.exists(document)) {
-            edsService.sendCompletionSignal(document, reason, signalSender);
-        }
+        edsService.sendCompletionSignal(document, reason, signalSender);
     }
 
     /**
@@ -118,8 +116,6 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
      */
     public void resetCompletionSignal(ScriptNode doc) {
         NodeRef document = doc.getNodeRef();
-        if (document != null && nodeService.exists(document)) {
-            edsService.resetCompletionSignal(document);
-        }
+        edsService.resetCompletionSignal(document);
     }
 }

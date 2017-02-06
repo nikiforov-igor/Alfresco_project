@@ -141,27 +141,22 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
 
     @Override
     public void sendCompletionSignal(NodeRef document, String reason, NodeRef signalSender) {
-        nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL, true);
-        nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL_REASON, reason);
-        if (!nodeService.exists(signalSender)) {
-            signalSender = orgstructureService.getCurrentEmployee();
-        }
-        if (signalSender != null) {
-            nodeService.createAssociation(document, signalSender, EDSDocumentService.ASSOC_COMPLETION_SIGNAL_SENDER);
+        if (document != null && nodeService.exists(document)) {
+            nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL, true);
+            nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL_REASON, reason);
+            if (signalSender == null || !nodeService.exists(signalSender)) {
+                signalSender = orgstructureService.getCurrentEmployee();
+            }
+            if (signalSender != null) {
+                nodeService.createAssociation(document, signalSender, EDSDocumentService.ASSOC_COMPLETION_SIGNAL_SENDER);
+            }
         }
     }
 
     @Override
     public void resetCompletionSignal(NodeRef document) {
-        nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL, false);
-        nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL_REASON, null);
-        List<AssociationRef> signalSenderAssoc = nodeService.getTargetAssocs(document, EDSDocumentService.ASSOC_COMPLETION_SIGNAL_SENDER);
-        NodeRef signalSender = null;
-        if (signalSenderAssoc != null && signalSenderAssoc.size() != 0) {
-            signalSender = signalSenderAssoc.get(0).getTargetRef();
-        }
-        if (signalSender != null) {
-            nodeService.removeAssociation(document, signalSender, EDSDocumentService.ASSOC_COMPLETION_SIGNAL_SENDER);
+        if (document != null && nodeService.exists(document)) {
+            nodeService.removeAspect(document, EDSDocumentService.ASPECT_COMPLETION_SIGNAL);
         }
     }
 }
