@@ -20,9 +20,9 @@
 	                                for (i = 0; i < errandsList.length; i++) {
 	                                    var errand = errandsList[i];
                                         errand["assoc_lecm-errands_additional-document-assoc"] = document.nodeRef.toString();
-	                                    var defaultInitiator = errands.getDefaultInitiator();
-	                                    if (defaultInitiator) {
-	                                        errand["assoc_lecm-errands_initiator-assoc"] = defaultInitiator.toString();
+	                                    var initiator = orgstructure.getCurrentEmployee();
+	                                    if (initiator) {
+	                                        errand["assoc_lecm-errands_initiator-assoc"] = initiator.nodeRef.toString();
 	                                    }
 	                                    errands.createErrands(errand);
 	                                }
