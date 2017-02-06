@@ -16,6 +16,7 @@
 				<property name="lecm-arm:types"><![CDATA[]]></property>
 				<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 				<property name="lecm-arm:search-query"><![CDATA[]]></property>
+				<property name="lecm-arm:expression"><![CDATA[user.currentUser().hasBusinessRole("DA_ARCHIVISTS")]]></property>
 				<items>
 					<item name="cm:Узлы" type="lecm-arm:node">
 						<property name="cm:name"><![CDATA[Узлы]]></property>
@@ -67,9 +68,6 @@
 						</assocs>
 					</item>
 				</items>
-				<assocs>
-					<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/СЭД. Архивариус"/>
-				</assocs>
 			</item>
 			<item name="cm:Управление номенклатурой дел" type="lecm-arm:accordion">
 				<property name="cm:name"><![CDATA[Управление номенклатурой дел]]></property>
@@ -79,6 +77,7 @@
 				<property name="lecm-arm:types"><![CDATA[]]></property>
 				<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 				<property name="lecm-arm:search-query"><![CDATA[]]></property>
+				<property name="lecm-arm:expression"><![CDATA[user.currentUser().hasBusinessRole("DA_ARCHIVISTS")]]></property>
 				<items>
 					<item name="cm:Номенклатура" type="lecm-arm:html-node">
 						<property name="cm:name"><![CDATA[Номенклатура]]></property>
@@ -120,9 +119,6 @@
 						</items>
 					</item>
 				</items>
-				<assocs>
-					<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/СЭД. Архивариус"/>
-				</assocs>
 			</item>
 			<item name="cm:На указание дела" type="lecm-arm:accordion">
 				<property name="cm:name"><![CDATA[На указание дела]]></property>
@@ -132,6 +128,7 @@
 				<property name="lecm-arm:types"><![CDATA[lecm-nd:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document]]></property>
 				<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 				<property name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\-aspects\:is\-final:true AND NOT ASPECT:"lecm-document-aspects:dont-move-to-archive-folder"]]></property>
+				<property name="lecm-arm:expression"><![CDATA[user.currentUser().hasBusinessRole("DA_ARCHIVISTS")]]></property>
 				<items>
 					<item name="cm:bdd25dd3-ca35-4183-8a0c-b1b562a55ab5" type="lecm-arm:field">
 						<property name="lecm-arm:field-title"><![CDATA[Тип]]></property>
@@ -218,7 +215,6 @@
 					</item>
 				</items>
 				<assocs>
-					<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/СЭД. Архивариус"/>
 					<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/7cca2794-fcc8-4867-ba3e-c62d17755123"/>
 					<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/de662da4-308e-4968-91e0-54c0bf7dc1d6"/>
 					<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/1c3624d8-5c8b-41bb-a3cd-45a2984133ac"/>
@@ -233,6 +229,7 @@
 				<property name="lecm-arm:types"><![CDATA[]]></property>
 				<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 				<property name="lecm-arm:search-query"><![CDATA[]]></property>
+				<property name="lecm-arm:expression"><![CDATA[user.currentUser().hasBusinessRole("DA_ARCHIVISTS")]]></property>
 				<items>
 					<item name="cm:Отчёты" type="lecm-arm:reports-node">
 						<property name="cm:name"><![CDATA[Отчёты]]></property>
@@ -241,9 +238,6 @@
 						<property name="lecm-arm:types"><![CDATA[]]></property>
 					</item>
 				</items>
-				<assocs>
-					<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/СЭД. Архивариус"/>
-				</assocs>
 			</item>
 		</items>
 		<assocs>

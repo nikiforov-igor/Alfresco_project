@@ -9,6 +9,7 @@
 		<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 		<property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
 		<property name="lecm-arm:search-query"><![CDATA[]]></property>
+		<property name="lecm-arm:expression"><![CDATA[user.currentUser().hasBusinessRole("BR_ORGSTRUCTURE_ENGINEER")]]></property>
 		<items>
 			<item name="cm:Организации" type="lecm-arm:html-node">
 				<property name="cm:name"><![CDATA[Организации]]></property>
@@ -51,8 +52,5 @@
 				<property name="lecm-arm:html-url"><![CDATA[page/org-business-roles]]></property>
 			</item>
 		</items>
-		<assocs>
-			<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Технолог Оргструктуры"/>
-		</assocs>
 	</item>
 </items>

@@ -9,6 +9,7 @@
 		<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 		<property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
 		<property name="lecm-arm:search-query"><![CDATA[]]></property>
+		<property name="lecm-arm:expression"><![CDATA[user.currentUser().hasBusinessRole("BR_CONTRACTORS_ENGINEER")]]></property>
 		<items>
 			<item name="cm:Контрагенты" type="lecm-arm:node">
 				<property name="cm:name"><![CDATA[Контрагенты]]></property>
@@ -30,8 +31,5 @@
 				</assocs>
 			</item>
 		</items>
-		<assocs>
-			<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Технолог Контрагентов"/>
-		</assocs>
 	</item>
 </items>

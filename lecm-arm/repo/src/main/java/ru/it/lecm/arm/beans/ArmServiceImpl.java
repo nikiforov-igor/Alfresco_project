@@ -14,7 +14,11 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import ru.it.lecm.arm.beans.childRules.*;
+import ru.it.lecm.arm.expression.ExpressionForArm;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SearchQueryProcessorService;
 import ru.it.lecm.base.beans.TransactionNeededException;
@@ -34,7 +38,7 @@ import java.util.regex.Matcher;
  * Date: 04.02.14
  * Time: 10:10
  */
-public class ArmServiceImpl extends BaseBean implements ArmService {
+public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationContextAware {
 	private Logger logger = LoggerFactory.getLogger(ArmServiceImpl.class);
 
     private DictionaryBean dictionaryService;
@@ -50,12 +54,14 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     private SimpleCache<NodeRef, List<ArmFilter>> filtersCache;
     private SimpleCache<NodeRef, List<NodeRef>> childNodesCache;
     private SimpleCache<NodeRef, List<String>> nodesTypesCache;
-    private SimpleCache<NodeRef, Map<NodeRef, Set<String>>> accordionsCache;
+    private SimpleCache<NodeRef, List<NodeRef>> accordionsCache;
     private SimpleCache<NodeRef, Map<QName, Serializable>> propertiesCache;
     private SimpleCache<NodeRef, NodeRef> parentsCache;
     private SimpleCache<String, NodeRef> armsCache;
     private SimpleCache<NodeRef, QName> typesCache;
     private SimpleCache<NodeRef, ArmBaseChildRule> childRulesCache;
+
+    private ApplicationContext applicationContext;
 
     private Comparator<NodeRef> comparator = new Comparator<NodeRef>() {
         @Override
@@ -135,7 +141,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         this.authorityService = authorityService;
     }
 
-    public void setAccordionsCache(SimpleCache<NodeRef, Map<NodeRef, Set<String>>> accordionsCache) {
+    public void setAccordionsCache(SimpleCache<NodeRef, List<NodeRef>> accordionsCache) {
         this.accordionsCache = accordionsCache;
     }
 
@@ -217,46 +223,23 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
     @Override
     public List<NodeRef> getArmAccordions(NodeRef arm) {
-        List<NodeRef> result = new ArrayList<>();
         if (!accordionsCache.contains(arm)) {
             Set<QName> typeSet = new HashSet<>(1);
-            Map<NodeRef, Set<String>> accordions = new TreeMap<>(comparator);
-            LinkedHashMap<NodeRef, Set<String>> allAccordions = new LinkedHashMap<>();
+            Set<NodeRef> accordions = new TreeSet<>(comparator);
+            LinkedList<NodeRef> allAccordions = new LinkedList<>();
 
             List<ChildAssociationRef> accordionsAssocs;
             typeSet.add(TYPE_ARM_ACCORDION);
             accordionsAssocs = nodeService.getChildAssocs(arm, typeSet);
             if (accordionsAssocs != null) {
                 for (ChildAssociationRef accordionAssoc : accordionsAssocs) {
-                    NodeRef accordionRef = accordionAssoc.getChildRef();
-                    Set<String> roles = new HashSet<>();
-                    List<AssociationRef> associationRefs = nodeService.getTargetAssocs(accordionRef, ArmService.ASSOC_ACCORDION_BUSINESS_ROLES);
-                    for (AssociationRef associationRef : associationRefs) {
-                        NodeRef role = associationRef.getTargetRef();
-                        String roleCode = getAutorityByBusinessRole(role);
-                        roles.add(roleCode);
-                    }
-                    accordions.put(accordionRef, roles.isEmpty() ? null : roles);
+                    accordions.add(accordionAssoc.getChildRef());
                 }
-                allAccordions.putAll(accordions);
+                allAccordions.addAll(accordions);
             }
             accordionsCache.put(arm, allAccordions);
         }
-        Map<NodeRef, Set<String>> armAccordions = accordionsCache.get(arm);
-        Set<String> auth = authorityService.getAuthoritiesForUser(AuthenticationUtil.getFullyAuthenticatedUser());
-        for (Map.Entry<NodeRef, Set<String>> accEntry : armAccordions.entrySet()) {
-            if (accEntry.getValue() == null) {
-                result.add(accEntry.getKey());
-            } else {
-                for (String accRole : accEntry.getValue()) {
-                    if (auth.contains(accRole)) {
-                        result.add(accEntry.getKey());
-                        break;
-                    }
-                }
-            }
-        }
-        return result;
+        return filterByExpressions(accordionsCache.get(arm));
     }
 
     @Override
@@ -343,24 +326,43 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
     @Override
     public List<NodeRef> getChildNodes(NodeRef node) {
-        if (childNodesCache.contains(node)) {
-            return childNodesCache.get(node);
-        }
-        List<NodeRef> result = new ArrayList<>();
+        if (!childNodesCache.contains(node)) {
+            Set<NodeRef> childNodes = new TreeSet<>(comparator);
+            LinkedList<NodeRef> allChildren = new LinkedList<>();
 
-        Set<QName> typeSet = new HashSet<>(1);
-        typeSet.add(TYPE_ARM_ACCORDION);
-        typeSet.add(TYPE_ARM_NODE);
-        typeSet.add(TYPE_ARM_REPORTS_NODE);
-        typeSet.add(TYPE_ARM_HTML_NODE);
-        List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(node, typeSet);
-        if (childAssocs != null) {
-            for (ChildAssociationRef child : childAssocs) {
-                result.add(child.getChildRef());
+            Set<QName> typeSet = new HashSet<>(4);
+            typeSet.add(TYPE_ARM_ACCORDION);
+            typeSet.add(TYPE_ARM_NODE);
+            typeSet.add(TYPE_ARM_REPORTS_NODE);
+            typeSet.add(TYPE_ARM_HTML_NODE);
+
+            List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(node, typeSet);
+            if (childAssocs != null) {
+                for (ChildAssociationRef child : childAssocs) {
+                    childNodes.add(child.getChildRef());
+                }
+                allChildren.addAll(childNodes);
+            }
+
+            childNodesCache.put(node, allChildren);
+        }
+        return filterByExpressions(childNodesCache.get(node));
+    }
+
+    private List<NodeRef> filterByExpressions(List<NodeRef> childs) {
+        List<NodeRef> result = new ArrayList<>();
+        for (NodeRef child : childs) {
+            Map<QName, Serializable> properties = getCachedProperties(child);
+            String expression = (String) properties.get(PROP_ARM_NODE_EXPRESSION);
+            if (expression == null || expression.isEmpty()) {
+                result.add(child);
+            } else {
+                ExpressionForArm evaluator = new ExpressionForArm(child, applicationContext);
+                if (evaluator.executeAsBoolean(expression)) {
+                    result.add(child);
+                }
             }
         }
-        Collections.sort(result, comparator);
-        childNodesCache.put(node, result);
         return result;
     }
 
@@ -816,4 +818,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         this.secretaryService = secretaryService;
 }
 
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 }

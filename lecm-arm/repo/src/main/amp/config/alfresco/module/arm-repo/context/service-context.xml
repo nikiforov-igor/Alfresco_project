@@ -171,7 +171,6 @@
                     <list>
                         <value>cm:name</value>
                         <value>lecm-arm:order</value>
-                        <value>lecm-arm:business-roles-assoc</value>
                         <value>lecm-arm:types</value>
                         <value>lecm-arm:search-query</value>
                         <value>lecm-arm:counter-enable</value>
@@ -182,6 +181,7 @@
                         <value>lecm-arm:search-type</value>
 	                    <value>lecm-arm:is-aggregation-node</value>
 	                    <value>lecm-arm:is-for-secretaries</value>
+	                    <value>lecm-arm:expression</value>
                     </list>
                 </entry>
 <!--                <entry key="lecm-arm:accordion-runAs">
@@ -219,6 +219,7 @@
                         <value>lecm-arm:activeTasks-filter</value>
                         <value>lecm-arm:search-type</value>
                         <value>lecm-arm:is-aggregation-node</value>
+                        <value>lecm-arm:expression</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:reports-node">
@@ -228,6 +229,7 @@
                         <value>lecm-arm:node-child-rule-assoc</value>
                         <value>lecm-arm:types</value>
                         <value>lecm-arm:reportCodes</value>
+                        <value>lecm-arm:expression</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:field">
@@ -295,6 +297,7 @@
                         <value>lecm-arm:html-url</value>
                         <value>lecm-arm:order</value>
                         <value>lecm-arm:node-child-rule-assoc</value>
+                        <value>lecm-arm:expression</value>
                     </list>
                 </entry>
             </map>

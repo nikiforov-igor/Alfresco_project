@@ -1,6 +1,7 @@
 package ru.it.lecm.arm.expression;
 
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.arm.beans.ArmService;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
@@ -33,7 +34,7 @@ public class ExpressionArmNode {
     public ExpressionArmNode() {
     }
 
-    public ExpressionArmNode(ArmNode node) {
-        this.node = node;
+    public ExpressionArmNode(NodeRef node) {
+        this.node = armWrraper.wrapArmNodeAsObject(node, armService.isArmAccordion(node));
     }
 }

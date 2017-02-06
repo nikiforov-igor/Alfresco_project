@@ -1,8 +1,8 @@
 package ru.it.lecm.arm.expression;
 
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.springframework.context.ApplicationContext;
-import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.documents.expression.BaseSpellExpression;
 import ru.it.lecm.documents.expression.ExpressionUser;
 
@@ -21,10 +21,10 @@ public class ExpressionForArm extends BaseSpellExpression {
         ExpressionForArm.serviceRegistry = serviceRegistry;
     }
 
-    public ExpressionForArm(ArmNode node, ApplicationContext applicationContext) {
+    public ExpressionForArm(NodeRef armNode, ApplicationContext applicationContext) {
         super(applicationContext);
-        this.armNode = new ExpressionArmNode(node);
-        this.user = new ExpressionUser(node.getArmNodeRef(), serviceRegistry, orgstructureBean, documentService);
+        this.armNode = new ExpressionArmNode(armNode);
+        this.user = new ExpressionUser(armNode, serviceRegistry, orgstructureBean, documentService);
     }
 
     public ExpressionForArm() {

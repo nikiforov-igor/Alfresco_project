@@ -3964,6 +3964,7 @@
                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                 <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                 <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                <property name="lecm-arm:expression"><![CDATA[user.currentUser().hasBusinessRole("DA_REGISTRARS")]]></property>
                 <items updateMode="CreateOrUpdate">
                     <item name="cm:Черновики" type="lecm-arm:node">
                         <property name="cm:name"><![CDATA[Черновики]]></property>
@@ -5507,8 +5508,6 @@
                     </item>
                 </items>
                 <assocs>
-                    <assoc type="lecm-arm:business-roles-assoc"
-                           path="/Business platform/LECM/Сервис Справочники/Бизнес роли/СЭД. Регистраторы"/>
                     <assoc type="lecm-arm:fields-assoc"
                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/f65dfd06-dc94-4d6e-96c4-7eeefae24099"/>
                     <assoc type="lecm-arm:fields-assoc"
@@ -5534,6 +5533,7 @@
                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                 <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                 <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                <property name="lecm-arm:expression"><![CDATA[user.currentUser().hasBusinessRole("CONTRACT_EXECUTOR")]]></property>
                 <items>
                     <item name="cm:Закрытые" type="lecm-arm:node">
                         <property name="cm:name"><![CDATA[Закрытые]]></property>
@@ -5945,10 +5945,6 @@
                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                     </item>
                 </items>
-                <assocs>
-                    <assoc type="lecm-arm:business-roles-assoc"
-                           path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Договор. Исполнитель"/>
-                </assocs>
             </item>
             <item name="cm:Ресурсы" type="lecm-arm:accordion">
                 <property name="cm:name"><![CDATA[Ресурсы]]></property>
@@ -5959,6 +5955,7 @@
                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                 <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                 <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                <property name="lecm-arm:expression"><![CDATA[user.currentUser().hasBusinessRole("EVENTS_RESPONSIBLE_FOR_RESOURCES")]]></property>
                 <items>
                     <item name="cm:Мои мероприятия" type="lecm-arm:node">
                         <property name="cm:name"><![CDATA[Мои мероприятия]]></property>
@@ -5988,8 +5985,6 @@
                     </item>
                 </items>
                 <assocs>
-                    <assoc type="lecm-arm:business-roles-assoc"
-                           path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Ответственные за ресурсы"/>
                     <assoc type="lecm-arm:fields-assoc"
                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Ресурсы/f9b42412-5c9a-4911-841e-686ee89bb52d"/>
                 </assocs>
