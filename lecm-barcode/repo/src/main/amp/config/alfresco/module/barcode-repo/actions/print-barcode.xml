@@ -4,7 +4,7 @@
 		<property name="cm:name"><![CDATA[Напечатать штрихкод]]></property>
 		<property name="cm:title"><![CDATA[Напечатать штрихкод]]></property>
 		<property name="lecm-group-actions:statuses"><![CDATA[]]></property>
-		<property name="lecm-group-actions:type"><![CDATA[[lecm-incoming:document, lecm-outgoing:document]]]></property>
+		<property name="lecm-group-actions:type"><![CDATA[]]></property>
 		<property name="lecm-group-actions:order"><![CDATA[0]]></property>
 		<property name="lecm-group-actions:expression"><![CDATA[@barcodeService.isBarcodeEnabled() AND @barcodeService.getPrinterNameByEmployee(user.currentUser().employee) != null]]></property>
 		<property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>

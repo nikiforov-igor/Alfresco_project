@@ -1,0 +1,49 @@
+.global-settings {
+	margin: 16px 10px 10px;
+}
+
+.global-settings .title {
+	font-size: 123.1%;
+	font-weight: bold;
+	padding-bottom: 0.75em;
+}
+
+.global-settings .object-finder .panel-left,
+.global-settings .object-finder .panel-right,
+.global-settings .object-finder .currentValueDisplay {
+	background-color: white;
+}
+
+.global-settings .object-finder {
+	width: 100%;
+	max-width: 800px;
+}
+
+.global-settings .form-field label,
+.global-settings .form-field .picker-visibility-buttons {
+	display: inline;
+}
+
+.global-settings .form-field.potential-role-control {
+    margin: 0 0 1em;
+}
+.global-settings .potential-role-control .object-finder {
+    max-width: none;
+}
+.global-settings .potential-role-control .object-finder .bd {
+    padding: 0.5em 0;
+}
+
+.global-settings .control.checkbox-control {
+    margin-left: -2px;
+}
+
+.global-settings .control.checkbox-control .label-div {
+    width: 0;
+    padding: 0;
+}
+
+.yui-skin-lecmTheme .admin-page .global-settings .form-container .form-buttons {
+    padding-left: 0;
+    margin-left: 10px;
+}

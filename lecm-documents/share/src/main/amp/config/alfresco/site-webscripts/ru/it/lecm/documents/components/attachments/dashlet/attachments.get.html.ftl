@@ -53,6 +53,7 @@
                     datagrid = new LogicECM.DocumentAttachments.DataGrid('${containerId}').setOptions({
                         usePagination: false,
                         documentRef: "${nodeRef?string}",
+						baseDocAssocName: "${baseDocAssocName!""}",
                         showExtendSearchBlock: false,
                         actions: [
 	                        <#if hasViewAttachmentPerm>

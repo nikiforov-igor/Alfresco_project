@@ -6,11 +6,11 @@
 				<items>
 					<item name="cm:Настройки" type="lecm-arm:arm">
 						<items>
-						    <item name="cm:Списки ознакомления" type="lecm-arm:html-node">
-						        <property name="cm:name"><![CDATA[Списки ознакомления]]></property>
-						        <property name="lecm-arm:order"><![CDATA[1]]></property>
-						        <property name="lecm-arm:html-url"><![CDATA[page/review-list]]></property>
-						    </item>
+							<item name="cm:Списки ознакомления" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Списки ознакомления]]></property>
+								<property name="lecm-arm:order"><![CDATA[20]]></property>
+								<property name="lecm-arm:html-url"><![CDATA[page/review-list]]></property>
+							</item>
 						</items>
 					</item>
 				</items>

@@ -16,7 +16,7 @@
             'components/console/consoletool.js',
             'scripts/lecm-eds-documents/global-settings.js'
         ], [
-            'css/lecm-eds-documents/global-settings.css',
+            'css/lecm-base/global-settings.css',
             'yui/treeview/assets/skins/sam/treeview.css'
         ], createPage);
     }
@@ -25,7 +25,7 @@
 })();
 //]]></script>
 
-<div id="${el}-body" class="eds-global-settings">
+<div id="${el}-body" class="global-settings eds-global-settings">
 	<div class="yui-g">
 		<div class="yui-u first">
 			<div class="title">${msg("label.title")}</div>

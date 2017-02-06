@@ -22,7 +22,15 @@
         <module>lecm-signing</module>
 		<module>lecm-review</module>
 		<module>lecm-approval</module>
-        <module>lecm-reservation</module>
 		<module>lecm-routes</module>
 	</modules>
+
+	<profiles>
+		<profile>
+			 <id>SED</id>
+			 <modules>
+		        <module>lecm-reservation</module>
+			 </modules>
+		</profile>
+	</profiles>
 </project>

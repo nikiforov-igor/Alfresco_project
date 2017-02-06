@@ -48,6 +48,9 @@
 				<property name="lecmRegnumRes:date">
 					<type>d:date</type>
 				</property>
+				<property name="lecmRegnumRes:regnumberTemplateCode">
+					<type>d:text</type>
+				</property>
 			</properties>
 		</type>
 

@@ -69,16 +69,6 @@
 		</property>
 	</bean>
 
-	<bean id="signedDocflow.arm.myProfile.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
-	      depends-on="userProfile.arm.LogicEcmBootstrap">
-		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
-		<property name="dictionaries">
-			<list>
-				<value>alfresco/module/${artifactId}/arm/default-arm-my-profile-items.xml</value>
-			</list>
-		</property>
-	</bean>
-
 	<util:constant id="signedDocflowFolder" static-field="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl.SIGNED_DOCFLOW_FOLDER"/>
 	<bean id="signedDocflowService" class="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl" parent="baseBean"
 		  depends-on="lecm.signed-docflow.model-bootstrap">

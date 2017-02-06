@@ -31,7 +31,7 @@
                     <item name="cm:Номер договора" type="lecm-rpeditor:reportDataColumn">
                         <property name="cm:name"><![CDATA[Номер договора]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{lecm-contract:regNumSystem}]]></property>
+                            <![CDATA[{lecm-document:regnum}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_ContractNumber]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
@@ -43,7 +43,7 @@
                     <item name="cm:Дата договора" type="lecm-rpeditor:reportDataColumn">
                         <property name="cm:name"><![CDATA[Дата договора]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{lecm-contract:dateRegContracts}]]></property>
+                            <![CDATA[{lecm-document:doc-date}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_Contract_Date]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>

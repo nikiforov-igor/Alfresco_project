@@ -1,5 +1,5 @@
 <webscript>
-  <shortname>Errands Initiator PickerList</shortname>
+  <shortname>Events locations PickerList</shortname>
   <description>Service to return metadata of child items in a parent space to display in the object finder.</description>
     <url>/lecm/events/locations/picker/{type}/{store_type}/{store_id}/{id}/children</url>
     <url>/lecm/events/locations/picker/{type}/children</url>

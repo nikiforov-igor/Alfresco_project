@@ -12,7 +12,7 @@
     text-decoration: none;
 }
 .dashlet.contracts .lecm-dashlet-actions .add {
-    background-image: url("../../images/lecm-contracts/alf_contract_add.png");
+    background-image: url("../../images/lecm-base/components/docs-common/alf_document_add.png");
 }
 
 .dashlet.contracts .toolbar {

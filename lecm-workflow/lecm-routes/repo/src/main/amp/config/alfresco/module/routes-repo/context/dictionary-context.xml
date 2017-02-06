@@ -24,7 +24,7 @@
 	</bean>
 
     <bean id="routes.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
-          depends-on="eds.documents.arm.settings.LogicEcmBootstrap">
+          depends-on="arm.settings.LogicEcmBootstrap, approve3.arm.bootstrap">
         <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>

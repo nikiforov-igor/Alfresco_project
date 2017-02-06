@@ -74,7 +74,13 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 	private AuthorityService authorityService;
 	private OrgstructureBean orgstructureService;
 	private NotificationsService notificationsService;
+	
+	private List<String> meetingsPropsForFilterShowInCalendar = new ArrayList<>();
 
+	public void setMeetingsPropsForFilterShowInCalendar(List<String> meetingsPropsForFilterShowInCalendar) {
+		this.meetingsPropsForFilterShowInCalendar = meetingsPropsForFilterShowInCalendar;
+	}
+	
 	public void setRoutesService(RoutesService routesService) {
 		this.routesService = routesService;
 	}
@@ -120,7 +126,7 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 		assocsToCopy.add(ASSOC_MEETINGS_SECRETARY);
 
 		eventsService.addUpdateType(TYPE_MEETINGS_DOCUMENT, propertiesToCopy, assocsToCopy);
-
+		eventsService.addPropsForFilterShowInCalendar(meetingsPropsForFilterShowInCalendar);
 	}
 
 	public DocumentService getDocumentService() {

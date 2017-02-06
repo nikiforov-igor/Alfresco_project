@@ -1,6 +1,6 @@
 <webscript>
-    <shortname>Contracts datagrid</shortname>
-    <description>Return contracts datagrid</description>
+    <shortname>Documents datagrid</shortname>
+    <description>Return documents datagrid</description>
     <url>/lecm/documents-journal/datagrid</url>
     <format default="html">extension</format>
     <authentication>user</authentication>

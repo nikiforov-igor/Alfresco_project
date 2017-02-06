@@ -1,7 +1,12 @@
 <webscript>
 	<shortname>connections-with-document</shortname>
-	<description>Get Connections With Document</description>
-	<url>/lecm/document/connections/api/getConnectionsWithDocument?documentNodeRef={documentNodeRef}</url>
+	<description>
+		Get Connections With Document Получение документов, связанных с документом
+		documentNodeRef - nodeRef документа
+		applyViewMode - учитывать режим отображения связей
+		excludeType - тип документа который мы хотим исключить из связанных
+	</description>
+	<url>/lecm/document/connections/api/getConnectionsWithDocument?documentNodeRef={documentNodeRef}&amp;applyViewMode={applyViewMode}&amp;excludeType={excludeType}</url>
 	<authentication runas="admin">user</authentication>
     <transaction allow="readonly">required</transaction>
 	<format default="json"/>
