@@ -1314,49 +1314,27 @@
                     <show id="lecm-errands-ts:coexecutor-report-attachment-assoc"/>
                     <show id="lecm-errands-ts:coexecutor-report-connected-document-assoc"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
-                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
-                    <show id="lecm-base-dummy-aspects:script3" force="true"/>
-                    <show id="lecm-base-dummy-aspects:script4" force="true"/>
-                    <show id="lecm-base-dummy-aspects:script5" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <set id="fieldsAndButtons" template="/ru/it/lecm/errands/controls/errands-coexecutor-reports-expand-set.ftl"/>
-                    <field id="lecm-errands-ts:coexecutor-report-text" set="fieldsAndButtons"/>
-                    <field id="lecm-errands-ts:coexecutor-report-attachment-assoc" set="fieldsAndButtons"/>
-                    <field id="lecm-errands-ts:coexecutor-report-connected-document-assoc" set="fieldsAndButtons">
+                    <set id="fieldsAndButtons" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+                    <set id="fields" parent="fieldsAndButtons"/>
+                    <set id="buttons" parent="fieldsAndButtons"/>
+                    <field id="lecm-errands-ts:coexecutor-report-text" set="fields"/>
+                    <field id="lecm-errands-ts:coexecutor-report-attachment-assoc" set="fields">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
+                            <control-param name="viewUrl">document-attachment?nodeRef={nodeRef}</control-param> '
+                        </control>
+                    </field>
+                    <field id="lecm-errands-ts:coexecutor-report-connected-document-assoc" set="fields">
                         <control>
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">Отчет об исполнении: {lecm-document:ext-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="showInaccessible">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-base-dummy-aspects:script" label-id="actions.coexecutor.report.accept" set="fieldsAndButtons">
-                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
-                            <control-param name="insertToDiv">acceptActionBlock</control-param>
-                        </control>
+                    <field id="lecm-base-dummy-aspects:script"  set="buttons">
+                        <control template="/ru/it/lecm/errands/controls/coexecutor-expand-actions-control.ftl"/>
                     </field>
-                    <field id="lecm-base-dummy-aspects:script2" label-id="actions.coexecutor.report.decline" set="fieldsAndButtons">
-                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
-                            <control-param name="insertToDiv">declineActionBlock</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-base-dummy-aspects:script3" label-id="actions.coexecutor.report.transfer" set="fieldsAndButtons">
-                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
-                            <control-param name="insertToDiv">transferActionBlock</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-base-dummy-aspects:script4" label-id="actions.edit" set="fieldsAndButtons">
-                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
-                            <control-param name="insertToDiv">editActionBlock</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-base-dummy-aspects:script5">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl" >
-                            <control-param name="scripts">scripts/lecm-errands/errands-coexecutor-expand-script.js</control-param>
-                            <control-param name="scriptLoadedFireAction">errandCoexecutorReportExpandScriptLoaded</control-param>
-                        </control>
-                    </field>
-
                 </appearance>
             </form>
             <form id="decline-coexecutor-report">

@@ -28,7 +28,6 @@ LogicECM.errands = LogicECM.errands || {};
     YAHOO.lang.augmentObject(LogicECM.errands.CoexecutorsReportsTS.prototype, {
         createDataGrid: function () {
             var actions = [];
-            var actionType = "datagrid-action-link-" + this.options.bubblingLabel;
             var currentUser = {
                 isExecutor: false,
                 isCoexecutor: false,
@@ -45,42 +44,13 @@ LogicECM.errands = LogicECM.errands || {};
                             if (roles) {
                                 if (!me.options.disabled) {
                                     if (roles.isExecutor) {
-                                        actions.push({
-                                            type: actionType,
-                                            id: "onActionAcceptCoexecutorReport",
-                                            permission: "edit",
-                                            label: me.msg("actions.coexecutor.report.accept"),
-                                            evaluator: me.showActionsEvaluator
-                                        });
-                                        actions.push({
-                                            type: actionType,
-                                            id: "onActionDeclineCoexecutorReport",
-                                            permission: "edit",
-                                            label: me.msg("actions.coexecutor.report.decline"),
-                                            evaluator: me.showActionsEvaluator
-                                        });
-                                        actions.push({
-                                            type: actionType,
-                                            id: "onActionTransferCoexecutorReport",
-                                            permission: "edit",
-                                            label: me.msg("actions.coexecutor.report.transfer"),
-                                            evaluator: me.showTransferActionEvaluator
-                                        });
                                         currentUser.isExecutor = true;
                                     }
                                     if (roles.isCoexecutor) {
-                                        actions.push({
-                                            type: actionType,
-                                            id: "onActionEdit",
-                                            permission: "edit",
-                                            label: me.msg("actions.edit"),
-                                            evaluator: me.editActionEvaluator
-                                        });
                                         currentUser.isCoexecutor = true;
                                     }
                                 }
                             }
-
                             Alfresco.util.Ajax.jsonGet({
                                 url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getCurrentEmployee",
                                 successCallback: {
@@ -263,22 +233,6 @@ LogicECM.errands = LogicECM.errands || {};
             }, datagrid, true);
 
             this.datagrid = datagrid;
-        },
-
-        showActionsEvaluator: function (rowData) {
-            var status = rowData.itemData["prop_lecm-errands-ts_coexecutor-report-status"];
-
-            return status != null && status.value == "ONCONTROL";
-        },
-        showTransferActionEvaluator: function (rowData) {
-            var reportStatus = rowData.itemData["prop_lecm-errands-ts_coexecutor-report-status"];
-            var isDocumentStatusOK = "На исполнении" == this.options.currentDocumentStatus || "На доработке" == this.options.currentDocumentStatus;
-            return reportStatus && reportStatus.value == "ACCEPT" && isDocumentStatusOK;
-        },
-        editActionEvaluator: function (rowData) {
-            var status = rowData.itemData["prop_lecm-errands-ts_coexecutor-report-status"];
-            var coexecutor = rowData.itemData["assoc_lecm-errands-ts_coexecutor-assoc"];
-            return status != null && status.value == "PROJECT" && coexecutor.value == this.options.currentUser.nodeRef;
         }
     }, true);
 })();
@@ -290,6 +244,19 @@ LogicECM.errands = LogicECM.errands || {};
         Bubbling = YAHOO.Bubbling;
 
     LogicECM.errands.CoexecutorsReportsDatagrid = function (htmlId) {
+
+        Bubbling.on("onActionTransferCoexecutorReport", function (layer, args) {
+            this.onActionTransferCoexecutorReport({
+                nodeRef: args[1].nodeRef
+            });
+        }, this, true);
+        Bubbling.on("onCoexecutorReportUpdated", function (layer, args) {
+            this._itemUpdate(args[1].nodeRef);
+        }, this, true);
+        Bubbling.on("onActionEditCoexecutorReport", function (layer, args) {
+            this.onActionEdit(args[1].report);
+        }, this, true);
+
         return LogicECM.errands.CoexecutorsReportsDatagrid.superclass.constructor.call(this, htmlId);
     };
 
@@ -313,97 +280,6 @@ LogicECM.errands = LogicECM.errands || {};
             }
         },
 
-        onActionAcceptCoexecutorReport: function (me, asset, owner, actionsConfig, confirmFunction) {
-            var nodeRef = arguments[0].nodeRef;
-            if (nodeRef != null) {
-                Alfresco.util.Ajax.jsonRequest(
-                    {
-                        method: Alfresco.util.Ajax.GET,
-                        url: Alfresco.constants.PROXY_URI + "lecm/errands/coexecutorReport/accept?nodeRef=" + nodeRef,
-                        successCallback: {
-                            fn: function (response) {
-                                var me = response.config.scope;
-                                if (response.json.success) {
-                                    me._itemUpdate(nodeRef);
-                                } else {
-                                    Alfresco.util.PopupManager.displayMessage(
-                                        {
-                                            text: me.msg("message.details.failure")
-                                        });
-                                }
-                            }
-                        },
-                        failureCallback: {
-                            fn: function (response) {
-                                var me = response.config.scope;
-                                Alfresco.util.PopupManager.displayMessage(
-                                    {
-                                        text: me.msg("message.details.failure")
-                                    });
-                            }
-                        },
-                        scope: this
-                    });
-            }
-        },
-
-        onActionDeclineCoexecutorReport: function (me, asset, owner, actionsConfig, confirmFunction) {
-            var nodeRef = arguments[0].nodeRef;
-            if (nodeRef) {
-                var me = this;
-                var formId = "decline-coexecutor-report";
-                var declineReportDialog = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
-                declineReportDialog.setOptions({
-                    templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'components/form',
-                    actionUrl: Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/errands/coexecutorReport/decline?nodeRef=' + nodeRef,
-                    templateRequestParams: {
-                        formId: formId,
-                        itemKind: "node",
-                        itemId: nodeRef,
-                        mode: "edit",
-                        showCancelButton: true,
-                        showCaption: false,
-                        submitType: 'json'
-                    },
-                    width: '50em',
-                    destroyOnHide: true,
-                    doBeforeDialogShow: {
-                        fn: function (form, simpleDialog) {
-                            simpleDialog.dialog.setHeader(this.msg("label.coexecutor.reports.decline"));
-                            simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
-                                LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
-                                LogicECM.module.Base.Util.formDestructor(event, args, params);
-                            }, {moduleId: simpleDialog.id}, this);
-                        },
-                        scope: this
-                    },
-                    onSuccess: {
-                        fn: function (response) {
-                            if (response.json.success) {
-                                me._itemUpdate(nodeRef);
-                            } else {
-                                Alfresco.util.PopupManager.displayMessage(
-                                    {
-                                        text: Alfresco.util.message("message.details.failure")
-                                    });
-                            }
-                            declineReportDialog.hide();
-                        },
-                        scope: this
-                    },
-                    onFailure: {
-                        fn: function (response) {
-                            Alfresco.util.PopupManager.displayMessage(
-                                {
-                                    text: Alfresco.util.message("message.details.failure")
-                                });
-                            declineReportDialog.hide();
-                        }
-                    }
-                });
-                declineReportDialog.show();
-            }
-            },
         onActionTransferCoexecutorReport: function (me, asset, owner, actionsConfig, confirmFunction) {
             var nodeRef = arguments[0].nodeRef;
             if (nodeRef) {
