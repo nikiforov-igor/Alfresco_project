@@ -1,48 +1,48 @@
 #lecm-menu #menu-buttons #menu-buttons-reportsListBtn span.first-child {
-    background: url('/share/res/images/lecm-reports-editor/reports-list-32.png') no-repeat scroll 4px 4px;
+    background: url('../../images/lecm-reports-editor/reports-list-32.png') no-repeat scroll 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-reportSettingsBtn span.first-child {
-    background: url('/share/res/images/lecm-reports-editor/report-settings-32.png') no-repeat scroll 4px 4px;
+    background: url('../../images/lecm-reports-editor/report-settings-32.png') no-repeat scroll 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-editDataSourceBtn span.first-child {
-    background: url("/share/res/images/lecm-reports-editor/data-source-edit-32.png") no-repeat scroll 4px 4px;
+    background: url("../../images/lecm-reports-editor/data-source-edit-32.png") no-repeat scroll 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-editTemplateBtn span.first-child {
-    background: url("/share/res/images/lecm-reports-editor/template-edit-32.png") no-repeat scroll 4px 4px;
+    background: url("../../images/lecm-reports-editor/template-edit-32.png") no-repeat scroll 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-subReportsBtn span.first-child {
-    background: url("/share/res/images/lecm-reports-editor/parameter-type-list-32.png") no-repeat scroll 4px 4px;
+    background: url("../../images/lecm-reports-editor/parameter-type-list-32.png") no-repeat scroll 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-deployReportBtn span.first-child {
-    background: url("/share/res/images/lecm-reports-editor/deploy-report_32.png") no-repeat scroll 4px 4px;
+    background: url("../../images/lecm-reports-editor/deploy-report_32.png") no-repeat scroll 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-templatesListBtn span.first-child {
-    background: url("/share/res/images/lecm-reports-editor/templates-list-32.png") no-repeat scroll 4px 4px;
+    background: url("../../images/lecm-reports-editor/templates-list-32.png") no-repeat scroll 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-sourcesListBtn span.first-child {
-    background: url("/share/res/images/lecm-reports-editor/data-sources-list-32.png") no-repeat scroll 4px 4px;
+    background: url("../../images/lecm-reports-editor/data-sources-list-32.png") no-repeat scroll 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-reportTypesBtn span.first-child {
-    background: url("/share/res/images/lecm-reports-editor/report-type-list-32.png") no-repeat scroll 4px 4px;
+    background: url("../../images/lecm-reports-editor/report-type-list-32.png") no-repeat scroll 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-reportProvidersBtn span.first-child {
-    background: url("/share/res/images/lecm-reports-editor/report-provider-list-32.png") no-repeat scroll 4px 4px;
+    background: url("../../images/lecm-reports-editor/report-provider-list-32.png") no-repeat scroll 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-reportColumnTypesBtn span.first-child {
-    background: url("/share/res/images/lecm-reports-editor/column-type-list-32.png") no-repeat scroll 4px 4px;
+    background: url("../../images/lecm-reports-editor/column-type-list-32.png") no-repeat scroll 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-reportParameterTypesBtn span.first-child {
-    background: url("/share/res/images/lecm-reports-editor/parameter-type-list-32.png") no-repeat scroll 4px 4px;
+    background: url("../../images/lecm-reports-editor/parameter-type-list-32.png") no-repeat scroll 4px 4px;
 }
 

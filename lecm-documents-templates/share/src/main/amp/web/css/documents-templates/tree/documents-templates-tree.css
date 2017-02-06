@@ -4,7 +4,7 @@
 
 span.insitu-create
 {
-	background: url(/share/res/components/images/add-icon-16.png) no-repeat center center;
+	background: url(../../../components/images/add-icon-16.png) no-repeat center center;
 	cursor: pointer;
 	display: inline-block;
 	height: 16px;
@@ -18,7 +18,7 @@ span.insitu-create
 
 span.insitu-delete
 {
-	background: url(/share/res/components/images/delete-16.png) no-repeat center center;
+	background: url(../../../components/images/delete-16.png) no-repeat center center;
 	cursor: pointer;
 	display: inline-block;
 	height: 16px;

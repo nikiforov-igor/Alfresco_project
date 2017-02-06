@@ -92,10 +92,10 @@
     background: url('../../images/lecm-documents/alf_transmit_document_16.png') no-repeat 5px 5px;
 }
 .document-header .document-action .favorite span.first-child {
-	background: url('/share/res/components/images/star-deselected_16x16.png') no-repeat 5px 5px;
+	background: url('../../components/images/star-deselected_16x16.png') no-repeat 5px 5px;
 }
 .document-header .document-action .favorite.enabled span.first-child {
-	background: url('/share/res/components/images/star-selected_16x16.png') no-repeat 5px 5px;
+	background: url('../../components/images/star-selected_16x16.png') no-repeat 5px 5px;
 }
 .document-header .document-action .copy span.first-child {
     background: url('../../images/lecm-documents/copy_document_16.png') no-repeat 5px 5px;

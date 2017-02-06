@@ -71,7 +71,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
             }
 
             function getPageName() {
-                return window.location.href.slice(window.location.href.indexOf('share/page/') + 11);
+                return window.location.href.slice(window.location.href.indexOf(Alfresco.constants.PAGECONTEXT) + Alfresco.constants.PAGECONTEXT.length);
             }
 
             function reloadPage(type) {

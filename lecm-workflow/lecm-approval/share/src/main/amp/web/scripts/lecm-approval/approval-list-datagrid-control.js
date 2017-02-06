@@ -918,7 +918,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 									break;
 								case 'lecmWorkflowRoutes:stageExpression':
 									if (oData[i].displayValue && oData[i].displayValue.length) {
-										html = '<div class="centered"><img src="/share/res/components/images/complete-16.png" width="16" alt="true" title="true" id="yui-gen538"></div>';
+										html = '<div class="centered"><img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png" width="16" alt="true" title="true" id="yui-gen538"></div>';
 									} else {
 										html = '';
 									}

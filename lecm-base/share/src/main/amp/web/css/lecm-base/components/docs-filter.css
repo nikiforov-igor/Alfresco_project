@@ -26,7 +26,7 @@
     margin-right: 20px;
 }
 .yui-skin-lecmTheme .filter div.flat-button span.yui-button {
-    background: url("/share/res/themes/lecmTheme/images/sprite.png") repeat-x scroll 0 0 transparent;
+    background: url("../../../themes/lecmTheme/images/sprite.png") repeat-x scroll 0 0 transparent;
     border-color: #999;
 }
 .yui-skin-lecmTheme .filter div.flat-button span.yui-button span.first-child {

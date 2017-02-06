@@ -43,7 +43,7 @@
 	}
 
 	function createControl() {
-	var control = new LogicECM.module.Checkbox("${fieldHtmlId}").setMessages(${messages});
+	var control = new LogicECM.module.AgendaCheckbox("${fieldHtmlId}").setMessages(${messages});
 	control.setOptions(
 			{
 			<#if disabled>

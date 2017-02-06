@@ -16,7 +16,7 @@ a.orgchart-action-link
 }
 
 div.addPerson a.orgchart-action-link {
-	background-image: url(/share/res/components/images/add-icon-16.png);
+	background-image: url(../../../../components/images/add-icon-16.png);
 }
 
 div.addPersonTitle a.orgchart-action-link {
@@ -24,7 +24,7 @@ div.addPersonTitle a.orgchart-action-link {
 }
 
 div.showUserInfo a.orgchart-action-link {
-	background-image: url(/share/res/components/images/search-16.png);
+	background-image: url(../../../../components/images/search-16.png);
 }
 
 div.showUserInfoTitle a.orgchart-action-link {
@@ -32,19 +32,19 @@ div.showUserInfoTitle a.orgchart-action-link {
 }
 
 div.deleteUser a.orgchart-action-link {
-	background-image: url(/share/res/components/images/delete-16.png);
+	background-image: url(../../../../components/images/delete-16.png);
 }
 
 div.editUserRoles a.orgchart-action-link {
-	background-image: url(/share/res/components/images/edit-metadata-16.png);
+	background-image: url(../../../../components/images/edit-metadata-16.png);
 }
 
 div.editRoleDef a.orgchart-action-link {
-	background-image: url(/share/res/components/images/edit-16.png);
+	background-image: url(../../../../components/images/edit-16.png);
 }
 
 div.deleteRoleDef a.orgchart-action-link {
-	background-image: url(/share/res/components/images/delete-16.png);
+	background-image: url(../../../../components/images/delete-16.png);
 }
 
 div.roles-list {
@@ -114,7 +114,7 @@ div.roles-list {
 
 span.insitu-open-orgchart
 {
-	background-image: url(/share/res/components/images/user-16.png);
+	background-image: url(../../../../components/images/user-16.png);
 	background-repeat: no-repeat;
 	cursor: pointer;
 	height: 16px;
@@ -127,7 +127,7 @@ span.insitu-open-orgchart
 
 span.insitu-roles-orgchart
 {
-	background-image: url(/share/res/components/images/edit-metadata-16.png);
+	background-image: url(../../../../components/images/edit-metadata-16.png);
 	background-repeat: no-repeat;
 	cursor: pointer;
 	height: 16px;
@@ -140,7 +140,7 @@ span.insitu-roles-orgchart
 
 span.insitu-edit-orgchart
 {
-	background-image: url(/share/res/components/images/edit-16.png);
+	background-image: url(../../../../components/images/edit-16.png);
 	background-repeat: no-repeat;
 	cursor: pointer;
 	height: 16px;
@@ -153,7 +153,7 @@ span.insitu-edit-orgchart
 
 span.insitu-add-orgchart
 {
-	background-image: url(/share/res/components/images/plus-16.png);
+	background-image: url(../../../../components/images/plus-16.png);
 	background-repeat: no-repeat;
 	cursor: pointer;
 	height: 16px;
@@ -166,7 +166,7 @@ span.insitu-add-orgchart
 
 span.insitu-delete-orgchart
 {
-	background-image: url(/share/res/components/images/delete-16.png);
+	background-image: url(../../../../components/images/delete-16.png);
 	background-repeat: no-repeat;
 	cursor: pointer;
 	height: 16px;
@@ -178,5 +178,5 @@ span.insitu-delete-orgchart
 }
 
 .wait-for-load {
-	background: url('/share/res/components/images/lightbox/loading.gif') no-repeat center, #F2F2F2 !important;
+	background: url('../../../../components/images/lightbox/loading.gif') no-repeat center, #F2F2F2 !important;
 }

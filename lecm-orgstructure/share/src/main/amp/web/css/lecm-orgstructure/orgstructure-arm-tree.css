@@ -40,19 +40,19 @@
     display:block;
     height: 16px;
     padding-left: 20px;
-    background: url('/share/res/images/lecm-base/components/organisation_16.png') no-repeat;
+    background: url('../../images/lecm-base/components/organisation_16.png') no-repeat;
     white-space: nowrap;
 }
 .orgstructure-tree .employee-icon {
     display:block;
     height: 16px;
     padding-left: 20px;
-    background: url('/share/res/components/images/filetypes/generic-user-16.png') no-repeat;
+    background: url('../../components/images/filetypes/generic-user-16.png') no-repeat;
     white-space: nowrap;
 }
 
 .dashlet .titleBarActions .dictionary {
-    background-image: url('/share/res/images/lecm-eds-documents/arm.png');
+    background-image: url('../../images/lecm-eds-documents/arm.png');
 }
 
 .orgstructure-dictionary .body .default-text,

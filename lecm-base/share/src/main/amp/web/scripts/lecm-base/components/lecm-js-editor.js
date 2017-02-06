@@ -20,10 +20,10 @@ LogicECM.module = LogicECM.module || {};
 
 	function loadDefs(id) {
 		var files = [
-				"/share/res/scripts/tern/browser.json", 
-				"/share/res/scripts/tern/ecma5.json", 
-				Alfresco.constants.PROXY_URI_RELATIVE + "lecm/jshelper/completions"
-			];
+			Alfresco.constants.URL_RESCONTEXT + "scripts/tern/browser.json",
+			Alfresco.constants.URL_RESCONTEXT + "scripts/tern/ecma5.json",
+			Alfresco.constants.PROXY_URI_RELATIVE + "lecm/jshelper/completions"
+		];
 		var loaded = 0;
 		for (var i = 0; i < files.length; ++i) (function(i) {
 			load(files[i], function(json) {

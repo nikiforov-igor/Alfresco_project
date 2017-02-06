@@ -1,9 +1,7 @@
 <#include "/org/alfresco/components/form/controls/common/editorparams.inc.ftl" />
 <#include "/org/alfresco/components/component.head.inc">
 
-<style type="text/css" media="screen">
-      @import "/share/res/components/model-editor/model-editor.css";
-</style>
+<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/model-editor/model-editor.css"/>
 
 <@script type="text/javascript" src="${url.context}/res/components/model-editor/utils.js" />
 <@script type="text/javascript" src="${url.context}/res/components/model-editor/controls/dialog.js" />

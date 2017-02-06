@@ -2003,7 +2003,7 @@
 		                <control template="/ru/it/lecm/documents/controls/workflow/format-packageItems-document.ftl">
 			                <control-param name="substituteString">
 				                <![CDATA[
-					                <a href='/share/page/view-metadata?nodeRef={lecm-errands:executor-assoc/nodeRef}'>
+					                <a href='/{~SHARE_CONTEXT}/page/view-metadata?nodeRef={lecm-errands:executor-assoc/nodeRef}'>
 					                    {lecm-errands:executor-assoc/lecm-orgstr:employee-short-name} {lecm-errands:executor-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}
 					                </a>
 				                ]]>
@@ -2114,7 +2114,7 @@
                         <control template="/ru/it/lecm/documents/controls/workflow/format-packageItems-document.ftl">
                             <control-param name="substituteString">
                                 <![CDATA[
-					                <a href='/share/page/view-metadata?nodeRef={lecm-errands:controller-assoc/nodeRef}'>
+					                <a href='/{~SHARE_CONTEXT}/page/view-metadata?nodeRef={lecm-errands:controller-assoc/nodeRef}'>
 					                    {lecm-errands:controller-assoc/lecm-orgstr:employee-short-name} {lecm-errands:controller-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}
 					                </a>
 				                ]]>

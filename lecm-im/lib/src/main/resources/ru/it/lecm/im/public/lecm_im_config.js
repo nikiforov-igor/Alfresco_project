@@ -50,7 +50,7 @@ var iJabConf =
     theme:"standard",
     debug:false,
     //avatar_url:"http://dummyimage.com/32x32/?text={username}",
-    avatar_url:"/share/proxy/alfresco/slingshot/profile/avatar/{username}",
+    avatar_url: Alfresco.constants.PROXY_URI_RELATIVE + "slingshot/profile/avatar/{username}",
     enable_roster_manage:false,
     enable_talkto_stranger:true,
     expand_bar_default:true,
@@ -64,7 +64,7 @@ var iJabConf =
     talkto_spam_repeat:2,
     xmpp:{
         domain:"localhost",
-        http_bind: window.Alfresco? "/share/proxy/alfresco/http-bind" : "http://127.0.0.1:7070/http-bind/" ,
+        http_bind: window.Alfresco ? Alfresco.constants.PROXY_URI_RELATIVE + "/http-bind" : "http://127.0.0.1:7070/http-bind/",
         //http_bind:"http://localhost:7070/http-bind/",
         //http_bind:"http://127.0.0.1:7070/http-bind/",
         host:"",
