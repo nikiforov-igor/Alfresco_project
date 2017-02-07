@@ -14,9 +14,9 @@
             if (toInput && toInput.value) {
                 var fromDate = Alfresco.util.fromISO8601(field.value);
                 var toDate = Alfresco.util.fromISO8601(toInput.value);
-                if (fromDate > toDate) {
-                    return false;
-                }
+                if (fromDate && toDate) {
+                    return fromDate <= toDate;
+				}
             }
         }
         return true;
@@ -29,9 +29,7 @@
                 selectedDate.setHours(0,0,0,0);
                 var curDate = new Date();
                 curDate.setHours(0,0,0,0);
-                if (selectedDate > curDate) {
-                    return false;
-                }
+                return selectedDate <= curDate;
 			}
         }
         return true;
