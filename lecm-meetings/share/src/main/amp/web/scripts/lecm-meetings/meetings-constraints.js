@@ -8,20 +8,31 @@
 
 	var Dom = YAHOO.util.Dom;
 
-    LogicECM.module.Meetings.finishDatesValidation = function (field, args, event, form, silent, message) {
-        if (field.form) {
-            var fromInput = field.form["prop_lecm-meetings_actual-from-date"];
+    LogicECM.module.Meetings.fromDateValidation = function (field, args, event, form, silent, message) {
+        if (field.value && field.form) {
             var toInput = field.form["prop_lecm-meetings_actual-to-date"];
-
-            if (fromInput && fromInput.value && toInput && toInput.value) {
-                var fromDate = Alfresco.util.fromISO8601(fromInput.value);
+            if (toInput && toInput.value) {
+                var fromDate = Alfresco.util.fromISO8601(field.value);
                 var toDate = Alfresco.util.fromISO8601(toInput.value);
-				var curDate = new Date();
-                if (fromDate > curDate || toDate > curDate || fromDate > toDate) {
+                if (fromDate > toDate) {
                     return false;
                 }
             }
+        }
+        return true;
+    };
 
+    LogicECM.module.Meetings.dateMoreThanCurrentDateValidation = function (field, args, event, form, silent, message) {
+        if (field.value) {
+			var selectedDate = Alfresco.util.fromISO8601(field.value);
+			if (selectedDate) {
+                selectedDate.setHours(0,0,0,0);
+                var curDate = new Date();
+                curDate.setHours(0,0,0,0);
+                if (selectedDate > curDate) {
+                    return false;
+                }
+			}
         }
         return true;
     };
