@@ -231,4 +231,6 @@ public interface ArmService {
     void invalidateCurrentUserCache();
 
 	Map<QName, Serializable> getCachedProperties(NodeRef nodeRef);
+
+	String getNodeSearchQuery(NodeRef nodeRef);
 }

@@ -14,7 +14,7 @@ import ru.it.lecm.documents.expression.ExpressionNode;
 public class ExpressionArmNode extends ExpressionNode {
 
     private static ArmService armService;
-    private static ArmWrapperService armWrraper;
+    private static ArmWrapperService armWrapper;
 
     private ArmNode armNode;
 
@@ -22,8 +22,8 @@ public class ExpressionArmNode extends ExpressionNode {
         ExpressionArmNode.armService = armService;
     }
 
-    public void setArmWrraper(ArmWrapperService armWrraper) {
-        ExpressionArmNode.armWrraper = armWrraper;
+    public void setArmWrapper(ArmWrapperService armWrapper) {
+        ExpressionArmNode.armWrapper = armWrapper;
     }
 
     public ExpressionArmNode() {
@@ -31,7 +31,7 @@ public class ExpressionArmNode extends ExpressionNode {
 
     public ExpressionArmNode(NodeRef nodeRef) {
         super(nodeRef);
-        this.armNode = armWrraper.wrapArmNodeAsObject(nodeRef, armService.isArmAccordion(nodeRef));
+        this.armNode = armWrapper.wrapArmNodeAsObject(nodeRef, armService.isArmAccordion(nodeRef));
     }
 
     public ArmNode getArmNode() {
@@ -39,6 +39,6 @@ public class ExpressionArmNode extends ExpressionNode {
     }
 
     public long count() {
-        return 0;
+        return armWrapper.getObjectsCount(armNode);
     }
 }

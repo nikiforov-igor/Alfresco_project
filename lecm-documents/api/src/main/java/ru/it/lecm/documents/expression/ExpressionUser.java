@@ -66,4 +66,12 @@ public class ExpressionUser {
         String creatorLogin = orgstructureBean.getEmployeeLogin(creator);
 		return login.equals(creatorLogin);
 	}
+
+    /**
+     * Проверяет является ли текущий сотрудник администратором
+     * @return true - если есть текущий сотрудник является администратором
+     */
+    public boolean isAdmin() {
+        return currentUser().isAdmin();
+    }
 }

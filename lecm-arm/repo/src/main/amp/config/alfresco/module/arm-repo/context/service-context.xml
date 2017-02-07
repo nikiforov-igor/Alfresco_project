@@ -125,6 +125,7 @@
 		<property name="service" ref="armService"/>
 		<property name="substitudeService" ref="substitudeService"/>
 		<property name="dictionaryBean" ref="serviceDictionary"/>
+		<property name="searchCounter" ref="lecmSearchCounterScript"/>
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
@@ -400,7 +401,7 @@
 
     <bean id="armNodeExpression" class="ru.it.lecm.arm.expression.ExpressionArmNode" parent="baseNodeExpression">
         <property name="armService" ref="armService"/>
-        <property name="armWrraper" ref="armWrapperService"/>
+        <property name="armWrapper" ref="armWrapperService"/>
         <property name="serviceRegistry" ref="ServiceRegistry"/>
     </bean>
 </beans>

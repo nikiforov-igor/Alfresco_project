@@ -1,14 +1,16 @@
 package ru.it.lecm.arm.beans;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
-import ru.it.lecm.arm.beans.childRules.ArmStatusesChildRule;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.base.beans.SearchCounter;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -23,12 +25,14 @@ import java.util.regex.Matcher;
  * Time: 11:00
  */
 public class ArmWrapperServiceImpl implements ArmWrapperService {
+    private Logger logger = LoggerFactory.getLogger(ArmWrapperServiceImpl.class);
 
     private NodeService nodeService;
     private ArmServiceImpl service;
     private SubstitudeBean substitudeService;
 	private NamespaceService namespaceService;
     private DictionaryBean dictionaryBean;
+    private SearchCounter searchCounter;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -48,6 +52,10 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
     public void setDictionaryBean(DictionaryBean dictionaryBean) {
         this.dictionaryBean = dictionaryBean;
+    }
+
+    public void setSearchCounter(SearchCounter searchCounter) {
+        this.searchCounter = searchCounter;
     }
 
     public List<ArmNode> getAccordionsByArmCode(String armCode) {
@@ -259,24 +267,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         NodeRef realParent = parentNode.getArmNodeRef();
         if (realParent != null && !realParent.equals(nodeRef)) {
             Object searchQuery = service.getCachedProperties(realParent).get(ArmService.PROP_SEARCH_QUERY);
-            if (searchQuery != null) {
-                String parentQuery = searchQuery.toString().replaceAll("\\n", " ").replaceAll("\\r", " ");
-                if (!parentQuery.isEmpty()) {
-                    sb.append(sb.length() > 0 ? " AND " : "");
-                    boolean useBrackets = true;
-
-                    if (parentQuery.startsWith("NOT")) {
-                        Matcher m = ArmService.MULTIPLE_NOT_QUERY.matcher(parentQuery.toUpperCase());
-                        if (!m.find()) {
-                            useBrackets = false;
-                        }
-                    }
-
-                    sb.append(useBrackets ? "(" : "");
-                    sb.append(parentQuery);
-                    sb.append(useBrackets ? ")" : "");
-                }
-            }
+            insertQueryToBuffer(sb, searchQuery);
         }
 
         node.setSearchQuery(sb.toString());
@@ -316,24 +307,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         NodeRef realParent = parentNode.getArmNodeRef();
         if (realParent != null) {
             Object searchQuery = service.getCachedProperties(realParent).get(ArmService.PROP_SEARCH_QUERY);
-            if (searchQuery != null) {
-                String parentQuery = searchQuery.toString().replaceAll("\\n", " ").replaceAll("\\r", " ");
-                if (!parentQuery.isEmpty()) {
-                    sb.append(sb.length() > 0 ? " AND " : "");
-                    boolean useBrackets = true;
-
-                    if (parentQuery.startsWith("NOT")) {
-                        Matcher m = ArmService.MULTIPLE_NOT_QUERY.matcher(parentQuery.toUpperCase());
-                        if (!m.find()) {
-                            useBrackets = false;
-                        }
-                    }
-
-                    sb.append(useBrackets ? "(" : "");
-                    sb.append(parentQuery);
-                    sb.append(useBrackets ? ")" : "");
-                }
-            }
+            insertQueryToBuffer(sb, searchQuery);
         }
 
         node.setSearchQuery(sb.toString());
@@ -374,32 +348,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     }
 
     public String getNodeSearchQuery(NodeRef nodeRef) {
-        List<AssociationRef> queryAssoc = nodeService.getTargetAssocs(nodeRef, ArmService.ASSOC_NODE_CHILD_RULE);
-        if (queryAssoc != null && queryAssoc.size() > 0) {
-            NodeRef query = queryAssoc.get(0).getTargetRef();
-            QName queryType = service.getCachedType(query);
-            Map<QName, Serializable> props = service.getCachedProperties(query);
-
-            if (ArmService.TYPE_STATUSES_CHILD_RULE.equals(queryType)) {
-                ArmStatusesChildRule node = new ArmStatusesChildRule();
-                node.setRule((String) props.get(ArmService.PROP_STATUSES_RULE));
-                String selectedStatuses = (String) props.get(ArmService.PROP_SELECTED_STATUSES);
-                if (selectedStatuses != null) {
-                    List<String> selectedStatusesList = new ArrayList<>();
-                    for (String str: selectedStatuses.split(",")) {
-                        String status = str.trim();
-                        if (status.length() > 0) {
-                            selectedStatusesList.add(status);
-                        }
-                    }
-
-                    node.setSelectedStatuses(selectedStatusesList);
-                }
-
-                return node.getQuery();
-            }
-        }
-        return (String) service.getCachedProperties(nodeRef).get(ArmService.PROP_SEARCH_QUERY);
+        return service.getNodeSearchQuery(nodeRef);
     }
 
     public String formatQuery(String templateQuery, String value) {
@@ -407,6 +356,49 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             return templateQuery.replaceAll(ArmWrapperService.VALUE, value);
         }
         return templateQuery;
+    }
+
+    @Override
+    public String getFullQuery(ArmNode armNode, boolean includeTypes, boolean includeParentQuery) {
+        StringBuilder builder = new StringBuilder();
+        if (includeTypes) {
+            List<String> types = armNode.getTypes();
+            StringBuilder typesBuilder = new StringBuilder();
+            for (String type : types) {
+                typesBuilder.append("TYPE:\"").append(type).append("\"").append(" OR ");
+            }
+            if (typesBuilder.length() > 0) {
+                typesBuilder.delete(typesBuilder.length() - 4, typesBuilder.length());
+            }
+
+            if (typesBuilder.length() > 0) {
+                includeTypes = false; /*Нам не нужны родительские типы, если получили конкретные*/
+                builder.append("(").append(typesBuilder.toString()).append(")");
+            }
+        }
+
+        insertQueryToBuffer(builder, armNode.getSearchQuery());
+
+        if (includeParentQuery) {
+            NodeRef parentNode = service.getCachedParent(armNode.getNodeRef());
+            if (parentNode != null) {
+                QName parentType = nodeService.getType(parentNode);
+                if (parentType.equals(ArmService.TYPE_ARM_NODE)
+                        || parentType.equals(ArmService.TYPE_ARM_ACCORDION)) {
+                    String parentQuery = getFullQuery(wrapArmNodeAsObject(parentNode, service.isArmAccordion(parentNode)), includeTypes, true);
+                    insertQueryToBuffer(builder, parentQuery);
+                }
+            }
+        }
+        return builder.toString();
+    }
+
+    public long getObjectsCount(ArmNode node) {
+        String query = getFullQuery(node, true, true);
+        logger.error("!!!!!!!!!!!!!!Сформированный запрос к узлу (" + node.getTitle() + ") = "  + query);
+        long res = execSearchQuery(query);
+        logger.error("!!!!!!!!!!!!!!Найдено по запросу объектов (" + node.getTitle() + ") = " + res);
+        return res;
     }
 
     private boolean isArmElement(NodeRef node) {
@@ -470,5 +462,41 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 }
     public boolean isAccordion(NodeRef node) {
         return service.isArmAccordion(node);
+    }
+
+
+    private void insertQueryToBuffer(StringBuilder builder, String queryToAppend) {
+        if (queryToAppend != null && !queryToAppend.isEmpty()) {
+            queryToAppend = queryToAppend.trim().replaceAll("\\n", " ").replaceAll("\\r", " ");
+            if (builder.length() > 0) {
+                builder.append(" AND ");
+            }
+            boolean useBrackets = true;
+            if (queryToAppend.startsWith("NOT")) {
+                Matcher m = ArmService.MULTIPLE_NOT_QUERY.matcher(queryToAppend.toUpperCase());
+                if (!m.find()) {
+                    useBrackets = false;
+                }
+            }
+            builder.append(useBrackets ? "(" : "");
+            builder.append(queryToAppend);
+            builder.append(useBrackets ? ")" : "");
+        }
+    }
+
+    private void insertQueryToBuffer(StringBuilder builder, Object queryToAppend) {
+        if (queryToAppend != null) {
+            insertQueryToBuffer(builder, queryToAppend.toString());
+        }
+    }
+
+    private long execSearchQuery(String queryToExecute) {
+        Map<Serializable, Serializable> searchProps = new HashMap<>();
+        searchProps.put("query", queryToExecute);
+        searchProps.put("language", SearchService.LANGUAGE_FTS_ALFRESCO);
+        searchProps.put("onerror", "no-results");
+
+        //вызываем counter с дефолтными настройками (как сейчас в АРМе)
+        return searchCounter.query(searchProps, true, false);
     }
 }

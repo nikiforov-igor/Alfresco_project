@@ -97,4 +97,12 @@ public class ExpressionEmployee {
         }
         return false;
     }
+
+    /**
+     * Проверяет является ли текущий сотрудник администратором
+     * @return true - если есть текущий сотрудник является администратором
+     */
+    public boolean isAdmin() {
+        return lecmPermissionService.isAdmin(orgstructureBean.getEmployeeLogin(employee));
+    }
 }
