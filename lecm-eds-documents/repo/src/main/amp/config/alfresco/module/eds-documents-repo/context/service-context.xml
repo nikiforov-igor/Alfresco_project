@@ -11,6 +11,7 @@
 		<value>alfresco/module/${artifactId}/models/lecm-eds-global-settings-model.xml</value>
 	</util:list>
 	<util:list id="eds.document.models">
+        <value>alfresco/module/${artifactId}/models/lecm-doc-type-dictionary-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-eds-document-model.xml</value>
 	</util:list>
 	<util:list id="eds.models.labels">
@@ -42,6 +43,8 @@
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-potential-roles.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-br-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-objectType-items.xml</value>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-document-type.xml</value>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-document-type-items.xml</value>
 	</util:list>
 	<bean id="eds.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
@@ -130,4 +133,11 @@
 		</property>
 	</bean>
 
+    <bean id="eds.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
+        <property name="configs">
+            <list>
+                <value>alfresco/module/${artifactId}/reports/configs/eds.properties</value>
+            </list>
+        </property>
+    </bean>
 </beans>
