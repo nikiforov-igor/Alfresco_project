@@ -1,3 +1,15 @@
+a.down
+{
+   background: transparent url(/share/res/components/images/collapsed.png) no-repeat scroll center center;
+   cursor: pointer;
+   padding-right: 15px;
+}
+.models .yui-dt-liner a.copy
+{
+   background: transparent url(/share/res/components/images/details-16.png) no-repeat scroll center center;
+   cursor: pointer;
+   padding-right: 15px;
+}
 .models .yui-dt-liner a.delete
 {
    background: transparent url(../../components/images/delete-16.png) no-repeat scroll center center;
@@ -48,10 +60,10 @@
    padding-right: 0.7em;
 }
 
-.models td.yui-dt-last .yui-dt-liner
+/*.models td.yui-dt-last .yui-dt-liner
 {
    text-align: right;
-}
+}*/
 
 .models .form-container select.yui-dt-dropdown {
 	width:100%;

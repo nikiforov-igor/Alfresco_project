@@ -1,0 +1,1 @@
+model.result = modelsList.getAspects(args["nodeRef"], args["doctype"]);

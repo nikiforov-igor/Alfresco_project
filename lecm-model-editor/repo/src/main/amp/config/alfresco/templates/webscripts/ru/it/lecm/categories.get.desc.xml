@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Model editor: получение списка категорий для редактора</shortname>
+	<description>Возвращает список категорий для редактора</description>
+	<url>/lecm/type/categories</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+</webscript>

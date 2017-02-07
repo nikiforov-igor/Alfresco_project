@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <page>
-    <title>Модели документов</title>
+    <title>Конструктор документов</title>
     <description>Document model list</description>
     <template-instance>doc-model-list</template-instance>
     <authentication>user</authentication>

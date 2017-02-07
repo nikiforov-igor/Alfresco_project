@@ -23,7 +23,7 @@
 				<formId>{formId}</formId>
 				<mode>edit</mode>
 				<submitType>json</submitType>
-				<showCaption>true</showCaption>
+				<showCaption>false</showCaption>
 				<showCancelButton>true</showCancelButton>
 			</properties>
 		</component>

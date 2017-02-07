@@ -1,1 +1,1 @@
-model.result = modelsList.getModelsList();
+model.result = modelsList.getModelsList(args["parentType"]);

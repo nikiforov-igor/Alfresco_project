@@ -132,6 +132,15 @@ var constructWidgets = [
 		}
 	},
 	{
+		id: "ADMIN_DICT_MODEL_MENU_ITEM",
+		name: "alfresco/menus/AlfMenuItem",
+		config: {
+			id: "ADMIN_DITC_MODEL_MENU_ITEM",
+			label: msg.get("label.dictionary.model"),
+			targetUrl: "dict-model-list"
+		}
+	},
+	{
 		id: "ADMIN_REPORTS_EDITOR_MENU_ITEM",
 		name: "alfresco/menus/AlfMenuItem",
 		config: {

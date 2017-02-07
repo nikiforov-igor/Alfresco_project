@@ -1,3 +1,4 @@
+<label><b>${msg("lecm.meditor.lbl.tables")}<b/></label>
 <#include "/ru/it/lecm/controls/datatable.ftl">
 <@inlineScript group='model-editor'>
 (function () {
@@ -7,7 +8,7 @@
 				key: 'table',
 				label: '${msg("lecm.meditor.lbl.table")}',
 				dropdownOptions: obj.tables,
-				formatter: 'dropdown',
+				formatter: LogicECM.module.ModelEditor.DatatableControl.prototype.formatDropdown,
 				width : 737,
 				maxAutoWidth : 737
 			}, {
@@ -35,6 +36,7 @@
 			columnDefinitions: columnDefinitions,
 			dialogElements: dialogElements,
 			responseSchema: responseSchema,
+			mode: '${form.mode}',
 			data: data
 		}, ${messages});
 	}

@@ -19,7 +19,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 		options: {
 			itemKind: null,
-			itemId: null
+			itemId: null,
+			doctype: null
 		},
 
 		deferredInit: null,
@@ -29,6 +30,16 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		associations: null,
 
 		_initModel: function(model) {
+			var typeIndex = 0;
+			if(YAHOO.lang.isObject(model.types)) {
+				if(YAHOO.lang.isArray(model.types.type)) {
+					for(var v in model.types.type) {
+						if(this.options.doctype==model.types.type[v]._name) {
+							typeIndex = v;
+						}
+					}
+				} 
+			}
 			var modelObject = {};
 			if(YAHOO.lang.isValue(model._name)) {
 				modelObject.prop_cm_name = (model._name.substr(model._name.indexOf(':')+1,model._name.length)).replace('Model','');
@@ -41,23 +52,23 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 				modelObject.signed = 'false';
 				if(YAHOO.lang.isObject(model.types)) {
 					if(YAHOO.lang.isArray(model.types.type)) {
-						modelObject.typeTitle = model.types.type[0].title;
-						modelObject.prop_type_name = (model.types.type[0]._name.substr(model.types.type[0]._name.indexOf(':')+1,model.types.type[0]._name.length));
+						modelObject.typeTitle = model.types.type[typeIndex].title;
+						modelObject.prop_type_name = (model.types.type[typeIndex]._name.substr(model.types.type[typeIndex]._name.indexOf(':')+1,model.types.type[typeIndex]._name.length));
 
-						modelObject.parentRef = model.types.type[0].parent;
+						modelObject.parentRef = model.types.type[typeIndex].parent;
 
-						if(YAHOO.lang.isObject(model.types.type[0]['mandatory-aspects'])) {
-							if(YAHOO.lang.isArray(model.types.type[0]['mandatory-aspects'].aspect)) {
-								for(var v in model.types.type[0]['mandatory-aspects'].aspect) {
-									if(model.types.type[0]['mandatory-aspects'].aspect[v]==='lecm-document-aspects:rateable') {
+						if(YAHOO.lang.isObject(model.types.type[typeIndex]['mandatory-aspects'])) {
+							if(YAHOO.lang.isArray(model.types.type[typeIndex]['mandatory-aspects'].aspect)) {
+								for(var v in model.types.type[typeIndex]['mandatory-aspects'].aspect) {
+									if(model.types.type[typeIndex]['mandatory-aspects'].aspect[v]==='lecm-document-aspects:rateable') {
 										modelObject.rating = 'true';
-									} else if(model.types.type[0]['mandatory-aspects'].aspect[v]==='lecm-signed-docflow:docflowable') {
+									} else if(model.types.type[typeIndex]['mandatory-aspects'].aspect[v]==='lecm-signed-docflow:docflowable') {
 										modelObject.signed = 'true';
 									}
 								}
-							} else if(model.types.type[0]['mandatory-aspects'].aspect==='lecm-document-aspects:rateable') {
+							} else if(model.types.type[typeIndex]['mandatory-aspects'].aspect==='lecm-document-aspects:rateable') {
 								modelObject.rating = 'true';
-							} else if(model.types.type[0]['mandatory-aspects'].aspect==='lecm-signed-docflow:docflowable') {
+							} else if(model.types.type[typeIndex]['mandatory-aspects'].aspect==='lecm-signed-docflow:docflowable') {
 								modelObject.signed = 'true';
 							}
 						}
@@ -390,8 +401,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			if(YAHOO.lang.isObject(model.types)) {
 				if(YAHOO.lang.isArray(model.types.type)) {
 					//properties
-					if(YAHOO.lang.isObject(model.types.type[0].properties)) {
-						var p = model.types.type[0].properties.property;
+					if(YAHOO.lang.isObject(model.types.type[typeIndex].properties)) {
+						var p = model.types.type[typeIndex].properties.property;
 						if (p instanceof Array) {
 							for ( var i = 0, n = p.length; i < n; i++) {
 								var index = (YAHOO.lang.isObject(p[i].index)?p[i].index._enabled:'true');
@@ -405,8 +416,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 						}
 					}
 					//associations
-					if(YAHOO.lang.isObject(model.types.type[0].associations)) {
-						var a = model.types.type[0].associations.association;
+					if(YAHOO.lang.isObject(model.types.type[typeIndex].associations)) {
+						var a = model.types.type[typeIndex].associations.association;
 						if (a instanceof Array) {
 							for (var i = 0, n = a.length; i < n; i++) {
 								tmpAssociationsArray[i] = {'_name':(a[i]._name.substr(a[i]._name.indexOf(':')+1,a[i]._name.length)), 'title':a[i].title,
@@ -465,8 +476,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 			if(YAHOO.lang.isObject(model.types)) {
 				if(YAHOO.lang.isArray(model.types.type)) {
-					if(YAHOO.lang.isObject(model.types.type[0]['mandatory-aspects'].aspect)) {
-						var a = model.types.type[0]['mandatory-aspects'].aspect;
+					if(YAHOO.lang.isObject(model.types.type[typeIndex]['mandatory-aspects'])) {
+						var a = model.types.type[typeIndex]['mandatory-aspects'].aspect;
 						if (a instanceof Array) {
 							for (var i = 0, n = a.length; i < n; i++) {
 								if(a[i] && this.tables.some(isTable, a[i])) {
@@ -544,7 +555,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 		_initAssociations: function () {
 			Alfresco.util.Ajax.jsonGet({
-				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/api/classes/cm_cmobject/subclasses',
+				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/api/classes/sys_base/subclasses',
 				dataObj: {
 					r: true
 				},
@@ -567,7 +578,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 		_initTables: function () {
 			Alfresco.util.Ajax.jsonGet({
-				url: Alfresco.constants.PROXY_URI_RELATIVE + 'api/classes/lecm-document_tableDataAspect/subclasses',
+				url: Alfresco.constants.PROXY_URI_RELATIVE + 'api/classes?cf=aspect',
 				dataObj: {
 					r: false
 				},

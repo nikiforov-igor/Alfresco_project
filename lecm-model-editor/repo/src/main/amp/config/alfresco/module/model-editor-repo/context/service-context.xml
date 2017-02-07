@@ -71,6 +71,7 @@
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="documentService" ref="documentService"/>
 		<property name="lecmModelsService" ref="lecmModelsService"/>
+		<property name="models" ref="dictionaryBootstrapPostProcessor"/>
 	</bean>
 
 	<bean id="modelListScript" parent="baseScript"
@@ -118,5 +119,7 @@
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
+	
+	<bean id="dictionaryBootstrapPostProcessor" class="ru.it.lecm.modelEditor.beans.DictionaryBootstrapPostProcessor"/>
 
 </beans>

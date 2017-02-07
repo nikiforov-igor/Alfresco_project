@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>menu</shortname>
+    <description>Returns the document model menu.</description>
+    <url>/lecm/documentmodel/back-menu</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

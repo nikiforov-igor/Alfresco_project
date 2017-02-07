@@ -1,3 +1,4 @@
+<label><b>${msg("lecm.meditor.lbl.attachs.categors")}</b></label>
 <#include "/ru/it/lecm/controls/datatable.ftl">
 <@inlineScript group='model-editor'>
 (function () {
@@ -35,6 +36,7 @@
 			columnDefinitions: columnDefinitions,
 			dialogElements: dialogElements,
 			responseSchema: responseSchema,
+			mode: '${form.mode}',
 			data: data
 		}, ${messages});
 	}

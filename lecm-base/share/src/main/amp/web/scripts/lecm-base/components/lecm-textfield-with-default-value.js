@@ -52,7 +52,7 @@ LogicECM.module = LogicECM.module || {};
 					}
 				});
 			} else {
-				this.textField.value = this.options.defaultValue;
+				this.textField.value = (this.options.defaultValue?this.options.defaultValue:null);
 			}
 		}
 	});
