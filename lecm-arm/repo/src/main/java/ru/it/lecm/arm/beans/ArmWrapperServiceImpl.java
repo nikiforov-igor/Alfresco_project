@@ -264,7 +264,9 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         NodeRef realParent = parentNode.getArmNodeRef();
         if (realParent != null && !realParent.equals(nodeRef)) {
             Object searchQuery = service.getCachedProperties(realParent).get(ArmService.PROP_SEARCH_QUERY);
-            insertQueryToBuffer(sb, searchQuery);
+            if (searchQuery != null) {
+                insertQueryToBuffer(sb, searchQuery.toString());
+            }
         }
 
         node.setSearchQuery(sb.toString());
@@ -304,7 +306,9 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         NodeRef realParent = parentNode.getArmNodeRef();
         if (realParent != null) {
             Object searchQuery = service.getCachedProperties(realParent).get(ArmService.PROP_SEARCH_QUERY);
-            insertQueryToBuffer(sb, searchQuery);
+            if (searchQuery != null) {
+                insertQueryToBuffer(sb, searchQuery.toString());
+            }
         }
 
         node.setSearchQuery(sb.toString());
@@ -475,12 +479,6 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             builder.append(useBrackets ? "(" : "");
             builder.append(queryToAppend);
             builder.append(useBrackets ? ")" : "");
-        }
-    }
-
-    private void insertQueryToBuffer(StringBuilder builder, Object queryToAppend) {
-        if (queryToAppend != null) {
-            insertQueryToBuffer(builder, queryToAppend.toString());
         }
     }
 
