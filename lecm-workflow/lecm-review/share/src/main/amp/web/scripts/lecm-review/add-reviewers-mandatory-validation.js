@@ -7,7 +7,7 @@
         YAHOO.Bubbling.fire('registerValidationHandler',
             {
                 fieldId: obj.eventGroup.id + '-items',
-                handler: LogicECM.module.Incoming.reviewerMandatory,
+                handler: LogicECM.module.Documents.reviewerMandatory,
                 when: "propertyChange",
                 message: Alfresco.util.message("Alfresco.forms.validation.mandatory.message")
             });

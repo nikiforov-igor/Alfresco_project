@@ -301,7 +301,7 @@
                     <show id="expand-button" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <set id="exist-business-role" template="/ru/it/lecm/deputy/controls/errands-choosing-set.ftl" />
+                    <set id="exist-business-role" template="/ru/it/lecm/errands/controls/errands-choosing-set.ftl" />
                     <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="block2-1" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
                     <set id="block3"  template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
@@ -749,7 +749,7 @@
                     <show id="lecm-errands:additional-document-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <set id="exist-business-role" template="/ru/it/lecm/deputy/controls/errands-choosing-set.ftl" />
+                    <set id="exist-business-role" template="/ru/it/lecm/errands/controls/errands-choosing-set.ftl" />
                     <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="block2-1" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
                     <set id="block3"  template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>

@@ -3,8 +3,7 @@
     <item name="cm:Создать мероприятие по документу" type="lecm-group-actions:script-action">
         <property name="cm:name"><![CDATA[Создать мероприятие по документу]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
-        <property name="lecm-group-actions:type">
-            <![CDATA[[lecm-contract:document, lecm-nd:document, lecm-errands:document, lecm-incoming:document, lecm-internal:document, lecm-additional-document:additionalDocument, lecm-protocol:document, lecm-outgoing:document, lecm-ord:document, lecm-eds-document:base]]]></property>
+        <property name="lecm-group-actions:type"><![CDATA[]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="lecm-group-actions:expression"><![CDATA[doc.attr("lecm-statemachine:status") != "Удален"]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>

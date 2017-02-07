@@ -137,6 +137,7 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
     /**
      * Проверка, скрывать ли свойства для получателей
      */
+    @Deprecated
     public Boolean isHidePropsForRecipients() {
 //		TODO: Метод isHideProperties в итоге дёргает метод getSettingsNode, который ранее был getOrCreate.
 //		Теперь метод разделён и необходимо провести проверку на существование ноды и создать её при необходимости
@@ -206,6 +207,7 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
         return null;
     }
 
+	@Deprecated
 	public String getLinksViewMode() {
 		return edsGlobalSettingsService.getLinksViewMode();
 	}

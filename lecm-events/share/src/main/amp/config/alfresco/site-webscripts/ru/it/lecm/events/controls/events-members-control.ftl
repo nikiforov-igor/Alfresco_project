@@ -65,6 +65,10 @@
 <#assign readonly = false>
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
+<#if params.busyTimeMembersFields??>
+    <#assign busyTimeMembersFields = params.busyTimeMembersFields>
+</#if>
+
 <#if disabled>
 <div id="${controlId}" class="control association-token-control members ${verticalListClass} viewmode">
 	<div class="label-div">
@@ -323,6 +327,9 @@
             </#if>
                 itemType: "${params.endpointType ! field.endpointType}",
                 additionalFilter: "${params.additionalFilter!''}",
+            <#if busyTimeMembersFields??>
+                busyTimeMembersFields: "${busyTimeMembersFields}",
+            </#if>
                 showAssocViewForm: ${showAssocViewForm?string},
                 checkType: ${checkType?string},
                 fieldId: "${field.configName}",

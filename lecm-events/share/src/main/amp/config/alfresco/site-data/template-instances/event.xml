@@ -140,23 +140,6 @@
             </properties>
         </component>
 
-        <!-- Повестка -->
-        <component>
-            <region-id>meeting-agenda</region-id>
-            <sub-components>
-                <sub-component id="default">
-                    <evaluations>
-                        <evaluation>
-                            <url>/lecm/components/meetings/meeting-agenda</url>
-                            <properties>
-                                <nodeRef>{nodeRef}</nodeRef>
-                            </properties>
-                        </evaluation>
-                    </evaluations>
-                </sub-component>
-            </sub-components>
-        </component>
-
         <!-- Вложения -->
         <component>
             <region-id>document-attachments</region-id>

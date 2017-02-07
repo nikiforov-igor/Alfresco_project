@@ -1,5 +1,10 @@
 <webscript>
-  <shortname>document-attachment-header</shortname>
-  <description>Document Attachment Header Component</description>
-  <url>/lecm/components/document/attachment/header</url>
+	<shortname>document-attachment-header</shortname>
+	<description>
+		Document Attachment Header Component
+
+		Дополнительные необязательные параметры для получения вложений документа-основания
+		baseDocAssocName - имя ассоциации указывающей на документ основание
+	</description>
+	<url>/lecm/components/document/attachment/header?baseDocAssocName={baseDocAssocName}</url>
 </webscript>
