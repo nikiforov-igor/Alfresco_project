@@ -20,7 +20,6 @@ import java.util.List;
  */
 public class ExpressionDocument extends ExpressionNode {
 
-	protected NodeRef nodeRef;
     private static DocumentAttachmentsService documentAttachmentsService;
     private static DocumentConnectionService documentConnectionService;
     private static DocumentTableService documentTableService;
