@@ -13,12 +13,12 @@ import java.util.Map;
  * Date: 07.02.13
  * Time: 16:44
  */
-public class Expression extends BaseSpellExpression {
+public class Expression extends BaseSpellExpression{
 
-	private Map<String, Object> state = new HashMap<>();
-	private ExpressionDocument doc;
-	private ExpressionUser user;
-	private static StateMachineServiceBean stateMachineService;
+    private Map<String, Object> state = new HashMap<>();
+    private ExpressionDocument doc;
+    private ExpressionUser user;
+    private static StateMachineServiceBean stateMachineService;
 
     public Expression() {
     }
@@ -33,13 +33,13 @@ public class Expression extends BaseSpellExpression {
         }
     }
 
-	public Object state(String variableName) {
-		return state.get(variableName);
-	}
+    public Object state(String variableName) {
+        return state.get(variableName);
+    }
 
-	public ExpressionDocument getDoc() {
-		return doc;
-	}
+    public ExpressionDocument getDoc() {
+        return doc;
+    }
 
     public ExpressionUser getUser() {
         return user;
