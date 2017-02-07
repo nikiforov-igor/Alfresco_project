@@ -30,7 +30,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      */
     LogicECM.DocumentConnections = function DocumentConnections_constructor(htmlId) {
         LogicECM.DocumentConnections.superclass.constructor.call(this, htmlId);
-
+		this.options.excludeType = null;
 	    YAHOO.Bubbling.on("connectionsUpdate", this.onConnectionsUpdate, this);
         return this;
     };
@@ -59,7 +59,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			            url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/connections-list",
 			            dataObj: {
 				            nodeRef: this.options.nodeRef,
-				            htmlid: this.id + Alfresco.util.generateDomId()
+				            htmlid: this.id + Alfresco.util.generateDomId(),
+							excludeType: this.options.excludeType
 			            },
 			            successCallback: {
 				            fn:function(response){
@@ -80,7 +81,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/connections",
 				        dataObj: {
 					        nodeRef: this.options.nodeRef,
-					        htmlid: this.id + "-" + Alfresco.util.generateDomId()
+					        htmlid: this.id + "-" + Alfresco.util.generateDomId(),
+							excludeType: this.options.excludeType
 				        },
 				        successCallback: {
 					        fn:function(response){

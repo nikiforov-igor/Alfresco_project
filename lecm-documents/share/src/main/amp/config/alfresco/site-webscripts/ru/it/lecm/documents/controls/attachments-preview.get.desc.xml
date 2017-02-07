@@ -5,7 +5,12 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <webscript>
-  <shortname>attachments-preview</shortname>
-  <description>This web scripts should be used to show attachments modal form</description>
-  <url>/lecm/components/document/attachments-preview</url>
+	<shortname>attachments-preview</shortname>
+	<description>
+		This web scripts should be used to show attachments modal form
+
+		Дополнительные необязательные параметры для получения вложений документа-основания
+		baseDocAssocName - имя ассоциации указывающей на документ основание
+	</description>
+	<url>/lecm/components/document/attachments-preview?baseDocAssocName={baseDocAssocName}</url>
 </webscript>

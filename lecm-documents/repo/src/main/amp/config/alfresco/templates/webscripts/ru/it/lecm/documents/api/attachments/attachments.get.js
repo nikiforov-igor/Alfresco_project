@@ -1,17 +1,18 @@
 var documentNodeRef = args['documentNodeRef'];
 var count = parseInt(args['count']);
-var showEmptyCategory = args['showEmptyCategory'];
+var showEmptyCategory = ('' + args['showEmptyCategory']).toLowerCase() == 'true';
+var baseDocAssocName = '' + args['baseDocAssocName'];
 var lockStatus = {};
 
 var categories = documentAttachments.getCategories(documentNodeRef);
 var items = [];
 var hasNext = false;
 var k = 0;
-if (categories != null) {
+if (categories) {
 	for (var i = 0; i < categories.length; i++) {
 		if (k <= count || isNaN(count)) {
 			var attachments = documentAttachments.getAttachmentsByCategory(categories[i]);
-			if (attachments != null && (attachments.length > 0 || (showEmptyCategory != null && showEmptyCategory == "true"))) {
+			if (attachments && (attachments.length || showEmptyCategory)) {
 				var showAttachments = [];
 				for (var j = 0; j < attachments.length; j++) {
 					if (k < count || isNaN(count)) {
@@ -35,20 +36,20 @@ if (categories != null) {
 		}
 	}
 
-	var document = search.findNode(documentNodeRef);
-	if (document != null && document.typeShort == "lecm-errands:document") {
-		while (document != null && document.typeShort == "lecm-errands:document" && document.hasPermission("Read")) {
-			var baseDocAssoc = document.assocs["lecm-errands:additional-document-assoc"];
-			if (baseDocAssoc != null && baseDocAssoc.length > 0) {
-				document = baseDocAssoc[0];
+	var document = utils.getNodeFromString(documentNodeRef);
+	if (document && baseDocAssocName) {
+		while (document && document.hasPermission("Read")) {
+			var baseDocs = document.assocs[baseDocAssocName];
+			if (baseDocs && baseDocs.length) {
+				document = baseDocs[0];
 			} else {
 				document = null;
 			}
 		}
 
-		if (document != null) {
+		if (document) {
 			var categories = documentAttachments.getCategories(document.nodeRef.toString());
-			if (categories != null) {
+			if (categories) {
 				var showAttachments = [];
 				for (var i = 0; i < categories.length; i++) {
 					var attachments = documentAttachments.getAttachmentsByCategory(categories[i]);
@@ -63,7 +64,7 @@ if (categories != null) {
 						k++;
 					}
 				}
-				if (showAttachments != null && (showAttachments.length > 0 || (showEmptyCategory != null && showEmptyCategory == "true"))) {
+				if (showAttachments && (showAttachments.length || showEmptyCategory)) {
 					items.push({
 						category: {
 							node: {

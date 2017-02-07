@@ -25,7 +25,7 @@
     <bean id="documents.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
           depends-on="dictionaryBootstrap,
                         documents.dictionaries.LogicEcmModelsBootstrap,
-                        links.LogicEcmContractsBootstrap,
+                        links.LogicEcmBootstrap,
                         ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsAspectBootstrap,
                         documents.LogicEcmModelsConnectionAspectBootstrap,
                         documents-members.LogicEcmModelsBootstrap,
@@ -34,14 +34,14 @@
                         ru.it.lecm.dictionary.dictionary-repo.dictionary">
         <property name="models">
             <list>
-                <value>alfresco/module/documents-repo/models/lecm-document-model.xml</value>
-                <value>alfresco/module/documents-repo/models/lecm-document-workflow-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-document-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-document-workflow-model.xml</value>
             </list>
         </property>
         <property name="labels">
             <list>
-                <value>alfresco/module/documents-repo/messages/lecm-document-model</value>
-                <value>alfresco/module/documents-repo/messages/lecm-document-workflow-model</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-document-model</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-document-workflow-model</value>
             </list>
         </property>
     </bean>
@@ -66,12 +66,12 @@
           depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
         <property name="models">
             <list>
-                <value>alfresco/module/documents-repo/models/lecm-document-member-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-document-member-model.xml</value>
             </list>
         </property>
 		<property name="labels">
 			<list>
-				<value>alfresco/module/documents-repo/messages/lecm-document-member-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-document-member-model</value>
 			</list>
 		</property>
     </bean>
@@ -80,29 +80,15 @@
 	      depends-on="dictionaryBootstrap,ru.it.lecm.dictionary.dictionary-repo.dictionary">
 		<property name="models">
 			<list>
-				<value>alfresco/module/documents-repo/models/lecm-document-dictionaries-model.xml</value>
-				<value>alfresco/module/documents-repo/models/lecm-delivery-method-dictionary-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-document-dictionaries-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-delivery-method-dictionary-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
 			<list>
-				<value>alfresco/module/documents-repo/messages/lecm-document-dictionaries-model</value>
-				<value>alfresco/module/documents-repo/messages/lecm-delivery-method-dictionary-model</value>
-				<value>alfresco/module/documents-repo/messages/lecm-doc-type-dictionary-model</value>
-			</list>
-		</property>
-	</bean>
-
-	<bean id="dictionary.fileRegister.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
-	      depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, operative.storage.model.bootstrap">
-		<property name="models">
-			<list>
-				<value>alfresco/module/documents-repo/models/lecm-file-register-dictionary-model.xml</value>
-			</list>
-		</property>
-		<property name="labels">
-			<list>
-				<value>alfresco/module/documents-repo/messages/lecm-file-register-dictionary-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-document-dictionaries-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-delivery-method-dictionary-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-doc-type-dictionary-model</value>
 			</list>
 		</property>
 	</bean>
@@ -114,12 +100,12 @@
           depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
         <property name="models">
             <list>
-                <value>alfresco/module/documents-repo/models/lecm-document-frequency-analysis-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-document-frequency-analysis-model.xml</value>
             </list>
         </property>
 		<property name="labels">
 			<list>
-				<value>alfresco/module/documents-repo/messages/lecm-document-frequency-analysis-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-document-frequency-analysis-model</value>
 			</list>
 		</property>
     </bean>
@@ -159,12 +145,12 @@
           depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary, documents.LogicEcmModelsConnectionTypesBootstrap, documents.LogicEcmModelsBootstrap">
         <property name="models">
             <list>
-                <value>alfresco/module/documents-repo/models/lecm-connection-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-connection-model.xml</value>
             </list>
         </property>
 		<property name="labels">
 			<list>
-				<value>alfresco/module/documents-repo/messages/lecm-connection-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-connection-model</value>
 			</list>
 		</property>
     </bean>
@@ -173,12 +159,12 @@
           depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary, documents.LogicEcmModelsConnectionTypesBootstrap, documents.LogicEcmModelsBootstrap">
         <property name="models">
             <list>
-                <value>alfresco/module/documents-repo/models/lecm-document-stamps-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-document-stamps-model.xml</value>
             </list>
         </property>
         <property name="labels">
             <list>
-                <value>alfresco/module/documents-repo/messages/lecm-document-stamps-model</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-document-stamps-model</value>
             </list>
         </property>
     </bean>
@@ -188,12 +174,12 @@
           depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
         <property name="models">
             <list>
-                <value>alfresco/module/documents-repo/models/lecm-connection-types-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-connection-types-model.xml</value>
             </list>
         </property>
 		<property name="labels">
 			<list>
-				<value>alfresco/module/documents-repo/messages/lecm-connection-types-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-connection-types-model</value>
 			</list>
 		</property>
     </bean>
@@ -202,14 +188,27 @@
           depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
         <property name="models">
             <list>
-                <value>alfresco/module/documents-repo/models/lecm-connection-aspect-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-connection-aspect-model.xml</value>
             </list>
         </property>
 		<property name="labels">
 			<list>
-				<value>alfresco/module/documents-repo/messages/lecm-connection-aspect-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-connection-aspect-model</value>
 			</list>
 		</property>
+    </bean>
+
+    <bean id="documents.logicEcmModelsDocumentsGlobalSettingsBootstrap" parent="dictionaryModelBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-document-global-settings-model.xml</value>
+            </list>
+        </property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/lecm-document-global-settings-model</value>
+            </list>
+        </property>
     </bean>
 
     <bean id="documents.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap"
@@ -221,21 +220,48 @@
                         businessJournalLogEventsPolicy">
         <property name="dictionaries">
             <list>
-                <value>alfresco/module/documents-repo/dictionaries/lecm-connection-types.xml</value>
-                <value>alfresco/module/documents-repo/dictionaries/lecm-connection-available-types.xml</value>
-                <value>alfresco/module/documents-repo/dictionaries/lecm-document-subjects.xml</value>
-	            <value>alfresco/module/documents-repo/dictionaries/lecm-delivery-method.xml</value>
-			    <value>alfresco/module/documents-repo/dictionaries/lecm-file-register-objectType-items.xml</value>
-			    <value>alfresco/module/documents-repo/dictionaries/lecm-reg-data-objectType-items.xml</value>
-                <value>alfresco/module/documents-repo/dictionaries/lecm-delivery-method-items.xml</value>
-                <value>alfresco/module/documents-repo/dictionaries/lecm-document-objectType-items.xml</value>
-                <value>alfresco/module/documents-repo/dictionaries/lecm-document-stamps.xml</value>
-                <value>alfresco/module/documents-repo/models/lecm-document-br-items.xml</value>
-                <value>alfresco/module/documents-repo/dictionaries/lecm-document-nt-items.xml</value>
-                <value>alfresco/module/documents-repo/dictionaries/lecm-connection-types-items.xml</value>
-                <value>alfresco/module/documents-repo/dictionaries/lecm-connection-available-types-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-connection-types.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-connection-available-types.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-document-subjects.xml</value>
+	            <value>alfresco/module/${artifactId}/dictionaries/lecm-delivery-method.xml</value>
+			    <value>alfresco/module/${artifactId}/dictionaries/lecm-reg-data-objectType-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-delivery-method-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-document-objectType-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-document-stamps.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-document-br-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-document-nt-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-connection-types-items.xml</value>
 		    </list>
 	    </property>
+    </bean>
+
+    <bean id="documents.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="arm.settings.LogicEcmBootstrap">
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/documents-repo/arm/documents-settings-arm.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <util:constant id="DOCUMENT_GLOBAL_SETTINGS_FOLDER_ID" static-field="ru.it.lecm.documents.beans.DocumentGlobalSettingsService.DOCUMENT_GLOBAL_SETTINGS_FOLDER_ID"/>
+    <util:constant id="DOCUMENT_GLOBAL_SETTINGS_FOLDER_NAME" static-field="ru.it.lecm.documents.beans.DocumentGlobalSettingsService.DOCUMENT_GLOBAL_SETTINGS_FOLDER_NAME"/>
+    <util:map id="documents.global-settings.folders">
+        <entry key="#{DOCUMENT_GLOBAL_SETTINGS_FOLDER_ID}" value="#{DOCUMENT_GLOBAL_SETTINGS_FOLDER_NAME}"/>
+    </util:map>
+    <bean id="documents.global-settings.service" parent="baseBean"
+          depends-on="documents.logicEcmModelsDocumentsGlobalSettingsBootstrap"
+          class="ru.it.lecm.documents.beans.DocumentGlobalSettingsServiceImpl">
+        <property name="folders" ref="documents.global-settings.folders"/>
+    </bean>
+
+    <bean id="documents.global-settings.script" parent="baseScript"
+          class="ru.it.lecm.documents.scripts.DocumentGlobalSettingsWebScriptBean">
+        <property name="extensionName">
+            <value>documentGlobalSettings</value>
+        </property>
+        <property name="documentGlobalSettingsService" ref="documents.global-settings.service"/>
     </bean>
 
     <bean id="documentConnectionService" class="ru.it.lecm.documents.beans.DocumentConnectionServiceImpl" parent="baseBean">
@@ -365,7 +391,7 @@
           depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalDictionaryBootstrap, businessJournalLogEventsPolicy">
         <property name="dictionaries">
             <list>
-                <value>alfresco/module/documents-repo/dictionaries/lecm-business-journal-eventCategory-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-business-journal-eventCategory-items.xml</value>
             </list>
         </property>
     </bean>
@@ -752,7 +778,7 @@
     <bean id="documents.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
         <property name="configs">
             <list>
-                <value>alfresco/module/documents-repo/reports/configs/documents.properties</value>
+                <value>alfresco/module/${artifactId}/reports/configs/documents.properties</value>
             </list>
         </property>
     </bean>

@@ -234,12 +234,6 @@ public class ControlsEditorBeanImpl extends BaseBean {
 		return createFolder(parent, folderName);
 	}
 
-	/*
-        contract.ensureVersioningEnabled(true, false);
-        var versionedContract = contract.checkout();
-        versionedContract.properties.content.write(taskComment.properties.content);
-        versionedContract.checkin();
-	*/
 	public boolean generateControls(final String typename) {
 
 		NodeRef configNode = geTypeControlsNode(typename);

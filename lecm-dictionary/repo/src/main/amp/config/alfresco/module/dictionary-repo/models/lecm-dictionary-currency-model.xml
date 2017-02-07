@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model name="lecm-currency:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
-	<description>Logic ECM contracts dictionaries model</description>
+	<description>Logic ECM currency dictionaries model</description>
 	<author>Logic ECM</author>
 	<version>1.0</version>
 	<imports>
@@ -33,7 +33,7 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
-				
+
 				<property name="lecm-currency:digital-code">
 					<type>d:int</type>
 					<mandatory>true</mandatory>

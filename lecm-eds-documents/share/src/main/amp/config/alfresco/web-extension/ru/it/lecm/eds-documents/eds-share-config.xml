@@ -79,16 +79,11 @@
 		<forms>
 			<form>
 				<field-visibility>
-                    <show id="lecm-eds-globset:links-view-mode"/>
-                    <show id="lecm-eds-globset:hide-properties-for-recipients"/>
                     <show id="lecm-eds-globset:centralized-registration"/>
                     <show id="lecm-eds-globset:arm-for-dashlet-assoc"/>
 				    <show id="lecm-eds-globset:arm-node-for-dashlet-assoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-eds-globset:links-view-mode">
-						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
-					</field>
 					<field id="lecm-eds-globset:centralized-registration" label-id="label.centralized-registration">
 						<control template="/ru/it/lecm/eds/global-settings/components/controls/potential-role-tree-picker.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
@@ -132,16 +127,11 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-eds-globset:links-view-mode"/>
-                    <show id="lecm-eds-globset:hide-properties-for-recipients"/>
                     <show id="lecm-eds-globset:centralized-registration"/>
                     <show id="lecm-eds-globset:arm-for-dashlet-assoc"/>
 				<show id="lecm-eds-globset:arm-node-for-dashlet-assoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-eds-globset:links-view-mode">
-						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
-					</field>
 					<field id="lecm-eds-globset:centralized-registration" label-id="label.centralized-registration">
 						<control template="/ru/it/lecm/eds/global-settings/components/controls/potential-role-tree-picker.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>

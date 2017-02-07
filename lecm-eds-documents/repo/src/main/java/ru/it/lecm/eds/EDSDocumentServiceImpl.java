@@ -7,15 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.eds.api.EDSDocumentService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: dbashmakov
@@ -30,6 +28,15 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
     private String limitlessString = "Без срока";
 
     private IWorkCalendar calendarBean;
+    private OrgstructureBean orgstructureService;
+
+    public OrgstructureBean getOrgstructureService() {
+        return orgstructureService;
+    }
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
 
     public void setCalendarDayTypeString(String calendarDayTypeString) {
         this.calendarDayTypeString = calendarDayTypeString;
@@ -129,5 +136,26 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
             }
         }
         return null;
+    }
+
+    @Override
+    public void sendCompletionSignal(NodeRef document, String reason, NodeRef signalSender) {
+        if (document != null && nodeService.exists(document)) {
+            nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL, true);
+            nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL_REASON, reason);
+            if (signalSender == null || !nodeService.exists(signalSender)) {
+                signalSender = orgstructureService.getCurrentEmployee();
+            }
+            if (signalSender != null) {
+                nodeService.createAssociation(document, signalSender, EDSDocumentService.ASSOC_COMPLETION_SIGNAL_SENDER);
+            }
+        }
+    }
+
+    @Override
+    public void resetCompletionSignal(NodeRef document) {
+        if (document != null && nodeService.exists(document)) {
+            nodeService.removeAspect(document, EDSDocumentService.ASPECT_COMPLETION_SIGNAL);
+        }
     }
 }

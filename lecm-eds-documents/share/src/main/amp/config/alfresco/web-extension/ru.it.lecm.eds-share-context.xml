@@ -7,6 +7,7 @@
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<util:list id="eds.share.configs">
+		<value>classpath:alfresco/web-extension/ru/it/lecm/eds-documents/controls.xml</value>
 		<value>classpath:alfresco/web-extension/ru/it/lecm/eds-documents/eds-share-config.xml</value>
 	</util:list>
 

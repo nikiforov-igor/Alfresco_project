@@ -105,7 +105,7 @@
 		<value>alfresco/module/${artifactId}/arm/review-settings-arm.xml</value>
 	</util:list>
 	<bean id="review.admin.arm.bootstrap" parent="lecmDictionaryBootstrap"
-		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
+		  depends-on="arm.settings.LogicEcmBootstrap"
 		  p:rootPath="/Business platform/LECM/Сервис АРМ"
 		  p:dictionaries-ref="review.admin.arm.dictionaries"/>
 
