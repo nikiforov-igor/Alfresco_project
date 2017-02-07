@@ -13,9 +13,9 @@
 	<#assign attributeForShow = params.attributeForShow/>
 </#if>
 
-<#assign showActions = "true"/>
-<#if params.showActions??>
-	<#assign showActions = params.showActions/>
+<#assign showActions = false/>
+<#if params.showActions?? && params.showActions == "true">
+	<#assign showActions = true/>
 </#if>
 
 <#assign isTableSortable = false/>
@@ -55,7 +55,7 @@
 					expandable: true,
 					expandDataSource: "components/form?formId=table-structure-expand",
 					documentNodeRef: "${form.arguments.itemId}",
-					showActions: true
+					showActions: ${showActions?string}
 				});
 	}
 	function init() {
@@ -74,10 +74,19 @@
 //]]></script>
 
 <div class="form-field with-grid coexecutors-report" id="${controlId}">
-	<div class="reports-filter-block">
-		<input type="checkbox" id="${controlId}-change-filter">
-		<label id="${controlId}-change-filter-label" for="${controlId}-change-filter"></label>
-	</div>
+	<div class="coexecutors-reports-additional-block">
+		<div class="reports-filter-block">
+			<input type="checkbox" id="${controlId}-change-filter">
+			<label id="${controlId}-change-filter-label" for="${controlId}-change-filter"></label>
+		</div>
+		<div class="reports-transfer-block">
+			 <span id="${controlId}-exec-report-transfer-coexecutors-reports" class="yui-button yui-push-button">
+				<span class="first-child">
+					<button>${msg("button.errands.executionReport.transferCoexecutorsReports")}</button>
+				</span>
+			</span>
+		</div>
+    </div>
 	<@grid.datagrid containerId false/>
 	<div id="${controlId}-container">
 		<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>

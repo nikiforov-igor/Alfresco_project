@@ -10,6 +10,7 @@
 					<show id="bpm:workflowDescription" />
 					<show id="lecmRegnumRes:mode" />
 					<show id="lecmRegnumRes:date" />
+					<show id="lecmRegnumRes:regnumberTemplateCode" />
 				</field-visibility>
 				<appearance>
 					<field id="warning">
@@ -35,6 +36,9 @@
 							<control-param name="showTime">false</control-param>
 							<control-param name="defaultValue">now</control-param>
 						</control>
+					</field>
+					<field id="lecmRegnumRes:regnumberTemplateCode">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
 				</appearance>
 			</form>

@@ -1,6 +1,11 @@
 <webscript>
     <shortname>Вложения</shortname>
-    <description>Компонент "Вложения"</description>
+    <description>
+		Компонент "Вложения"
+
+		Дополнительные необязательные параметры для получения вложений документа-основания
+		baseDocAssocName - имя ассоциации указывающей на документ основание
+	</description>
     <family>document-dashlet</family>
-    <url>/lecm/components/dashlets/document-attachments</url>
+    <url>/lecm/components/dashlets/document-attachments?baseDocAssocName={baseDocAssocName}</url>
 </webscript>

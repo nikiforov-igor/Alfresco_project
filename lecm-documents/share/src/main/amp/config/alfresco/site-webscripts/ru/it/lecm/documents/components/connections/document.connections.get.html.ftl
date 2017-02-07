@@ -67,11 +67,11 @@
                         Alfresco.util.createTwister("${el}-heading", "DocumentConnections");
 
                         if (documentConnectionsComponent == null) {
-                            documentConnectionsComponent = new LogicECM.DocumentConnections("${el}").setOptions(
-                                    {
-                                        nodeRef: "${nodeRef}",
-                                        title: "${msg('heading')}"
-                                    }).setMessages(${messages});
+                            documentConnectionsComponent = new LogicECM.DocumentConnections("${el}").setOptions({
+                                nodeRef: "${nodeRef}",
+                                title: "${msg('heading')}",
+								excludeType: "${excludeType!""}"
+                            }).setMessages(${messages});
                         }
                     }
 

@@ -98,24 +98,24 @@
 }
 
 .datagrid .expandRow a {
-    background-image: url("/share/res/images/lecm-base/components/triangle_down.png");
+    background-image: url("../../../images/lecm-base/components/triangle_down.png");
 }
 
 .datagrid .expanded .expandRow a {
-    background-image: url("/share/res/images/lecm-base/components/triangle_up.png");
+    background-image: url("../../../images/lecm-base/components/triangle_up.png");
 }
 
 .datagrid .onAddRow a {
-    background-image: url("/share/res/components/images/plus-16.png");
+    background-image: url("../../../components/images/plus-16.png");
 }
 
 .datagrid .onMoveTableRowUp a {
-    background-image: url("/share/res/images/lecm-base/components/triangle_up.png");
+    background-image: url("../../../images/lecm-base/components/triangle_up.png");
 	background-position: 4px 4px;
 }
 
 .datagrid .onMoveTableRowDown a {
-    background-image: url("/share/res/images/lecm-base/components/triangle_down.png");
+    background-image: url("../../../images/lecm-base/components/triangle_down.png");
 	background-position: 4px 4px;
 }
 
@@ -158,7 +158,7 @@
 }
 
 .boolean-true {
-    background: url("/share/res/components/images/complete-16.png") no-repeat center;
+    background: url("../../../components/images/complete-16.png") no-repeat center;
 }
 
 .datagrid .yui-dt-col-actions .yui-dt-liner {

@@ -1,19 +1,19 @@
 #lecm-menu #menu-buttons #menu-buttons-mainBtn span.first-child {
-	background: url('/share/res/images/lecm-contracts/alf_contracts_main_32.png') no-repeat 4px 4px;
+	background: url('../../images/lecm-base/components/docs-common/alf_documents_main_32.png') no-repeat 4px 4px;
 }
 #lecm-menu #menu-buttons-listBtn span.first-child {
-    background: url('/share/res/images/lecm-contracts/alf_contracts_list_32.png') no-repeat 4px 4px;
+    background: url('../../images/lecm-base/components/docs-common/alf_documents_list_32.png') no-repeat 4px 4px;
 }
 
 #lecm-menu #menu-buttons-documentsBtn span.first-child {
-    background: url('/share/res/images/lecm-contracts/alf_contracts_documents_32.png') no-repeat 4px 4px;
+    background: url('../../images/lecm-contracts/alf_contracts_documents_32.png') no-repeat 4px 4px;
 }
 
 #lecm-menu #menu-buttons-reportsBtn span.first-child {
-    background: url('/share/res/images/lecm-contracts/alf_contracts_reports_32.png') no-repeat 4px 4px;
+    background: url('../../images/lecm-base/components/docs-common/alf_documents_reports_32.png') no-repeat 4px 4px;
 }
 
 #lecm-menu #menu-buttons-archiveBtn span.first-child {
-    background: url('/share/res/images/lecm-contracts/alf_contracts_list_32.png') no-repeat 4px 4px;
+    background: url('../../images/lecm-base/components/docs-common/alf_documents_list_32.png') no-repeat 4px 4px;
 }
 

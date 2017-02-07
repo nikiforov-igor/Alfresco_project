@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -29,6 +30,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	private OrgstructureBean orgstructureService;
     private NamespaceService namespaceService;
 	private DictionaryBean dictionaryService;
+	private DocumentGlobalSettingsService documentGlobalSettingsService;
 	private NodeRef settingsNode;
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
@@ -43,6 +45,10 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
         this.dictionaryService = dictionaryService;
     }
 
+	public void setDocumentGlobalSettingsService(DocumentGlobalSettingsService documentGlobalSettingsService) {
+		this.documentGlobalSettingsService = documentGlobalSettingsService;
+	}
+    
 	@Override
 	public NodeRef getServiceRootFolder() {
             return getFolder(EDS_GLOBAL_SETTINGS_FOLDER_ID);
@@ -251,13 +257,10 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
         return false;
     }
 
+	@Deprecated
     @Override
     public Boolean isHideProperties() {
-        NodeRef settings = getSettingsNode();
-        if (settings != null) {
-            return (Boolean) nodeService.getProperty(settings, PROP_SETTINGS_HIDE_PROPS);
-        }
-        return false;
+		return documentGlobalSettingsService.isHideProperties();
     }
 
 	@Override
@@ -295,13 +298,9 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 		return registrars;
 	}
 
+	@Deprecated
 	@Override
 	public String getLinksViewMode() {
-		String mode = null;
-		NodeRef settings = getSettingsNode();
-		if (settings != null) {
-			mode = (String) nodeService.getProperty(settings, PROP_SETTINGS_LINKS_VIEW_MODE);
-		}
-		return mode != null ? mode : "VIEW_ALL";
+		return documentGlobalSettingsService.getLinksViewMode();
 	}
 }

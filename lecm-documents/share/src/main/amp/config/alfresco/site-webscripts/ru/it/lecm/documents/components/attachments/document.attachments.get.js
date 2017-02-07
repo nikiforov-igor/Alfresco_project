@@ -5,6 +5,7 @@
 function main() {
 	AlfrescoUtil.param("nodeRef");
 	AlfrescoUtil.param("view", "");
+	var baseDocAssocName = AlfrescoUtil.param("baseDocAssocName", null);
 	var hasPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
 	if (hasPerm) {
 		var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
@@ -21,7 +22,7 @@ function main() {
 			}
 
 			if (!withoutAttachments) {
-				var atts = getAttachments(model.nodeRef);
+				var atts = getAttachments(model.nodeRef, null, baseDocAssocName);
 				if (atts != null) {
 					model.attachments = atts;
 				}
@@ -31,8 +32,11 @@ function main() {
 	}
 }
 
-function getAttachments(nodeRef, defaultValue) {
+function getAttachments(nodeRef, defaultValue, baseDocAssocName) {
 	var url = '/lecm/document/attachments/api/get?documentNodeRef=' + nodeRef + "&count=5";
+	if (baseDocAssocName) {
+		url += '&baseDocAssocName=' + encodeURIComponent(baseDocAssocName);
+	}
 	var result = remote.connect("alfresco").get(url);
 	if (result.status != 200) {
 		if (defaultValue !== undefined) {

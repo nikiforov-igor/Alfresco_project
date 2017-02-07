@@ -83,20 +83,12 @@
 	</bean>
 
 	<bean id="reservationWorkflowService2" parent="lecmWorkflowService"
-		  class="ru.it.lecm.workflow.reservation.ReservationWorkflowServiceImpl2"
+		  class="ru.it.lecm.workflow.reservation.deprecated.ReservationWorkflowServiceImpl2"
 		  depends-on="reservation.model.bootstrap"
 		  p:edsGlobalSettingsService-ref="eds.global-settings.service"
 		  p:regNumbersService-ref="regNumbersService"
 		  p:businessJournalService-ref="businessJournalService"
 		  p:notificationsService-ref="notificationsService" />
-	
-	<util:list id="lecm.reservatioin.groupOperations">
-		<value>alfresco/module/reservation-repo/actions/reservation.xml</value>
-	</util:list>
-
-	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
-		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
-		  p:dictionaries-ref="lecm.reservatioin.groupOperations" />
 
 	<bean id="webscript.ru.it.lecm.workflow.reservation.GetReservationTaskMessageByNodeRef.get"
 		  class="ru.it.lecm.workflow.reservation.webscripts.GetReservationTaskMessageByNodeRef" parent="webscript"

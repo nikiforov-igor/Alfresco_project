@@ -21,7 +21,7 @@
 		<dependency>
 			<groupId>ru.it.lecm.base</groupId>
 			<artifactId>base-repo-api</artifactId>
-			<version>${project.version}</version>
+			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

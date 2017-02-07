@@ -2518,7 +2518,7 @@ LogicECM.module = LogicECM.module || {};
 	            var onError = "";
                 if (item.type && item.type.indexOf("lecm") >=0 && item.type.indexOf("document") >=0) {
                     src = Alfresco.constants.URL_RESCONTEXT + "images/lecm-documents/type-icons/" + item.type.replace(":", "_") + ".png";
-	                onError = "onerror=\"this.src = '/share/res/images/lecm-documents/type-icons/default_document.png';\"";
+	                onError = "onerror=\"this.src = '" + Alfresco.constants.URL_RESCONTEXT + "images/lecm-documents/type-icons/default_document.png';\"";
                 } else {
                     src = me.getIconURL(item, iconSize);
                 }

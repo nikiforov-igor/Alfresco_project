@@ -44,7 +44,7 @@ if (nodeRef != 'empty') {
                 var first = ppl.properties["cm:firstName"];
                 var last = ppl.properties["cm:lastName"];
                 var fullName = first + " " + last;
-                var link = new String(url.server + "/share/page/user/" + login + "/profile");
+                var link = new String(url.server + "/" + base.getShareContext() + "/page/user/" + login + "/profile");
                 var ref = ppl.getNodeRef().toString();
 
                 node.createAssociation(ppl, "lecm-exp:experts");

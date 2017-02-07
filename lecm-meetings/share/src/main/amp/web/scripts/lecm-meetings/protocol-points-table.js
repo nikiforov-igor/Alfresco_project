@@ -111,7 +111,8 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                 Alfresco.util.Ajax.jsonGet({
                     url: Alfresco.constants.PROXY_URI + 'lecm/document/connections/api/getConnectionsWithDocument',
                     dataObj: {
-                        documentNodeRef: this.options.itemId
+                        documentNodeRef: this.options.itemId,
+						excludeType: 'lecm-errands:document'
                     },
                     successCallback: {
                         scope: this,

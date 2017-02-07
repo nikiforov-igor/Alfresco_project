@@ -24,7 +24,7 @@
 
 .attributes .yui-dt-liner .delete {
 	display: block;
-	background: url(/share/res/components/images/delete-16.png) no-repeat center center;
+	background: url(../../../../components/images/delete-16.png) no-repeat center center;
 	cursor: pointer;
 	min-height: 16px;
 }

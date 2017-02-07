@@ -1,16 +1,16 @@
 #lecm-menu #menu-buttons #menu-buttons-modelEditorHomeBtn span.first-child {
-	background: url('/share/res/images/lecm-statemachine-editor/home.png') no-repeat 4px 4px;
+	background: url('../../images/lecm-statemachine-editor/home.png') no-repeat 4px 4px;
 }
 #lecm-menu #menu-buttons #menu-buttons-stateMachineHomeBtn span.first-child {
 	margin-bottom: 10px;
-	background: url('/share/res/images/lecm-statemachine-editor/home.png') no-repeat 4px 4px;
+	background: url('../../images/lecm-statemachine-editor/home.png') no-repeat 4px 4px;
 }
 #lecm-menu #menu-buttons #menu-buttons-formsEditorHomeBtn span.first-child {
-	background: url('/share/res/images/lecm-statemachine-editor/home.png') no-repeat 4px 4px;
+	background: url('../../images/lecm-statemachine-editor/home.png') no-repeat 4px 4px;
 }
 #lecm-menu #menu-buttons #menu-buttons-controlsEditorHomeBtn span.first-child {
-	background: url('/share/res/images/lecm-statemachine-editor/home.png') no-repeat 4px 4px;
+	background: url('../../images/lecm-statemachine-editor/home.png') no-repeat 4px 4px;
 }
 #lecm-menu #menu-buttons #menu-buttons-modelListHomeBtn span.first-child {
-	background: url('/share/res/images/lecm-statemachine-editor/back.png') no-repeat 4px 4px;
+	background: url('../../images/lecm-statemachine-editor/back.png') no-repeat 4px 4px;
 }

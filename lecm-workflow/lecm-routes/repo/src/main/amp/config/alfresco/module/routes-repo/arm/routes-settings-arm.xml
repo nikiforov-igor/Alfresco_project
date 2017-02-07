@@ -1,35 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
 	<item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary">
-		<property name="cm:name">Настройки АРМ</property>
-		<property name="lecm-dic:attributeForShow">cm:name</property>
-		<property name="lecm-dic:type">lecm-arm:arm</property>
-		<property name="lecm-dic:active">true</property>
-		<property name="lecm-dic:plane">false</property>
-		<property name="lecm-dic:description">Настройки АРМ</property>
 		<items>
-		    <item name="cm:Администрирование" type="lecm-arm:arm">
-		        <property name="cm:name"><![CDATA[Администрирование]]></property>
-		        <property name="lecm-arm:code"><![CDATA[ADMIN]]></property>
-		        <items>
-		            <item name="cm:Другие настройки" type="lecm-arm:accordion">
-		                <property name="cm:name"><![CDATA[Другие настройки]]></property>
-		                <property name="lecm-arm:order"><![CDATA[200]]></property>
-		                <property name="lecm-arm:search-type"><![CDATA[]]></property>
-		                <property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
-		                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-		                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+			<item name="cm:Администрирование" type="lecm-arm:arm">
+				<items>
+					<item name="cm:Другие настройки" type="lecm-arm:accordion">
 						<items>
-							<item name="cm:Настройки СЭД" type="lecm-arm:html-node">
-						        <property name="cm:name"><![CDATA[Настройки СЭД]]></property>
-						        <property name="lecm-arm:order"><![CDATA[60]]></property>
-						        <property name="lecm-arm:html-url"><![CDATA[page/lecm/arm/blank?title=Настройки СЭД&description=Общие настройки СЭД и настройки маршрутов]]></property>
+							<item name="cm:Настройки согласования" type="lecm-arm:html-node">
 								<items>
-								    <item name="cm:Настройки маршрутов" type="lecm-arm:html-node">
-								        <property name="cm:name"><![CDATA[Настройки маршрутов]]></property>
-								        <property name="lecm-arm:order"><![CDATA[20]]></property>
-								        <property name="lecm-arm:html-url"><![CDATA[page/routes]]></property>
-								    </item>
+									<item name="cm:Маршруты согласования" type="lecm-arm:html-node">
+										<property name="cm:name"><![CDATA[Маршруты согласования]]></property>
+										<property name="lecm-arm:order"><![CDATA[20]]></property>
+										<property name="lecm-arm:html-url"><![CDATA[page/routes]]></property>
+									</item>
 								</items>
 							</item>
 						</items>

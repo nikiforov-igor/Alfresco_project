@@ -46,10 +46,18 @@
 		  p:lecmTransactionHelper-ref="lecmTransactionHelper"
 		  p:authService-ref="authenticationService"
 		  p:lecmServicesRegistry-ref="lecmServicesRegistry"
+		  p:urlService-ref="urlService"
 		  p:repository-ref="repositoryHelper"/>
+
+	<bean id="urlService" class="ru.it.lecm.base.beans.LecmURLServiceImpl">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="globalProperties" ref="global-properties"/>
+		<property name="adminParams" ref="sysAdminParams"/>
+	</bean>
 
 	<bean id="baseScript" class="ru.it.lecm.base.beans.BaseWebScript" abstract="true" parent="baseJavaScriptExtension">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="urlService" ref="urlService"/>
 	</bean>
 
 	<bean id="ServiceFolderPermissionHelper" init-method="bootstrap" abstract="true"
@@ -123,6 +131,7 @@
 		<property name="workflowNodeConverter" ref="activitiNodeConverter"/>
 		<property name="globalProperties" ref="global-properties"/>
 		<property name="repositoryStructureHelper" ref="repositoryStructureHelper"/>
+		<property name="urlService" ref="urlService"/>
 	</bean>
 
 	<bean id="lecmRepositoryWebScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.LecmRepositoryWebScriptBean">
@@ -221,7 +230,7 @@
 		</property>
 	</bean>
 
-	<bean id="links.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap"
+	<bean id="links.LogicEcmBootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap">
 		<property name="models">
 			<list>

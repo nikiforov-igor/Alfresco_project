@@ -33,7 +33,8 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			options:{
 				itemId: "",
 				forTask: true,
-                                selectedAttachmentNodeRef: ""
+                selectedAttachmentNodeRef: "",
+				baseDocAssocName: null
 			},
 
 			documentNodeRef: null,
@@ -78,7 +79,12 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 				if (this.options.itemId != null) {
 					Alfresco.util.Ajax.request({
 						method: "GET",
-						url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/attachments/api/get?documentNodeRef=" + this.documentNodeRef + "&showEmptyCategory=true",
+						url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/attachments/api/get",
+						dataObj: {
+							documentNodeRef: this.documentNodeRef,
+							showEmptyCategory: true,
+							baseDocAssocName: this.options.baseDocAssocName
+						},
 						successCallback: {
 							fn: function (response) {
 								var result = response.json;

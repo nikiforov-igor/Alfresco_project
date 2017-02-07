@@ -67,7 +67,7 @@
                     <item name="cm:Дата регистрации договора" type="lecm-rpeditor:reportDataColumn">
                         <property name="cm:name"><![CDATA[Дата регистрации договора]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{lecm-contract:dateRegContracts}]]></property>
+                            <![CDATA[{lecm-document:doc-date}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_DateRegContracts]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
@@ -115,7 +115,7 @@
                     <item name="cm:Регистрационный номер договора" type="lecm-rpeditor:reportDataColumn">
                         <property name="cm:name"><![CDATA[Регистрационный номер договора]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{lecm-contract:regNumSystem}]]></property>
+                            <![CDATA[{lecm-document:regnum}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_Regnum]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
@@ -139,7 +139,7 @@
                     <item name="cm:Регистрационный номер проекта договора" type="lecm-rpeditor:reportDataColumn">
                         <property name="cm:name"><![CDATA[Регистрационный номер проекта договора]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{lecm-contract:regNumProject}]]></property>
+                            <![CDATA[{lecm-document-aspects:reg-project-data-number}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_RegnumProject]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>

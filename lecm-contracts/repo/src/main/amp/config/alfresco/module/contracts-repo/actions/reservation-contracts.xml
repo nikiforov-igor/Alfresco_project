@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items updateMode="CreateOrUpdate">
+    <item name="cm:Договоры. Запросить номер" type="lecm-group-actions:workflow-action">
+        <property name="cm:name"><![CDATA[Договоры. Запросить номер]]></property>
+        <property name="cm:title"><![CDATA[Запросить номер]]></property>
+        <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
+        <property name="lecm-group-actions:type"><![CDATA[[lecm-contract:document]]]></property>
+        <property name="lecm-group-actions:order"><![CDATA[0]]></property>
+        <property name="lecm-group-actions:expression">
+            <![CDATA[(doc.attr("lecm-document-aspects:reg-data-is-registered") == null or doc.attr("lecm-document-aspects:reg-data-is-registered") == false) and (doc.attr("lecm-reservation-aspects:isReservationRunning") == null OR !doc.attr("lecm-reservation-aspects:isReservationRunning")) and (doc.attr("lecm-reservation-aspects:isReserved") == null or doc.attr("lecm-reservation-aspects:isReserved") == false) and doc.attr("lecm-statemachine:status") != "Черновик" and doc.attr("lecm-statemachine:status") != "Удален"]]></property>
+        <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
+        <property name="lecm-group-actions:availableForReader"><![CDATA[false]]></property>
+        <property name="lecm-group-actions:workflow"><![CDATA[activiti$regnumReservationExecution]]></property>
+        <items>
+            <item name="cm:cfca81ac-180e-44be-a4f8-b392ebf112a4" type="lecm-stmeditor:inputFormVariable">
+                <property name="cm:name"><![CDATA[cfca81ac-180e-44be-a4f8-b392ebf112a4]]></property>
+                <property name="lecm-stmeditor:formInputToValue"><![CDATA[prop_lecmRegnumRes_regnumberTemplateCode]]></property>
+                <property name="lecm-stmeditor:formInputFromType"><![CDATA[VALUE]]></property>
+                <property name="lecm-stmeditor:formInputFromValue"><![CDATA[CONTRACT_REGNUM]]></property>
+            </item>
+        </items>
+    </item>
+</items>

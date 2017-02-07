@@ -101,7 +101,7 @@ div.metadata-form div.lecm-dashlet-actions + div {
 }
 
 .document-components-panel .alfresco-twister-actions .expand {
-    background-image: url("/share/res/images/lecm-documents/expand-16.png");
+    background-image: url("../images/lecm-documents/expand-16.png");
     display: none;
     opacity: .8;
 }
@@ -190,7 +190,7 @@ div.metadata-form div.lecm-dashlet-actions + div {
 
 .form-container .edit-metadata a,
 .form-container .edit-metadata a:visited {
-    background: transparent url(/share/res/components/documentlibrary/actions/document-edit-metadata-16.png) no-repeat 12px 4px;
+    background: transparent url(../components/documentlibrary/actions/document-edit-metadata-16.png) no-repeat 12px 4px;
     padding-left: 32px;
 }
 
@@ -207,25 +207,14 @@ div.metadata-form div.lecm-dashlet-actions + div {
     color: #CC6600;
 }
 .WORKFLOWTASKPRIORITY_LOW {
-    background-image: url("/share/res/components/images/priority-low-16.png");
+    background-image: url("../components/images/priority-low-16.png");
 }
 .WORKFLOWTASKPRIORITY_MEDIUM {
-    background-image: url("/share/res/components/images/priority-medium-16.png");
+    background-image: url("../components/images/priority-medium-16.png");
 }
 .WORKFLOWTASKPRIORITY_HIGH {
-    background-image: url("/share/res/components/images/priority-high-16.png");
+    background-image: url("../components/images/priority-high-16.png");
 }
-
-.errands-after {
-    color: #cd853f;
-}
-.errands-new {
-    color: #008000;
-}
-.errands-overdue {
-     color: red;
- }
-
 
 .workflow-date {
     font-size: 12px;
@@ -267,7 +256,7 @@ div.metadata-form div.lecm-dashlet-actions + div {
 }
 
 .right-more-link-arrow {
-    background-image: url(/share/res/images/lecm-documents/gray_arrow.png);
+    background-image: url(../images/lecm-documents/gray_arrow.png);
     float: right;
     width: 12px;
     height: 11px;
@@ -305,12 +294,6 @@ div.metadata-form div.lecm-dashlet-actions + div {
     color:#666666;
     padding-bottom: 10px;
     float: left;
-}
-.errands-list-category-title {
-    font-size:20px;
-    font-weight:bold;
-    color:#666666;
-    padding-bottom: 10px;
 }
 .list-workflows-title {
 	font-size:20px;
@@ -363,13 +346,13 @@ div.metadata-form div.lecm-dashlet-actions + div {
 .lecm-dashlet-actions .add {
     display: inline-block;
     height: 18px;
-    background: url("/share/res/images/lecm-contracts/alf_contract_add.png") 1px 1px no-repeat;
+    background: url("../images/lecm-base/components/docs-common/alf_document_add.png") 1px 1px no-repeat;
     padding: 2px 20px;
     margin-left: 40px;
 }
 
 .document-components-panel .alfresco-twister-actions .refresh {
-    background-image: url(/share/res/themes/lecmTheme/images/refresh-16.png);
+    background-image: url(../themes/lecmTheme/images/refresh-16.png);
     display: none;
     opacity: .8;
 }
@@ -381,7 +364,7 @@ div.metadata-form div.lecm-dashlet-actions + div {
 }
 
 .lecm-document-content-ajax-loading {
-    background: url(/share/res/images/lecm-documents/ajax-loader.gif) no-repeat center center;
+    background: url(../images/lecm-documents/ajax-loader.gif) no-repeat center center;
     width: 99%;
     height: 40px;
     margin: 3px;
@@ -397,12 +380,12 @@ div.metadata-form div.lecm-dashlet-actions + div {
 }
 
 .task-marker {
-    background: url(/share/images/lecm-documents/task-marker.png) no-repeat 3px 3px;
+    background: url(../images/lecm-documents/task-marker.png) no-repeat 3px 3px;
     padding-left: 22px;
 }
 
 .chief-task-marker {
-    background: url(/share/images/lecm-documents/chief-task-marker.png) no-repeat 3px 3px;
+    background: url(../images/lecm-documents/chief-task-marker.png) no-repeat 3px 3px;
     padding-left: 22px;
     margin-bottom: 0px;
 }

@@ -49,10 +49,10 @@
 					<tr class="detail-list-item <#if item_has_next>border-bottom</#if>">
 						<td class="icon">
 							<#if item.connectedDocument?? && item.connectedDocument.type??>
-								<img src="/share/res/images/lecm-documents/type-icons/${item.connectedDocument.type?replace(":", "_")}.png"
-								     onerror="this.src = '/share/res/images/lecm-documents/type-icons/default_document.png';"/>
+								<img src="${url.context}/res/images/lecm-documents/type-icons/${item.connectedDocument.type?replace(":", "_")}.png"
+								     onerror="this.src = '${url.context}/res/images/lecm-documents/type-icons/default_document.png';"/>
 							<#else>
-								<img src="/share/res/images/lecm-documents/type-icons/default_document.png"/>
+								<img src="${url.context}/res/images/lecm-documents/type-icons/default_document.png"/>
 							</#if>
 						</td>
 						<td class="connection <#if item.connectedDocument?? && !item.connectedDocument.hasAccess>dont-have-access</#if>">
@@ -110,10 +110,10 @@
 				<tr class="detail-list-item <#if item_has_next>border-bottom</#if>">
 					<td class="icon">
 						<#if item.primaryDocument?? && item.primaryDocument.type??>
-							<img src="/share/res/images/lecm-documents/type-icons/${item.primaryDocument.type?replace(":", "_")}.png"
-							     onerror="this.src = '/share/res/images/lecm-documents/type-icons/default_document.png';"/>
+							<img src="${url.context}/res/images/lecm-documents/type-icons/${item.primaryDocument.type?replace(":", "_")}.png"
+							     onerror="this.src = '${url.context}/res/images/lecm-documents/type-icons/default_document.png';"/>
 						<#else>
-							<img src="/share/res/images/lecm-documents/type-icons/default_document.png"/>
+							<img src="${url.context}/res/images/lecm-documents/type-icons/default_document.png"/>
 						</#if>
 					</td>
 					<td class="connection <#if item.primaryDocument?? && !item.primaryDocument.hasAccess>dont-have-access</#if>">
@@ -150,10 +150,10 @@
 	</div>
 
 		<script type="text/javascript">//<![CDATA[
-			new LogicECM.DocumentConnectionsList("${el}").setOptions(
-					{
-						documentNodeRef: "${nodeRef}"
-					}).setMessages(${messages});
+			new LogicECM.DocumentConnectionsList("${el}").setOptions({
+				documentNodeRef: "${nodeRef}",
+				excludeType: "${excludeType!""}"
+			}).setMessages(${messages});
 		YAHOO.util.Event.onContentReady("${el}-graph-tree", function() {
 			YAHOO.Bubbling.fire("graphContainerReady");
 		});

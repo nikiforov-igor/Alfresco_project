@@ -6,18 +6,18 @@
 	</head>
 	<body>
 		<h2>${msg("title.export")}</h2>
-		<a href="/share/proxy/alfresco/lecm/ogstructure/export/positions">${msg("text.staff-positions")} (positions)</a>
+		<a href="${url.context}/proxy/alfresco/lecm/ogstructure/export/positions">${msg("text.staff-positions")} (positions)</a>
 		<br>
-		<a href="/share/proxy/alfresco/lecm/ogstructure/export/employees">${msg("text.employees")} (employees)</a>
+		<a href="${url.context}/proxy/alfresco/lecm/ogstructure/export/employees">${msg("text.employees")} (employees)</a>
 		<br>
-		<a href="/share/proxy/alfresco/lecm/ogstructure/export/departments">${msg("text.departments")} (departments)</a>
+		<a href="${url.context}/proxy/alfresco/lecm/ogstructure/export/departments">${msg("text.departments")} (departments)</a>
 		<br>
-		<a href="/share/proxy/alfresco/lecm/ogstructure/export/staffList">${msg("text.staff-list")} (staffList)</a>
+		<a href="${url.context}/proxy/alfresco/lecm/ogstructure/export/staffList">${msg("text.staff-list")} (staffList)</a>
 		<br>
-		<a href="/share/proxy/alfresco/lecm/ogstructure/export/businessRoles">${msg("text.business-roles")} (businessRoles)</a>
+		<a href="${url.context}/proxy/alfresco/lecm/ogstructure/export/businessRoles">${msg("text.business-roles")} (businessRoles)</a>
 		<br>
 		<h2>${msg("title.import")}</h2>
-		<form action="/share/proxy/alfresco/lecm/ogstructure/import" method="POST" enctype="multipart/form-data">
+		<form action="${url.context}/proxy/alfresco/lecm/ogstructure/import" method="POST" enctype="multipart/form-data">
 			<table border="0">
 				<tr>
 					<td>${msg("text.staff-positions")} (positions):</td>

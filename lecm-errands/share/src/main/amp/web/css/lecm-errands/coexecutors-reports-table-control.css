@@ -26,3 +26,23 @@
     width: 130px;
     padding-left: 50px;
 }
+
+.form-field.with-grid.coexecutors-report .coexecutors-reports-additional-block .reports-filter-block {
+    float: left;
+}
+
+.form-field.with-grid.coexecutors-report .coexecutors-reports-additional-block .reports-filter-block > label {
+    float: right;
+}
+
+.form-field.with-grid.coexecutors-report .coexecutors-reports-additional-block .reports-transfer-block {
+    float: right;
+}
+
+.form-field.with-grid.coexecutors-report .datagrid {
+    clear: both;
+}
+
+.datagrid .grid table tbody tr.declined {
+    background-color: #ffe1e1;
+}

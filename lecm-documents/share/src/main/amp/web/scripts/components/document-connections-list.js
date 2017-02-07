@@ -26,7 +26,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	YAHOO.extend(LogicECM.DocumentConnectionsList, Alfresco.component.Base,
 		{
 			options: {
-				documentNodeRef: null
+				documentNodeRef: null,
+				excludeType: null
 			},
 
 			connectButton: null,
@@ -199,7 +200,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/connections-list",
 						dataObj: {
 							nodeRef: this.options.documentNodeRef,
-							htmlid: this.id + "-" + Alfresco.util.generateDomId()
+							htmlid: this.id + "-" + Alfresco.util.generateDomId(),
+							excludeType: this.options.excludeType
 						},
 						successCallback: {
 							fn:function(response){
