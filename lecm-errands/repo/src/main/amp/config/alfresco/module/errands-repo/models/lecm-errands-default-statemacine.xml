@@ -3872,49 +3872,20 @@ if (document) {
                                                                 <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-execute-errand-script.js">
 var doc = bpm_package.children[0];
 if (doc) {
-
-  var countErrandsFinal = 0;
-  var isAllChildErrandsOnFinal = false;
-
-  var children = [];
-  var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
-  var childrenResolutions = errands.getChildResolutions(doc.nodeRef.toString());
-
+  ExecuteErrandScript.processChildExecutedSignal(doc);
   if (childrenErrands && childrenErrands.length) {
-    for (var i =0; i < childrenErrands.length; i++) {
-      if (statemachine.isFinal(childrenErrands[i].nodeRef.toString())) {
-        countErrandsFinal++;
+      var countErrandsFinal = 0;
+      for (var i =0; i < childrenErrands.length; i++) {
+          if (statemachine.isFinal(childrenErrands[i].nodeRef.toString())) {
+            countErrandsFinal++;
+          }
       }
-    }
-    if (countErrandsFinal == childrenErrands.length) {
-      isAllChildErrandsOnFinal = true;
-    }
-    children = children.concat(childrenErrands);
+      if (countErrandsFinal == childrenErrands.length && !doc.properties["lecm-errands:report-required"]) {
+          doc.properties["lecm-errands:transit-to-executed"] = true;
+          doc.save();
+      }
   }
-
-  if (childrenResolutions) {
-    children = children.concat(childrenResolutions);
-  }
-  var completionReason = doc.properties["lecm-eds-aspect:completion-signal-reason"];
-  var isProcessExecutedChild = children.some(function(child) {
-    var isStatusOk = child.properties["lecm-statemachine:status"] == "Исполнено";
-    var isAutoClose = child.properties["lecm-errands:auto-close"];
-    var isCompleteReasonOk = child.properties["lecm-errands:execution-report"] == completionReason;
-    return isStatusOk && isAutoClose && isCompleteReasonOk;
-  });
-
-  if (isProcessExecutedChild) {
-    if (doc.properties["lecm-errands:execution-report-status"] == "PROJECT") {
-      doc.properties["lecm-errands:execution-report"] += '<p>' + doc.properties["lecm-eds-aspect:completion-signal-reason"] + '</p>';
-    } else if (!doc.properties["lecm-errands:execution-report-status"]) {
-      	doc.properties["lecm-errands:execution-report-status"] = "PROJECT";
-    	doc.properties["lecm-errands:execution-report"] = doc.properties["lecm-eds-aspect:completion-signal-reason"];
-    }
-    ExecuteErrandScript.executeErrand(doc, false);
-  }
-  doc.properties["lecm-errands:transit-to-executed"] = isAllChildErrandsOnFinal;
-  doc.properties["lecm-eds-aspect:child-change-signal-count"] = 0;
-  doc.save();
+  edsDocument.resetChildChangeSignal(doc);
 }]]></value>
                                                             </property>
                                                             <property>
@@ -6377,35 +6348,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                 <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-execute-errand-script.js">
 var doc = bpm_package.children[0];
 if (doc) {
-  var children = [];
-  var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
-  var childrenResolutions = errands.getChildResolutions(doc.nodeRef.toString());
-  if (childrenErrands) {
-    children = children.concat(childrenErrands);
-  }
-  if (childrenResolutions) {
-    children = children.concat(childrenResolutions);
-  }
-
-  var completionReason = doc.properties["lecm-eds-aspect:completion-signal-reason"];
-  var isProcessExecutedChild = children.some(function(child) {
-    var isStatusOk = child.properties["lecm-statemachine:status"] == "Исполнено";
-    var isAutoClose = child.properties["lecm-errands:auto-close"];
-    var isCompleteReasonOk = child.properties["lecm-errands:execution-report"] == completionReason;
-    return isStatusOk && isAutoClose && isCompleteReasonOk;
-  });
-
-  if (isProcessExecutedChild) {
-    if (doc.properties["lecm-errands:execution-report-status"] == "PROJECT") {
-      doc.properties["lecm-errands:execution-report"] += '<p>' + doc.properties["lecm-eds-aspect:completion-signal-reason"] + '</p>';
-    } else if (!doc.properties["lecm-errands:execution-report-status"]) {
-      	doc.properties["lecm-errands:execution-report-status"] = "PROJECT";
-    	doc.properties["lecm-errands:execution-report"] = doc.properties["lecm-eds-aspect:completion-signal-reason"];
-    }
-    ExecuteErrandScript.executeErrand(doc, false);
-  }
-  doc.properties["lecm-eds-aspect:child-change-signal-count"] = 0;
-  doc.save();
+    ExecuteErrandScript.processChildExecutedSignal(doc);
 }]]></value>
                                                             </property>
                                                         </properties>
@@ -6416,10 +6359,6 @@ if (doc) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
-                                                </nodes>
-                                            </subFolder>
-                                        </subFolders>
-                                    </node>
                                                     <node>
                                                         <type>transition</type>
                                                         <name>b4e5efdc-54d2-466e-9ea2-cff73f2e9592</name>

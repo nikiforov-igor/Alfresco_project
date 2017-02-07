@@ -1,5 +1,35 @@
 var ExecuteErrandScript = {
-  executeErrand: function(document, closeChild){
+
+  processChildExecutedSignal: function (doc) {
+      var children = [];
+      var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
+      var childrenResolutions = errands.getChildResolutions(doc.nodeRef.toString());
+      if (childrenErrands) {
+          children = children.concat(childrenErrands);
+      }
+      if (childrenResolutions) {
+          children = children.concat(childrenResolutions);
+      }
+      var completionReason = doc.properties["lecm-eds-aspect:completion-signal-reason"];
+      var isProcessExecutedChild = children.some(function (child) {
+          var isStatusOk = child.properties["lecm-statemachine:status"] == "Исполнено";
+          var isAutoClose = child.properties["lecm-errands:auto-close"];
+          var isCompleteReasonOk = child.properties["lecm-errands:execution-report"] == completionReason;
+          return isStatusOk && isAutoClose && isCompleteReasonOk;
+      });
+      if (isProcessExecutedChild) {
+          if (doc.properties["lecm-errands:execution-report-status"] == "PROJECT") {
+              doc.properties["lecm-errands:execution-report"] += '<p>' + doc.properties["lecm-eds-aspect:completion-signal-reason"] + '</p>';
+          } else if (!doc.properties["lecm-errands:execution-report-status"]) {
+              doc.properties["lecm-errands:execution-report-status"] = "PROJECT";
+              doc.properties["lecm-errands:execution-report"] = doc.properties["lecm-eds-aspect:completion-signal-reason"];
+          }
+          ExecuteErrandScript.executeErrand(doc, false);
+      }
+      edsDocument.resetChildChangeSignal(doc);
+      doc.save();
+  },
+  executeErrand: function (document, closeChild){
       var reportRequired  = document.properties["lecm-errands:report-required"];
       var currentUser = orgstructure.getCurrentEmployee();
       var recipients = [];
@@ -51,9 +81,9 @@ var ExecuteErrandScript = {
           notificationTemplate = "ERRANDS_EXECUTED_WITH_REPORT";
           if (reportRecipientType == "AUTHOR" && author) {
               recipients = [author];
-          }else if (reportRecipientType == "CONTROLLER" && controller) {
+          } else if (reportRecipientType == "CONTROLLER" && controller) {
               recipients = [controller];
-          }else if (reportRecipientType == "AUTHOR_AND_CONTROLLER") {
+          } else if (reportRecipientType == "AUTHOR_AND_CONTROLLER") {
               if (author) {
                   recipients.push(author);
               }
