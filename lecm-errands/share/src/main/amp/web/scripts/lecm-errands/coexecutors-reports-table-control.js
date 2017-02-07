@@ -39,10 +39,9 @@ LogicECM.errands = LogicECM.errands || {};
                     url: Alfresco.constants.PROXY_URI + "lecm/errands/api/getCurrentEmployeeRoles?errandNodeRef=" + encodeURIComponent(this.options.documentNodeRef),
                     successCallback: {
                         fn: function (response) {
-                            var me = response.config.scope;
                             var roles = response.json;
                             if (roles) {
-                                if (!me.options.disabled) {
+                                if (!this.options.disabled) {
                                     if (roles.isExecutor) {
                                         currentUser.isExecutor = true;
                                     }
@@ -55,62 +54,39 @@ LogicECM.errands = LogicECM.errands || {};
                                 url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getCurrentEmployee",
                                 successCallback: {
                                     fn: function (response) {
-                                        var me = response.config.scope;
                                         if (response && response.json.nodeRef) {
                                             currentUser.nodeRef = response.json.nodeRef;
                                             var currentDocumentStatus;
                                             Alfresco.util.Ajax.jsonPost({
                                                 url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                                                 dataObj: {
-                                                    nodeRef: me.options.documentNodeRef,
+                                                    nodeRef: this.options.documentNodeRef,
                                                     substituteString: "{lecm-statemachine:status}"
                                                 },
                                                 successCallback: {
                                                     fn: function (response) {
-                                                        var me = response.config.scope;
                                                         if (response && response.json.formatString) {
                                                             currentDocumentStatus = response.json.formatString;
-                                                            me.realCreateDatagrid(actions, currentUser, currentDocumentStatus);
+                                                            this.realCreateDatagrid(actions, currentUser, currentDocumentStatus);
                                                         }
-                                                    }
+                                                    },
+                                                    scope: this
                                                 },
-                                                failureCallback: {
-                                                    fn: function (response) {
-                                                        var me = response.config.scope;
-                                                        Alfresco.util.PopupManager.displayMessage(
-                                                            {
-                                                                text: me.msg("message.details.failure")
-                                                            });
-                                                    }
-                                                },
-                                                scope: me
+                                                failureMessage: Alfresco.util.message("message.details.failure"),
+                                                scope: this
                                             });
                                         }
-                                    }
+                                    },
+                                    scope: this
                                 },
-                                failureCallback: {
-                                    fn: function (response) {
-                                        var me = response.config.scope;
-                                        Alfresco.util.PopupManager.displayMessage(
-                                            {
-                                                text: me.msg("message.details.failure")
-                                            });
-                                    }
-                                },
-                                scope: me
+                                failureMessage: Alfresco.util.message("message.details.failure"),
+                                scope: this
                             });
 
-                        }
+                        },
+                        scope: this
                     },
-                    failureCallback: {
-                        fn: function (response) {
-                            var me = response.config.scope;
-                            Alfresco.util.PopupManager.displayMessage(
-                                {
-                                    text: me.msg("message.details.failure")
-                                });
-                        }
-                    },
+                    failureMessage: Alfresco.util.message("message.details.failure"),
                     scope: this
                 });
 

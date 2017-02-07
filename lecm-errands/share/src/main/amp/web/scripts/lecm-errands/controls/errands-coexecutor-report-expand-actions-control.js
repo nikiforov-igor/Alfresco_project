@@ -45,104 +45,100 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
             this.loadAdditionalData();
         },
         loadAdditionalData: function () {
-            var me = this;
             Alfresco.util.Ajax.jsonPost(
                 {
                     url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
-
                     dataObj: {
-                        nodeRef: me.options.expandedReport.nodeRef,
+                        nodeRef: this.options.expandedReport.nodeRef,
                         substituteString: "{../../../nodeRef}"
                     },
                     successCallback: {
                         fn: function (response) {
-                            var me = response.config.scope;
                             if (response && response.json.formatString) {
-                                if (response.json.formatString) {
-                                    me.errandNodeRef = response.json.formatString;
-                                    Alfresco.util.Ajax.jsonRequest(
-                                        {
-                                            method: Alfresco.util.Ajax.GET,
-                                            url: Alfresco.constants.PROXY_URI + "lecm/errands/api/getCurrentEmployeeRoles?errandNodeRef=" + encodeURIComponent(me.errandNodeRef),
-                                            successCallback: {
-                                                fn: function (response) {
-                                                    var me = response.config.scope;
-                                                    var roles = response.json;
-                                                    if (roles) {
-                                                        if (roles.isExecutor) {
-                                                            me.currentUser.isExecutor = true;
-                                                            me.actions.push({
-                                                                handler: "onActionAcceptCoexecutorReport",
-                                                                permission: "Write",
-                                                                label: me.msg("actions.coexecutor.report.accept"),
-                                                                evaluator: me.firstActionsEvaluator
-                                                            });
-                                                            me.actions.push({
-                                                                handler: "onActionDeclineCoexecutorReport",
-                                                                permission: "Write",
-                                                                label: me.msg("actions.coexecutor.report.decline"),
-                                                                evaluator: me.firstActionsEvaluator
-                                                            });
-                                                            me.actions.push({
-                                                                handler: "onActionTransferCoexecutorReport",
-                                                                permission: "Write",
-                                                                label: me.msg("actions.coexecutor.report.transfer"),
-                                                                evaluator: me.transferActionEvaluator
-                                                            });
-                                                        }
-                                                        if (roles.isCoexecutor) {
-                                                            me.currentUser.isCoexecutor = true;
-                                                            me.actions.push({
-                                                                handler: "onActionEdit",
-                                                                permission: "Write",
-                                                                label: me.msg("actions.edit"),
-                                                                evaluator: me.editActionEvaluator
-                                                            });
-                                                        }
+                                this.errandNodeRef = response.json.formatString;
+                                Alfresco.util.Ajax.jsonRequest(
+                                    {
+                                        method: Alfresco.util.Ajax.GET,
+                                        url: Alfresco.constants.PROXY_URI + "lecm/errands/api/getCurrentEmployeeRoles?errandNodeRef=" + encodeURIComponent(this.errandNodeRef),
+                                        successCallback: {
+                                            fn: function (response) {
+                                                var roles = response.json;
+                                                if (roles) {
+                                                    if (roles.isExecutor) {
+                                                        this.currentUser.isExecutor = true;
+                                                        this.actions.push({
+                                                            handler: "onActionAcceptCoexecutorReport",
+                                                            permission: "Write",
+                                                            label: this.msg("actions.coexecutor.report.accept"),
+                                                            evaluator: this.firstActionsEvaluator
+                                                        });
+                                                        this.actions.push({
+                                                            handler: "onActionDeclineCoexecutorReport",
+                                                            permission: "Write",
+                                                            label: this.msg("actions.coexecutor.report.decline"),
+                                                            evaluator: this.firstActionsEvaluator
+                                                        });
+                                                        this.actions.push({
+                                                            handler: "onActionTransferCoexecutorReport",
+                                                            permission: "Write",
+                                                            label: this.msg("actions.coexecutor.report.transfer"),
+                                                            evaluator: this.transferActionEvaluator
+                                                        });
                                                     }
-                                                    Alfresco.util.Ajax.jsonGet({
-                                                        url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getCurrentEmployee",
-                                                        successCallback: {
-                                                            fn: function (response) {
-                                                                var me = response.config.scope;
-                                                                if (response && response.json.nodeRef) {
-                                                                    me.currentUser.nodeRef = response.json.nodeRef;
-                                                                    Alfresco.util.Ajax.jsonPost({
-                                                                        url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
-                                                                        dataObj: {
-                                                                            nodeRef: me.errandNodeRef,
-                                                                            substituteString: "{lecm-statemachine:status}"
-                                                                        },
-                                                                        successCallback: {
-                                                                            fn: function (response) {
-                                                                                var me = response.config.scope;
-                                                                                if (response && response.json.formatString) {
-                                                                                    me.currentDocumentStatus = response.json.formatString;
-                                                                                    me.prepareButtons();
-                                                                                }
+                                                    if (roles.isCoexecutor) {
+                                                        this.currentUser.isCoexecutor = true;
+                                                        this.actions.push({
+                                                            handler: "onActionEdit",
+                                                            permission: "Write",
+                                                            label: this.msg("actions.edit"),
+                                                            evaluator: this.editActionEvaluator
+                                                        });
+                                                    }
+                                                }
+                                                Alfresco.util.Ajax.jsonGet({
+                                                    url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getCurrentEmployee",
+                                                    successCallback: {
+                                                        fn: function (response) {
+                                                            if (response && response.json.nodeRef) {
+                                                                this.currentUser.nodeRef = response.json.nodeRef;
+                                                                Alfresco.util.Ajax.jsonPost({
+                                                                    url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                                                                    dataObj: {
+                                                                        nodeRef: this.errandNodeRef,
+                                                                        substituteString: "{lecm-statemachine:status}"
+                                                                    },
+                                                                    successCallback: {
+                                                                        fn: function (response) {
+                                                                            if (response && response.json.formatString) {
+                                                                                this.currentDocumentStatus = response.json.formatString;
+                                                                                this.prepareButtons();
                                                                             }
                                                                         },
-                                                                        failureMesage: Alfresco.util.message("message.details.failure"),
-                                                                        scope: me
-                                                                    });
-                                                                }
+                                                                        scope: this
+                                                                    },
+                                                                    failureMessage: Alfresco.util.message("message.details.failure"),
+                                                                    scope: this
+                                                                });
                                                             }
                                                         },
-                                                        failureMesage: Alfresco.util.message("message.details.failure"),
-                                                        scope: me
-                                                    });
+                                                        scope: this
+                                                    },
+                                                    failureMessage: Alfresco.util.message("message.details.failure"),
+                                                    scope: this
+                                                });
 
-                                                }
                                             },
-                                            failureMesage: Alfresco.util.message("message.details.failure"),
-                                            scope: me
-                                        });
-                                }
+                                            scope: this
+                                        },
+                                        failureMessage: Alfresco.util.message("message.details.failure"),
+                                        scope: this
+                                    });
+
                             }
                         },
-                        scope: me
+                        scope: this
                     },
-                    failureMesage: Alfresco.util.message("message.details.failure"),
+                    failureMessage: Alfresco.util.message("message.details.failure"),
                     scope: this
                 }
             )
@@ -154,7 +150,8 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
             var fieldsContainer = Selector.query(".yui-u.first", Dom.get(me.options.formId + "-form-fields"), true);
             var visibleActionBlocks = this.actions.filter(function (action) {
                 return me.options.expandedReport.permissions[action.permission] && action.evaluator.call(me, me.options.expandedReport);
-            }).map(function (action) {
+            });
+            visibleActionBlocks.forEach(function (action) {
                 var actionBlock = document.createElement("div");
                 actionBlock.id = me.options.formId + action.handler;
                 actionBlock.innerHTML = Substitute(me.getActionHtml(), {
@@ -201,18 +198,18 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                         url: Alfresco.constants.PROXY_URI + "lecm/errands/coexecutorReport/accept?nodeRef=" + nodeRef,
                         successCallback: {
                             fn: function (response) {
-                                var me = response.config.scope;
                                 if (response.json.success) {
-                                    me.updateItem(nodeRef);
+                                    this.updateItem(nodeRef);
                                 } else {
                                     Alfresco.util.PopupManager.displayMessage(
                                         {
-                                            text: me.msg("message.details.failure")
+                                            text: this.msg("message.details.failure")
                                         });
                                 }
-                            }
+                            },
+                            scope: this
                         },
-                        failureMesage: Alfresco.util.message("message.details.failure"),
+                        failureMessage: Alfresco.util.message("message.details.failure"),
                         scope: this
                     });
             }
@@ -221,7 +218,6 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
         onActionDeclineCoexecutorReport: function (report) {
             var nodeRef = report.nodeRef;
             if (nodeRef) {
-                var me = this;
                 var formId = "decline-coexecutor-report";
                 var declineReportDialog = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
                 declineReportDialog.setOptions({
@@ -251,7 +247,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                     onSuccess: {
                         fn: function (response) {
                             if (response.json.success) {
-                                me.updateItem(nodeRef);
+                                this.updateItem(nodeRef);
                             } else {
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
