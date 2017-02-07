@@ -6,10 +6,14 @@
 				<items>
 					<item name="cm:Другие настройки" type="lecm-arm:accordion">
 						<items>
-							<item name="cm:Маршруты согласования" type="lecm-arm:html-node">
-								<property name="cm:name"><![CDATA[Маршруты согласования]]></property>
-								<property name="lecm-arm:order"><![CDATA[20]]></property>
-								<property name="lecm-arm:html-url"><![CDATA[page/routes]]></property>
+							<item name="cm:Настройки согласования" type="lecm-arm:html-node">
+								<items>
+									<item name="cm:Маршруты согласования" type="lecm-arm:html-node">
+										<property name="cm:name"><![CDATA[Маршруты согласования]]></property>
+										<property name="lecm-arm:order"><![CDATA[20]]></property>
+										<property name="lecm-arm:html-url"><![CDATA[page/routes]]></property>
+									</item>
+								</items>
 							</item>
 						</items>
 					</item>
