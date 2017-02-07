@@ -515,8 +515,7 @@
                                 expandable: true,
                                 expandDataSource: "components/form?formId=table-structure-expand",
                                 documentNodeRef: "${node.nodeRef!""}",
-                                showActions: true
-
+                                showActions: false
                             });
                 }
                 function init() {

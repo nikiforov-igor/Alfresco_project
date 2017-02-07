@@ -8,21 +8,22 @@
 <#if field.control.params.clickFireAction??>
     <#assign clickFireAction = field.control.params.clickFireAction/>
 </#if>
-
-<#if form.mode != "view">
+<#assign insertToDiv = "form-buttons"/>
+<#if field.control.params.insertToDiv??>
+    <#assign insertToDiv = field.control.params.insertToDiv/>
+</#if>
 <span id="${fieldHtmlId}" class="yui-button yui-push-button">
     <span class="first-child">
         <button type="button">${msg("${field.label?html}")}</button>
     </span>
 </span>
-</#if>
 
 <script type="text/javascript">//<![CDATA[
 (function() {
 
     function init(){
 
-        var formButtons = YAHOO.util.Dom.get("${formId}-form-buttons");
+        var formButtons = YAHOO.util.Dom.get("${formId}-${insertToDiv}");
         var button = YAHOO.util.Dom.get("${fieldHtmlId}");
         if(formButtons && button) {
             switch ("${insertType}") {
