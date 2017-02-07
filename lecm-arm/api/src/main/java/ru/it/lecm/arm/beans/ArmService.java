@@ -45,6 +45,7 @@ public interface ArmService {
 	QName ASSOC_NODE_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "node-child-rule-assoc");
 	QName PROP_IS_SELECT_BY_ACTIVE_TASKS = QName.createQName(ARM_NAMESPACE_URI, "is-select-by-activeTasks");
 	QName PROP_ACTIVE_TASKS_FILTER = QName.createQName(ARM_NAMESPACE_URI, "activeTasks-filter");
+	@Deprecated
 	QName ASSOC_ACCORDION_BUSINESS_ROLES = QName.createQName(ARM_NAMESPACE_URI, "business-roles-assoc");
 	QName PROP_IS_AGGREGATION_NODE = QName.createQName(ARM_NAMESPACE_URI, "is-aggregation-node");
 	QName PROP_IS_FOR_SECRETARIES = QName.createQName(ARM_NAMESPACE_URI, "is-for-secretaries");
