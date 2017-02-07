@@ -6,8 +6,6 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.base.beans.SearchCounter;
@@ -25,7 +23,6 @@ import java.util.regex.Matcher;
  * Time: 11:00
  */
 public class ArmWrapperServiceImpl implements ArmWrapperService {
-    private Logger logger = LoggerFactory.getLogger(ArmWrapperServiceImpl.class);
 
     private NodeService nodeService;
     private ArmServiceImpl service;
@@ -395,10 +392,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
     public long getObjectsCount(ArmNode node) {
         String query = getFullQuery(node, true, true);
-        logger.error("!!!!!!!!!!!!!!Сформированный запрос к узлу (" + node.getTitle() + ") = "  + query);
-        long res = execSearchQuery(query);
-        logger.error("!!!!!!!!!!!!!!Найдено по запросу объектов (" + node.getTitle() + ") = " + res);
-        return res;
+        return execSearchQuery(query);
     }
 
     private boolean isArmElement(NodeRef node) {
