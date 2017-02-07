@@ -3869,27 +3869,23 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var doc = bpm_package.children[0];
-if (doc){
-
-  var countFinal = 0;
-  var isAllChildOnFinal = false;
-  var children = errands.getChildErrands(doc.nodeRef.toString());
-  if (children && children.length){
-    var docExecutor = doc.properties["lecm-errands:executor-assoc-ref"];
-    for(var i =0; i<children.length; i++){
-	  if (statemachine.isFinal(children[i].nodeRef.toString())) {
-		  countFinal++;
-	  }
-    }
-	if(countFinal == children.length){
-      isAllChildOnFinal = true;
-    }
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-execute-errand-script.js">
+var doc = bpm_package.children[0];
+if (doc) {
+  ExecuteErrandScript.processChildExecutedSignal(doc);
+  if (childrenErrands && childrenErrands.length) {
+      var countErrandsFinal = 0;
+      for (var i =0; i < childrenErrands.length; i++) {
+          if (statemachine.isFinal(childrenErrands[i].nodeRef.toString())) {
+            countErrandsFinal++;
+          }
+      }
+      if (countErrandsFinal == childrenErrands.length && !doc.properties["lecm-errands:report-required"]) {
+          doc.properties["lecm-errands:transit-to-executed"] = true;
+          doc.save();
+      }
   }
-	doc.properties["lecm-errands:transit-to-executed"] = isAllChildOnFinal;
-	doc.properties["lecm-eds-aspect:child-change-signal-count"] = 0;
-	doc.save();
-
+  edsDocument.resetChildChangeSignal(doc);
 }]]></value>
                                                             </property>
                                                             <property>
@@ -6324,6 +6320,42 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                 </reference>
                                                             </association>
                                                         </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>8eeddf31-3de8-410c-8c7a-c334a838c72e</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/bf6d6143-6409-406a-a509-40c3f33ec489
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:child-change-signal") AND doc.attr("lecm-eds-aspect:child-change-signal-count") !=0]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-execute-errand-script.js">
+var doc = bpm_package.children[0];
+if (doc) {
+    ExecuteErrandScript.processChildExecutedSignal(doc);
+}]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
