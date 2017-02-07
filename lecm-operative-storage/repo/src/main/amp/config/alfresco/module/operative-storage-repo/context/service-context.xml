@@ -45,6 +45,7 @@
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-os-br-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/os-bj-eventCategory-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/os-objectType-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/deprecated/lecm-file-register-objectType-items.xml</value>
 	</util:list>
 
 	<util:list id="operative.storage.groupOperations">
@@ -73,6 +74,10 @@
 
 	<util:list id="operative.storage.dir.permissions">
 		<value>alfresco/module/${artifactId}/permissions/directories-permissions.xml</value>
+	</util:list>
+
+	<util:list id="operative.storage.arm.dictionaries">
+		<value>alfresco/module/${artifactId}/arm/os-settings-arm.xml</value>
 	</util:list>
 
 	<util:list id="operative.storage.reports">
@@ -109,6 +114,11 @@
 	<bean id="operative.storage.ConfigToRepositoryLoader" parent="configsToRepositoryLoader"
 		  p:configs-ref="operative.storage.reports.config"
 	/>
+
+	<bean id="operative.storage.arm.bootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="arm.settings.LogicEcmBootstrap,eds.documents.arm.settings.LogicEcmBootstrap"
+		  p:rootPath="/Business platform/LECM/Сервис АРМ"
+		  p:dictionaries-ref="operative.storage.arm.dictionaries"/>
 
 	<bean id="operative.storage.reports.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
@@ -255,5 +265,17 @@
 			</map>
 		</constructor-arg>
 	</bean>
-
+	<bean id="dictionary.fileRegister.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
+	      depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, operative.storage.model.bootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/deprecated/lecm-file-register-dictionary-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/deprecated/lecm-file-register-dictionary-model</value>
+			</list>
+		</property>
+	</bean>
 </beans>

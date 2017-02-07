@@ -277,7 +277,7 @@
                     <set id="collapsible1"/>
                     <set id="static1"/>
                     <set id="collapsible2"/>
-                    <set id="exist-bussines-role" parent="collapsible2" template="/ru/it/lecm/deputy/controls/errands-choosing-set.ftl" />
+                    <set id="exist-bussines-role" parent="collapsible2" template="/ru/it/lecm/errands/controls/errands-choosing-set.ftl" />
                     <set id="collapsible2-inner" parent="collapsible2"/>
                     <set id="static2"/>
 
@@ -600,7 +600,7 @@
                     <set id="collapsible1"/>
                     <set id="static1"/>
                     <set id="collapsible2"/>
-                    <set id="exist-bussines-role" parent="collapsible2" appearance="ERRANDS_CHOOSING_INITIATOR" template="/ru/it/lecm/deputy/controls/errands-choosing-set.ftl" />
+                    <set id="exist-bussines-role" parent="collapsible2" appearance="ERRANDS_CHOOSING_INITIATOR" template="/ru/it/lecm/errands/controls/errands-choosing-set.ftl" />
                     <set id="collapsible2-inner" parent="collapsible2"/>
                     <set id="static2"/>
 

@@ -18,7 +18,9 @@ var $html = Alfresco.util.encodeHTML,
 (function () {
 
 	LogicECM.DocumentAttachments.DataGrid = function (containerId) {
-		return LogicECM.DocumentAttachments.DataGrid.superclass.constructor.call(this, containerId);
+		LogicECM.DocumentAttachments.DataGrid.superclass.constructor.call(this, containerId);
+		this.options.baseDocAssocName = null;
+		return this;
 	};
 
 	/**
@@ -113,7 +115,13 @@ var $html = Alfresco.util.encodeHTML,
 							}
 
 							if (oColumn.field == "prop_cm_name") {
-								html += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.showAttachmentsModalForm('" + grid.options.documentRef + "', '" + oRecord.getData("nodeRef") + "')\">" + columnContent + "</a>";
+								var href = '<a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.showAttachmentsModalForm(\'{documentRef}\', \'{attachmentRef}\', \'{baseDocAssocName}\')">{columnContent}</a>';
+								html += YAHOO.lang.substitute(href, {
+									documentRef: grid.options.documentRef,
+									attachmentRef: oRecord.getData("nodeRef"),
+									baseDocAssocName: grid.options.baseDocAssocName,
+									columnContent: columnContent
+								});
 								oColumn.maxAutoWidth = oColumn.getColEl().offsetWidth;
 							} else if (grid.options.attributeForShow != null && datalistColumn.name == grid.options.attributeForShow) {
 								html += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + oRecord.getData("nodeRef") + "\'})\">" + columnContent + "</a>";

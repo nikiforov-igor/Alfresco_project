@@ -48,6 +48,7 @@
                 <value>alfresco/module/${artifactId}/models/lecm-incoming-roles-items.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-incoming-regnumbers.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-incoming-nt-items.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-connection-available-types-items.xml</value>
             </list>
         </property>
     </bean>

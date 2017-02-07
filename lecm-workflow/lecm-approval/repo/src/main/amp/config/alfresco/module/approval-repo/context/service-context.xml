@@ -44,17 +44,7 @@
 		<value>alfresco/module/${artifactId}/messages/lecm-approval-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-approval-workflow</value>
 	</util:list>
-
-	<util:list id="approve3.groupOperations">
-		<value>alfresco/module/approval-repo/actions/force-approval.xml</value>
-		<value>alfresco/module/approval-repo/actions/reject-approval.xml</value>
-	</util:list>
-
-	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
-		<property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>
-		<property name="dictionaries" ref="approve3.groupOperations"/>
-	</bean>
-
+	
 	<bean id="lecm.approve3.model.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap, lecm.approval3.helper.model.bootstrap"
 		  p:models-ref="approve3.models"
@@ -64,7 +54,7 @@
 		<value>alfresco/module/${artifactId}/arm/approval-settings-arm.xml</value>
 	</util:list>
 	<bean id="approve3.arm.bootstrap" parent="lecmDictionaryBootstrap"
-		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
+		  depends-on="arm.settings.LogicEcmBootstrap"
 		  p:rootPath="/Business platform/LECM/Сервис АРМ"
 		  p:dictionaries-ref="approve3.arm.dictionaries"/>
 

@@ -23,7 +23,7 @@
 	      depends-on="dictionaryBootstrap, documents.LogicEcmModelsBootstrap,
 		  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
 		  documents.LogicEcmModelsConnectionsBootstrap,
-		  links.LogicEcmContractsBootstrap,
+		  links.LogicEcmBootstrap,
 		  documents.dictionaries.LogicEcmModelsBootstrap,
 		  errands.tableStructure.LogicEcmModelsBootstrap">
 		<property name="models">
@@ -82,7 +82,7 @@
 	</bean>
 
     <bean id="errands.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
-          depends-on="userProfile.arm.LogicEcmBootstrap, arm.settings.LogicEcmBootstrap">
+          depends-on="userProfile.arm.LogicEcmBootstrap,arm.settings.LogicEcmBootstrap,eds.documents.arm.settings.LogicEcmBootstrap">
         <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>
@@ -486,6 +486,7 @@
                 <value>alfresco/module/${artifactId}/reports/exec-discipline-by-creator.xml</value>
                 <value>alfresco/module/${artifactId}/reports/exec-discipline-by-unit.xml</value>
                 <value>alfresco/module/${artifactId}/reports/exec-discipline-by-executor.xml</value>
+				<value>alfresco/module/${artifactId}/reports/errands-barcode-generic.xml</value>
             </list>
         </property>
         <property name="xmlImportListener" ref="errands.reportsDeployer"/>
@@ -498,6 +499,7 @@
                 <value>exec-discipline-by-creator</value>
                 <value>exec-discipline-by-unit</value>
                 <value>exec-discipline-by-executor</value>
+				<value>errands-barcode-generic</value>
             </list>
         </property>
     </bean>

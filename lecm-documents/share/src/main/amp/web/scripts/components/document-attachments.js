@@ -30,7 +30,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      */
     LogicECM.DocumentAttachments = function DocumentAttachments_constructor(htmlId) {
         LogicECM.DocumentAttachments.superclass.constructor.call(this, htmlId);
-
+		this.options.baseDocAssocName = null;
+		this.options.showAfterReady = false;
 	    YAHOO.Bubbling.on("metadataRefresh", this.onAttachmentsUpdate, this);
 	    YAHOO.Bubbling.on("fileRenamed", this.onAttachmentsUpdate, this);
 	    YAHOO.Bubbling.on("fileDeleted", this.onAttachmentsUpdate, this);
@@ -42,9 +43,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
     YAHOO.lang.augmentObject(LogicECM.DocumentAttachments.prototype,
         {
 	        newId: null,
-            options: {
-		        showAfterReady: false
-	        },
 
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -72,7 +70,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/attachments-list",
                         dataObj: {
                             nodeRef: this.options.nodeRef,
-                            htmlid: this.id + Alfresco.util.generateDomId()
+                            htmlid: this.id + Alfresco.util.generateDomId(),
+							inclBaseDoc: !!this.options.baseDocAssocName
                         },
                         successCallback: {
                             fn:function(response){
@@ -94,7 +93,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/document-attachments",
 				        dataObj: {
 					        nodeRef: this.options.nodeRef,
-					        htmlid: newId
+					        htmlid: newId,
+							baseDocAssocName: this.options.baseDocAssocName
 				        },
 				        successCallback: {
 					        fn:function(response){

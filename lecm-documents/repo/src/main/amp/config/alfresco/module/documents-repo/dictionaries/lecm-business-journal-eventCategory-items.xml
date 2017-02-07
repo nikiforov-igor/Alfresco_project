@@ -54,10 +54,6 @@
                 <property name="cm:name">Регистрация</property>
                 <property name="lecm-busjournal:eventCategory-code">REGISTRATION</property>
             </item>
-            <item name="cm:Создание поручения по документу" type="lecm-busjournal:eventCategory">
-                <property name="cm:name">Создание поручения по документу</property>
-                <property name="lecm-busjournal:eventCategory-code">CREATE_ERRAND_BASED_ON_DOC</property>
-            </item>
         </items>
     </item>
 </items>

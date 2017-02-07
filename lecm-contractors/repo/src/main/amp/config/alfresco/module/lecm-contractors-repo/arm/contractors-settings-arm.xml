@@ -1,16 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
 	<item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary">
-		<property name="cm:name">Настройки АРМ</property>
-		<property name="lecm-dic:attributeForShow">cm:name</property>
-		<property name="lecm-dic:type">lecm-arm:arm</property>
-		<property name="lecm-dic:active">true</property>
-		<property name="lecm-dic:plane">false</property>
-		<property name="lecm-dic:description">Настройки АРМ</property>
 		<items>
 		    <item name="cm:Администрирование" type="lecm-arm:arm">
-		        <property name="cm:name"><![CDATA[Администрирование]]></property>
-		        <property name="lecm-arm:code"><![CDATA[ADMIN]]></property>
 		        <items>
 					<item name="cm:Контрагенты" type="lecm-arm:accordion">
 						<property name="cm:name"><![CDATA[Контрагенты]]></property>

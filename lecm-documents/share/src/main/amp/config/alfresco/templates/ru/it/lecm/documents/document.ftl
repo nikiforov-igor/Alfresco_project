@@ -4,10 +4,8 @@
     <@script type="text/javascript" src="${url.context}/res/yui/resize/resize.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/components/document-details/document-metadata.js"></@script>
-    <@script type="text/javascript" src="${url.context}/res/scripts/dashlets/lecm-errands-dashlet.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/graph-tree-control.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/graph-tree.js"></@script>
-    <@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-errands.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-ajax-content.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-save-last.js"></@script>
 
@@ -28,29 +26,7 @@
     <link rel="stylesheet" type="text/css" href="${url.context}/res/css/dashlet-components.css" />
     <link rel="stylesheet" type="text/css" href="${url.context}/res/css/page-document.css" />
 
-    <#if documentType?? && documentType == "{http://www.it.ru/logicECM/errands/1.0}document">
-        <link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-metadata.css" />
-    </#if>
-    <link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-form.css" />
-
     <@templateHtmlEditorAssets />
-    <script type="text/javascript">//<![CDATA[
-        if (typeof LogicECM == "undefined" || !LogicECM) {
-			LogicECM = {};
-		}
-		LogicECM.module = LogicECM.module || {};
-		LogicECM.module.Documents = LogicECM.module.Documents|| {};
-		(function() {
-			LogicECM.module.Documents.ERRANDS_SETTINGS = LogicECM.module.Documents.ERRANDS_SETTINGS || <#if errandsSettings?? >${errandsSettings}<#else>{}</#if>;
-
-            var viewHistory = new LogicECM.module.Document.ViewHistory("save-view-history").setOptions({
-                nodeRef: "${page.url.args.nodeRef}"
-            });
-
-            viewHistory.save();
-
-		})();
-    //]]></script>
 	</@>
 
 <@templateBody>
@@ -72,7 +48,6 @@
                 <@region id="document-actions" scope="template"/>
                 <@region id="document-metadata" scope="template"/>
                 <@region id="document-attachments" scope="template"/>
-                <@region id="document-errands" scope="template"/>
                 <@region id="document-workflows" scope="template"/>
                 <@region id="document-connections" scope="template"/>
                 <@region id="document-members" scope="template"/>
@@ -84,11 +59,7 @@
             </div>
             <div id="main-content" class="main-content">
 		        <div id="main-region">
-                    <#if documentType?? && documentType == "{http://www.it.ru/logicECM/errands/1.0}document">
-                        <@region id="errand-form" scope="template"/>
-                    <#else>
-                        <@region id="dashlet-panel" scope="template"/>
-                    </#if>
+                    <@region id="dashlet-panel" scope="template"/>
 	                <@region id="rating" scope="template"/>
 	                <@region id="comments" scope="template"/>
 	            </div>

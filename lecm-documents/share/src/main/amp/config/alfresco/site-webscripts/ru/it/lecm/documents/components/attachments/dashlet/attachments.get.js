@@ -3,13 +3,14 @@
 
 function main() {
 	AlfrescoUtil.param("nodeRef");
+	var baseDocAssocName = AlfrescoUtil.param("baseDocAssocName", null);
 
 	model.hasViewListPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
 	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
 	model.hasAddNewVersionAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_ADD_VER);
 	model.hasDeleteAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_DELETE);
 	model.hasDeleteOwnAttachmentPerm = hasPermission(model.nodeRef, PERM_OWN_CONTENT_DELETE);
-	model.lockedAttacments = getLockedAttachments(model.nodeRef, 50);
+	model.lockedAttacments = getLockedAttachments(model.nodeRef, 50, baseDocAssocName);
 	if (model.hasViewListPerm) {
 	    var cats = getCategories(model.nodeRef);
         if (cats != null) {
@@ -30,10 +31,13 @@ function getCategories(nodeRef, defaultValue) {
 	return eval('(' + result + ')');
 }
 
-function getLockedAttachments(nodeRef, count) {
+function getLockedAttachments(nodeRef, count, baseDocAssocName) {
 	var i, j, category, attachment;
 	var lockedAttachments = [];
-	var url = '/lecm/document/attachments/api/get?documentNodeRef=' + nodeRef + '&count=' + count;
+	var url = '/lecm/document/attachments/api/get' + '?documentNodeRef=' + nodeRef + '&count=' + count;
+	if (baseDocAssocName) {
+		url += '&baseDocAssocName=' + encodeURIComponent(baseDocAssocName);
+	}
 	var result = remote.connect("alfresco").get(url);
 	if (result.status == 200) {
 		var data = eval('(' + result + ')');
@@ -46,7 +50,6 @@ function getLockedAttachments(nodeRef, count) {
 				}
 			}
 		}
-		
 	}
 	return lockedAttachments;
 }
