@@ -283,7 +283,6 @@
 				</property>
 				<property name="lecm-errands:execution-report-status">
 					<type>d:text</type>
-					<default>PROJECT</default>
 					<constraints>
 						<constraint ref="lecm-errands:execution-report-status-const"/>
 					</constraints>

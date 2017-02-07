@@ -3869,27 +3869,52 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var doc = bpm_package.children[0];
-if (doc){
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-execute-errand-script.js">
+var doc = bpm_package.children[0];
+if (doc) {
 
-  var countFinal = 0;
-  var isAllChildOnFinal = false;
-  var children = errands.getChildErrands(doc.nodeRef.toString());
-  if (children && children.length){
-    var docExecutor = doc.properties["lecm-errands:executor-assoc-ref"];
-    for(var i =0; i<children.length; i++){
-	  if (statemachine.isFinal(children[i].nodeRef.toString())) {
-		  countFinal++;
-	  }
+  var countErrandsFinal = 0;
+  var isAllChildErrandsOnFinal = false;
+
+  var children = [];
+  var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
+  var childrenResolutions = errands.getChildResolutions(doc.nodeRef.toString());
+
+  if (childrenErrands && childrenErrands.length) {
+    for (var i =0; i < childrenErrands.length; i++) {
+      if (statemachine.isFinal(childrenErrands[i].nodeRef.toString())) {
+        countErrandsFinal++;
+      }
     }
-	if(countFinal == children.length){
-      isAllChildOnFinal = true;
+    if (countErrandsFinal == childrenErrands.length) {
+      isAllChildErrandsOnFinal = true;
     }
+    children = children.concat(childrenErrands);
   }
-	doc.properties["lecm-errands:transit-to-executed"] = isAllChildOnFinal;
-	doc.properties["lecm-eds-aspect:child-change-signal-count"] = 0;
-	doc.save();
 
+  if (childrenResolutions) {
+    children = children.concat(childrenResolutions);
+  }
+  var completionReason = doc.properties["lecm-eds-aspect:completion-signal-reason"];
+  var isProcessExecutedChild = children.some(function(child) {
+    var isStatusOk = child.properties["lecm-statemachine:status"] == "Исполнено";
+    var isAutoClose = child.properties["lecm-errands:auto-close"];
+    var isCompleteReasonOk = child.properties["lecm-errands:execution-report"] == completionReason;
+    return isStatusOk && isAutoClose && isCompleteReasonOk;
+  });
+
+  if (isProcessExecutedChild) {
+    if (doc.properties["lecm-errands:execution-report-status"] == "PROJECT") {
+      doc.properties["lecm-errands:execution-report"] += '<p>' + doc.properties["lecm-eds-aspect:completion-signal-reason"] + '</p>';
+    } else if (!doc.properties["lecm-errands:execution-report-status"]) {
+      	doc.properties["lecm-errands:execution-report-status"] = "PROJECT";
+    	doc.properties["lecm-errands:execution-report"] = doc.properties["lecm-eds-aspect:completion-signal-reason"];
+    }
+    ExecuteErrandScript.executeErrand(doc, false);
+  }
+  doc.properties["lecm-errands:transit-to-executed"] = isAllChildErrandsOnFinal;
+  doc.properties["lecm-eds-aspect:child-change-signal-count"] = 0;
+  doc.save();
 }]]></value>
                                                             </property>
                                                             <property>
@@ -6327,6 +6352,74 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>8eeddf31-3de8-410c-8c7a-c334a838c72e</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/bf6d6143-6409-406a-a509-40c3f33ec489
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:child-change-signal") AND doc.attr("lecm-eds-aspect:child-change-signal-count") !=0]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-execute-errand-script.js">
+var doc = bpm_package.children[0];
+if (doc) {
+  var children = [];
+  var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
+  var childrenResolutions = errands.getChildResolutions(doc.nodeRef.toString());
+  if (childrenErrands) {
+    children = children.concat(childrenErrands);
+  }
+  if (childrenResolutions) {
+    children = children.concat(childrenResolutions);
+  }
+
+  var completionReason = doc.properties["lecm-eds-aspect:completion-signal-reason"];
+  var isProcessExecutedChild = children.some(function(child) {
+    var isStatusOk = child.properties["lecm-statemachine:status"] == "Исполнено";
+    var isAutoClose = child.properties["lecm-errands:auto-close"];
+    var isCompleteReasonOk = child.properties["lecm-errands:execution-report"] == completionReason;
+    return isStatusOk && isAutoClose && isCompleteReasonOk;
+  });
+
+  if (isProcessExecutedChild) {
+    if (doc.properties["lecm-errands:execution-report-status"] == "PROJECT") {
+      doc.properties["lecm-errands:execution-report"] += '<p>' + doc.properties["lecm-eds-aspect:completion-signal-reason"] + '</p>';
+    } else if (!doc.properties["lecm-errands:execution-report-status"]) {
+      	doc.properties["lecm-errands:execution-report-status"] = "PROJECT";
+    	doc.properties["lecm-errands:execution-report"] = doc.properties["lecm-eds-aspect:completion-signal-reason"];
+    }
+    ExecuteErrandScript.executeErrand(doc, false);
+  }
+  doc.properties["lecm-eds-aspect:child-change-signal-count"] = 0;
+  doc.save();
+}]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
+                                    </node>
                                                     <node>
                                                         <type>transition</type>
                                                         <name>b4e5efdc-54d2-466e-9ea2-cff73f2e9592</name>
