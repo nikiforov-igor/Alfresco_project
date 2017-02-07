@@ -3,26 +3,26 @@ var ErrandsCompletionSignalScript = {
     processCompletionSignal: function() {
         var doc = bpm_package.children[0];
         if (doc) {
-            var signalReason = doc.properties["lecm-eds-aspect:completion-signal-reason"];
-            var closeChild = doc.properties["lecm-eds-aspect:completion-signal-close-child"];
-            if (closeChild) {
-                var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
-                var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
-                childrenErrands.forEach(function (childErrand) {
-                    if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
-                        edsDocument.sendCompletionSignal(childErrand, reason, currentUser);
-                    }
-                });
-                childrenResolutions.forEach(function (childResolution) {
-                    if (!statemachine.isFinal(childResolution.nodeRef.toString()) && !statemachine.isDraft(childResolution)) {
-                        edsDocument.sendCompletionSignal(childResolution, reason, currentUser);
-                    }
-                });
-            }
             var signalSender = null;
             var signalSenderAssoc = doc.assocs["lecm-eds-aspect:completion-signal-sender-assoc"];
             if (signalSenderAssoc && signalSenderAssoc.length) {
                 signalSender = signalSenderAssoc[0];
+            }
+            var signalReason = doc.properties["lecm-eds-aspect:completion-signal-reason"];
+            var closeChild = doc.properties["lecm-eds-aspect:completion-signal-close-child"];
+            if (closeChild) {
+                var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
+                var childrenResolutions = errands.getChildResolutions(doc.nodeRef.toString());
+                childrenErrands.forEach(function (childErrand) {
+                    if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
+                        edsDocument.sendCompletionSignal(childErrand, signalReason, signalSender);
+                    }
+                });
+                childrenResolutions.forEach(function (childResolution) {
+                    if (!statemachine.isFinal(childResolution.nodeRef.toString()) && !statemachine.isDraft(childResolution)) {
+                        edsDocument.sendCompletionSignal(childResolution, signalReason, signalSender);
+                    }
+                });
             }
             if (signalReason) {
                 if (doc.properties["lecm-errands:execution-report-status"] == "PROJECT") {
@@ -41,24 +41,24 @@ var ErrandsCompletionSignalScript = {
             }
             doc.properties["lecm-errands:execution-report-status"] = "ACCEPT";
             doc.save();
-
-            var authorAssoc = document.assocs["lecm-errands:initiator-assoc"];
+            var recipients = [];
+            var authorAssoc = doc.assocs["lecm-errands:initiator-assoc"];
             if (authorAssoc && authorAssoc.length) {
                 recipients.push(authorAssoc[0]);
             }
-            var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
+            var executorAssoc = doc.assocs["lecm-errands:executor-assoc"];
             if (executorAssoc && executorAssoc.length) {
                 recipients.push(executorAssoc[0]);
             }
 
-            var soExecutors = document.assocs["lecm-errands:coexecutors-assoc"];
+            var soExecutors = doc.assocs["lecm-errands:coexecutors-assoc"];
             if (soExecutors) {
                 soExecutors.forEach(function (coexecutor) {
                     recipients.push(coexecutor);
                 });
             }
 
-            var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
+            var controllerAssoc = doc.assocs["lecm-errands:controller-assoc"];
             if (controllerAssoc && controllerAssoc.length == 1) {
                 recipients.push(controllerAssoc[0]);
             }
@@ -66,7 +66,7 @@ var ErrandsCompletionSignalScript = {
                 recipients: recipients,
                 templateCode: 'ERRANDS_EXECUTED_WITHOUT_REPORT',
                 templateConfig: {
-                    mainObject: document,
+                    mainObject: doc,
                     eventExecutor: signalSender
                 },
                 dontCheckAccessToObject: true
@@ -76,9 +76,9 @@ var ErrandsCompletionSignalScript = {
             var logText = "#object1 ";
             logText += documentScript.wrapperTitle("завершил", signalReason ? signalReason : "");
             logText += "исполнение поручения #mainobject.";
-            businessJournal.log(document.nodeRef.toString(), "ERRAND_EXECUTION", logText, logObjects);
+            businessJournal.log(doc.nodeRef.toString(), "ERRAND_EXECUTION", logText, logObjects);
 
-            edsDocument.resetCompletionSignal(document);
+            edsDocument.resetCompletionSignal(doc);
         }
     }
 };
