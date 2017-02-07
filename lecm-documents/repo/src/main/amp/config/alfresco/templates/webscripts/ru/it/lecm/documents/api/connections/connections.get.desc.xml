@@ -1,7 +1,14 @@
 <webscript>
 	<shortname>Get Connections</shortname>
-	<description>Get Connections</description>
-	<url>/lecm/document/connections/api/records?documentNodeRef={documentNodeRef}&amp;count={count}</url>
+	<description>
+		Get Connections Получение связанных документов
+		documentNodeRef - nodeRef документа
+		count - кол-во получаемых связанных документов
+		checkInAccess - checkIndirectAccess проверять права доступа
+		applyViewMode - учитывать режим отображения связей
+		excludeType - тип документа который мы хотим исключить из связанных
+	</description>
+	<url>/lecm/document/connections/api/records?documentNodeRef={documentNodeRef}&amp;count={count}&amp;checkInAccess={checkInAccess}&amp;applyViewMode={applyViewMode}&amp;excludeType={excludeType}</url>
 	<authentication runas="admin">user</authentication>
 	<format default="json"/>
 	<transaction>none</transaction>

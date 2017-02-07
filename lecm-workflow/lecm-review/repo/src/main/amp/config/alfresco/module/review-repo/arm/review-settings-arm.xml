@@ -2,7 +2,7 @@
 <items>
 	<item name="cm:Настройки ознакомления" type="lecm-arm:html-node">
 		<property name="cm:name"><![CDATA[Настройки ознакомления]]></property>
-		<property name="lecm-arm:order"><![CDATA[30]]></property>
+		<property name="lecm-arm:order"><![CDATA[20]]></property>
 		<property name="lecm-arm:html-url"><![CDATA[page/review-settings]]></property>
 		<items>
 			<item name="cm:Списки ознакомления" type="lecm-arm:node">
@@ -25,7 +25,7 @@
 				</items>
 				<assocs>
 					<assoc type="lecm-arm:node-child-rule-assoc"
-						   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки/Настройки СЭД/Настройки ознакомления/Списки ознакомления/1845e402-f1f7-4074-b7e6-05133ef07aef"/>
+						   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки/Настройки ознакомления/Списки ознакомления/1845e402-f1f7-4074-b7e6-05133ef07aef"/>
 				</assocs>
 			</item>
 		</items>

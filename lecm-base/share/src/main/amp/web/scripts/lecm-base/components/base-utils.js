@@ -831,7 +831,7 @@ LogicECM.module.Base.Util = {
 		return Alfresco.util.fromISO8601(dateStr);
 	},
 
-	showAttachmentsModalForm: function(documentRef, attachmentRef) {
+	showAttachmentsModalForm: function(documentRef, attachmentRef, baseDocAssocName) {
 
 		var self = this;
 		var attachmentsModalForm = new Alfresco.module.SimpleDialog("modalWindow");
@@ -842,7 +842,8 @@ LogicECM.module.Base.Util = {
 			templateRequestParams: {
 				nodeRef : documentRef,
 				forTask : false,
-				selectedAttachmentNodeRef : attachmentRef
+				selectedAttachmentNodeRef : attachmentRef,
+				baseDocAssocName: baseDocAssocName
 			},
 			destroyOnHide: true,
 			doBeforeDialogShow: {

@@ -107,7 +107,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
     {
         var html = Alfresco.constants.URL_PAGECONTEXT + "document-attachment?nodeRef=" + record.jsNode.nodeRef;
 
-        if (scope.options.nodeRef.indexOf("errands-base-document-attachments") == 0) {
+        if (scope.options.nodeRef.indexOf("base-document-attachments") == 0) {
             return '<a href="' + html + '" target="_blank">';
         } else {
             return '<a  href="' + html + '">';

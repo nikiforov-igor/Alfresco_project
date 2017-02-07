@@ -17,7 +17,7 @@
     (function () {
         var Dom = YAHOO.util.Dom;
 
-        LogicECM.module.Errands.dashlet.IssuedErrands= function Contracts_constructor(htmlId) {
+        LogicECM.module.Errands.dashlet.IssuedErrands= function IssuedErrands_constructor(htmlId) {
             LogicECM.module.Errands.dashlet.IssuedErrands.superclass.constructor.call(this, "LogicECM.module.Errands.dashlet.IssuedErrands", htmlId, ["button", "container", "resize"]);
 
             return this;
@@ -38,7 +38,7 @@
 
                     container: null,
 
-                    onReady: function Contracts_onReady() {
+                    onReady: function IssuedErrands_onReady() {
                         this.container = Dom.get(this.id + '_results');
                         this.drawForm();
                     },

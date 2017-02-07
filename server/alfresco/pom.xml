@@ -151,13 +151,6 @@
 			<type>amp</type>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.contracts</groupId>
-			<artifactId>contracts-repo</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.statemachine</groupId>
 			<artifactId>statemachine-repo</artifactId>
 			<version>${platform.version}</version>
@@ -263,13 +256,6 @@
 			<type>amp</type>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.errands</groupId>
-			<artifactId>errands-repo</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.signed-docflow</groupId>
 			<artifactId>signed-docflow-repo</artifactId>
 			<version>${platform.version}</version>
@@ -290,24 +276,9 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
-
-		<dependency>
-            <groupId>ru.it.lecm.eds-documents</groupId>
-            <artifactId>eds-documents-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
 		<dependency>
 			<groupId>ru.it.lecm.arm</groupId>
 			<artifactId>arm-repo</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.workflow.reservation</groupId>
-			<artifactId>reservation-repo</artifactId>
 			<version>${platform.version}</version>
 			<scope>runtime</scope>
 			<type>amp</type>
@@ -383,22 +354,8 @@
 			<type>amp</type>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.operative-storage</groupId>
-			<artifactId>operative-storage-repo</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.events</groupId>
 			<artifactId>events-repo</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.meetings</groupId>
-			<artifactId>meetings-repo</artifactId>
 			<version>${platform.version}</version>
 			<scope>runtime</scope>
 			<type>amp</type>
@@ -656,11 +613,6 @@
 							<type>amp</type>
 						</overlay>
 						<overlay>
-							<groupId>ru.it.lecm.contracts</groupId>
-							<artifactId>contracts-repo</artifactId>
-							<type>amp</type>
-						</overlay>
-						<overlay>
 							<groupId>ru.it.lecm.statemachine</groupId>
 							<artifactId>statemachine-repo</artifactId>
 							<type>amp</type>
@@ -736,11 +688,6 @@
 							<type>amp</type>
 						</overlay>
 						<overlay>
-							<groupId>ru.it.lecm.errands</groupId>
-							<artifactId>errands-repo</artifactId>
-							<type>amp</type>
-						</overlay>
-						<overlay>
 							<groupId>ru.it.lecm.signed-docflow</groupId>
 							<artifactId>signed-docflow-repo</artifactId>
 							<type>amp</type>
@@ -761,18 +708,8 @@
 							<type>amp</type>
 						</overlay>
 						<overlay>
-							<groupId>ru.it.lecm.eds-documents</groupId>
-							<artifactId>eds-documents-repo</artifactId>
-							<type>amp</type>
-						</overlay>
-						<overlay>
 							<groupId>ru.it.lecm.arm</groupId>
 							<artifactId>arm-repo</artifactId>
-							<type>amp</type>
-						</overlay>
-						<overlay>
-							<groupId>ru.it.lecm.workflow.reservation</groupId>
-							<artifactId>reservation-repo</artifactId>
 							<type>amp</type>
 						</overlay>
 						<overlay>
@@ -821,18 +758,8 @@
 							<type>amp</type>
 						</overlay>
 						<overlay>
-							<groupId>ru.it.lecm.operative-storage</groupId>
-							<artifactId>operative-storage-repo</artifactId>
-							<type>amp</type>
-						</overlay>
-						<overlay>
 							<groupId>ru.it.lecm.events</groupId>
 							<artifactId>events-repo</artifactId>
-							<type>amp</type>
-						</overlay>
-						<overlay>
-							<groupId>ru.it.lecm.meetings</groupId>
-							<artifactId>meetings-repo</artifactId>
 							<type>amp</type>
 						</overlay>
 						<overlay>
@@ -985,7 +912,42 @@
         <profile>
             <id>SED</id>
             <dependencies>
-                <dependency>
+				<dependency>
+					<groupId>ru.it.lecm.contracts</groupId>
+					<artifactId>contracts-repo</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.errands</groupId>
+					<artifactId>errands-repo</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.eds-documents</groupId>
+					<artifactId>eds-documents-repo</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.operative-storage</groupId>
+					<artifactId>operative-storage-repo</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.meetings</groupId>
+					<artifactId>meetings-repo</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
+				<dependency>
                     <groupId>ru.it.lecm.internal</groupId>
                     <artifactId>internal-repo</artifactId>
                     <version>${platform.version}</version>
@@ -1020,6 +982,13 @@
                     <scope>runtime</scope>
                     <type>amp</type>
                 </dependency>
+				<dependency>
+					<groupId>ru.it.lecm.workflow.reservation</groupId>
+					<artifactId>reservation-repo</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
             </dependencies>
             <build>
                 <plugins>

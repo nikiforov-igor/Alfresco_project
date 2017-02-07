@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  *
@@ -49,6 +48,7 @@ public interface EDSGlobalSettingsService {
 
 	Boolean isRegistrationCenralized();
 
+	@Deprecated
 	Boolean isHideProperties();
 
 	NodeRef getArmDashletNode();
@@ -57,5 +57,6 @@ public interface EDSGlobalSettingsService {
 
 	List<NodeRef> getRegistras(NodeRef employeeRef, String businessRoleId);
 
+	@Deprecated
 	String getLinksViewMode();
 }

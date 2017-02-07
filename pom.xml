@@ -96,7 +96,6 @@
         <module>lecm-orgstructure</module>
         <module>lecm-jasperreports-forms</module>
         <module>lecm-dictionary</module>
-        <module>lecm-contracts</module>
         <module>lecm-statemachine</module>
         <module>lecm-statemachine-editor</module>
         <module>lecm-theme</module>
@@ -113,20 +112,16 @@
         <module>lecm-regnumbers</module>
         <module>lecm-contractors</module>
         <module>lecm-reports-editor</module>
-        <module>lecm-errands</module>
         <module>lecm-permission-exp</module>
         <module>lecm-signed-docflow</module>
         <module>lecm-documents-removal</module>
 		<module>lecm-model-editor</module>
-		<module>lecm-eds-documents</module>
 		<module>lecm-arm</module>
 		<module>lecm-workflow</module>
 		<module>lecm-group-actions</module>
 		<module>lecm-types-view</module>
 		<module>lecm-barcode</module>
-		<module>lecm-operative-storage</module>
 		<module>lecm-events</module>
-		<module>lecm-meetings</module>
         <module>lecm-search-editor</module>
         <module>lecm-documents-templates</module>
         <module>lecm-reporting</module>
@@ -759,6 +754,11 @@
 		<profile>
             <id>SED</id>
             <modules>
+				<module>lecm-contracts</module>
+				<module>lecm-errands</module>
+				<module>lecm-eds-documents</module>
+				<module>lecm-operative-storage</module>
+				<module>lecm-meetings</module>
                 <module>lecm-incoming</module>
                 <module>lecm-outgoing</module>
                 <module>lecm-internal</module>

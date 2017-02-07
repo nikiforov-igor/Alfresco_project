@@ -98,6 +98,11 @@
 
 	<util:constant id="MEETINGS_ROOT_ID" static-field="ru.it.lecm.meetings.beans.MeetingsService.MEETINGS_ROOT_ID"/>
 
+	<util:list id="meetingsPropsForFilterShowInCalendar">
+		<value>lecm-meetings:chairman-assoc-ref</value>
+		<value>lecm-meetings:secretary-assoc-ref</value>
+	</util:list>
+	
 	<bean id="meetingsService" class="ru.it.lecm.meetings.beans.MeetingsServiceImpl" parent="baseBean"
 		  depends-on="meetings.ModelsBootstrap, ServiceRegistry, nodeService, transactionService, businessJournalService, WorkflowService, personService, stateMachineHelper"
 		  init-method="init"
@@ -114,6 +119,7 @@
 		  p:orgstructureService-ref="serviceOrgstructure"
 		  p:notificationsService-ref="notificationsService"
 		  p:routesService-ref="routesService"
+		  p:meetingsPropsForFilterShowInCalendar-ref="meetingsPropsForFilterShowInCalendar"
 	>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
@@ -211,6 +217,8 @@
 				<value>alfresco/module/${artifactId}/actions/create-protocol.xml</value>
 				<value>alfresco/module/${artifactId}/actions/approve-time.xml</value>
 				<value>alfresco/module/${artifactId}/actions/change-secretary.xml</value>
+				<value>alfresco/module/${artifactId}/actions/force-approval.xml</value>
+				<value>alfresco/module/${artifactId}/actions/reject-approval.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -274,5 +282,4 @@
 			</list>
 		</property>
 	</bean>
-
 </beans>

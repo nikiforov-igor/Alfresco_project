@@ -9,9 +9,9 @@
         <items>
             <item name="cm:Другие настройки" type="lecm-arm:accordion">
                 <property name="cm:name"><![CDATA[Другие настройки]]></property>
-                <property name="lecm-arm:order"><![CDATA[200]]></property>
+                <property name="lecm-arm:order"><![CDATA[60]]></property>
                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                <property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
+                <property name="lecm-arm:types"><![CDATA[lecm-document:base]]></property>
                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                 <property name="lecm-arm:search-query"><![CDATA[]]></property>
             </item>

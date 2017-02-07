@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-	<item name="cm:Настройки мероприятий и совещаний" type="lecm-arm:html-node">
-		<property name="cm:name"><![CDATA[Настройки мероприятий и совещаний]]></property>
-		<property name="lecm-arm:order"><![CDATA[5]]></property>
+	<item name="cm:Настройки мероприятий" type="lecm-arm:html-node">
+		<property name="cm:name"><![CDATA[Настройки мероприятий]]></property>
+		<property name="lecm-arm:order"><![CDATA[40]]></property>
 		<property name="lecm-arm:html-url"><![CDATA[page/lecm/events-user-settings/content]]></property>
 	</item>
 </items>
