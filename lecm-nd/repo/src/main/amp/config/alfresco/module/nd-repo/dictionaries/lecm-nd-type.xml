@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <items updateMode="CreateOrUpdate">
-	<item name="lecm-dic:Вид НД" type="lecm-dic:dictionary">
-        <property name="cm:name">Вид НД</property>
-        <property name="lecm-dic:description">Справочник видов НД</property>
-        <property name="lecm-dic:type">lecm-doc-dic-dt:documentType</property>
-        <property name="lecm-dic:attributeForShow">cm:name</property>
-        <property name="lecm-dic:plane">true</property>
-        <property name="lecm-dic:active">true</property>
-	</item>
+    <item name="lecm-dic:Вид документа" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Вид НД" type="lecm-doc-dic-dt:typeDictionary">
+                <property name="cm:name">Вид НД</property>
+                <property name="lecm-dic:valueContainsType">lecm-nd-dic:documentType</property>
+                <items>
+                    <item name="cm:Инструкция" type="lecm-nd-dic:documentType">
+                        <property name="cm:name">Инструкция</property>
+                        <property name="lecm-doc-dic-dt:documentType-code">01</property>
+                    </item>
+                    <item name="cm:Положение" type="lecm-nd-dic:documentType">
+                        <property name="cm:name">Положение</property>
+                        <property name="lecm-doc-dic-dt:documentType-code">02</property>
+                    </item>
+                    <item name="cm:Регламент" type="lecm-nd-dic:documentType">
+                        <property name="cm:name">Регламент</property>
+                        <property name="lecm-doc-dic-dt:documentType-code">03</property>
+                    </item>
+                    <item name="cm:Правило" type="lecm-nd-dic:documentType">
+                        <property name="cm:name">Правило</property>
+                        <property name="lecm-doc-dic-dt:documentType-code">04</property>
+                    </item>
+                </items>
+            </item>
+        </items>
+    </item>
 </items>
