@@ -11,6 +11,7 @@
 		<value>alfresco/module/${artifactId}/models/lecm-eds-global-settings-model.xml</value>
 	</util:list>
 	<util:list id="eds.document.models">
+        <value>alfresco/module/${artifactId}/models/lecm-doc-type-dictionary-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-eds-document-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-eds-aspects-model.xml</value>
 	</util:list>
@@ -45,6 +46,8 @@
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-br-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-nt-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-objectType-items.xml</value>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-document-type.xml</value>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-document-type-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-business-journal-eventCategory-items.xml</value>
 	</util:list>
 	<bean id="eds.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
@@ -132,4 +135,12 @@
 		<property name="documentService" ref="documentService"/>
 		<property name="stateMachineService" ref="stateMachineHelper"/>
 	</bean>
+
+    <bean id="eds.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
+        <property name="configs">
+            <list>
+                <value>alfresco/module/${artifactId}/reports/configs/eds.properties</value>
+            </list>
+        </property>
+    </bean>
 </beans>
