@@ -32,8 +32,6 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 	YAHOO.lang.extend(LogicECM.module.WCalendar.Absence.DatePicker, LogicECM.DatePicker);
 
 	LogicECM.module.WCalendar.Absence.DatePicker.prototype.draw = function () {
-		var me = this;
-
 		if (!this.options.currentValue) {
 			// MNT-2214 fix, check for prevously entered value
 			var iso8601DateString = Dom.get(this.currentValueHtmlId).value;
@@ -103,17 +101,17 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 
 		// Hide Calendar if we click anywhere in the document other than the calendar
 		Event.on(document, "click", function(e) {
-			var inputEl = Dom.get(me.id + "-date");
-			var iconEl = Dom.get(me.id + "-icon");
+			var inputEl = Dom.get(this.id + "-date");
+			var iconEl = Dom.get(this.id + "-icon");
 			var el = Event.getTarget(e);
-			if (me.widgets.calendar) {
-				var dialogEl = me.widgets.calendar.oDomContainer;
+			if (this.widgets.calendar) {
+				var dialogEl = this.widgets.calendar.oDomContainer;
 
 				if (el && el != dialogEl && !Dom.isAncestor(dialogEl, el) && el != iconEl) {
-					me._hidePicker();
+					this._hidePicker();
 				}
 			}
-		});
+		}, null, this);
 
 		// Register a validation handler for the date entry field so that the submit
 		// button disables when an invalid date is entered
