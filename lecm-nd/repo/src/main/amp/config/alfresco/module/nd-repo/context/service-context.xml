@@ -44,7 +44,7 @@
           depends-on="ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
                       ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
                       nd.document.models.bootstrap,
-                      eds.dictionary.bootstrap
+                      eds.dictionary.bootstrap,
 					  businessJournalLogEventsPolicy,
                       documents.LogicEcmConnectionTypesBootstrap,
 					  regNumbers.regNumbersTemplatesDicBootstrap"
