@@ -6,6 +6,7 @@
     <imports>
         <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.it.ru/logicECM/document/dictionaries/docType/1.0" prefix="lecm-doc-dic-dt"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/internal-doc-type/1.0" prefix="lecm-internal-doc-type"/>
@@ -15,8 +16,9 @@
         <!--Справочник видов документа-->
         <type name="lecm-internal-doc-type:dictionary">
             <title>Internal Document Type</title>
-            <parent>lecm-dic:plane_dictionary_values</parent>
+            <parent>lecm-doc-dic-dt:documentType</parent>
             <properties>
+                <!--deprecated (Больше не используется)-->
                 <property name="lecm-internal-doc-type:code">
                     <title>Код</title>
                     <type>d:text</type>
