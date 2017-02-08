@@ -76,47 +76,13 @@ public class ArmWrapperWebScriptBean extends BaseWebScript {
 
     @SuppressWarnings("unused")
     public String getFullQuery(ScriptNode node, boolean includeTypes, boolean includeParentQuery) {
-        StringBuilder builder = new StringBuilder();
         ArmNode armNode = armWrapperService.wrapArmNodeAsObject(node.getNodeRef());
-
         return getFullQuery(armNode, includeTypes, includeParentQuery);
     }
 
     @SuppressWarnings("unused")
     public String getFullQuery(ArmNode armNode, boolean includeTypes, boolean includeParentQuery) {
-        StringBuilder builder = new StringBuilder();
-        if (includeTypes) {
-            List<String> types = armNode.getTypes();
-            StringBuilder typesBuilder = new StringBuilder();
-            for (String type : types) {
-                typesBuilder.append("TYPE:\"").append(type).append("\"").append(" OR ");
-            }
-            if (typesBuilder.length() > 0) {
-                typesBuilder.delete(typesBuilder.length() - 4, typesBuilder.length());
-            }
-
-            if (typesBuilder.length() > 0) {
-                builder.append("(").append(typesBuilder.toString()).append(")");
-            }
-        }
-
-        Object query = armNode.getSearchQuery();
-        if (query != null && query.toString().length() > 0) {
-            if (builder.length() > 0) {
-                builder.append(" AND ");
-            }
-            builder.append("(").append(query.toString()).append(")");
-        }
-        if (includeParentQuery) {
-            NodeRef parentNode = nodeService.getPrimaryParent(armNode.getNodeRef()).getParentRef();
-            if (parentNode != null) {
-                QName parentType = nodeService.getType(parentNode);
-                if (parentType.equals(ArmService.TYPE_ARM_NODE) || parentType.equals(ArmService.TYPE_ARM_ACCORDION)) {
-                    builder.append(getFullQuery(new ScriptNode(parentNode, serviceRegistry, getScope()), false, false));
-                }
-            }
-        }
-        return builder.toString();
+        return armWrapperService.getFullQuery(armNode, includeTypes, includeParentQuery);
     }
 
     public void setArmService(ArmService armService) {

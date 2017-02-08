@@ -15,6 +15,7 @@ import java.util.List;
  * Date: 23.07.2014
  * Time: 17:09
  */
+@Deprecated
 public class ExpressionNode {
     private NodeRef nodeRef;
     private ServiceRegistry serviceRegistry;

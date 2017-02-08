@@ -1,6 +1,5 @@
 package ru.it.lecm.base.beans;
 
-import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.cache.SimpleCache;
 import org.alfresco.repo.dictionary.constraint.ListOfValuesConstraint;
 import org.alfresco.repo.node.getchildren.FilterProp;
@@ -24,9 +23,9 @@ import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import ru.it.lecm.base.beans.getchildren.FilterPropLECM;
-import ru.it.lecm.base.expression.ExpressionNode;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.documents.expression.ExpressionNode;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
@@ -432,7 +431,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
             expression = expression.substring("{@".length(), expression.length() - 1);
         }
         try {
-            StandardEvaluationContext context = new StandardEvaluationContext(new ExpressionNode(node, serviceRegistry));
+            StandardEvaluationContext context = new StandardEvaluationContext(new ExpressionNode(node));
             context.setBeanResolver(new BeanFactoryResolver(this.applicationContext));
 
             Boolean result = new SpelExpressionParser().parseExpression(expression).getValue(context, Boolean.class);
