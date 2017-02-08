@@ -39,10 +39,12 @@ LogicECM.module.Counters = LogicECM.module.Counters || {};
          */
         populateDataGrid: function DataGrid_populateDataGrid()
         {
-            if (!YAHOO.lang.isObject(this.datagridMeta))
-            {
+            if (!YAHOO.lang.isObject(this.datagridMeta)) {
                 return;
             }
+
+            // Получение title-ов из моделей типов через api-сервис Alfresco (тип 'lecm-document:base' и его дочерние типы)
+            this.getTypesTitles();
 
             this.renderDataGridMeta();
 
@@ -64,25 +66,21 @@ LogicECM.module.Counters = LogicECM.module.Counters || {};
                 configURL = $combine(Alfresco.constants.URL_SERVICECONTEXT, "lecm/components/datagrid/config/columns?itemType=" + encodeURIComponent(itemType) + ((this.datagridMeta.datagridFormId != null && this.datagridMeta.datagridFormId != undefined) ? "&formId=" + encodeURIComponent(this.datagridMeta.datagridFormId) : ""));
             }
 
-            Alfresco.util.Ajax.jsonGet(
-                {
-                    url: configURL,
-                    successCallback:
-                    {
-                        fn: this.onDataGridColumns,
-                        scope: this
+            Alfresco.util.Ajax.jsonGet({
+                url: configURL,
+                successCallback: {
+                    fn: this.onDataGridColumns,
+                    scope: this
+                },
+                failureCallback: {
+                    fn: this._onDataGridFailure,
+                    obj: {
+                        title: this.msg("message.error.columns.title"),
+                        text: this.msg("message.error.columns.description")
                     },
-                    failureCallback:
-                    {
-                        fn: this._onDataGridFailure,
-                        obj:
-                        {
-                            title: this.msg("message.error.columns.title"),
-                            text: this.msg("message.error.columns.description")
-                        },
-                        scope: this
-                    }
-                });
+                    scope: this
+                }
+            });
         },
 
         getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
@@ -131,38 +129,34 @@ LogicECM.module.Counters = LogicECM.module.Counters || {};
         },
 
         getDisplayedType: function(docType) {
-            var displayedType = "";
-            switch (docType) {
-                case "lecm-additional-document:additionalDocument":
-                    displayedType = this.msg("type.additionalDocument");
-                    break;
-                case "lecm-contract:document":
-                    displayedType = this.msg("type.contract");
-                    break;
-                case "lecm-nd:document":
-                    displayedType = this.msg("type.nd");
-                    break;
-                case "lecm-ord:document":
-                    displayedType = this.msg("type.ord");
-                    break;
-                case "lecm-outgoing:document":
-                    displayedType = this.msg("type.outgoing");
-                    break;
-                case "lecm-protocol:document":
-                    displayedType = this.msg("type.protocol");
-                    break;
-                case "lecm-errands:document":
-                    displayedType = this.msg("type.errands");
-                    break;
-                case "lecm-incoming:document":
-                    displayedType = this.msg("type.incoming");
-                    break;
-                case "lecm-internal:document":
-                    displayedType = this.msg("type.internal");
-                    break;
+            if (docType && this.options.typesTitles) {
+                for (key in this.options.typesTitles) {
+                    if (key == docType) {
+                        return this.options.typesTitles[key];
+                    }
+                }
             }
-            return displayedType;
-        }
+            return '';
+        },
 
+        getTypesTitles: function() {
+            this.options.typesTitles = {};
+            Alfresco.util.Ajax.jsonGet({
+                url: Alfresco.constants.PROXY_URI + 'api/classes/lecm-document_base/subclasses',
+                successCallback: {
+                    fn: function (response) {
+                        if (response.json) {
+                            for (key in response.json) {
+                                if (response.json[key].name && response.json[key].title) {
+                                    this.options.typesTitles[response.json[key].name] = '' + response.json[key].title;
+                                }
+                            }
+                        }
+                    },
+                    scope: this
+                },
+                failureMessage: this.msg('message.failure')
+            });
+        }
     }, true);
 })();
