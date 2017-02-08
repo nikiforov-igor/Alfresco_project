@@ -8,13 +8,13 @@
 
 	var Dom = YAHOO.util.Dom;
 
-    LogicECM.module.Meetings.fromDateValidation = function (field, args, event, form, silent, message) {
-        var toInput = field.form["prop_lecm-meetings_actual-to-date"],
+    LogicECM.module.Meetings.toDateValidation = function (field, args, event, form, silent, message) {
+        var fromInput = field.form["prop_lecm-meetings_actual-from-date"],
             toDate,
 			fromDate;
-    	if (field.value && toInput && toInput.value) {
-			fromDate = Alfresco.util.fromISO8601(field.value);
-			toDate = Alfresco.util.fromISO8601(toInput.value);
+    	if (field.value && fromInput && fromInput.value) {
+			toDate = Alfresco.util.fromISO8601(field.value);
+			fromDate = Alfresco.util.fromISO8601(fromInput.value);
 			if (fromDate && toDate) {
 				return fromDate <= toDate;
 			}
