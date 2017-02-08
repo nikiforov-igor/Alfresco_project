@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<items updateMode="CreateOrUpdate">
+    <item name="lecm-dic:Вид документа" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Вид входящего" type="lecm-doc-dic-dt:typeDictionary">
+                <property name="cm:name">Вид входящего</property>
+                <property name="lecm-dic:valueContainsType">lecm-incoming-dic:documentType</property>
+            </item>
+        </items>
+    </item>
+</items>

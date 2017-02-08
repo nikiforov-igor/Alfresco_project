@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Шаблоны уведомлений" type="lecm-dic:dictionary">
+        <property name="cm:name"><![CDATA[Шаблоны уведомлений]]></property>
+        <property name="lecm-dic:attributeForShow"><![CDATA[cm:name]]></property>
+        <property name="lecm-dic:type"><![CDATA[lecm-notification-template:template]]></property>
+        <property name="lecm-dic:plane"><![CDATA[true]]></property>
+        <property name="lecm-dic:description"><![CDATA[Шаблоны уведомлений]]></property>
+        <items>
+            <item name="cm:INCOMING_REGISTRATION_REQUEST" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[INCOMING_REGISTRATION_REQUEST]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-incoming:recipient-assoc/lecm-orgstr:employee-short-name}"))}  просит зарегистрировать  {#mainObject.wrapAsLink(#mainObject.getFormatted("входящий документ {lecm-incoming:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:fullname}"))}.]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Входящий. Запрос регистрации]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:INCOMING_RETURN_DOCUMENT" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[INCOMING_RETURN_DOCUMENT]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#sender.wrapAsLink(#sender.getFormatted("{lecm-orgstr:employee-short-name}"))}  вернул(а) документ {#mainObject.wrapAsLink(#mainObject.getFormatted("№ {~REGNUM} от {~REGDATE}"))} {#sendToExecutionUser != null ? "сотруднику ".concat({#sendToExecutionUser.wrapAsLink(#sendToExecutionUser.getFormatted("{lecm-orgstr:employee-short-name}"))}) : ""}.]]></property>
+                <property name="lecm-notification-template:description"><![CDATA[Входящий. Вернуть]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:INCOMING_RECEIVED" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[INCOMING_RECEIVED]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Вам поступил документ: {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:shortname}"))}.]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Входящий. Направить на исполнение]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:INCOMING_REVIEW" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[INCOMING_REVIEW]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#sender.wrapAsLink(#sender.getFormatted("{lecm-orgstr:employee-short-name}"))} направил Вам документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:shortname}"))} на рассмотрение. Комментарий: {#comment}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Входящий. Направить на рассмотрение]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:INCOMING_SEND_TO_RECIPIENT" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[INCOMING_SEND_TO_RECIPIENT]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Вам направлен новый документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:title}"))}.]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Входящий. Направить получателю (Не требует регистрации)]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:INCOMING_APPROACHING_DEADLINE" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[INCOMING_APPROACHING_DEADLINE]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Приближается срок исполнения документа {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:present-string}: {lecm-document:title}"))}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Входящий. Приближается срок исполнения]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:INCOMING_EXCEEDED_DEADLINE" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[INCOMING_EXCEEDED_DEADLINE]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Превышен срок исполнения по документу {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:present-string}: {lecm-document:title}"))}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Входящий. Превышен срок исполнения]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+        </items>
+    </item>
+</items>
