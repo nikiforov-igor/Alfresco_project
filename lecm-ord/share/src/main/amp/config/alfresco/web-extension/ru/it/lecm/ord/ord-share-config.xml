@@ -271,17 +271,26 @@
             <form id="search">
                 <field-visibility>
                     <show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
-                    <show id="lecm-document:title"/>																	<!-- Заголовок -->
-                    <show id="cm:created"/>																				<!-- Дата создания -->
+                    <show id="lecm-statemachine:status" force="true"/>                                                               <!-- Статус -->
+                    <show id="lecm-document:regnum"/>	                                                                <!-- Номер -->
+                    <!--<show id="lecm-document-aspects:reg-project-data-number"/>											&lt;!&ndash; Номер проекта &ndash;&gt;-->
+                    <show id="lecmSignAspects:signerEmployeeAssoc"/>													<!-- Подписанты -->
                     <show id="lecm-document-aspects:reg-project-data-date"/>											<!-- Дата регистрации -->
-                    <show id="lecm-document-aspects:reg-project-data-number"/>											<!-- Номер проекта -->
-                    <show id="lecm-document:author-assoc"/>																<!-- Автор -->
-                    <show id="lecmSignAspects:signerEmployeeAssoc"/>																	<!-- Подписанты -->
+                    <show id="lecm-eds-document:executor-assoc"/>                                                       <!-- Исполнитель -->
+                    <show id="lecm-document:author-assoc"/>                                                             <!-- Составитель -->
+                    <show id="lecm-document:title"/>																	<!-- Заголовок -->
+                    <show id="lecm-ord:controller-assoc"/>																<!-- Контролер -->
+                                                        																<!-- Подтверждать завершение  -->
+                                                        																<!-- На исполнении -->
+                    <show id="lecm-eds-document:execution-date"/>                                                       <!-- Срок исполнения -->
+                                                                                                                        <!-- Исполнен -->
+                    <show id="lecm-review-ts:review-aspect"/>                                                           <!-- Исполнение -->
+                                                                                                                        <!-- Ознакомление -->
                 </field-visibility>
                 <appearance>
-                    <set id="ord-document-search-common-set" template="/ru/it/lecm/ord/components/class-set.ftl"/>
+                    <set id="cm:content2cols" template="/org/alfresco/components/form/2-column-set.ftl" />
 
-                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа" set="ord-document-search-common-set">
+                    <field id="lecm-eds-document:document-type-assoc" set="cm:content2cols" label="Вид документа" >
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_ОРД</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -290,24 +299,44 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:title" set="ord-document-search-common-set" mandatory="false">
+                    <field id="lecm-document:title"  mandatory="false">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="cm:created" set="ord-document-search-common-set" >
+                    <field id="lecm-document-aspects:reg-project-data-date"  >
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
-                    <field id="lecm-document-aspects:reg-project-data-date" set="ord-document-search-common-set" >
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
-                    </field>
-                    <field id="lecm-document-aspects:reg-project-data-number" set="ord-document-search-common-set" />
-                    <field id="lecm-document:author-assoc" set="ord-document-search-common-set" mandatory="false">
+                    <field id="lecm-document:regnum" set="cm:content2cols"/>
+                    <field id="lecm-document:author-assoc" set="cm:content2cols"  mandatory="false">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecmSignAspects:signerEmployeeAssoc" set="ord-document-search-common-set"/>
+                    <field id="lecmSignAspects:signerEmployeeAssoc" set="cm:content2cols"/>
+                    <field id="lecm-statemachine:status" set="cm:content2cols" label-id="label.lecm-ord-status.title"  mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                        <control template="/ru/it/lecm/documents/controls/select-status-control.ftl">
+                            <control-param name="docType">lecm-ord:document</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="valuesDelimiter">,</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-eds-document:executor-assoc" set="cm:content2cols"/>
+                    <field id="lecm-ord:controller-assoc" set="cm:content2cols"/>
+                    <field id="lecm-review-ts:review-aspect" set="cm:content2cols"/>
+                    <field id="lecm-eds-document:execution-date" >
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                    </field>
+                    <!--<field>-->
+                        <!--<field id="lecm-errands:is-expired">-->
+                            <!--<control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">-->
+                                <!--<control-param name="options">true|Да,false|Нет</control-param>-->
+                            <!--</control>-->
+                        <!--</field>-->
+                    <!--</field> &lt;!&ndash; Контрол для исполнение\ознакомление &ndash;&gt;-->
                 </appearance>
             </form>
 
