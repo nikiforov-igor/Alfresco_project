@@ -43,9 +43,6 @@ LogicECM.module.Counters = LogicECM.module.Counters || {};
                 return;
             }
 
-            // Получение title-ов из моделей типов через api-сервис Alfresco (тип 'lecm-document:base' и его дочерние типы)
-            this.getTypesTitles();
-
             this.renderDataGridMeta();
 
             var itemType = "";
@@ -137,26 +134,38 @@ LogicECM.module.Counters = LogicECM.module.Counters || {};
                 }
             }
             return '';
-        },
-
-        getTypesTitles: function() {
-            this.options.typesTitles = {};
-            Alfresco.util.Ajax.jsonGet({
-                url: Alfresco.constants.PROXY_URI + 'api/classes/lecm-document_base/subclasses',
-                successCallback: {
-                    fn: function (response) {
-                        if (response.json) {
-                            for (key in response.json) {
-                                if (response.json[key].name && response.json[key].title) {
-                                    this.options.typesTitles[response.json[key].name] = '' + response.json[key].title;
-                                }
-                            }
-                        }
-                    },
-                    scope: this
-                },
-                failureMessage: this.msg('message.failure')
-            });
         }
     }, true);
+
+    LogicECM.module.Counters.DataGrid.createDatagrid = function (containerId, options, datagridMetadata, messages) {
+        var datagrid = new LogicECM.module.Counters.DataGrid(containerId);
+        datagrid.setOptions(options);
+        datagrid.setMessages(messages);
+
+        // Получение title-ов из моделей типов через api-сервис Alfresco (тип 'lecm-document:base' и его дочерние типы)
+        Alfresco.util.Ajax.jsonGet({
+            url: Alfresco.constants.PROXY_URI + 'api/classes/lecm-document_base/subclasses',
+            successCallback: {
+                fn: function (response) {
+                    if (response.json) {
+                        var typesTitles = {};
+                        for (key in response.json) {
+                            if (response.json[key].name && response.json[key].title) {
+                                typesTitles[response.json[key].name] = '' + response.json[key].title;
+                            }
+                        }
+                        datagrid.options.typesTitles = typesTitles;
+                        Bubbling.fire('activeGridChanged', {
+                            bubblingLabel: options.bubblingLabel,
+                            datagridMeta: datagridMetadata
+                        });
+                    }
+                }
+            },
+            failureCallback: {
+                fn: function () {}
+            }
+        });
+    };
+
 })();
