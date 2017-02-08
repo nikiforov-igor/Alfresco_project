@@ -43,14 +43,11 @@
 					<set id="review" label="Ознакомление"/>
 
 					<field id="lecm-document:title" set="common" />
-					<field id="lecm-eds-document:document-type-assoc" set="common">
-						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel"> </control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-						</control>
+					<field id="lecm-eds-document:document-type-assoc" set="common" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_протокола</control-param>
+                            <control-param name="endpointType">lecm-meetings-dic:protocolDocumentType</control-param>
+                        </control>
 					</field>
 					<field id="lecm-eds-document:execution-date" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
@@ -194,14 +191,11 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:title"/>
-					<field id="lecm-eds-document:document-type-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel"> </control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-						</control>
+					<field id="lecm-eds-document:document-type-assoc" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_протокола</control-param>
+                            <control-param name="endpointType">lecm-meetings-dic:protocolDocumentType</control-param>
+                        </control>
 					</field>
 					<field id="lecm-eds-document:execution-date">
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
@@ -308,14 +302,11 @@
 					<show id="lecm-protocol:errands-autocreation"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-eds-document:document-type-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel"> </control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-						</control>
+					<field id="lecm-eds-document:document-type-assoc" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_протокола</control-param>
+                            <control-param name="endpointType">lecm-meetings-dic:protocolDocumentType</control-param>
+                        </control>
 					</field>
 					<field id="lecm-eds-document:execution-date">
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
@@ -429,9 +420,10 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-eds-document:document-type-assoc">
-						<control>
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
-						</control>
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_протокола</control-param>
+                            <control-param name="endpointType">lecm-meetings-dic:protocolDocumentType</control-param>
+                        </control>
 					</field>
 					<field id="lecm-protocol:signers-assoc">
 						<control>
@@ -490,13 +482,10 @@
 						</constraint-handlers>
 					</field>
 					<field id="lecm-eds-document:document-type-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel"> </control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-						</control>
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_протокола</control-param>
+                            <control-param name="endpointType">lecm-meetings-dic:protocolDocumentType</control-param>
+                        </control>
 					</field>
 				</appearance>
 			</form>
@@ -827,6 +816,46 @@
 			</form>
 		</forms>
 	</config>
+
+    <config evaluator="node-type" condition="lecm-meetings-dic:protocolDocumentType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-meetings-dic:protocolDocumentType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                </field-visibility>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-doc-dic-dt:documentType-code" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 
 	<config evaluator="string-compare" condition="Workflow">
 		<hidden-workflows>

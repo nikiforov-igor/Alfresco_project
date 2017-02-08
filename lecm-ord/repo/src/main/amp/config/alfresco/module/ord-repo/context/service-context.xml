@@ -32,6 +32,7 @@
             ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
             eds.models.bootstrap, documents.LogicEcmModelsBootstrap,
             errands.LogicEcmModelsBootstrap,
+            eds.dictionary.bootstrap,
             lecm.sign2.helper.model.bootstrap
             review.model.bootstrap"
           p:models-ref="ord.models"

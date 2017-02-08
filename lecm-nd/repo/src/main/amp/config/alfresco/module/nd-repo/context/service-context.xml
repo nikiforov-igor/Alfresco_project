@@ -33,6 +33,7 @@
           depends-on="
             ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
             eds.models.bootstrap, documents.LogicEcmModelsBootstrap,
+            eds.dictionary.bootstrap,
             documents.LogicEcmModelsBootstrap,
             lecm.sign2.helper.model.bootstrap
             review.model.bootstrap"
