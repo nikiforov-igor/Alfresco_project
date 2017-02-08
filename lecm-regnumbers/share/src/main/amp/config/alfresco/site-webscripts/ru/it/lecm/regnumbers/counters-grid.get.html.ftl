@@ -3,23 +3,22 @@
 <#assign id = args.htmlid + "-counters-datagrid"/>
 <#assign showViewForm = false/>
 
-<div id="counters-reset-title" class="documents-counters-reset">
+<div id="${id}" class="documents-counters-reset">
     <div class="yui-g">
         <div class="yui-u first">
             <div class="title">${msg("label.regnumbers.documents.counters.reset.title")}</div>
         </div>
     </div>
-</div>
-<div id="${id}">
     <@grid.datagrid id showViewForm/>
 </div>
+
 <div class="clear"></div>
 
 <script type="text/javascript">
 (function(){
     function createPage() {
-        // Ищем оба типа счетчиков: сквозной и годовой.
-        var itemTypes = LogicECM.module.Counters.Const.COUNTERS_CONTAINER.yearCounterType + "," + LogicECM.module.Counters.Const.COUNTERS_CONTAINER.plainCounterType;
+        // Ищем оба типа счетчиков: сквозной и годовой (используя для этого их родительский тип).
+        var itemType = LogicECM.module.Counters.Const.COUNTERS_CONTAINER.parentCounterType;
         LogicECM.module.Counters.DataGrid.createDatagrid("${id}", {
             usePagination: false,
             disableDynamicPagination: true,
@@ -39,7 +38,7 @@
             editFormTitleMsg: "${msg('actions.counters.edit')}"
         }, {
             useFilterByOrg: false,
-            itemType: itemTypes,
+            itemType: itemType,
             datagridFormId: 'year-counter-datagrid',
             nodeRef: LogicECM.module.Counters.Const.COUNTERS_CONTAINER.nodeRef,
             searchConfig: {
