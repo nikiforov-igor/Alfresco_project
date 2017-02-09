@@ -4,17 +4,55 @@
     <author>Logic ECM</author>
     <version>1.0</version>
     <imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
         <import uri="http://www.it.ru/logicECM/document/dictionaries/docType/1.0" prefix="lecm-doc-dic-dt"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/incoming/dictionaries/1.0" prefix="lecm-incoming-dic"/>
     </namespaces>
 
+    <constraints>
+        <constraint name="lecm-incoming-dic:date-type-const" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>WORK</value>
+                    <value>CALENDAR</value>
+                </list>
+            </parameter>
+        </constraint>
+    </constraints>
+
     <types>
         <!--Справочник видов документа-->
         <type name="lecm-incoming-dic:documentType">
             <title>Incoming Document Type</title>
             <parent>lecm-doc-dic-dt:documentType</parent>
+            <properties>
+                <property name="lecm-incoming-dic:review-date-days">
+                    <type>d:int</type>
+                    <mandatory>false</mandatory>
+                </property>
+                <property name="lecm-incoming-dic:review-date-type">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <default>WORK</default>
+                    <constraints>
+                        <constraint ref="lecm-incoming-dic:date-type-const"/>
+                    </constraints>
+                </property>
+                <property name="lecm-incoming-dic:execution-date-days">
+                    <type>d:int</type>
+                    <mandatory>false</mandatory>
+                </property>
+                <property name="lecm-incoming-dic:execution-date-type">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <default>WORK</default>
+                    <constraints>
+                        <constraint ref="lecm-incoming-dic:date-type-const"/>
+                    </constraints>
+                </property>
+            </properties>
         </type>
     </types>
 </model>
