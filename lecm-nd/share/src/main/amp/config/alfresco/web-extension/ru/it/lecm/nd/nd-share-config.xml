@@ -369,7 +369,7 @@
 					<show id="lecmSignAspects:signingDate" for-mode="view"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
 					<show id="lecm-review-ts:review-table-assoc"/>
-                    <show id="editExecutorScript" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                 </field-visibility>
                 <appearance>
 
@@ -475,7 +475,7 @@
                             <!--<control-param name="expandDataSource">lecm/workflow/review/ts/items/datagrid</control-param>-->
                         </control>
                     </field>
-                    <field id="editExecutorScript" set="common">
+                    <field id="lecm-base-dummy-aspects:script" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">editExecutorEditFormScriptLoaded</control-param>

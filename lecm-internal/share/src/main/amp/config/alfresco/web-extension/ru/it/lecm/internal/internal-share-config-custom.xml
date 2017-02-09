@@ -28,7 +28,7 @@
 					<show id="lecmSignAspects:isSigned" for-mode="view"/>
 					<show id="lecmSignAspects:signingDate" for-mode="view"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
-                    <show id="editExecutorScript" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label="Атрибуты" /> <!-- tab1 -->
@@ -143,7 +143,7 @@
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
                         </control>
                     </field>
-                    <field id="editExecutorScript" set="common">
+                    <field id="lecm-base-dummy-aspects:script" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">editExecutorEditFormScriptLoaded</control-param>
