@@ -232,6 +232,38 @@
 		</forms>
 	</config>
 
+    <config evaluator="model-type" condition="lecm-doc-dic-dt:typeDictionary">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                </field-visibility>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-doc-dic-dt:typeDictionary">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
     <config evaluator="node-type" condition="lecm-doc-dic-dt:documentType">
         <forms>
             <form>

@@ -28,7 +28,7 @@
 					<show id="lecmSignAspects:signingDate" for-mode="view"/>
 					<show id="lecm-document-aspects:registrator-assoc" force="true"/>
 					<show id="lecm-outgoing:is-finishing"/>
-					<show id="editExecutorScript" force="true"/>
+					<show id="lecm-base-dummy-aspects:script" force="true"/>
 				</field-visibility>
 				<appearance>
 					<set id="common" appearance="" label="Сведения" /> <!-- tab1 -->
@@ -44,7 +44,12 @@
 
 					<field id="lecm-document:title" set="common"/>
 
-					<field id="lecm-eds-document:document-type-assoc" set="common"/>
+					<field id="lecm-eds-document:document-type-assoc" set="common" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
+                            <control-param name="endpointType">lecm-outgoing-dic:documentType</control-param>
+                        </control>
+                    </field>
 					<field id="lecm-outgoing:delivery-method-assoc" set="common"/>
 
 					<field id="lecm-outgoing:contractor-assoc" set="common">
@@ -203,7 +208,7 @@
 					<field id="lecm-outgoing:is-finishing" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 					</field>
-					<field id="editExecutorScript" set="common">
+					<field id="lecm-base-dummy-aspects:script" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
 							<control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
 							<control-param name="scriptLoadedFireAction">editExecutorEditFormScriptLoaded</control-param>
@@ -497,7 +502,12 @@
 				<appearance>
 					<field id="lecm-document:title"/>
 
-					<field id="lecm-eds-document:document-type-assoc"/>
+					<field id="lecm-eds-document:document-type-assoc" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
+                            <control-param name="endpointType">lecm-outgoing-dic:documentType</control-param>
+                        </control>
+                    </field>
 					<field id="lecm-outgoing:delivery-method-assoc"/>
 
 					<field id="lecm-outgoing:contractor-assoc">
@@ -703,6 +713,12 @@
 					<show id="lecm-outgoing:is-finishing"/>
 				</field-visibility>
 				<appearance>
+                    <field id="lecm-eds-document:document-type-assoc" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
+                            <control-param name="endpointType">lecm-outgoing-dic:documentType</control-param>
+                        </control>
+                    </field>
 					<field id="lecm-outgoing:contractor-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="changeItemsFireAction">contractor.selected</control-param>
@@ -1025,6 +1041,12 @@
 					<show id="lecm-document-aspects:registrator-assoc"/>
 				</field-visibility>
 				<appearance>
+                    <field id="lecm-eds-document:document-type-assoc" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
+                            <control-param name="endpointType">lecm-outgoing-dic:documentType</control-param>
+                        </control>
+                    </field>
 					<field id="lecm-document:present-string" label="Название"/>
 					<field id="lecm-outgoing:recipient-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
@@ -1108,6 +1130,46 @@
 			</form>
 		</forms>
 	</config>
+
+    <config evaluator="node-type" condition="lecm-outgoing-dic:documentType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-outgoing-dic:documentType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                </field-visibility>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-doc-dic-dt:documentType-code" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 
 	<config evaluator="string-compare" condition="Workflow">
 		<hidden-workflows>

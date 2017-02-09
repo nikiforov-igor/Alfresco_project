@@ -10,7 +10,7 @@
             </item>
             <item name="cm:Номер внутреннего" type="lecm-regnum:template">
                 <property name="cm:name">Номер внутреннего</property>
-                <property name="lecm-regnum:template-string">{doc.associatedAttributePath('lecm-internal:doc-type-assoc/lecm-internal-doc-type:code').isEmpty() ? "" : doc.associatedAttributePath('lecm-internal:doc-type-assoc/lecm-internal-doc-type:code') + "-"}{doc.associatedAttributePath('lecm-eds-document:file-register-assoc/lecm-os:nomenclature-case-index').isEmpty() ? "" : doc.associatedAttributePath('lecm-eds-document:file-register-assoc/lecm-os:nomenclature-case-index') + "-"}{#formatNumber('00000', doc.counterYearDoctype)}/{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-string">{doc.associatedAttributePath('lecm-eds-document:document-type-assoc/lecm-doc-dic-dt:documentType-code').isEmpty() ? "" : doc.associatedAttributePath('lecm-eds-document:document-type-assoc/lecm-doc-dic-dt:documentType-code') + "-"}{doc.associatedAttributePath('lecm-eds-document:file-register-assoc/lecm-os:nomenclature-case-index').isEmpty() ? "" : doc.associatedAttributePath('lecm-eds-document:file-register-assoc/lecm-os:nomenclature-case-index') + "-"}{#formatNumber('00000', doc.counterYearDoctype)}/{#formatDate('yy', doc.creationDate)}</property>
                 <property name="lecm-regnum:template-comment">Шаблон для номера внутреннего</property>
                 <property name="lecm-regnum:template-service-id">INTERNAL_DOC_NUMBER</property>
             </item>

@@ -7,6 +7,7 @@
 							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <util:list id="nd.models">
+        <value>alfresco/module/${artifactId}/models/lecm-nd-dic-model.xml</value>
         <value>alfresco/module/${artifactId}/models/lecm-nd-model.xml</value>
     </util:list>
 
@@ -20,7 +21,6 @@
         <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-br-items.xml</value>
         <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-event-items.xml</value>
         <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-connection-types-items.xml</value>
-        <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-type-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-nd-bj-items.xml</value>
         <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-nt-items.xml</value>
     </util:list>
@@ -33,6 +33,7 @@
           depends-on="
             ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
             eds.models.bootstrap, documents.LogicEcmModelsBootstrap,
+            eds.dictionary.bootstrap,
             documents.LogicEcmModelsBootstrap,
             lecm.sign2.helper.model.bootstrap
             review.model.bootstrap"
@@ -43,6 +44,7 @@
           depends-on="ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
                       ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
                       nd.document.models.bootstrap,
+                      eds.dictionary.bootstrap,
 					  businessJournalLogEventsPolicy,
                       documents.LogicEcmConnectionTypesBootstrap,
 					  regNumbers.regNumbersTemplatesDicBootstrap"

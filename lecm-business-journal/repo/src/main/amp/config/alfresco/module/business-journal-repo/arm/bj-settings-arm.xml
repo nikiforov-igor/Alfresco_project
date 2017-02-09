@@ -11,6 +11,7 @@
 				        <property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
 				        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 				        <property name="lecm-arm:search-query"><![CDATA[]]></property>
+				        <property name="lecm-arm:expression"><![CDATA[user.currentUser().hasBusinessRole("BR_BUSINESS_JOURNAL_ENGENEER")]]></property>
 				        <items>
 				            <item name="cm:Бизнес-журнал" type="lecm-arm:html-node">
 				                <property name="cm:name"><![CDATA[Бизнес-журнал]]></property>
@@ -23,10 +24,6 @@
 				                <property name="lecm-arm:html-url"><![CDATA[page/business-journal-logger-settings]]></property>
 				            </item>
 				        </items>
-				        <assocs>
-				            <assoc type="lecm-arm:business-roles-assoc"
-				                   path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Технолог бизнес-журнала"/>
-				        </assocs>
 				    </item>
 				</items>
 			</item>
