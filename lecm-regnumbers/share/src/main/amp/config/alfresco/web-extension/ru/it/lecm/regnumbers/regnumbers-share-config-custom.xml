@@ -155,14 +155,10 @@
 			<form id="year-counter-datagrid">
 				<field-visibility>
 					<show id="cm:name"/>
-					<show id="lecm-regnum:doctype"/>
-					<show id="lecm-regnum:year"/>
+					<show id="lecm-regnum:doctype" force="true"/>
+					<show id="lecm-regnum:year" force="true"/>
 					<show id="lecm-regnum:value"/>
 				</field-visibility>
-				<appearance>
-					<field id="lecm-regnum:doctype" label-id="label.regnum.counter.doctype"/>
-					<field id="lecm-regnum:year" label-id="label.regnum.counter.year"/>
-				</appearance>
 			</form>
 		</forms>
 	</config>
