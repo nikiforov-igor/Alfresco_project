@@ -22,6 +22,7 @@
                 var errandRef = Dom.get(formId + "_assoc_packageItems-added").value;
                 processCloseChildCheckbox(errandRef, "lecmErrandWf_execute_1CloseChild");
                 processReportTextField(errandRef, "lecmErrandWf_execute_1ReportText");
+                processNewReportProject(errandRef);
             });
         } else {
             var form = Alfresco.util.ComponentManager.get(formId);
@@ -41,7 +42,26 @@
             saveReportElement.innerHTML = Alfresco.util.message("button.save-report")
         });
     }
-
+    function processNewReportProject (errandRef) {
+        Alfresco.util.Ajax.jsonPost({
+            url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+            dataObj: {
+                nodeRef: errandRef,
+                substituteString: "{lecm-errands:execution-report-status}"
+            },
+            successCallback: {
+                fn: function (response) {
+                    if (response && response.json.formatString) {
+                        var reportStatus = response.json.formatString;
+                        if (reportStatus != "PROJECT") {
+                            //clearFormData!
+                        }
+                    }
+                }
+            },
+            failureMessage: Alfresco.util.message("message.details.failure")
+        });
+    }
     function executeErrand(layer, args) {
         if (formId == args[1].formId && Dom.get(formId + "-form")) {
             // поле с формы процесса создания и формы редактирования

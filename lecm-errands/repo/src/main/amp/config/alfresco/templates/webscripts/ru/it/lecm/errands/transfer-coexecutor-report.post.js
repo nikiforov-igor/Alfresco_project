@@ -7,25 +7,28 @@ model.data = {};
 model.data.items = [];
 model.success = false;
 if (reportRefs && reportRefs.length) {
-    var formAtachments = [];
+    var formAttachments = [];
     var formConnections = [];
     var routeDateString = "";
+    var document = documentTables.getDocumentByTableDataRow(search.findNode(reportRefs[0]));
     var errandExecutor = document.assocs["lecm-errands:executor-assoc"][0];
     var executionAttachments = document.assocs["lecm-errands:execution-report-attachment-assoc"];
     var documentConnectionsAssoc = document.assocs["lecm-errands:execution-connected-document-assoc"];
     var executionReportText = document.properties["lecm-errands:execution-report"];
     var executionReportStatus = document.properties["lecm-errands:execution-report-status"];
     var formText = executionReportStatus != "PROJECT" ? "" : executionReportText;
-    if (documentConnectionsAssoc) {
-        formConnections.concat(documentConnectionsAssoc);
-    }
-    if(executionAttachments){
-        formAtachments.concat(executionAttachments);
+
+    if (executionReportStatus == "PROJECT") {
+        if (documentConnectionsAssoc) {
+            formConnections.concat(documentConnectionsAssoc);
+        }
+        if (executionAttachments) {
+            formAttachments.concat(executionAttachments);
+        }
     }
     for (var i = 0; i < reportRefs.length; i++) {
         var report = search.findNode(reportRefs[i]);
         if (report && report.properties["lecm-errands-ts:coexecutor-report-status"] == "ACCEPT") {
-            var document = documentTables.getDocumentByTableDataRow(report);
             var currentEmployee = orgstructure.getCurrentEmployee();
             if (document && lecmPermission.hasEmployeeDynamicRole(document, currentEmployee, "ERRANDS_EXECUTOR")) {
                 var errandExecutorName = errandExecutor.properties["lecm-orgstr:employee-short-name"];
@@ -56,7 +59,7 @@ if (reportRefs && reportRefs.length) {
                             });
                         }
                         if(!attachmentExist) {
-                            formAtachments.push(reportAttachments[j]);
+                            formAttachments.push(reportAttachments[j]);
                             attachments.push({
                                 name: reportAttachments[j].name,
                                 link: "/share/page/document-attachment?nodeRef=" + reportAttachments[j].nodeRef
@@ -106,7 +109,7 @@ if (reportRefs && reportRefs.length) {
         }
     }
     model.data.formText = formText;
-    model.data.formAtachments = formAtachments;
+    model.data.formAttachments = formAttachments;
     model.data.formConnections = formConnections;
 }
 if (model.data.items.length) {

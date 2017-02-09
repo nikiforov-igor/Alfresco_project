@@ -298,6 +298,7 @@ LogicECM.errands = LogicECM.errands || {};
                 var executionReportDialog = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
                 executionReportDialog.setOptions({
                     templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'components/form',
+                    actionUrl: Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/errands/executionReport/process?nodeRef=' + nodeRef,
                     templateRequestParams: {
                         formId: formId,
                         itemKind: "node",
@@ -324,11 +325,13 @@ LogicECM.errands = LogicECM.errands || {};
                     },
                     onSuccess: {
                         fn: function (response) {
-                            reportsRefs.forEach(function (nodeRef) {
-                                me._itemUpdate(nodeRef);
-                            });
-                            me.updateExecutorReport(response.json.data);
                             executionReportDialog.hide();
+                            if (!response.json.isExecute) {
+                                reportsRefs.forEach(function (nodeRef) {
+                                    me._itemUpdate(nodeRef);
+                                });
+                                me.updateExecutorReport(response.json.data);
+                            }
                         },
                         scope: this
                     },

@@ -197,11 +197,11 @@ public class ErrandsExecutionReportUpdatePolicy implements NodeServicePolicies.O
                     }
                 }
                 nodeService.setProperty(nodeRef, ErrandsService.PROP_ERRANDS_EXECUTE_RESULT, "onControl");
-                Map<String, Object> templateConfig = new HashMap<>();
-                templateConfig.put("mainObject", nodeRef);
-                templateConfig.put("eventExecutor", currentUser);
-                notificationsService.sendNotification(authenticationService.getCurrentUserName(), currentUser, recipients, notificationTemplateCode, templateConfig, true);
             }
+            Map<String, Object> templateConfig = new HashMap<>();
+            templateConfig.put("mainObject", nodeRef);
+            templateConfig.put("eventExecutor", currentUser);
+            notificationsService.sendNotification(authenticationService.getCurrentUserName(), currentUser, recipients, notificationTemplateCode, templateConfig, true);
             nodeService.setProperty(nodeRef, ErrandsService.PROP_ERRANDS_EXECUTION_REPORT_IS_EXECUTE, false);
         }
     }
