@@ -1,4 +1,4 @@
-if (typeof LogicECM == "undefined" || !LogicECM) {
+if (typeof LogicECM == 'undefined' || !LogicECM) {
     LogicECM = {};
 }
 
@@ -33,7 +33,7 @@ LogicECM.module.Counters = LogicECM.module.Counters || {};
 
     YAHOO.lang.augmentObject(LogicECM.module.Counters.DataGrid.prototype, {
         getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
-            var html = "";
+            var html = '';
             // Populate potentially missing parameters
             if (!oRecord) {
                 oRecord = this.getRecord(elCell);
@@ -44,7 +44,7 @@ LogicECM.module.Counters = LogicECM.module.Counters || {};
 
             if (oRecord && oColumn) {
                 if (!oData) {
-                    oData = oRecord.getData("itemData")[oColumn.field];
+                    oData = oRecord.getData('itemData')[oColumn.field];
                 }
 
                 if (oData) {
@@ -54,12 +54,10 @@ LogicECM.module.Counters = LogicECM.module.Counters || {};
                         for (var i = 0, ii = oData.length, data; i < ii; i++) {
                             data = oData[i];
 
-                            var columnContent = "";
+                            var columnContent = '';
                             switch (datalistColumn.name) { //  меняем отрисовку для конкретных колонок
-                                case "lecm-regnum:doctype":
-                                    if (data.value && (("" + data.value) != "false")) {
-                                        columnContent += (data.value + " (" + (grid.options.typesTitles[data.value] || "") + ")");
-                                    }
+                                case 'lecm-regnum:doctype':
+                                    columnContent += data.value ? (data.value + ' (' + (grid.options.typesTitles[data.value] || '') + ')') : '';
                                     break;
                                 default:
                                     break;
