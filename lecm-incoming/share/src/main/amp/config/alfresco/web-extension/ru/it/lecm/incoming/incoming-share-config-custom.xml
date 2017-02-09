@@ -163,7 +163,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
 
-                    <field set="common" id="lecm-incoming:recipient-assoc">
+                    <field set="common" id="lecm-incoming:recipient-assoc" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="items">employee,organization</control-param>
 							<!-- lecm-orgstr:employee -->
@@ -266,7 +266,7 @@
                     <field id="lecm-statemachine:status">
                         <control template="/ru/it/lecm/documents/controls/history/status-history.ftl"/>
                     </field>
-                    <field id="lecm-incoming:recipient-assoc">
+                    <field id="lecm-incoming:recipient-assoc" mandatory="tue">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="items">employee,organization</control-param>
 							<!-- lecm-orgstr:employee -->
@@ -583,7 +583,7 @@
                         </control>
                     </field>
 
-                    <field id="lecm-incoming:recipient-assoc">
+                    <field id="lecm-incoming:recipient-assoc" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="items">employee,organization</control-param>
 							<!-- lecm-orgstr:employee -->
@@ -755,7 +755,7 @@
 						</control>
 					</field>
 
-                    <field id="lecm-incoming:recipient-assoc">
+                    <field id="lecm-incoming:recipient-assoc" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="items">employee,organization</control-param>
 							<!-- lecm-orgstr:employee -->
@@ -933,7 +933,7 @@
                         </control>
                     </field>
                     <field id="lecm-document:present-string" label="Название"/>
-                    <field id="lecm-incoming:recipient-assoc">
+                    <field id="lecm-incoming:recipient-assoc" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="items">employee,organization</control-param>
 							<!-- lecm-orgstr:employee -->
