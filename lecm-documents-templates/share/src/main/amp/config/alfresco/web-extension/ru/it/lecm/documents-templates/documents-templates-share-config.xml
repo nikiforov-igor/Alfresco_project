@@ -6,6 +6,7 @@
 					<show id="lecm-template:actions"/>
 					<show id="cm:title"/>
 					<show id="lecm-template:organizationAssoc"/>
+					<show id="lecm-template:unitAssoc"/>
 					<show id="lecm-template:readonly"/>
 					<show id="lecm-template:doc-type"/>
 					<show id="lecm-template:attributes"/>
@@ -34,6 +35,14 @@
 								<control-param name="defaultValueDataSource">/lecm/documents-templates/defaultOrganization</control-param>
 							</control>
 						</field>
+						<field id="lecm-template:unitAssoc" set="top2">
+							<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+								<control-param name="additionalFilter">PATH:\"//app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг/*//*\"</control-param>
+								<control-param name="plane">true</control-param>
+								<control-param name="showAutocomplete">true</control-param>
+								<control-param name="showSearch">true</control-param>
+							</control>
+						</field>
 						<field id="lecm-template:readonly" set="top2">
 							<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 						</field>
@@ -57,6 +66,7 @@
 					<show id="lecm-template:actions"/>
 					<show id="cm:title"/>
 					<show id="lecm-template:organizationAssoc"/>
+					<show id="lecm-template:unitAssoc"/>
 					<show id="lecm-template:readonly"/>
 					<show id="lecm-template:doc-type"/>
 					<show id="lecm-template:attributes"/>
@@ -83,6 +93,14 @@
 								<control-param name="childrenDataSource">/lecm/orgstructure/getOrganizations/picker</control-param>
 								<control-param name="pickerItemsScript">/lecm/orgstructure/getOrganizations/items</control-param>
 								<control-param name="defaultValueDataSource">/lecm/documents-templates/defaultOrganization</control-param>
+							</control>
+						</field>
+						<field id="lecm-template:unitAssoc" set="top2">
+							<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+								<control-param name="additionalFilter">PATH:\"//app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг/*//*\"</control-param>
+								<control-param name="plane">true</control-param>
+								<control-param name="showAutocomplete">true</control-param>
+								<control-param name="showSearch">true</control-param>
 							</control>
 						</field>
 						<field id="lecm-template:readonly" set="top2">
