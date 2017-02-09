@@ -1068,9 +1068,29 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
-                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                    <show id="cm:name"/>
+                    <show id="lecm-incoming-dic:review-date-days"/>
+                    <show id="lecm-incoming-dic:review-date-type"/>
+                    <show id="lecm-incoming-dic:execution-date-days"/>
+                    <show id="lecm-incoming-dic:execution-date-type"/>
                 </field-visibility>
+                <appearance>
+                    <set id="start"/>
+                    <set id="review-date" template="/ru/it/lecm/eds/controls/relative-date-set.ftl"/>
+                    <set id="execution-date" template="/ru/it/lecm/eds/controls/relative-date-set.ftl"/>
+
+                    <field id="cm:name" set="start"/>
+
+                    <field id="lecm-incoming-dic:review-date-days" set="review-date"/>
+                    <field id="lecm-incoming-dic:review-date-type" set="review-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+
+                    <field id="lecm-incoming-dic:execution-date-days" set="execution-date"/>
+                    <field id="lecm-incoming-dic:execution-date-type" set="execution-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -1080,13 +1100,32 @@
             <form>
                 <field-visibility>
                     <show id="cm:name" force="true"/>
-                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                    <show id="lecm-incoming-dic:review-date-days"/>
+                    <show id="lecm-incoming-dic:review-date-type"/>
+                    <show id="lecm-incoming-dic:execution-date-days"/>
+                    <show id="lecm-incoming-dic:execution-date-type"/>
                 </field-visibility>
+                <appearance>
+                    <set id="start"/>
+                    <set id="review-date" template="/ru/it/lecm/eds/controls/relative-date-set.ftl"/>
+                    <set id="execution-date" template="/ru/it/lecm/eds/controls/relative-date-set.ftl"/>
+
+                    <field id="cm:name" set="start"/>
+
+                    <field id="lecm-incoming-dic:review-date-days" set="review-date"/>
+                    <field id="lecm-incoming-dic:review-date-type" set="review-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+
+                    <field id="lecm-incoming-dic:execution-date-days" set="execution-date"/>
+                    <field id="lecm-incoming-dic:execution-date-type" set="execution-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                </appearance>
             </form>
             <form id="search">
                 <field-visibility>
                     <show id="cm:name" force="true"/>
-                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" mandatory="false">
@@ -1094,12 +1133,12 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-doc-dic-dt:documentType-code" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
-                        </constraint-handlers>
-                    </field>
                 </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                </field-visibility>
             </form>
         </forms>
     </config>

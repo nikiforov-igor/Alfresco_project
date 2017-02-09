@@ -1,0 +1,17 @@
+.relative-date-set .relative-date-type {
+    width: 200px;
+    float: right;
+    margin-left: 4px;
+}
+.relative-date-set .relative-date-type .label-div,
+.relative-date-set .relative-date-days .buttons-div {
+    display: none;
+}
+.relative-date-set .relative-date-type .control .container,
+.relative-date-set .relative-date-days .control .container {
+    min-width: 0;
+}
+.relative-date-set .relative-date-days {
+    width: auto;
+    overflow: hidden;
+}

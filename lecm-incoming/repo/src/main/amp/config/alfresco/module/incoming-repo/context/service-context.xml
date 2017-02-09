@@ -32,6 +32,7 @@
         <property name="labels">
             <list>
                 <value>alfresco/module/${artifactId}/messages/lecm-incoming-model</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-incoming-dictionaries-model</value>
             </list>
         </property>
     </bean>
