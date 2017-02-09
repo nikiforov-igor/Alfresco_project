@@ -642,64 +642,39 @@
                     <set id="block2"/>
                     <set id="2-column_3" template="/org/alfresco/components/form/2-column-set.ftl"/>
 
-                    <field id="lecm-errands:wait-for-execution-date" label="Дата выдачи" set="block1">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
-                    </field>
-                    <field id="lecmErrandWf:requestDueDateChange_1ChildDueDate" set="block2">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
-                    </field>
-                    <field id="lecm-errands:type-assoc" set="block2">
-                        <control>
-                            <control-param name="endpointMany">true</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-errands:title" set="block2">
-                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
-                        </constraint-handlers>
-                    </field>
-                    <field id="lecm-errands:limitation-date" set="block2" label-id="label.errand.wait-for-execution-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
-                    </field>
-                    <field id="lecm-errands:limitation-date-radio" set="block2" label-id="label.errand.limitless">
-                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
-                            <control-param name="options">LIMITLESS|Без срока,*|Все</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-errands:number" set="2-column_1">
-                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                        <control>
                             <control-param name="hideValue"/>
-                            <control-param name="nameSuffix">-strong-constant-upper-case</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:additional-doc-number" set="2-column_1">
-                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
-                            <control-param name="nameSuffix">-strong-constant-upper-case</control-param>
-                        </control>
+                    <field id="lecm-errands:additional-doc-number" set="2-column_1"/>
+
+                    <field id="lecm-errands:wait-for-execution-date" label-id="label.errand.wait-for-execution-date" set="block1">
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
-                    <field id="lecm-errands:executor-assoc" set="2-column_2">
+
+                    <field id="lecm-errands:initiator-assoc" set="2-column_2" mandatory="false">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-errands:initiator-assoc" set="2-column_2">
+                    <field id="lecm-document:author-assoc" set="2-column_2" label="Создатель" mandatory="false">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-document:author-assoc" set="2-column_2" label="Создатель">
+                    <field id="lecm-errands:executor-assoc" set="2-column_2" mandatory="false">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:controller-assoc" set="2-column_2">
@@ -707,6 +682,26 @@
                             <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
+
+                    <field id="lecm-errands:type-assoc" set="block2">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-errands:title" set="block2">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-errands:limitation-date" set="block2">
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                    </field>
+                    <field id="lecm-errands:limitation-date-radio" set="block2" label-id="label.errand.limitless">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
+                            <control-param name="options">LIMITLESS|Без срока,*|Все</control-param>
+                        </control>
+                    </field>
+
                     <field id="lecm-errands:is-important" set="2-column_3">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
                             <control-param name="options">true|Да,false|Нет</control-param>

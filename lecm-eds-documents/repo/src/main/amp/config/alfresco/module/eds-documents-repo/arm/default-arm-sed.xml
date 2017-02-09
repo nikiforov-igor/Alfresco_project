@@ -191,7 +191,7 @@
                                                 <property
                                                         name="cm:name"><![CDATA[e7c75a5b-e3b2-41ae-8912-73ec1950b5ca]]></property>
                                                 <property
-                                                        name="lecm-arm:field-name"><![CDATA[lecm-errands:limitation-date]]></property>
+                                                        name="lecm-arm:field-name"><![CDATA[lecm-errands:limitation-date-text]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                                 <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
