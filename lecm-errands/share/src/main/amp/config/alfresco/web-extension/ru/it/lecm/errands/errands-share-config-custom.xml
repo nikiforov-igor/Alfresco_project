@@ -649,7 +649,7 @@
                     </field>
                     <field id="lecm-errands:additional-doc-number" set="2-column_1"/>
 
-                    <field id="lecm-errands:wait-for-execution-date" label-id="label.errand.wait-for-execution-date" set="block1">
+                    <field id="lecm-errands:wait-for-execution-date" set="block1">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
 
@@ -661,7 +661,7 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-document:author-assoc" set="2-column_2" label="Создатель" mandatory="false">
+                    <field id="lecm-document:author-assoc" set="2-column_2" label-id="label.document.creator" mandatory="false">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>
