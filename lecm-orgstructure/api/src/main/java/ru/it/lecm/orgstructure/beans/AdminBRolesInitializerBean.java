@@ -91,6 +91,7 @@ public abstract class AdminBRolesInitializerBean extends BaseBean {
         return adminEmployee;
     }
 
+    @Override
     protected void initServiceImpl() {
 	NodeRef adminEmployee = getAdminEmployee();
         for (String businessRole : getBusinessRoles()) {
