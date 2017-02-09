@@ -8,20 +8,31 @@
 
 	var Dom = YAHOO.util.Dom;
 
-    LogicECM.module.Meetings.finishDatesValidation = function (field, args, event, form, silent, message) {
-        if (field.form) {
-            var fromInput = field.form["prop_lecm-meetings_actual-from-date"];
-            var toInput = field.form["prop_lecm-meetings_actual-to-date"];
+    LogicECM.module.Meetings.toDateValidation = function (field, args, event, form, silent, message) {
+        var fromInput = field.form["prop_lecm-meetings_actual-from-date"],
+            toDate,
+			fromDate;
+    	if (field.value && fromInput && fromInput.value) {
+			toDate = Alfresco.util.fromISO8601(field.value);
+			fromDate = Alfresco.util.fromISO8601(fromInput.value);
+			if (fromDate && toDate) {
+				return fromDate <= toDate;
+			}
+        }
+        return true;
+    };
 
-            if (fromInput && fromInput.value && toInput && toInput.value) {
-                var fromDate = Alfresco.util.fromISO8601(fromInput.value);
-                var toDate = Alfresco.util.fromISO8601(toInput.value);
-				var curDate = new Date();
-                if (fromDate > curDate || toDate > curDate || fromDate > toDate) {
-                    return false;
-                }
-            }
-
+    LogicECM.module.Meetings.dateMoreThanCurrentDateValidation = function (field, args, event, form, silent, message) {
+        var selectedDate,
+            curDate;
+    	if (field.value) {
+			selectedDate = Alfresco.util.fromISO8601(field.value);
+			if (selectedDate) {
+                selectedDate.setHours(0,0,0,0);
+                curDate = new Date();
+                curDate.setHours(0,0,0,0);
+                return selectedDate <= curDate;
+			}
         }
         return true;
     };

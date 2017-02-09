@@ -71,7 +71,7 @@ function main() {
 	model.isEditableExecutionLinks = doGetCall(uri);
 
 	uri = addParamToUrl('/lecm/document-type/settings', 'docType', 'lecm-errands:document');
-	model.errandsSettings = doGetCall(uri);
+	model.errandsSettings = jsonUtils.toJSONString(doGetCall(uri));
 
 	model.isErrandsStarter = isStarter("lecm-errands:document");
 
