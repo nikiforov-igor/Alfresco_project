@@ -30,6 +30,10 @@
                 <property name="cm:name">Создание поручения по документу</property>
                 <property name="lecm-busjournal:eventCategory-code">CREATE_ERRAND_BASED_ON_DOC</property>
             </item>
+            <item name="cm:Исполнение поручения" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Исполнение поручения</property>
+                <property name="lecm-busjournal:eventCategory-code">ERRAND_EXECUTION</property>
+            </item>
         </items>
     </item>
 </items>
