@@ -25,6 +25,7 @@ LogicECM.module.Counters = LogicECM.module.Counters || {};
 
     LogicECM.module.Counters.DataGrid = function(containerId) {
         LogicECM.module.Counters.DataGrid.superclass.constructor.call(this, containerId);
+        this.options.typesTitles = {};
         return this;
     };
 
@@ -57,7 +58,7 @@ LogicECM.module.Counters = LogicECM.module.Counters || {};
                             switch (datalistColumn.name) { //  меняем отрисовку для конкретных колонок
                                 case "lecm-regnum:doctype":
                                     if (data.value && (("" + data.value) != "false")) {
-                                        columnContent += (data.value + " (" + grid.getDisplayedType(data.value) + ")");
+                                        columnContent += (data.value + " (" + (grid.options.typesTitles[data.value] || "") + ")");
                                     }
                                     break;
                                 default:
@@ -74,17 +75,6 @@ LogicECM.module.Counters = LogicECM.module.Counters || {};
                 }
             }
             return html.length > 0 ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
-        },
-
-        getDisplayedType: function(docType) {
-            if (docType && this.options.typesTitles) {
-                for (key in this.options.typesTitles) {
-                    if (key == docType) {
-                        return this.options.typesTitles[key];
-                    }
-                }
-            }
-            return '';
         }
     }, true);
 
