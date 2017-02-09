@@ -5,7 +5,7 @@
         {
             "items":
                 [
-                    <#list data as item>
+                    <#list data.items as item>
                     {
                         "reportText": "${item.reportText}",
                         "attachments":
@@ -28,7 +28,25 @@
                             ]
                     }<#if item_has_next>,</#if>
                     </#list>
-                ]
+                ],
+                "formAttachments":
+                [
+                    <#list data.formAttachments as attachment>
+                    {
+                    "name": "${attachment.name}",
+                    "link": "${attachment.link}"
+                    }<#if attachment_has_next>,</#if>
+                    </#list>
+                ],
+                "formConnections":
+                [
+                    <#list data.formConnections as attachment>
+                    {
+                    "name": "${attachment.name}",
+                    "link": "${attachment.link}"
+                    }<#if attachment_has_next>,</#if>
+                    </#list>
+                ],
+                "formText": "${data.formText}"
         }
-}
 </#escape>

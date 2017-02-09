@@ -262,6 +262,7 @@ LogicECM.errands = LogicECM.errands || {};
                 this.doReportsTransfer([nodeRef]);
             }
         },
+        //подготовка данных для формы
         doReportsTransfer: function (reportsRefs) {
             Alfresco.util.Ajax.jsonRequest(
                 {
@@ -272,10 +273,7 @@ LogicECM.errands = LogicECM.errands || {};
                         fn: function (response) {
                             var me = response.config.scope;
                             if (response.json.success) {
-                                reportsRefs.forEach(function (nodeRef) {
-                                    me._itemUpdate(nodeRef);
-                                });
-                                me.updateExecutorReport(response.json.data);
+                                me.processExecutionReport(response.json.data, reportsRefs);
                             } else {
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
@@ -284,17 +282,68 @@ LogicECM.errands = LogicECM.errands || {};
                             }
                         }
                     },
-                    failureCallback: {
-                        fn: function (response) {
-                            var me = response.config.scope;
-                            Alfresco.util.PopupManager.displayMessage(
-                                {
-                                    text: me.msg("message.details.failure")
-                                });
-                        }
-                    },
+                    failureMessage: Alfresco.util.message("message.details.failure"),
                     scope: this
                 });
+        },
+        //создание/редактирование отчета исполнителя
+        processExecutionReport: function(data, reportsRefs){
+            var me = this;
+            var formConnections = data.formConnections;
+            var formAttachments = data.formAttachmnets;
+            var formText = data.formText;
+            var nodeRef = this.options.documentNodeRef;
+            if (nodeRef) {
+                var formId = "edit-execution-report";
+                var executionReportDialog = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
+                executionReportDialog.setOptions({
+                    templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'components/form',
+                    templateRequestParams: {
+                        formId: formId,
+                        itemKind: "node",
+                        itemId: nodeRef,
+                        mode: "edit",
+                        showCancelButton: true,
+                        showCaption: false,
+                        submitType: 'json',
+                        'prop_lecm-errands_execution-report':formText,
+                        'assoc_lecm-errands_execution-report-attachment-assoc':formAttachments,
+                        'assoc_lecm-errands_execution-connected-document-assoc':formConnections
+                    },
+                    width: '50em',
+                    destroyOnHide: true,
+                    doBeforeDialogShow: {
+                        fn: function (form, simpleDialog) {
+                            simpleDialog.dialog.setHeader(this.msg("label.execution.report.form.title"));
+                            simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
+                                LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
+                                LogicECM.module.Base.Util.formDestructor(event, args, params);
+                            }, {moduleId: simpleDialog.id}, this);
+                        },
+                        scope: this
+                    },
+                    onSuccess: {
+                        fn: function (response) {
+                            reportsRefs.forEach(function (nodeRef) {
+                                me._itemUpdate(nodeRef);
+                            });
+                            me.updateExecutorReport(response.json.data);
+                            executionReportDialog.hide();
+                        },
+                        scope: this
+                    },
+                    onFailure: {
+                        fn: function (response) {
+                            Alfresco.util.PopupManager.displayMessage(
+                                {
+                                    text: Alfresco.util.message("message.details.failure")
+                                });
+                            executionReportDialog.hide();
+                        }
+                    }
+                });
+                executionReportDialog.show();
+            }
         },
         //обновление форм отчета исполнителя
         updateExecutorReport: function (data) {
