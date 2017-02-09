@@ -42,6 +42,10 @@ public class ModelsListWebScriptBean extends BaseWebScript {
 		return modelListService.getAssocs(nodeRef, documentType);
 	}
 	
+	public JSONObject getTables(String documentType) {
+		return modelListService.getTables(documentType);
+	}
+	
 	public JSONObject getAspects(String nodeRef, String documentType) {
 		return modelListService.getAspects(nodeRef, documentType);
 	}

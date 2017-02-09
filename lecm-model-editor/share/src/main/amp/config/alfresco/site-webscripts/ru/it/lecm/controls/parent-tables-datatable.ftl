@@ -1,21 +1,7 @@
-<script language="javascript"> 
-function toggle3() {
-    var ele = document.getElementById("${fieldHtmlId}");
-    var text = document.getElementById("${fieldHtmlId}-displayText");
-    if(ele.style.display == "block") {
-        ele.style.display = "none";
-        text.style.background = "transparent url(/share/res/components/images/collapsed.png) no-repeat scroll center center";
-    }
-    else {
-        ele.style.display = "block";
-        text.style.background = "transparent url(/share/res/components/images/expanded.png) no-repeat scroll center center";
-    }
-} 
-</script>
-<label><b>Таблицы родительского документа</b><a id="${fieldHtmlId}-displayText" href="javascript:toggle3();" class="down">&nbsp;</a></label>
+<label><b>Таблицы родительского документа</b></label>
 <div class="control datatable models">
 	<div class="container">
-		<div id="${fieldHtmlId}" class="value-div" style="display: none;">
+		<div id="${fieldHtmlId}" class="value-div">
 			<div id="${fieldHtmlId}-dialog"></div>
 			<div id="${fieldHtmlId}-button-add"></div>
 			<div id="${fieldHtmlId}-datatable"></div>
@@ -31,19 +17,19 @@ function toggle3() {
 (function () {
 	function initParentTablesDatatable(obj) {
 		var columnDefinitions = [{
-				className: 'viewmode-label',
-				key: 'name',
-				label: '${msg("lecm.meditor.lbl.table")}',
-				dropdownOptions: obj.tables,
-				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatDropdown,
-				width : 737,
-				maxAutoWidth : 737
-			}, {
-				key: 'delete',
+				key: 'expand',
 				label: '',
 				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatActions,
 				width: 15,
 				maxAutoWidth: 15
+			}, {
+				className: 'viewmode-label',
+				key: 'aspectName',
+				label: '${msg("lecm.meditor.lbl.table")}',
+				dropdownOptions: obj.tables,
+				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatText,
+				width : 1078,
+				maxAutoWidth : 1078
 			}],
 			dialogElements = [{
 				name: 'table',
@@ -53,9 +39,11 @@ function toggle3() {
 				showdefault: false
 			}],
 			responseSchema = {
-				fields: [{
-					key: 'name'
-				}]
+				fields: [
+				{key: 'name'},
+				{key: 'aspectName'},
+				{key: 'table'}
+				]
 			},
 			nodeRef = '${context.properties.nodeRef}',
 			doctype = '${context.properties.doctype}',

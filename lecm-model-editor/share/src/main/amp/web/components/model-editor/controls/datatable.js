@@ -67,6 +67,20 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			if(this.configs.mode==='view') {
 				
 			} else {
+				if(oColumn.key==='expand') {
+					el.innerHTML = "";
+					if (oRecord.getData("expanded")!=null&&oRecord.getData("expanded")) {
+						var collapseLink = document.createElement("a");
+						Dom.addClass(collapseLink, "collapse");
+						collapseLink.innerHTML = "&nbsp;";
+						el.appendChild(collapseLink);
+					} else {
+						var expandLink = document.createElement("a");
+						Dom.addClass(expandLink, "expand");
+						expandLink.innerHTML = "&nbsp;";
+						el.appendChild(expandLink);
+					}
+				}
 				if(oColumn.key==='copy') {
 					var deleteLink = document.createElement('a');
 					//deleteLink.id = Dom.generateId();
@@ -85,63 +99,137 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		},
 		
 		formatDropdown : function(el, oRecord, oColumn, oData, oDataTable) {
-	        var oDT = oDataTable || this,
-	            selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.field),
-	            options = (lang.isArray(oColumn.dropdownOptions)) ?
-	                oColumn.dropdownOptions : null,
-
-	            selectEl,
-	            collection = el.getElementsByTagName("select");
-
-	        // Create the form element only once, so we can attach the onChange listener
-	        if(collection.length === 0) {
-	            // Create SELECT element
-	            selectEl = document.createElement("select");
-	            selectEl.className = DT.CLASS_DROPDOWN;
-	            selectEl = el.appendChild(selectEl);
-
-	            // Add event listener
-	            Ev.addListener(selectEl,"change",oDT._onDropdownChange,oDT);
-	        }
-
-	        selectEl = collection[0];
-
-	        // Update the form element
-	        if(selectEl) {
-	            // Clear out previous options
-	            selectEl.innerHTML = "";
-	            if(this.configs.mode==='view') selectEl.disabled = true;
-	            // We have options to populate
-	            if(options) {
-	                // Create OPTION elements
-	                for(var i=0; i<options.length; i++) {
-	                    var option = options[i];
-	                    var optionEl = document.createElement("option");
-	                    optionEl.value = (lang.isValue(option.value)) ?
-	                            option.value : option;
-	                    // Bug 2334323: Support legacy text, support label for consistency with DropdownCellEditor
-	                    optionEl.innerHTML = (lang.isValue(option.text)) ?
-	                            option.text : (lang.isValue(option.label)) ? option.label : option;
-	                    optionEl = selectEl.appendChild(optionEl);
-	                    if (optionEl.value == selectedValue) {
-	                        optionEl.selected = true;
-	                    }
-	                }
-	            }
-	            // Selected value is our only option
-	            else {
-	                selectEl.innerHTML = "<option selected value=\"" + selectedValue + "\">" + selectedValue + "</option>";
-	            }
-	        }
-	        else {
-	            el.innerHTML = lang.isValue(oData) ? oData : "";
-	        }
+			var table = oRecord.getData("table");
+			if(table==null) {
+		        var oDT = oDataTable || this,
+		            selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.field),
+		            options = (lang.isArray(oColumn.dropdownOptions)) ?
+		                oColumn.dropdownOptions : null,
+	
+		            selectEl,
+		            collection = el.getElementsByTagName("select");
+	
+		        // Create the form element only once, so we can attach the onChange listener
+		        if(collection.length === 0) {
+		            // Create SELECT element
+		            selectEl = document.createElement("select");
+		            selectEl.className = DT.CLASS_DROPDOWN;
+		            selectEl = el.appendChild(selectEl);
+	
+		            // Add event listener
+		            Ev.addListener(selectEl,"change",oDT._onDropdownChange,oDT);
+		        }
+	
+		        selectEl = collection[0];
+	
+		        // Update the form element
+		        if(selectEl) {
+		            // Clear out previous options
+		            selectEl.innerHTML = "";
+		            if(this.configs.mode==='view') selectEl.disabled = true;
+		            // We have options to populate
+		            if(options) {
+		                // Create OPTION elements
+		                for(var i=0; i<options.length; i++) {
+		                    var option = options[i];
+		                    var optionEl = document.createElement("option");
+		                    optionEl.value = (lang.isValue(option.value)) ?
+		                            option.value : option;
+		                    // Bug 2334323: Support legacy text, support label for consistency with DropdownCellEditor
+		                    optionEl.innerHTML = (lang.isValue(option.text)) ?
+		                            option.text : (lang.isValue(option.label)) ? option.label : option;
+		                    optionEl = selectEl.appendChild(optionEl);
+		                    if (optionEl.value == selectedValue) {
+		                        optionEl.selected = true;
+		                    }
+		                }
+		            }
+		            // Selected value is our only option
+		            else {
+		                selectEl.innerHTML = "<option selected value=\"" + selectedValue + "\">" + selectedValue + "</option>";
+		            }
+		        }
+		        else {
+		            el.innerHTML = lang.isValue(oData) ? oData : "";
+		        }
+			} else {
+				var expanded = oRecord.getData("expanded") != null && oRecord.getData("expanded");
+				if(expanded) {
+					var options = (lang.isArray(oColumn.dropdownOptions)) ? oColumn.dropdownOptions : null,
+					selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.field);
+					if(options) {
+		                for(var i=0; i<options.length; i++) {
+		                    var option = options[i];
+		                    optionValue = (lang.isValue(option.value)) ? option.value : option;
+	
+		                    if (optionValue == selectedValue) {
+		                    	el.innerHTML = '';
+		                    	var optionProps = (lang.isArray(option.props)) ? option.props : [];
+		                    	var optionAssocs = (lang.isArray(option.assocs)) ? option.assocs : [];
+		                    	var div = el.appendChild(document.createElement('div'));
+		        				div.innerHTML = optionValue;
+		        				var div11 = el.appendChild(document.createElement('div'));
+		        				div11.innerHTML = "<b>Атрибуты</b>"
+		                    	var div12 = el.appendChild(document.createElement('div'));
+		        				div12.id = oRecord.getId()+'props';
+		        				var div21 = el.appendChild(document.createElement('div'));
+		        				div21.innerHTML = "<b>Ассоциации</b>"
+		                    	var div22 = el.appendChild(document.createElement('div'));
+		        				div22.id = oRecord.getId()+'assocs';
+		        				var colDefProps = [
+		        					{className:'viewmode-label',key:'_name',label:'Имя',width:170,maxAutoWidth:170},
+		        					{className:'viewmode-label',key:'title',label:'Заголовок',width:170,maxAutoWidth:170},
+		        					{className:'viewmode-label',key:'type',label:'По умолчанию',width:170,maxAutoWidth:170},
+		        					{className:'viewmode-label',key:'default',label:'Тип',width:100,maxAutoWidth:100},
+		        					{className:'viewmode-label',key:'mandatory',label:'Обязательный',width:100,maxAutoWidth:100},
+		        					{className:'viewmode-label',key:'_enabled',label:'Индексировать',width:100,maxAutoWidth:100},
+		        					{className:'viewmode-label',key:'tokenised',label:'Токенизация',width:80,maxAutoWidth:80}
+		        				],
+		        				DSProps = new YAHOO.util.DataSource(optionProps, {
+		        					responseSchema:  {fields: [{key: '_name'},{key: 'title'},{key: 'type'},{key: 'default'},{key: 'mandatory'},{key: '_enabled'},{key: 'tokenised'}]}
+		        				}),
+		        				colDefAssocs = [
+		        					{className:'viewmode-label',key:'_name',label:'Имя',width:170,maxAutoWidth:170},
+		        					{className:'viewmode-label',key:'title',label:'Заголовок',width:170,maxAutoWidth:170},
+		        					{className:'viewmode-label',key:'class',label:'Тип',width:291,maxAutoWidth:291},
+		        					{className:'viewmode-label',key:'mandatory',label:'Обязательный',width:100,maxAutoWidth:100},
+		        					{className:'viewmode-label',key:'many',label:'Множественная',width:203,maxAutoWidth:203}
+		        				],
+		        				DSPAssocs = new YAHOO.util.DataSource(optionAssocs, {
+		        					responseSchema:  {fields: [{key: '_name'},{key: 'class'},{key: 'title'},{key: 'mandatory'},{key: 'many'}]}
+		        				});
+		        				datatable1 = new YAHOO.widget.DataTable(div12, colDefProps, DSProps);
+		        				datatable2 = new YAHOO.widget.DataTable(div22, colDefAssocs, DSPAssocs);
+		                    }
+		                }
+		            }
+				} else {
+					var options = (lang.isArray(oColumn.dropdownOptions)) ? oColumn.dropdownOptions : null,
+						selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.field);
+					if(options) {
+						for(var i=0; i<options.length; i++) {
+							var option = options[i];
+							optionValue = (lang.isValue(option.value)) ? option.value : option;
+							
+							if (optionValue == selectedValue) {
+								el.innerHTML = optionValue;
+							}
+						}
+					}
+				}
+			}
 	    },
 
 		deleteRow: function(oArgs) {
 			var target = oArgs.target;
 			var column = this.getColumn(target);
-			if (column.key == 'delete') {
+			var oRecord = this.getRecord(target);
+			if (column.key == 'expand') {
+				var expanded = oRecord.getData("expanded") != null && oRecord.getData("expanded");
+				var itemData = oRecord.getData();
+				itemData.expanded = !expanded;
+				this.updateRow(oRecord, itemData);
+			} else if (column.key == 'delete') {
 				if (confirm(Alfresco.util.message('lecm.meditor.msg.approve.delete.row'))) {
 					this.deleteRow(target);
 					YAHOO.Bubbling.fire('mandatoryControlValueUpdated', this);

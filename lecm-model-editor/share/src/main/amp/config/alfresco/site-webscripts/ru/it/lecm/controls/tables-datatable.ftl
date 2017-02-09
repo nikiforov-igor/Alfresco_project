@@ -4,13 +4,19 @@
 (function () {
 	function initTablesDatatable(obj) {
 		var columnDefinitions = [{
+				key: 'expand',
+				label: '',
+				formatter: LogicECM.module.ModelEditor.DatatableControl.prototype.formatActions,
+				width: 15,
+				maxAutoWidth: 15
+			}, {
 				className: 'viewmode-label',
 				key: 'table',
 				label: '${msg("lecm.meditor.lbl.table")}',
 				dropdownOptions: obj.tables,
 				formatter: LogicECM.module.ModelEditor.DatatableControl.prototype.formatDropdown,
-				width : 737,
-				maxAutoWidth : 737
+				width : 1042,
+				maxAutoWidth : 1042
 			}, {
 				key: 'delete',
 				label: '',

@@ -1,21 +1,7 @@
-<script language="javascript"> 
-function toggle1() {
-    var ele = document.getElementById("${fieldHtmlId}");
-    var text = document.getElementById("${fieldHtmlId}-displayText");
-    if(ele.style.display == "block") {
-        ele.style.display = "none";
-        text.style.background = "transparent url(/share/res/components/images/collapsed.png) no-repeat scroll center center";
-    }
-    else {
-        ele.style.display = "block";
-        text.style.background = "transparent url(/share/res/components/images/expanded.png) no-repeat scroll center center";
-    }
-} 
-</script>
-<label><b>Ассоциации родительского документа</b><a id="${fieldHtmlId}-displayText" href="javascript:toggle1();" class="down">&nbsp;</a></label>
+<label><b>Ассоциации родительского документа</b></label>
 <div class="control datatable models">
 	<div class="container">
-		<div id="${fieldHtmlId}" class="value-div" style="display: none;">
+		<div id="${fieldHtmlId}" class="value-div">
 			<div id="${fieldHtmlId}-dialog"></div>
 			<div id="${fieldHtmlId}-button-add"></div>
 			<div id="${fieldHtmlId}-datatable"></div>
@@ -31,6 +17,12 @@ function toggle1() {
 (function () {
 	function initParentAssociationsDatatable(obj) {
 		var columnDefinitions = [{
+				key: 'expand',
+				label: '',
+				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatActions,
+				width: 15,
+				maxAutoWidth: 15
+			}, {
 				className: 'viewmode-label',
 				key: '_name',
 				label: '${msg("lecm.meditor.lbl.name")}',
@@ -64,14 +56,8 @@ function toggle1() {
 				key: 'many',
 				label: '${msg("lecm.meditor.lbl.multiple")}',
 				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatBoolean,
-				width: 223,
-				maxAutoWidth: 223
-			}, {
-				key: 'delete',
-				label: '',
-				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatActions,
-				width: 15,
-				maxAutoWidth: 15
+				width: 260,
+				maxAutoWidth: 260
 			}],
 			dialogElements = [
 				{
@@ -113,6 +99,8 @@ function toggle1() {
 			responseSchema = {
 				fields: [{
 					key: '_name'
+				}, {
+					key: 'assocs'
 				}, {
 					key: 'class'
 				}, {

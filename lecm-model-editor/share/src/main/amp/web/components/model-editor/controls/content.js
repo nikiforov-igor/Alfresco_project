@@ -577,18 +577,21 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		},
 
 		_initTables: function () {
+			//api/classes/lecm-document_tableDataAspect/subclasses
 			Alfresco.util.Ajax.jsonGet({
-				url: Alfresco.constants.PROXY_URI_RELATIVE + 'api/classes?cf=aspect',
+				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/type/tables?doctype=lecm-document:tableDataAspect',
 				dataObj: {
 					r: false
 				},
 				successCallback: {
 					scope: this,
 					fn: function (successResponse) {
-						this.tables = successResponse.json.map(function(table) {
+						this.tables = successResponse.json.data.map(function(table) {
 							return {
-								label: table.title + ' - ' + table.name,
-								value: table.name
+								label: table.aspectName,
+								value: table.aspectName,
+								props: table.table.props,
+								assocs: table.table.assocs
 							};
 						});
 						this.tables.splice(0, 0, '');

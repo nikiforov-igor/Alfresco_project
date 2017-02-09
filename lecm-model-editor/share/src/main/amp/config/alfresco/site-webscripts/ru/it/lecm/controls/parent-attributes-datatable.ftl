@@ -1,21 +1,7 @@
-<script language="javascript"> 
-function toggle2() {
-    var ele = document.getElementById("${fieldHtmlId}");
-    var text = document.getElementById("${fieldHtmlId}-displayText");
-    if(ele.style.display == "block") {
-        ele.style.display = "none";
-        text.style.background = "transparent url(/share/res/components/images/collapsed.png) no-repeat scroll center center";
-    }
-    else {
-        ele.style.display = "block";
-        text.style.background = "transparent url(/share/res/components/images/expanded.png) no-repeat scroll center center";
-    }
-} 
-</script>
-<label><b>Атрибуты родительского документа</b><a id="${fieldHtmlId}-displayText" href="javascript:toggle2();" class="down">&nbsp;</a></label>
+<label><b>Атрибуты родительского документа</b></label>
 <div class="control datatable models">
 	<div class="container">
-		<div id="${fieldHtmlId}" class="value-div" style="display: none;">
+		<div id="${fieldHtmlId}" class="value-div">
 			<div id="${fieldHtmlId}-dialog"></div>
 			<div id="${fieldHtmlId}-button-add"></div>
 			<div id="${fieldHtmlId}-datatable"></div>
@@ -52,6 +38,12 @@ function toggle2() {
 				{ label: '${msg("lecm.meditor.lbl.both")}', value: 'BOTH'  }
 			],
 			columnDefinitions = [{
+				key: 'expand',
+				label: '',
+				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatActions,
+				width: 15,
+				maxAutoWidth: 15
+			}, {
 				className: 'viewmode-label',
 				key: '_name',
 				label: '${msg("lecm.meditor.lbl.name")}',
@@ -100,14 +92,8 @@ function toggle2() {
 				label: '${msg("lecm.meditor.lbl.tokenised")}',
 				dropdownOptions: dTokenised,
 				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatDropdown,
-				width: 100,
-				maxAutoWidth: 100
-			}, {
-				key: 'delete',
-				label: '',
-				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatActions,
-				width: 15,
-				maxAutoWidth: 15
+				width: 136,
+				maxAutoWidth: 136
 			}],
 			dialogElements = {
 				'_name': {
@@ -172,15 +158,14 @@ function toggle2() {
 			},
 			responseSchema = {
 				fields: [
-					{ key: '_id'       },
 					{ key: '_name'     },
+					{ key: 'props'     },
 					{ key: 'title'     },
 					{ key: 'default'   },
 					{ key: 'type'      },
 					{ key: 'mandatory' },
 					{ key: '_enabled'  },
-					{ key: 'tokenised' },
-					{ key: 'validator' }
+					{ key: 'tokenised' }
 				]
 			},
 			nodeRef = '${context.properties.nodeRef}',
