@@ -41,25 +41,6 @@ public abstract class AdminBRolesInitializerBean extends BaseBean {
         return businessRoles;
     }
 
-    public void init() {
-//        AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-//            @Override
-//            public NodeRef doWork() throws Exception {
-//                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-//                    @Override
-//                    public NodeRef execute() throws Throwable {
-//                        NodeRef adminEmployee = getAdminEmployee();
-//                        for (String businessRole : getBusinessRoles()) {
-//                            addBusinessRole(adminEmployee, businessRole);
-//                        }
-//                        return null;
-//                    }
-//                });
-//            }
-//        };
-//        AuthenticationUtil.runAsSystem(raw);
-    }
-    
     @Override
 	protected void onShutdown(ApplicationEvent event)
 	{
