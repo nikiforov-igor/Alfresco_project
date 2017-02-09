@@ -33,7 +33,7 @@
             </item>
             <item name="cm:INTERNAL_ANSWER" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#sender.wrapAsLink(#sender.attribute("lecm-orgstr:employee-short-name"))} ответил с комментарием на ваш документ {#mainObject.attribute("lecm-internal:doc-type-assoc-text-content") != null ? #mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-internal:doc-type-assoc-text-content}: {lecm-document:title}")) : #mainObject.wrapAsLink(#mainObject.attribute("lecm-document:title"))}.]]></property>
+                    <![CDATA[{#sender.wrapAsLink(#sender.attribute("lecm-orgstr:employee-short-name"))} ответил с комментарием на ваш документ {#mainObject.attribute("lecm-eds-document:document-type-assoc-text-content") != null ? #mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc-text-content}: {lecm-document:title}")) : #mainObject.wrapAsLink(#mainObject.attribute("lecm-document:title"))}.]]></property>
                 <property name="cm:name"><![CDATA[INTERNAL_ANSWER]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Внутренний. Ответить]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -56,7 +56,7 @@
             </item>
             <item name="cm:INTERNAL_REGISTER" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Документ {#mainObject.attribute("lecm-internal:doc-type-assoc-text-content") != null ? #mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-internal:doc-type-assoc-text-content}: {lecm-document:title}")) : #mainObject.wrapAsLink(#mainObject.attribute("lecm-document:title"))} поступил Вам на регистрацию.]]></property>
+                    <![CDATA[Документ {#mainObject.attribute("lecm-eds-document:document-type-assoc-text-content") != null ? #mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc-text-content}: {lecm-document:title}")) : #mainObject.wrapAsLink(#mainObject.attribute("lecm-document:title"))} поступил Вам на регистрацию.]]></property>
                 <property name="cm:name"><![CDATA[INTERNAL_REGISTER]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Внутренний. Направить на регистрацию]]></property>

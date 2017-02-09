@@ -26,13 +26,10 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document:title"/>
-                    <field id="lecm-eds-document:document-type-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_ОРД</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                    <field id="lecm-eds-document:document-type-assoc" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
+                            <control-param name="endpointType">lecm-ord-dic:documentType</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:execution-date">
@@ -150,13 +147,10 @@
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-eds-document:document-type-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_ОРД</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                    <field id="lecm-eds-document:document-type-assoc" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
+                            <control-param name="endpointType">lecm-ord-dic:documentType</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:execution-date">
@@ -282,12 +276,9 @@
                     <set id="ord-document-search-common-set" template="/ru/it/lecm/ord/components/class-set.ftl"/>
 
                     <field id="lecm-eds-document:document-type-assoc" label="Вид документа" set="ord-document-search-common-set">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_ОРД</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
+                            <control-param name="endpointType">lecm-ord-dic:documentType</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:title" set="ord-document-search-common-set" mandatory="false">
@@ -348,7 +339,8 @@
                 <appearance>
                     <field id="lecm-eds-document:document-type-assoc">
                         <control>
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_ОРД</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
+                            <control-param name="endpointType">lecm-ord-dic:documentType</control-param>
                         </control>
                     </field>
                     <field id="lecmSignAspects:signingDate">
@@ -408,13 +400,10 @@
 	                <field id="lecm-document-aspects:reg-data-date" set="ord-document-form-common-set"/>
 
                     <field id="lecm-document:title" set="ord-document-form-common-set"/>
-                    <field id="lecm-eds-document:document-type-assoc" set="ord-document-form-common-set">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_ОРД</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                    <field id="lecm-eds-document:document-type-assoc" set="ord-document-form-common-set" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
+                            <control-param name="endpointType">lecm-ord-dic:documentType</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:execution-date" set="ord-document-form-common-set">
@@ -687,6 +676,46 @@
                     <show id="lecm-ord-table-structure:execution-date"/>
                     <show id="lecm-ord-table-structure:item-status-assoc"/>
                 </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-ord-dic:documentType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-ord-dic:documentType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                </field-visibility>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-doc-dic-dt:documentType-code" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>

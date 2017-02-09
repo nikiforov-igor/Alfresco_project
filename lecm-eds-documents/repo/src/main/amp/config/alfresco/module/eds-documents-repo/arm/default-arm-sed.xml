@@ -1604,7 +1604,7 @@
                                                     <![CDATA[16ef5131-8077-469f-94b7-08751e7afbd8]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Вид документа]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-internal:doc-type-assoc]]></property>
+                                                    <![CDATA[lecm-eds-document:document-type-assoc]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                                 <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
@@ -4363,7 +4363,7 @@
                                                 <property name="lecm-arm:field-title">
                                                     <![CDATA[Вид внутреннего документа]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-internal:doc-type-assoc]]></property>
+                                                    <![CDATA[lecm-eds-document:document-type-assoc]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                                 <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
@@ -5078,7 +5078,7 @@
                                                 <property name="lecm-arm:field-title">
                                                     <![CDATA[Вид внутреннего документа]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-internal:doc-type-assoc]]></property>
+                                                    <![CDATA[lecm-eds-document:document-type-assoc]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                                 <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>

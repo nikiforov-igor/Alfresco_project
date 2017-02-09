@@ -7,6 +7,7 @@
 							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <util:list id="ord.models">
+	    <value>alfresco/module/${artifactId}/models/lecm-ord-dic-model.xml</value>
 	    <value>alfresco/module/${artifactId}/models/lecm-ord-table-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-ord-model.xml</value>
 	</util:list>
@@ -23,7 +24,6 @@
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-ord-br-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-ord-bj-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-ord-event-items.xml</value>
-        <value>alfresco/module/${artifactId}/dictionaries/lecm-ord-type-items.xml</value>
         <value>alfresco/module/${artifactId}/dictionaries/lecm-ord-nt-items.xml</value>
 	</util:list>
     <!-- Registration of ord models -->
@@ -32,6 +32,7 @@
             ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
             eds.models.bootstrap, documents.LogicEcmModelsBootstrap,
             errands.LogicEcmModelsBootstrap,
+            eds.dictionary.bootstrap,
             lecm.sign2.helper.model.bootstrap
             review.model.bootstrap"
           p:models-ref="ord.models"
