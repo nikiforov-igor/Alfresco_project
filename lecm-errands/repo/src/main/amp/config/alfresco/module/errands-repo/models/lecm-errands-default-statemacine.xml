@@ -9130,14 +9130,16 @@ if (doc) {
   if (executorAssoc && executorAssoc.length) {
     executor = executorAssoc[0];
   }
-  notifications.sendNotificationFromCurrentUser({
-    recipients: [executor],
-    templateCode: 'ERRANDS_ACCEPT_EXEC',
-    templateConfig: {
-      mainObject: doc,
-      eventExecutor: currentUser
-    }
-  });
+  if (executor) {
+      notifications.sendNotificationFromCurrentUser({
+        recipients: [executor],
+        templateCode: 'ERRANDS_ACCEPT_EXEC',
+        templateConfig: {
+          mainObject: doc,
+          eventExecutor: currentUser
+        }
+      });
+  }
 
 }]]></value>
                                                             </property>
