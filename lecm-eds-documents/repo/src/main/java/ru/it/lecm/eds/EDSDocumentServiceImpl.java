@@ -143,6 +143,7 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
         if (document != null && nodeService.exists(document)) {
             nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL, true);
             nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL_REASON, reason);
+            nodeService.setProperty(document, EDSDocumentService.PROP_COMPLETION_SIGNAL_CLOSE_CHILD, true);
             if (signalSender == null || !nodeService.exists(signalSender)) {
                 signalSender = orgstructureService.getCurrentEmployee();
             }

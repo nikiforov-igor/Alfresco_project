@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <items updateMode="CreateOrUpdate">
-	<item name="lecm-dic:Вид ОРД" type="lecm-dic:dictionary">
-        <property name="cm:name">Вид ОРД</property>
-        <property name="lecm-dic:description">Справочник видов ОРД</property>
-        <property name="lecm-dic:type">lecm-doc-dic-dt:documentType</property>
-        <property name="lecm-dic:attributeForShow">cm:name</property>
-        <property name="lecm-dic:plane">true</property>
-        <property name="lecm-dic:active">true</property>
-	</item>
+    <item name="lecm-dic:Вид документа" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Вид ОРД" type="lecm-doc-dic-dt:typeDictionary">
+                <property name="cm:name">Вид ОРД</property>
+                <property name="lecm-dic:valueContainsType">lecm-ord-dic:documentType</property>
+                <items>
+                    <item name="cm:Приказ" type="lecm-ord-dic:documentType">
+                        <property name="cm:name">Приказ</property>
+                        <property name="lecm-doc-dic-dt:documentType-code">01</property>
+                    </item>
+                    <item name="cm:Распоряжение" type="lecm-ord-dic:documentType">
+                        <property name="cm:name">Распоряжение</property>
+                        <property name="lecm-doc-dic-dt:documentType-code">02</property>
+                    </item>
+                    <item name="cm:Постановление" type="lecm-ord-dic:documentType">
+                        <property name="cm:name">Постановление</property>
+                        <property name="lecm-doc-dic-dt:documentType-code">03</property>
+                    </item>
+                </items>
+            </item>
+        </items>
+    </item>
 </items>

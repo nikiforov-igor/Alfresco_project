@@ -18,7 +18,8 @@
 				,ru.it.lecm.dictionary.dictionary-repo.dictionary
 				,ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap
 				,ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap
-				,documents.dictionaries.LogicEcmModelsBootstrap"
+				,documents.dictionaries.LogicEcmModelsBootstrap
+                ,eds.dictionary.bootstrap"
 		  p:models-ref="meetingsDictionariesModels"
 		  p:labels-ref="meetingsDictionariesLabels"
 	/>

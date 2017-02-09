@@ -77,7 +77,7 @@
 				</property>
 			</properties>
 			<associations>
-				<!-- Бизнес роли -->
+				<!-- @deprecated Бизнес роли -->
 				<association name="lecm-arm:business-roles-assoc">
 					<source>
 						<mandatory>false</mandatory>
@@ -258,6 +258,12 @@
 						<stored>false</stored>
 						<tokenised>both</tokenised>
 					</index>
+				</property>
+				<!--Условие доступности-->
+				<property name="lecm-arm:expression">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="false"/>
 				</property>
 			</properties>
 			<associations>

@@ -47,6 +47,11 @@
                 <property name="lecm-eds-aspect:completion-signal-reason">
                     <type>d:text</type>
                 </property>
+                <!-- Закрыть неисполненные подчиненные поручения/резолюции -->
+                <property name="lecm-eds-aspect:completion-signal-close-child">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
             </properties>
             <associations>
                 <association name="lecm-eds-aspect:completion-signal-sender-assoc">

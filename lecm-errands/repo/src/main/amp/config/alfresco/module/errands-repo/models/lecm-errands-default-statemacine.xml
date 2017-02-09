@@ -1953,6 +1953,47 @@ if(doc){
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>b40b7adb-a85a-4db2-86d4-66a7718fd8eb</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/c639d5c4-d2f0-4ead-924c-01bb2c9f9ca6
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:completion-signal-aspect") AND doc.attr("lecm-eds-aspect:completion-signal") == true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-completion-signal-script.js">
+
+ErrandsCompletionSignalScript.processCompletionSignal();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/2dfadfb3-6ae8-4ed5-8358-90fca1ba3458
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -3873,7 +3914,6 @@ if (document) {
 var doc = bpm_package.children[0];
 if (doc) {
   ExecuteErrandScript.processChildExecutedSignal(doc);
-  var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
   if (childrenErrands && childrenErrands.length) {
       var countErrandsFinal = 0;
       for (var i =0; i < childrenErrands.length; i++) {
@@ -4073,6 +4113,47 @@ if (document) {
                                                             <transitionStatusAspect/>
                                                         </aspects>
                                                         <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>2a205946-5b3c-4f26-9093-d87c2620d3fd</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/4a640d06-9c07-4cc1-ac3c-0965c5a3cb14
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:completion-signal-aspect") AND doc.attr("lecm-eds-aspect:completion-signal") == true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-completion-signal-script.js">
+
+ErrandsCompletionSignalScript.processCompletionSignal();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/2dfadfb3-6ae8-4ed5-8358-90fca1ba3458
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
@@ -6493,6 +6574,47 @@ if (document) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>79feb3a6-b041-469f-b83f-5c9d9031a342</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/03816ad5-115a-4f2d-b385-23776fabce88
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:completion-signal-aspect") AND doc.attr("lecm-eds-aspect:completion-signal") == true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-completion-signal-script.js">
+
+ErrandsCompletionSignalScript.processCompletionSignal();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/2dfadfb3-6ae8-4ed5-8358-90fca1ba3458
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -8571,6 +8693,86 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
                                                                     workspace://SpacesStore/b181ff5c-de14-43dc-bc3a-b1edca3842bf
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>c43d46c3-fbf4-4426-a8d5-38904c560a4e</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/fecdbc1a-1911-48fb-b354-e04d010cb485
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-errands:approver-result") == "executed"]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/2dfadfb3-6ae8-4ed5-8358-90fca1ba3458
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>046110d2-fc62-48b1-acc3-26207271abb6</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/85cc5c7d-c3ec-4107-bde5-2f8480d8cde2
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:completion-signal-aspect") AND doc.attr("lecm-eds-aspect:completion-signal") == true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-completion-signal-script.js">
+
+ErrandsCompletionSignalScript.processCompletionSignal();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/2dfadfb3-6ae8-4ed5-8358-90fca1ba3458
                                                                 </reference>
                                                             </association>
                                                         </associations>
