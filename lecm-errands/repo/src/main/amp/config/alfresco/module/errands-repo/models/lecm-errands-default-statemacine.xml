@@ -8701,45 +8701,6 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                     </node>
                                                     <node>
                                                         <type>transition</type>
-                                                        <name>c43d46c3-fbf4-4426-a8d5-38904c560a4e</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/fecdbc1a-1911-48fb-b354-e04d010cb485
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionExpression</name>
-                                                                <value>
-                                                                    <![CDATA[doc.attr("lecm-errands:approver-result") == "executed"]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/2dfadfb3-6ae8-4ed5-8358-90fca1ba3458
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>transition</type>
                                                         <name>046110d2-fc62-48b1-acc3-26207271abb6</name>
                                                         <nodeRef>
                                                             workspace://SpacesStore/85cc5c7d-c3ec-4107-bde5-2f8480d8cde2
@@ -9225,7 +9186,7 @@ if (doc) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR usercurrentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
