@@ -690,7 +690,7 @@
                     </field>
                     <field id="lecm-errands:title" set="block2">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date" set="block2">
