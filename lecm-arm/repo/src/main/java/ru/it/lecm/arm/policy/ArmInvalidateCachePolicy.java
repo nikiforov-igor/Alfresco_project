@@ -131,14 +131,6 @@ public class ArmInvalidateCachePolicy implements NodeServicePolicies.OnUpdateNod
                 ArmService.ASSOC_DICTIONARY_CHILD_RULE,
                 new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
-        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-                ArmService.TYPE_ARM_ACCORDION, ArmService.ASSOC_ACCORDION_BUSINESS_ROLES,
-                new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-
-        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-                ArmService.TYPE_ARM_ACCORDION, ArmService.ASSOC_ACCORDION_BUSINESS_ROLES,
-                new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteChildAssociationPolicy.QNAME,
                 ArmService.TYPE_ARM_ACCORDION,
                 new JavaBehaviour(this, "onDeleteChildAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));

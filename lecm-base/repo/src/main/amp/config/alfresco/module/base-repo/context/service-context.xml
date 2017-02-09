@@ -320,7 +320,7 @@
 		</property>
 	</bean>
 
-	<bean id="lecmSearchCounterScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.SearchCounter">
+	<bean id="lecmSearchCounterScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.beans.SearchCounter">
 		<property name="extensionName">
 			<value>searchCounter</value>
 		</property>
