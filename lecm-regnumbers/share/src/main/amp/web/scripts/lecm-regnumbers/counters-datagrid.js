@@ -98,12 +98,11 @@ LogicECM.module.Counters = LogicECM.module.Counters || {};
             url: Alfresco.constants.PROXY_URI + 'api/classes/lecm-document_base/subclasses',
             successCallback: {
                 fn: function (response) {
-                    var typesTitles = response.json.reduce(function (previousObject, currentValue) {
+                    datagrid.options.typesTitles = response.json.reduce(function (previousObject, currentValue) {
                         var attr = {};
                         attr[currentValue.name] = currentValue.title;
                         return YAHOO.lang.merge(previousObject, attr);
                     }, {});
-                    datagrid.options.typesTitles = typesTitles;
                     Bubbling.fire('activeGridChanged', {
                         bubblingLabel: options.bubblingLabel,
                         datagridMeta: datagridMetadata
