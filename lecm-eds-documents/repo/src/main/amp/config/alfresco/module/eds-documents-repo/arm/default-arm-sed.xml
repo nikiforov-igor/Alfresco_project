@@ -16,7 +16,7 @@
                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                         <property name="lecm-arm:types">
-                            <![CDATA[lecm-nd:document,lecm-errands:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document,lecm-protocol:document]]></property>
+                            <![CDATA[lecm-nd:document,lecm-errands:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document,lecm-protocol:document,lecm-resolutions:document]]></property>
                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
