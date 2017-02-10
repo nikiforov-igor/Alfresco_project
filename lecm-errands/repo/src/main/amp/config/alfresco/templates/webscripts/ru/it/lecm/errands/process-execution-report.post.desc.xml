@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Создание/редактирование проекта отчета исполнителя</shortname>
+    <description>Создание/редактирование проекта отчета исполнителя</description>
+    <url>/lecm/errands/executionReport/process?nodeRef={nodeRef}</url>
+    <authentication>user</authentication>
+    <transaction allow="readwrite">required</transaction>
+    <format default="json">extension</format>
+</webscript>
