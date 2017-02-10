@@ -397,11 +397,6 @@
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                                 <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                             </item>
-                                            <item name="cm:admin" type="lecm-arm:user-settings">
-                                                <property name="cm:name">
-                                                    <![CDATA[admin]]></property><!--<property name="cm:title"><value lang="ru"><![CDATA[ru value]]></value><value lang="en_GB"><![CDATA[en_GB value]]></value></property>-->
-                                                <assocs/>
-                                            </item>
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:fields-assoc"
