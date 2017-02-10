@@ -268,7 +268,7 @@
                     <show id="lecm-statemachine:status" force="true"/>                                                  <!-- Статус -->
                     <show id="lecm-document:regnum"/>                                                                   <!-- Номер -->
                     <show id="lecmSignAspects:signerEmployeeAssoc"/>                                                    <!-- Подписанты -->
-                    <show id="lecm-document-aspects:reg-data-date"/>                                                    <!-- Дата регистрации -->
+                    <show id="lecm-document:doc-date"/>                                                                 <!-- Дата регистрации -->
                     <show id="lecm-eds-document:executor-assoc"/>                                                       <!-- Исполнитель -->
                     <show id="lecm-document:author-assoc"/>                                                             <!-- Составитель -->
                     <show id="lecm-document:title"/>                                                                    <!-- Заголовок -->
@@ -308,7 +308,7 @@
                     </field>
                     <field id="lecm-document:regnum" set="line1"/>
                     <field id="lecmSignAspects:signerEmployeeAssoc" set="line1"/>
-                    <field id="lecm-document-aspects:reg-data-date" set="line2">
+                    <field id="lecm-document:doc-date" set="line2">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
                     <field id="lecm-eds-document:executor-assoc" set="line3"/>
