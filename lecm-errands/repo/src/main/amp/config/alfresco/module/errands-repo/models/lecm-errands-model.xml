@@ -338,6 +338,7 @@
 				<property name="lecm-errands:controller-approve-result">
 					<type>d:text</type>
 				</property>
+
 				<property name="lecm-errands:project-report-ref">
 					<type>d:text</type>
 				</property>
