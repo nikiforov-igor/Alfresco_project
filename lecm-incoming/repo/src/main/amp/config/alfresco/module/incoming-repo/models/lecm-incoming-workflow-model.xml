@@ -79,5 +79,18 @@
             </mandatory-aspects>
         </type>
 
+        <type name="lecmIncomingWf:return">
+            <parent>bpm:startTask</parent>
+            <properties>
+                <property name="lecmIncomingWf:returnReason">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+            <mandatory-aspects>
+                <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+            </mandatory-aspects>
+        </type>
+
 	</types>
 </model>
