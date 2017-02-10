@@ -3,15 +3,13 @@ var requestContent = eval("(" + requestbody.getContent() + ")");
 if (requestContent instanceof Array) {
     reportRefs = requestContent;
 }
-model.data = {};
-model.data.items = [];
+model.formData = {};
 model.success = false;
 if (reportRefs && reportRefs.length) {
     var formAttachments = [];
     var formConnections = [];
     var routeDateString = "";
     var document = documentTables.getDocumentByTableDataRow(search.findNode(reportRefs[0]));
-    var errandExecutor = document.assocs["lecm-errands:executor-assoc"][0];
     var executionAttachments = document.assocs["lecm-errands:execution-report-attachment-assoc"];
     var documentConnectionsAssoc = document.assocs["lecm-errands:execution-connected-document-assoc"];
     var executionReportText = document.properties["lecm-errands:execution-report"];
@@ -20,10 +18,10 @@ if (reportRefs && reportRefs.length) {
 
     if (executionReportStatus == "PROJECT") {
         if (documentConnectionsAssoc) {
-            formConnections.concat(documentConnectionsAssoc);
+            formConnections = formConnections.concat(documentConnectionsAssoc);
         }
         if (executionAttachments) {
-            formAttachments.concat(executionAttachments);
+            formAttachments = formAttachments.concat(executionAttachments);
         }
     }
     for (var i = 0; i < reportRefs.length; i++) {
@@ -31,7 +29,6 @@ if (reportRefs && reportRefs.length) {
         if (report && report.properties["lecm-errands-ts:coexecutor-report-status"] == "ACCEPT") {
             var currentEmployee = orgstructure.getCurrentEmployee();
             if (document && lecmPermission.hasEmployeeDynamicRole(document, currentEmployee, "ERRANDS_EXECUTOR")) {
-                var errandExecutorName = errandExecutor.properties["lecm-orgstr:employee-short-name"];
                 var reportCoexecutor = report.assocs["lecm-errands-ts:coexecutor-assoc"][0];
                 var reportCoexecutorName = reportCoexecutor.properties["lecm-orgstr:employee-short-name"];
                 var reportRouteDate = report.properties["lecm-errands-ts:coexecutor-report-route-date"];
@@ -42,12 +39,13 @@ if (reportRefs && reportRefs.length) {
                     var year = utils.pad(jsReportRouteDate.getFullYear(), 4);
                     routeDateString = day + "." + month + "." + year;
                 }
-                var reportText = "<p>Отчет Соисполнителя " + reportCoexecutorName + ", направлен " + routeDateString + ":</p> ";
+                var reportText = "\nОтчет Соисполнителя " + reportCoexecutorName + ", направлен " + routeDateString + ":\n";
                 if (reportRefs.length == 1 && executionReportStatus != "PROJECT"){
-                    reportText = "<p>Использован отчет Соисполнителя " + reportCoexecutorName + ", направлен " + routeDateString + ":</p> ";
+                    reportText = "\nИспользован отчет Соисполнителя " + reportCoexecutorName + ", направлен " + routeDateString + ":\n  ";
                 }
-                reportText += "<p>" + report.properties["lecm-errands-ts:coexecutor-report-text"] + "</p>";
+                reportText += report.properties["lecm-errands-ts:coexecutor-report-text"] + "\n";
                 formText += reportText;
+
                 var attachments = [];
                 var reportAttachments = report.assocs["lecm-errands-ts:coexecutor-report-attachment-assoc"];
                 if (reportAttachments && reportAttachments.length) {
@@ -58,12 +56,8 @@ if (reportRefs && reportRefs.length) {
                                 return attachment.equals(reportAttachments[j]);
                             });
                         }
-                        if(!attachmentExist) {
+                        if(!attachmentExist || executionReportStatus != "PROJECT") {
                             formAttachments.push(reportAttachments[j]);
-                            attachments.push({
-                                name: reportAttachments[j].name,
-                                link: "/share/page/document-attachment?nodeRef=" + reportAttachments[j].nodeRef
-                            });
                         }
                     }
                 }
@@ -82,13 +76,8 @@ if (reportRefs && reportRefs.length) {
                                 return connection.equals(reportConnections[k]);
                             });
                         }
-                        if (!documentConnectionsAssoc || !documentConnectionsAssoc.length || !assocExist) {
-                            //document.createAssociation(reportConnections[k], "lecm-errands:execution-connected-document-assoc");
+                        if (!assocExist || executionReportStatus != "PROJECT") {
                             formConnections.push(reportConnections[k]);
-                            connections.push({
-                                name: reportConnections[k].name,
-                                link: "/share/page/" + documentScript.getViewUrl(reportConnections[k]) + "?nodeRef=" + reportConnections[k].nodeRef
-                            });
                         }
                         if (!hasAccess) {
                             lecmPermission.popAuthentication();
@@ -98,20 +87,14 @@ if (reportRefs && reportRefs.length) {
                 report.properties["lecm-errands-ts:coexecutor-report-is-transferred"] = true;
                 document.save();
                 report.save();
-                var reportData = {
-                    reportText: reportText,
-                    attachments: attachments,
-                    connections: connections
-                };
-                model.data.items.push(reportData);
-
             }
         }
     }
-    model.data.formText = formText;
-    model.data.formAttachments = formAttachments;
-    model.data.formConnections = formConnections;
-}
-if (model.data.items.length) {
-    model.success = true;
+    model.formData.formText = formText;
+    model.formData.formAttachments = formAttachments.map(function(attachment){
+        return attachment.nodeRef.toString()
+    }).join();
+    model.formData.formConnections = formConnections.map(function(connection){
+        return connection.nodeRef.toString()
+    }).join();
 }

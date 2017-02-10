@@ -221,20 +221,6 @@
         <property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
 
-<!--    <bean id="errandsExecutionReportUpdatePolicy" class="ru.it.lecm.errands.policy.ErrandsExecutionReportUpdatePolicy"
-          init-method="init" depends-on="errands.LogicEcmModelsBootstrap">
-        <property name="policyComponent" ref="policyComponent"/>
-        <property name="documentService" ref="documentService"/>
-        <property name="nodeService" ref="nodeService"/>
-        <property name="errandsService" ref="errandsService"/>
-        <property name="notificationsService" ref="notificationsService"/>
-        <property name="edsDocumentService" ref="edsService"/>
-        <property name="authenticationService" ref="authenticationService"/>
-        <property name="orgstructureService" ref="serviceOrgstructure"/>
-        <property name="stateMachineServiceBean" ref="stateMachineHelper"/>
-        <property name="lecmURLService" ref="urlService"/>
-    </bean>-->
-
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.TYPE_ERRANDS" id="errandsTypeQname"/>
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.TYPE_ERRANDS_TS_COEXECUTOR_REPORT" id="coexecutorReportTypeQname"/>
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.TYPE_ERRANDS_TS_EXECUTION_REPORT" id="executionReportTypeQname"/>

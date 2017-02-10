@@ -5102,7 +5102,7 @@ if(doc){
                                                                             <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-errands:execution-report]]></value>
+                                                                                    <![CDATA[lecm-errands:project-report-text]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputToValue</name>
@@ -5134,7 +5134,7 @@ if(doc){
                                                                             <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-errands:execution-report-attachment-assoc-ref]]></value>
+                                                                                    <![CDATA[lecm-errands:project-report-attachment]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputToValue</name>
@@ -5166,7 +5166,7 @@ if(doc){
                                                                             <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-errands:execution-connected-document-assoc-ref]]></value>
+                                                                                    <![CDATA[lecm-errands:project-report-connections]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputToValue</name>
@@ -7442,7 +7442,7 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-errands:execution-report]]></value>
+                                                                                    <![CDATA[lecm-errands:project-report-text]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputToValue</name>
@@ -7474,7 +7474,7 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-errands:execution-report-attachment-assoc-ref]]></value>
+                                                                                    <![CDATA[lecm-errands:project-report-attachment]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputToValue</name>
@@ -7506,7 +7506,7 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[lecm-errands:execution-connected-document-assoc-ref]]></value>
+                                                                                    <![CDATA[lecm-errands:project-report-connections]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputToValue</name>

@@ -354,6 +354,9 @@
 				<property name="lecm-errands:project-report-connections">
 					<type>d:text</type>
 				</property>
+				<property name="lecm-errands:execution-report-create-date">
+					<type>d:date</type>
+				</property>
 
                 <!-- Сигналы -->
                 <!-- Сигнал об отмене -->

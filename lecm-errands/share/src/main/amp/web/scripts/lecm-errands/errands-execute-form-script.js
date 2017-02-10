@@ -5,7 +5,8 @@
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
         Selector = YAHOO.util.Selector,
-        Bubbling = YAHOO.Bubbling;
+        Bubbling = YAHOO.Bubbling,
+        Util = LogicECM.module.Base.Util;
     var formId;
     var formButtons;
     var scriptLayer;
@@ -15,58 +16,37 @@
     Bubbling.on("executeErrandButtonClick", executeErrand);
 
     function processForm(layer, args) {
-        scriptLayer = layer;
-        formId = args[1].formId;
-        if (scriptLayer == "errandsExecuteWFScriptLoaded") {
-            Event.onContentReady(formId + "_assoc_packageItems-added", function () {
-                var errandRef = Dom.get(formId + "_assoc_packageItems-added").value;
-                processCloseChildCheckbox(errandRef, "lecmErrandWf_execute_1CloseChild");
-                processReportTextField(errandRef, "lecmErrandWf_execute_1ReportText");
-                processNewReportProject(errandRef);
-            });
-        } else {
-            var form = Alfresco.util.ComponentManager.get(formId);
-            if (form) {
-                var errandRef = form.options.nodeRef;
-                processCloseChildCheckbox(errandRef, "lecm-errands_execution-report-close-child");
-                processReportTextField(errandRef, "lecm-errands_execution-report");
-            }
-        }
-
-
-        var form = Dom.get(formId + "-form");
-        Dom.addClass(form, "errands-execute-form");
-        formButtons = Dom.get(formId + "-form-buttons");
-        Event.onAvailable(formId + "-form-submit-button", function () {
-            var saveReportElement = Dom.get(formId + "-form-submit-button");
-            saveReportElement.innerHTML = Alfresco.util.message("button.save-report")
-        });
-    }
-    function processNewReportProject (errandRef) {
-        Alfresco.util.Ajax.jsonPost({
-            url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
-            dataObj: {
-                nodeRef: errandRef,
-                substituteString: "{lecm-errands:execution-report-status}"
-            },
-            successCallback: {
-                fn: function (response) {
-                    if (response && response.json.formatString) {
-                        var reportStatus = response.json.formatString;
-                        if (reportStatus != "PROJECT") {
-                            //clearFormData!
-                        }
-                    }
+        if (!form) {
+            scriptLayer = layer;
+            formId = args[1].formId;
+            if (scriptLayer == "errandsExecuteWFScriptLoaded") {
+                Event.onContentReady(formId + "_assoc_packageItems-added", function () {
+                    var errandRef = Dom.get(formId + "_assoc_packageItems-added").value;
+                    processCloseChildCheckbox(errandRef, "lecmErrandWf_execute_1CloseChild");
+                    processReportTextField(errandRef, "lecmErrandWf_execute_1ReportText");
+                });
+            } else {
+                var form = Alfresco.util.ComponentManager.get(formId);
+                if (form) {
+                    var errandRef = form.options.nodeRef;
+                    processCloseChildCheckbox(errandRef, "lecm-errands-ts_execution-close-child");
+                    processReportTextField(errandRef, "lecm-errands-ts_execution-report-text");
                 }
-            },
-            failureMessage: Alfresco.util.message("message.details.failure")
-        });
+            }
+            var formEl = Dom.get(formId + "-form");
+            Dom.addClass(formEl, "errands-execute-form");
+            formButtons = Dom.get(formId + "-form-buttons");
+            Event.onAvailable(formId + "-form-submit-button", function () {
+                var saveReportElement = Dom.get(formId + "-form-submit-button");
+                saveReportElement.innerHTML = Alfresco.util.message("button.save-report")
+            });
+        }
     }
     function executeErrand(layer, args) {
         if (formId == args[1].formId && Dom.get(formId + "-form")) {
             // поле с формы процесса создания и формы редактирования
             var executeErrand = Selector.query(scriptLayer == "errandsExecuteWFScriptLoaded" ? 'input[name="prop_lecmErrandWf_execute_1Execute"]'
-                : 'input[name="prop_lecm-errands_execution-report-is-execute"]', Dom.get(formId + "-form"), true);
+                : 'input[name="prop_lecm-errands-ts_execution-report-is-execute"]', Dom.get(formId + "-form"), true);
             if (executeErrand) {
                 executeErrand.value = true;
                 var submitButton = Selector.query(".yui-submit-button", formButtons, true);
@@ -74,7 +54,6 @@
             }
         }
     }
-
 
     function processReportTextField(errandRef, field) {
 
@@ -89,7 +68,7 @@
                     if (response && response.json.formatString) {
                         var isReportRequired = response.json.formatString;
                         if (isReportRequired == "true") {
-                            var reportTextReadyElId = LogicECM.module.Base.Util.getComponentReadyElementId(formId, field.replace("_", ":"));
+                            var reportTextReadyElId = Util.getComponentReadyElementId(formId, field.replace("_", ":"));
                             Event.onContentReady(reportTextReadyElId, function () {
                                 YAHOO.Bubbling.fire("registerValidationHandler",
                                     {

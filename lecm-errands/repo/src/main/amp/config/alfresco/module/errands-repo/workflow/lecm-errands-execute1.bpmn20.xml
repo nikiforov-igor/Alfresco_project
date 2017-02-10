@@ -18,6 +18,10 @@
                                 var reportText = execution.getVariable("lecmErrandWf_execute_1ReportText");
                                 var isExecute = lecmErrandWf_execute_1Execute;
                                 var closeChild = lecmErrandWf_execute_1CloseChild;
+
+                                if (reportStatus != "PROJECT"){
+                                    document.properties["lecm-errands:execution-report-create-date"] = new Date();
+                                }
                                 var attachments = [];
                                 var attachmentsList = execution.getVariable("lecmErrandWf_execute_1Attachment")
                                 if (attachmentsList && attachmentsList.size()) {
@@ -35,8 +39,18 @@
                                 ExecuteErrandScript.fillExecutionReport(document, attachments, connectedDocuments, reportText, closeChild);
                                 if (!isExecute) {
                                     document.properties["lecm-errands:execution-report-status"] = "PROJECT";
+                                    document.properties["lecm-errands:project-report-text"] = reportText;
+                                    document.properties["lecm-errands:project-report-attachment"] = attachments.map(function(a) {
+                                        return a.nodeRef.toString();
+                                    }).join();
+                                    document.properties["lecm-errands:project-report-connections"] = connectedDocuments.map(function(a) {
+                                        return a.nodeRef.toString();
+                                    }).join();
                                 } else {
       	                            ExecuteErrandScript.executeErrand(document, closeChild);
+                                    document.properties["lecm-errands:project-report-text"] = null;
+                                    document.properties["lecm-errands:project-report-attachment"] = null;
+                                    document.properties["lecm-errands:project-report-connections"] = null;
                                 }
                                 document.save();
                             }

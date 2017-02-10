@@ -1,5 +1,5 @@
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
-"isExecute": ${isExecute?string}
+"success": ${success?string}
 }
 </#escape>
