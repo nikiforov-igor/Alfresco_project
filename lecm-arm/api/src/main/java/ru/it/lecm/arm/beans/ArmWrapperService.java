@@ -53,4 +53,14 @@ public interface ArmWrapperService {
 
     boolean isAccordion(NodeRef node);
     boolean isRunAsAccordion(NodeRef node);
+
+    /**
+     * возвращает поисковый запрос для узла
+     */
+    String getFullQuery(ArmNode node, boolean includeTypes, boolean includeParentQuery);
+
+    /**
+     * возвращает число объектов (документов) в узле
+     */
+    long getObjectsCount(ArmNode node);
 }

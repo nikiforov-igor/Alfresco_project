@@ -49,7 +49,12 @@
 
                     <field set="common" id="lecm-document:title"/>
 
-                    <field set="common" id="lecm-eds-document:document-type-assoc"/>
+                    <field set="common" id="lecm-eds-document:document-type-assoc" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_входящего</control-param>
+                            <control-param name="endpointType">lecm-incoming-dic:documentType</control-param>
+                        </control>
+                    </field>
                     <field set="common" id="lecm-incoming:delivery-method-assoc" mandatory="true"/>
 
                     <field set="common" id="lecm-incoming:sender-assoc" mandatory="true">
@@ -472,7 +477,12 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document:title"/>
-                    <field id="lecm-eds-document:document-type-assoc"/>
+                    <field id="lecm-eds-document:document-type-assoc" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_входящего</control-param>
+                            <control-param name="endpointType">lecm-incoming-dic:documentType</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-incoming:delivery-method-assoc" mandatory="true"/>
 					<field id="lecm-incoming:sender-assoc" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
@@ -672,6 +682,12 @@
                     <show id="lecm-incoming:is-not-registered"/>
                 </field-visibility>
                 <appearance>
+                    <field id="lecm-eds-document:document-type-assoc" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_входящего</control-param>
+                            <control-param name="endpointType">lecm-incoming-dic:documentType</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-incoming:delivery-method-assoc" mandatory="true"/>
 					<field id="lecm-incoming:sender-assoc" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
@@ -910,6 +926,12 @@
                     <show id="lecm-document:author-assoc"/>
                 </field-visibility>
                 <appearance>
+                    <field id="lecm-eds-document:document-type-assoc" mandatory="true">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_входящего</control-param>
+                            <control-param name="endpointType">lecm-incoming-dic:documentType</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-document:present-string" label="Название"/>
                     <field id="lecm-incoming:recipient-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
@@ -1038,6 +1060,85 @@
                         </control>
                     </field>
                 </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-incoming-dic:documentType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-incoming-dic:review-date-days"/>
+                    <show id="lecm-incoming-dic:review-date-type"/>
+                    <show id="lecm-incoming-dic:execution-date-days"/>
+                    <show id="lecm-incoming-dic:execution-date-type"/>
+                </field-visibility>
+                <appearance>
+                    <set id="start"/>
+                    <set id="review-date" template="/ru/it/lecm/eds/controls/relative-date-set.ftl"/>
+                    <set id="execution-date" template="/ru/it/lecm/eds/controls/relative-date-set.ftl"/>
+
+                    <field id="cm:name" set="start"/>
+
+                    <field id="lecm-incoming-dic:review-date-days" set="review-date"/>
+                    <field id="lecm-incoming-dic:review-date-type" set="review-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+
+                    <field id="lecm-incoming-dic:execution-date-days" set="execution-date"/>
+                    <field id="lecm-incoming-dic:execution-date-type" set="execution-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-incoming-dic:documentType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-incoming-dic:review-date-days"/>
+                    <show id="lecm-incoming-dic:review-date-type"/>
+                    <show id="lecm-incoming-dic:execution-date-days"/>
+                    <show id="lecm-incoming-dic:execution-date-type"/>
+                </field-visibility>
+                <appearance>
+                    <set id="start"/>
+                    <set id="review-date" template="/ru/it/lecm/eds/controls/relative-date-set.ftl"/>
+                    <set id="execution-date" template="/ru/it/lecm/eds/controls/relative-date-set.ftl"/>
+
+                    <field id="cm:name" set="start"/>
+
+                    <field id="lecm-incoming-dic:review-date-days" set="review-date"/>
+                    <field id="lecm-incoming-dic:review-date-type" set="review-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+
+                    <field id="lecm-incoming-dic:execution-date-days" set="execution-date"/>
+                    <field id="lecm-incoming-dic:execution-date-type" set="execution-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                </field-visibility>
             </form>
         </forms>
     </config>

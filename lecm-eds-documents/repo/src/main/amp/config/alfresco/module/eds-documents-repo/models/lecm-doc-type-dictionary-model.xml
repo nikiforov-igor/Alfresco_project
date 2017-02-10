@@ -12,6 +12,15 @@
 	</namespaces>
 
 	<types>
+        <type name="lecm-doc-dic-dt:typeDictionary">
+            <title>Logic Ecm Dictionary Document Type</title>
+            <parent>lecm-dic:hierarchical_dictionary_values</parent>
+            <overrides>
+                <property name="lecm-dic:valueContainsType">
+                    <default>lecm-doc-dic-dt:documentType</default>
+                </property>
+            </overrides>
+        </type>
 		<type name="lecm-doc-dic-dt:documentType">
 			<title>Logic Ecm Dictionary Document Type</title>
 			<parent>lecm-dic:plane_dictionary_values</parent>

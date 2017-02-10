@@ -210,7 +210,7 @@
             </list>
         </property>
     </bean>
-    
+
     <bean id="documents.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="documents.LogicEcmModelsConnectionTypesBootstrap,
                         documents.LogicEcmModelsStampsBootstrap,
@@ -263,7 +263,7 @@
         </property>
         <property name="documentGlobalSettingsService" ref="documents.global-settings.service"/>
     </bean>
-    
+
     <bean id="documentConnectionService" class="ru.it.lecm.documents.beans.DocumentConnectionServiceImpl" parent="baseBean">
         <property name="searchService" ref="SearchService"/>
         <property name="namespaceService" ref="namespaceService"/>
@@ -665,7 +665,11 @@
 		<property name="documentConnectionService" ref="documentConnectionService"/>
 	</bean>
 
-    <bean id="documentExpression" class="ru.it.lecm.documents.expression.ExpressionDocument">
+    <bean id="baseNodeExpression" class="ru.it.lecm.documents.expression.ExpressionNode">
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+    </bean>
+
+    <bean id="documentExpression" class="ru.it.lecm.documents.expression.ExpressionDocument" parent="baseNodeExpression">
         <property name="documentService" ref="documentService"/>
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
         <property name="documentConnectionService" ref="documentConnectionService"/>
@@ -673,9 +677,12 @@
         <property name="stateMachineService" ref="stateMachineHelper"/>
     </bean>
 
-    <bean id="lecmBPExpression" class="ru.it.lecm.documents.expression.Expression">
+    <bean id="baseSpellExpression" class="ru.it.lecm.documents.expression.BaseSpellExpression" abstract="true">
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
         <property name="documentService" ref="documentService"/>
+    </bean>
+
+    <bean id="lecmBPExpression" class="ru.it.lecm.documents.expression.Expression" parent="baseSpellExpression">
         <property name="stateMachineService" ref="stateMachineHelper"/>
     </bean>
 

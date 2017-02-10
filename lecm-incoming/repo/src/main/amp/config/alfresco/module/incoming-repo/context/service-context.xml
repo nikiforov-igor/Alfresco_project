@@ -25,12 +25,14 @@
 		  documents.LogicEcmModelsConnectionsBootstrap,documents.dictionaries.LogicEcmModelsBootstrap, lecm.signed-docflow.model-bootstrap, review.model.bootstrap">
         <property name="models">
             <list>
+                <value>alfresco/module/${artifactId}/models/lecm-incoming-dictionaries-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-incoming-model.xml</value>
             </list>
         </property>
         <property name="labels">
             <list>
                 <value>alfresco/module/${artifactId}/messages/lecm-incoming-model</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-incoming-dictionaries-model</value>
             </list>
         </property>
     </bean>
@@ -41,14 +43,16 @@
                       ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
                       ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
                       businessJournalLogEventsPolicy, documents.LogicEcmConnectionTypesBootstrap,
+                      eds.dictionary.bootstrap,
 					  regNumbers.regNumbersTemplatesDicBootstrap">
         <property name="dictionaries">
             <list>
-                <value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType-items.xml</value>
-                <value>alfresco/module/${artifactId}/models/lecm-incoming-roles-items.xml</value>
-                <value>alfresco/module/${artifactId}/models/lecm-incoming-regnumbers.xml</value>
-                <value>alfresco/module/${artifactId}/models/lecm-incoming-nt-items.xml</value>
-                <value>alfresco/module/${artifactId}/models/lecm-connection-available-types-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-business-journal-objectType-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-incoming-roles-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-incoming-regnumbers.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-incoming-nt-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-connection-available-types-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-incoming-type.xml</value>
             </list>
         </property>
     </bean>
