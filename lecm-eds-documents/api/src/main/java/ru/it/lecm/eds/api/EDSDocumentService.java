@@ -45,6 +45,7 @@ public interface EDSDocumentService {
 	QName PROP_CHANGE_DUE_DATE_SIGNAL_SHIFT_REASON = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "change-duedate-reason");
     QName PROP_COMPLETION_SIGNAL = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "completion-signal");
     QName PROP_COMPLETION_SIGNAL_REASON = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "completion-signal-reason");
+    QName PROP_COMPLETION_SIGNAL_CLOSE_CHILD = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "completion-signal-close-child");
     QName ASPECT_COMPLETION_SIGNAL = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "completion-signal-aspect");
     /**
      * Отправка сигнала об изменении дочерних документов

@@ -579,7 +579,7 @@ if (document != null) {
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-internal_doc-type-assoc</name>
+                                        <name>lecm-eds-document_document-type-assoc</name>
                                         <nodeRef>workspace://SpacesStore/51aef956-6a77-4125-a885-56532dbd24b6</nodeRef>
                                         <properties>
                                             <property>
@@ -1847,7 +1847,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-internal_doc-type-assoc</name>
+                                        <name>lecm-eds-document_document-type-assoc</name>
                                         <nodeRef>workspace://SpacesStore/840f7872-5067-4892-af54-1afeb5a09f53</nodeRef>
                                         <properties>
                                             <property>
@@ -2357,7 +2357,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-internal_doc-type-assoc</name>
+                                        <name>lecm-eds-document_document-type-assoc</name>
                                         <nodeRef>workspace://SpacesStore/34976856-9e05-4ab3-8d57-eb7c85dfdd10</nodeRef>
                                         <properties>
                                             <property>
@@ -3256,7 +3256,7 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-internal_doc-type-assoc</name>
+                                        <name>lecm-eds-document_document-type-assoc</name>
                                         <nodeRef>workspace://SpacesStore/a9779b23-e782-439a-98b9-08f453454916</nodeRef>
                                         <properties>
                                             <property>
@@ -4253,7 +4253,7 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-internal_doc-type-assoc</name>
+                                        <name>lecm-eds-document_document-type-assoc</name>
                                         <nodeRef>workspace://SpacesStore/f89b8b61-e1ae-43fa-b02a-22f7d50cbfa6</nodeRef>
                                         <properties>
                                             <property>
@@ -5464,7 +5464,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-internal_doc-type-assoc</name>
+                                        <name>lecm-eds-document_document-type-assoc</name>
                                         <nodeRef>workspace://SpacesStore/19439e7c-3a53-42f6-a76e-a4e890d73593</nodeRef>
                                         <properties>
                                             <property>
@@ -6291,7 +6291,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-internal_doc-type-assoc</name>
+                                        <name>lecm-eds-document_document-type-assoc</name>
                                         <nodeRef>workspace://SpacesStore/a4326a20-5b0e-4f88-9a32-8ed7e0d89d93</nodeRef>
                                         <properties>
                                             <property>
@@ -7156,7 +7156,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-internal_doc-type-assoc</name>
+                                        <name>lecm-eds-document_document-type-assoc</name>
                                         <nodeRef>workspace://SpacesStore/4bbcdc39-10cc-4c10-8429-bc85952cadf7</nodeRef>
                                         <properties>
                                             <property>
@@ -8129,7 +8129,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-internal_doc-type-assoc</name>
+                                        <name>lecm-eds-document_document-type-assoc</name>
                                         <nodeRef>workspace://SpacesStore/c11f68fc-af9b-4f8c-8889-ada8e2e6dc3c</nodeRef>
                                         <properties>
                                             <property>
@@ -9202,7 +9202,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-internal_doc-type-assoc</name>
+                                        <name>lecm-eds-document_document-type-assoc</name>
                                         <nodeRef>workspace://SpacesStore/1da86e51-d5bf-4c65-aa93-a8ba625f96cf</nodeRef>
                                         <properties>
                                             <property>
@@ -9562,7 +9562,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-internal_doc-type-assoc</name>
+                                        <name>lecm-eds-document_document-type-assoc</name>
                                         <nodeRef>workspace://SpacesStore/6e272ddf-0cbe-40ee-bf56-17c7818891d9</nodeRef>
                                         <properties>
                                             <property>

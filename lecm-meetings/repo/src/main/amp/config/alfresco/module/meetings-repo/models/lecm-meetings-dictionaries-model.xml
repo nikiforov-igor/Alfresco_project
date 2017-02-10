@@ -8,6 +8,7 @@
         <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
         <import uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+        <import uri="http://www.it.ru/logicECM/document/dictionaries/docType/1.0" prefix="lecm-doc-dic-dt"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/meetings/dictionaries/1.0" prefix="lecm-meetings-dic"/>
@@ -304,5 +305,11 @@
                 </association>
             </associations>
         </type>-->
+
+        <!--Справочник видов документа-->
+        <type name="lecm-meetings-dic:protocolDocumentType">
+            <title>Protocol Document Type</title>
+            <parent>lecm-doc-dic-dt:documentType</parent>
+        </type>
     </types>
 </model>
