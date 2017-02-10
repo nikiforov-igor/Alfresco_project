@@ -275,29 +275,13 @@
             <form id="search">
                 <field-visibility>
                     <show id="lecm-resolutions:number"/>
-
-
                     <show id="lecm-resolutions:transition-to-execution-date"/>
-
-
                     <show id="lecm-resolutions:limitation-date"/>
-
-
                     <show id="lecm-resolutions:limitation-date-radio"/>
-
-
                     <show id="lecm-resolutions:author-assoc"/>
-
-
                     <show id="lecm-document:author-assoc"/>
-
-
                     <show id="lecm-resolutions:is-expired"/>
-
-
                     <show id="lecm-resolutions:control"/>
-
-
                     <show id="lecm-resolutions:controller-assoc"/>
                 </field-visibility>
 
@@ -308,62 +292,53 @@
 
                     <field id="lecm-resolutions:number" set="block1">
                         <control>
-                            <control-param name="defaultValue">""</control-param>
+                            <control-param name="hideValue"/>
                         </control>
                     </field>
-
                     <field id="lecm-resolutions:transition-to-execution-date" set="block1">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl">
-                            <control-param name="forceEditable">true</control-param>
-                        </control>
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
-
-
                     <field id="lecm-resolutions:limitation-date" set="block1">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
-
-
                     <field id="lecm-resolutions:limitation-date-radio" set="block1">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
                             <control-param name="options">LIMITLESS|Без срока,*|Все</control-param>
                         </control>
                     </field>
-
-
                     <field id="lecm-resolutions:author-assoc" set="block1">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
                     </field>
-
                     <field id="lecm-document:author-assoc" label-id="label.document.creator" set="block1">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
                     </field>
-
                     <field id="lecm-resolutions:is-expired" set="two-column">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
                             <control-param name="options">true|Да,false|Нет</control-param>
                         </control>
                     </field>
-
                     <field id="lecm-resolutions:control" set="two-column">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
                             <control-param name="options">true|Да,false|Нет</control-param>
                         </control>
                     </field>
-
                     <field id="lecm-resolutions:controller-assoc" set="block2">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
-
                 </appearance>
             </form>
-
             <form id="searchQueryGrid">
                 <field-visibility>
                     <show id="lecm-resolutions:number"/>
