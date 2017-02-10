@@ -619,7 +619,7 @@
             <form id="search">
                 <field-visibility>
                     <show id="lecm-errands:number"/>
-                    <show id="lecm-errands:additional-doc-number"/>
+                    <show id="lecm-errands:base-doc-number"/>
                     <!--Дата выдачи-->
                     <show id="lecm-errands:wait-for-execution-date"/>
                     <show id="lecm-errands:initiator-assoc"/>
@@ -647,7 +647,7 @@
                             <control-param name="hideValue"/>
                         </control>
                     </field>
-                    <field id="lecm-errands:additional-doc-number" set="2-column_1"/>
+                    <field id="lecm-errands:base-doc-number" set="2-column_1"/>
 
                     <field id="lecm-errands:wait-for-execution-date" set="block1">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
