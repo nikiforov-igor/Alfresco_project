@@ -61,13 +61,20 @@ public class DocumentTemplateServiceImpl extends BaseBean implements DocumentTem
 			NodeRef template = child.getChildRef();
 
 			NodeRef templateOrganization = findNodeByAssociationRef(template, ASSOC_ORGANIZATION, TYPE_CONTRACTOR, ASSOCIATION_TYPE.TARGET);
+			NodeRef templateUnit = findNodeByAssociationRef(template, ASSOC_ORG_UNIT, null, ASSOCIATION_TYPE.TARGET);
+			NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+
 			boolean isAllowed = templateOrganization == null;
 
 			if (templateOrganization != null) {
-				NodeRef employeeOrganization = orgstructureService.getOrganization(orgstructureService.getCurrentEmployee());
+				NodeRef employeeOrganization = orgstructureService.getOrganization(currentEmployee);
 				isAllowed = Objects.equals(templateOrganization, employeeOrganization);
 			}
 
+			if (isAllowed && templateUnit != null) {
+				NodeRef employeeUnit = orgstructureService.getPrimaryOrgUnit(currentEmployee);
+				isAllowed = Objects.equals(templateUnit, employeeUnit);
+			}
 			if (isAllowed) {
 				templates.add(template);
 			}

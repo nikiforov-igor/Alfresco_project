@@ -22,7 +22,7 @@
 
 	<bean id="documents.templates.model.bootstrap"
 		  parent="dictionaryModelBootstrap"
-		  depends-on="dictionaryBootstrap, ru.it.lecm.contractors.lecm-contractors-repo.contractors-model-bootstrap">
+		  depends-on="dictionaryBootstrap, ru.it.lecm.contractors.lecm-contractors-repo.contractors-model-bootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
 		<property name="models">
 			<list>
 				 <value>alfresco/module/${artifactId}/models/lecm-document-template-model.xml</value>
