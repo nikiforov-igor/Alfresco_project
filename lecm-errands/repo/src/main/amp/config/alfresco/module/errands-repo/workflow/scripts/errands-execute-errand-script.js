@@ -101,6 +101,10 @@ var ExecuteErrandScript = {
                 eventExecutor: currentUser
             }
         });
+        document.properties["lecm-errands:project-report-text"] = null;
+        document.properties["lecm-errands:project-report-attachment"] = null;
+        document.properties["lecm-errands:project-report-connections"] = null;
+        document.save();
     },
     fillExecutionReport: function (document, attachments, connectedDocuments, reportText, closeChild) {
         var reportAttachments = document.assocs["lecm-errands:execution-report-attachment-assoc"];

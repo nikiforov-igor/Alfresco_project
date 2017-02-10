@@ -43,9 +43,6 @@ if (requestContent) {
             }).join();
         } else {
             ExecuteErrandScript.executeErrand(document, closeChild);
-            document.properties["lecm-errands:project-report-text"] = null;
-            document.properties["lecm-errands:project-report-attachment"] = null;
-            document.properties["lecm-errands:project-report-connections"] = null;
         }
         document.save();
         model.success = true;
