@@ -2207,7 +2207,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[110]]></property>
                                                 <property name="lecm-arm:types"><![CDATA[]]></property>
                                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
-                                                <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+                                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                                 <property name="lecm-arm:search-query">
                                                     <![CDATA[@lecm\-statemachine\:status:'Удален']]></property>
