@@ -270,16 +270,15 @@
             <!-- Форма атрибутивного поиска -->
             <form id="search">
                 <field-visibility>
-                    <show id="lecm-eds-document:document-type-assoc"/>                                                    <!-- Вид документа -->
-                    <show id="lecm-statemachine:status"
-                          force="true"/>                                                  <!-- Статус -->
-                    <show id="lecm-document:regnum"/>                                                                    <!-- Номер -->
+                    <show id="lecm-eds-document:document-type-assoc"/>                                                  <!-- Вид документа -->
+                    <show id="lecm-statemachine:status" force="true"/>                                                  <!-- Статус -->
+                    <show id="lecm-document:regnum"/>                                                                   <!-- Номер -->
                     <show id="lecmSignAspects:signerEmployeeAssoc"/>                                                    <!-- Подписанты -->
                     <show id="lecm-document-aspects:reg-data-date"/>                                                    <!-- Дата регистрации -->
                     <show id="lecm-eds-document:executor-assoc"/>                                                       <!-- Исполнитель -->
                     <show id="lecm-document:author-assoc"/>                                                             <!-- Составитель -->
                     <show id="lecm-document:title"/>                                                                    <!-- Заголовок -->
-                    <show id="lecm-ord:controller-assoc"/>                                                                <!-- Контролер -->
+                    <show id="lecm-ord:controller-assoc"/>                                                              <!-- Контролер -->
                     <!-- Подтверждать завершение  -->
                     <!-- На исполнении -->
                     <show id="lecm-eds-document:execution-date"/>                                                       <!-- Срок исполнения -->
