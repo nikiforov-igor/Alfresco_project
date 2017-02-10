@@ -40,7 +40,7 @@ if (reportRefs && reportRefs.length) {
                     routeDateString = day + "." + month + "." + year;
                 }
                 var reportText = "\nОтчет Соисполнителя " + reportCoexecutorName + ", направлен " + routeDateString + ":\n";
-                if (reportRefs.length == 1 && executionReportStatus != "PROJECT"){
+                if (reportRefs.length == 1 && executionReportStatus != "PROJECT") {
                     reportText = "\nИспользован отчет Соисполнителя " + reportCoexecutorName + ", направлен " + routeDateString + ":\n  ";
                 }
                 reportText += report.properties["lecm-errands-ts:coexecutor-report-text"] + "\n";
@@ -56,7 +56,7 @@ if (reportRefs && reportRefs.length) {
                                 return attachment.equals(reportAttachments[j]);
                             });
                         }
-                        if(!attachmentExist || executionReportStatus != "PROJECT") {
+                        if (!attachmentExist || executionReportStatus != "PROJECT") {
                             formAttachments.push(reportAttachments[j]);
                         }
                     }
@@ -91,10 +91,10 @@ if (reportRefs && reportRefs.length) {
         }
     }
     model.formData.formText = formText;
-    model.formData.formAttachments = formAttachments.map(function(attachment){
+    model.formData.formAttachments = formAttachments.map(function (attachment) {
         return attachment.nodeRef.toString()
     }).join();
-    model.formData.formConnections = formConnections.map(function(connection){
+    model.formData.formConnections = formConnections.map(function (connection) {
         return connection.nodeRef.toString()
     }).join();
 }

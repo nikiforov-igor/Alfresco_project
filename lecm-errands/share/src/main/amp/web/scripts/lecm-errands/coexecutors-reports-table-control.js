@@ -288,8 +288,7 @@ LogicECM.errands = LogicECM.errands || {};
                 });
         },
         //создание/редактирование отчета исполнителя
-        processExecutionReport: function(formData, reportsRefs){
-            var me = this;
+        processExecutionReport: function(formData, reportsRefs) {
             var formConnections = formData.formConnections;
             var formAttachments = formData.formAttachments;
             var formText = formData.formText;
@@ -316,7 +315,7 @@ LogicECM.errands = LogicECM.errands || {};
                         submitType: 'json',
                         args: JSON.stringify(formArgs)
                     },
-                    width: '50em',
+                    width: '60em',
                     destroyOnHide: true,
                     doBeforeDialogShow: {
                         fn: function (form, simpleDialog) {

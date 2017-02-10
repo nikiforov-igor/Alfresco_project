@@ -55,11 +55,6 @@ public interface ErrandsService {
     QName PROP_ERRANDS_JUST_IN_TIME = QName.createQName(ERRANDS_NAMESPACE_URI, "just-in-time");
     QName PROP_ERRANDS_CONTENT = QName.createQName(ERRANDS_NAMESPACE_URI, "content");
     QName PROP_ERRANDS_WITHOUT_INITIATOR_APPROVAL = QName.createQName(ERRANDS_NAMESPACE_URI, "without-initiator-approval");
-    QName PROP_ERRANDS_EXECUTION_REPORT_STATUS = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-report-status");
-    QName PROP_ERRANDS_EXECUTION_REPORT_IS_EXECUTE = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-report-is-execute");
-    QName PROP_ERRANDS_EXECUTION_REPORT_CLOSE_CHILD = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-report-close-child");
-
-    QName PROP_ERRANDS_EXECUTE_RESULT = QName.createQName(ERRANDS_NAMESPACE_URI, "execute-result");
 
     QName PROP_ERRANDS_REPORT_REQUIRED = QName.createQName(ERRANDS_NAMESPACE_URI,"report-required");
     QName PROP_ERRANDS_REPORT_RECIPIENT_TYPE = QName.createQName(ERRANDS_NAMESPACE_URI,"report-recipient-type");
