@@ -476,7 +476,8 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 						}
 
 					},
-					failureMessage: Alfresco.util.message('message.failure')
+					failureMessage: this.msg('message.failure'),
+					scope: this
 				});
 			} else {
 				LogicECM.module.Base.Util.reInitializeControl(formId, 'lecm-template:unitAssoc', {
