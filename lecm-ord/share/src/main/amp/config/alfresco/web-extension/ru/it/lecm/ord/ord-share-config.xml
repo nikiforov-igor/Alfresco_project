@@ -270,43 +270,48 @@
             <!-- Форма атрибутивного поиска -->
             <form id="search">
                 <field-visibility>
-                    <show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
-                    <show id="lecm-statemachine:status" force="true"/>                                                  <!-- Статус -->
-                    <show id="lecm-document:regnum"/>	                                                                <!-- Номер -->
-                    <show id="lecmSignAspects:signerEmployeeAssoc"/>								                	<!-- Подписанты -->
-                    <show id="lecm-document-aspects:reg-data-date"/>											        <!-- Дата регистрации -->
+                    <show id="lecm-eds-document:document-type-assoc"/>                                                    <!-- Вид документа -->
+                    <show id="lecm-statemachine:status"
+                          force="true"/>                                                  <!-- Статус -->
+                    <show id="lecm-document:regnum"/>                                                                    <!-- Номер -->
+                    <show id="lecmSignAspects:signerEmployeeAssoc"/>                                                    <!-- Подписанты -->
+                    <show id="lecm-document-aspects:reg-data-date"/>                                                    <!-- Дата регистрации -->
                     <show id="lecm-eds-document:executor-assoc"/>                                                       <!-- Исполнитель -->
                     <show id="lecm-document:author-assoc"/>                                                             <!-- Составитель -->
-                    <show id="lecm-document:title"/>																	<!-- Заголовок -->
-                    <show id="lecm-ord:controller-assoc"/>																<!-- Контролер -->
-                                                        																<!-- Подтверждать завершение  -->
-                                                        																<!-- На исполнении -->
+                    <show id="lecm-document:title"/>                                                                    <!-- Заголовок -->
+                    <show id="lecm-ord:controller-assoc"/>                                                                <!-- Контролер -->
+                    <!-- Подтверждать завершение  -->
+                    <!-- На исполнении -->
                     <show id="lecm-eds-document:execution-date"/>                                                       <!-- Срок исполнения -->
-                                                                                                                        <!-- Исполнен -->
-                                                                                                                        <!-- Исполнение -->
-                                                                                                                        <!-- Ознакомление -->
+                    <!-- Исполнен -->
+                    <!-- Исполнение -->
+                    <!-- Ознакомление -->
                 </field-visibility>
                 <appearance>
-                    <set id="line1" template="/org/alfresco/components/form/2-column-set.ftl" />
-                    <set id="line2" />
-                    <set id="line3" template="/org/alfresco/components/form/2-column-set.ftl" />
+                    <set id="line1" template="/org/alfresco/components/form/2-column-set.ftl"/>
+                    <set id="line2"/>
+                    <set id="line3" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="line4"/>
-                    <set id="line5" template="/org/alfresco/components/form/2-column-set.ftl" />
+                    <set id="line5" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="line6"/>
-                    <set id="line7" template="/org/alfresco/components/form/2-column-set.ftl" />
+                    <set id="line7" template="/org/alfresco/components/form/2-column-set.ftl"/>
 
-                    <field id="lecm-eds-document:document-type-assoc" set="line1" label="Вид документа" >
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_ОРД</control-param>
+                    <field id="lecm-eds-document:document-type-assoc" set="line1" label="Вид документа">
+                        <control
+                                template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                            <control-param name="startLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_ОРД
+                            </control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="notSelectedOptionLabel"></control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-statemachine:status" set="line1" label-id="label.lecm-ord-status.title"  mandatory="false">
+                    <field id="lecm-statemachine:status" set="line1" mandatory="false">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory"
+                                        event="keyup"/>
                         </constraint-handlers>
                         <control template="/ru/it/lecm/documents/controls/select-status-control.ftl">
                             <control-param name="docType">lecm-ord:document</control-param>
@@ -316,18 +321,20 @@
                     </field>
                     <field id="lecm-document:regnum" set="line1"/>
                     <field id="lecmSignAspects:signerEmployeeAssoc" set="line1"/>
-                    <field id="lecm-document-aspects:reg-data-date" set="line2"  >
+                    <field id="lecm-document-aspects:reg-data-date" set="line2">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
                     <field id="lecm-eds-document:executor-assoc" set="line3"/>
-                    <field id="lecm-document:author-assoc" set="line3"  mandatory="false">
+                    <field id="lecm-document:author-assoc" set="line3" mandatory="false">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory"
+                                        event="keyup"/>
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-document:title" set="line4"  mandatory="false">
+                    <field id="lecm-document:title" set="line4" mandatory="false">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory"
+                                        event="keyup"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-ord:controller-assoc" set="line5"/>
