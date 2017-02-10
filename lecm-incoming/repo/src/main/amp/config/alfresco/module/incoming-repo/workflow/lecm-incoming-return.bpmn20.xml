@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/incoming/workflow/return/1.0">
+    <process id="incomingReturn" name="Входящие: вернуть">
+        <startEvent id="startReturn" name="Start" activiti:formKey="lecmIncomingWf:return"></startEvent>
+        <endEvent id="endReturn" name="End"></endEvent>
+        <scriptTask id="doReturn" name="Return" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start"
+                                            class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+                          	var document = bpm_package.children[0];
+                          	var reason = lecmIncomingWf_returnReason;
+                          	if (document && reason) {
+                                var registrars =  orgstructure.getEmployeesByBusinessRoleId("DA_REGISTRARS", true);
+                                notifications.sendNotificationFromCurrentUser({
+                                    recipients: registrars,
+                                    templateCode: 'INCOMING_RETURN_DOCUMENT',
+                                    templateConfig: {
+                                        mainObject: document,
+                                        eventExecutor: orgstructure.getCurrentEmployee(),
+                                        reason: reason
+                                    }
+                                });
+
+                                var logText = "#initiator " + base.wrapperTitle("вернул", reason) + " на регистрацию документ #mainobject.";
+                                businessJournal.log(document.nodeRef.toString(), "RETURN_DOCUMENT", logText, []);
+                          	}
+						]]></activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script>var test=1;</script>
+        </scriptTask>
+        <receiveTask id="incomingReceiveTask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startReturn" targetRef="doReturn"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="doReturn" targetRef="incomingReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="incomingReceiveTask" targetRef="endReturn"></sequenceFlow>
+    </process>
+</definitions>

@@ -1228,6 +1228,27 @@
         </forms>
     </config>
 
+    <config evaluator="string-compare" condition="activiti$incomingReturn">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmIncomingWf:returnReason"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmIncomingWf:returnReason">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">7</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
     <config evaluator="string-compare" condition="Workflow">
         <hidden-workflows>
             <workflow name="activiti$lecm-incoming_document"/>
@@ -1235,6 +1256,7 @@
             <workflow name="activiti$incomingSendToReview"/>
             <workflow name="activiti$incomingSearchRepeats"/>
             <workflow name="activiti$incomingRegistration"/>
+            <workflow name="activiti$incomingReturn"/>
         </hidden-workflows>
     </config>
 
