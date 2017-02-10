@@ -864,7 +864,7 @@
                             <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-statemachine:status" set="two_colum" label-id="label.lecm-incoming-status.title"  mandatory="false">
+                    <field id="lecm-statemachine:status" set="two_colum"  mandatory="false">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
