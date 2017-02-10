@@ -35,7 +35,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 LogicECM.module = LogicECM.module || {};
 
 (function () {
-    var Dom = YAHOO.util.Dom;
+    var Dom = YAHOO.util.Dom,
+        $siteURL = Alfresco.util.siteURL;
 
     LogicECM.module.ExecutionTreeControl = function (htmlId) {
         LogicECM.module.ExecutionTreeControl.superclass.constructor.call(this, "LogicECM.module.ExecutionTreeControl", htmlId, ["button", "container"]);
@@ -269,13 +270,13 @@ LogicECM.module = LogicECM.module || {};
                                     var connectedDocsList = [];
                                     if (response.json.connectedDocuments) {
                                         response.json.connectedDocuments.forEach(function (doc) {
-                                            connectedDocsList.push(doc.presentString);
+                                            connectedDocsList.push("<a href='" + $siteURL(doc.viewUrl + "?nodeRef=" + doc.nodeRef) + "' target='_blank'>" + doc.presentString + "</a>");
                                         });
                                     }
                                     var attachmentsList = [];
                                     if (response.json.attachments) {
                                         response.json.attachments.forEach(function (attachment) {
-                                            attachmentsList.push(attachment.name);
+                                            attachmentsList.push("<a onclick=\"LogicECM.module.Base.Util.showAttachmentsModalForm('" + nodeRef + "', '" + attachment.nodeRef + "')\" target=\"_blank\">" + attachment.name + "</a>");
                                         });
                                     }
 
