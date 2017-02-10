@@ -211,7 +211,7 @@
                                             <item name="cm:1f4f967a-9318-4212-9897-5adebb73b51f" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-errands:additional-document-assoc]]></property>
+                                                    <![CDATA[lecm-errands:base-assoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Документ-основание]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[5c1466ed-32dc-44e2-8b1e-df2de2543e47]]></property>
