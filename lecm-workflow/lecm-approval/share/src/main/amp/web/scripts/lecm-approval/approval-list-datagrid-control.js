@@ -12,7 +12,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 (function () {
 
 	LogicECM.module.Approval.ApprovalListDataGridControl = function (containerId, documentNodeRef) {
-		var createApprovalListButtonElement, addStageButtonElement, clearButtonElement;
+		var createApprovalListButtonElement, addStageButtonElement, clearButtonElement, expandAllStagesElement;
 		this.documentNodeRef = documentNodeRef;
 
 		createApprovalListButtonElement = YAHOO.util.Dom.get(containerId + '-create-approval-list-button');
@@ -98,6 +98,12 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			this.clearButton.on('click', this.onClearButton, this, true);
 		}
 
+		expandAllStagesElement = YAHOO.util.Dom.get(containerId + '-expand-all-button');
+		if (expandAllStagesElement) {
+			this.expandAllStagesButton = new YAHOO.widget.Button(expandAllStagesElement);
+            this.expandAllStagesButton.on('click', this.onExpandAllStages, this, true);
+		}
+
 		this.approvalContainer = YAHOO.util.Dom.get(containerId + '-approval-container');
 		this.completedApprovalsCountContainer = YAHOO.util.Dom.get(containerId + '-approval-completed-count');
 		this.showHistoryLink = YAHOO.util.Dom.get(containerId + '-show-history-link');
@@ -134,6 +140,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		];
 		this.approvalStateSettings.NEW.revealElements = [
 			this.clearButton,
+            this.expandAllStagesButton,
 			this.approvalContainer,
 			this.addStageButton
 		];
@@ -144,7 +151,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		];
 		this.approvalStateSettings.ACTIVE.revealElements = [
 			this.approvalContainer,
-			this.addStageButton
+			this.addStageButton,
+            this.expandAllStagesButton
 		];
 
 		this.approvalStateSettings.COMPLETE.hideElements = [
@@ -153,7 +161,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		];
 		this.approvalStateSettings.COMPLETE.revealElements = [
 			this.approvalContainer,
-			this.createApprovalListButton
+			this.createApprovalListButton,
+            this.expandAllStagesButton
 		];
 
 		YAHOO.Bubbling.on("hideControl", this.onHideControl, this);
@@ -660,6 +669,12 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					}]
 			});
 		},
+
+        onExpandAllStages: function () {
+            YAHOO.Bubbling.fire('expandAllGridRows', {
+            	id: this.id
+			});
+        },
 
 		fillCurrentApprovalState: function () {
 			var approvalMsgTemplate = '{msg} ({additionalMsg})';

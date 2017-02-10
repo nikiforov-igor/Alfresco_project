@@ -7,6 +7,7 @@
 <#assign isApproval = args["isApproval"] == "true"/>
 <#assign routeRef = args["routeRef"]!''>
 <#assign mainFormId = args["mainFormId"]!''>
+<#assign isExpandAutomatically = args["isExpandAutomatically"] == "true"/>
 
 <script>
 (function(){
@@ -20,6 +21,7 @@
 		bubblingLabel: "${datagridId}",
 		overrideSortingWith: false,
 		expandable: false,
+        isExpandAutomatically: ${isExpandAutomatically?string},
 		showActionColumn: ${editable?string},
 		<#if editable>
 		actions: [{

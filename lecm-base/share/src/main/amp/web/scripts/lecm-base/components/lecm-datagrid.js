@@ -102,6 +102,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         Bubbling.on("datagridRefresh", this.onDataGridRefresh, this);
         Bubbling.on("archiveCheckBoxClicked", this.onArchiveCheckBoxClicked, this);
         Bubbling.on("reCreateDatagrid", this.onReCreateDatagrid, this);
+        Bubbling.on("expandAllGridRows", this.onExpanAllGridRows, this);
 
         /* Deferred list population until DOM ready */
         this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "onGridTypeChanged"],
@@ -330,7 +331,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 /**
                  * Имя атрибута для открытия документа
                  */
-                attributeForOpen: null
+                attributeForOpen: null,
+
+                // Нужно ли раскрывать все строки грида автоматически
+                isExpandAutomatically: false
             },
 
             showActionsCount: 3,
@@ -463,7 +467,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
             errorMessageDialog: null,
 
-	        doubleClickLock: false,
+	        doubleClickLock: {},
 
             onArchiveCheckBoxClicked: function (layer, args) {
                 var cbShowArchive = YAHOO.util.Dom.get(this.id + "-cbShowArchive");
@@ -532,17 +536,22 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 					Dom.removeClass(row, "expanded");
 					this.onCollapse(record);
 				} else {
-					Dom.addClass(row, "expanded");
-					Dom.get("expand-" + record.getId()).innerHTML = "-";
-					var rowId = this.getExpandedRecordId(record);
-					if (Dom.get(rowId) != null) {
-						Dom.setStyle(rowId, "display", "table-row");
-					} else {
-						this.prepareExpandedRow(record);
-						this.onExpand(record);
-					}
+                    this.expandRowByRecord(record, false);
 				}
 			},
+
+            expandRowByRecord: function(record, isExpandAutomatically) {
+                var row = this.widgets.dataTable.getRow(record);
+                Dom.addClass(row, "expanded");
+                Dom.get("expand-" + record.getId()).innerHTML = "-";
+                var rowId = this.getExpandedRecordId(record);
+                if (Dom.get(rowId) != null) {
+                    Dom.setStyle(rowId, "display", "table-row");
+                } else {
+                    this.prepareExpandedRow(record);
+                    this.onExpand(record, isExpandAutomatically);
+                }
+            },
 
 	        onCollapse: function (record) {
 		        //Можно переопределять для полного удаления схлопываемой строки
@@ -567,9 +576,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
             },
 
-			onExpand: function(record) {
-				if (this.doubleClickLock) return;
-				this.doubleClickLock = true;
+			onExpand: function(record, isExpandAutomatically) {
+				if (this.doubleClickLock[record.getId()]) return;
+				this.doubleClickLock[record.getId()] = true;
 
 				var nodeRef = record.getData("nodeRef");
 				if (nodeRef) {
@@ -578,7 +587,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 						htmlid: this.getExpandedFormId(record),
 						itemKind: "node",
 						itemId: nodeRef,
-						mode: "view"
+						mode: "view",
+                        isExpandAutomatically: !!isExpandAutomatically
 					}, this.options.expandDataObj);
 					Alfresco.util.Ajax.request({
 						url: Alfresco.constants.URL_SERVICECONTEXT + this.options.expandDataSource,
@@ -589,7 +599,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 								if (response.serverResponse != null) {
 									me.addExpandedRow(record, response.serverResponse.responseText);
 								}
-								me.doubleClickLock = false;
+								me.doubleClickLock[record.getId()] = false;
 							}
 						},
 						failureMessage: "message.failure",
@@ -1573,6 +1583,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
                 this.afterDataGridUpdate = [];
                 this.fixHeader();
+
+                if (this.options.isExpandAutomatically) {
+                    // Раскрыть все строки текущего datagrid-а
+                    YAHOO.Bubbling.fire('expandAllGridRows', {
+                        id: this.id
+                    });
+                }
             },
             /**
              * DataTable set-up and event registration
@@ -3113,6 +3130,21 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     this.datagridMeta = YAHOO.lang.merge(this.datagridMeta, newMeta);
                     this.datagridMeta.recreate = true;
                     this.populateDataGrid();
+                }
+            },
+
+            onExpanAllGridRows: function DataGrid_onExpanAllGridRows(layer, args) {
+                var obj = args[1];
+                if (obj && obj.id != this.id) return;
+                var dTable = this.widgets.dataTable;
+                if (dTable != null) {
+                    var records = dTable.getRecordSet().getRecords();
+                    for (var i = 0; i < records.length; ++i) {
+                        var row = this.widgets.dataTable.getRow(records[i]);
+                        if (!Dom.hasClass(row, "expanded")) {
+                            this.expandRowByRecord(records[i], true);
+                        }
+                    }
                 }
             },
 
