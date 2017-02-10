@@ -83,6 +83,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			var attributes = Alfresco.util.ComponentManager.findFirst('LogicECM.module.ModelEditor.AttributesDatatable');
 			var categories = Alfresco.util.ComponentManager.findFirst('LogicECM.module.ModelEditor.CategoriesDatatable');
 			var tables = Alfresco.util.ComponentManager.findFirst('LogicECM.module.ModelEditor.TablesDatatable');
+			var aspects = Alfresco.util.ComponentManager.findFirst('LogicECM.module.ModelEditor.AspectsDatatable');
 			var month = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
 			var cmName = form.elements['prop_cm_name'].value;
 			var modelName = form.elements['cm_lecmModelName'].value ? form.elements['cm_lecmModelName'].value : cmName + 'Model';
@@ -171,6 +172,18 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 				records = tables.widgets.datatable.getRecordSet().getRecords();
 				for (i in records) {
 					clazz = records[i].getData('table');
+					NS = clazz.substr(0, clazz.indexOf(':'));
+					for (j in obj.namespaces) {
+						if (obj.namespaces[j].prefix == NS && !IT.Utils.containsUri(model.imports["import"], { _uri: obj.namespaces[j].uri, _prefix: NS })) {
+							model.imports["import"].push({ _uri: obj.namespaces[j].uri, _prefix: NS });
+						}
+					}
+				}
+			}
+			if (aspects && aspects.widgets.datatable) {
+				records = aspects.widgets.datatable.getRecordSet().getRecords();
+				for (i in records) {
+					clazz = records[i].getData('aspect');
 					NS = clazz.substr(0, clazz.indexOf(':'));
 					for (j in obj.namespaces) {
 						if (obj.namespaces[j].prefix == NS && !IT.Utils.containsUri(model.imports["import"], { _uri: obj.namespaces[j].uri, _prefix: NS })) {
@@ -357,6 +370,14 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 				for (i in records) {
 					if (!IT.Utils.contains(model.types.type['mandatory-aspects'].aspect, records[i].getData('table'))) {
 						model.types.type['mandatory-aspects'].aspect.push(records[i].getData('table') || '');
+					}
+				}
+			}
+			if (aspects && aspects.widgets.datatable) {
+				records = aspects.widgets.datatable.getRecordSet().getRecords();
+				for (i in records) {
+					if (!IT.Utils.contains(model.types.type['mandatory-aspects'].aspect, records[i].getData('aspect'))) {
+						model.types.type['mandatory-aspects'].aspect.push(records[i].getData('aspect') || '');
 					}
 				}
 			}

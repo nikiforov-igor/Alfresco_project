@@ -25,44 +25,52 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			data: null
 		},
 		
+		formatSimpleText: function (el, oRecord, oColumn, oData, oDataTable) {
+			el.innerHTML = (oData?oData:'');
+		},
+		
 		formatText: function (el, oRecord, oColumn, oData, oDataTable) {
 			if(oRecord.getData("tProps")!=null){
 				el.id=oRecord.getId();
-				var div11 = el.appendChild(document.createElement('div'));
-				div11.innerHTML = "<b>Атрибуты</b>"
-				var div12 = el.appendChild(document.createElement('div'));
-				div12.id = oRecord.getId()+'props';
-				var div21 = el.appendChild(document.createElement('div'));
-				div21.innerHTML = "<b>Ассоциации</b>"
-				var div22 = el.appendChild(document.createElement('div'));
-				div22.id = oRecord.getId()+'assocs';
-				var colDefProps = [
-					{className:'viewmode-label',key:'_name',label:'Имя',width:170,maxAutoWidth:170},
-					{className:'viewmode-label',key:'title',label:'Заголовок',width:170,maxAutoWidth:170},
-					{className:'viewmode-label',key:'type',label:'По умолчанию',width:170,maxAutoWidth:170},
-					{className:'viewmode-label',key:'default',label:'Тип',width:100,maxAutoWidth:100},
-					{className:'viewmode-label',key:'mandatory',label:'Обязательный',width:100,maxAutoWidth:100},
-					{className:'viewmode-label',key:'_enabled',label:'Индексировать',width:100,maxAutoWidth:100},
-					{className:'viewmode-label',key:'tokenised',label:'Токенизация',width:80,maxAutoWidth:80}
-				],
-				DSProps = new YAHOO.util.DataSource(oRecord.getData("tProps"), {
-					responseSchema:  {fields: [{key: '_name'},{key: 'title'},{key: 'type'},{key: 'default'},{key: 'mandatory'},{key: '_enabled'},{key: 'tokenised'}]}
-				}),
-				colDefAssocs = [
-					{className:'viewmode-label',key:'_name',label:'Имя',width:170,maxAutoWidth:170},
-					{className:'viewmode-label',key:'title',label:'Заголовок',width:170,maxAutoWidth:170},
-					{className:'viewmode-label',key:'class',label:'Тип',width:291,maxAutoWidth:291},
-					{className:'viewmode-label',key:'mandatory',label:'Обязательный',width:100,maxAutoWidth:100},
-					{className:'viewmode-label',key:'many',label:'Множественная',width:203,maxAutoWidth:203}
-				],
-				DSPAssocs = new YAHOO.util.DataSource(oRecord.getData("tAssocs"), {
-					responseSchema:  {fields: [{key: '_name'},{key: 'class'},{key: 'title'},{key: 'mandatory'},{key: 'many'}]}
-				});
-				datatable1 = new YAHOO.widget.DataTable(div12, colDefProps, DSProps);
-				datatable2 = new YAHOO.widget.DataTable(div22, colDefAssocs, DSPAssocs);
+				if(oRecord.getData("tProps").length>0){
+					var div11 = el.appendChild(document.createElement('div'));
+					div11.innerHTML = "<b>Атрибуты</b>"
+					var div12 = el.appendChild(document.createElement('div'));
+					div12.id = oRecord.getId()+'props';
+					var colDefProps = [
+						{className:'viewmode-label',key:'_name',label:'Имя',width:170,maxAutoWidth:170},
+						{className:'viewmode-label',key:'title',label:'Заголовок',width:170,maxAutoWidth:170,formater:LogicECM.module.ModelEditor.RODatatableControl.formatSimpleText},
+						{className:'viewmode-label',key:'type',label:'По умолчанию',width:170,maxAutoWidth:170},
+						{className:'viewmode-label',key:'default',label:'Тип',width:100,maxAutoWidth:100,formater:LogicECM.module.ModelEditor.RODatatableControl.formatSimpleText},
+						{className:'viewmode-label',key:'mandatory',label:'Обязательный',width:100,maxAutoWidth:100},
+						{className:'viewmode-label',key:'_enabled',label:'Индексировать',width:100,maxAutoWidth:100},
+						{className:'viewmode-label',key:'tokenised',label:'Токенизация',width:80,maxAutoWidth:80}
+					],
+					DSProps = new YAHOO.util.DataSource(oRecord.getData("tProps"), {
+						responseSchema:  {fields: [{key: '_name'},{key: 'title'},{key: 'type'},{key: 'default'},{key: 'mandatory'},{key: '_enabled'},{key: 'tokenised'}]}
+					});
+					datatable1 = new YAHOO.widget.DataTable(div12, colDefProps, DSProps);
+				}
+				if(oRecord.getData("tAssocs").length>0) {
+					var div21 = el.appendChild(document.createElement('div'));
+					div21.innerHTML = "<b>Ассоциации</b>"
+					var div22 = el.appendChild(document.createElement('div'));
+					div22.id = oRecord.getId()+'assocs';
+					var colDefAssocs = [
+						{className:'viewmode-label',key:'_name',label:'Имя',width:170,maxAutoWidth:170},
+						{className:'viewmode-label',key:'title',label:'Заголовок',width:170,maxAutoWidth:170},
+						{className:'viewmode-label',key:'class',label:'Тип',width:291,maxAutoWidth:291},
+						{className:'viewmode-label',key:'mandatory',label:'Обязательный',width:100,maxAutoWidth:100},
+						{className:'viewmode-label',key:'many',label:'Множественная',width:203,maxAutoWidth:203}
+					],
+					DSPAssocs = new YAHOO.util.DataSource(oRecord.getData("tAssocs"), {
+						responseSchema:  {fields: [{key: '_name'},{key: 'class'},{key: 'title'},{key: 'mandatory'},{key: 'many'}]}
+					});
+					datatable2 = new YAHOO.widget.DataTable(div22, colDefAssocs, DSPAssocs);
+				}
 			} else {
 				el.id=oRecord.getId();
-				el.innerHTML = oData;
+				el.innerHTML = (oData?oData:'');
 			}
 		},
 		
@@ -86,7 +94,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		},
 		
 		formatActions: function (el, oRecord, oColumn, oData, oDataTable) {			
-			if (oRecord.getData("props")!=null || oRecord.getData("assocs")!=null || oRecord.getData("table")!=null) {
+			if (oRecord.getData("props")!=null || oRecord.getData("assocs")!=null || oRecord.getData("table")!=null || (oRecord.getData("aspect")!=null&&(oRecord.getData("aspect").props.length>0||oRecord.getData("aspect").assocs.length>0))) {
 				el.innerHTML = "";
 
 				if (oRecord.getData("expanded")) {
@@ -201,6 +209,38 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 						for (i = 0; i < recordSet.getLength(); i++) {
 							var cN = recordSet.getRecord(i).getData("name");
 							var cT = recordSet.getRecord(i).getData("table");
+							var pN = oRecord.getData("name")
+							if (cN=== pN && cT==null) {
+								findedRows.push(recordSet.getRecord(i));
+							}
+						}
+
+						for (i = 0; i < findedRows.length; i++) {
+							this.deleteRows(findedRows[i]);
+						}
+					}
+					var itemData = oRecord.getData();
+					itemData.expanded = !expanded;
+					this.updateRow(oRecord, itemData);
+				}
+				
+				var aspect = oRecord.getData("aspect");
+				if (aspect != null) {
+					var expanded = oRecord.getData("expanded") != null && oRecord.getData("expanded");
+					if (!expanded) {
+						var typeRows = [];
+						typeRows.push({
+							name: aspect.name,
+							tProps: aspect.props,
+							tAssocs: aspect.assocs
+						});
+						this.addRows(typeRows, this.getTrIndex(oArgs.target) + 1);
+					} else {
+						var recordSet = this.getRecordSet();
+						var findedRows = [];
+						for (i = 0; i < recordSet.getLength(); i++) {
+							var cN = recordSet.getRecord(i).getData("name");
+							var cT = recordSet.getRecord(i).getData("aspect");
 							var pN = oRecord.getData("name")
 							if (cN=== pN && cT==null) {
 								findedRows.push(recordSet.getRecord(i));

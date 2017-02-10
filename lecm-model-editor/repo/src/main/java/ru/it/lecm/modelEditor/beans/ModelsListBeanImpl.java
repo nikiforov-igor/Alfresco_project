@@ -241,29 +241,7 @@ public class ModelsListBeanImpl extends BaseBean {
 			}
 
 			List<JSONObject> items = new ArrayList<>(models.values());
-			Collections.sort(items, new Comparator<JSONObject>() {
-				@Override
-				public int compare(JSONObject o1, JSONObject o2) {
-					String title1 = null;
-					String title2 = null;
-                    try {
-                        title1 = o1.getString("title");
-                    } catch (JSONException ignored) {}
-                    try {
-                        title2 = o2.getString("title");
-                    } catch (JSONException ignored) {}
-
-                    if (title1 == null && title2 == null) {
-						return 0;
-                    } else if (title1 == null && title2 != null) {
-						return -1;
-					} else if (title2 == null && title1 != null) {
-						return 1;
-					} else {
-						return title1.compareTo(title2);
-					}
-				}
-			});
+			Collections.sort(items, new JSONComparator("title"));
 
 			result.put("items", items);
 		} catch (JSONException ex) {
@@ -381,29 +359,7 @@ public class ModelsListBeanImpl extends BaseBean {
 							propsArray.add(propObject);
 						}
 					}
-					Collections.sort(propsArray, new Comparator<JSONObject>() {
-						@Override
-						public int compare(JSONObject o1, JSONObject o2) {
-							String title1 = null;
-							String title2 = null;
-							try {
-								title1 = o1.getString("_name");
-							} catch (JSONException ignored) {}
-							try {
-								title2 = o2.getString("_name");
-							} catch (JSONException ignored) {}
-
-							if (title1 == null && title2 == null) {
-								return 0;
-							} else if (title1 == null && title2 != null) {
-								return -1;
-							} else if (title2 == null && title1 != null) {
-								return 1;
-							} else {
-								return title1.compareTo(title2);
-							}
-						}
-					});
+					Collections.sort(propsArray, new JSONComparator("_name"));
 					parentObject.put("props", propsArray);
 					items.add(parentObject);
 					parentDocumentTypeQName = parentType.getParentName();
@@ -469,29 +425,7 @@ public class ModelsListBeanImpl extends BaseBean {
 							assocsArray.add(assocObject);
 						}
 					}
-					Collections.sort(assocsArray, new Comparator<JSONObject>() {
-						@Override
-						public int compare(JSONObject o1, JSONObject o2) {
-							String title1 = null;
-							String title2 = null;
-							try {
-								title1 = o1.getString("_name");
-							} catch (JSONException ignored) {}
-							try {
-								title2 = o2.getString("_name");
-							} catch (JSONException ignored) {}
-	
-							if (title1 == null && title2 == null) {
-								return 0;
-							} else if (title1 == null && title2 != null) {
-								return -1;
-			                } else if (title2 == null && title1 != null) {
-								return 1;
-							} else {
-								return title1.compareTo(title2);
-							}
-						}
-					});
+					Collections.sort(assocsArray, new JSONComparator("_name"));
 					parentObject.put("assocs", assocsArray);
 					items.add(parentObject);
 					parentDocumentTypeQName = parentType.getParentName();
@@ -505,8 +439,50 @@ public class ModelsListBeanImpl extends BaseBean {
 		return result;
 	}
 	
-	public JSONObject getTables(String documentType) {
-		logger.info("%%%%%%% documentType: "+documentType);
+	private JSONObject getAspectObject(QName aspectQN) throws JSONException {
+		JSONObject aspectObject = null;
+		AspectDefinition aspect = dictionaryService.getAspect(aspectQN);
+		
+		if( aspect!=null) {
+			aspectObject = new JSONObject();
+			aspectObject.put("aspectName", aspect.getName().toPrefixString(namespaceService));
+			aspectObject.put("name", aspect.getName().toPrefixString(namespaceService));
+			List<JSONObject> props = new ArrayList<>();
+			for(PropertyDefinition pdRow: aspect.getProperties().values()){
+				logger.info("%%%%%%% pdRow: "+pdRow.getName().toPrefixString());
+				JSONObject propObject = new JSONObject();
+				propObject.put("_name", pdRow.getName().toPrefixString(namespaceService));
+				propObject.put("title", pdRow.getTitle());
+				propObject.put("type", pdRow.getDataType().getName().toPrefixString(namespaceService));
+				propObject.put("default", pdRow.getDefaultValue());
+				propObject.put("mandatory", pdRow.isMandatory());
+				propObject.put("_enabled", pdRow.isIndexed());
+				propObject.put("tokenised", pdRow.getIndexTokenisationMode());
+				props.add(propObject);
+			}
+			Collections.sort(props, new JSONComparator("_name"));
+			JSONObject tableObject = new JSONObject();
+			tableObject.put("name", aspect.getName().toPrefixString(namespaceService));
+			tableObject.put("props", props);
+			List<JSONObject> assocs = new ArrayList<>();
+			for(AssociationDefinition adRow: aspect.getAssociations().values()) {
+				logger.info("%%%%%%% adRow: "+adRow.getName().toPrefixString());
+				JSONObject assocObject = new JSONObject();
+				assocObject.put("_name", adRow.getName().toPrefixString(namespaceService));
+				assocObject.put("title", adRow.getTitle());
+				assocObject.put("class", adRow.getTargetClass().getName().toPrefixString(namespaceService));
+				assocObject.put("mandatory", adRow.isTargetMandatory());
+				assocObject.put("many", adRow.isTargetMany());
+				assocs.add(assocObject);
+			}
+			Collections.sort(assocs, new JSONComparator("_name"));
+			tableObject.put("assocs", assocs);
+			aspectObject.put("aspect", tableObject);
+		}
+		return aspectObject;
+	}
+	
+	public JSONObject getAspects(String documentType) {
 		JSONObject result = new JSONObject();
 		try {
 			List<JSONObject> items = new ArrayList<>();
@@ -516,136 +492,28 @@ public class ModelsListBeanImpl extends BaseBean {
 				documentTypeQName = QName.createQName(documentType, namespaceService);
 				type = dictionaryService.getAspect(documentTypeQName);
 			} catch(Exception e) {}
-			logger.info("%%%%%%% type: "+type);
 			QName parentDocumentTypeQName = null;
 			if(type!=null) {
 				parentDocumentTypeQName = documentTypeQName;
 			}
-			logger.info("%%%%%%% parentDocumentTypeQName: "+parentDocumentTypeQName);
 			if(parentDocumentTypeQName!=null) {
 				Collection<QName> aspects = dictionaryService.getSubAspects(parentDocumentTypeQName, true);
 				for(QName aspectQN : aspects) {
 					AspectDefinition aspect = dictionaryService.getAspect(aspectQN);
 					
-					JSONObject aspectObject = null;
-					for(AssociationDefinition ad: aspect.getAssociations().values()) {
-						TypeDefinition td = dictionaryService.getType(ad.getTargetClass().getName());
-						//lecm-document:tableDataRowType
-						for(PropertyDefinition pd: td.getProperties().values()){
-							String tableRowProp = pd.getName().toPrefixString();
-							if("lecm-document:tableDataRowType".equals(tableRowProp)) {
-								String tableRowType = pd.getDefaultValue();
-								logger.info("%%%%%%% tableRowProp: "+tableRowProp+", tableRowType: "+tableRowType);
-								QName tableRowTypeQname = QName.createQName(tableRowType, namespaceService);
-								TypeDefinition tdRow = dictionaryService.getType(tableRowTypeQname);
-								if(tdRow!=null) {
-									aspectObject = new JSONObject();
-									aspectObject.put("aspectName", aspect.getName().toPrefixString(namespaceService));
-									aspectObject.put("name", tableRowType);
-									List<JSONObject> props = new ArrayList<>();
-									for(PropertyDefinition pdRow: tdRow.getProperties().values()){
-										logger.info("%%%%%%% pdRow: "+pdRow.getName().toPrefixString());
-										JSONObject propObject = new JSONObject();
-										propObject.put("_name", pdRow.getName().toPrefixString(namespaceService));
-										propObject.put("title", pdRow.getTitle());
-										propObject.put("type", pdRow.getDataType().getName().toPrefixString(namespaceService));
-										propObject.put("default", pdRow.getDefaultValue());
-										propObject.put("mandatory", pdRow.isMandatory());
-										propObject.put("_enabled", pdRow.isIndexed());
-										propObject.put("tokenised", pdRow.getIndexTokenisationMode());
-										props.add(propObject);
-									}
-									Collections.sort(props, new Comparator<JSONObject>() {
-										@Override
-										public int compare(JSONObject o1, JSONObject o2) {
-											String title1 = null;
-											String title2 = null;
-											try {
-												title1 = o1.getString("_name");
-											} catch (JSONException ignored) {}
-											try {
-												title2 = o2.getString("_name");
-											} catch (JSONException ignored) {}
-					
-											if (title1 == null && title2 == null) {
-												return 0;
-											} else if (title1 == null && title2 != null) {
-												return -1;
-							                } else if (title2 == null && title1 != null) {
-												return 1;
-											} else {
-												return title1.compareTo(title2);
-											}
-										}
-									});
-									JSONObject tableObject = new JSONObject();
-									tableObject.put("name", tableRowType);
-									tableObject.put("props", props);
-									List<JSONObject> assocs = new ArrayList<>();
-									for(AssociationDefinition adRow: tdRow.getAssociations().values()) {
-										logger.info("%%%%%%% adRow: "+adRow.getName().toPrefixString());
-										JSONObject assocObject = new JSONObject();
-										assocObject.put("_name", adRow.getName().toPrefixString(namespaceService));
-										assocObject.put("title", adRow.getTitle());
-										assocObject.put("class", adRow.getTargetClass().getName().toPrefixString(namespaceService));
-										assocObject.put("mandatory", adRow.isTargetMandatory());
-										assocObject.put("many", adRow.isTargetMany());
-										assocs.add(assocObject);
-									}
-									Collections.sort(assocs, new Comparator<JSONObject>() {
-										@Override
-										public int compare(JSONObject o1, JSONObject o2) {
-											String title1 = null;
-											String title2 = null;
-											try {
-												title1 = o1.getString("_name");
-											} catch (JSONException ignored) {}
-											try {
-												title2 = o2.getString("_name");
-											} catch (JSONException ignored) {}
-					
-											if (title1 == null && title2 == null) {
-												return 0;
-											} else if (title1 == null && title2 != null) {
-												return -1;
-							                } else if (title2 == null && title1 != null) {
-												return 1;
-											} else {
-												return title1.compareTo(title2);
-											}
-										}
-									});
-									tableObject.put("assocs", assocs);
-									aspectObject.put("table", tableObject);
-								}
-							}
-						}
-					}
+					JSONObject aspectObject = getAspectObject(aspectQN);;
 					if(aspectObject!=null) items.add(aspectObject);
 				}
-				Collections.sort(items, new Comparator<JSONObject>() {
-					@Override
-					public int compare(JSONObject o1, JSONObject o2) {
-						String title1 = null;
-						String title2 = null;
-						try {
-							title1 = o1.getString("name");
-						} catch (JSONException ignored) {}
-						try {
-							title2 = o2.getString("name");
-						} catch (JSONException ignored) {}
-
-						if (title1 == null && title2 == null) {
-							return 0;
-						} else if (title1 == null && title2 != null) {
-							return -1;
-						} else if (title2 == null && title1 != null) {
-							return 1;
-						} else {
-							return title1.compareTo(title2);
-						}
-					}
-				});
+				Collections.sort(items, new JSONComparator());
+			} else {
+				Collection<QName> aspects = dictionaryService.getAllAspects();
+				for(QName aspectQN : aspects) {
+					AspectDefinition aspect = dictionaryService.getAspect(aspectQN);
+					
+					JSONObject aspectObject = getAspectObject(aspectQN);;
+					if(aspectObject!=null) items.add(aspectObject);
+				}
+				Collections.sort(items, new JSONComparator());
 			}
 			result.put("data", items);
 		} catch (JSONException ex) {
@@ -654,7 +522,7 @@ public class ModelsListBeanImpl extends BaseBean {
 		return result;
 	}
 	
-	public JSONObject getAspects(String nodeRef, String documentType) {
+	public JSONObject getParentAspects(String nodeRef, String documentType) {
 		JSONObject result = new JSONObject();
 		try {
 			List<JSONObject> items = new ArrayList<>();
@@ -690,127 +558,145 @@ public class ModelsListBeanImpl extends BaseBean {
 				TypeDefinition parentType = dictionaryService.getType(parentDocumentTypeQName);
 				Set<QName> aspects = parentType.getDefaultAspectNames();
 				for(QName aspectQN : aspects) {
-					AspectDefinition aspect = dictionaryService.getAspect(aspectQN);
-					
-					JSONObject aspectObject = null;
-					for(AssociationDefinition ad: aspect.getAssociations().values()) {
-						TypeDefinition td = dictionaryService.getType(ad.getTargetClass().getName());
-						//lecm-document:tableDataRowType
-						for(PropertyDefinition pd: td.getProperties().values()){
-							String tableRowProp = pd.getName().toPrefixString();
-							if("lecm-document:tableDataRowType".equals(tableRowProp)) {
-								String tableRowType = pd.getDefaultValue();
-								logger.info("%%%%%%% tableRowProp: "+tableRowProp+", tableRowType: "+tableRowType);
-								QName tableRowTypeQname = QName.createQName(tableRowType, namespaceService);
-								TypeDefinition tdRow = dictionaryService.getType(tableRowTypeQname);
-								if(tdRow!=null) {
-									aspectObject = new JSONObject();
-									aspectObject.put("aspectName", aspect.getName().toPrefixString(namespaceService));
-									aspectObject.put("name", tableRowType);
-									List<JSONObject> props = new ArrayList<>();
-									for(PropertyDefinition pdRow: tdRow.getProperties().values()){
-										logger.info("%%%%%%% pdRow: "+pdRow.getName().toPrefixString());
-										JSONObject propObject = new JSONObject();
-										propObject.put("_name", pdRow.getName().toPrefixString(namespaceService));
-										propObject.put("title", pdRow.getTitle());
-										propObject.put("type", pdRow.getDataType().getName().toPrefixString(namespaceService));
-										propObject.put("default", pdRow.getDefaultValue());
-										propObject.put("mandatory", pdRow.isMandatory());
-										propObject.put("_enabled", pdRow.isIndexed());
-										propObject.put("tokenised", pdRow.getIndexTokenisationMode());
-										props.add(propObject);
-									}
-									Collections.sort(props, new Comparator<JSONObject>() {
-										@Override
-										public int compare(JSONObject o1, JSONObject o2) {
-											String title1 = null;
-											String title2 = null;
-											try {
-												title1 = o1.getString("_name");
-											} catch (JSONException ignored) {}
-											try {
-												title2 = o2.getString("_name");
-											} catch (JSONException ignored) {}
-					
-											if (title1 == null && title2 == null) {
-												return 0;
-											} else if (title1 == null && title2 != null) {
-												return -1;
-							                } else if (title2 == null && title1 != null) {
-												return 1;
-											} else {
-												return title1.compareTo(title2);
-											}
-										}
-									});
-									JSONObject tableObject = new JSONObject();
-									tableObject.put("name", tableRowType);
-									tableObject.put("props", props);
-									List<JSONObject> assocs = new ArrayList<>();
-									for(AssociationDefinition adRow: tdRow.getAssociations().values()) {
-										logger.info("%%%%%%% adRow: "+adRow.getName().toPrefixString());
-										JSONObject assocObject = new JSONObject();
-										assocObject.put("_name", adRow.getName().toPrefixString(namespaceService));
-										assocObject.put("title", adRow.getTitle());
-										assocObject.put("class", adRow.getTargetClass().getName().toPrefixString(namespaceService));
-										assocObject.put("mandatory", adRow.isTargetMandatory());
-										assocObject.put("many", adRow.isTargetMany());
-										assocs.add(assocObject);
-									}
-									Collections.sort(assocs, new Comparator<JSONObject>() {
-										@Override
-										public int compare(JSONObject o1, JSONObject o2) {
-											String title1 = null;
-											String title2 = null;
-											try {
-												title1 = o1.getString("_name");
-											} catch (JSONException ignored) {}
-											try {
-												title2 = o2.getString("_name");
-											} catch (JSONException ignored) {}
-					
-											if (title1 == null && title2 == null) {
-												return 0;
-											} else if (title1 == null && title2 != null) {
-												return -1;
-							                } else if (title2 == null && title1 != null) {
-												return 1;
-											} else {
-												return title1.compareTo(title2);
-											}
-										}
-									});
-									tableObject.put("assocs", assocs);
-									aspectObject.put("table", tableObject);
-								}
-							}
-						}
-					}
+					JSONObject aspectObject = getAspectObject(aspectQN);
 					if(aspectObject!=null) items.add(aspectObject);
 				}
-				Collections.sort(items, new Comparator<JSONObject>() {
-					@Override
-					public int compare(JSONObject o1, JSONObject o2) {
-						String title1 = null;
-						String title2 = null;
-						try {
-							title1 = o1.getString("name");
-						} catch (JSONException ignored) {}
-						try {
-							title2 = o2.getString("name");
-						} catch (JSONException ignored) {}
-
-						if (title1 == null && title2 == null) {
-							return 0;
-						} else if (title1 == null && title2 != null) {
-							return -1;
-						} else if (title2 == null && title1 != null) {
-							return 1;
-						} else {
-							return title1.compareTo(title2);
+				Collections.sort(items, new JSONComparator());
+			}
+			result.put("data", items);
+		} catch (JSONException ex) {
+			throw new WebScriptException("Can not form JSONObject", ex);
+		}
+		return result;
+	}
+	
+	private JSONObject getTableObject(QName aspectQN) throws JSONException {
+		JSONObject aspectObject = null;
+		AspectDefinition aspect = dictionaryService.getAspect(aspectQN);
+		
+		for(AssociationDefinition ad: aspect.getAssociations().values()) {
+			TypeDefinition td = dictionaryService.getType(ad.getTargetClass().getName());
+			//lecm-document:tableDataRowType
+			for(PropertyDefinition pd: td.getProperties().values()){
+				String tableRowProp = pd.getName().toPrefixString();
+				if("lecm-document:tableDataRowType".equals(tableRowProp)) {
+					String tableRowType = pd.getDefaultValue();
+					logger.info("%%%%%%% tableRowProp: "+tableRowProp+", tableRowType: "+tableRowType);
+					QName tableRowTypeQname = QName.createQName(tableRowType, namespaceService);
+					TypeDefinition tdRow = dictionaryService.getType(tableRowTypeQname);
+					if(tdRow!=null) {
+						aspectObject = new JSONObject();
+						aspectObject.put("aspectName", aspect.getName().toPrefixString(namespaceService));
+						aspectObject.put("name", tableRowType);
+						List<JSONObject> props = new ArrayList<>();
+						for(PropertyDefinition pdRow: tdRow.getProperties().values()){
+							logger.info("%%%%%%% pdRow: "+pdRow.getName().toPrefixString());
+							JSONObject propObject = new JSONObject();
+							propObject.put("_name", pdRow.getName().toPrefixString(namespaceService));
+							propObject.put("title", pdRow.getTitle());
+							propObject.put("type", pdRow.getDataType().getName().toPrefixString(namespaceService));
+							propObject.put("default", pdRow.getDefaultValue());
+							propObject.put("mandatory", pdRow.isMandatory());
+							propObject.put("_enabled", pdRow.isIndexed());
+							propObject.put("tokenised", pdRow.getIndexTokenisationMode());
+							props.add(propObject);
 						}
+						Collections.sort(props, new JSONComparator("_name"));
+						JSONObject tableObject = new JSONObject();
+						tableObject.put("name", tableRowType);
+						tableObject.put("props", props);
+						List<JSONObject> assocs = new ArrayList<>();
+						for(AssociationDefinition adRow: tdRow.getAssociations().values()) {
+							logger.info("%%%%%%% adRow: "+adRow.getName().toPrefixString());
+							JSONObject assocObject = new JSONObject();
+							assocObject.put("_name", adRow.getName().toPrefixString(namespaceService));
+							assocObject.put("title", adRow.getTitle());
+							assocObject.put("class", adRow.getTargetClass().getName().toPrefixString(namespaceService));
+							assocObject.put("mandatory", adRow.isTargetMandatory());
+							assocObject.put("many", adRow.isTargetMany());
+							assocs.add(assocObject);
+						}
+						Collections.sort(assocs, new JSONComparator("_name"));
+						tableObject.put("assocs", assocs);
+						aspectObject.put("table", tableObject);
 					}
-				});
+				}
+			}
+		}
+		return aspectObject;
+	}
+	
+	public JSONObject getTables(String documentType) {
+		JSONObject result = new JSONObject();
+		try {
+			List<JSONObject> items = new ArrayList<>();
+			AspectDefinition type = null;
+			QName documentTypeQName = null;
+			try{
+				documentTypeQName = QName.createQName(documentType, namespaceService);
+				type = dictionaryService.getAspect(documentTypeQName);
+			} catch(Exception e) {}
+			QName parentDocumentTypeQName = null;
+			if(type!=null) {
+				parentDocumentTypeQName = documentTypeQName;
+			}
+			if(parentDocumentTypeQName!=null) {
+				Collection<QName> aspects = dictionaryService.getSubAspects(parentDocumentTypeQName, true);
+				for(QName aspectQN : aspects) {
+					AspectDefinition aspect = dictionaryService.getAspect(aspectQN);
+					
+					JSONObject aspectObject = getTableObject(aspectQN);;
+					if(aspectObject!=null) items.add(aspectObject);
+				}
+				Collections.sort(items, new JSONComparator());
+			}
+			result.put("data", items);
+		} catch (JSONException ex) {
+			throw new WebScriptException("Can not form JSONObject", ex);
+		}
+		return result;
+	}
+	
+	public JSONObject getParentTables(String nodeRef, String documentType) {
+		JSONObject result = new JSONObject();
+		try {
+			List<JSONObject> items = new ArrayList<>();
+			TypeDefinition type = null;
+			try{
+				QName documentTypeQName = QName.createQName(documentType, namespaceService);
+				type = dictionaryService.getType(documentTypeQName);
+			} catch(Exception e) {}
+			QName parentDocumentTypeQName = null;
+			if(type==null) {
+				ContentReader contentReader = contentService.getReader(new NodeRef(nodeRef), ContentModel.PROP_CONTENT);
+				if (contentReader != null) {
+					M2Model model = M2Model.createModel(contentReader.getContentInputStream());
+		
+		            List<M2Type> types = model.getTypes();
+		            M2Type firstType = null;
+		            if (types != null && !types.isEmpty()) {//для случая, если в модели нет типов (например только аспекты)
+		            	for(M2Type mtype:types) {
+							if(mtype.getName().equals(documentType)) {
+								firstType = mtype;
+							}
+						}
+		            }
+		
+					if (firstType != null) {
+						parentDocumentTypeQName = QName.createQName(firstType.getParentName(), namespaceService);
+					}
+				}
+			} else {
+				parentDocumentTypeQName = type.getParentName();
+			}
+			if(parentDocumentTypeQName!=null) {
+				TypeDefinition parentType = dictionaryService.getType(parentDocumentTypeQName);
+				Set<QName> aspects = parentType.getDefaultAspectNames();
+				for(QName aspectQN : aspects) {
+					JSONObject aspectObject = getTableObject(aspectQN);
+					if(aspectObject!=null) items.add(aspectObject);
+				}
+				Collections.sort(items, new JSONComparator());
 			}
 			result.put("data", items);
 		} catch (JSONException ex) {
@@ -946,29 +832,7 @@ public class ModelsListBeanImpl extends BaseBean {
 						associationObject.put("target",target);
 						associationArray.add(associationObject);
 					}
-					Collections.sort(associationArray, new Comparator<JSONObject>() {
-						@Override
-						public int compare(JSONObject o1, JSONObject o2) {
-							String title1 = null;
-							String title2 = null;
-							try {
-								title1 = o1.getString("_name");
-							} catch (JSONException ignored) {}
-							try {
-								title2 = o2.getString("_name");
-							} catch (JSONException ignored) {}
-
-							if (title1 == null && title2 == null) {
-								return 0;
-							} else if (title1 == null && title2 != null) {
-								return -1;
-							} else if (title2 == null && title1 != null) {
-								return 1;
-							} else {
-								return title1.compareTo(title2);
-							}
-						}
-					});
+					Collections.sort(associationArray, new JSONComparator("_name"));
 					associations.put("association",associationArray);
 					typeObject.put("associations",associations);
 					JSONObject mandatoryAspects = new JSONObject();
@@ -995,29 +859,7 @@ public class ModelsListBeanImpl extends BaseBean {
 						propertyObject.put("index",indexObject);
 						propertyArray.add(propertyObject);
 					}
-					Collections.sort(propertyArray, new Comparator<JSONObject>() {
-						@Override
-						public int compare(JSONObject o1, JSONObject o2) {
-							String title1 = null;
-							String title2 = null;
-							try {
-								title1 = o1.getString("_name");
-							} catch (JSONException ignored) {}
-							try {
-								title2 = o2.getString("_name");
-							} catch (JSONException ignored) {}
-
-							if (title1 == null && title2 == null) {
-								return 0;
-							} else if (title1 == null && title2 != null) {
-								return -1;
-							} else if (title2 == null && title1 != null) {
-								return 1;
-							} else {
-								return title1.compareTo(title2);
-							}
-						}
-					});
+					Collections.sort(propertyArray, new JSONComparator("_name"));
 					properties.put("property",propertyArray);
 					typeObject.put("properties",properties);
 					typeObject.put("title",type.getTitle());
@@ -1030,5 +872,36 @@ public class ModelsListBeanImpl extends BaseBean {
 			throw new WebScriptException("Can not form JSONObject", ex);
 		}
 		return result;
+	}
+}
+
+class JSONComparator implements Comparator<JSONObject> {
+	private String key;
+	public JSONComparator() {
+		this.key = "name";
+	}
+	public JSONComparator(String key) {
+		this.key = key;
+	}
+	@Override
+	public int compare(JSONObject o1, JSONObject o2) {
+		String title1 = null;
+		String title2 = null;
+		try {
+			title1 = o1.getString(key);
+		} catch (JSONException ignored) {}
+		try {
+			title2 = o2.getString(key);
+		} catch (JSONException ignored) {}
+
+		if (title1 == null && title2 == null) {
+			return 0;
+		} else if (title1 == null && title2 != null) {
+			return -1;
+		} else if (title2 == null && title1 != null) {
+			return 1;
+		} else {
+			return title1.compareTo(title2);
+		}
 	}
 }

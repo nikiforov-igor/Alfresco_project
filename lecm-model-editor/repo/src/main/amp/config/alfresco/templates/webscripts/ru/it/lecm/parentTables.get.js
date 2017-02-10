@@ -1,0 +1,1 @@
+model.result = modelsList.getParentTables(args["nodeRef"], args["doctype"]);

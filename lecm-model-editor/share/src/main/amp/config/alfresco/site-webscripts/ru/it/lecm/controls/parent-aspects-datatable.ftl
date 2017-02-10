@@ -1,4 +1,4 @@
-<label><b>Таблицы родительского документа</b></label>
+<label><b>Аспекты родительского документа</b></label>
 <div class="control datatable models">
 	<div class="container">
 		<div id="${fieldHtmlId}" class="value-div">
@@ -15,7 +15,7 @@
 <@script type='text/javascript' src='${url.context}/res/components/model-editor/controls/readonlyDatatable.js' group='model-editor'/>
 <@inlineScript group='model-editor'>
 (function () {
-	function initParentTablesDatatable(obj) {
+	function initParentAspectsDatatable(obj) {
 		var columnDefinitions = [{
 				key: 'expand',
 				label: '',
@@ -26,39 +26,39 @@
 				className: 'viewmode-label',
 				key: 'aspectName',
 				label: '${msg("lecm.meditor.lbl.table")}',
-				dropdownOptions: obj.tables,
+				dropdownOptions: obj.aspects,
 				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatText,
 				width : 1078,
 				maxAutoWidth : 1078
 			}],
 			dialogElements = [{
-				name: 'table',
+				name: 'aspect',
 				label: '${msg("lecm.meditor.lbl.table")}',
 				type: 'select',
-				options: obj.tables,
+				options: obj.aspects,
 				showdefault: false
 			}],
 			responseSchema = {
 				fields: [
 				{key: 'name'},
 				{key: 'aspectName'},
-				{key: 'table'}
+				{key: 'aspect'}
 				]
 			},
 			nodeRef = '${context.properties.nodeRef}',
 			doctype = '${context.properties.doctype}',
-			data = obj.model.tablesArray;
+			data = obj.model.aspectsArray;
 
-		new LogicECM.module.ModelEditor.RODatatableControl('LogicECM.module.ModelEditor.ParentTablesDatatable', '${fieldHtmlId}', {
+		new LogicECM.module.ModelEditor.RODatatableControl('LogicECM.module.ModelEditor.ParentAspectsDatatable', '${fieldHtmlId}', {
 			columnDefinitions: columnDefinitions,
 			dialogElements: dialogElements,
 			responseSchema: responseSchema,
-			url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/type/parent/tables?nodeRef='+nodeRef+'&doctype='+doctype,
+			url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/type/parent/aspects?nodeRef='+nodeRef+'&doctype='+doctype,
 			data: data
 		}, ${messages});
 	}
 
-	LogicECM.module.ModelEditor.ModelPromise.then(initParentTablesDatatable);
+	LogicECM.module.ModelEditor.ModelPromise.then(initParentAspectsDatatable);
 })();
 </@>
 

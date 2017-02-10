@@ -36,6 +36,8 @@
 					<show id="cm:lecmModelAssociations"/>
 					<show id="cm:lecmParentModelTables"/>
 					<show id="cm:lecmModelTables"/>
+					<show id="cm:lecmParentModelAspects"/>
+					<show id="cm:lecmModelAspects"/>
 				</field-visibility>
 				<appearance>
 					<field id="cm:name">
@@ -145,6 +147,12 @@
 					</field>
 					<field id="cm:lecmModelTables" label-id="lecm.meditor.lbl.tables">
 						<control template="/ru/it/lecm/controls/tables-datatable.ftl"/>
+					</field>
+					<field id="cm:lecmParentModelAspects">
+						<control template="/ru/it/lecm/controls/parent-aspects-datatable.ftl"/>
+					</field>
+					<field id="cm:lecmModelAspects" label-id="lecm.meditor.lbl.aspects">
+						<control template="/ru/it/lecm/controls/aspects-datatable.ftl"/>
 					</field>
 				</appearance>
 			</form>

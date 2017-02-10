@@ -64,6 +64,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		},
 
 		formatActions: function (el, oRecord, oColumn, oData, oDataTable) {
+			Dom.setStyle(el.parentElement, 'vertical-align','top'); 
 			if(this.configs.mode==='view') {
 				
 			} else {
@@ -100,7 +101,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		
 		formatDropdown : function(el, oRecord, oColumn, oData, oDataTable) {
 			var table = oRecord.getData("table");
-			if(table==null) {
+			var aspect = oRecord.getData("aspect");
+			if(table==null&&aspect==null) {
 		        var oDT = oDataTable || this,
 		            selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.field),
 		            options = (lang.isArray(oColumn.dropdownOptions)) ?
@@ -168,38 +170,42 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		                    	var optionAssocs = (lang.isArray(option.assocs)) ? option.assocs : [];
 		                    	var div = el.appendChild(document.createElement('div'));
 		        				div.innerHTML = optionValue;
-		        				var div11 = el.appendChild(document.createElement('div'));
-		        				div11.innerHTML = "<b>Атрибуты</b>"
-		                    	var div12 = el.appendChild(document.createElement('div'));
-		        				div12.id = oRecord.getId()+'props';
-		        				var div21 = el.appendChild(document.createElement('div'));
-		        				div21.innerHTML = "<b>Ассоциации</b>"
-		                    	var div22 = el.appendChild(document.createElement('div'));
-		        				div22.id = oRecord.getId()+'assocs';
-		        				var colDefProps = [
-		        					{className:'viewmode-label',key:'_name',label:'Имя',width:170,maxAutoWidth:170},
-		        					{className:'viewmode-label',key:'title',label:'Заголовок',width:170,maxAutoWidth:170},
-		        					{className:'viewmode-label',key:'type',label:'По умолчанию',width:170,maxAutoWidth:170},
-		        					{className:'viewmode-label',key:'default',label:'Тип',width:100,maxAutoWidth:100},
-		        					{className:'viewmode-label',key:'mandatory',label:'Обязательный',width:100,maxAutoWidth:100},
-		        					{className:'viewmode-label',key:'_enabled',label:'Индексировать',width:100,maxAutoWidth:100},
-		        					{className:'viewmode-label',key:'tokenised',label:'Токенизация',width:80,maxAutoWidth:80}
-		        				],
-		        				DSProps = new YAHOO.util.DataSource(optionProps, {
-		        					responseSchema:  {fields: [{key: '_name'},{key: 'title'},{key: 'type'},{key: 'default'},{key: 'mandatory'},{key: '_enabled'},{key: 'tokenised'}]}
-		        				}),
-		        				colDefAssocs = [
-		        					{className:'viewmode-label',key:'_name',label:'Имя',width:170,maxAutoWidth:170},
-		        					{className:'viewmode-label',key:'title',label:'Заголовок',width:170,maxAutoWidth:170},
-		        					{className:'viewmode-label',key:'class',label:'Тип',width:291,maxAutoWidth:291},
-		        					{className:'viewmode-label',key:'mandatory',label:'Обязательный',width:100,maxAutoWidth:100},
-		        					{className:'viewmode-label',key:'many',label:'Множественная',width:203,maxAutoWidth:203}
-		        				],
-		        				DSPAssocs = new YAHOO.util.DataSource(optionAssocs, {
-		        					responseSchema:  {fields: [{key: '_name'},{key: 'class'},{key: 'title'},{key: 'mandatory'},{key: 'many'}]}
-		        				});
-		        				datatable1 = new YAHOO.widget.DataTable(div12, colDefProps, DSProps);
-		        				datatable2 = new YAHOO.widget.DataTable(div22, colDefAssocs, DSPAssocs);
+		        				if(optionProps.length>0){
+			        				var div11 = el.appendChild(document.createElement('div'));
+			        				div11.innerHTML = "<b>Атрибуты</b>"
+			                    	var div12 = el.appendChild(document.createElement('div'));
+			        				div12.id = oRecord.getId()+'props';
+			        				var colDefProps = [
+			        					{className:'viewmode-label',key:'_name',label:'Имя',width:170,maxAutoWidth:170},
+			        					{className:'viewmode-label',key:'title',label:'Заголовок',width:170,maxAutoWidth:170},
+			        					{className:'viewmode-label',key:'type',label:'По умолчанию',width:170,maxAutoWidth:170},
+			        					{className:'viewmode-label',key:'default',label:'Тип',width:100,maxAutoWidth:100},
+			        					{className:'viewmode-label',key:'mandatory',label:'Обязательный',width:100,maxAutoWidth:100},
+			        					{className:'viewmode-label',key:'_enabled',label:'Индексировать',width:100,maxAutoWidth:100},
+			        					{className:'viewmode-label',key:'tokenised',label:'Токенизация',width:80,maxAutoWidth:80}
+			        				],
+			        				DSProps = new YAHOO.util.DataSource(optionProps, {
+			        					responseSchema:  {fields: [{key: '_name'},{key: 'title'},{key: 'type'},{key: 'default'},{key: 'mandatory'},{key: '_enabled'},{key: 'tokenised'}]}
+			        				});
+			        				datatable1 = new YAHOO.widget.DataTable(div12, colDefProps, DSProps);
+		        				}
+		        				if(optionAssocs.length>0){
+			        				var div21 = el.appendChild(document.createElement('div'));
+			        				div21.innerHTML = "<b>Ассоциации</b>"
+			                    	var div22 = el.appendChild(document.createElement('div'));
+			        				div22.id = oRecord.getId()+'assocs';
+			        				var colDefAssocs = [
+			        					{className:'viewmode-label',key:'_name',label:'Имя',width:170,maxAutoWidth:170},
+			        					{className:'viewmode-label',key:'title',label:'Заголовок',width:170,maxAutoWidth:170},
+			        					{className:'viewmode-label',key:'class',label:'Тип',width:291,maxAutoWidth:291},
+			        					{className:'viewmode-label',key:'mandatory',label:'Обязательный',width:100,maxAutoWidth:100},
+			        					{className:'viewmode-label',key:'many',label:'Множественная',width:203,maxAutoWidth:203}
+			        				],
+			        				DSPAssocs = new YAHOO.util.DataSource(optionAssocs, {
+			        					responseSchema:  {fields: [{key: '_name'},{key: 'class'},{key: 'title'},{key: 'mandatory'},{key: 'many'}]}
+			        				});
+			        				datatable2 = new YAHOO.widget.DataTable(div22, colDefAssocs, DSPAssocs);
+		        				}
 		                    }
 		                }
 		            }
