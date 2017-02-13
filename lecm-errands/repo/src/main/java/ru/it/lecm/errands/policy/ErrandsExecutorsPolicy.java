@@ -55,8 +55,8 @@ public class ErrandsExecutorsPolicy implements NodeServicePolicies.OnCreateAssoc
 
     /** Метод в зависимости от значения change создает или удаляет ассоциацию
      *
-     * @param nodeAssocRef
-     * @param change
+     * @param nodeAssocRef  Ассоциация поручение\исполнитель
+     * @param change        (true)создать\(false)удалить ассоциацию
      */
     private void changeExecutorsAspect(AssociationRef nodeAssocRef, boolean change) {
         List<NodeRef> executors = new ArrayList<>();
@@ -68,9 +68,9 @@ public class ErrandsExecutorsPolicy implements NodeServicePolicies.OnCreateAssoc
                 for (AssociationRef associationRef : nodeService.getTargetAssocs(document, ErrandsService.ASSOC_ERRANDS_EXECUTORS)) {
                     executors.add(associationRef.getTargetRef());
                 }
-                if (!executors.contains(executor)) {
+                if (!executors.contains(executor) && change) {
                     nodeService.createAssociation(document, executor, ErrandsService.ASSOC_ERRANDS_EXECUTORS);
-                } else if (!change) {
+                } else if (executors.contains(executor) && !change) {
                     nodeService.removeAssociation(document, executor, ErrandsService.ASSOC_ERRANDS_EXECUTORS);
                 }
             }
