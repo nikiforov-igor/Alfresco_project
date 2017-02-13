@@ -8,6 +8,7 @@ function main() {
     model.countersContainer = countersContainer;
     model.yearCounterType = 'lecm-regnum:doctype-year-counter';
     model.plainCounterType = 'lecm-regnum:doctype-plain-counter';
+    model.parentCounterType = 'lecm-regnum:plain-counter';
 }
 
 main();

@@ -124,6 +124,7 @@
 		<property name="service" ref="armService"/>
 		<property name="substitudeService" ref="substitudeService"/>
 		<property name="dictionaryBean" ref="serviceDictionary"/>
+		<property name="searchCounter" ref="lecmSearchCounterScript"/>
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
@@ -170,7 +171,6 @@
                     <list>
                         <value>cm:name</value>
                         <value>lecm-arm:order</value>
-                        <value>lecm-arm:business-roles-assoc</value>
                         <value>lecm-arm:types</value>
                         <value>lecm-arm:search-query</value>
                         <value>lecm-arm:counter-enable</value>
@@ -181,6 +181,7 @@
                         <value>lecm-arm:search-type</value>
 	                    <value>lecm-arm:is-aggregation-node</value>
 	                    <value>lecm-arm:is-for-secretaries</value>
+	                    <value>lecm-arm:expression</value>
                     </list>
                 </entry>
 <!--                <entry key="lecm-arm:accordion-runAs">
@@ -218,6 +219,7 @@
                         <value>lecm-arm:activeTasks-filter</value>
                         <value>lecm-arm:search-type</value>
                         <value>lecm-arm:is-aggregation-node</value>
+                        <value>lecm-arm:expression</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:reports-node">
@@ -227,6 +229,7 @@
                         <value>lecm-arm:node-child-rule-assoc</value>
                         <value>lecm-arm:types</value>
                         <value>lecm-arm:reportCodes</value>
+                        <value>lecm-arm:expression</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:field">
@@ -294,6 +297,7 @@
                         <value>lecm-arm:html-url</value>
                         <value>lecm-arm:order</value>
                         <value>lecm-arm:node-child-rule-assoc</value>
+                        <value>lecm-arm:expression</value>
                     </list>
                 </entry>
             </map>
@@ -388,5 +392,15 @@
     <bean name="arm.rules.cache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache" ref="arm.rules.shared.cache"/>
         <property name="name" value="ru.it.lecm.cache.arm.rules"/>
+    </bean>
+
+    <bean id="armBPExpression" class="ru.it.lecm.arm.expression.ExpressionForArm" parent="baseSpellExpression">
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+    </bean>
+
+    <bean id="armNodeExpression" class="ru.it.lecm.arm.expression.ExpressionArmNode" parent="baseNodeExpression">
+        <property name="armService" ref="armService"/>
+        <property name="armWrapper" ref="armWrapperService"/>
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
     </bean>
 </beans>

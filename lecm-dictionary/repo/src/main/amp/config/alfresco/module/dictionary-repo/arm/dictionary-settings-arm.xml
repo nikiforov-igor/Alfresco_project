@@ -13,6 +13,7 @@
 						<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 						<property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
 						<property name="lecm-arm:search-query"><![CDATA[]]></property>
+						<property name="lecm-arm:expression"><![CDATA[user.currentUser().hasBusinessRole("BR_DICTIONARIES_ENGINEER")]]></property>
 						<items>
 							<item name="cm:Все справочники" type="lecm-arm:html-node">
 								<property name="cm:name"><![CDATA[Все справочники]]></property>
@@ -39,9 +40,6 @@
 								</assocs>
 							</item>
 						</items>
-						<assocs>
-							<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Технолог справочников"/>
-						</assocs>
 					</item>
 				</items>
 			</item>

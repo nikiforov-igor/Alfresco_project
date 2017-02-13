@@ -118,12 +118,15 @@
 					<show id="lecm-arm:counter-enable" force="true"/>
 					<show id="lecm-arm:counter-limitation" force="true"/>
 					<show id="lecm-arm:counter-description" force="true"/>
-					<show id="lecm-arm:business-roles-assoc" force="true"/>
+					<show id="lecm-arm:expression" force="true"/>
 					<show id="lecm-arm:is-aggregation-node" force="true"/>
 					<show id="lecm-arm:is-for-secretaries"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:search-query">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
+					<field id="lecm-arm:expression">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
 					<field id="lecm-arm:types">
@@ -149,16 +152,6 @@
 							<control-param name="disabledFieldsIfNotSelect">lecm-arm:counter-limitation,lecm-arm:counter-description</control-param>
 						</control>
 					</field>
-					<field id="lecm-arm:business-roles-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="showViewIncompleteWarning">false</control-param>
-							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
-						</control>
-					</field>
 					<field id="lecm-arm:is-aggregation-node">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
 							<control-param name="disabledFieldsIfSelect">lecm-arm:search-query</control-param>
@@ -182,11 +175,14 @@
 					<show id="lecm-arm:counter-enable" force="true"/>
 					<show id="lecm-arm:counter-limitation" force="true"/>
 					<show id="lecm-arm:counter-description" force="true"/>
-					<show id="lecm-arm:business-roles-assoc" force="true"/>
+					<show id="lecm-arm:expression" force="true"/>
 					<show id="lecm-arm:is-aggregation-node" force="true"/>
 					<show id="lecm-arm:is-for-secretaries"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-arm:expression">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
 					<field id="lecm-arm:search-query">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
@@ -205,16 +201,6 @@
 					<field id="lecm-arm:counter-enable">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
 							<control-param name="disabledFieldsIfNotSelect">lecm-arm:counter-limitation,lecm-arm:counter-description</control-param>
-						</control>
-					</field>
-					<field id="lecm-arm:business-roles-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="showViewIncompleteWarning">false</control-param>
-							<control-param name="additionalFilter">@lecm\\-orgstr\\:business\\-role\\-is\\-dynamic:\"false\"</control-param>
 						</control>
 					</field>
 					<field id="lecm-arm:is-aggregation-node">
@@ -242,9 +228,13 @@
 					<show id="lecm-arm:counter-limitation" force="true"/>
 					<show id="lecm-arm:counter-description" force="true"/>
 					<show id="lecm-arm:node-child-rule-assoc" force="true"/>
+					<show id="lecm-arm:expression" force="true"/>
 					<show id="lecm-arm:is-aggregation-node" force="true"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-arm:expression">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
 					<field id="lecm-arm:search-query">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
@@ -301,9 +291,13 @@
 					<show id="lecm-arm:counter-enable" force="true"/>
 					<show id="lecm-arm:counter-limitation" force="true"/>
 					<show id="lecm-arm:counter-description" force="true"/>
+					<show id="lecm-arm:expression" force="true"/>
 					<show id="lecm-arm:is-aggregation-node" force="true"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-arm:expression">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
 					<field id="lecm-arm:search-query">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
@@ -342,8 +336,12 @@
 					<show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:types" force="true"/>
 					<show id="lecm-arm:reportCodes" force="true"/>
+					<show id="lecm-arm:expression" force="true"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-arm:expression">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
 					<field id="lecm-arm:types">
 						<control template="/ru/it/lecm/base-share/components/controls/select-types-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
@@ -367,8 +365,12 @@
 					<show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:types" force="true"/>
 					<show id="lecm-arm:reportCodes" force="true"/>
+					<show id="lecm-arm:expression" force="true"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-arm:expression">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
 					<field id="lecm-arm:types">
 						<control template="/ru/it/lecm/base-share/components/controls/select-types-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
@@ -392,8 +394,12 @@
 					<show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:html-url" force="true"/>
 					<show id="lecm-arm:node-child-rule-assoc" force="true"/>
+					<show id="lecm-arm:expression" force="true"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-arm:expression">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
 					<field id="lecm-arm:node-child-rule-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-create-control.ftl">
 							<control-param name="nameSubstituteString">{lecm-arm:list-query-child-rule}{lecm-arm:child-rule-dictionary-assoc/cm:name}{lecm-arm:statuses-rule}{lecm-arm:xpath-child-rule-root-xpath}{lecm-arm:script-child-rule-root}</control-param>
@@ -413,7 +419,13 @@
 					<show id="cm:name" force="true"/>
 					<show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:html-url" force="true"/>
+					<show id="lecm-arm:expression" force="true"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:expression">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
+				</appearance>
 			</form>
 		</forms>
 	</config>
