@@ -77,7 +77,13 @@ function createReviewTSItem(reviewTable, reviewTsItems, initiatingDocument) {
 			items.push(reviewRecord);
 		}
         if (reviewRecord && initiatingDocument) {
-            initiatingDocument.createAssociation(reviewRecord, 'lecm-review-aspects:related-review-records-assoc');
+            var existAssocs = initiatingDocument.assocs["lecm-review-aspects:related-review-records-assoc"];
+            var existReviewRecordAssoc = existAssocs.some(function (assoc) {
+                return assoc.equals(reviewRecord);
+            });
+            if (!existReviewRecordAssoc) {
+                initiatingDocument.createAssociation(reviewRecord, 'lecm-review-aspects:related-review-records-assoc');
+            }
         }
 	}
 	return items;
