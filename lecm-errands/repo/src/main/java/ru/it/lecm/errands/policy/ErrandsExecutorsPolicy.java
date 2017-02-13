@@ -62,7 +62,7 @@ public class ErrandsExecutorsPolicy implements NodeServicePolicies.OnCreateAssoc
         List<NodeRef> executors = new ArrayList<>();
         NodeRef executor = nodeAssocRef.getTargetRef();
         List<AssociationRef> list = nodeService.getTargetAssocs(nodeAssocRef.getSourceRef(), ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
-        if (list.size() > 0) {
+        if (list != null && list.size() > 0) {
             NodeRef document = list.get(0).getTargetRef();
             if (nodeService.hasAspect(document, ErrandsService.ASPECT_ERRANDS_EXECUTORS)) {
                 for (AssociationRef associationRef : nodeService.getTargetAssocs(document, ErrandsService.ASSOC_ERRANDS_EXECUTORS)) {
