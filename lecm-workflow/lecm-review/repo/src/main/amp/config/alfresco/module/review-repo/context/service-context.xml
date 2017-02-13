@@ -38,6 +38,7 @@
 		<value>alfresco/module/${artifactId}/models/lecm-review-ts-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-review-list-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-review-global-settings-model.xml</value>
+		<value>alfresco/module/${artifactId}/models/lecm-review-aspects-model.xml</value>
 	</util:list>
 
 	<util:list id="review.labels">

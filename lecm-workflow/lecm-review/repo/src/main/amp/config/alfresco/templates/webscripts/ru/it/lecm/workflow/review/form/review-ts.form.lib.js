@@ -1,27 +1,23 @@
 /* global logger, search, orgstructure, documentMembers, notifications, businessJournal, review, documentTables, utils */
-function createReviewTSItem(reviewTable, reviewTsItems) {
+function createReviewTSItem(reviewTable, reviewTsItems, initiatingDocument) {
 
-	function isOnReview(allRows, employee) {
-		var i, j, row, state, reviewers, isOnReview = false;
+	function getOnReviewRecord(allRows, employee) {
+		var i, j, row, state, reviewers;
 		for (i in allRows) {
 			row = allRows[i];
 			state = '' + row.properties['lecm-review-ts:review-state'];
-			if ('NOT_REVIEWED' == state || 'REVIEWED' == state) {
+			if ('NOT_REVIEWED' == state) {
 				reviewers = row.assocs['lecm-review-ts:reviewer-assoc'];
 				if (reviewers && reviewers.length) {
 					for (j in reviewers) {
 						if ('' + reviewers[j].nodeRef.toString() == employee) {
-							isOnReview = true;
-							break;
+							return row;
 						}
 					}
 				}
 			}
-			if (isOnReview) {
-				break;
-			}
 		}
-		return isOnReview;
+		return null;
 	}
 
 	function pushEmployeeIfNotExist(employees, employee) {
@@ -57,7 +53,7 @@ function createReviewTSItem(reviewTable, reviewTsItems) {
 	}
 
 	// надо достать имплоев из ассоков и для каждого склепать итем
-	var i, j, k, item,
+	var i, j, k,
 		items = [],
 		employee,
 		employees = [],
@@ -70,15 +66,19 @@ function createReviewTSItem(reviewTable, reviewTsItems) {
 	}
 	for (i in employees) {
 		allRows = documentTables.getTableDataRows(reviewTable.nodeRef.toString());
-		if (!isOnReview(allRows, employees[i])) {
+		var reviewRecord = getOnReviewRecord(allRows, employees[i]);
+		if (reviewRecord === null) {
 			employee = utils.getNodeFromString(employees[i]);
-			item = reviewTable.createNode(null, 'lecm-review-ts:review-table-item', {
+            reviewRecord = reviewTable.createNode(null, 'lecm-review-ts:review-table-item', {
 				'lecm-document:indexTableRow': allRows.length ? allRows.length + 1 : 1
 			});
-			item.createAssociation(currentEmployee, 'lecm-review-ts:initiator-assoc');
-			item.createAssociation(employee, 'lecm-review-ts:reviewer-assoc');
-			items.push(item);
+            reviewRecord.createAssociation(currentEmployee, 'lecm-review-ts:initiator-assoc');
+            reviewRecord.createAssociation(employee, 'lecm-review-ts:reviewer-assoc');
+			items.push(reviewRecord);
 		}
+        if (reviewRecord && initiatingDocument) {
+            initiatingDocument.createAssociation(reviewRecord, 'lecm-review-aspects:related-review-records-assoc');
+        }
 	}
 	return items;
 }
@@ -119,4 +119,13 @@ function sendToReview(items) {
 			}
 		});
 	}
+}
+
+function sendDocumentToReview(document, reviewers, initiatingDocument) {
+    var reviewTable = document.associations['lecm-review-ts:review-table-assoc'];
+
+    if (reviewTable && reviewTable.length) {
+        var reviewTsItems = createReviewTSItem(reviewTable[0], reviewers, initiatingDocument);
+        sendToReview(reviewTsItems);
+    }
 }

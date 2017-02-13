@@ -12,6 +12,9 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.ConcurrencyFailureException;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
@@ -28,6 +31,7 @@ import java.util.*;
  * @author vkuprin
  */
 public class ReviewServiceImpl extends BaseBean implements ReviewService {
+    private final static Logger logger = LoggerFactory.getLogger(ReviewServiceImpl.class);
 
 	public static final String REVIEW_FOLDER = "REVIEW_FOLDER";
 	private final static String REVIEW_GLOBAL_SETTINGS_NAME = "Глобальные настройки ознакомления";
@@ -409,4 +413,18 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 
 		return resultSet.getNodeRefs();
 	}
+
+    @Override
+    public void addRelatedReviewChangeCount(NodeRef document) {
+        doIncrementProperty(document, PROP_RELATED_REVIEW_RECORDS_CHANGE_COUNT);
+    }
+
+    @Override
+    public void resetRelatedReviewChangeCount(NodeRef document) {
+        try {
+            nodeService.setProperty(document, PROP_RELATED_REVIEW_RECORDS_CHANGE_COUNT, 0);
+        } catch (ConcurrencyFailureException ex) {
+            logger.warn("Send signal at the same time", ex);
+        }
+    }
 }

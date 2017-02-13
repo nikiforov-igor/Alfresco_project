@@ -19,6 +19,7 @@ public interface ReviewService extends InitializingBean {
     String REVIEW_LIST_NAMESPACE = "http://www.it.ru/logicECM/model/review-list/1.0";
     String REVIEW_GLOBAL_SETTINGS_NAMESPACE = "http://www.it.ru/logicECM/model/review/workflow/global-settings/1.0";
 	String REVIEW_INFO_NAMESPACE = "http://www.it.ru/logicECM/model/review-info/1.0";
+	String REVIEW_ASPECTS_NAMESPACE = "http://www.it.ru/logicECM/model/review-aspects/1.0";
     QName ASSOC_REVIEW_TS_REVIEW_TABLE = QName.createQName(REVIEW_TS_NAMESPACE, "review-table-assoc");
     QName ASSOC_REVIEW_TS_REVIEWER = QName.createQName(REVIEW_TS_NAMESPACE, "reviewer-assoc");
     QName ASSOC_REVIEW_TS_INITIATOR = QName.createQName(REVIEW_TS_NAMESPACE, "initiator-assoc");
@@ -39,6 +40,9 @@ public interface ReviewService extends InitializingBean {
 	QName ASSOC_REVIEW_INFO_INITIATOR = QName.createQName(REVIEW_INFO_NAMESPACE, "initiator-assoc");
 	QName ASSOC_REVIEW_REVIEW_LIST = QName.createQName(REVIEW_INFO_NAMESPACE, "review-list-assoc");
 	QName ASSOC_REVIEW_INFO = QName.createQName(REVIEW_INFO_NAMESPACE, "info-assoc");
+
+    QName PROP_RELATED_REVIEW_RECORDS_CHANGE_COUNT = QName.createQName(REVIEW_ASPECTS_NAMESPACE, "related-review-records-change-count");
+	QName ASSOC_RELATED_REVIEW_RECORDS = QName.createQName(REVIEW_ASPECTS_NAMESPACE, "related-review-records-assoc");
 
     String CONSTRAINT_REVIEW_GLOBAL_SETTINGS_SELECT_BY_ORGANISATION = "ORGANISATION";
     String CONSTRAINT_REVIEW_GLOBAL_SETTINGS_SELECT_BY_UNIT= "UNIT";
@@ -77,4 +81,18 @@ public interface ReviewService extends InitializingBean {
     List<NodeRef> getPotentialReviewers(List<NodeRef> unit);
 
     List<NodeRef> getAllowedReviewList();
+
+    /**
+     * При изменении статуса записи ознакомления в каждом инициирующем документе,
+     * из которого есть ассоциация на текущую запись, увеличить значение счетчика
+     *
+     * @param document Инициирующий документ
+     */
+    void addRelatedReviewChangeCount(NodeRef document);
+
+    /**
+     * Метод сброса сигнала после обработки
+     * @param document Инициирующий документ
+     */
+    void resetRelatedReviewChangeCount(NodeRef document);
 }
