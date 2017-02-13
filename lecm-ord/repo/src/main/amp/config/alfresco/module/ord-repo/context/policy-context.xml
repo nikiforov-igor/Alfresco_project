@@ -28,4 +28,10 @@
 		  p:stateMachineService-ref="stateMachineHelper"
 		  p:lecmPermissionService-ref="lecmPermissionServiceBean"/>
 
+	<bean id="ord.ORDErrandsExecutorsPolicy"
+		  class="ru.it.lecm.ord.policies.ORDErrandsExecutorsPolicy"
+		  init-method="init" depends-on="ord.document.models.bootstrap"
+		  p:policyComponent-ref="policyComponent"
+		  p:nodeService-ref="nodeService"/>
+
 </beans>
