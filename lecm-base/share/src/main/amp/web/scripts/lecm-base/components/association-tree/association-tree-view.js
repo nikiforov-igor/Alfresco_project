@@ -54,6 +54,8 @@ LogicECM.module = LogicECM.module || {};
 
 	YAHOO.extend(LogicECM.module.AssociationTreeViewer, Alfresco.component.Base,
 	{
+        readonly: false,
+
         tree: null,
 
         eventGroup: null,
