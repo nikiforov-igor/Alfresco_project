@@ -49,7 +49,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 				form.elements['cm_lecmTypeTitle'].value = obj.model.typeTitle;
 			}
 			if (obj.model.parentRef) {
-				form.elements['cm_lecmParentRef'].title = obj.model.parentRef;
+				form.elements['cm_lecmParentRef'].value = obj.model.parentRef;
 			}
 			if (obj.model.presentString) {
 				form.elements['cm_lecmPresentString'].value = obj.model.presentString;
