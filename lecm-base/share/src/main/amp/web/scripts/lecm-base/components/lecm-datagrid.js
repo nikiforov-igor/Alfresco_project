@@ -594,7 +594,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         isExpandAutomatically: isExpandAutomatically
 					}, this.options.expandDataObj);
 					Alfresco.util.Ajax.request({
-						url: Alfresco.constants.URL_SERVICECONTEXT + this.options.expandDataSource,
+						url: this.getExpandUri(),
 						dataObj: dataObj,
 						successCallback: {
 							scope: this,
@@ -3149,6 +3149,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         }
                     }
                 }
+            },
+
+            getExpandUri: function DataGrid_getExpandUri() {
+                var context = this.options.expandDataSource.context || Alfresco.constants.URL_SERVICECONTEXT;
+                var uri = this.options.expandDataSource.uri || this.options.expandDataSource.toString()
+                return (context + uri);
             },
 
 	        destroyDatatable: function () {
