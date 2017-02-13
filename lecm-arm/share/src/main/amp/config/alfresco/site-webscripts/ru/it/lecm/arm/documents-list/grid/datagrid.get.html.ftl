@@ -60,7 +60,7 @@ YAHOO.util.Event.onContentReady("${filtersId}", initFilters);
                         expandable: true,
                         expandDataSource: {
                             context: Alfresco.constants.PROXY_URI,
-                            url: "lecm/document/connections/api/armPresentation"
+                            uri: "lecm/document/connections/api/armPresentation"
                         },
                         datagridMeta: {
                             itemType: "lecm-document:base",
