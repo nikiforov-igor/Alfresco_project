@@ -70,9 +70,6 @@ function main() {
 	uri = addParamToUrl(uri, 'field', 'lecm-errands:execution-links-assoc');
 	model.isEditableExecutionLinks = doGetCall(uri);
 
-	uri = addParamToUrl('/lecm/document-type/settings', 'docType', 'lecm-errands:document');
-	model.errandsSettings = jsonUtils.toJSONString(doGetCall(uri));
-
 	model.isErrandsStarter = isStarter("lecm-errands:document");
 
     model.hasStatemachine = hasStatemachine(model.nodeRef);

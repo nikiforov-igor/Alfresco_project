@@ -1,5 +1,4 @@
 <@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/lecm-errands-dashlet.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/lecm-document-errands.js"></@script>
 <@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/errands-links.js"></@script>
 
 <!-- Document Metadata Header -->
@@ -36,8 +35,6 @@
     (function () {
         var Dom = YAHOO.util.Dom,
             Event = YAHOO.util.Event;
-
-		LogicECM.module.Documents.ERRANDS_SETTINGS = LogicECM.module.Documents.ERRANDS_SETTINGS || <#if errandsSettings?? >${errandsSettings?string}<#else>{}</#if>;
 
 		var viewHistory = new LogicECM.module.Document.ViewHistory("save-view-history").setOptions({
 			nodeRef: "${nodeRef}"
