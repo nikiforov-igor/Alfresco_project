@@ -1,6 +1,4 @@
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/document-errands.js"></@script>
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/document-errands.css" />
-
+<@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/lecm-document-errands.js"></@script>
 <#assign id=args.htmlid/>
 
 <script type="text/javascript">

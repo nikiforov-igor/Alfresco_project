@@ -37,9 +37,10 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 
 		actionCancelReviewEvaluator: function (rowData) {
 			var state = rowData.itemData['prop_lecm-review-ts_review-state'],
-				username = rowData.itemData['prop_lecm-review-ts_initiator-username'];
+				username = rowData.itemData['prop_lecm-review-ts_initiator-username'],
+                initiatingDocuments = rowData.itemData['prop_lecm-review-ts_initiating-documents'];
 
-			return 'NOT_REVIEWED' === state.value && Alfresco.constants.USERNAME === username.value;
+			return 'NOT_REVIEWED' === state.value && Alfresco.constants.USERNAME === username.value && !initiatingDocuments.value.length;
 		},
 
 		rejectReview: function () {
@@ -137,7 +138,7 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 				}
 
 				var datagrid = new LogicECM.module.DocumentTableDataGrid(this.options.containerId).setOptions({
-					excludeColumns: ['lecm-review-ts:initiator-username'],
+					excludeColumns: ['lecm-review-ts:initiator-username', 'lecm-review-ts:initiating-documents'],
 					usePagination: true,
 					showExtendSearchBlock: false,
 					formMode: this.options.mode,
