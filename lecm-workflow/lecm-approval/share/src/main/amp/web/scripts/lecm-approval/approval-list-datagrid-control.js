@@ -98,12 +98,6 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			this.clearButton.on('click', this.onClearButton, this, true);
 		}
 
-		expandAllStagesElement = YAHOO.util.Dom.get(containerId + '-expand-all-button');
-		if (expandAllStagesElement) {
-			this.expandAllStagesButton = new YAHOO.widget.Button(expandAllStagesElement);
-            this.expandAllStagesButton.on('click', this.onExpandAllStages, this, true);
-		}
-
 		this.approvalContainer = YAHOO.util.Dom.get(containerId + '-approval-container');
 		this.completedApprovalsCountContainer = YAHOO.util.Dom.get(containerId + '-approval-completed-count');
 		this.showHistoryLink = YAHOO.util.Dom.get(containerId + '-show-history-link');
@@ -140,7 +134,6 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		];
 		this.approvalStateSettings.NEW.revealElements = [
 			this.clearButton,
-            this.expandAllStagesButton,
 			this.approvalContainer,
 			this.addStageButton
 		];
@@ -151,8 +144,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		];
 		this.approvalStateSettings.ACTIVE.revealElements = [
 			this.approvalContainer,
-			this.addStageButton,
-            this.expandAllStagesButton
+			this.addStageButton
 		];
 
 		this.approvalStateSettings.COMPLETE.hideElements = [
@@ -161,8 +153,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		];
 		this.approvalStateSettings.COMPLETE.revealElements = [
 			this.approvalContainer,
-			this.createApprovalListButton,
-            this.expandAllStagesButton
+			this.createApprovalListButton
 		];
 
 		YAHOO.Bubbling.on("hideControl", this.onHideControl, this);
@@ -177,6 +168,11 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		LogicECM.module.Approval.ApprovalListDataGridControl.superclass.constructor.call(this, containerId);
 
 		this.name = 'LogicECM.module.Approval.ApprovalListDataGridControl';
+
+        this.expandAllStagesButton = Alfresco.util.createYUIButton(this, 'expand-all-button', this.onExpandAllStages);
+        this.approvalStateSettings.NEW.revealElements.push(this.expandAllStagesButton);
+        this.approvalStateSettings.ACTIVE.revealElements.push(this.expandAllStagesButton);
+        this.approvalStateSettings.COMPLETE.revealElements.push(this.expandAllStagesButton);
 
 		YAHOO.Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
 

@@ -3,11 +3,11 @@
 <#assign itemId = args["itemId"]>
 <#assign id = itemId?replace(":|/", "_", "r")>
 <#assign datagridId = id + "-dtgrd">
-<#assign editable = args["editable"] == "true"/>
-<#assign isApproval = args["isApproval"] == "true"/>
+<#assign editable = (args["editable"])?has_content && args["editable"]?lower_case == "true"/>
+<#assign isApproval = (args["isApproval"])?has_content && args["isApproval"]?lower_case == "true"/>
 <#assign routeRef = args["routeRef"]!''>
 <#assign mainFormId = args["mainFormId"]!''>
-<#assign isExpandAutomatically = args["isExpandAutomatically"] == "true"/>
+<#assign isExpandAutomatically = (args["isExpandAutomatically"])?has_content && args["isExpandAutomatically"]?lower_case == "true"/>
 
 <script>
 (function(){

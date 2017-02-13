@@ -467,7 +467,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
             errorMessageDialog: null,
 
-	        doubleClickLock: {},
+	        doubleClickLock: false,
 
             onArchiveCheckBoxClicked: function (layer, args) {
                 var cbShowArchive = YAHOO.util.Dom.get(this.id + "-cbShowArchive");
@@ -577,18 +577,21 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             },
 
 			onExpand: function(record, isExpandAutomatically) {
-				if (this.doubleClickLock[record.getId()]) return;
-				this.doubleClickLock[record.getId()] = true;
+                if (typeof this.doubleClickLock != 'object') {
+                    this.doubleClickLock = {};
+                } else if (this.doubleClickLock[record.getId()]) {
+                    return;
+                }
 
+				this.doubleClickLock[record.getId()] = true;
 				var nodeRef = record.getData("nodeRef");
 				if (nodeRef) {
-					var me = this;
 					var dataObj = YAHOO.lang.merge({
 						htmlid: this.getExpandedFormId(record),
 						itemKind: "node",
 						itemId: nodeRef,
 						mode: "view",
-                        isExpandAutomatically: !!isExpandAutomatically
+                        isExpandAutomatically: isExpandAutomatically
 					}, this.options.expandDataObj);
 					Alfresco.util.Ajax.request({
 						url: Alfresco.constants.URL_SERVICECONTEXT + this.options.expandDataSource,
@@ -597,12 +600,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 							scope: this,
 							fn: function(response) {
 								if (response.serverResponse != null) {
-									me.addExpandedRow(record, response.serverResponse.responseText);
+									this.addExpandedRow(record, response.serverResponse.responseText);
 								}
-								me.doubleClickLock[record.getId()] = false;
+								this.doubleClickLock[record.getId()] = false;
 							}
 						},
-						failureMessage: "message.failure",
+						failureMessage: this.msg('message.failure'),
 						execScripts: true,
 						scope: this
 					});
@@ -3137,7 +3140,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var obj = args[1];
                 if (obj && obj.id != this.id) return;
                 var dTable = this.widgets.dataTable;
-                if (dTable != null) {
+                if (dTable) {
                     var records = dTable.getRecordSet().getRecords();
                     for (var i = 0; i < records.length; ++i) {
                         var row = this.widgets.dataTable.getRow(records[i]);
