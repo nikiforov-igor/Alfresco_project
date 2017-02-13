@@ -467,7 +467,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
             errorMessageDialog: null,
 
-	        doubleClickLock: false,
+	        doubleClickLock: null,
 
             onArchiveCheckBoxClicked: function (layer, args) {
                 var cbShowArchive = YAHOO.util.Dom.get(this.id + "-cbShowArchive");
@@ -577,14 +577,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             },
 
 			onExpand: function(record, isExpandAutomatically) {
-                if (typeof this.doubleClickLock != 'object') {
+                if (!this.doubleClickLock) {
                     this.doubleClickLock = {};
                 } else if (this.doubleClickLock[record.getId()]) {
                     return;
                 }
-
 				this.doubleClickLock[record.getId()] = true;
-				var nodeRef = record.getData("nodeRef");
+
+                var nodeRef = record.getData("nodeRef");
 				if (nodeRef) {
 					var dataObj = YAHOO.lang.merge({
 						htmlid: this.getExpandedFormId(record),

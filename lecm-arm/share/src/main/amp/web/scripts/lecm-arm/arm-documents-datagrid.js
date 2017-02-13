@@ -246,30 +246,32 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         },
 
         onExpand: function(record) {
-	        if (this.doubleClickLock) return;
-	        this.doubleClickLock = true;
+            if (!this.doubleClickLock) {
+                this.doubleClickLock = {};
+            } else if (this.doubleClickLock[record.getId()]) {
+                return;
+            }
+            this.doubleClickLock[record.getId()] = true;
 
 	        var nodeRef = record.getData("nodeRef");
 	        if (nodeRef != null) {
-		        var me = this;
-		        Alfresco.util.Ajax.request(
-			        {
-				        url: Alfresco.constants.PROXY_URI + "lecm/document/connections/api/armPresentation",
-				        dataObj: {
-					        nodeRef: nodeRef
-				        },
-				        successCallback: {
-					        fn: function(response) {
-						        if (response.serverResponse != null) {
-							        me.addExpandedRow(record, response.serverResponse.responseText);
-						        }
-						        me.doubleClickLock = false;
-					        }
-				        },
-				        failureMessage: "message.failure",
-				        execScripts: true,
-				        scope: this
-			        });
+		        Alfresco.util.Ajax.request({
+                    url: Alfresco.constants.PROXY_URI + "lecm/document/connections/api/armPresentation",
+                    dataObj: {
+                        nodeRef: nodeRef
+                    },
+                    successCallback: {
+                        fn: function(response) {
+                            if (response.serverResponse != null) {
+                                this.addExpandedRow(record, response.serverResponse.responseText);
+                            }
+                            this.doubleClickLock[record.getId()] = false;
+                        }
+                    },
+                    failureMessage: this.msg('message.failure'),
+                    execScripts: true,
+                    scope: this
+                });
 	        }
 	    },
 

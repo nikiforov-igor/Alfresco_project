@@ -54,7 +54,9 @@
 			expandDataSource: "ru/it/lecm/workflow/routes/stages/stageExpanded",
 			expandDataObj: {
 				editable: ${editable?string},
-				isApproval: false
+				isApproval: false,
+                mainFormId: "${args.htmlid}",
+                routeRef: '${form.arguments.itemId!""}'
 			},
 			<#if editable>
 			actions: [{
