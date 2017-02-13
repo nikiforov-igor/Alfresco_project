@@ -3153,7 +3153,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
             getExpandUri: function DataGrid_getExpandUri() {
                 var context = this.options.expandDataSource.context || Alfresco.constants.URL_SERVICECONTEXT;
-                var uri = this.options.expandDataSource.uri || this.options.expandDataSource.toString()
+                var uri = this.options.expandDataSource.uri || this.options.expandDataSource.toString();
                 return (context + uri);
             },
 
