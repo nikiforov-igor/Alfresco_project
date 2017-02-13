@@ -661,7 +661,7 @@
                                                 <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'На исполнении' AND @lecm\-errands\-aspect\:errands\-executors\-assoc\-ref:"*#current-user*"]]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'На исполнении' AND (@lecm\-errands\-aspect\:errands\-executors\-assoc\-ref:"*#current-user*" OR @lecm\-errands\-aspect\:errands\-co\-executors\-assoc\-ref:"*#current-user*")]]></property>
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <items>
                                                     <item name="cm:4e0e243d-f373-4590-a481-c29e3d579c0a" type="lecm-arm:field">
