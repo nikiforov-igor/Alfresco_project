@@ -663,6 +663,7 @@
 	       init-method="init" depends-on="documents.LogicEcmModelsBootstrap">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="documentConnectionService" ref="documentConnectionService"/>
+        <property name="nodeService" ref="nodeService"/>
 	</bean>
 
     <bean id="baseNodeExpression" class="ru.it.lecm.documents.expression.ExpressionNode">

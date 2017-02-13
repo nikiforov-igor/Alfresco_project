@@ -525,6 +525,11 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 	@Override
 	public List<NodeRef> getConnectionsWithDocument(final NodeRef documentRef, final Boolean checkPermissions) {
+		return getConnectionsWithDocument(documentRef, null, checkPermissions);
+	}
+
+	@Override
+	public List<NodeRef> getConnectionsWithDocument(final NodeRef documentRef, final String connectionTypeCode, final Boolean checkPermissions) {
 		final List<NodeRef> connections = new ArrayList<>();
 		final LecmPermissionService service = this.lecmPermissionService;
 
@@ -536,13 +541,25 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 			@Override
 			public Void doWork() throws Exception {
 				try {
+					NodeRef connectionType = null;
+					if (connectionTypeCode != null) {
+						connectionType = dictionaryService.getDictionaryValueByParam(
+								DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
+								DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
+								connectionTypeCode);
+					}
+
 					List<AssociationRef> connectionsAssocRefs = nodeService.getSourceAssocs(documentRef, ASSOC_CONNECTED_DOCUMENT);
 					if (connectionsAssocRefs != null) {
 						for (AssociationRef assocRef : connectionsAssocRefs) {
 							NodeRef connectionRef = assocRef.getSourceRef();
-							List<AssociationRef> primary = nodeService.getTargetAssocs(connectionRef, ASSOC_PRIMARY_DOCUMENT);
-							if (!primary.isEmpty() && (!checkPermissions || (!isArchive(connectionRef) && service.hasReadAccess(connectionRef)) )) {
-								connections.add(connectionRef);
+							List<AssociationRef> connectionTypeAssoc = nodeService.getTargetAssocs(connectionRef, DocumentConnectionService.ASSOC_CONNECTION_TYPE);
+							if (connectionTypeAssoc != null &&
+									(connectionTypeCode == null || Objects.equals(connectionTypeAssoc.get(0).getTargetRef(), connectionType))) {
+								List<AssociationRef> primary = nodeService.getTargetAssocs(connectionRef, ASSOC_PRIMARY_DOCUMENT);
+								if (!primary.isEmpty() && (!checkPermissions || (!isArchive(connectionRef) && service.hasReadAccess(connectionRef)))) {
+									connections.add(connectionRef);
+								}
 							}
 						}
 					}
