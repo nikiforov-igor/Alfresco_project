@@ -454,6 +454,39 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			this.widgets.hiddenValue.value = '[]';
 		},
 
+		onUpdateUnitsField: function (organization, formId) {
+			if (organization && organization.nodeRef && organization.nodeRef.length) {
+				Alfresco.util.Ajax.jsonGet({
+					url: Alfresco.constants.PROXY_URI + '/lecm/orgstructure/api/getUnitByOrg',
+					dataObj: {
+						nodeRef: organization.nodeRef
+					},
+					successCallback: {
+						scope: this,
+						fn: function (response) {
+							var unit = new Alfresco.util.NodeRef(response.json.nodeRef);
+							LogicECM.module.Base.Util.readonlyControl(formId, "lecm-template:unitAssoc", false);
+							YAHOO.util.Event.onAvailable(LogicECM.module.Base.Util.getComponentReadyElementId(formId, "lecm-template:unitAssoc"), function() {
+								YAHOO.Bubbling.fire("refreshItemList", {
+									formId: formId,
+									fieldId: "lecm-template:unitAssoc",
+									additionalFilter: '@lecm\\-orgstr\\-aspects\\:linked\\-organization\\-assoc\\-ref:\"' + organization.nodeRef + '\" AND NOT(@sys\\:node\\-uuid:\"' + unit.id + '\")'
+								});
+							}, this);
+						}
+
+					},
+					failureMessage: this.msg('message.failure'),
+					scope: this
+				});
+			} else {
+				LogicECM.module.Base.Util.reInitializeControl(formId, 'lecm-template:unitAssoc', {
+					currentValue:""
+				});
+				LogicECM.module.Base.Util.readonlyControl(formId, "lecm-template:unitAssoc", true);
+			}
+		},
+
 		onTemplateOrganizationSelect: function (layer, args) {
 			var organization = null;
 
@@ -475,6 +508,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				disabledState: !this.templateOrganization.nodeRef
 			});
 
+			this.onUpdateUnitsField(this.templateOrganization, args[1].formId);
 			this.deferredListPopulation.fulfil("onOrganizationSelect");
 		},
 
