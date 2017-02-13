@@ -63,7 +63,7 @@ public class DocumentResponseToPolicy implements NodeServicePolicies.OnCreateAss
 		for (NodeRef connection : connections) {
 			NodeRef targetDoc = nodeService.getTargetAssocs(connection, DocumentConnectionService.ASSOC_PRIMARY_DOCUMENT).get(0).getTargetRef();
 			if (Objects.equals(targetDoc, parent)) {
-				Boolean isSystem = Boolean.TRUE.equals(nodeService.getProperties(connection).get(DocumentConnectionService.PROP_IS_SYSTEM));
+				Boolean isSystem = Boolean.TRUE.equals(nodeService.getProperty(connection, DocumentConnectionService.PROP_IS_SYSTEM));
 				if (isSystem) {
 					documentConnectionService.deleteConnection(connection);
 				}
