@@ -145,7 +145,7 @@
 						<many>true</many>
 					</target>
 				</association>
-				<association name="lecm-ord:executors">
+				<association name="lecm-ord:errands-executors-assoc">
 					<title>Исполнители поручения</title>
 					<source>
 						<mandatory>false</mandatory>
