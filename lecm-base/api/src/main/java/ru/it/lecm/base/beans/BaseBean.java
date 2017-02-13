@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.dao.ConcurrencyFailureException;
 import ru.it.lecm.base.ServiceFolder;
 
 import java.io.Serializable;
@@ -490,4 +491,18 @@ public abstract class BaseBean implements InitializingBean {
 		return QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate());
 	}
 
+    protected void doIncrementProperty(NodeRef node, QName prop) {
+        try {
+            Integer currentCount = (Integer) nodeService.getProperty(node, prop);
+            if (currentCount != null) {
+                currentCount++;
+            } else {
+                currentCount = 1;
+            }
+
+            nodeService.setProperty(node, prop, currentCount);
+        } catch (ConcurrencyFailureException ex) {
+            logger.warn("Increment property at the same time", ex);
+        }
+    }
 }
