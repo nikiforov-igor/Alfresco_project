@@ -1186,30 +1186,17 @@
                                 <property name="cm:name"><![CDATA[Поручения в работе]]></property>
                                 <property name="lecm-arm:order"><![CDATA[40]]></property>
                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                <property name="lecm-arm:is-aggregation-node"><![CDATA[true]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="lecm-arm:types"><![CDATA[lecm-errands:document]]></property>
                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                 <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[((((@lecm\-document\:author\-assoc\-ref:"#current-user") OR
-                                    (@lecm\-errands\:initiator\-assoc\-ref:"#current-user")) AND NOT
-                                    (@lecm\-statemachine\-aspects\:is\-final:true) AND NOT
-                                    (@lecm\-statemachine\-aspects\:is\-draft:true) AND NOT
-                                    (@lecm\-statemachine\:status:'На рассмотрении'))) OR
-                                    ((((@lecm\-errands\:executor\-assoc\-ref:"#current-user") OR
-                                    (@lecm\-errands\:coexecutors\-assoc\-ref:"#current-user")) AND NOT
-                                    (@lecm\-statemachine\-aspects\:is\-final:true) AND NOT
-                                    (@lecm\-statemachine\-aspects\:is\-draft:true) AND NOT
-                                    (@lecm\-statemachine\:status:'На рассмотрении'))) OR
-                                    ((@lecm\-errands\:controller\-assoc\-ref:"#current-user") AND NOT
-                                    (@lecm\-statemachine\-aspects\:is\-final:true) AND NOT
-                                    (@lecm\-statemachine\:status:'На рассмотрении') AND NOT
-                                    (@lecm\-statemachine\-aspects\:is\-draft:true))]]></property>
+                                    <![CDATA[(@lecm\-errands\:initiator\-assoc\-ref:"#current-user" OR @lecm\-errands\:executor\-assoc\-ref:"#current-user" OR @lecm\-errands\:coexecutors\-assoc\-ref:"#current-user" OR @lecm\-errands\:controller\-assoc\-ref:"#current-user") AND NOT @lecm\-statemachine\-aspects\:is\-final:true AND NOT @lecm\-statemachine\-aspects\:is\-draft:true AND NOT @lecm\-errands\:type\-assoc\-ref:{{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dictionary:'Типы поручений', attribute:'lecm-errands-dic:errand-type-launch-review', value:true})}}]]></property>
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <items>
-                                    <item name="cm:Выданные мной" type="lecm-arm:node">
-                                        <property name="cm:name"><![CDATA[Выданные мной]]></property>
+                                    <item name="cm:Контролируемые мной" type="lecm-arm:node">
+                                        <property name="cm:name"><![CDATA[Контролируемые мной]]></property>
                                         <property name="lecm-arm:order"><![CDATA[10]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
@@ -1217,39 +1204,13 @@
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[((@lecm\-errands\:initiator\-assoc\-ref:"#current-user") AND NOT
-                                            (@lecm\-statemachine\-aspects\:is\-final:true) AND NOT
-                                            (@lecm\-statemachine\-aspects\:is\-draft:true) AND NOT
-                                            (@lecm\-errands\:type\-assoc\-text\-content:'На рассмотрение'))]]></property>
-                                        <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
-                                    </item>
-                                    <item name="cm:Контролируемые мной" type="lecm-arm:node">
-                                        <property name="cm:name"><![CDATA[Контролируемые мной]]></property>
-                                        <property name="lecm-arm:order"><![CDATA[20]]></property>
-                                        <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                        <property name="lecm-arm:types"><![CDATA[]]></property>
-                                        <property name="lecm-arm:counter-description"><![CDATA[]]></property>
-                                        <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
-                                        <property name="lecm-arm:search-query">
-                                            <![CDATA[(@lecm\-errands\:controller\-assoc\-ref:"#current-user") AND NOT
-                                            (@lecm\-statemachine\-aspects\:is\-final:true) AND NOT
-                                            (@lecm\-errands\:type\-assoc\-text\-content:'На рассмотрение') AND NOT
-                                            (@lecm\-statemachine\-aspects\:is\-draft:true)]]></property>
+                                            <![CDATA[@lecm\-errands\:controller\-assoc\-ref:"#current-user"]]></property>
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                     </item>
                                     <item name="cm:На проверке отчета" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[((((@lecm\-errands\:report\-recipient\-type:AUTHOR) AND
-                                            (@lecm\-errands\:initiator\-assoc\-ref:"#current-user")) OR
-                                            ((@lecm\-errands\:report\-recipient\-type:CONTROLLER) AND
-                                            (@lecm\-errands\:controller\-assoc\-ref:"#current-user")) OR
-                                            ((@lecm\-errands\:report\-recipient\-type:AUTHOR_AND_CONTROLLER) AND
-                                            ((@lecm\-errands\:initiator\-assoc\-ref:"#current-user") OR
-                                            (@lecm\-errands\:controller\-assoc\-ref:"#current-user")))) AND
-                                            (@lecm\-statemachine\:status:'На контроле') AND NOT
-                                            (@lecm\-errands\:type\-assoc\-text\-content:'На рассмотрение'))]]></property>
+                                            <![CDATA[((@lecm\-errands\:report\-recipient\-type:AUTHOR AND @lecm\-errands\:initiator\-assoc\-ref:"#current-user") OR (@lecm\-errands\:report\-recipient\-type:CONTROLLER AND @lecm\-errands\:controller\-assoc\-ref:"#current-user") OR (@lecm\-errands\:report\-recipient\-type:AUTHOR_AND_CONTROLLER AND (@lecm\-errands\:initiator\-assoc\-ref:"#current-user" OR @lecm\-errands\:controller\-assoc\-ref:"#current-user"))) AND @lecm\-statemachine\:status:'На контроле']]></property>
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
@@ -1257,16 +1218,13 @@
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:order"><![CDATA[30]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[20]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
                                     </item>
                                     <item name="cm:На исполнении" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[((@lecm\-errands\:executor\-assoc\-ref:'#current-user') AND
-                                            ((@lecm\-statemachine\:status:'Ожидает исполнения') OR
-                                            (@lecm\-statemachine\:status:'На исполнении')) AND NOT
-                                            (@lecm\-errands\:type\-assoc\-text\-content:'На рассмотрение'))]]></property>
+                                            <![CDATA[@lecm\-errands\:executor\-assoc\-ref:'#current-user' AND (@lecm\-statemachine\:status:'Ожидает исполнения' OR @lecm\-statemachine\:status:'На исполнении')]]></property>
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
@@ -1274,16 +1232,13 @@
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:order"><![CDATA[40]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[30]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
                                     </item>
                                     <item name="cm:На соисполнении" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[((@lecm\-errands\:coexecutors\-assoc\-ref:'#current-user') AND
-                                            ((@lecm\-statemachine\:status:'Ожидает исполнения') OR
-                                            (@lecm\-statemachine\:status:'На исполнении')) AND NOT
-                                            (@lecm\-errands\:type\-assoc\-text\-content:'На рассмотрение'))]]></property>
+                                            <![CDATA[@lecm\-errands\:coexecutors\-assoc\-ref:'#current-user' AND (@lecm\-statemachine\:status:'Ожидает исполнения' OR @lecm\-statemachine\:status:'На исполнении')]]></property>
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
@@ -1291,15 +1246,13 @@
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:order"><![CDATA[50]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[40]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
                                     </item>
                                     <item name="cm:На доработке" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[((@lecm\-errands\:executor\-assoc\-ref:'#current-user') AND
-                                            (@lecm\-statemachine\:status:'На доработке') AND NOT
-                                            (@lecm\-errands\:type\-assoc\-text\-content:'На рассмотрение'))]]></property>
+                                            <![CDATA[@lecm\-errands\:executor\-assoc\-ref:'#current-user' AND @lecm\-statemachine\:status:'На доработке']]></property>
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
@@ -1307,12 +1260,12 @@
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:order"><![CDATA[60]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[50]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
                                     </item>
                                     <item name="cm:dab9e21a-45ed-4a3c-8a03-4541f768cc52" type="lecm-arm:field">
                                         <property name="cm:name"><![CDATA[7e6e1fe7-2cae-40f2-a138-256afb8dcaa6]]></property>
-                                        <property name="lecm-arm:field-title"><![CDATA[Номер поручения]]></property>
+                                        <property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
                                         <property name="lecm-arm:field-name"><![CDATA[lecm-errands:number]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                         <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
@@ -1357,7 +1310,7 @@
                                     </item>
                                     <item name="cm:2f18fabd-841a-4e8e-9cbe-ac5b3fadd35d" type="lecm-arm:field">
                                         <property name="lecm-arm:field-name"><![CDATA[lecm-errands:limitation-date-text]]></property>
-                                        <property name="lecm-arm:field-title"><![CDATA[Срок исполнения]]></property>
+                                        <property name="lecm-arm:field-title"><![CDATA[Исполнить к]]></property>
                                         <property name="cm:name"><![CDATA[aa73150f-39e9-4799-9d8e-35db5928a4c7]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                         <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
@@ -1432,31 +1385,31 @@
                                     <assoc type="lecm-arm:filters-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По срокам"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения/7e6e1fe7-2cae-40f2-a138-256afb8dcaa6"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/7e6e1fe7-2cae-40f2-a138-256afb8dcaa6"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения/fb2d45e1-b3b4-436e-82d3-73e0c1a3d64e"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/fb2d45e1-b3b4-436e-82d3-73e0c1a3d64e"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения/53b10c1a-9ec2-43cd-bc96-5c06da600cb2"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/53b10c1a-9ec2-43cd-bc96-5c06da600cb2"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения/22023dcb-0fab-400d-b6c1-b17207e96470"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/22023dcb-0fab-400d-b6c1-b17207e96470"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения/7a142630-34d3-430c-b14b-2bc04c8e8747"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/7a142630-34d3-430c-b14b-2bc04c8e8747"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения/e59bbe44-f714-45c1-810f-2fb4d0fd7031"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/e59bbe44-f714-45c1-810f-2fb4d0fd7031"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения/aa73150f-39e9-4799-9d8e-35db5928a4c7"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/aa73150f-39e9-4799-9d8e-35db5928a4c7"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения/227d9a76-ce5d-4590-95b0-8c814f1c7abd"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/227d9a76-ce5d-4590-95b0-8c814f1c7abd"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения/95e45be5-1c3a-4520-be6c-a99628f4f166"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/95e45be5-1c3a-4520-be6c-a99628f4f166"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения/1aa4cc94-bed5-4551-9625-d4a965f5dd58"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/1aa4cc94-bed5-4551-9625-d4a965f5dd58"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения/f95fc22b-19ae-4d0e-a9e7-d9b194a28482"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/f95fc22b-19ae-4d0e-a9e7-d9b194a28482"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения/c3e98d57-6f09-439c-afc5-eb62a90ee488"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/c3e98d57-6f09-439c-afc5-eb62a90ee488"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения/802fcd12-acae-4025-8b13-df8efa21eb70"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/802fcd12-acae-4025-8b13-df8efa21eb70"/>
                                 </assocs>
                             </item>
                             <item name="cm:4099526f-d2ca-4010-8935-5dbf337e27a7" type="lecm-arm:field">
