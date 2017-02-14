@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-review-aspects:review-aspects-model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>LECM Review Aspects Model</description>
+    <author>aivkin</author>
+    <version>1.0</version>
+
+    <imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.it.ru/logicECM/model/review-ts/1.0" prefix="lecm-review-ts"/>
+    </imports>
+
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/model/review-aspects/1.0" prefix="lecm-review-aspects"/>
+    </namespaces>
+
+    <aspects>
+        <aspect name="lecm-review-aspects:related-review-aspect">
+            <properties>
+                <property name="lecm-review-aspects:related-review-records-change-count">
+                    <type>d:int</type>
+                    <default>0</default>
+                </property>
+            </properties>
+            <associations>
+                <association name="lecm-review-aspects:related-review-records-assoc">
+                    <source>
+                        <mandatory>true</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-review-ts:review-table-item</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+            </associations>
+        </aspect>
+    </aspects>
+
+</model>

@@ -169,6 +169,15 @@ public interface DocumentConnectionService {
 	 */
 	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef, Boolean checkPermissions);
 
+	/**
+	 * Получение документов, связанных с документом
+	 * @param documentRef Ссылка на документ
+	 * @param connectionTypeCode тип связи
+	 * @param checkPermissions проверка прав
+	 * @return Список ссылок на связи
+	 */
+	List<NodeRef> getConnectionsWithDocument(NodeRef documentRef, String connectionTypeCode, Boolean checkPermissions);
+
 	Boolean hasConnectionsWithDocument(NodeRef documentRef, Boolean checkPermissions);
 
 	/**

@@ -5,8 +5,9 @@
         <#if connectedDocuments??>
             <#list connectedDocuments as connectedDoc>
                 {
-                "nodeRef": "${connectedDoc.nodeRef}",
-                "presentString": "${connectedDoc.properties["lecm-document:present-string"]!""}"
+                "nodeRef": "${connectedDoc.doc.nodeRef}",
+                "presentString": "${connectedDoc.doc.properties["lecm-document:present-string"]!""}",
+                "viewUrl": "${connectedDoc.viewPage!"document"}"
                 }<#if connectedDoc_has_next>,</#if>
             </#list>
         </#if>

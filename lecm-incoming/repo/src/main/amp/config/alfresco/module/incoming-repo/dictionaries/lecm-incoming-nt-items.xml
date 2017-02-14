@@ -6,7 +6,7 @@
         <property name="lecm-dic:type"><![CDATA[lecm-notification-template:template]]></property>
         <property name="lecm-dic:plane"><![CDATA[true]]></property>
         <property name="lecm-dic:description"><![CDATA[Шаблоны уведомлений]]></property>
-        <items>
+        <items updateMode="CreateOrUpdate">
             <item name="cm:INCOMING_REGISTRATION_REQUEST" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[INCOMING_REGISTRATION_REQUEST]]></property>
                 <property name="lecm-notification-template:template">
@@ -22,7 +22,7 @@
             <item name="cm:INCOMING_RETURN_DOCUMENT" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[INCOMING_RETURN_DOCUMENT]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#sender.wrapAsLink(#sender.getFormatted("{lecm-orgstr:employee-short-name}"))}  вернул(а) документ {#mainObject.wrapAsLink(#mainObject.getFormatted("№ {~REGNUM} от {~REGDATE}"))} {#sendToExecutionUser != null ? "сотруднику ".concat({#sendToExecutionUser.wrapAsLink(#sendToExecutionUser.getFormatted("{lecm-orgstr:employee-short-name}"))}) : ""}.]]></property>
+                    <![CDATA[Документ {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} {#wrapTitle("возвращён", #reason)} на регистрацию пользователем {#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))}.]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Входящий. Вернуть]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>

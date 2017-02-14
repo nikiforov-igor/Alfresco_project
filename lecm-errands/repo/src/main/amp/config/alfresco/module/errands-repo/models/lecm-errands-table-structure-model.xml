@@ -167,6 +167,17 @@
                     </property>
                     <property name="lecm-errands-ts:execution-close-child">
                         <type>d:boolean</type>
+                        <default>false</default>
+                    </property>
+                    <property name="lecm-errands-ts:execution-report-is-execute">
+                        <type>d:boolean</type>
+                        <default>false</default>
+                    </property>
+                    <property name="lecm-errands-ts:execution-report-create-date">
+                        <type>d:date</type>
+                    </property>
+                    <property name="lecm-errands-ts:execution-report-decline-date">
+                        <type>d:date</type>
                     </property>
                     <!-- Причина отклонения -->
                     <property name="lecm-errands-ts:execution-report-decline-reason">

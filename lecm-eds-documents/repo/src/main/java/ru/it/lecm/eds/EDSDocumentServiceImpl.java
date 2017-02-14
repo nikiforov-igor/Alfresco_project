@@ -61,18 +61,7 @@ public class EDSDocumentServiceImpl extends BaseBean implements EDSDocumentServi
 
     @Override
     public void sendChildChangeSignal(NodeRef baseDoc) {
-        try {
-            Integer currentCount = (Integer) nodeService.getProperty(baseDoc, PROP_CHILD_CHANGE_SIGNAL_COUNT);
-            if (currentCount != null) {
-                currentCount++;
-            } else {
-                currentCount = 1;
-            }
-
-            nodeService.setProperty(baseDoc, PROP_CHILD_CHANGE_SIGNAL_COUNT, currentCount);
-        } catch (ConcurrencyFailureException ex) {
-            logger.warn("Send signal at the same time", ex);
-        }
+        doIncrementProperty(baseDoc, PROP_CHILD_CHANGE_SIGNAL_COUNT);
     }
 
     @Override

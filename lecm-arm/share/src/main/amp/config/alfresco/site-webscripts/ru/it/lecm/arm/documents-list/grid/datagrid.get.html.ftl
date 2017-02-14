@@ -58,6 +58,10 @@ YAHOO.util.Event.onContentReady("${filtersId}", initFilters);
                         showCheckboxColumn: true,
                         bubblingLabel: "documents-arm",
                         expandable: true,
+                        expandDataSource: {
+                            context: Alfresco.constants.PROXY_URI,
+                            uri: "lecm/document/connections/api/armPresentation"
+                        },
                         datagridMeta: {
                             itemType: "lecm-document:base",
                             datagridFormId: "datagrid-arm",
