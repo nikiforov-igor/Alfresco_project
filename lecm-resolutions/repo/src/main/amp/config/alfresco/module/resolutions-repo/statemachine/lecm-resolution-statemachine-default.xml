@@ -1666,22 +1666,17 @@ if (document) {
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = stm_document;
 if (document && !regnumbers.isDocumentRegistered(document)) {
-  var document = stm_document;
-  if (document) {
-    document.properties["lecm-resolutions:transition-to-execution-date"] = new Date();
+  document.properties["lecm-resolutions:transition-to-execution-date"] = new Date();
 
-    var executionDate = edsDocument.convertComplexDate(
-            document.properties["lecm-resolutions:limitation-date-radio"],
-            document.properties["lecm-resolutions:limitation-date"],
-            document.properties["lecm-resolutions:limitation-date-type"],
-            document.properties["lecm-resolutions:limitation-date-days"]);
+  var executionDate = edsDocument.convertComplexDate(
+    document.properties["lecm-resolutions:limitation-date-radio"],
+    document.properties["lecm-resolutions:limitation-date"],
+    document.properties["lecm-resolutions:limitation-date-type"],
+    document.properties["lecm-resolutions:limitation-date-days"]);
 
-    if (executionDate) {
-      document.properties["lecm-resolutions:limitation-date-radio"] = "DATE";
-      document.properties["lecm-resolutions:limitation-date"] = executionDate;
-    }
-
-    document.save();
+  if (executionDate) {
+    document.properties["lecm-resolutions:limitation-date-radio"] = "DATE";
+    document.properties["lecm-resolutions:limitation-date"] = executionDate;
   }
 
   var regNumberCode;
@@ -1694,10 +1689,11 @@ if (document && !regnumbers.isDocumentRegistered(document)) {
       childIndex = childAssoc.length;
     }
     document.properties["lecm-resolutions:child-index-counter"] = childIndex;
-    document.save();
   } else {
     regNumberCode = "RESOLUTION_FREE_NUMBER";
   }
+  document.save();
+
   regnumbers.registerDocument(document, regNumberCode);
   regnumbers.setDocumentNumber(regNumberCode, document, "lecm-resolutions:number");
 
@@ -1742,6 +1738,35 @@ if (document) {
   var baseDocAssoc = document.assocs["lecm-resolutions:base-assoc"];
   if (baseDocAssoc && baseDocAssoc.length) {
     edsDocument.sendChildChangeSignal(baseDocAssoc[0]);
+  }
+}]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>e780d9d9-283e-49a9-9628-4ab0d1d8e5bd</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/09201e31-62da-40e8-9e4c-cb7a4e9c518d
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Создание листа ознакомления]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/workflow/review/form/review-ts.form.lib.js">
+
+var document = stm_document;
+if (document) {
+  var baseDocumentAssoc = document.assocs["lecm-resolutions:base-document-assoc"];
+  if (baseDocumentAssoc && baseDocumentAssoc.length) {
+    sendDocumentToReview(baseDocumentAssoc[0], document.assocs["lecm-resolutions:reviewers-assoc"], document);
   }
 }]]></value>
                                                             </property>
