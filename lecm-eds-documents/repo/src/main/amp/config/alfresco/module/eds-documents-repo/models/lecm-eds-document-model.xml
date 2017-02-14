@@ -42,7 +42,7 @@
                 <property name="lecm-eds-document:summaryContent">
                     <title>Содержание</title>
                     <type>d:text</type>
-                    <mandatory>true</mandatory>
+                    <mandatory>false</mandatory>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
