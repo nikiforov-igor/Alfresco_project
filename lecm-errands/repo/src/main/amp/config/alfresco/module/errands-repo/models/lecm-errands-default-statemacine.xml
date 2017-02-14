@@ -5010,6 +5010,7 @@ if (document) {
 var doc = bpm_package.children[0];
 if (doc) {
   ExecuteErrandScript.processChildExecutedSignal(doc);
+  var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
   if (childrenErrands && childrenErrands.length) {
       var countErrandsFinal = 0;
       for (var i =0; i < childrenErrands.length; i++) {

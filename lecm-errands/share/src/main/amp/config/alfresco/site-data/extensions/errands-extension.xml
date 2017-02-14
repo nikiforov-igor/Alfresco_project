@@ -30,6 +30,7 @@
 								</evaluation>
 							</evaluations>
 						</sub-component>
+
 						<sub-component id="document-errands">
 							<evaluations>
 								<evaluation id="document-errands-add">
@@ -50,21 +51,7 @@
 						</sub-component>
 					</sub-components>
 				</component>
-				<component>
-					<scope>template</scope>
-					<region-id>dashlet-panel</region-id>
-					<source-id>document</source-id>
-					<sub-component id="default">
-						<evaluations>
-							<evaluation>
-								<url>/lecm/components/dashlets/document-main</url>
-								<properties>
-									<nodeRef>{nodeRef}</nodeRef>
-								</properties>
-							</evaluation>
-						</evaluations>
-					</sub-component>
-				</component>
+
 				<component>
 					<scope>template</scope>
 					<region-id>attachments</region-id>
