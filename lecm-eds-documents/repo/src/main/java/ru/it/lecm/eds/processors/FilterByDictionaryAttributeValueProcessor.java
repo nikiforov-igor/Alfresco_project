@@ -2,17 +2,17 @@ package ru.it.lecm.eds.processors;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import org.apache.commons.lang3.BooleanUtils;
 import ru.it.lecm.base.beans.SearchQueryProcessor;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by KKurets on 10.02.2017.
  */
-public class FilterByAttributeProcessor extends SearchQueryProcessor {
+public class FilterByDictionaryAttributeValueProcessor extends SearchQueryProcessor {
 
     private DictionaryBean dictionaryBean;
 
@@ -28,23 +28,18 @@ public class FilterByAttributeProcessor extends SearchQueryProcessor {
     public String getQuery(Map<String, Object> params) {
         StringBuilder sbQuery = new StringBuilder();
         List<NodeRef> records;
-        Object dic = params != null ? params.get("dic") : null;
-        Object attr = params != null ? params.get("attr") : null;
-        Object val = params != null ? params.get("value") : null;
+        Object dictionaryName = params != null ? params.get("dic") : null;
+        Object attributeName = params != null ? params.get("attr") : null;
+        Serializable attributeValue = params != null ? (Serializable) params.get("value") : null;
 
-        if (dic != null && attr != null && val != null) {
-            String dictionary = dic.toString();
-            String attribute = attr.toString();
-            String value = val.toString();
-            Object boolValue;
-            if ((boolValue = BooleanUtils.toBooleanObject(value)) != null) {
-                records = dictionaryBean.getRecordsByParamValue(dictionary, QName.createQName(attribute, namespaceService), (boolean) boolValue);
-            } else {
-                records = dictionaryBean.getRecordsByParamValue(dictionary, QName.createQName(attribute, namespaceService), value);
-            }
+        if (dictionaryName != null && attributeName != null && attributeValue != null) {
+            records = dictionaryBean.getRecordsByParamValue(dictionaryName.toString(), QName.createQName(attributeName.toString(), namespaceService), attributeValue);
             if (records != null && records.size() != 0) {
-                for (NodeRef record : records) {
-                    sbQuery.append("\"").append(record).append("\"");
+                for (int i = 0; i < records.size(); i++) {
+                    sbQuery.append("\"").append(records.get(i)).append("\"");
+                    if (i != (records.size() - 1)) {
+                        sbQuery.append(" OR ");
+                    }
                 }
             } else {
                 sbQuery.append("NOT_REF");

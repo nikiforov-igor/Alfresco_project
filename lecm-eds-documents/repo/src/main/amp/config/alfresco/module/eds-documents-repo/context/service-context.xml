@@ -165,8 +165,8 @@
 		<property name="stateMachineService" ref="stateMachineHelper"/>
 	</bean>
 
-	<bean id="filterByAttributeProcessor" class="ru.it.lecm.eds.processors.FilterByAttributeProcessor" parent="searchQueryBaseProccesor">
-		<property name="id" value="FILTER_BY_ATTRIBUTE"/>
+	<bean id="filterByDictionaryAttributeValueProcessor" class="ru.it.lecm.eds.processors.FilterByDictionaryAttributeValueProcessor" parent="searchQueryBaseProccesor">
+		<property name="id" value="FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE"/>
 		<property name="dictionaryBean" ref="serviceDictionary"/>
 	</bean>
 </beans>
