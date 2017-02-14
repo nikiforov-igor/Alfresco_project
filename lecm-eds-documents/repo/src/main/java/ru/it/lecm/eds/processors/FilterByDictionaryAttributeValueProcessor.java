@@ -41,10 +41,10 @@ public class FilterByDictionaryAttributeValueProcessor extends SearchQueryProces
                     }
                 }
             } else {
-                sbQuery.append("\"").append("NOT_REF").append("\"");
+                sbQuery.append("\"NOT_REF\"");
             }
         } else {
-            sbQuery.append("\"").append("NOT_REF").append("\"");
+            sbQuery.append("\"NOT_REF\"");
         }
         return sbQuery.toString();
     }
