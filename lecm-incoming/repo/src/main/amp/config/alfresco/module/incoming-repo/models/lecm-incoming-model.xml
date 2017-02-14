@@ -12,6 +12,7 @@
         <import uri="http://www.it.ru/logicECM/links/1.0" prefix="lecm-links"/>
         <import uri="http://www.it.ru/logicECM/document/dictionaries/deliveryMethod/1.0" prefix="lecm-doc-dic-dm"/>
         <import uri="http://www.it.ru/logicECM/model/review-ts/1.0" prefix="lecm-review-ts"/>
+        <import uri="http://www.it.ru/logicECM/errands-aspects/1.0" prefix="lecm-errands-aspect"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/incoming/1.0" prefix="lecm-incoming"/>
@@ -215,6 +216,7 @@
                 <aspect>lecm-document-aspects:response-to-aspect</aspect>
                 <aspect>lecm-document-aspects:on-control-aspect</aspect>
                 <aspect>lecm-review-ts:review-aspect</aspect>
+                <aspect>lecm-errands-aspect:errandsExecutorsAspect</aspect>
             </mandatory-aspects>
         </type>
     </types>
