@@ -78,7 +78,7 @@ function createReviewTSItem(reviewTable, reviewTsItems, initiatingDocument) {
 		}
         if (reviewRecord && initiatingDocument) {
             var existAssocs = initiatingDocument.assocs["lecm-review-aspects:related-review-records-assoc"];
-            var existReviewRecordAssoc = existAssocs.some(function (assoc) {
+            var existReviewRecordAssoc = existAssocs && existAssocs.some(function (assoc) {
                 return assoc.equals(reviewRecord);
             });
             if (!existReviewRecordAssoc) {
