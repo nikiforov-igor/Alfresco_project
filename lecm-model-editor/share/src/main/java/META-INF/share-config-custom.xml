@@ -66,12 +66,11 @@
 						<!-- <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl">
 							<control-param name="options">lecm-document:base|LECM BASE,lecm-eds-document:base|LECM EDS BASE</control-param>
 						</control> -->
-						<!-- <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
-							<control-param name="webscriptType">server</control-param>
-							<control-param name="webscript">lecm/registered/types</control-param>
-							<control-param name="needSort">true</control-param>
-						</control> -->
-						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+						<control template="/ru/it/lecm/controls/select-one-with-webscript-values.ftl">
+							<control-param name="values">associations</control-param>
+							<control-param name="selectedValue">model.parentRef</control-param>
+							<control-param name="readOnly">true</control-param>
+						</control>
 					</field>
 					<field id="cm:lecmPresentString" label-id="lecm.meditor.lbl.templ.pres.string">
 						<!-- <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/> -->
