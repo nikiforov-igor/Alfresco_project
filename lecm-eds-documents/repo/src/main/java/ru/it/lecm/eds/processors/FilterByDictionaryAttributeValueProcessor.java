@@ -21,14 +21,14 @@ public class FilterByDictionaryAttributeValueProcessor extends SearchQueryProces
     }
 
     /*
-	 * Usage example: {{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dic:'Типы поручений', attr:'cm:name', value:'Для информации'})}}
+	 * Usage example: {{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dictionary:'Типы поручений', attribute:'cm:name', value:'Для информации'})}}
 	 */
 
     @Override
     public String getQuery(Map<String, Object> params) {
         StringBuilder sbQuery = new StringBuilder();
-        Object dictionaryName = params != null ? params.get("dic") : null;
-        Object attributeName = params != null ? params.get("attr") : null;
+        Object dictionaryName = params != null ? params.get("dictionary") : null;
+        Object attributeName = params != null ? params.get("attribute") : null;
         Serializable attributeValue = params != null ? (Serializable) params.get("value") : null;
 
         if (dictionaryName != null && attributeName != null && attributeValue != null) {
