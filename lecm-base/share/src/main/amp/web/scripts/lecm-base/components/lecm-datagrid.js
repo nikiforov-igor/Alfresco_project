@@ -1115,14 +1115,25 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             template: this.msg("lecm.pagination.template"),
                             pageReportTemplate: this.msg("pagination.template.page-report"),
                             previousPageLinkLabel: this.msg("lecm.pagination.previousPageLinkLabel"),
+                            previousPageLinkTitle: this.msg("lecm.pagination.previousPageLinkTitle"),
                             nextPageLinkLabel: this.msg("lecm.pagination.nextPageLinkLabel"),
+                            nextPageLinkTitle: this.msg("lecm.pagination.nextPageLinkTitle"),
                             firstPageLinkLabel: this.msg("lecm.pagination.firstPageLinkLabel"),
                             lastPageLinkLabel: this.msg("lecm.pagination.lastPageLinkLabel"),
                             lastPageLinkTitle: this.msg("lecm.pagination.lastPageLinkLabel.title"),
-                            firstPageLinkTitle: this.msg("lecm.pagination.firstPageLinkLabel.title")
+                            firstPageLinkTitle: this.msg("lecm.pagination.firstPageLinkLabel.title"),
+                            jumpToPageDropdownTitle: this.msg("lecm.pagination.jumpToPageDropdown.title")
                         });
 
                     this.widgets.paginator.subscribe("changeRequest" + this.id, handlePagination, this);
+
+                    /*Подменим хардкор из YUI Paginator*/
+                    this.widgets.paginator.setAttributeConfig('pageTitleBuilder', {
+                        value: function (page, paginator) {
+                            return Alfresco.util.message('lecm.pagination.page', 'Page') + ' ' + page;
+                        },
+                        validator: YAHOO.lang.isFunction
+                    });
 
                     // Display the bottom paginator bar
                     Dom.setStyle(this.id + "-datagridBarBottom", "display", "none");

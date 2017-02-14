@@ -134,6 +134,7 @@
 				<!--содержит полезные вещи, включая ассинхронную подгрузку других скриптов-->
 				<js src="/scripts/lecm-base/components/lecm-validation.js" />
 				<js src="/scripts/lecm-base/constraints.js" />
+				<js src="/scripts/lecm-base/components/custom/lecm-custom-objects.js" />
 			</dependencies>
 
 			<constraint-handlers>
