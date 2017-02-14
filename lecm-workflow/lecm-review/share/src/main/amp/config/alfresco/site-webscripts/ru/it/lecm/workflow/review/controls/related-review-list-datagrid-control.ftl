@@ -115,6 +115,15 @@
 
 <#assign itemType=field.control.params.itemType!field.endpointType!"">
 
+<div id="${controlId}">
+    <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>
+    <div id="${controlId}-review-container" class="reviewContainer">
+        <div id="${containerId}">
+        <@grid.datagrid containerId false />
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">//<![CDATA[
 (function() {
     function drawForm(){
@@ -140,31 +149,21 @@
                     allowDelete: false,
                     allowEdit: false,
                     expandable: false,
-                    showActions: <#if editable>${showActions?string}<#else>false</#if>
+                showActions: <#if editable>${showActions?string}<#else>false</#if>
                 });
     }
-    function init() {
-        LogicECM.module.Base.Util.loadResources([
-                    'scripts/lecm-base/components/advsearch.js',
-                    'modules/simple-dialog.js',
-                    'scripts/lecm-base/components/lecm-datagrid.js',
-                    'scripts/lecm-base/components/lecm-toolbar.js',
-                    'scripts/documents/tables/lecm-document-table.js',
-                    'scripts/lecm-review/related-review-document-table.js'
-                ],
-                [
-                    'css/components/document-table-control.css',
-                    'css/lecm-review/review-document-table.css'
-                ], drawForm);
-    }
-    YAHOO.util.Event.onDOMReady(init);
+
+    LogicECM.module.Base.Util.loadResources([
+                'scripts/lecm-base/components/advsearch.js',
+                'modules/simple-dialog.js',
+                'scripts/lecm-base/components/lecm-datagrid.js',
+                'scripts/lecm-base/components/lecm-toolbar.js',
+                'scripts/documents/tables/lecm-document-table.js',
+                'scripts/lecm-review/related-review-document-table.js'
+            ],
+            [
+                'css/components/document-table-control.css',
+                'css/lecm-review/review-document-table.css'
+            ], drawForm);
 })();
 //]]></script>
-<div id="${controlId}">
-    <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>
-    <div id="${controlId}-review-container" class="reviewContainer">
-        <div id="${containerId}">
-        <@grid.datagrid containerId false />
-        </div>
-    </div>
-</div>
