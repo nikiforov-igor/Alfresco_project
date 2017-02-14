@@ -5,7 +5,7 @@
 
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign aDateTime = .now>
-<#assign containerId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
+<#assign containerId = fieldHtmlId + "-container">
 <#assign bubblingId = containerId/>
 
 <#assign reportId = "review_list">
