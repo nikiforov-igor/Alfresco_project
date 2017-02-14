@@ -21,7 +21,7 @@ public class FilterByDictionaryAttributeValueProcessor extends SearchQueryProces
     }
 
     /*
-	 * Usage example: {{FILTER_BY_ATTRIBUTE({dic:'Типы поручений', attr:'cm:name', value:'Для информации'})}}
+	 * Usage example: {{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dic:'Типы поручений', attr:'cm:name', value:'Для информации'})}}
 	 */
 
     @Override
