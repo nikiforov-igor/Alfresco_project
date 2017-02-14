@@ -731,7 +731,7 @@
                                     </item>
                                     <item name="cm:На рассмотрении" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
-                                        <property name="lecm-arm:search-query"><![CDATA[(@lecm\-errands\-aspect\:errands\-executors\-assoc\-ref:"*#current-user*" OR @lecm\-errands\-aspect\:errands\-co\-executors\-assoc\-ref:"*#current-user*") AND @lecm\-errands\:type\-assoc\-ref:{{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dictionary:'Типы поручений', attribute:'lecm-errands-dic:errand-type-launch-review', value:true})}}]]></property>
+                                        <property name="lecm-arm:search-query"><![CDATA[@lecm\-errands\-aspect\:errands\-executors\-assoc\-ref:"*#current-user*" OR @lecm\-errands\-aspect\:errands\-co\-executors\-assoc\-ref:"*#current-user*"]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="cm:name"><![CDATA[На рассмотрении]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
