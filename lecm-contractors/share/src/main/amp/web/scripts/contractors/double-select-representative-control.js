@@ -84,7 +84,8 @@ LogicECM.module = LogicECM.module || {};
         onSelect: function (layer, args) {
             var initDatatasources = function(scope) {
                 if (marker == 'contractor') {
-
+                    var autocompleteConf,
+                        treeConf;
                     autocompleteConf = {
                         startLocation: scope.options.representativesLocation,
                         itemType: scope.options.representativesType,
@@ -155,58 +156,33 @@ LogicECM.module = LogicECM.module || {};
                 scope._updateControls(selectedContractor, resetValue, autocompleteConf, treeConf);
             };
 
+            var resetValue = false,
+                marker,
+                selectedContractor;
+
+            if (args[1].marker) {
+                marker = args[1].marker;
+            } else {
+                marker = (layer == this.options.contractorSelectEvent) ? 'contractor' : 'organisation';
+            }
+
+            if (marker != 'person') {
+                var selectedContractors = Object.keys(args[1].selectedItems); // IE 9+
+                selectedContractor = selectedContractors.length == 1 ? selectedContractors[0] : null;
+            } else {
+                selectedContractor = null;
+            }
+
+            if (this.previousSelected === selectedContractor) {
+                return;
+            } else {
+                if (this.previousSelected != null) {
+                    resetValue = true;  // контагент сменился - прежнее значение неактуально
+                }
+                this.previousSelected = selectedContractor;
+            }
             if (!this.options.disabled) {
-                var marker, selectedContractor;
-                
-                if (args[1].marker) {
-                    marker = args[1].marker;
-                } else {
-                    marker = layer == this.options.contractorSelectEvent ? 'contractor' : 'organisation';
-                }
-                
-                if (marker != 'person') {
-                    var selectedContractors = Object.keys(args[1].selectedItems); // IE 9+
-                    selectedContractor = selectedContractors.length == 1 ? selectedContractors[0] : null;
-
-                    var resetValue = false,
-                        autocompleteConf,
-                        treeConf;
-                } else {
-                    selectedContractor = null;
-                }
-                
-                if (this.previousSelected === selectedContractor) {
-                    return;
-                } else {
-                    if (this.previousSelected != null) {
-                        resetValue = true;  // контагент сменился - прежнее значение неактуально
-                    }
-                    this.previousSelected = selectedContractor;
-                }
-
-                if (selectedContractor == null) {
-                    initDatatasources(this);
-                } else {
-                    Alfresco.util.Ajax.jsonRequest(
-                        {
-                            url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
-                            method: "POST",
-                            dataObj: {
-                                nodeRef: selectedContractor,
-                                substituteString: "{@hasAspect('lecm-orgstr-aspects:is-organization-aspect')}"
-                            },
-                            successCallback: {
-                                fn: function (response) {
-                                    if (response.json != null && response.json.formatString != null) {
-                                        var result = response.json.formatString;
-                                        marker = result === 'true' ? 'organisation' : 'contractor';
-                                        initDatatasources(this);
-                                    }
-                                },
-                                scope: this
-                            }
-                        });
-                }
+                initDatatasources(this, selectedContractor, marker);
             }
         },
 
@@ -225,7 +201,7 @@ LogicECM.module = LogicECM.module || {};
 
         _updateControls: function (selectedContractor, reset, autocompleteConf, treeConf) {
             var control = LogicECM.CurrentModules[this.options.autoCompleteJsName];
-            if (control != null) {
+            if (control) {
                 if (reset) {
                     control.dataArray = [];
                     control.selectedItems = {};
@@ -245,7 +221,7 @@ LogicECM.module = LogicECM.module || {};
                     lazyLoading: (selectedContractor != null)
                 });
                 
-                if (selectedContractor != null) {
+                if (selectedContractor) {
                     if (autocompleteConf) {
                         control.setOptions(autocompleteConf);
                     } else {
@@ -260,7 +236,7 @@ LogicECM.module = LogicECM.module || {};
                 control.onReady();
             }
             var treeControl = LogicECM.CurrentModules[this.options.treeViewJsName];
-            if (treeControl != null) {
+            if (treeControl) {
                 if (reset) {
                     treeControl.selectedItems = null;
                     treeControl.defaultValue = null;
@@ -274,14 +250,18 @@ LogicECM.module = LogicECM.module || {};
                     selectedValue: null
                 });
                 
-                if (selectedContractor != null && treeConf) {
-                    treeControl.setOptions(treeConf);
+                if (selectedContractor) {
+                    if (treeConf) {
+                        treeControl.setOptions(treeConf);
+                    } else {
+                        treeControl.options.disabled = false;
+                    }
                     if (!treeControl.options.currentValue && this.options.defaultValue && !this.options.defaultValueLoaded) {
                         treeControl.options.selectedValue = this.options.defaultValue;
                         this.options.defaultValueLoaded = true;
                     }
                 } else {
-                    treeControl.options.disabled = selectedContractor == null;
+                    treeControl.options.disabled = true;
                 }
 
                 treeControl.init();

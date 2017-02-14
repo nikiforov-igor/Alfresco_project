@@ -21,6 +21,7 @@
                                     props["lecm-errands-ts:execution-report-text"] = document.properties["lecm-errands:execution-report"];
                                     props["lecm-errands-ts:execution-report-status"] = "DECLINE";
                                     props["lecm-errands-ts:execution-report-decline-reason"] = lecmErrandWf_approverDeclineReason;
+                                    props["lecm-errands-ts:execution-report-create-date"] = document.properties["lecm-errands:execution-report-create-date"];
                                     var report = reportsTable.createNode(null, "lecm-errands-ts:execution-report", props);
 
                                     var executionAttachmentAssoc = document.assocs["lecm-errands:execution-report-attahcment-assoc"];

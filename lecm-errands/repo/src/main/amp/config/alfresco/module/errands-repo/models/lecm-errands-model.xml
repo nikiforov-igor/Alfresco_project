@@ -290,6 +290,10 @@
 				<property name="lecm-errands:execution-report-decline-reason">
 					<type>d:text</type>
 				</property>
+				<property name="lecm-errands:execution-report-close-child">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
 				<!-- Дата исполнения -->
 				<property name="lecm-errands:execution-date">
 					<type>d:date</type>
@@ -346,6 +350,9 @@
 				</property>
 				<property name="lecm-errands:project-report-connections">
 					<type>d:text</type>
+				</property>
+				<property name="lecm-errands:execution-report-create-date">
+					<type>d:date</type>
 				</property>
 
                 <!-- Сигналы -->

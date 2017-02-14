@@ -4,6 +4,7 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
@@ -67,20 +68,27 @@ public class ItemChangedPolicy implements NodeServicePolicies.OnUpdateProperties
 
 	@Override
 	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-		if (null != nodeRef
-				&& null != after.get(ReviewService.PROP_REVIEW_TS_STATE)
-				&& !after.get(ReviewService.PROP_REVIEW_TS_STATE).equals(before.get(ReviewService.PROP_REVIEW_TS_STATE))) {
-			NodeRef document = tableService.getDocumentByTableDataRow(nodeRef);
-			List<NodeRef> employees = reviewService.getActiveReviewersForDocument(document);
-			StringBuilder sb = new StringBuilder();
-			for (NodeRef employee : employees) {
-				sb.append(employee.toString()).append(";");
-			}
-			if (sb.length()>0) {
-				sb.deleteCharAt(sb.length()-1);
-			}
-			nodeService.setProperty(document, ReviewService.PROP_REVIEW_TS_ACTIVE_REVIEWERS, sb.toString());
-		}
-	}
+        if (null != nodeRef
+                && null != after.get(ReviewService.PROP_REVIEW_TS_STATE)
+                && !after.get(ReviewService.PROP_REVIEW_TS_STATE).equals(before.get(ReviewService.PROP_REVIEW_TS_STATE))) {
+            NodeRef document = tableService.getDocumentByTableDataRow(nodeRef);
+            List<NodeRef> employees = reviewService.getActiveReviewersForDocument(document);
+            StringBuilder sb = new StringBuilder();
+            for (NodeRef employee : employees) {
+                sb.append(employee.toString()).append(";");
+            }
+            if (sb.length() > 0) {
+                sb.deleteCharAt(sb.length() - 1);
+            }
+            nodeService.setProperty(document, ReviewService.PROP_REVIEW_TS_ACTIVE_REVIEWERS, sb.toString());
+
+            List<AssociationRef> initiatingDocuments = nodeService.getSourceAssocs(nodeRef, ReviewService.ASSOC_RELATED_REVIEW_RECORDS);
+            if (initiatingDocuments != null) {
+                for (AssociationRef assoc: initiatingDocuments) {
+                    reviewService.addRelatedReviewChangeCount(assoc.getSourceRef());
+                }
+            }
+        }
+    }
 
 }

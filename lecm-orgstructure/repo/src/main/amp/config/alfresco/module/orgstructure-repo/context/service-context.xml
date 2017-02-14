@@ -183,7 +183,7 @@
 
     <util:constant id="ORGANIZATION_ENGINEER" static-field="ru.it.lecm.orgstructure.beans.OrgstructureBean.BUSINESS_ROLE_ORGSTRUCTURE_ENGINEER_ID"/>
 
-    <bean id="businessRolesInitiazer" class="ru.it.lecm.orgstructure.beans.AdminBRolesInitializerBean" init-method="init"
+    <bean id="businessRolesInitiazer" class="ru.it.lecm.orgstructure.beans.AdminBRolesInitializerBean" parent="baseBean"
           depends-on="${groupId}.${artifactId}.orgStructureBootstrap, serviceOrgstructure" abstract="true">
         <property name="orgstructureBean" ref="serviceOrgstructure" />
         <property name="transactionService" ref="transactionService"/>
@@ -192,7 +192,7 @@
     </bean>
 
     <bean id="brOrgstructureEngineerInitiazer" class="ru.it.lecm.orgstructure.beans.BROrgstructureEngineerInitializerBean"
-    		parent="businessRolesInitiazer" init-method="init" depends-on="serviceOrgstructure">
+          parent="businessRolesInitiazer" depends-on="serviceOrgstructure">
         <property name="businessRoles">
             <list>
                 <value>#{ORGANIZATION_ENGINEER}</value>

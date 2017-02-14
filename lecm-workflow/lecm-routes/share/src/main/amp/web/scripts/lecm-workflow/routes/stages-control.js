@@ -247,40 +247,6 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
             expandedRow.parentNode.removeChild(expandedRow);
         },
 
-        onExpand: function (record) {
-            if (this.doubleClickLock) return;
-            this.doubleClickLock = true;
-
-            var nodeRef = record.getData("nodeRef");
-            if (nodeRef) {
-                var me = this;
-                var dataObj = YAHOO.lang.merge({
-                    htmlid: this.getExpandedFormId(record),
-                    itemKind: "node",
-                    itemId: nodeRef,
-                    mode: "view",
-                    routeRef: this.routeNodeRef,
-                    mainFormId:this.options.formId
-                }, this.options.expandDataObj);
-                Alfresco.util.Ajax.request({
-                    url: Alfresco.constants.URL_SERVICECONTEXT + this.options.expandDataSource,
-                    dataObj: dataObj,
-                    successCallback: {
-                        scope: this,
-                        fn: function (response) {
-                            if (response.serverResponse != null) {
-                                me.addExpandedRow(record, response.serverResponse.responseText);
-                            }
-                            me.doubleClickLock = false;
-                        }
-                    },
-                    failureMessage: "message.failure",
-                    execScripts: true,
-                    scope: this
-                });
-            }
-        },
-
         _createNewStageItem: function (dialogType, destination) {
             var itemType = LogicECM.module.Routes.Const.ROUTES_CONTAINER.stageItemType,
                 createStageItemDialog = new Alfresco.module.SimpleDialog(this.id + '-createStageItemDialog'),

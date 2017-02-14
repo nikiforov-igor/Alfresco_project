@@ -34,6 +34,11 @@
 			<button type="button">${msg("label.button.clear.approval.data")}</button>
 		</span>
 	</span>
+	<span id="${controlId}-expand-all-button" class="yui-button yui-push-button hidden">
+		<span class="first-child">
+			<button type="button">${msg("label.button.expand.all.stages")}</button>
+		</span>
+	</span>
 	</#if>
 
 	<div id="${controlId}-approval-container" class="approvalContainer hidden">

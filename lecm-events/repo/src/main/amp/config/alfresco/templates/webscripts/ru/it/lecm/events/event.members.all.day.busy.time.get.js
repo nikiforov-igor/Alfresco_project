@@ -5,6 +5,7 @@
         if (args['timeZoneOffset']) {
             timeZoneOffset = parseInt(args['timeZoneOffset']);
         }
+        var additionalFilterFields = args["busyTimeMembersFields"]? args["busyTimeMembersFields"].split(",") : [];
         var isBusy = false;
         for each(var employee in employees) {
             if (employee) {
