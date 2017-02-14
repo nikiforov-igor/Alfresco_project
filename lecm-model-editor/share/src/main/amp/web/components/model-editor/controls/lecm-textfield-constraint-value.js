@@ -8,19 +8,19 @@ LogicECM.module = LogicECM.module || {};
 {
 	var Dom = YAHOO.util.Dom;
 
-	LogicECM.module.TextfieldWithDefaultValue = function(fieldHtmlId) {
-        LogicECM.module.TextfieldWithDefaultValue.superclass.constructor.call(this, "LogicECM.module.TextfieldWithDefaultValue", fieldHtmlId, ["container", "datasource"]);
+	LogicECM.module.TextfieldConstraintValue = function(fieldHtmlId) {
+        LogicECM.module.TextfieldConstraintValue.superclass.constructor.call(this, "LogicECM.module.TextfieldConstraintValue", fieldHtmlId, ["container", "datasource"]);
 		return this;
 	};
 
-	YAHOO.extend(LogicECM.module.TextfieldWithDefaultValue, Alfresco.component.Base, {
+	YAHOO.extend(LogicECM.module.TextfieldConstraintValue, Alfresco.component.Base, {
 		options: {
 			defaultValueDataSource: null,
 			allowInNonCreateMode: false
 		},
 		textField: null,
 		setOptions: function(obj) {
-			LogicECM.module.TextfieldWithDefaultValue.superclass.setOptions.call(this, obj);
+			LogicECM.module.TextfieldConstraintValue.superclass.setOptions.call(this, obj);
 			YAHOO.Bubbling.fire("afterOptionsSet", {
 				eventGroup: this
 			});

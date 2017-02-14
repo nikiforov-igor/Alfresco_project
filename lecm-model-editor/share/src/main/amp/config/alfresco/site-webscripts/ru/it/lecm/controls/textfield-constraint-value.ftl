@@ -21,11 +21,11 @@
 <#else>
 	<#assign defaultValue1 =  field.value?html>
 </#if>
-<@script type='text/javascript' src='${url.context}/res/components/model-editor/controls/lecm-textfield-with-default-value.js' group='model-editor'/>
+<@script type='text/javascript' src='${url.context}/res/components/model-editor/controls/lecm-textfield-constraint-value.js' group='model-editor'/>
 <script type="text/javascript">
 	(function() {
 		function createControl(obj) {
-		var control = new LogicECM.module.TextfieldWithDefaultValue('${fieldHtmlId}').setMessages(${messages});
+		var control = new LogicECM.module.TextfieldConstraintValue('${fieldHtmlId}').setMessages(${messages});
 		control.setOptions(
 				{
 					

@@ -75,42 +75,42 @@
 					</field>
 					<field id="cm:lecmPresentString" label-id="lecm.meditor.lbl.templ.pres.string">
 						<!-- <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/> -->
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.parentRef</control-param>
 							<control-param name="defaultValueDataSource">present-string-constraint/presentString</control-param>
 						</control>
 					</field>
 					<field id="cm:lecmArmUrl" label-id="lecm.meditor.lbl.docs.list.page">
 						<!-- <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/> -->
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.parentRef</control-param>
 							<control-param name="defaultValueDataSource">arm-url-constraint/armUrl</control-param>
 						</control>
 					</field>
 					<field id="cm:lecmCreateUrl" label-id="lecm.meditor.lbl.docs.create.page">
 						<!-- <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/> -->
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.parentRef</control-param>
 							<control-param name="defaultValueDataSource">document-url-constraint/createUrl</control-param>
 						</control>
 					</field>
 					<field id="cm:lecmViewUrl" label-id="lecm.meditor.lbl.docs.view.page">
 						<!-- <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/> -->
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.parentRef</control-param>
 							<control-param name="defaultValueDataSource">document-url-constraint/viewUrl</control-param>
 						</control>
 					</field>
 					<field id="cm:lecmAuthorProperty" label-id="lecm.meditor.lbl.author">
 						<!-- <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/> -->
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.parentRef</control-param>
 							<control-param name="defaultValueDataSource">author-property-constraint/authorProperty</control-param>
 						</control>
 					</field>
 					<field id="cm:lecmRegNumbersProperties" label-id="lecm.meditor.lbl.reg.numbers">
 						<!-- <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/> -->
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.parentRef</control-param>
 							<control-param name="defaultValueDataSource">reg-number-properties-constraint/regNumbersProperties</control-param>
 						</control>
@@ -401,7 +401,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
 					<field id="cm:modeFile" label-id="lecm.meditor.lbl.modelFile.desc">
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.file</control-param>
 						</control>
 					</field>
@@ -415,7 +415,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
 					<field id="cm:lecmModelDescription" label-id="lecm.meditor.lbl.model.desc">
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.model_description</control-param>
 						</control>
 					</field>
@@ -423,7 +423,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
 					<field id="cm:lecmTypeTitle" label-id="lecm.meditor.lbl.doc.desc" read-only="true">
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.typeTitle</control-param>
 						</control>
 					</field>
@@ -438,32 +438,32 @@
 						</control>
 					</field>
 					<field id="cm:lecmPresentString" label-id="lecm.meditor.lbl.templ.pres.string">
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.presentString</control-param>
 						</control>
 					</field>
 					<field id="cm:lecmArmUrl" label-id="lecm.meditor.lbl.docs.list.page">
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.armUrl</control-param>
 						</control>
 					</field>
 					<field id="cm:lecmCreateUrl" label-id="lecm.meditor.lbl.docs.create.page">
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.createUrl</control-param>
 						</control>
 					</field>
 					<field id="cm:lecmViewUrl" label-id="lecm.meditor.lbl.docs.view.page">
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.viewUrl</control-param>
 						</control>
 					</field>
 					<field id="cm:lecmAuthorProperty" label-id="lecm.meditor.lbl.author">
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.authorProperty</control-param>
 						</control>
 					</field>
 					<field id="cm:lecmRegNumbersProperties" label-id="lecm.meditor.lbl.reg.numbers">
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.regNumbersProperties</control-param>
 						</control>
 					</field>
@@ -522,7 +522,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
 					<field id="cm:modeFile" label-id="lecm.meditor.lbl.modelFile.desc">
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.file</control-param>
 						</control>
 					</field>
@@ -536,7 +536,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
 					<field id="cm:lecmModelDescription" label-id="lecm.meditor.lbl.model.desc">
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.model_description</control-param>
 						</control>
 					</field>
@@ -544,7 +544,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
 					<field id="cm:lecmTypeTitle" label-id="lecm.meditor.lbl.dict.desc" read-only="true">
-						<control template="/ru/it/lecm/controls/textfield-with-default-value.ftl">
+						<control template="/ru/it/lecm/controls/textfield-constraint-value.ftl">
 							<control-param name="defaultValue">model.typeTitle</control-param>
 						</control>
 					</field>
