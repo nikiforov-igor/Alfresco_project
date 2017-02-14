@@ -1385,7 +1385,7 @@
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[NOT @lecm\-statemachine\-aspects\:is\-final:true AND NOT @lecm\-statemachine\-aspects\:is\-draft:true AND (@lecm\-document\:author\-assoc\-ref:"#current-user" OR @lecm\-resolutions\:author\-assoc\-ref:"#current-user" OR @lecm\-resolutions\:controller\-assoc\-ref:"#current-user")]]></property>
+                                    <![CDATA[(@lecm\-document\:author\-assoc\-ref:"#current-user" OR @lecm\-resolutions\:author\-assoc\-ref:"#current-user" OR @lecm\-resolutions\:controller\-assoc\-ref:"#current-user") AND NOT @lecm\-statemachine\-aspects\:is\-final:true AND NOT @lecm\-statemachine\-aspects\:is\-draft:true]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                 <property name="cm:name"><![CDATA[Резолюции]]></property>
