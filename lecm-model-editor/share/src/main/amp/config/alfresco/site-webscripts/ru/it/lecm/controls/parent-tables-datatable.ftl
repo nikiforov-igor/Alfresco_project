@@ -47,6 +47,7 @@
 			},
 			nodeRef = '${context.properties.nodeRef}',
 			doctype = '${context.properties.doctype}',
+			associations = obj.associations,
 			data = obj.model.tablesArray;
 
 		new LogicECM.module.ModelEditor.RODatatableControl('LogicECM.module.ModelEditor.ParentTablesDatatable', '${fieldHtmlId}', {
@@ -54,6 +55,7 @@
 			dialogElements: dialogElements,
 			responseSchema: responseSchema,
 			url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/type/parent/tables?nodeRef='+nodeRef+'&doctype='+doctype,
+			associations: associations,
 			data: data
 		}, ${messages});
 	}

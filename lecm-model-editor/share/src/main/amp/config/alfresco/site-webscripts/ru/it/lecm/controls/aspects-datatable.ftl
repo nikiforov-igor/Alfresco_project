@@ -36,6 +36,7 @@
 					key: 'aspect'
 				}]
 			},
+			associations = obj.associations,
 			data = obj.model.aspectsArray;
 
 		new LogicECM.module.ModelEditor.DatatableControl('LogicECM.module.ModelEditor.AspectsDatatable', '${fieldHtmlId}', {
@@ -43,6 +44,7 @@
 			dialogElements: dialogElements,
 			responseSchema: responseSchema,
 			mode: '${form.mode}',
+			associations: associations,
 			data: data
 		}, ${messages});
 	}

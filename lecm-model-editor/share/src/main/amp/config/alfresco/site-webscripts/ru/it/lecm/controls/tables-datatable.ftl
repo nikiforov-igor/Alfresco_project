@@ -36,6 +36,7 @@
 					key: 'table'
 				}]
 			},
+			associations = obj.associations,
 			data = obj.model.tablesArray;
 
 		new LogicECM.module.ModelEditor.DatatableControl('LogicECM.module.ModelEditor.TablesDatatable', '${fieldHtmlId}', {
@@ -43,6 +44,7 @@
 			dialogElements: dialogElements,
 			responseSchema: responseSchema,
 			mode: '${form.mode}',
+			associations: associations,
 			data: data
 		}, ${messages});
 	}

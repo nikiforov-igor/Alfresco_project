@@ -175,14 +175,48 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			        				div11.innerHTML = "<b>Атрибуты</b>"
 			                    	var div12 = el.appendChild(document.createElement('div'));
 			        				div12.id = oRecord.getId()+'props';
-			        				var colDefProps = [
+			        				var dTypes = ['',
+			    						{ label: "Любой",      value: 'd:any'      },
+			    						{ label: "Текст",     value: 'd:text'     },
+			    						{ label: "Контент",  value: 'd:content'  },
+			    						{ label: "Целое",  value: 'd:int'      },
+			    						{ label: "Дл.целое",     value: 'd:long'     },
+			    						{ label: "Дробное",    value: 'd:float'    },
+			    						{ label: "Дл.дробное",   value: 'd:double'   },
+			    						{ label: "Дата",     value: 'd:date'     },
+			    						{ label: "Дата/время", value: 'd:datetime' },
+			    						{ label: "Булево",  value: 'd:boolean'  },
+			    						{ label: "Имя типа",    value: 'd:qname'    },
+			    						{ label: "Ссылка",  value: 'd:noderef'  },
+			    						{ label: "Категория", value: 'd:category' },
+			    						{ label: "М.текст",   value: 'd:mltext'},
+			    						{ label: "Локаль", value: 'd:locale'}
+			    					],
+			    					dTokenised = ['',
+			    						{ label: "Да",  value: 'TRUE'  },
+			    						{ label: "Нет",   value: 'FALSE' },
+			    						{ label: "Обе", value: 'BOTH'  }
+			    					],
+			        				colDefProps = [
 			        					{className:'viewmode-label',key:'_name',label:'Имя',width:170,maxAutoWidth:170},
 			        					{className:'viewmode-label',key:'title',label:'Заголовок',width:170,maxAutoWidth:170},
-			        					{className:'viewmode-label',key:'type',label:'По умолчанию',width:170,maxAutoWidth:170},
-			        					{className:'viewmode-label',key:'default',label:'Тип',width:100,maxAutoWidth:100},
-			        					{className:'viewmode-label',key:'mandatory',label:'Обязательный',width:100,maxAutoWidth:100},
-			        					{className:'viewmode-label',key:'_enabled',label:'Индексировать',width:100,maxAutoWidth:100},
-			        					{className:'viewmode-label',key:'tokenised',label:'Токенизация',width:80,maxAutoWidth:80}
+			        					{className:'viewmode-label',key:'default',label:'По умолчанию',width:170,maxAutoWidth:170},
+			        					{className:'viewmode-label',key:'type',label:'Тип',width:100,maxAutoWidth:100,dropdownOptions:dTypes,formatter:function (el, oRecord, oColumn, oData, oDataTable) {
+			    							var select = new IT.widget.Select({ name: "parentRef", options: oColumn.dropdownOptions, value: oData, showdefault: true, disabled: true });
+			    							select.render(el);
+			    						}},
+			        					{className:'viewmode-label',key:'mandatory',label:'Обязательный',width:100,maxAutoWidth:100,formatter:function (el, oRecord, oColumn, oData, oDataTable) {
+			    							var bChecked = (oData===true) ? ' checked="checked"' : '';
+			    							el.innerHTML = '<input disabled="true" type="checkbox"' + bChecked + ' class="' + YAHOO.widget.DataTable.CLASS_CHECKBOX + '"/>';
+			    						}},
+			        					{className:'viewmode-label',key:'_enabled',label:'Индексировать',width:100,maxAutoWidth:100,formatter:function (el, oRecord, oColumn, oData, oDataTable) {
+			    							var bChecked = (oData===true) ? ' checked="checked"' : '';
+			    							el.innerHTML = '<input disabled="true" type="checkbox"' + bChecked + ' class="' + YAHOO.widget.DataTable.CLASS_CHECKBOX + '"/>';
+			    						}},
+			        					{className:'viewmode-label',key:'tokenised',label:'Токенизация',width:80,maxAutoWidth:80,dropdownOptions:dTokenised,formatter:function (el, oRecord, oColumn, oData, oDataTable) {
+			    							var select = new IT.widget.Select({ name: "parentRef", options: oColumn.dropdownOptions, value: oData, showdefault: true, disabled: true });
+			    							select.render(el);
+			    						}}
 			        				],
 			        				DSProps = new YAHOO.util.DataSource(optionProps, {
 			        					responseSchema:  {fields: [{key: '_name'},{key: 'title'},{key: 'type'},{key: 'default'},{key: 'mandatory'},{key: '_enabled'},{key: 'tokenised'}]}
@@ -197,9 +231,18 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			        				var colDefAssocs = [
 			        					{className:'viewmode-label',key:'_name',label:'Имя',width:170,maxAutoWidth:170},
 			        					{className:'viewmode-label',key:'title',label:'Заголовок',width:170,maxAutoWidth:170},
-			        					{className:'viewmode-label',key:'class',label:'Тип',width:291,maxAutoWidth:291},
-			        					{className:'viewmode-label',key:'mandatory',label:'Обязательный',width:100,maxAutoWidth:100},
-			        					{className:'viewmode-label',key:'many',label:'Множественная',width:203,maxAutoWidth:203}
+			        					{className:'viewmode-label',key:'class',label:'Тип',width:291,maxAutoWidth:291,dropdownOptions:this.configs.associations,formatter:function (el, oRecord, oColumn, oData, oDataTable) {
+			    							var select = new IT.widget.Select({ name: "parentRef", options: oColumn.dropdownOptions, value: oData, showdefault: true, disabled: true });
+			    							select.render(el);
+			    						}},
+			        					{className:'viewmode-label',key:'mandatory',label:'Обязательный',width:100,maxAutoWidth:100,formatter:function (el, oRecord, oColumn, oData, oDataTable) {
+			    							var bChecked = (oData===true) ? ' checked="checked"' : '';
+			    							el.innerHTML = '<input disabled="true" type="checkbox"' + bChecked + ' class="' + YAHOO.widget.DataTable.CLASS_CHECKBOX + '"/>';
+			    						}},
+			        					{className:'viewmode-label',key:'many',label:'Множественная',width:203,maxAutoWidth:203,formatter:function (el, oRecord, oColumn, oData, oDataTable) {
+			    							var bChecked = (oData===true) ? ' checked="checked"' : '';
+			    							el.innerHTML = '<input disabled="true" type="checkbox"' + bChecked + ' class="' + YAHOO.widget.DataTable.CLASS_CHECKBOX + '"/>';
+			    						}}
 			        				],
 			        				DSPAssocs = new YAHOO.util.DataSource(optionAssocs, {
 			        					responseSchema:  {fields: [{key: '_name'},{key: 'class'},{key: 'title'},{key: 'mandatory'},{key: 'many'}]}
@@ -262,7 +305,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 				responseSchema: this.options.responseSchema
 			});
 
-			this.widgets.datatable = new YAHOO.widget.DataTable(this.id + '-datatable', this.options.columnDefinitions, this.widgets.datasource,{"mode":this.options.mode,"ns":this.options.ns});
+			this.widgets.datatable = new YAHOO.widget.DataTable(this.id + '-datatable', this.options.columnDefinitions, this.widgets.datasource,{"mode":this.options.mode,"ns":this.options.ns,associations:this.options.associations});
 			if(this.options.mode==='view'){} else {
 				this.widgets.datatable.subscribe('cellClickEvent', this.deleteRow);
 				this.widgets.datatable.on('valueChangeEvent', function(args) {
