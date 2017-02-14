@@ -71,7 +71,7 @@ LogicECM.module.Review = LogicECM.module.Review || {};
                     type: actionType,
                     id: 'onActionCancelReview',
                     permission: 'edit',
-                    label: this.msg('Отозвать с ознакомления'),
+                    label: this.msg('title.reject'),
                     evaluator: this.actionCancelRelativeReviewEvaluator
                 });
             }
