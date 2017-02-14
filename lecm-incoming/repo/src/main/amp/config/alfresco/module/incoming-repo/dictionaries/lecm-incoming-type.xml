@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<items updateMode="CreateOrUpdate">
+    <item name="lecm-dic:Вид документа" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Вид входящего" type="lecm-doc-dic-dt:typeDictionary">
+                <property name="cm:name">Вид входящего</property>
+                <property name="lecm-dic:valueContainsType">lecm-incoming-dic:documentType</property>
+                <items>
+                    <item name="cm:Письмо" type="lecm-incoming-dic:documentType">
+                        <property name="cm:name">Письмо</property>
+                        <property name="lecm-incoming-dic:review-date-days">3</property>
+                        <property name="lecm-incoming-dic:review-date-type">WORK</property>
+                        <property name="lecm-incoming-dic:execution-date-days">10</property>
+                        <property name="lecm-incoming-dic:execution-date-type">WORK</property>
+                    </item>
+                    <item name="cm:Сопроводительное письмо" type="lecm-incoming-dic:documentType">
+                        <property name="cm:name">Сопроводительное письмо</property>
+                        <property name="lecm-incoming-dic:review-date-days">3</property>
+                        <property name="lecm-incoming-dic:review-date-type">WORK</property>
+                        <property name="lecm-incoming-dic:execution-date-days">10</property>
+                        <property name="lecm-incoming-dic:execution-date-type">WORK</property>
+                    </item>
+                    <item name="cm:Информационное письмо" type="lecm-incoming-dic:documentType">
+                        <property name="cm:name">Информационное письмо</property>
+                        <property name="lecm-incoming-dic:review-date-days">3</property>
+                        <property name="lecm-incoming-dic:review-date-type">WORK</property>
+                    </item>
+                    <item name="cm:Извещение" type="lecm-incoming-dic:documentType">
+                        <property name="cm:name">Извещение</property>
+                    </item>
+                    <item name="cm:Заявление" type="lecm-incoming-dic:documentType">
+                        <property name="cm:name">Заявление</property>
+                        <property name="lecm-incoming-dic:review-date-days">5</property>
+                        <property name="lecm-incoming-dic:review-date-type">CALENDAR</property>
+                        <property name="lecm-incoming-dic:execution-date-days">30</property>
+                        <property name="lecm-incoming-dic:execution-date-type">CALENDAR</property>
+                    </item>
+                    <item name="cm:Напоминание" type="lecm-incoming-dic:documentType">
+                        <property name="cm:name">Напоминание</property>
+                        <property name="lecm-incoming-dic:review-date-days">3</property>
+                        <property name="lecm-incoming-dic:review-date-type">WORK</property>
+                    </item>
+                    <item name="cm:Обращение" type="lecm-incoming-dic:documentType">
+                        <property name="cm:name">Обращение</property>
+                        <property name="lecm-incoming-dic:review-date-days">5</property>
+                        <property name="lecm-incoming-dic:review-date-type">CALENDAR</property>
+                        <property name="lecm-incoming-dic:execution-date-days">30</property>
+                        <property name="lecm-incoming-dic:execution-date-type">CALENDAR</property>
+                    </item>
+                    <item name="cm:Подтверждение" type="lecm-incoming-dic:documentType">
+                        <property name="cm:name">Подтверждение</property>
+                        <property name="lecm-incoming-dic:review-date-days">3</property>
+                        <property name="lecm-incoming-dic:review-date-type">WORK</property>
+                    </item>
+                    <item name="cm:Претензия" type="lecm-incoming-dic:documentType">
+                        <property name="cm:name">Претензия</property>
+                        <property name="lecm-incoming-dic:review-date-days">3</property>
+                        <property name="lecm-incoming-dic:review-date-type">WORK</property>
+                        <property name="lecm-incoming-dic:execution-date-days">10</property>
+                        <property name="lecm-incoming-dic:execution-date-type">WORK</property>
+                    </item>
+                    <item name="cm:Приглашение" type="lecm-incoming-dic:documentType">
+                        <property name="cm:name">Приглашение</property>
+                        <property name="lecm-incoming-dic:review-date-days">3</property>
+                        <property name="lecm-incoming-dic:review-date-type">WORK</property>
+                    </item>
+                    <item name="cm:Реклама" type="lecm-incoming-dic:documentType">
+                        <property name="cm:name">Реклама</property>
+                    </item>
+                    <item name="cm:Уведомление" type="lecm-incoming-dic:documentType">
+                        <property name="cm:name">Уведомление</property>
+                    </item>
+                </items>
+            </item>
+        </items>
+    </item>
+</items>

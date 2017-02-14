@@ -48,14 +48,13 @@
     <bean id="${groupId}.${artifactId}.internalDictionaryBootstrap"
           parent="lecmDictionaryBootstrap"
           depends-on="ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
-                    internal.LogicEcmInternalBootstrap, regNumbers.regNumbersBootstrap">
+                    internal.LogicEcmInternalBootstrap, regNumbers.regNumbersBootstrap, eds.dictionary.bootstrap">
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-doc-type-dic.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-typical-answers-dic.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-br-items.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-rn-items.xml</value>
-                <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-doc-type-dic-items.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-bj-objectType-items.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-nt-items.xml</value>
             </list>
@@ -148,7 +147,7 @@
                 <value>lecm-eds-document:file-register-assoc</value>
                 <value>lecm-document:subject-assoc</value>
                 <value>lecm-internal:recipients-assoc</value>
-                <value>lecm-internal:doc-type-assoc</value>
+                <value>lecm-eds-document:document-type-assoc</value>
             </list>
         </property>
     </bean>

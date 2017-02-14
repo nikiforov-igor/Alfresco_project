@@ -6,6 +6,11 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
+    <util:list id="outgoing.models">
+        <value>alfresco/module/${artifactId}/models/lecm-outgoing-model.xml</value>
+        <value>alfresco/module/${artifactId}/models/lecm-outgoing-dictionaries-model.xml</value>
+    </util:list>
+
 	<bean id="outgoing.model.bootstrap" parent="modelsToRepositoryLoader"
 		  depends-on="dictionaryBootstrap,
 					  documents.LogicEcmModelsBootstrap,
@@ -15,7 +20,7 @@
 					  dictionary.fileRegister.LogicEcmModelsBootstrap,
 					  ru.it.lecm.contractors.lecm-contractors-repo.contractors-model-bootstrap,
 					  lecm.sign2.helper.model.bootstrap"
-		  p:models="alfresco/module/${artifactId}/models/lecm-outgoing-model.xml"
+		  p:models-ref="outgoing.models"
 		  p:labels="alfresco/module/${artifactId}/messages/lecm-outgoing-model"/>
 
 	<util:list id="outgoing.dictionaries">
@@ -23,12 +28,14 @@
 		<value>alfresco/module/${artifactId}/dictionaries/outgoing-br-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/outgoing-rn-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/outgoing-nt-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-outgoing-type.xml</value>
 	</util:list>
 	<bean id="outgoing.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
 					  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
 					  ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
 					  businessJournalLogEventsPolicy,
+					  eds.dictionary.bootstrap,
 					  regNumbers.regNumbersBootstrap"
 		  p:dictionaries-ref="outgoing.dictionaries"/>
 

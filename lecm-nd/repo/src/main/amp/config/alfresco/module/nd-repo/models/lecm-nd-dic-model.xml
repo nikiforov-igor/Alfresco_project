@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-nd-dic:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Модель справочников НД</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+    <imports>
+        <import uri="http://www.it.ru/logicECM/document/dictionaries/docType/1.0" prefix="lecm-doc-dic-dt"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/ND/dictionaries/1.0" prefix="lecm-nd-dic"/>
+    </namespaces>
+
+    <types>
+        <!--Справочник видов документа-->
+        <type name="lecm-nd-dic:documentType">
+            <title>ND Document Type</title>
+            <parent>lecm-doc-dic-dt:documentType</parent>
+        </type>
+    </types>
+</model>

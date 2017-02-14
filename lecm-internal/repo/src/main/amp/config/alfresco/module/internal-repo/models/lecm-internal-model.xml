@@ -52,6 +52,7 @@
 			<title>Внутренний</title>
 			<parent>lecm-eds-document:base</parent>
 			<properties>
+                <!--deprecated (Больше не используется)-->
 				<property name="lecm-internal:doc-type-assoc-ref">
 					<title>Вид внутреннего документа</title>
 					<type>d:text</type>
@@ -61,6 +62,7 @@
 						<tokenised>false</tokenised>
 					</index>
 				</property>
+                <!--deprecated (Больше не используется)-->
 				<property name="lecm-internal:doc-type-assoc-text-content">
 					<title>Вид внутреннего документа</title>
 					<type>d:text</type>
@@ -110,6 +112,8 @@
 						<many>true</many>
 					</target>
 				</association>
+
+                <!--deprecated (Больше не используется)-->
 				<association name="lecm-internal:doc-type-assoc">
 					<title>Вид внутреннего документа</title>
 					<source>

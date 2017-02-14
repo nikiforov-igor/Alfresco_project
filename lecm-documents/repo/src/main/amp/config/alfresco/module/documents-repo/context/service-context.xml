@@ -210,7 +210,7 @@
             </list>
         </property>
     </bean>
-    
+
     <bean id="documents.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="documents.LogicEcmModelsConnectionTypesBootstrap,
                         documents.LogicEcmModelsStampsBootstrap,
@@ -263,7 +263,7 @@
         </property>
         <property name="documentGlobalSettingsService" ref="documents.global-settings.service"/>
     </bean>
-    
+
     <bean id="documentConnectionService" class="ru.it.lecm.documents.beans.DocumentConnectionServiceImpl" parent="baseBean">
         <property name="searchService" ref="SearchService"/>
         <property name="namespaceService" ref="namespaceService"/>
