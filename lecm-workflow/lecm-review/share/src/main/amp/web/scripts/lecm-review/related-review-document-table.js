@@ -48,7 +48,9 @@ LogicECM.module.Review = LogicECM.module.Review || {};
                                 text: this.msg('message.details.success')
                             });
 
-                            this.options.currentValue = this.options.currentValue.replace("," + rowData.nodeRef, "").replace(rowData.nodeRef + ",", "").replace(rowData.nodeRef, "");
+                            this.options.currentValue = this.options.currentValue.split(",").filter(function (item) {
+                                return item != rowData.nodeRef;
+                            }).join();
                             this.dataGrid.datagridMeta.searchConfig.filter = this.getSearchConfigFilter();
 
                             Bubbling.fire("dataItemsDeleted",
