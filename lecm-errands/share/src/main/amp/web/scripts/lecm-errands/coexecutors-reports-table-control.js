@@ -120,6 +120,7 @@ LogicECM.errands = LogicECM.errands || {};
                     actions: actions,
                     currentUser: currentUser,
                     currentDocumentStatus: currentDocumentStatus,
+                    documentNodeRef: this.options.documentNodeRef,
                     datagridMeta: {
                         itemType: this.tableData.rowType,
                         datagridFormId: this.options.datagridFormId,
@@ -262,6 +263,7 @@ LogicECM.errands = LogicECM.errands || {};
                 this.doReportsTransfer([nodeRef]);
             }
         },
+        //подготовка данных для формы
         doReportsTransfer: function (reportsRefs) {
             Alfresco.util.Ajax.jsonRequest(
                 {
@@ -271,11 +273,8 @@ LogicECM.errands = LogicECM.errands || {};
                     successCallback: {
                         fn: function (response) {
                             var me = response.config.scope;
-                            if (response.json.success) {
-                                reportsRefs.forEach(function (nodeRef) {
-                                    me._itemUpdate(nodeRef);
-                                });
-                                me.updateExecutorReport(response.json.data);
+                            if (response.json.formData) {
+                                me.processExecutionReport(response.json.formData);
                             } else {
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
@@ -284,81 +283,66 @@ LogicECM.errands = LogicECM.errands || {};
                             }
                         }
                     },
-                    failureCallback: {
-                        fn: function (response) {
-                            var me = response.config.scope;
-                            Alfresco.util.PopupManager.displayMessage(
-                                {
-                                    text: me.msg("message.details.failure")
-                                });
-                        }
-                    },
+                    failureMessage: Alfresco.util.message("message.details.failure"),
                     scope: this
                 });
         },
-        //обновление форм отчета исполнителя
-        updateExecutorReport: function (data) {
-            var transferedReportsData = data.items;
-            //получаем формы работы над поручением исполнителя через форму отчетов соисполнителей
-            var coexecutorsReportElementId = Dom.get(this.id + "-body").parentElement.parentElement.id;
-            var formTemplateString = coexecutorsReportElementId.substring(0, coexecutorsReportElementId.indexOf("-coexecutors-reports", 0));
-
-            var executorReportDomElement = Dom.get(formTemplateString + "-exec");
-            //Почему-то текст отчета не в блоке  ..-exec-report, а рядом с ним
-            var executorReportRichTextFrame = Selector.query(".control.richtext.editmode .value-div iframe ", executorReportDomElement, true);
-            if (executorReportRichTextFrame) {
-                var executorReportTextElement = Selector.query("body", executorReportRichTextFrame.contentDocument, true);
-            }
-            var executorReportAttachmentsDomElement = Dom.get(formTemplateString + "-exec-attachments");
-            var executorReportConnectionsDomElement = Dom.get(formTemplateString + "-exec-connections");
-            var executorReportAttachmentsULElement = Selector.query("ul.data-list", executorReportAttachmentsDomElement, true);
-            var executorReportConnectionsULElement = Selector.query("ul.data-list", executorReportConnectionsDomElement, true);
-            var executorReportAttachmentsCountDomElement = Selector.query(".count", executorReportAttachmentsDomElement, true);
-            var executorReportConnectionsCountDomElement = Selector.query(".count", executorReportConnectionsDomElement, true);
-
-
-            //добавляем перенесенные значения
-            for (var i = 0; i < transferedReportsData.length; i++) {
-                //заполняем текст отчета
-                if (executorReportTextElement) {
-                    executorReportTextElement.innerHTML += transferedReportsData[i].reportText;
-                }
-                var liElementTemplate = "<li title={name}>" +
-                    "<img src='/share/res/components/images/filetypes/{fileIcon}' class='file-icon'/> " +
-                    "<a href={link}>{name}</a></li>";
-                //добавляем вложения
-                if (executorReportAttachmentsULElement) {
-                    var attachments = transferedReportsData[i].attachments;
-                    attachments.forEach(function (a) {
-                        var fileIcon = Alfresco.util.getFileIcon(a.name, "cm:content", 16);
-                        var attachmentEl = YAHOO.lang.substitute(liElementTemplate, {
-                            fileIcon: fileIcon,
-                            name: a.name,
-                            link: a.link
-                        });
-                        executorReportAttachmentsULElement.innerHTML += attachmentEl;
-                    });
-                }
-                //добавляем связанные документы
-                if (executorReportConnectionsULElement) {
-                    var connections = transferedReportsData[i].connections;
-                    var fileIcon = "generic-file-16.png";
-                    connections.forEach(function (c) {
-                        var connectionEl = YAHOO.lang.substitute(liElementTemplate, {
-                            fileIcon: fileIcon,
-                            name: c.name,
-                            link: c.link
-                        });
-                        executorReportConnectionsULElement.innerHTML += connectionEl;
-                    });
-                }
-            }
-            //обновляем каунтеры
-            if (executorReportAttachmentsCountDomElement) {
-                executorReportAttachmentsCountDomElement.innerHTML = " (" + executorReportAttachmentsULElement.children.length + ")";
-            }
-            if (executorReportConnectionsCountDomElement) {
-                executorReportConnectionsCountDomElement.innerHTML = " (" + executorReportConnectionsULElement.children.length + ")";
+        //создание/редактирование отчета исполнителя
+        processExecutionReport: function(formData, reportsRefs) {
+            var formConnections = formData.formConnections;
+            var formAttachments = formData.formAttachments;
+            var formText = formData.formText;
+            var formArgs = {
+                'prop_lecm-errands-ts_execution-report-text': formText,
+                'assoc_lecm-errands-ts_execution-report-attachment-assoc': formAttachments,
+                'executionConnectedDocs': formConnections
+            };
+            var nodeRef = this.options.documentNodeRef;
+            if (nodeRef) {
+                var formId = "edit-execution-report";
+                var executionReportDialog = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
+                executionReportDialog.setOptions({
+                    nodeRef: nodeRef,
+                    templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
+                    actionUrl: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/errands/executionReport/process?nodeRef=' + nodeRef,
+                    templateRequestParams: {
+                        formId: "executionReportForm",
+                        itemKind: "type",
+                        itemId: "lecm-errands-ts:execution-report",
+                        mode: "create",
+                        showCancelButton: true,
+                        showCaption: false,
+                        submitType: 'json',
+                        args: JSON.stringify(formArgs)
+                    },
+                    width: '60em',
+                    destroyOnHide: true,
+                    doBeforeDialogShow: {
+                        fn: function (form, simpleDialog) {
+                            simpleDialog.dialog.setHeader(this.msg("label.execution.report.form.title"));
+                            simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
+                                LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
+                                LogicECM.module.Base.Util.formDestructor(event, args, params);
+                            }, {moduleId: simpleDialog.id}, this);
+                        },
+                        scope: this
+                    },
+                    onSuccess: {
+                        fn: function (response) {
+                            window.location.reload();
+                        }
+                    },
+                    onFailure: {
+                        fn: function (response) {
+                            Alfresco.util.PopupManager.displayMessage(
+                                {
+                                    text: Alfresco.util.message("message.details.failure")
+                                });
+                            executionReportDialog.hide();
+                        }
+                    }
+                });
+                executionReportDialog.show();
             }
         }
     }, true)

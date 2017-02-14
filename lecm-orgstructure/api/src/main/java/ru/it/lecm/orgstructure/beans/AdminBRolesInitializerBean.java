@@ -1,49 +1,36 @@
 package ru.it.lecm.orgstructure.beans;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.service.transaction.TransactionService;
 import org.springframework.context.ApplicationEvent;
-import org.springframework.extensions.surf.util.AbstractLifecycleBean;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
+
+import ru.it.lecm.base.beans.BaseBean;
 
 /**
  * User: dbashmakov
  * Date: 04.04.13
  * Time: 10:27
  */
-public abstract class AdminBRolesInitializerBean extends AbstractLifecycleBean {
+public abstract class AdminBRolesInitializerBean extends BaseBean {
 
     public static final String ADMIN = "admin";
     protected OrgstructureBean orgstructureBean;
-    protected TransactionService transactionService;
     protected List<String> businessRoles;
-    protected NodeService nodeService;
     protected PersonService personService;
 
     public void setPersonService(PersonService personService) {
         this.personService = personService;
     }
 
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
-
     public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
         this.orgstructureBean = orgstructureBean;
-    }
-
-    public void setTransactionService(TransactionService transactionService) {
-        this.transactionService = transactionService;
     }
 
     public void setBusinessRoles(List<String> businessRoles) {
@@ -54,46 +41,6 @@ public abstract class AdminBRolesInitializerBean extends AbstractLifecycleBean {
         return businessRoles;
     }
 
-    public void init() {
-//        AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-//            @Override
-//            public NodeRef doWork() throws Exception {
-//                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-//                    @Override
-//                    public NodeRef execute() throws Throwable {
-//                        NodeRef adminEmployee = getAdminEmployee();
-//                        for (String businessRole : getBusinessRoles()) {
-//                            addBusinessRole(adminEmployee, businessRole);
-//                        }
-//                        return null;
-//                    }
-//                });
-//            }
-//        };
-//        AuthenticationUtil.runAsSystem(raw);
-    }
-    
-    @Override
-	protected void onBootstrap(ApplicationEvent event)
-	{
-    	AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-          @Override
-          public NodeRef doWork() throws Exception {
-              return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                  @Override
-                  public NodeRef execute() throws Throwable {
-                      NodeRef adminEmployee = getAdminEmployee();
-                      for (String businessRole : getBusinessRoles()) {
-                          addBusinessRole(adminEmployee, businessRole);
-                      }
-                      return null;
-                  }
-              });
-          }
-      };
-      AuthenticationUtil.runAsSystem(raw);
-	}
-    
     @Override
 	protected void onShutdown(ApplicationEvent event)
 	{
@@ -123,5 +70,18 @@ public abstract class AdminBRolesInitializerBean extends AbstractLifecycleBean {
             nodeService.createAssociation(adminEmployee, adminPerson, OrgstructureBean.ASSOC_EMPLOYEE_PERSON);
         }
         return adminEmployee;
+    }
+
+    @Override
+    protected void initServiceImpl() {
+	NodeRef adminEmployee = getAdminEmployee();
+        for (String businessRole : getBusinessRoles()) {
+            addBusinessRole(adminEmployee, businessRole);
+        }
+    }
+
+    @Override
+    public NodeRef getServiceRootFolder() {
+        return null;
     }
 }

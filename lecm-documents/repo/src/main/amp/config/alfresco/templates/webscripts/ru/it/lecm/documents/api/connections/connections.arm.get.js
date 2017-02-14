@@ -1,5 +1,5 @@
 function main() {
-    var nodeRef = args["nodeRef"];
+    var nodeRef = args["itemId"];
 	var connections = [];
 	var connectionsWithDocument = [];
 	if (lecmPermission.hasPermission(nodeRef, "_lecmPerm_LinksView")) {

@@ -5179,38 +5179,6 @@ if(doc){
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
-                                                                    <node>
-                                                                        <type>inputVariable</type>
-                                                                        <name>3f08f16d-0e8e-45cf-9ecf-a919aa5d9f30
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/150c4b44-cf0c-484c-b0a0-3cbd26f5b08d
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>inputFromType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[lecm-errands:project-report-ref]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[executionReportRef]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -7551,38 +7519,6 @@ if (document != null) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
-                                                                    <node>
-                                                                        <type>inputVariable</type>
-                                                                        <name>302d5e25-003e-4db5-8f01-d1d53e55c529
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/acf70ab4-2111-43c4-8b74-8db82e1f7250
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>inputFromType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[lecm-errands:project-report-ref]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[executionReportRef]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -8701,45 +8637,6 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                     </node>
                                                     <node>
                                                         <type>transition</type>
-                                                        <name>c43d46c3-fbf4-4426-a8d5-38904c560a4e</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/fecdbc1a-1911-48fb-b354-e04d010cb485
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionExpression</name>
-                                                                <value>
-                                                                    <![CDATA[doc.attr("lecm-errands:approver-result") == "executed"]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/2dfadfb3-6ae8-4ed5-8358-90fca1ba3458
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>transition</type>
                                                         <name>046110d2-fc62-48b1-acc3-26207271abb6</name>
                                                         <nodeRef>
                                                             workspace://SpacesStore/85cc5c7d-c3ec-4107-bde5-2f8480d8cde2
@@ -8804,31 +8701,6 @@ ErrandsCompletionSignalScript.processCompletionSignal();]]></value>
                                             <subFolder>
                                                 <name>transitions</name>
                                                 <nodes>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
-                                                        <name>c0824e04-5933-4fb4-814a-3d75f816cf4e</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/f15c80e5-531d-46ff-91c7-1964648812ad
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[var document = bpm_package.children[0];
-if (document != null) {
-   document.properties["lecm-errands:controller-approve-result"] = "";
-   document.save();
-}]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value><![CDATA[Сброс служебных переменных]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
                                                     <node>
                                                         <type>ScriptActionEntity</type>
                                                         <name>eeadec04-773c-4639-bf2f-f830b8d505d3</name>
@@ -9167,12 +9039,46 @@ if (document) {
                                                         </subFolders>
                                                     </node>
                                                     <node>
-                                                        <type>transitionWorkflow</type>
-                                                        <name>b9ebb862-923c-455e-ae7a-a682521d1de7</name>
+                                                        <type>userTransition</type>
+                                                        <name>e4cde3c7-a6c2-443e-b843-d47832c7c707</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/75986e0e-43f5-49e1-895e-b4d24ac60b6c
+                                                            workspace://SpacesStore/1a0e9ec9-eed1-4214-a999-1953571decff
                                                         </nodeRef>
                                                         <properties>
+                                                            <property>
+                                                                <name>transition-script</name>
+                                                                <value><![CDATA[var doc = bpm_package.children[0];
+if (doc) {
+  var currentUser = orgstructure.getCurrentEmployee();
+  doc.properties["lecm-errands:execution-report-status"] = "ACCEPT";
+  doc.save();
+  var autoCloseParent = doc.properties["lecm-errands:auto-close"];
+  if (autoCloseParent) {
+    var additionalDoc = errands.getAdditionalDocument(doc.nodeRef.toString());
+    if (additionalDoc) {
+      additionalDoc.properties["lecm-eds-aspect:completion-signal-reason"] = doc.properties["lecm-errands:execution-report"];
+      additionalDoc.save();
+    }
+  }
+
+  var executor = null;
+  var executorAssoc = doc.assocs["lecm-errands:executor-assoc"];
+  if (executorAssoc && executorAssoc.length) {
+    executor = executorAssoc[0];
+  }
+  if (executor) {
+      notifications.sendNotificationFromCurrentUser({
+        recipients: [executor],
+        templateCode: 'ERRANDS_ACCEPT_EXEC',
+        templateConfig: {
+          mainObject: doc,
+          eventExecutor: currentUser
+        }
+      });
+  }
+
+}]]></value>
+                                                            </property>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
                                                                 <value><![CDATA[true]]></value>
@@ -9182,19 +9088,13 @@ if (document) {
                                                                 <value><![CDATA[Подтвердить исполнение]]></value>
                                                             </property>
                                                             <property>
-                                                                <name>workflowId</name>
-                                                                <value>
-                                                                    <![CDATA[activiti$errandsInitiatorApprove]]></value>
-                                                            </property>
-                                                            <property>
                                                                 <name>do-not-ask-for-confirmation</name>
                                                                 <value><![CDATA[false]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
-                                                            <transitionStatusAspect/>
                                                             <transitionLabelAspect/>
-                                                            <workflowAspect/>
+                                                            <transitionStatusAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -9205,7 +9105,45 @@ if (document) {
                                                             </association>
                                                         </associations>
                                                         <roleAssociations/>
-                                                        <subFolders/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>43718eaa-4f48-4fc7-9b1e-94e3db9411dc
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/9fae4799-af66-46d7-98a4-e92598ee9e08
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно только получателю отчета]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
                                                     </node>
                                                 </nodes>
                                             </subFolder>
@@ -9356,28 +9294,6 @@ if (document) {
                                             <subFolder>
                                                 <name>transitions</name>
                                                 <nodes>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
-                                                        <name>82609393-6cf5-42a7-b8a7-45031eec63ce</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/f9b5aa5a-74db-494f-9573-0d15a7c2b78d
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value>
-                                                                    <![CDATA[execution.setVariable("controllerApproveResult", "");]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value><![CDATA[Очистка переменных]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
