@@ -12,7 +12,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 (function () {
 
 	LogicECM.module.Approval.ApprovalListDataGridControl = function (containerId, documentNodeRef) {
-		var createApprovalListButtonElement, addStageButtonElement, clearButtonElement;
+		var createApprovalListButtonElement, addStageButtonElement, clearButtonElement, expandAllStagesElement;
 		this.documentNodeRef = documentNodeRef;
 
 		createApprovalListButtonElement = YAHOO.util.Dom.get(containerId + '-create-approval-list-button');
@@ -168,6 +168,11 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		LogicECM.module.Approval.ApprovalListDataGridControl.superclass.constructor.call(this, containerId);
 
 		this.name = 'LogicECM.module.Approval.ApprovalListDataGridControl';
+
+        this.expandAllStagesButton = Alfresco.util.createYUIButton(this, 'expand-all-button', this.onExpandAllStages);
+        this.approvalStateSettings.NEW.revealElements.push(this.expandAllStagesButton);
+        this.approvalStateSettings.ACTIVE.revealElements.push(this.expandAllStagesButton);
+        this.approvalStateSettings.COMPLETE.revealElements.push(this.expandAllStagesButton);
 
 		YAHOO.Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
 
@@ -662,6 +667,12 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					}]
 			});
 		},
+
+        onExpandAllStages: function () {
+            YAHOO.Bubbling.fire('expandAllGridRows', {
+            	id: this.id
+			});
+        },
 
 		fillCurrentApprovalState: function () {
 			var approvalMsgTemplate = '{msg} ({additionalMsg})';

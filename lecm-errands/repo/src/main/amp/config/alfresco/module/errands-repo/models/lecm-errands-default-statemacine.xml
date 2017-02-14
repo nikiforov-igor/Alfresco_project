@@ -5179,38 +5179,6 @@ if(doc){
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
-                                                                    <node>
-                                                                        <type>inputVariable</type>
-                                                                        <name>3f08f16d-0e8e-45cf-9ecf-a919aa5d9f30
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/150c4b44-cf0c-484c-b0a0-3cbd26f5b08d
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>inputFromType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[lecm-errands:project-report-ref]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[executionReportRef]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -7544,38 +7512,6 @@ if (document != null) {
                                                                                 <name>inputToValue</name>
                                                                                 <value>
                                                                                     <![CDATA[executionConnectedDocs]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>inputVariable</type>
-                                                                        <name>302d5e25-003e-4db5-8f01-d1d53e55c529
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/acf70ab4-2111-43c4-8b74-8db82e1f7250
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>inputFromType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[lecm-errands:project-report-ref]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[executionReportRef]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>

@@ -1,6 +1,3 @@
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/document-errands.js"></@script>
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/document-errands.css" />
-
 <#assign id=containerHtmlId/>
 
 <h2 id="${id}-heading" class="dark">
@@ -57,23 +54,24 @@
             panel: "${id}-formContainer"
         });
 
-        documentErrandsComponent = new LogicECM.DocumentErrands("${id}").setOptions(
-                {
-                    nodeRef: "${args.nodeRef}",
-                    title: "${msg('heading')}"
-                }).setMessages(${messages});
+        documentErrandsComponent = new LogicECM.DocumentErrands("${id}").setOptions({
+			nodeRef: "${args.nodeRef}",
+			title: "${msg('heading')}"
+		}).setMessages(${messages});
 
-        errandsComponent = new LogicECM.module.Errands.dashlet.Errands("${id}").setOptions(
-                {
-                    itemType: "lecm-errands:document",
-                    destination: LogicECM.module.Documents.ERRANDS_SETTINGS.nodeRef,
-                    parentDoc: "${nodeRef}"
-                <#if subjectAssoc??>,
-                    parentDocSubjectAssoc: "${subjectAssoc}"
-                </#if>
-                }).setMessages(${messages});
+        errandsComponent = new LogicECM.module.Errands.dashlet.Errands("${id}").setOptions({
+			itemType: "lecm-errands:document",
+			destination: LogicECM.module.Documents.ERRANDS_SETTINGS.nodeRef,
+			parentDoc: "${nodeRef}"
+        <#if subjectAssoc??>,
+            parentDocSubjectAssoc: "${subjectAssoc}"
+        </#if>
+		}).setMessages(${messages});
     }
-    YAHOO.util.Event.onContentReady("${id}-formContainer", initComponent);
+	LogicECM.module.Base.Util.loadResources([
+		'scripts/lecm-errands/lecm-errands-dashlet.js',
+		'/scripts/lecm-errands/document-errands.js'
+	],[], initComponent);
 })();
 //]]>
 </script>

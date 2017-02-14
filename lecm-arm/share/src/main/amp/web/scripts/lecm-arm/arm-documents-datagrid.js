@@ -34,8 +34,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
     YAHOO.lang.extend(LogicECM.module.ARM.DataGrid, LogicECM.module.Base.DataGrid);
 
     YAHOO.lang.augmentObject(LogicECM.module.ARM.DataGrid.prototype, {
-        doubleClickLock: false,
-
         PREFERENCE_KEY: "ru.it.lecm.arm.",
 
         armMenuState: {},
@@ -244,34 +242,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             }
             this.sendRequestToUpdateGrid();
         },
-
-        onExpand: function(record) {
-	        if (this.doubleClickLock) return;
-	        this.doubleClickLock = true;
-
-	        var nodeRef = record.getData("nodeRef");
-	        if (nodeRef != null) {
-		        var me = this;
-		        Alfresco.util.Ajax.request(
-			        {
-				        url: Alfresco.constants.PROXY_URI + "lecm/document/connections/api/armPresentation",
-				        dataObj: {
-					        nodeRef: nodeRef
-				        },
-				        successCallback: {
-					        fn: function(response) {
-						        if (response.serverResponse != null) {
-							        me.addExpandedRow(record, response.serverResponse.responseText);
-						        }
-						        me.doubleClickLock = false;
-					        }
-				        },
-				        failureMessage: "message.failure",
-				        execScripts: true,
-				        scope: this
-			        });
-	        }
-	    },
 
         getSearchQuery: function (node, buffer, parentId) {
             if (node) {
