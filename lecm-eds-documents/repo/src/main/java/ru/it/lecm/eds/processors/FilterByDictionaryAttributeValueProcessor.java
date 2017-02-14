@@ -27,13 +27,12 @@ public class FilterByDictionaryAttributeValueProcessor extends SearchQueryProces
     @Override
     public String getQuery(Map<String, Object> params) {
         StringBuilder sbQuery = new StringBuilder();
-        List<NodeRef> records;
         Object dictionaryName = params != null ? params.get("dic") : null;
         Object attributeName = params != null ? params.get("attr") : null;
         Serializable attributeValue = params != null ? (Serializable) params.get("value") : null;
 
         if (dictionaryName != null && attributeName != null && attributeValue != null) {
-            records = dictionaryBean.getRecordsByParamValue(dictionaryName.toString(), QName.createQName(attributeName.toString(), namespaceService), attributeValue);
+            List<NodeRef> records = dictionaryBean.getRecordsByParamValue(dictionaryName.toString(), QName.createQName(attributeName.toString(), namespaceService), attributeValue);
             if (records != null && records.size() != 0) {
                 for (int i = 0; i < records.size(); i++) {
                     sbQuery.append("\"").append(records.get(i)).append("\"");
@@ -42,10 +41,10 @@ public class FilterByDictionaryAttributeValueProcessor extends SearchQueryProces
                     }
                 }
             } else {
-                sbQuery.append("NOT_REF");
+                sbQuery.append("\"").append("NOT_REF").append("\"");
             }
         } else {
-            sbQuery.append("NOT_REF");
+            sbQuery.append("\"").append("NOT_REF").append("\"");
         }
         return sbQuery.toString();
     }
