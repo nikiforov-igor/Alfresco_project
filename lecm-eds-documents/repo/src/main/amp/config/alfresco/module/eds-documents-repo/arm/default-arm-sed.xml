@@ -1465,7 +1465,7 @@
                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[8]]></property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecm-resolutions:limitation-date]]></property>
+                                            <![CDATA[lecm-resolutions:limitation-date-text]]></property>
                                         <property name="lecm-arm:field-title"><![CDATA[Срок исполнения]]></property>
                                         <property name="cm:name"><![CDATA[ef92389e-7fe7-4675-b267-694b106364c4]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
