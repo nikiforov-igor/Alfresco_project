@@ -582,6 +582,7 @@
                     <field id="lecm-errands:controller-assoc">
                         <control>
                             <control-param name="showSearch">true</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:report-required"/>
@@ -914,6 +915,7 @@
                         <control>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="changeItemsFireAction">errandControllerChanged</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                     </field>
 
@@ -1202,6 +1204,7 @@
                     <field id="lecm-errands:controller-assoc" set="left">
                         <control>
                             <control-param name="showSearch">true</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                     </field>
 
@@ -1300,6 +1303,13 @@
                     <!-- Без утверждения инициатором -->
                     <show id="lecm-errands:without-initiator-approval"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-errands:controller-assoc">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
             <form id="searchQueryGrid">
                 <field-visibility>
@@ -2783,7 +2793,11 @@
                         </control>
                     </field>
 
-                    <field id="lecmErrandWf:controllerAssoc"/>
+                    <field id="lecmErrandWf:controllerAssoc">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                        </control>
+                    </field>
                     <field id="lecmErrandWf:coexecutorsAssoc">
                         <control>
                             <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>

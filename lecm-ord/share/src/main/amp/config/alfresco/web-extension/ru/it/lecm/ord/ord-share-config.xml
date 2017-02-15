@@ -212,6 +212,7 @@
                         <control>
                             <control-param name="useStrictFilterByOrg">true</control-param>
                             <control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -259,6 +260,11 @@
                 </field-visibility>
 				<appearance>
 					<field id="lecmApproveAspects:approvalFolderRef" label="Согласование"/>
+                    <field id="lecm-errands:controller-assoc">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                        </control>
+                    </field>
 				</appearance>
             </form>
 
