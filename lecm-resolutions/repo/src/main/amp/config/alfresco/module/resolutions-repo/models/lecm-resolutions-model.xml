@@ -9,6 +9,7 @@
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
         <import uri="http://www.it.ru/logicECM/resolutions/dictionaries/1.0" prefix="lecm-resolutions-dic"/>
+        <import uri="http://www.it.ru/logicECM/errands-aspects/1.0" prefix="lecm-errands-aspect"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/resolutions/1.0" prefix="lecm-resolutions"/>
@@ -345,6 +346,10 @@
                     </target>
                 </association>
             </associations>
+
+            <mandatory-aspects>
+                <aspect>lecm-errands-aspect:errandsExecutorsAspect</aspect>
+            </mandatory-aspects>
         </type>
     </types>
 </model>
