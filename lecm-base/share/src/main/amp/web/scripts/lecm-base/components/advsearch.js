@@ -113,7 +113,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     form.htmlid = this.options.searchFormId + "-" + form.type.split(":").join("_");
 
                     // load the form component for the appropriate type
-                    var formUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "/components/form?itemKind=type&itemId={itemId}&formId={formId}&mode=edit&showSubmitButton=false&showCancelButton=false",
+                    var formUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "/components/form?itemKind=type&itemId={itemId}&formId={formId}&mode=edit&showSubmitButton=false&showCancelButton=false&showCaption=false",
                         {
                             itemId: form.type,
                             formId: form.id
