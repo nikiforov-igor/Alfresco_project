@@ -79,6 +79,7 @@
                     <field id="lecm-resolutions:controller-assoc" set="start-left">
                         <control>
                             <control-param name="changeItemsFireAction">resolutionControllerChanged</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.controllerValidation" event="change" />
@@ -246,6 +247,13 @@
                     <show id="lecm-resolutions:limitation-date"/>
                     <show id="lecm-resolutions:reviewers-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-resolutions:controller-assoc">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
 
             <!-- Форма с набором полей, редактируемых в машине состояний -->
@@ -270,6 +278,13 @@
                     <show id="lecm-resolutions:base-document-assoc"/>
                     <show id="lecm-review-aspects:related-review-records-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-resolutions:controller-assoc">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
 
             <!-- Форма атрибутивного поиска -->
@@ -544,6 +559,7 @@
                     <field id="lecm-resolutions:controller-assoc" set="start-left">
                         <control>
                             <control-param name="changeItemsFireAction">resolutionControllerChanged</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.controllerValidation" event="change" />
