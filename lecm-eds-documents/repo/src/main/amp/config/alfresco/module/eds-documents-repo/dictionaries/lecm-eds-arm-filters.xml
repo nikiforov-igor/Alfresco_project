@@ -32,7 +32,7 @@
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">@lecm\\-document:author\\-assoc\\-ref:'#current-user' OR @lecm\\-eds\\-document:executor\\-assoc\\-ref:'#current-user' OR @lecm\\-resolutions:author\\-assoc\\-ref:'#current-user' OR @lecm\\-errands:initiator\\-assoc\\-ref:'#current-user'|Мои документы</property>
-                <property name="lecm-arm:filter-query">#value</property>
+                <property name="lecm-arm:filter-query">value</property>
             </item>
             <item name="cm:По контролю" type="lecm-arm:filter">
                 <property name="cm:name">По контролю</property>
