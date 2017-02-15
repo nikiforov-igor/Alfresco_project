@@ -45,6 +45,7 @@
                     <field id="lecm-ord:controller-assoc">
                         <control>
                             <control-param name="showSearch">true</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:note">
@@ -448,6 +449,7 @@
                     <field id="lecm-ord:controller-assoc" set="ord-document-form-common-set">
                         <control>
                             <control-param name="showSearch">true</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:note"  set="ord-document-form-common-set">

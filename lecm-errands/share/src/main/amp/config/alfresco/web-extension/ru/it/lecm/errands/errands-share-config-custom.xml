@@ -111,6 +111,7 @@
 					<field id="lecm-errands:controller-assoc" set="common">
 						<control>
 							<control-param name="showSearch">true</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
 						</control>
 					</field>
 					<field id="lecm-errands:start-date" set="common">
@@ -426,6 +427,7 @@
                         <control>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="changeItemsFireAction">errandControllerChanged</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                     </field>
 
