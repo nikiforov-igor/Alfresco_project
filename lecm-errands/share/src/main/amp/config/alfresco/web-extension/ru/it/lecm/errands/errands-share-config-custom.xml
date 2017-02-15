@@ -1211,6 +1211,7 @@
                     <field id="lecm-errands:controller-assoc" set="left">
                         <control>
                             <control-param name="showSearch">true</control-param>
+                            <control-param name="changeItemsFireAction">errandControllerChanged</control-param>
                         </control>
                     </field>
 
