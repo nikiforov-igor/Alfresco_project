@@ -26,6 +26,14 @@
                 <property name="lecm-arm:filter-values">lecm-incoming:document|Входящие,lecm-outgoing:document|Исходящие,lecm-internal:document|Внутренние,lecm-ord:document|ОРД,lecm-errands:document|Поручения</property>
                 <property name="lecm-arm:filter-query">+TYPE:'#value'</property>
             </item>
+            <item name="cm:По контролю" type="lecm-arm:filter">
+                <property name="cm:name">По контролю</property>
+                <property name="lecm-arm:filter-code">BY_CONTROL</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">ISNOTNULL:'lecm-document-aspects:is-on-control' AND @lecm\\-document\\-aspects:is\\-on\\-control:true|Контрольные,ISNULL:'lecm-document-aspects:is-on-control' OR @lecm\\-document\\-aspects:is\\-on\\-control:false|Не контрольные</property>
+                <property name="lecm-arm:filter-query">#value</property>
+            </item>
         </items>
     </item>
 </items>
