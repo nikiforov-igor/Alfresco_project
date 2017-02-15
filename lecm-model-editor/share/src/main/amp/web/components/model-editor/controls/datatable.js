@@ -161,7 +161,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 					selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.field);
 					if(options) {
 		                for(var i=0; i<options.length; i++) {
-		                    var option = options[i];
+		                    var option = options[i],
+		                    optionLabel = option.label,
 		                    optionValue = (lang.isValue(option.value)) ? option.value : option;
 	
 		                    if (optionValue == selectedValue) {
@@ -169,7 +170,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		                    	var optionProps = (lang.isArray(option.props)) ? option.props : [];
 		                    	var optionAssocs = (lang.isArray(option.assocs)) ? option.assocs : [];
 		                    	var div = el.appendChild(document.createElement('div'));
-		        				div.innerHTML = optionValue;
+		                    	div.style.marginBottom = "3px";
+		        				div.innerHTML = optionLabel;
 		        				if(optionProps.length>0){
 			        				var div11 = el.appendChild(document.createElement('div'));
 			        				div11.innerHTML = "<b>Атрибуты</b>"
@@ -253,15 +255,19 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		                }
 		            }
 				} else {
+					el.innerHTML = '';
 					var options = (lang.isArray(oColumn.dropdownOptions)) ? oColumn.dropdownOptions : null,
 						selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.field);
 					if(options) {
 						for(var i=0; i<options.length; i++) {
-							var option = options[i];
+							var option = options[i],
+							optionLabel = option.label,
 							optionValue = (lang.isValue(option.value)) ? option.value : option;
 							
 							if (optionValue == selectedValue) {
-								el.innerHTML = optionValue;
+								var div = el.appendChild(document.createElement('div'));
+		                    	div.style.marginBottom = "3px";
+		        				div.innerHTML = optionLabel;
 							}
 						}
 					}

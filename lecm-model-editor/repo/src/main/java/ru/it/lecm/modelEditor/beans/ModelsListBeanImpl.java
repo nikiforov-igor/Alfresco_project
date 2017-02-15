@@ -446,6 +446,7 @@ public class ModelsListBeanImpl extends BaseBean {
 		if( aspect!=null) {
 			aspectObject = new JSONObject();
 			aspectObject.put("aspectName", aspect.getName().toPrefixString(namespaceService));
+			aspectObject.put("aspectTitle", aspect.getTitle(dictionaryService));
 			aspectObject.put("name", aspect.getName().toPrefixString(namespaceService));
 			List<JSONObject> props = new ArrayList<>();
 			for(PropertyDefinition pdRow: aspect.getProperties().values()){
@@ -587,6 +588,7 @@ public class ModelsListBeanImpl extends BaseBean {
 					if(tdRow!=null) {
 						aspectObject = new JSONObject();
 						aspectObject.put("aspectName", aspect.getName().toPrefixString(namespaceService));
+						aspectObject.put("aspectTitle", aspect.getTitle(dictionaryService));
 						aspectObject.put("name", tableRowType);
 						List<JSONObject> props = new ArrayList<>();
 						for(PropertyDefinition pdRow: tdRow.getProperties().values()){

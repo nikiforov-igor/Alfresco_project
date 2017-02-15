@@ -595,7 +595,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 					fn: function (successResponse) {
 						this.tables = successResponse.json.data.map(function(table) {
 							return {
-								label: table.aspectName,
+								label: (table.aspectTitle?table.aspectTitle+" - "+table.aspectName:table.aspectName),
 								value: table.aspectName,
 								props: table.table.props,
 								assocs: table.table.assocs
@@ -621,7 +621,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 					fn: function (successResponse) {
 						this.aspects = successResponse.json.data.map(function(aspect) {
 							return {
-								label: aspect.aspectName,
+								label: (aspect.aspectTitle?aspect.aspectTitle+" - "+aspect.aspectName:aspect.aspectName),
 								value: aspect.aspectName,
 								props: aspect.aspect.props,
 								assocs: aspect.aspect.assocs
