@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Errands settings</shortname>
+	<description>Get global errands settings</description>
+	<url>/lecm/errands/errands-settings</url>
+	<format default="html"/>
+	<authentication>user</authentication>
+</webscript>

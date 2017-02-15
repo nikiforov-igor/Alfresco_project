@@ -963,24 +963,15 @@
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <set id="2-column_1" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="block1"/>
-                    <set id="2-column_2" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="block2"/>
-                    <set id="2-column_3" template="/org/alfresco/components/form/2-column-set.ftl"/>
-
-                    <field id="lecm-errands:number" set="2-column_1">
+                    <field id="lecm-errands:number">
                         <control>
                             <control-param name="hideValue"/>
                         </control>
                     </field>
-                    <field id="lecm-errands:base-doc-number" set="2-column_1"/>
-
-                    <field id="lecm-errands:wait-for-execution-date" set="block1">
+                    <field id="lecm-errands:wait-for-execution-date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
-
-                    <field id="lecm-errands:initiator-assoc" set="2-column_2" mandatory="false">
+                    <field id="lecm-errands:initiator-assoc" mandatory="false">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>
@@ -988,7 +979,7 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-document:author-assoc" set="2-column_2" label-id="label.document.creator" mandatory="false">
+                    <field id="lecm-document:author-assoc" label-id="label.document.creator" mandatory="false">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>
@@ -996,7 +987,7 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-errands:executor-assoc" set="2-column_2" mandatory="false">
+                    <field id="lecm-errands:executor-assoc" mandatory="false">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>
@@ -1004,47 +995,45 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-errands:controller-assoc" set="2-column_2">
+                    <field id="lecm-errands:controller-assoc">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
-
-                    <field id="lecm-errands:type-assoc" set="block2">
+                    <field id="lecm-errands:type-assoc">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:title" set="block2">
+                    <field id="lecm-errands:title">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-errands:limitation-date" set="block2">
+                    <field id="lecm-errands:limitation-date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
-                    <field id="lecm-errands:limitation-date-radio" set="block2" label-id="label.errand.limitless">
+                    <field id="lecm-errands:limitation-date-radio" label-id="label.errand.limitless">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
                             <control-param name="options">LIMITLESS|Без срока,*|Все</control-param>
                         </control>
                     </field>
-
-                    <field id="lecm-errands:is-important" set="2-column_3">
+                    <field id="lecm-errands:is-important">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
                             <control-param name="options">true|Да,false|Нет</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:is-expired" set="2-column_3">
+                    <field id="lecm-errands:is-expired">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
                             <control-param name="options">true|Да,false|Нет</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:report-required" set="2-column_3">
+                    <field id="lecm-errands:report-required">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
                             <control-param name="options">true|Да,false|Нет</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:subject-assoc" set="2-column_3">
+                    <field id="lecm-document:subject-assoc">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>

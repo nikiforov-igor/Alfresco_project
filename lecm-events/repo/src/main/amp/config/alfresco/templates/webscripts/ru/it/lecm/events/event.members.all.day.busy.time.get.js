@@ -5,13 +5,13 @@
         if (args['timeZoneOffset']) {
             timeZoneOffset = parseInt(args['timeZoneOffset']);
         }
+        var additionalFilterFields = args["busyTimeMembersFields"]? args["busyTimeMembersFields"].split(",") : [];
         var isBusy = false;
         for each(var employee in employees) {
             if (employee) {
                 var additionalFilter = "AND (";
                 for (var i=0; i < additionalFilterFields.length; ++i) {
                     var formatedField = additionalFilterFields[i].replace(/:/g, "\\:").replace(/-/g, "\\-");
-                    formatedField += "\\-ref";
                     additionalFilter += ("@" + formatedField + ": \"*" + employee + "*\"");
                     if (i < additionalFilterFields.length - 1) {
                         additionalFilter += " OR ";

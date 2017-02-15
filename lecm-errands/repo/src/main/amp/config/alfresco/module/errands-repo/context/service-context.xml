@@ -220,6 +220,11 @@
         <property name="authenticationService" ref="authenticationService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
+    <bean id="ErrandsExecutorsPolicy" class="ru.it.lecm.errands.policy.ErrandsExecutorsPolicy"
+          init-method="init" depends-on="errands.LogicEcmModelsBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
 
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.TYPE_ERRANDS" id="errandsTypeQname"/>
     <util:constant static-field="ru.it.lecm.errands.ErrandsService.TYPE_ERRANDS_TS_COEXECUTOR_REPORT" id="coexecutorReportTypeQname"/>

@@ -118,6 +118,9 @@ public interface ErrandsService {
     String BUSINESS_ROLE_ERRANDS_INITIATOR_ID = "ERRANDS_INITIATOR";
     String BUSINESS_ROLE_CHOOSING_INITIATOR = "CHOOSING_INITIATOR";
 
+    QName ASPECT_ERRANDS_EXECUTORS = QName.createQName(ERRANDS_ASPECT_NAMESPACE_URI, "errandsExecutorsAspect");
+    QName ASSOC_ERRANDS_EXECUTORS_FIRST_LEVEL = QName.createQName(ERRANDS_ASPECT_NAMESPACE_URI, "errands-executors-assoc");
+    QName ASSOC_ERRANDS_CO_EXECUTORS_FIRST_LEVEL = QName.createQName(ERRANDS_ASPECT_NAMESPACE_URI, "errands-co-executors-assoc");
     /**
      * Получение папки для черновиков
      *
