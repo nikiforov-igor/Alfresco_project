@@ -17,9 +17,10 @@
     });
 
 
-	YAHOO.Bubbling.on('errandTypeChanged', reInit);
+	YAHOO.Bubbling.on('errandTypeChanged', reInit, {reinitLimitationDate: true});
+	YAHOO.Bubbling.on('resolutionErrandTypeChanged', reInit, {reinitLimitationDate: false});
 
-	function reInit(layer, args) {
+	function reInit(layer, args, param) {
 		var obj = args[1];
 		var nodeRef;
 
@@ -42,7 +43,7 @@
                 if (contentElement && !contentElement.value) {
                     contentElement.value = errandsTypes[nodeRef].defaultTitle;
                 }
-                if (limitationDateRadio) {
+                if (limitationDateRadio && param.reinitLimitationDate) {
                     var checkedRadioButton = YAHOO.util.Selector.query("input[checked]", limitationDateRadio.parentElement, true);
                     checkedRadioButton.checked = false;
                     if (errandsTypes[nodeRef].limitless) {

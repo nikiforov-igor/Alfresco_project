@@ -1186,7 +1186,7 @@
 
                     <field id="lecm-errands:type-assoc" set="left" mandatory="true">
                         <control>
-                            <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
+                            <control-param name="changeItemsFireAction">resolutionErrandTypeChanged</control-param>
                             <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                         </control>
                     </field>
