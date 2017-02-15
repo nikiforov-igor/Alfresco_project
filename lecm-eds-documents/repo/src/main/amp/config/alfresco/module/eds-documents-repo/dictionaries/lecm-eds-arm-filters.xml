@@ -26,6 +26,30 @@
                 <property name="lecm-arm:filter-values">lecm-incoming:document|Входящие,lecm-outgoing:document|Исходящие,lecm-internal:document|Внутренние,lecm-ord:document|ОРД,lecm-errands:document|Поручения</property>
                 <property name="lecm-arm:filter-query">+TYPE:'#value'</property>
             </item>
+            <item name="cm:По типу" type="lecm-arm:filter">
+                <property name="cm:name">По типу</property>
+                <property name="lecm-arm:filter-code">BY_TYPE</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">lecm-incoming:document|Входящие,lecm-outgoing:document|Исходящие,lecm-internal:document|Внутренние,lecm-ord:document|ОРД,lecm-nd:document|Нормативные документы,lecm-protocol:document|Протоколы,lecm-resolutions:document|Резолюции,lecm-errands:document|Поручения</property>
+                <property name="lecm-arm:filter-query">TYPE:'#value'</property>
+            </item>
+            <item name="cm:Мои документы" type="lecm-arm:filter">
+                <property name="cm:name">Мои документы</property>
+                <property name="lecm-arm:filter-code">MY_DOCUMENTS</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">@lecm\\-document:author\\-assoc\\-ref:'#current-user' OR @lecm\\-eds\\-document:executor\\-assoc\\-ref:'#current-user' OR @lecm\\-resolutions:author\\-assoc\\-ref:'#current-user' OR @lecm\\-errands:initiator\\-assoc\\-ref:'#current-user'|Мои документы</property>
+                <property name="lecm-arm:filter-query">#value</property>
+            </item>
+            <item name="cm:По контролю" type="lecm-arm:filter">
+                <property name="cm:name">По контролю</property>
+                <property name="lecm-arm:filter-code">BY_CONTROL</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">ISNOTNULL:'lecm-document-aspects:is-on-control' AND @lecm\\-document\\-aspects:is\\-on\\-control:true|Контрольные,ISNULL:'lecm-document-aspects:is-on-control' OR @lecm\\-document\\-aspects:is\\-on\\-control:false|Не контрольные</property>
+                <property name="lecm-arm:filter-query">#value</property>
+            </item>
         </items>
     </item>
 </items>
