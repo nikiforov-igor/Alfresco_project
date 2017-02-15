@@ -3433,3 +3433,71 @@ LogicECM.module.Base = LogicECM.module.Base || {};
     /* Dummy instance to load optional YUI components early */
     var dummyInstance = new LogicECM.module.Base.Actions();
 })();
+
+/**
+ * Модуль для кастомизации Paginator. Подключается непосредственно в датагрид
+ */
+(function () {
+    var Paginator = YAHOO.widget.Paginator,
+        l = YAHOO.lang,
+        setId = YAHOO.util.Dom.generateId;
+
+    /**
+     * ui Component to generate the jump-to-page dropdown
+     *
+     * @namespace YAHOO.widget.Paginator.ui
+     * @class LecmJumpToPageDropdown
+     * @for YAHOO.widget.Paginator
+     *
+     * @constructor
+     * @param p {Pagintor} Paginator instance to attach to
+     */
+    Paginator.ui.LecmJumpToPageDropdown = function (p) {
+        Paginator.ui.LecmJumpToPageDropdown.superclass.constructor.call(this, p);
+    };
+
+    /**
+     * Decorates Paginator instances with new attributes. Called during
+     * Paginator instantiation.
+     * @method init
+     * @param p {Paginator} Paginator instance to decorate
+     * @static
+     */
+    Paginator.ui.LecmJumpToPageDropdown.init = function (p) {
+        /**
+         * Заголовок
+         * @attribute jumpToPageDropdownTitle
+         * @default 'Jump To Page'
+         */
+        p.setAttributeConfig('jumpToPageDropdownTitle', {
+            value: 'Jump To Page',
+            validator: l.isString
+        });
+        /**
+         * CSS class assigned to the select node
+         * @attribute jumpToPageDropdownClass
+         * @default 'yui-pg-jtp-options'
+         */
+        p.setAttributeConfig('jumpToPageDropdownClass', {
+            value : 'yui-pg-jtp-options',
+            validator : l.isString
+        });
+    };
+
+    YAHOO.extend(Paginator.ui.LecmJumpToPageDropdown, Paginator.ui.JumpToPageDropdown);
+
+    YAHOO.lang.augmentObject(Paginator.ui.LecmJumpToPageDropdown.prototype, {
+        render: function (id_base) {
+            this.select = document.createElement('select');
+            setId(this.select, id_base + '-jtp');
+            this.select.className = this.paginator.get('jumpToPageDropdownClass');
+            this.select.title = this.paginator.get('jumpToPageDropdownTitle');
+
+            YAHOO.util.Event.on(this.select, 'change', this.onChange, this, true);
+
+            this.rebuild();
+
+            return this.select;
+        }
+    }, true);
+})();
