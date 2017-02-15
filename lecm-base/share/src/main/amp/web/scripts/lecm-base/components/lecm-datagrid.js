@@ -3464,6 +3464,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
      * @static
      */
     Paginator.ui.LecmJumpToPageDropdown.init = function (p) {
+        Paginator.ui.JumpToPageDropdown.init.call(this, p);
         /**
          * Заголовок
          * @attribute jumpToPageDropdownTitle
@@ -3472,15 +3473,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         p.setAttributeConfig('jumpToPageDropdownTitle', {
             value: 'Jump To Page',
             validator: l.isString
-        });
-        /**
-         * CSS class assigned to the select node
-         * @attribute jumpToPageDropdownClass
-         * @default 'yui-pg-jtp-options'
-         */
-        p.setAttributeConfig('jumpToPageDropdownClass', {
-            value : 'yui-pg-jtp-options',
-            validator : l.isString
         });
     };
 
