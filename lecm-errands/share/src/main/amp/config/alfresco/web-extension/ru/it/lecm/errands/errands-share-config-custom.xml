@@ -55,9 +55,7 @@
                     <!-- Соисполнители -->
                     <show id="lecm-errands:coexecutors-assoc"/>
                     <!-- Срок исполнения -->
-                    <show id="lecm-errands:limitation-date-radio"/>
-                    <show id="lecm-base-dummy-aspects:script" force="true"/>
-                    <show id="lecm-errands:limitation-date"/>
+                    <show id="lecm-errands:limitation-date-text"/>
                     <!-- Закрывает вышестоящее поручение -->
                     <show id="lecm-errands:auto-close"/>
                     <!-- Направлять периодически  -->
@@ -95,9 +93,7 @@
                     <set id="reports" label-id="label.errands.forms.tab.reports"/>
                     <set id="execution" label-id="label.errands.forms.tab.execution"/>
                     <set id="statuses" parent="common"/>
-                    <set id="beforeDateSet" parent="common"/>
-                    <set id="limitation-date" parent="common" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-view-limitation-date-set.ftl"/>
-                    <set id="afterDateSet" parent="common"/>
+                    <set id="commonField" parent="common"/>
                     <set id="execution-report" parent="reports" appearance="title" template="/ru/it/lecm/errands/controls/errands-execution-report-set.ftl" label-id="title.errands.execution-reports"/>
                     <set id="lineReports" parent="reports"/>
                     <set id="coexecutors-reports" parent="reports" appearance="title" label-id="title.errands.coexecutors-reports"/>
@@ -108,21 +104,21 @@
                     <field id="lecm-statemachine:status" set="statuses">
                         <control template="/ru/it/lecm/base-share/components/controls/status.ftl" />
                     </field>
-                    <field id="lecm-errands:base-assoc" set="beforeDateSet">
+                    <field id="lecm-errands:base-assoc" set="commonField">
                         <control>
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="showInaccessible">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:additional-document-assoc" set="beforeDateSet">
+                    <field id="lecm-errands:additional-document-assoc" set="commonField">
                         <control>
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="showInaccessible">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:initiator-assoc" set="beforeDateSet">
+                    <field id="lecm-errands:initiator-assoc" set="commonField">
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Errands.checkChoosingInitiatorValidation" event="change"/>
                         </constraint-handlers>
@@ -130,9 +126,9 @@
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:author-assoc" set="beforeDateSet" label-id="label.document.creator"/>
-                    <field id="lecm-errands:type-assoc" set="beforeDateSet"/>
-                    <field id="lecm-errands:title" set="beforeDateSet">
+                    <field id="lecm-document:author-assoc" set="commonField" label-id="label.document.creator"/>
+                    <field id="lecm-errands:type-assoc" set="commonField"/>
+                    <field id="lecm-errands:title" set="commonField">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
@@ -143,58 +139,44 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:content" set="beforeDateSet">
+                    <field id="lecm-errands:content" set="commonField">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">8</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:executor-assoc" set="beforeDateSet">
+                    <field id="lecm-errands:executor-assoc" set="commonField">
                         <control>
                             <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:coexecutors-assoc" set="beforeDateSet">
+                    <field id="lecm-errands:coexecutors-assoc" set="commonField">
                         <control>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:limitation-date-radio" set="limitation-date">
-                        <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
-                            <control-param name="options">DATE,LIMITLESS</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-base-dummy-aspects:script" set="limitation-date">
-                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
-                            <control-param name="textCode">label.errand.limitless</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-errands:limitation-date" set="limitation-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-errands:auto-close" set="afterDateSet">
+                    <field id="lecm-errands:limitation-date-text" set="commonField"/>
+                    <field id="lecm-errands:auto-close" set="commonField">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
-                    <field id="lecm-errands:periodically" set="afterDateSet" read-only="true">
+                    <field id="lecm-errands:periodically" set="commonField" read-only="true">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
-                    <field id="lecm-errands:controller-assoc" set="afterDateSet">
+                    <field id="lecm-errands:controller-assoc" set="commonField">
                         <control>
                             <control-param name="showSearch">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:report-required" set="afterDateSet">
+                    <field id="lecm-errands:report-required" set="commonField">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
                             <control-param name="changeFireAction">errandReportRequiredChanged</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:report-recipient-type" set="afterDateSet">
+                    <field id="lecm-errands:report-recipient-type" set="commonField">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
-                    <field id="lecm-document:subject-assoc" set="afterDateSet"/>
-                    <field id="lecm-base-dummy-aspects:script2" set="afterDateSet">
+                    <field id="lecm-document:subject-assoc" set="commonField"/>
+                    <field id="lecm-base-dummy-aspects:script2" set="commonField">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-view-form-script.js</control-param>
                         </control>

@@ -8,6 +8,10 @@
     color: red;
 }
 
+.errands-execution-report-empty {
+    clear:left;
+}
+
 .errands-execution-report-empty span {
     font-style: italic;
 }
