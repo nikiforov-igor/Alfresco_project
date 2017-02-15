@@ -22,7 +22,6 @@
 
 <@markup id="css">
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata.css" group="document-edit"/>
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-resolution/resolution-form.css" group="document-edit"/>
 </@>
 
 <@markup id="widgets">
