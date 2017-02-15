@@ -4652,18 +4652,11 @@
                                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[20]]></property>
                                                 <property name="lecm-arm:types"><![CDATA[lecm-resolutions:document]]></property>
-                                                <items>
-                                                    <item name="cm:admin" type="lecm-arm:user-settings">
-                                                        <property name="cm:name">
-                                                            <![CDATA[admin]]></property><!--<property name="cm:title"><value lang="ru"><![CDATA[ru value]]></value><value lang="en_GB"><![CDATA[en_GB value]]></value></property>-->
-                                                        <assocs/>
-                                                    </item>
-                                                </items>
                                             </item>
                                             <item name="cm:Завершено" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\-aspects\:is\-final:true]]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'Завершено']]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="cm:name"><![CDATA[Завершено]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
