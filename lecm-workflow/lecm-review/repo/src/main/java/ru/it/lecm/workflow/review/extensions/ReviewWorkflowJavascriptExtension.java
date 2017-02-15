@@ -162,4 +162,9 @@ public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
 
         return createScriptable(results);
     }
+
+    public void resetRelatedReviewChangeCount(ScriptNode initiatingDocument) {
+        ParameterCheck.mandatory("baseDocument", initiatingDocument);
+        reviewService.resetRelatedReviewChangeCount(initiatingDocument.getNodeRef());
+    }
 }
