@@ -2640,21 +2640,32 @@ if (document) {
                                                         <properties>
                                                             <property>
                                                                 <name>scriptLabel</name>
-                                                                <value><![CDATA[Нарезка прав]]></value>
+                                                                <value>
+                                                                    <![CDATA[Нарезка прав и отправка уведомлений]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function(){
   /* Автор */
-  var creatorAssoc = stm_document.assocs["lecm-resolutions:author-assoc"];
-  if (creatorAssoc && creatorAssoc.length) {
-    statemachine.grandDynamicRoleForEmployee(stm_document, creatorAssoc[0], "RESOLUTION_AUTHOR_DYN", task);
+  var authorAssoc = stm_document.assocs["lecm-resolutions:author-assoc"];
+  if (authorAssoc && authorAssoc.length) {
+    statemachine.grandDynamicRoleForEmployee(stm_document, authorAssoc[0], "RESOLUTION_AUTHOR_DYN", task);
+
+    notifications.sendNotificationFromCurrentUser({
+      recipients: authorAssoc,
+      templateCode: 'RESOLUTION_SEND_TO_APPROVE',
+      templateConfig: {
+        mainObject: stm_document,
+        eventExecutor: orgstructure.getCurrentEmployee()
+      },
+      dontCheckAccessToObject: true
+    });
   }
 
   /* Создатель */
-  var authorAssoc = stm_document.assocs["lecm-document:author-assoc"];
-  if (authorAssoc && authorAssoc.length) {
-    statemachine.grandDynamicRoleForEmployee(stm_document, authorAssoc[0], "RESOLUTION_CREATOR_DYN", task);
+  var creatorAssoc = stm_document.assocs["lecm-document:author-assoc"];
+  if (creatorAssoc && creatorAssoc.length) {
+    statemachine.grandDynamicRoleForEmployee(stm_document, creatorAssoc[0], "RESOLUTION_CREATOR_DYN", task);
   }
 })();]]></value>
                                                             </property>
