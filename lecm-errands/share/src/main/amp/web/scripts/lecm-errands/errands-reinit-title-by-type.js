@@ -63,12 +63,13 @@
                 if (reportRequiredElement) {
                     var reportRequiredCheckBox = Dom.get(reportRequiredElement.id + "-entry");
                     if (errandsTypes[nodeRef]["report-required"]) {
-                        reportRequiredElement.value = true;
-                        reportRequiredCheckBox.checked = true;
-                    } else {
                         reportRequiredElement.value = false;
                         reportRequiredCheckBox.checked = false;
+                    } else {
+                        reportRequiredElement.value = true;
+                        reportRequiredCheckBox.checked = true;
                     }
+                    reportRequiredCheckBox.click();
                     YAHOO.Bubbling.fire("errandReportRequiredChanged", {
                         formId: obj.formId,
                         fieldId: "lecm-errands:report-required"
