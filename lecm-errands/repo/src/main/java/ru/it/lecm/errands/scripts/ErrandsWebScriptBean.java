@@ -690,7 +690,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     }
 
     public void createErrands(final Map<String, Object> properties, ScriptNode parentErrandNode) {
-        final NodeRef parentErrand = parentErrandNode.getNodeRef();
+        final NodeRef parentDoc = parentErrandNode.getNodeRef();
         final String user = AuthenticationUtil.getFullyAuthenticatedUser();
         Runnable runnable = new Runnable() {
             public void run() {
@@ -718,11 +718,35 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                         props.put(ErrandsService.PROP_ERRANDS_CONTENT, (Serializable) value);
                                     }
 
+                                    value = properties.get("lecmErrandWf_limitationDateRadio");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO, (Serializable) value);
+                                    }
+
                                     value = properties.get("lecmErrandWf_limitationDate");
                                     if (value != null) {
                                         props.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE, (Serializable) value);
                                     }
-
+                                    value = properties.get("lecmErrandWf_limitationDateDays");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_DAYS, (Serializable) value);
+                                    }
+                                    value = properties.get("lecmErrandWf_limitationDateType");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TYPE, (Serializable) value);
+                                    }
+                                    value = properties.get("lecmErrandWf_periodically");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_IS_PERIODICALLY, (Serializable) value);
+                                    }
+                                    value = properties.get("lecmErrandWf_reportRequired");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_REPORT_REQUIRED, (Serializable) value);
+                                    }
+                                    value = properties.get("lecmErrandWf_reportRecipientType");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_REPORT_RECIPIENT_TYPE, (Serializable) value);
+                                    }
                                     value = properties.get("lecmErrandWf_withoutInitiatorApproval");
                                     if (value != null) {
                                         props.put(ErrandsService.PROP_ERRANDS_WITHOUT_INITIATOR_APPROVAL, (Serializable) value);
@@ -732,7 +756,6 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                     if (value != null) {
                                         props.put(ErrandsService.PROP_ERRANDS_START_DATE, (Serializable) value);
                                     }
-
                                     String name = GUID.generate();
 
                                     NodeRef draft = repositoryStructureHelper.getDraftsRef(user);
@@ -765,6 +788,16 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                         nodeService.createAssociation(errand, ((ScriptNode) value).getNodeRef(), ErrandsService.ASSOC_ERRANDS_CONTROLLER);
                                     }
 
+                                    value = properties.get("lecmErrandWf_initiatorAssoc");
+                                    if (value != null) {
+                                        nodeService.createAssociation(errand, ((ScriptNode) value).getNodeRef(), ErrandsService.ASSOC_ERRANDS_INITIATOR);
+                                    }
+
+                                    value = properties.get("lecmErrandWf_subjectAssoc");
+                                    if (value != null) {
+                                        nodeService.createAssociation(errand, ((ScriptNode) value).getNodeRef(), DocumentService.ASSOC_SUBJECT);
+                                    }
+
                                     value = properties.get("lecmErrandWf_attachmentsAssoc");
                                     if (value != null) {
                                         value = getObjectsArray(value);
@@ -788,8 +821,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                             }
                                         }
                                     }
+                                    nodeService.createAssociation(errand, parentDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
+                                    nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_IS_SHORT, false);
 
-                                    nodeService.createAssociation(errand, parentErrand, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
                                     return null;
                                 }
                             }, false, true);

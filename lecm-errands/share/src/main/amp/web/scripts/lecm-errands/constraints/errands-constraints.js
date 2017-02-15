@@ -56,3 +56,28 @@ LogicECM.module.Errands.WFChangeDueDateValidation =
         }
         return true;
     };
+LogicECM.module.Errands.createErrandWFLimitationDateValidation =
+    function (field, args, event, form, silent, message) {
+        if (field.form) {
+            var radio = field.form["prop_lecmErrandWf_limitationDateRadio"];
+            var days = field.form["prop_lecmErrandWf_limitationDateDays"];
+            var limitationDate = field.form["prop_lecmErrandWf_limitationDate"];
+
+            var radioValue = null;
+            if (radio) {
+                for (var i = 0; i < radio.length; i++) {
+                    if (radio[i].checked == true) {
+                        radioValue = radio[i].value;
+                    }
+                }
+            }
+            if (radioValue == "LIMITLESS") {
+                return true;
+            } else if (radioValue == "DAYS") {
+                return (days.value.length > 0) || (field.name != "prop_lecmErrandWf_limitationDateDays");
+            } else {
+                return (limitationDate && limitationDate.value.length) || (field.name != "prop_lecmErrandWf_limitationDate");
+            }
+        }
+        return true;
+    };
