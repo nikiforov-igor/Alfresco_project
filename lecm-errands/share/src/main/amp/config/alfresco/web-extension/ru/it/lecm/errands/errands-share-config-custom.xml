@@ -108,8 +108,20 @@
                     <field id="lecm-statemachine:status" set="statuses">
                         <control template="/ru/it/lecm/base-share/components/controls/status.ftl" />
                     </field>
-                    <field id="lecm-errands:base-assoc" set="beforeDateSet"/>
-                    <field id="lecm-errands:additional-document-assoc" set="beforeDateSet"/>
+                    <field id="lecm-errands:base-assoc" set="beforeDateSet">
+                        <control>
+                            <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="showInaccessible">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-errands:additional-document-assoc" set="beforeDateSet">
+                        <control>
+                            <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+                            <control-param name="showInaccessible">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-errands:initiator-assoc" set="beforeDateSet">
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Errands.checkChoosingInitiatorValidation" event="change"/>
