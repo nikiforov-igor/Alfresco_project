@@ -20,6 +20,9 @@
 
     function callback() {
         YAHOO.Bubbling.fire("${scriptLoadedFireAction}", {
+            <#if form.arguments.itemKind == "node">
+                nodeRef: "${form.arguments.itemId}",
+            </#if>
             formId: "${formId}",
             fieldId: "${fieldId}"
         });
