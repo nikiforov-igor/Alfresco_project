@@ -359,10 +359,12 @@ public class ModelsListBeanImpl extends BaseBean {
 						}
 					}
 					Collections.sort(propsArray, new JSONComparator("_name"));
-					JSONObject typeObject = new JSONObject();
-					typeObject.put("props", propsArray);
-					parentObject.put("type", typeObject);
-					items.add(parentObject);
+					if(propsArray.size()>0) {
+						JSONObject typeObject = new JSONObject();
+						typeObject.put("props", propsArray);
+						parentObject.put("type", typeObject);
+						items.add(parentObject);
+					}
 					parentDocumentTypeQName = parentType.getParentName();
 					if("cm:cmobject".equals(parentDocumentTypeQName.toPrefixString())) parentDocumentTypeQName = null;
 				}
@@ -426,10 +428,12 @@ public class ModelsListBeanImpl extends BaseBean {
 						}
 					}
 					Collections.sort(assocsArray, new JSONComparator("_name"));
-					JSONObject typeObject = new JSONObject();
-					typeObject.put("assocs", assocsArray);
-					parentObject.put("type", typeObject);
-					items.add(parentObject);
+					if(assocsArray.size()>0) {
+						JSONObject typeObject = new JSONObject();
+						typeObject.put("assocs", assocsArray);
+						parentObject.put("type", typeObject);
+						items.add(parentObject);
+					}
 					parentDocumentTypeQName = parentType.getParentName();
 					if("cm:cmobject".equals(parentDocumentTypeQName.toPrefixString())) parentDocumentTypeQName = null;
 				}
@@ -814,22 +818,25 @@ public class ModelsListBeanImpl extends BaseBean {
 				List<JSONObject> typeArray = new ArrayList<>();
 					JSONObject typeObject = new JSONObject();
 					typeObject.put("_name",type.getName().toPrefixString());
+					String typeNS = type.getName().toPrefixString().substring(0,type.getName().toPrefixString().indexOf(":"));
 					JSONObject associations = new JSONObject();
 					List<JSONObject> associationArray = new ArrayList<>();
 					for(AssociationDefinition ad: type.getAssociations().values()) {
-						JSONObject associationObject = new JSONObject();
-						associationObject.put("_name",ad.getName().toPrefixString());
-						associationObject.put("title",ad.getTitle());
-						JSONObject source = new JSONObject();
-						source.put("mandatory",ad.isSourceMandatory());
-						source.put("many",ad.isSourceMany());
-						associationObject.put("source",source);
-						JSONObject target = new JSONObject();
-						target.put("class",ad.getTargetClass().getName().toPrefixString());
-						target.put("mandatory",ad.isTargetMandatory());
-						target.put("many",ad.isTargetMany());
-						associationObject.put("target",target);
-						associationArray.add(associationObject);
+						if( ad.getName().toPrefixString(namespaceService).startsWith(typeNS)) {
+							JSONObject associationObject = new JSONObject();
+							associationObject.put("_name",ad.getName().toPrefixString().replace(typeNS+":",""));
+							associationObject.put("title",ad.getTitle());
+							JSONObject source = new JSONObject();
+							source.put("mandatory",ad.isSourceMandatory());
+							source.put("many",ad.isSourceMany());
+							associationObject.put("source",source);
+							JSONObject target = new JSONObject();
+							target.put("class",ad.getTargetClass().getName().toPrefixString());
+							target.put("mandatory",ad.isTargetMandatory());
+							target.put("many",ad.isTargetMany());
+							associationObject.put("target",target);
+							associationArray.add(associationObject);
+						}
 					}
 					Collections.sort(associationArray, new JSONComparator("_name"));
 					associations.put("association",associationArray);
@@ -846,17 +853,19 @@ public class ModelsListBeanImpl extends BaseBean {
 					JSONObject properties = new JSONObject();
 					List<JSONObject> propertyArray = new ArrayList<>();
 					for(PropertyDefinition pd: type.getProperties().values()){
-						JSONObject propertyObject = new JSONObject();
-						propertyObject.put("_name",pd.getName().toPrefixString());
-						propertyObject.put("title",pd.getTitle());
-						propertyObject.put("default",pd.getDefaultValue());
-						propertyObject.put("mandatory",pd.isMandatory());
-						propertyObject.put("type",pd.getDataType().getName().toPrefixString());
-						JSONObject indexObject = new JSONObject();
-						indexObject.put("_enabled",pd.isIndexed());
-						indexObject.put("tokenised",pd.getIndexTokenisationMode().toString().toLowerCase());
-						propertyObject.put("index",indexObject);
-						propertyArray.add(propertyObject);
+						if( pd.getName().toPrefixString(namespaceService).startsWith(typeNS)) {
+							JSONObject propertyObject = new JSONObject();
+							propertyObject.put("_name",pd.getName().toPrefixString().replace(typeNS+":",""));
+							propertyObject.put("title",pd.getTitle());
+							propertyObject.put("default",pd.getDefaultValue());
+							propertyObject.put("mandatory",pd.isMandatory());
+							propertyObject.put("type",pd.getDataType().getName().toPrefixString());
+							JSONObject indexObject = new JSONObject();
+							indexObject.put("_enabled",pd.isIndexed());
+							indexObject.put("tokenised",pd.getIndexTokenisationMode().toString().toLowerCase());
+							propertyObject.put("index",indexObject);
+							propertyArray.add(propertyObject);
+						}
 					}
 					Collections.sort(propertyArray, new JSONComparator("_name"));
 					properties.put("property",propertyArray);

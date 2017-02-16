@@ -58,9 +58,9 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			var cmName = form.elements['prop_cm_name'].value;
 			var modelName = form.elements['cm_lecmModelName'].value ? form.elements['cm_lecmModelName'].value : cmName + 'Model';
 			var namespace = form.elements['cm_lecmModelNamespace'].value ? form.elements['cm_lecmModelNamespace'].value : cmName + 'NS';
-			var modelDescription = form.elements['cm_lecmModelDescription'].value;
 			var typeName = form.elements['cm_lecmTypeName'].value ? form.elements['cm_lecmTypeName'].value : cmName;
-			var typeTitle = form.elements['cm_lecmTypeTitle'].value;
+			var typeTitle = form.elements['cm_lecmTypeTitle'].value ? form.elements['cm_lecmTypeTitle'].value : typeName;
+			var modelDescription = (form.elements['cm_lecmModelDescription']&&form.elements['cm_lecmModelDescription'].value) ? form.elements['cm_lecmModelDescription'].value : typeTitle;
 			var parentRef = form.elements['cm_lecmParentRef'].value;
 			var userName = Alfresco.constants.USERNAME;
 			var modelPublished = new Date();
@@ -233,6 +233,22 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 		onBeforeFormSubmit: function (form, obj) {
 			LogicECM.module.ModelEditor.ModelPromise.then(this._createModelXml, this);
-		}
+		},
+		
+		onFormSubmitSuccess: function (response)
+        {
+			if(response.config.dataObj.alf_redirect) {
+				this.options.submitUrl = "/share/page/dict-model-edit?formId=edit-dict-model&nodeRef="+response.json.persistedObject+"&redirect=/share/page/doc-model-list&doctype="+response.config.dataObj.prop_cm_name+"NS:"+response.config.dataObj.prop_cm_name;
+			} else {
+				this.options.submitUrl = "/share/page/dict-model-list";
+			}
+			this.navigateForward(true);
+        },
+
+        onCancelButtonClick: function (type, args)
+        {
+        	this.options.cancelUrl = "/share/page/dict-model-list";
+        	this.navigateForward(false);
+        }
 	}, true);
 })();

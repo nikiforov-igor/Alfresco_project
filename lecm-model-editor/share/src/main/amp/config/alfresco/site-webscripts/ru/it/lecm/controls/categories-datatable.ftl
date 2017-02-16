@@ -1,4 +1,4 @@
-<label><b>${msg("lecm.meditor.lbl.attachs.categors")}</b></label>
+<label><b>${field.label?html}</b></label>
 <#include "/ru/it/lecm/controls/datatable.ftl">
 <@inlineScript group='model-editor'>
 (function () {

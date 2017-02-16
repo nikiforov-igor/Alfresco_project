@@ -1,4 +1,4 @@
-<label><b>${msg("lecm.meditor.lbl.assocs")}<b/></label>
+<label><b>${field.label?html}<b/></label>
 <#include "/ru/it/lecm/controls/datatable.ftl">
 <@inlineScript group='model-editor'>
 (function () {
@@ -102,7 +102,7 @@
 					key : 'many'
 				}]
 			},
-			ns = obj.model.prop_namespace_name
+			ns = obj.model.prop_type_ns
 			data = obj.model.associationsArray;
 
 		new LogicECM.module.ModelEditor.DatatableControl('LogicECM.module.ModelEditor.AssociationsDatatable', '${fieldHtmlId}', {

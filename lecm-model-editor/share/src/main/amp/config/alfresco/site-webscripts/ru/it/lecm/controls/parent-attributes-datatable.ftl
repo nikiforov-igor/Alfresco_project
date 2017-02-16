@@ -1,4 +1,4 @@
-<label><b>Атрибуты родительского документа</b></label>
+<label><b>${field.label?html}</b></label>
 <div class="control datatable models">
 	<div class="container">
 		<div id="${fieldHtmlId}" class="value-div">

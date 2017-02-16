@@ -1,4 +1,4 @@
-<label><b>Аспекты родительского документа</b></label>
+<label><b>${field.label?html}</b></label>
 <div class="control datatable models">
 	<div class="container">
 		<div id="${fieldHtmlId}" class="value-div">
@@ -25,7 +25,7 @@
 			}, {
 				className: 'viewmode-label',
 				key: 'aspectName',
-				label: '${msg("lecm.meditor.lbl.table")}',
+				label: '${msg("lecm.meditor.lbl.aspect")}',
 				dropdownOptions: obj.aspects,
 				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatText,
 				width : 1078,

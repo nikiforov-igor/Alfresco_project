@@ -69,7 +69,26 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		formatActions: function (el, oRecord, oColumn, oData, oDataTable) {
 			Dom.setStyle(el.parentElement, 'vertical-align','top'); 
 			if(this.configs.mode==='view') {
-				
+				if(oColumn.key==='expand') {
+					el.innerHTML = "";
+					if (oRecord.getData("expanded")!=null&&oRecord.getData("expanded")) {
+						var collapseLink = document.createElement("a");
+						Dom.addClass(collapseLink, "collapse");
+						collapseLink.innerHTML = "&nbsp;";
+						el.appendChild(collapseLink);
+					} else {
+						var expandLink = document.createElement("a");
+						Dom.addClass(expandLink, "expand");
+						expandLink.innerHTML = "&nbsp;";
+						el.appendChild(expandLink);
+					}
+				}
+				if(oColumn.key==='copy') {
+					var deleteLink = document.createElement('a');
+					YAHOO.util.Dom.addClass(deleteLink, 'copy');
+					deleteLink.innerHTML = '&nbsp;';
+					el.appendChild(deleteLink);
+				}
 			} else {
 				if(oColumn.key==='expand') {
 					el.innerHTML = "";
@@ -285,7 +304,9 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			});
 
 			this.widgets.datatable = new YAHOO.widget.DataTable(this.id + '-datatable', this.options.columnDefinitions, this.widgets.datasource,{"mode":this.options.mode,"ns":this.options.ns,associations:this.options.associations,dTypes:this.options.dTypes,dTokenised:this.options.dTokenised});
-			if(this.options.mode==='view'){} else {
+			if(this.options.mode==='view'){
+				this.widgets.datatable.subscribe('cellClickEvent', this.deleteRow);
+			} else {
 				this.widgets.datatable.subscribe('cellClickEvent', this.deleteRow);
 				this.widgets.datatable.on('valueChangeEvent', function(args) {
 					var e = args.event,

@@ -1,4 +1,4 @@
-<label><b>${msg("lecm.meditor.lbl.attrs")}</b></label>
+<label><b>${field.label?html}</b></label>
 <#include "/ru/it/lecm/controls/datatable.ftl">
 <@inlineScript group='model-editor'>
 (function () {
@@ -162,7 +162,7 @@
 					{ key: 'validator' }
 				]
 			},
-			ns = obj.model.prop_namespace_name,
+			ns = obj.model.prop_type_ns,
 			data = obj.model.attributesArray;
 
 		new LogicECM.module.ModelEditor.DatatableControl('LogicECM.module.ModelEditor.AttributesDatatable', '${fieldHtmlId}', {

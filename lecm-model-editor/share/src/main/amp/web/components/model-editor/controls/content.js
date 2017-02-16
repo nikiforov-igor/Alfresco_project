@@ -55,6 +55,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 					if(YAHOO.lang.isArray(model.types.type)) {
 						modelObject.typeTitle = model.types.type[typeIndex].title;
 						modelObject.prop_type_name = (model.types.type[typeIndex]._name.substr(model.types.type[typeIndex]._name.indexOf(':')+1,model.types.type[typeIndex]._name.length));
+						modelObject.prop_type_ns = (model.types.type[typeIndex]._name.substr(0,model.types.type[typeIndex]._name.indexOf(':')));
 
 						modelObject.parentRef = model.types.type[typeIndex].parent;
 
@@ -76,6 +77,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 					} else if(YAHOO.lang.isObject(model.types.type)) {
 						modelObject.typeTitle = model.types.type.title;
 						modelObject.prop_type_name = (model.types.type._name.substr(model.types.type._name.indexOf(':')+1,model.types.type._name.length));
+						modelObject.prop_type_ns = (model.types.type._name.substr(0,model.types.type._name.indexOf(':')));
 
 						modelObject.parentRef = model.types.type.parent;
 
