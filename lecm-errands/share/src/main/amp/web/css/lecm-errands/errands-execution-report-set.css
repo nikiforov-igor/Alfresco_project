@@ -23,6 +23,6 @@
     font-style:italic;
 }
 
-.main-content .set div.form-fields .errands-execution-report-set .errands-execution-report-status .viewmode-field .viewmode-label {
+div.form-fields .errands-execution-report-set .errands-execution-report-status .viewmode-field .viewmode-label {
     display: none;
 }
