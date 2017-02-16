@@ -1473,44 +1473,19 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var document = bpm_package.children[0];
-if (document) {
-  var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
-  if (childrenErrands && childrenErrands.length) {
-    var canceledCount = 0;
-    var executedCount = 0;
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/resolutions-repo/workflow/scripts/resolution-scripts-lib.js">
 
-    childrenErrands.forEach(function (errand) {
-      if ("Исполнено" == errand.properties["lecm-statemachine:status"]) {
-        executedCount++;
-      } else if ("Отменено" == errand.properties["lecm-statemachine:status"]) {
-        canceledCount++;
-      }
-    });
-
-    if (childrenErrands.length == (executedCount + canceledCount)) {
-      if (childrenErrands.length == executedCount) {
-        document.properties["lecm-resolutions:auto-complete"] = true;
-      } if (childrenErrands.length == canceledCount) {
-        document.properties["lecm-resolutions:annul-signal"] = true;
-      } else {
-        document.properties["lecm-resolutions:require-closers-decision"] = true;
-
-        notifications.sendNotificationFromCurrentUser({
-          recipients: resolutionsScript.getResolutionClosers(document),
-          templateCode: 'RESOLUTION_REQUIRES_SOLUTION_CLOSERS',
-          templateConfig: {
-            mainObject: document
-          },
-          dontCheckAccessToObject: true
-        });
-      }
-    }
+(function(){
+  var document = bpm_package.children[0];
+  if (document) {
+    lecmPermission.pushAuthentication();
+    lecmPermission.setRunAsUserSystem();
+	LECMResolutionActions.processChangeChildSignal(document);
+    edsDocument.resetChildChangeSignal(document);
+    lecmPermission.popAuthentication();
   }
-
-  document.properties["lecm-eds-aspect:child-change-signal-count"] = 0;
-  document.save();
-}]]></value>
+})();
+]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -1589,6 +1564,50 @@ if (document) {
 	LECMResolutionActions.processChangeDueDateSignal(document);
   }
 })();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>fdf44554-e72a-4880-bc7c-e1664dc5a3ce</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/6b81997b-dad9-42cd-8622-7010da173672
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-review-aspects:related-review-records-change-count") > 0]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/resolutions-repo/workflow/scripts/resolution-scripts-lib.js">
+
+(function(){
+  var document = bpm_package.children[0];
+  if (document) {
+    lecmPermission.pushAuthentication();
+    lecmPermission.setRunAsUserSystem();
+	LECMResolutionActions.processChangeChildSignal(document);
+    review.resetRelatedReviewChangeCount(document);
+    lecmPermission.popAuthentication();
+  }
+})();
+]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
