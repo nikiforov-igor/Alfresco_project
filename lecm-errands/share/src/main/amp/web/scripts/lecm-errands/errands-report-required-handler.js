@@ -26,7 +26,7 @@
 
     function toggleReportRecipientField(layer, args) {
         var propName = "lecm-errands_report-recipient-type";
-        if (layer == "createErrandsWFErrandControllerChanged") {
+        if (layer == "createErrandsWFErrandReportRequiredChanged") {
             propName = "lecmErrandWf_reportRecipientType";
         }
         var requiredReportField = Dom.get(args[1].formId + '_prop_' + args[1].fieldId.replace('\:', '_'));

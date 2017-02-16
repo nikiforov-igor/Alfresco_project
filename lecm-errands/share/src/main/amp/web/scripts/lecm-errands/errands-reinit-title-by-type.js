@@ -39,10 +39,10 @@
             var reportRequiredChangedFireEvent = "errandReportRequiredChanged";
             var limitationDateRadioChangedEvent = "changeLimitationDateRadio";
 		    if (layer == "createErrandsWFErrandTypeChanged") {
-                titleProp = "lecmErrandWf:title";
-                contentProp = "lecmErrandWf:content";
-                reportRequiredProp = "lecmErrandWf:reportRequired";
-                limitationDateRadioProp = "lecmErrandWf:limitationDateRadio";
+                titleProp = "lecmErrandWf_title";
+                contentProp = "lecmErrandWf_content";
+                reportRequiredProp = "lecmErrandWf_reportRequired";
+                limitationDateRadioProp = "lecmErrandWf_limitationDateRadio";
                 reportRequiredChangedFireEvent = "createErrandsWFErrandReportRequiredChanged";
                 limitationDateRadioChangedEvent = "createErrandsWFChangeLimitationDateRadio";
             }

@@ -2782,13 +2782,13 @@
 
                     <field id="lecmErrandWf:typeAssoc" mandatory="true">
                         <control>
-                            <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
+                            <control-param name="changeItemsFireAction">createErrandsWFErrandTypeChanged</control-param>
                             <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
                         </control>
                     </field>
                     <field id="change-errand-type-script">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecmErrandWf/errands-reinit-title-by-type.js</control-param>
+                            <control-param name="scripts">scripts/lecm-errands/errands-reinit-title-by-type.js</control-param>
                         </control>
                     </field>
                     <field id="lecmErrandWf:title">
@@ -2880,7 +2880,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
 
-                    <field id="lecm-document:subjectAssoc" set="block2">
+                    <field id="lecmErrandWf:subjectAssoc" set="block2">
                         <control>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
                         </control>

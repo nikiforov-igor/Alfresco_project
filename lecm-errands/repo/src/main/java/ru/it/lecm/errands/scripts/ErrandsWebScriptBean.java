@@ -756,6 +756,12 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                     if (value != null) {
                                         props.put(ErrandsService.PROP_ERRANDS_START_DATE, (Serializable) value);
                                     }
+
+                                    value = properties.get("lecmErrandWf_isShort");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_IS_SHORT, (Serializable) value);
+                                    }
+
                                     String name = GUID.generate();
 
                                     NodeRef draft = repositoryStructureHelper.getDraftsRef(user);
@@ -765,9 +771,6 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                             QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)),
                                             ErrandsService.TYPE_ERRANDS,
                                             props).getChildRef();
-
-                                    NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-                                    nodeService.createAssociation(errand, currentEmployee, ErrandsService.ASSOC_ERRANDS_INITIATOR);
 
                                     value = properties.get("lecmErrandWf_executorAssoc");
                                     if (value != null) {
@@ -822,7 +825,6 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                         }
                                     }
                                     nodeService.createAssociation(errand, parentDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
-                                    nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_IS_SHORT, false);
 
                                     return null;
                                 }
