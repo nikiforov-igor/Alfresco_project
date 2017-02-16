@@ -135,3 +135,14 @@ function sendDocumentToReview(document, reviewers, initiatingDocument) {
         sendToReview(reviewTsItems);
     }
 }
+
+function cancelReviewFromInitiatingDocument(initiatingDocument, reviewItems) {
+    var items = Array.isArray(reviewItems) ? reviewItems : [reviewItems];
+    if (initiatingDocument && items && items.length) {
+        items.forEach(function (item) {
+            initiatingDocument.removeAssociation(item, "lecm-review-aspects:related-review-records-assoc");
+        });
+        return true;
+    }
+    return false;
+}
