@@ -1,7 +1,7 @@
 .approvalControlsContainer {
 	height: 16px;
 	float: right;
-	width: 60px;
+	width: 90px;
 	margin-top: 0.5em;
 	display: table;
 	border-spacing: 10px 0;
@@ -16,6 +16,11 @@
 .editIteration {
 	background: url("../../components/images/edit-16.png") no-repeat;
 	background-position: bottom;
+	display: table-cell;
+}
+
+.expandAllStages {
+	background: url("../../images/lecm-approval/expand-16.png") no-repeat bottom;
 	vertical-align: bottom;
 	display: table-cell;
 }
