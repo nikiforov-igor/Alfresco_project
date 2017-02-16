@@ -27,8 +27,7 @@
 	            }).setMessages(${messages});
 
 	    new Alfresco.widget.DashletResizer("${jsid}", "${instance.object.id}");
-        Alfresco.util.Ajax.jsonRequest({
-            method: "GET",
+        Alfresco.util.Ajax.jsonGet({
             url: Alfresco.constants.PROXY_URI + "lecm/contracts/dashlet/settings/url",
             dataObj: {},
             successCallback: {
@@ -47,11 +46,7 @@
                     }
                 }
             },
-            failureCallback: {
-                fn: function (oResponse) {
-                }
-            },
-            scope: this,
+            failureMessage: "${msg("message.failure")}",
             execScripts: true
         });
 

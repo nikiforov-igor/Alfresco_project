@@ -1332,63 +1332,60 @@ LogicECM.module = LogicECM.module || {};
 
 			_loadNode:function (node, fnLoadComplete) {
 				var sUrl = this._generateItemsUrlPath(node.data.nodeRef) + this._generateItemsUrlParams();
-
-				var callback = {
-					success:function (oResponse) {
-						var oResults = eval("(" + oResponse.responseText + ")");
-						if (oResults != null) {
-							node.children = [];
-							for (var nodeIndex in oResults) {
-								var nodeRef = oResults[nodeIndex].nodeRef;
-								var ignore = false;
-								if (this.argument.context.options.ignoreNodesInTreeView) {
-									var ignoreNodes = this.argument.context.options.ignoreNodes;
-									if (ignoreNodes != null) {
-										for (var i = 0; i < ignoreNodes.length; i++) {
-											if (ignoreNodes[i] == nodeRef) {
-												ignore = true;
+				Alfresco.util.Ajax.jsonGet({
+					url: sUrl,
+					successCallback: {
+						fn: function (response) {
+							var oResults = response.json;
+							if (oResults) {
+								node.children = [];
+								for (var nodeIndex in oResults) {
+									var nodeRef = oResults[nodeIndex].nodeRef;
+									var ignore = false;
+									if (this.options.ignoreNodesInTreeView) {
+										var ignoreNodes = this.options.ignoreNodes;
+										if (ignoreNodes) {
+											for (var i = 0; i < ignoreNodes.length; i++) {
+												if (ignoreNodes[i] == nodeRef) {
+													ignore = true;
+												}
 											}
 										}
 									}
-								}
 
-								if (!ignore) {
-									var newNode = {
-										label:oResults[nodeIndex].label,
-										title:oResults[nodeIndex].title,
-										nodeRef:oResults[nodeIndex].nodeRef,
-										isLeaf:oResults[nodeIndex].isLeaf,
-										type:oResults[nodeIndex].type,
-										isContainer: oResults[nodeIndex].isContainer,
-										hasPermAddChildren: oResults[nodeIndex].hasPermAddChildren,
-										renderHidden:true
-									};
+									if (!ignore) {
+										var newNode = {
+											label:oResults[nodeIndex].label,
+											title:oResults[nodeIndex].title,
+											nodeRef:oResults[nodeIndex].nodeRef,
+											isLeaf:oResults[nodeIndex].isLeaf,
+											type:oResults[nodeIndex].type,
+											isContainer: oResults[nodeIndex].isContainer,
+											hasPermAddChildren: oResults[nodeIndex].hasPermAddChildren,
+											renderHidden:true
+										};
 
-									new YAHOO.widget.TextNode(newNode, node);
+										new YAHOO.widget.TextNode(newNode, node);
+									}
 								}
 							}
-						}
 
-						if (oResponse.argument.fnLoadComplete != null) {
-							oResponse.argument.fnLoadComplete();
-						} else {
-							oResponse.argument.tree.draw();
-						}
+							if (YAHOO.lang.isFunction(fnLoadComplete)) {
+								fnLoadComplete.call();
+							} else {
+								this.tree.draw();
+							}
+						},
+						scope: this
 					},
-					failure:function (oResponse) {
-						var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-						this.widgets.dataTable.set("MSG_ERROR", response.message);
-						this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
-					},
-					argument:{
-						node:node,
-						fnLoadComplete:fnLoadComplete,
-						tree:this.tree,
-						context: this
-					},
-					timeout:60000
-				};
-				YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+					failureCallback: {
+						fn: function (response) {
+							this.widgets.dataTable.set("MSG_ERROR", response.json.message);
+							this.widgets.dataTable.showTableMessage(response.json.message, YAHOO.widget.DataTable.CLASS_ERROR);
+						},
+						scope: this
+					}
+				});
 			},
 
 			_generateItemsUrlPath: function (nodeRef)

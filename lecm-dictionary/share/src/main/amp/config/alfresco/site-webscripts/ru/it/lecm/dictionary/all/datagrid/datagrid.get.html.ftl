@@ -145,46 +145,34 @@
             var fields = "";
             var dUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent(item.itemData.prop_cm_name.value);
 
-            Alfresco.util.Ajax.jsonGet(
-                    {
-                        url:dUrl,
-                        successCallback:{
-                            fn:function (response) {
-                                var oResults = eval("(" + response.serverResponse.responseText + ")");
-                                var itemType = oResults["itemType"];
-                                var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/datagrid/config/columns?itemType=" + encodeURIComponent(itemType) + "&formId=export-fields";
-                                Alfresco.util.Ajax.jsonGet(
-                                        {
-                                            url:sUrl,
-                                            successCallback:{
-                                                fn:function (response) {
-                                                    var datagridColumns = response.json.columns;
-                                                    for (var nodeIndex in datagridColumns) {
-                                                        fields += "field=" + datagridColumns[nodeIndex].name + "&";
-                                                    }
-                                                    document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export"
-                                                            + "?" + fields
-                                                            + "nodeRef=" + item.nodeRef;
-                                                },
-                                                scope:this
-                                            },
-                                            failureCallback:{
-                                                fn:function () {
-                                                    alert("Failed to load webscript export.")
-                                                },
-                                                scope:this
-                                            }
-                                        });
+            Alfresco.util.Ajax.jsonGet({
+                url:dUrl,
+                successCallback:{
+                    fn:function (response) {
+                        var oResults = response.json;
+                        var itemType = oResults["itemType"];
+                        var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/datagrid/config/columns?itemType=" + encodeURIComponent(itemType) + "&formId=export-fields";
+                        Alfresco.util.Ajax.jsonGet({
+                            url:sUrl,
+                            successCallback:{
+                                fn:function (response) {
+                                    var datagridColumns = response.json.columns;
+                                    for (var nodeIndex in datagridColumns) {
+                                        fields += "field=" + datagridColumns[nodeIndex].name + "&";
+                                    }
+                                    document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export"
+                                            + "?" + fields
+                                            + "nodeRef=" + item.nodeRef;
+                                },
+                                scope:this
                             },
-                            scope:this
-                        },
-                        failureCallback:{
-                            fn:function () {
-                                alert("Failed to load webscript export.")
-                            },
-                            scope:this
-                        }
-                    });
+                            failureMessage: "${msg('message.dictionary.load.failed')}"
+                        });
+                    },
+                    scope:this
+                },
+                failureMessage: "${msg('message.dictionary.load.failed')}"
+            });
         };
 
         var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions(

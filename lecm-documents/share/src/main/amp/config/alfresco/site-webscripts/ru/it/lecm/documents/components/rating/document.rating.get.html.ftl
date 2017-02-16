@@ -106,7 +106,7 @@
         };
 
         <#-- Получение рейтинга для текущего пользователя (при загрузке страницы)-->
-        Alfresco.util.Ajax.request({
+        Alfresco.util.Ajax.jsonGet({
             url: Alfresco.constants.PROXY_URI + "lecm/document/api/getRating?nodeRef=" + nodeRef,
             successCallback: {
                 fn: function refreshSuccess(response) {

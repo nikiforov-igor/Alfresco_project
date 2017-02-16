@@ -57,18 +57,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			},
 
 			onSubmit: function () {
-				var me = this;
-				Alfresco.util.Ajax.jsonRequest(
-					{
-						method: "POST",
-						url: Alfresco.constants.PROXY_URI + "lecm/document/api/editDocument",
-						dataObj: {
-							nodeRef: me.options.nodeRef,
-							properties: me.options.propertyName + "=" + Dom.get(this.id + "-property-value").value + "," + me.options.propertyName + "=" + Dom.get(this.id + "-property-value").value
-						},
-						successMessage: this.msg("message.submit.success"),
-						failureMessage: this.msg("message.submit.failure")
-					});
+				Alfresco.util.Ajax.jsonPost({
+					url: Alfresco.constants.PROXY_URI + "lecm/document/api/editDocument",
+					dataObj: {
+						nodeRef: this.options.nodeRef,
+						properties: this.options.propertyName + "=" + Dom.get(this.id + "-property-value").value + "," + this.options.propertyName + "=" + Dom.get(this.id + "-property-value").value
+					},
+					successMessage: this.msg("message.submit.success"),
+					failureMessage: this.msg("message.submit.failure")
+				});
 			},
 
 			updateDocumentPage: function (layer, args) {

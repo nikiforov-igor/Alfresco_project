@@ -113,37 +113,33 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
             },
 
             updateDocTypeData: function () {
-                Alfresco.util.Ajax.jsonGet(
-                    {
-                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/type/fields?itemType=" + this.currentDocType,
-                        successCallback:
-                        {
-                            fn:function (response) {
-                                this.currentDocTypeFields = response.json.fields;
-                                this.currentDocTypeFields.sort(function(left, right) {
-                                    if (left.label < right.label) {
-                                        return -1;
-                                    }
-                                    if (left.label > right.label) {
-                                        return 1;
-                                    }
-                                    return 0;
-                                });
-                                Bubbling.fire("docFieldsSet");
-                            },
-                            scope:this
+                Alfresco.util.Ajax.jsonGet({
+                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/type/fields?itemType=" + this.currentDocType,
+                    successCallback: {
+                        fn:function (response) {
+                            this.currentDocTypeFields = response.json.fields;
+                            this.currentDocTypeFields.sort(function(left, right) {
+                                if (left.label < right.label) {
+                                    return -1;
+                                }
+                                if (left.label > right.label) {
+                                    return 1;
+                                }
+                                return 0;
+                            });
+                            Bubbling.fire("docFieldsSet");
                         },
-                        failureCallback:
-                        {
-                            fn:function () {
-                                Alfresco.util.PopupManager.displayMessage(
-                                    {
-                                        text:this.msg("message.failure")
-                                    });
-                            },
-                            scope:this
-                        }
-                    });
+                        scope:this
+                    },
+                    failureCallback: {
+                        fn:function () {
+                            Alfresco.util.PopupManager.displayMessage({
+                                text: this.msg("message.failure")
+                            });
+                        },
+                        scope:this
+                    }
+                });
             },
 
             getDataTableColumnDefinitions:function () {

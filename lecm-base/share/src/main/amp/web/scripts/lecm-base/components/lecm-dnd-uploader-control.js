@@ -236,31 +236,27 @@ LogicECM.control = LogicECM.control || {};
 			},
 
 			loadRootNode: function () {
-				Alfresco.util.Ajax.jsonGet(
-					{
-						url: this.generateRootUrlPath(),
-						successCallback:
-						{
-							fn: function (response) {
-								var oResults = response.json;
-								if (oResults != null) {
-									this.rootNodeRef = oResults.nodeRef;
-									this.initUploader();
-								}
-							},
-							scope: this
+				Alfresco.util.Ajax.jsonGet({
+					url: this.generateRootUrlPath(),
+					successCallback: {
+						fn: function (response) {
+							var oResults = response.json;
+							if (oResults) {
+								this.rootNodeRef = oResults.nodeRef;
+								this.initUploader();
+							}
 						},
-						failureCallback:
-						{
-							fn: function (oResponse) {
-								Alfresco.util.PopupManager.displayPrompt(
-									{
-										text: this.msg("message.load.dnd-uploader.failure")
-									});
-							},
-							scope: this
-						}
-					});
+						scope: this
+					},
+					failureCallback: {
+						fn: function (oResponse) {
+							Alfresco.util.PopupManager.displayPrompt({
+								text: this.msg("message.load.dnd-uploader.failure")
+							});
+						},
+						scope: this
+					}
+				});
 			},
 
 			generateRootUrlPath: function () {

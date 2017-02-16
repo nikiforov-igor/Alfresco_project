@@ -111,42 +111,40 @@ LogicECM.module = LogicECM.module || {};
 							}
 						);
 					} else if (this.options.itemTypes.length > 1) {
-						var me = this;
-						Alfresco.util.Ajax.jsonRequest(
-							{
-								url:Alfresco.constants.PROXY_URI + "lecm/base/types/titles",
-								method:Alfresco.util.Ajax.POST,
-								dataObj:{
-									types: this.options.itemTypes
-								},
-								successCallback:{
-									fn:function(response){
-										if (response.json != null && response.json.length > 0) {
-											var menu = [];
-											for (var i = 0; i < response.json.length; i++) {
-												var type = response.json[i];
-												menu.push({
-													text: type.title,
-													value: type.name,
-													onclick: {
-														fn: me.onClickMenuButton,
-														scope: this
-													}
-												});
-											}
-											me.widgets.createNewButton = new YAHOO.widget.Button(
-												me.options.controlId + "-create-new-button",
-												{
-													type: "menu",
-													menu: menu
+						Alfresco.util.Ajax.jsonRequest({
+							url:Alfresco.constants.PROXY_URI + "lecm/base/types/titles",
+							method:Alfresco.util.Ajax.POST,
+							dataObj:{
+								types: this.options.itemTypes
+							},
+							successCallback:{
+								fn:function(response){
+									if (response.json && response.json.length > 0) {
+										var menu = [];
+										for (var i = 0; i < response.json.length; i++) {
+											var type = response.json[i];
+											menu.push({
+												text: type.title,
+												value: type.name,
+												onclick: {
+													fn: this.onClickMenuButton,
+													scope: this
 												}
-											);
+											});
 										}
-									},
-									scope:this
+										this.widgets.createNewButton = new YAHOO.widget.Button(
+											this.options.controlId + "-create-new-button",
+											{
+												type: "menu",
+												menu: menu
+											}
+										);
+									}
 								},
-								failureMessage: "message.failure"
-							});
+								scope: this
+							},
+							failureMessage: this.msg("message.failure")
+						});
 					}
 			},
 

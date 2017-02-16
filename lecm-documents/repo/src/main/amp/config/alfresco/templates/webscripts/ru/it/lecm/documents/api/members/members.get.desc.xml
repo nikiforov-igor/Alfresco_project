@@ -2,7 +2,7 @@
     <shortname>Get document members</shortname>
     <description>Document Members Get</description>
     <url>/lecm/document/api/getMembers?nodeRef={nodeRef}&amp;skipCount={skipCount}&amp;loadCount={loadCount}</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

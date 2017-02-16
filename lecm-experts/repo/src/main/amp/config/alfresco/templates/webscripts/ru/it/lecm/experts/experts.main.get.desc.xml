@@ -2,7 +2,7 @@
     <shortname>Document Experts</shortname>
     <description>Get already saved experts for document from repository</description>
     <url>/lecm/experts/main</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction allow="readonly">required</transaction>
     <lifecycle>internal</lifecycle>

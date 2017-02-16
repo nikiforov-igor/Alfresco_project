@@ -3,6 +3,6 @@
 	<shortname>Generate Report Template</shortname>
 	<url>/lecm/reports/rptmanager/generateReportTemplate?reportRef={reportRef}</url>
 	<authentication>user</authentication>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<transaction>required</transaction>
 </webscript>

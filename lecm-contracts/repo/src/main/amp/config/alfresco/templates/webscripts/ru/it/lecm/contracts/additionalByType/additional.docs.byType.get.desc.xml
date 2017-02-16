@@ -2,7 +2,7 @@
     <shortname>Документы к договорам по типу</shortname>
     <description>Получение списка документов к договорам по типу</description>
     <url>/lecm/contracts/additionalDocsCount?type={type}</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

@@ -2,7 +2,7 @@
 	<shortname>Delegation Module Global Settings Node</shortname>
 	<description>Delegation Module Global Settings Node</description>
 	<url>/lecm/delegation/getGlobalSettings</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>user</authentication>
 	<transaction>none</transaction>
 </webscript>

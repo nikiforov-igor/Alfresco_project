@@ -7,6 +7,6 @@
 	...(параметры)
 	</description>
 	<url>/lecm/groupActions/exec</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>user</authentication>
 </webscript>

@@ -15,8 +15,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 
 	YAHOO.lang.augmentObject(LogicECM.module.Nomenclature.Tree.prototype, {
 		_loadRootNode: function() {
-			Alfresco.util.Ajax.request({
-				method: "GET",
+			Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/os/nomenclature/getNomenclatureFolder',
 				successCallback: {
 					scope: this,
@@ -27,9 +26,8 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 						}
 					}
 				},
-				failureMessage: "message.failure",
-				execScripts: true,
-				scope: this
+				failureMessage: this.msg("message.failure"),
+				execScripts: true
 			});
 		},
 

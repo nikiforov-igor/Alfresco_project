@@ -51,9 +51,8 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 				successCallback: {
 					fn: function (response) {
 						var oResults = response.json;
-						if (oResults != null && oResults.targetType != null) {
+						if (oResults && oResults.targetType) {
 							this.targetType = oResults.targetType;
-
 							this.loadConfig()
 						}
 					},

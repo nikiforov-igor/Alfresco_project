@@ -83,22 +83,21 @@
         }
 
         function init() {
-            Alfresco.util.Ajax.request(
-                    {
-                        url: Alfresco.constants.PROXY_URI + "lecm/document/api/getMembersFolder",
-                        dataObj: {
-                            nodeRef: "${docRef}"
-                        },
-                        successCallback: {
-                            fn: function (oResponse) {
-                                var oResults = eval("(" + oResponse.serverResponse.responseText + ")");
-                                if (oResults && oResults.nodeRef) {
-                                    draw(oResults.nodeRef);
-                                }
-                            }
-                        },
-                        failureMessage: "message.failure"
-                    });
+            Alfresco.util.Ajax.jsonGet({
+                url: Alfresco.constants.PROXY_URI + "lecm/document/api/getMembersFolder",
+                dataObj: {
+                    nodeRef: "${docRef}"
+                },
+                successCallback: {
+                    fn: function (response) {
+                        if (response && response.nodeRef) {
+                            draw(response.nodeRef);
+                        }
+                    },
+                    scope: this
+                },
+                failureMessage: "${msg('message.failure')}"
+            });
         }
 
         function draw(folderRef) {

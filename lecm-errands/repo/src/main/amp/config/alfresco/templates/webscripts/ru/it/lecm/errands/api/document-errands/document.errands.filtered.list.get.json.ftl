@@ -1,5 +1,5 @@
 <#macro renderErrand errand>
-	<#escape x as jsonUtils.encodeJSONString(x)>
+	<#escape x as jsonUtils.encodeJSONString(x)!''>
 		"nodeRef": "${errand.getNodeRef().toString()}",
 		"description": "${errand.properties["lecm-errands:content"]?string}",
 		"title": "${errand.properties["lecm-errands:title"]?js_string}",

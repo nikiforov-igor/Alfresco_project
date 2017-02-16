@@ -269,47 +269,41 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
             onGroupActionsClick: function onGroupActionsClick(p_sType, p_aArgs, p_oItem) {
                 var items = p_oItem.items;
                 if (p_oItem.type == "lecm-group-actions:script-action") {
-                    var me = this;
-                    Alfresco.util.PopupManager.displayPrompt(
-                        {
-                            title: this.msg("lecm.re.ttl.action.performing"),
-                            text: this.msg("lecm.re.ttl.confirm.action") + " \"" + p_oItem.label + "\"",
-                            buttons: [
-                                {
-                                    text: this.msg("lecm.re.btn.ok"),
-                                    handler: function dlA_onAction_action() {
-                                        this.destroy();
-                                        Alfresco.util.Ajax.jsonRequest({
-                                            method: "POST",
-                                            url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
-                                            dataObj: {
-                                                items: items,
-                                                actionId: p_oItem.actionId
+                    Alfresco.util.PopupManager.displayPrompt({
+                        title: this.msg("lecm.re.ttl.action.performing"),
+                        text: this.msg("lecm.re.ttl.confirm.action") + " \"" + p_oItem.label + "\"",
+                        buttons: [
+                            {
+                                text: this.msg("lecm.re.btn.ok"),
+                                handler: function dlA_onAction_action() {
+                                    this.destroy();
+                                    Alfresco.util.Ajax.jsonPost({
+                                        url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
+                                        dataObj: {
+                                            items: items,
+                                            actionId: p_oItem.actionId
+                                        },
+                                        successCallback: {
+                                            fn: function (oResponse) {
+                                                this._actionResponse(p_oItem.actionId, oResponse, items);
                                             },
-                                            successCallback: {
-                                                fn: function (oResponse) {
-                                                    me._actionResponse(p_oItem.actionId, oResponse, items);
-                                                }
-                                            },
-                                            failureCallback: {
-                                                fn: function () {
-                                                }
-                                            },
-                                            scope: me,
-                                            execScripts: true
-                                        });
+                                            scope: this
+                                        },
+                                        failureMessage: this.msg('message.failure'),
+                                        execScripts: true
+                                    });
 
-                                    }
-                                },
-                                {
-                                    text: this.msg("lecm.re.btn.cancel"),
-                                    handler: function dlA_onActionDelete_cancel() {
-                                        this.destroy();
-                                    },
-                                    isDefault: true
                                 }
-                            ]
-                        });
+                            },
+                            {
+                                text: this.msg("lecm.re.btn.cancel"),
+                                handler: function dlA_onActionDelete_cancel() {
+                                    this.destroy();
+                                },
+                                isDefault: true
+                            }
+                        ]
+                    });
                 }
             },
             _actionResponse: function actionResponseFunction(label, response, items) {

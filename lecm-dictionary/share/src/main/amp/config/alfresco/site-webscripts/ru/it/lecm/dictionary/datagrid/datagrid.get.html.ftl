@@ -85,20 +85,19 @@
 	}
 
 	function loadDictionary() {
-    var sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent("${args.dictionaryName}");
-
-	    var callback = {
-	        success: function (oResponse) {
-	            var oResults = eval("(" + oResponse.responseText + ")");
-	            if (oResults != null) {
-	                    createDatagrid(oResults);
-	            }
-	        },
-	        failure: function (oResponse) {
-	            alert("${msg('message.dictionary.loading.fail')}");
-	        }
-	    };
-	    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+    	var sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent("${args.dictionaryName}");
+        Alfresco.util.Ajax.jsonGet({
+            url: sUrl,
+            successCallback: {
+                fn: function (response) {
+                    if (response.json) {
+                        createDatagrid(response.json);
+                    }
+                },
+                scope: this
+            },
+            failureMessage: "${msg('message.dictionary.loading.fail')}"
+        });
 	}
 
     function init() {

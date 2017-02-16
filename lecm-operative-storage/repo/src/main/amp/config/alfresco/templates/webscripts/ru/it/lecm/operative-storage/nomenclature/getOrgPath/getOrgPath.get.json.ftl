@@ -1,5 +1,5 @@
-<#escape x as x!""?js_string>
-	{
-		"xPath": "${result.qnamePath}"
-	}
+<#escape x as jsonUtils.encodeJSONString(x)!''>
+{
+	"xPath": "${result.qnamePath}"
+}
 </#escape>

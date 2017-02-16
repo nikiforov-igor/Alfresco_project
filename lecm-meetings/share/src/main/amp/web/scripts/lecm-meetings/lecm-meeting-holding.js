@@ -167,23 +167,19 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 
 		onRemoveItem: function(layer, args) {
 			var nodeRef = args[1].nodeRef;
-			if (nodeRef != null) {
-				var me = this;
-				Alfresco.util.Ajax.request({
-					method: "GET",
+			if (nodeRef) {
+				Alfresco.util.Ajax.jsonGet({
 					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/meeting/removeItem?nodeRef=" + nodeRef,
 					successCallback: {
 						fn: function (response) {
 							var itemBlock = Dom.get(this.ITEM_FORM_PREFIX + nodeRef.replace('workspace://SpacesStore/', '_') + "-form-container");
-							if (itemBlock != null) {
+							if (itemBlock) {
 								itemBlock.parentNode.removeChild(itemBlock);
 							}
 						},
 						scope: this
 					}
 				});
-
-
 			}
 		},
 
