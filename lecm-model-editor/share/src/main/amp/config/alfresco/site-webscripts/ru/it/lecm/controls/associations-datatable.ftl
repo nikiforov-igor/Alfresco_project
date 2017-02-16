@@ -4,18 +4,18 @@
 (function () {
 	function initAssociationsDatatable(obj) {
 		var columnDefinitions = [{
+				key: 'copy',
+				label: '',
+				formatter: LogicECM.module.ModelEditor.DatatableControl.prototype.formatActions,
+				width: 15,
+				maxAutoWidth: 15
+			}, {
 				className: 'viewmode-label',
 				key: '_name',
 				label: '${msg("lecm.meditor.lbl.name")}',
 				formatter: LogicECM.module.ModelEditor.DatatableControl.prototype.formatText,
 				width: 170,
 				maxAutoWidth: 170
-			}, {
-				key: 'copy',
-				label: '',
-				formatter: LogicECM.module.ModelEditor.DatatableControl.prototype.formatActions,
-				width: 15,
-				maxAutoWidth: 15
 			}, {
 				className: 'viewmode-label',
 				key: 'title',

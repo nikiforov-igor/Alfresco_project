@@ -16,7 +16,32 @@
 <@inlineScript group='model-editor'>
 (function () {
 	function initParentAttributesDatatable(obj) {
-		var dTypes = ['',
+		var columnDefinitions = [{
+				key: 'expand',
+				label: '',
+				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatActions,
+				width: 15,
+				maxAutoWidth: 15
+			}, {
+				className: 'viewmode-label',
+				key: '_name',
+				label: '${msg("lecm.meditor.lbl.name")}',
+				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatText,
+				width: 1078,
+				maxAutoWidth: 1078
+			}],
+			responseSchema = {
+				fields: [
+					{ key: '_name'     },
+					{ key: 'type'     }
+				]
+			},
+			dTokenised = ['',
+				{ label: '${msg("lecm.meditor.lbl.yes")}',  value: 'TRUE'  },
+				{ label: '${msg("lecm.meditor.lbl.no")}',   value: 'FALSE' },
+				{ label: '${msg("lecm.meditor.lbl.both")}', value: 'BOTH'  }
+			],
+			dTypes = ['',
 				{ label: '${msg("lecm.meditor.lbl.any")}',      value: 'd:any'      },
 				{ label: '${msg("lecm.meditor.lbl.text")}',     value: 'd:text'     },
 				{ label: '${msg("lecm.meditor.lbl.content")}',  value: 'd:content'  },
@@ -30,153 +55,19 @@
 				{ label: '${msg("lecm.meditor.lbl.qname")}',    value: 'd:qname'    },
 				{ label: '${msg("lecm.meditor.lbl.noderef")}',  value: 'd:noderef'  },
 				{ label: '${msg("lecm.meditor.lbl.category")}', value: 'd:category' },
-				{ label: '${msg("lecm.meditor.lbl.mltext")}',   value: 'd:mltext'}
+				{ label: '${msg("lecm.meditor.lbl.mltext")}',   value: 'd:mltext'   },
+				{ label: '${msg("lecm.meditor.lbl.locale")}',   value: 'd:locale'   }
 			],
-			dTokenised = ['',
-				{ label: '${msg("lecm.meditor.lbl.yes")}',  value: 'TRUE'  },
-				{ label: '${msg("lecm.meditor.lbl.no")}',   value: 'FALSE' },
-				{ label: '${msg("lecm.meditor.lbl.both")}', value: 'BOTH'  }
-			],
-			columnDefinitions = [{
-				key: 'expand',
-				label: '',
-				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatActions,
-				width: 15,
-				maxAutoWidth: 15
-			}, {
-				className: 'viewmode-label',
-				key: '_name',
-				label: '${msg("lecm.meditor.lbl.name")}',
-				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatText,
-				width: 170,
-				maxAutoWidth: 170
-			}, {
-				className: 'viewmode-label',
-				key: 'title',
-				label: '${msg("lecm.meditor.lbl.title")}',
-				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatText,
-				width: 170,
-				maxAutoWidth: 170
-			}, {
-				className: 'viewmode-label',
-				key: 'default',
-				label: '${msg("lecm.meditor.lbl.default")}',
-				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatText,
-				width: 170,
-				maxAutoWidth: 170
-			}, {
-				className: 'viewmode-label',
-				key: 'type',
-				label: '${msg("lecm.meditor.lbl.type")}',
-				dropdownOptions: dTypes,
-				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatDropdown,
-				width: 100,
-				maxAutoWidth: 100
-			}, {
-				className: 'viewmode-label',
-				key: 'mandatory',
-				label: '${msg("lecm.meditor.lbl.mandatory")}',
-				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatBoolean,
-				width: 100,
-				maxAutoWidth: 100
-			}, {
-				className: 'viewmode-label',
-				key: '_enabled',
-				label: '${msg("lecm.meditor.lbl.index")}',
-				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatBoolean,
-				width: 100,
-				maxAutoWidth: 100
-			}, {
-				className: 'viewmode-label',
-				key: 'tokenised',
-				label: '${msg("lecm.meditor.lbl.tokenised")}',
-				dropdownOptions: dTokenised,
-				formatter: LogicECM.module.ModelEditor.RODatatableControl.prototype.formatDropdown,
-				width: 136,
-				maxAutoWidth: 136
-			}],
-			dialogElements = {
-				'_name': {
-					name: '_name',
-					label: '${msg("lecm.meditor.lbl.name")}',
-					type: 'input',
-					value: ''
-				},
-				'title': {
-					name: 'title',
-					label: '${msg("lecm.meditor.lbl.title")}',
-					type: 'input',
-					value: ''
-				},
-				'default': {
-					name: 'default',
-					label: '${msg("lecm.meditor.lbl.default")}',
-					type: 'input',
-					value: ''
-				},
-				'type': {
-					name: 'type',
-					label: '${msg("lecm.meditor.lbl.type")}',
-					type: 'select',
-					options: dTypes,
-					showdefault: false
-				},
-				'mandatory': {
-					name: 'mandatory',
-					label: '${msg("lecm.meditor.lbl.mandatory")}',
-					type: 'select',
-					options: [
-						{ label: '${msg("lecm.meditor.lbl.yes")}', value: 'true'  },
-						{ label: '${msg("lecm.meditor.lbl.no")}',  value: 'false' }
-					],
-					value: 'false',
-					showdefault: false
-				},
-				'_enabled': {
-					name: '_enabled',
-					label: '${msg("lecm.meditor.lbl.index")}',
-					type: 'select',
-					options: [
-						{ label: '${msg("lecm.meditor.lbl.yes")}', value: 'true'  },
-						{ label: '${msg("lecm.meditor.lbl.no")}',  value: 'false' }
-					],
-					value: 'false',
-					showdefault: false
-				},
-				'tokenised': {
-					name: 'tokenised',
-					label: '${msg("lecm.meditor.lbl.tokenised")}',
-					type: 'select',
-					options: [
-						{ label: '${msg("lecm.meditor.lbl.both")}', value: 'both' },
-						{ label: '${msg("lecm.meditor.lbl.yes")}', value: 'true'  },
-						{ label: '${msg("lecm.meditor.lbl.no")}', value: 'false'  }
-					],
-					value: 'both',
-					showdefault: false
-				}
-			},
-			responseSchema = {
-				fields: [
-					{ key: '_name'     },
-					{ key: 'props'     },
-					{ key: 'title'     },
-					{ key: 'default'   },
-					{ key: 'type'      },
-					{ key: 'mandatory' },
-					{ key: '_enabled'  },
-					{ key: 'tokenised' }
-				]
-			},
 			nodeRef = '${context.properties.nodeRef}',
 			doctype = '${context.properties.doctype}',
 			data = obj.model.attributesArray;
 
 		new LogicECM.module.ModelEditor.RODatatableControl('LogicECM.module.ModelEditor.ParentAttributesDatatable', '${fieldHtmlId}', {
 			columnDefinitions: columnDefinitions,
-			dialogElements: dialogElements,
 			responseSchema: responseSchema,
 			url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/type/attributes?nodeRef='+nodeRef+'&doctype='+doctype,
+			dTokenised:dTokenised,
+			dTypes:dTypes,
 			data: data
 		}, ${messages});
 	}

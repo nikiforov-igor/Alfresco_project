@@ -340,7 +340,6 @@ public class ModelsListBeanImpl extends BaseBean {
 			if(parentDocumentTypeQName!=null) {
 				while(parentDocumentTypeQName!=null) {
 					String parentNS = parentDocumentTypeQName.toPrefixString().substring(0,parentDocumentTypeQName.toPrefixString().indexOf(":"));
-					logger.info("$$$$$$$$$ parentNS: "+parentNS);
 					JSONObject parentObject = new JSONObject();
 					parentObject.put("_name", parentDocumentTypeQName.toPrefixString());
 					TypeDefinition parentType = dictionaryService.getType(parentDocumentTypeQName);
@@ -360,7 +359,9 @@ public class ModelsListBeanImpl extends BaseBean {
 						}
 					}
 					Collections.sort(propsArray, new JSONComparator("_name"));
-					parentObject.put("props", propsArray);
+					JSONObject typeObject = new JSONObject();
+					typeObject.put("props", propsArray);
+					parentObject.put("type", typeObject);
 					items.add(parentObject);
 					parentDocumentTypeQName = parentType.getParentName();
 					if("cm:cmobject".equals(parentDocumentTypeQName.toPrefixString())) parentDocumentTypeQName = null;
@@ -408,7 +409,6 @@ public class ModelsListBeanImpl extends BaseBean {
 			if(parentDocumentTypeQName!=null) {
 				while(parentDocumentTypeQName!=null) {
 					String parentNS = parentDocumentTypeQName.toPrefixString().substring(0,parentDocumentTypeQName.toPrefixString().indexOf(":"));
-					logger.info("$$$$$$$$$ parentNS: "+parentNS);
 					JSONObject parentObject = new JSONObject();
 					parentObject.put("_name", parentDocumentTypeQName.toPrefixString());
 					TypeDefinition parentType = dictionaryService.getType(parentDocumentTypeQName);
@@ -426,7 +426,9 @@ public class ModelsListBeanImpl extends BaseBean {
 						}
 					}
 					Collections.sort(assocsArray, new JSONComparator("_name"));
-					parentObject.put("assocs", assocsArray);
+					JSONObject typeObject = new JSONObject();
+					typeObject.put("assocs", assocsArray);
+					parentObject.put("type", typeObject);
 					items.add(parentObject);
 					parentDocumentTypeQName = parentType.getParentName();
 					if("cm:cmobject".equals(parentDocumentTypeQName.toPrefixString())) parentDocumentTypeQName = null;
@@ -450,7 +452,6 @@ public class ModelsListBeanImpl extends BaseBean {
 			aspectObject.put("name", aspect.getName().toPrefixString(namespaceService));
 			List<JSONObject> props = new ArrayList<>();
 			for(PropertyDefinition pdRow: aspect.getProperties().values()){
-				logger.info("%%%%%%% pdRow: "+pdRow.getName().toPrefixString());
 				JSONObject propObject = new JSONObject();
 				propObject.put("_name", pdRow.getName().toPrefixString(namespaceService));
 				propObject.put("title", pdRow.getTitle());
@@ -467,7 +468,6 @@ public class ModelsListBeanImpl extends BaseBean {
 			tableObject.put("props", props);
 			List<JSONObject> assocs = new ArrayList<>();
 			for(AssociationDefinition adRow: aspect.getAssociations().values()) {
-				logger.info("%%%%%%% adRow: "+adRow.getName().toPrefixString());
 				JSONObject assocObject = new JSONObject();
 				assocObject.put("_name", adRow.getName().toPrefixString(namespaceService));
 				assocObject.put("title", adRow.getTitle());
@@ -582,7 +582,6 @@ public class ModelsListBeanImpl extends BaseBean {
 				String tableRowProp = pd.getName().toPrefixString();
 				if("lecm-document:tableDataRowType".equals(tableRowProp)) {
 					String tableRowType = pd.getDefaultValue();
-					logger.info("%%%%%%% tableRowProp: "+tableRowProp+", tableRowType: "+tableRowType);
 					QName tableRowTypeQname = QName.createQName(tableRowType, namespaceService);
 					TypeDefinition tdRow = dictionaryService.getType(tableRowTypeQname);
 					if(tdRow!=null) {
@@ -592,7 +591,6 @@ public class ModelsListBeanImpl extends BaseBean {
 						aspectObject.put("name", tableRowType);
 						List<JSONObject> props = new ArrayList<>();
 						for(PropertyDefinition pdRow: tdRow.getProperties().values()){
-							logger.info("%%%%%%% pdRow: "+pdRow.getName().toPrefixString());
 							JSONObject propObject = new JSONObject();
 							propObject.put("_name", pdRow.getName().toPrefixString(namespaceService));
 							propObject.put("title", pdRow.getTitle());
@@ -609,7 +607,6 @@ public class ModelsListBeanImpl extends BaseBean {
 						tableObject.put("props", props);
 						List<JSONObject> assocs = new ArrayList<>();
 						for(AssociationDefinition adRow: tdRow.getAssociations().values()) {
-							logger.info("%%%%%%% adRow: "+adRow.getName().toPrefixString());
 							JSONObject assocObject = new JSONObject();
 							assocObject.put("_name", adRow.getName().toPrefixString(namespaceService));
 							assocObject.put("title", adRow.getTitle());

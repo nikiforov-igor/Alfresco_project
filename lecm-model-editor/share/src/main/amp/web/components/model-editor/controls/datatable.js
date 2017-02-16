@@ -200,7 +200,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			    						{ label: "Обе", value: 'BOTH'  }
 			    					],
 			        				colDefProps = [
-			        					{className:'viewmode-label',key:'_name',label:'Имя',width:170,maxAutoWidth:170},
+			        					{className:'viewmode-label',key:'_name',label:'Имя',width:158,maxAutoWidth:158},
 			        					{className:'viewmode-label',key:'title',label:'Заголовок',width:170,maxAutoWidth:170},
 			        					{className:'viewmode-label',key:'default',label:'По умолчанию',width:170,maxAutoWidth:170},
 			        					{className:'viewmode-label',key:'type',label:'Тип',width:100,maxAutoWidth:100,dropdownOptions:dTypes,formatter:function (el, oRecord, oColumn, oData, oDataTable) {
@@ -231,7 +231,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			                    	var div22 = el.appendChild(document.createElement('div'));
 			        				div22.id = oRecord.getId()+'assocs';
 			        				var colDefAssocs = [
-			        					{className:'viewmode-label',key:'_name',label:'Имя',width:170,maxAutoWidth:170},
+			        					{className:'viewmode-label',key:'_name',label:'Имя',width:158,maxAutoWidth:158},
 			        					{className:'viewmode-label',key:'title',label:'Заголовок',width:170,maxAutoWidth:170},
 			        					{className:'viewmode-label',key:'class',label:'Тип',width:291,maxAutoWidth:291,dropdownOptions:this.configs.associations,formatter:function (el, oRecord, oColumn, oData, oDataTable) {
 			    							var select = new IT.widget.Select({ name: "parentRef", options: oColumn.dropdownOptions, value: oData, showdefault: true, disabled: true });

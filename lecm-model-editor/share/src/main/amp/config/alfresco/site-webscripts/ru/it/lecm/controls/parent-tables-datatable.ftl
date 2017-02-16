@@ -31,17 +31,11 @@
 				width : 1078,
 				maxAutoWidth : 1078
 			}],
-			dialogElements = [{
-				name: 'table',
-				label: '${msg("lecm.meditor.lbl.table")}',
-				type: 'select',
-				options: obj.tables,
-				showdefault: false
-			}],
 			responseSchema = {
 				fields: [
 				{key: 'name'},
 				{key: 'aspectName'},
+				{key: 'aspectTitle'},
 				{key: 'table'}
 				]
 			},
@@ -52,7 +46,6 @@
 
 		new LogicECM.module.ModelEditor.RODatatableControl('LogicECM.module.ModelEditor.ParentTablesDatatable', '${fieldHtmlId}', {
 			columnDefinitions: columnDefinitions,
-			dialogElements: dialogElements,
 			responseSchema: responseSchema,
 			url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/type/parent/tables?nodeRef='+nodeRef+'&doctype='+doctype,
 			associations: associations,
