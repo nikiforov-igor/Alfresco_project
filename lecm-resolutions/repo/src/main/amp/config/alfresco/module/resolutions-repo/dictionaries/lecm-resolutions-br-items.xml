@@ -32,6 +32,18 @@
 				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
 				<property name="lecm-orgstr:business-role-description"></property>
 			</item>
+            <item name="cm:Резолюции. Исполнитель дочернего поручения" type="lecm-orgstr:business-role">
+				<property name="cm:name">Резолюции. Исполнитель дочернего поручения</property>
+				<property name="lecm-orgstr:business-role-identifier">RESOLUTION_CHILD_ERRANDS_EXECUTOR</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
+				<property name="lecm-orgstr:business-role-description"></property>
+			</item>
+            <item name="cm:Резолюции. Соисполнитель дочернего поручения" type="lecm-orgstr:business-role">
+				<property name="cm:name">Резолюции. Соисполнитель дочернего поручения</property>
+				<property name="lecm-orgstr:business-role-identifier">RESOLUTION_CHILD_ERRANDS_CO_EXECUTOR</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
+				<property name="lecm-orgstr:business-role-description"></property>
+			</item>
 		</items>
 	</item>
 </items>
