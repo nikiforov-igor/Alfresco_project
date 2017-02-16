@@ -19,17 +19,12 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 		options: {
 			columnDefinitions: null,
-//			dialogElements: null,
 			responseSchema: null,
 			url: null,
 			dTypes: null,
 			dTokenised: null,
 			associations: null,
 			data: null
-		},
-		
-		formatSimpleText: function (el, oRecord, oColumn, oData, oDataTable) {
-			el.innerHTML = (oData?oData:'');
 		},
 		
 		formatText: function (el, oRecord, oColumn, oData, oDataTable) {
@@ -55,8 +50,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 					div12.id = oRecord.getId()+'props';
 					var colDefProps = [
 						{className:'viewmode-label',key:'_name',label:'Имя',width:158,maxAutoWidth:158},
-						{className:'viewmode-label',key:'title',label:'Заголовок',width:170,maxAutoWidth:170,formatter:LogicECM.module.ModelEditor.RODatatableControl.formatSimpleText},
-						{className:'viewmode-label',key:'default',label:'По умолчанию',width:170,maxAutoWidth:170,formatter:LogicECM.module.ModelEditor.RODatatableControl.formatSimpleText},
+						{className:'viewmode-label',key:'title',label:'Заголовок',width:170,maxAutoWidth:170},
+						{className:'viewmode-label',key:'default',label:'По умолчанию',width:170,maxAutoWidth:170},
 						{className:'viewmode-label',key:'type',label:'Тип',width:100,maxAutoWidth:100,dropdownOptions:this.configs.dTypes,formatter:function (el, oRecord, oColumn, oData, oDataTable) {
 							var select = new IT.widget.Select({ name: "parentRef", options: oColumn.dropdownOptions, value: oData, showdefault: true, disabled: true });
 							select.render(el);
@@ -106,30 +101,6 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 					datatable2 = new YAHOO.widget.DataTable(div22, colDefAssocs, DSPAssocs);
 				}
 			}
-		},
-		
-		formatBoolean: function (el, oRecord, oColumn, oData, oDataTable) {
-			if(oData) {
-				var bChecked = (oData===true) ? ' checked="checked"' : '';
-				el.innerHTML = '<input disabled="true" type="checkbox"' + bChecked + ' class="' + YAHOO.widget.DataTable.CLASS_CHECKBOX + '"/>';
-			} else {
-				if(oRecord.getData("props")==null&&oRecord.getData("assocs")==null&&oRecord.getData("table")==null&&oRecord.getData("aspect")==null){
-					var bChecked = (oData===true) ? ' checked="checked"' : '';
-					el.innerHTML = '<input disabled="true" type="checkbox"' + bChecked + ' class="' + YAHOO.widget.DataTable.CLASS_CHECKBOX + '"/>';
-				} else {
-					el.innerHTML = '';
-				}
-			}
-		},
-		
-		formatDropdown: function (el, oRecord, oColumn, oData, oDataTable) {
-			if(oData) {
-				var select = new IT.widget.Select({ name: "parentRef", options: oColumn.dropdownOptions, value: oData, showdefault: true, disabled: true });
-				select.render(el);
-			} else {
-				el.innerHTML = '';
-			}
-			
 		},
 		
 		formatActions: function (el, oRecord, oColumn, oData, oDataTable) {
