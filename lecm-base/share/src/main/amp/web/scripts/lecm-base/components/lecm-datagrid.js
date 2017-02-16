@@ -1115,14 +1115,25 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             template: this.msg("lecm.pagination.template"),
                             pageReportTemplate: this.msg("pagination.template.page-report"),
                             previousPageLinkLabel: this.msg("lecm.pagination.previousPageLinkLabel"),
+                            previousPageLinkTitle: this.msg("lecm.pagination.previousPageLinkTitle"),
                             nextPageLinkLabel: this.msg("lecm.pagination.nextPageLinkLabel"),
+                            nextPageLinkTitle: this.msg("lecm.pagination.nextPageLinkTitle"),
                             firstPageLinkLabel: this.msg("lecm.pagination.firstPageLinkLabel"),
                             lastPageLinkLabel: this.msg("lecm.pagination.lastPageLinkLabel"),
                             lastPageLinkTitle: this.msg("lecm.pagination.lastPageLinkLabel.title"),
-                            firstPageLinkTitle: this.msg("lecm.pagination.firstPageLinkLabel.title")
+                            firstPageLinkTitle: this.msg("lecm.pagination.firstPageLinkLabel.title"),
+                            jumpToPageDropdownTitle: this.msg("lecm.pagination.jumpToPageDropdown.title")
                         });
 
                     this.widgets.paginator.subscribe("changeRequest" + this.id, handlePagination, this);
+
+                    /*Подменим хардкор из YUI Paginator*/
+                    this.widgets.paginator.setAttributeConfig('pageTitleBuilder', {
+                        value: function (page, paginator) {
+                            return Alfresco.util.message('lecm.pagination.page', 'Page') + ' ' + page;
+                        },
+                        validator: YAHOO.lang.isFunction
+                    });
 
                     // Display the bottom paginator bar
                     Dom.setStyle(this.id + "-datagridBarBottom", "display", "none");
@@ -3423,4 +3434,64 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
     /* Dummy instance to load optional YUI components early */
     var dummyInstance = new LogicECM.module.Base.Actions();
+})();
+
+/**
+ * Модуль для кастомизации Paginator. Подключается непосредственно в датагрид
+ */
+(function () {
+    var Paginator = YAHOO.widget.Paginator,
+        l = YAHOO.lang,
+        setId = YAHOO.util.Dom.generateId;
+
+    /**
+     * ui Component to generate the jump-to-page dropdown
+     *
+     * @namespace YAHOO.widget.Paginator.ui
+     * @class LecmJumpToPageDropdown
+     * @for YAHOO.widget.Paginator
+     *
+     * @constructor
+     * @param p {Pagintor} Paginator instance to attach to
+     */
+    Paginator.ui.LecmJumpToPageDropdown = function (p) {
+        Paginator.ui.LecmJumpToPageDropdown.superclass.constructor.call(this, p);
+    };
+
+    /**
+     * Decorates Paginator instances with new attributes. Called during
+     * Paginator instantiation.
+     * @method init
+     * @param p {Paginator} Paginator instance to decorate
+     * @static
+     */
+    Paginator.ui.LecmJumpToPageDropdown.init = function (p) {
+        Paginator.ui.JumpToPageDropdown.init.call(this, p);
+        /**
+         * Заголовок
+         * @attribute jumpToPageDropdownTitle
+         * @default 'Jump To Page'
+         */
+        p.setAttributeConfig('jumpToPageDropdownTitle', {
+            value: 'Jump To Page',
+            validator: l.isString
+        });
+    };
+
+    YAHOO.extend(Paginator.ui.LecmJumpToPageDropdown, Paginator.ui.JumpToPageDropdown);
+
+    YAHOO.lang.augmentObject(Paginator.ui.LecmJumpToPageDropdown.prototype, {
+        render: function (id_base) {
+            this.select = document.createElement('select');
+            setId(this.select, id_base + '-jtp');
+            this.select.className = this.paginator.get('jumpToPageDropdownClass');
+            this.select.title = this.paginator.get('jumpToPageDropdownTitle');
+
+            YAHOO.util.Event.on(this.select, 'change', this.onChange, this, true);
+
+            this.rebuild();
+
+            return this.select;
+        }
+    }, true);
 })();

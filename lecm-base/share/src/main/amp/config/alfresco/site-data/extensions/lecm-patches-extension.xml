@@ -1,0 +1,19 @@
+<!--
+	Фикс по аналогии https://github.com/Alfresco/Aikau/pull/1228
+	Стоит удалить после перехода на Aikau версии 1.0.85 (текущая - 1.0.67)
+-->
+<extension>
+    <modules>
+        <module>
+            <id>Patch dojo and alfresco widgets</id>
+            <version>1.0</version>
+            <auto-deploy>true</auto-deploy>
+            <customizations>
+                <customization>
+                    <targetPackageRoot>dojo</targetPackageRoot>
+                    <sourcePackageRoot>ru.it.lecm.base-share.dojo-patches</sourcePackageRoot>
+                </customization>
+            </customizations>
+        </module>
+    </modules>
+</extension>
