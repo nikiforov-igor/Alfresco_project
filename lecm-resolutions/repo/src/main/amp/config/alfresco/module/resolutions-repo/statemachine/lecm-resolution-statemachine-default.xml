@@ -1391,7 +1391,9 @@
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var document = stm_document;
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/workflow/review/form/review-ts.form.lib.js">
+
+var document = stm_document;
 if (document) {
   var annulReason = document.properties["lecm-resolutions:annul-signal-reason"];
 
@@ -1406,6 +1408,11 @@ if (document) {
   var baseDocAssoc = document.assocs["lecm-resolutions:base-document-assoc"];
   if (baseDocAssoc && baseDocAssoc.length) {
     edsDocument.sendChildChangeSignal(baseDocAssoc[0]);
+  }
+
+  var reviewItemsAssocs = document.assocs["lecm-review-aspects:related-review-records-assoc"];
+  if (reviewItemsAssocs && reviewItemsAssocs.length) {
+    cancelReviewFromInitiatingDocument(document, reviewItemsAssocs);
   }
 
   if (annulReason) {
