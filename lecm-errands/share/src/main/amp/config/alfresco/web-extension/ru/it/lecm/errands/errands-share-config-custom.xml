@@ -87,6 +87,7 @@
                     <show id="lecm-base-dummy-aspects:script5" force="true"/>
                     <!-- Отчеты соисполнителей -->
                     <show id="lecm-errands-ts:coexecutor-reports-assoc"/>
+                    <show id="lecm-base-dummy-aspects:script6" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" label-id="label.errands.forms.tab.common"/>
@@ -220,6 +221,9 @@
                         <control template="/ru/it/lecm/errands/controls/coexecutors-reports-table-control.ftl">
                             <control-param name="datagridFormId">coexecutors-reports-datagrid</control-param>
                         </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script6" set="execution">
+                        <control template="/ru/it/lecm/eds/controls/execution-tree-control.ftl"/>
                     </field>
                 </appearance>
             </form>
