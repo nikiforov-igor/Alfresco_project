@@ -358,21 +358,6 @@
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DAYS</control-param>
                             <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
-	                <field id="lecm-errands:executor-assoc" set="common">
-		                <control>
-			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
-		                </control>
-	                </field>
-                    <field id="lecm-errands:end-date" set="common"/>
-					<field id="lecm-errands:controller-assoc" set="common">
-						<control>
-							<control-param name="showSearch">true</control-param>
-                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
-						</control>
-					</field>
-					<field id="lecm-errands:start-date" set="common">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
