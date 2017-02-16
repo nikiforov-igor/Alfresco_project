@@ -50,6 +50,14 @@
                 <property name="lecm-arm:filter-values">ISNOTNULL:'lecm-document-aspects:is-on-control' AND @lecm\\-document\\-aspects:is\\-on\\-control:true|Контрольные,ISNULL:'lecm-document-aspects:is-on-control' OR @lecm\\-document\\-aspects:is\\-on\\-control:false|Не контрольные</property>
                 <property name="lecm-arm:filter-query">#value</property>
             </item>
+            <item name="cm:По срокам" type="lecm-arm:filter">
+                <property name="cm:name">По срокам</property>
+                <property name="lecm-arm:filter-code">BY_TERMS</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">(ISNOTNULL:'lecm-errands:is-expired' AND @lecm\\-errands:is\\-expired:true) OR (ISNOTNULL:'lecm-resolutions:is-expired' AND @lecm\\-resolutions:is\\-expired:true)|С нарушением срока;(ISNULL:'lecm-errands:is-expired' AND ISNULL:'lecm-resolutions:is-expired') OR (ISNOTNULL:'lecm-errands:is-expired' AND @lecm\\-errands:is\\-expired:false) OR (ISNOTNULL:'lecm-resolutions:is-expired' AND @lecm\\-resolutions:is\\-expired:false)|Без нарушения;@lecm\\-eds\\-document:execution\\-date:{{TIME_OFFSET({metricUnit:'DAY',value:4})}} OR @lecm\\-errands\\:limitation\\-date:{{TIME_OFFSET({metricUnit:'DAY',value:4})}} OR @lecm\\-resolutions\\:limitation\\-date:{{TIME_OFFSET({metricUnit:'DAY',value:4})}}|Осталось менее 5-ти дней</property>
+                <property name="lecm-arm:filter-query">#value</property>
+            </item>
         </items>
     </item>
 </items>
