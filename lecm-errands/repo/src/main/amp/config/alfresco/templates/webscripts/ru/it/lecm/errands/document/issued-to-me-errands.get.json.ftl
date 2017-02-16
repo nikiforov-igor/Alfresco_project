@@ -6,7 +6,7 @@
     "nodeRef": "${record.nodeRef}",
     "record": "${record.record}",
         <#if record.date??>
-        "date": "${record.date?string("yyyy-MM-dd")}",
+        "date": "${record.date}",
         </#if>
     "title":    "${record.title}",
     "summary":    "${record.summary}",

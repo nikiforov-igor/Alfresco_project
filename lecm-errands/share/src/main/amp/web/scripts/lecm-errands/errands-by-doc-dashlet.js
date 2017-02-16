@@ -210,7 +210,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 
                 var errandDescription = data.title
                     + ", " + this.msg("label.errand-executor") + ": " + data.executor_name + ", "
-                    + YAHOO.util.Date.format(new Date(data.date), {format: "%d %b %Y"}, this.msg("locale"));
+                    + data.date;
 
                 desc = "<a href='" + window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT
                     + "document?nodeRef=" + data.nodeRef + "'>" + errandDescription + "</a> ";
@@ -265,7 +265,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 
                 var errandDescription = data.title + ","
                     + this.msg("label.errand-author") + ": " + data.initiator_name + ", "
-                    + YAHOO.util.Date.format(new Date(data.date), {format: "%d %b %Y"}, this.msg("locale"));
+                    + data.date;
                 desc = "<a href='" + window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT
                     + "document?nodeRef=" + data.nodeRef + "'>" + errandDescription + "</a> ";
 
