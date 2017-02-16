@@ -495,7 +495,7 @@
                     <field id="lecm-review-aspects:related-review-records-assoc" set="reviewers-table-hidden">
                         <control template="/ru/it/lecm/workflow/review/controls/related-review-list-datagrid-control.ftl">
                             <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
-                            <control-param name="datagridFormId">datagrid</control-param>
+                            <control-param name="datagridFormId">relatedReviewDatagrid</control-param>
                             <control-param name="isTableSortable">false</control-param>
                             <control-param name="editable">true</control-param>
                             <control-param name="forceEditable">true</control-param>

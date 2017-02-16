@@ -10,12 +10,12 @@
                 <property name="lecm-arm:filter-values">MY|Мои,DEPARTMENT|Мое подразделение,ALL|Все</property>
                 <property name="lecm-arm:filter-query">lecm-document:author-assoc-ref,lecm-eds-document:recipients-assoc-ref,lecm-eds-document:reviewers-assoc-ref,lecm-ord:controller-assoc-ref</property>
             </item>
-                <item name="cm:По срокам" type="lecm-arm:filter">
+            <item name="cm:По срокам" type="lecm-arm:filter">
                 <property name="cm:name">По срокам</property>
                 <property name="lecm-arm:filter-code">DATE_FILTER</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
-                <property name="lecm-arm:filter-values">(@lecm\\-eds\\-document:execution\\-date:[MIN TO NOW]) OR (@lecm\\-errands\\:limitation\\-date:[MIN TO NOW]) OR (lecm\\-errands:is\\-expired:true)|Просроченные;(@lecm\\-eds\\-document:execution\\-date:[NOW TO MAX]) OR (@lecm\\-errands\\:limitation\\-date:[NOW TO MAX])|В работе;(@lecm\\-eds\\-document:execution\\-date:{{TIME_OFFSET({metricUnit:'DAY',value:2})}}) OR (@lecm\\-errands\\:limitation\\-date:{{TIME_OFFSET({metricUnit:'DAY',value:2})}})|С приближающимся сроком; |Все</property>
+                <property name="lecm-arm:filter-values">@lecm\\-errands:is\\-expired:true OR @lecm\\-resolutions:is\\-expired:true|С нарушением срока;NOT @lecm\\-errands\:is\\-expired:true AND NOT @lecm\\-resolutions:is\\-expired:true|Без нарушения;@lecm\\-eds\\-document:execution\\-date:[NOW TO NOW+4DAY] OR @lecm\\-errands\\:limitation\\-date:[NOW TO NOW+4DAY] OR @lecm\\-resolutions\\:limitation\\-date:[NOW TO NOW+4DAY]|Осталось менее 5-ти дней</property>
                 <property name="lecm-arm:filter-query">#value</property>
             </item>
                 <item name="cm:Вид документа" type="lecm-arm:filter">
@@ -48,6 +48,30 @@
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">ISNOTNULL:'lecm-document-aspects:is-on-control' AND @lecm\\-document\\-aspects:is\\-on\\-control:true|Контрольные,ISNULL:'lecm-document-aspects:is-on-control' OR @lecm\\-document\\-aspects:is\\-on\\-control:false|Не контрольные</property>
+                <property name="lecm-arm:filter-query">#value</property>
+            </item>
+            <item name="cm:По типу участия" type="lecm-arm:filter">
+                <property name="cm:name">По типу участия</property>
+                <property name="lecm-arm:filter-code">BY_TYPE_OF_PARTICIPATION</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">@lecm\\-events:initiator\\-assoc\\-ref:'#current-user'|Я - Инициатор,@lecm\\-meetings:chairman\\-assoc\\-ref:'#current-user'|Я - Председатель,@lecm\\-meetings:secretary\\-assoc\\-ref:'#current-user'|Я - Секретарь,@lecm\\-events:temp\\-members\\-assoc\\-ref:'*#current-user*'|Я - Участник,@lecm\\-events:invited\\-members\\-assoc\\-ref:'*#current-user*'|Я - Приглашенный</property>
+                <property name="lecm-arm:filter-query">#value</property>
+            </item>
+            <item name="cm:По роли" type="lecm-arm:filter">
+                <property name="cm:name">По роли</property>
+                <property name="lecm-arm:filter-code">BY_ROLE</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">@lecm\\-eds\\-document:executor\\-assoc\\-ref:'#current-user' OR @lecm\\-resolutions:author\\-assoc\\-ref:'#current-user' OR @lecm\\-errands:initiator\\-assoc\\-ref:'#current-user'|Я - Автор,@lecm\\-document:author\\-assoc\\-ref:'#current-user'|Я - Составитель</property>
+                <property name="lecm-arm:filter-query">#value</property>
+            </item>
+            <item name="cm:По важности" type="lecm-arm:filter">
+                <property name="cm:name">По важности</property>
+                <property name="lecm-arm:filter-code">BY_IMPORTANCE</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">@lecm\\-errands:is\\-important:true|Важные;NOT @lecm\\-errands:is\\-important:true OR @lecm\\-errands:is\\-important:false|Простые</property>
                 <property name="lecm-arm:filter-query">#value</property>
             </item>
         </items>

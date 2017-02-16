@@ -97,6 +97,18 @@
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.statemachine</groupId>
+            <artifactId>statemachine-api</artifactId>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.security</groupId>
+            <artifactId>lecm-security-api</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required

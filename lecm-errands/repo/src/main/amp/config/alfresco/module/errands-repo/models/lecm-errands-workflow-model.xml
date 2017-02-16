@@ -12,6 +12,8 @@
 		<import uri="http://www.it.ru/logicECM/statemachine/aspects/1.0" prefix="lecm-statemachine-aspects"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+		<import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
+		<import uri="http://www.it.ru/logicECM/errands/dictionaries/1.0" prefix="lecm-errands-dic"/>
 	</imports>
 
 	<namespaces>
@@ -583,6 +585,7 @@
 				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
 			</mandatory-aspects>
 		</type>
+
 		<type name="lecmErrandWf:createErrands">
 			<title>Поручение</title>
 			<parent>bpm:startTask</parent>
@@ -609,7 +612,7 @@
 				<!-- Срок поручения-->
 				<property name="lecmErrandWf:limitationDate">
 					<type>d:date</type>
-					<mandatory>true</mandatory>
+					<mandatory>false</mandatory>
 				</property>
 				<!-- Без утверждения Инициатором-->
 				<property name="lecmErrandWf:withoutInitiatorApproval">
@@ -625,6 +628,64 @@
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
+
+				<property name="lecmErrandWf:limitationDateRadio">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<constraints>
+						<constraint name="lecmErrandWf:limitationDateRadioConst" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>DAYS</value>
+									<value>DATE</value>
+									<value>LIMITLESS</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+				<property name="lecmErrandWf:limitationDateDays">
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+					<default>1</default>
+				</property>
+				<property name="lecmErrandWf:limitationDateType">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<constraints>
+						<constraint name="lecmErrandWf:limitationDateTypeConst" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>WORK</value>
+									<value>CALENDAR</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+				<property name="lecmErrandWf:periodically">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<property name="lecmErrandWf:reportRequired">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<property name="lecmErrandWf:reportRecipientType">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint name="lecmErrandWf:reportRecipientTypeConst" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>AUTHOR</value>
+									<value>CONTROLLER</value>
+									<value>AUTHOR_AND_CONTROLLER</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
 			</properties>
 			<associations>
 				<!-- Исполнитель -->
@@ -639,6 +700,18 @@
 						<many>false</many>
 					</target>
 				</association>
+				<!-- Couсполнителu -->
+				<association name="lecmErrandWf:coexecutorsAssoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
 				<!-- Контролер -->
 				<association name="lecmErrandWf:controllerAssoc">
 					<source>
@@ -651,16 +724,40 @@
 						<many>false</many>
 					</target>
 				</association>
-				<!-- Соисполнители -->
-				<association name="lecmErrandWf:coexecutorsAssoc">
+				<!-- Автор -->
+				<association name="lecmErrandWf:initiatorAssoc">
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
 					</source>
 					<target>
 						<class>lecm-orgstr:employee</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<association name="lecmErrandWf:subjectAssoc">
+					<title>Тематика</title>
+					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-doc-dic:subjects</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<!-- Тип поручения -->
+				<association name="lecmErrandWf:typeAssoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-errands-dic:errand-type</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
 					</target>
 				</association>
 			</associations>
