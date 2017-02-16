@@ -5,12 +5,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.Errands = LogicECM.module.Errands || {};
 
-LogicECM.module.Errands.limitationDateValidation =
-    function (field, args, event, form, silent, message) {
+LogicECM.module.Errands.commonLimitationDateValidation =
+    function (field, args, event, form, silent, message, props) {
         if (field.form) {
-            var radio = field.form["prop_lecm-errands_limitation-date-radio"];
-            var days = field.form["prop_lecm-errands_limitation-date-days"];
-            var limitationDate = field.form["prop_lecm-errands_limitation-date"];
+            var radio = field.form["prop_" + props.radioProp];
+            var days = field.form["prop_" + props.daysProp];
+            var limitationDate = field.form["prop_" + props.dateProp];
 
             var radioValue = null;
             if (radio) {
@@ -24,13 +24,14 @@ LogicECM.module.Errands.limitationDateValidation =
             if (radioValue == "LIMITLESS") {
                 return true;
             } else if (radioValue == "DAYS") {
-                return (days.value.length > 0) || (field.name != "prop_lecm-errands_limitation-date-days");
+                return (days.value.length > 0) || (field.name != "prop_" + props.daysProp);
             } else {
-                return (limitationDate && limitationDate.value.length) || (field.name != "prop_lecm-errands_limitation-date");
+                return (limitationDate && limitationDate.value.length) || (field.name != "prop_" + props.dateProp);
             }
         }
         return true;
     };
+
 LogicECM.module.Errands.WFChangeDueDateValidation =
     function (field, args, event, form, silent, message) {
         var dateField = Selector.query(".errands-wf-duedate-set-date .value-div input[type='hidden']", YAHOO.util.Dom.get(field.form.id), true);
@@ -56,28 +57,24 @@ LogicECM.module.Errands.WFChangeDueDateValidation =
         }
         return true;
     };
+
+LogicECM.module.Errands.limitationDateValidation =
+    function (field, args, event, form, silent, message) {
+        var props = {
+            radioProp: "lecm-errands_limitation-date-radio",
+            daysProp: "lecm-errands_limitation-date-days",
+            dateProp: "lecm-errands_limitation-date"
+        };
+        return LogicECM.module.Errands.commonLimitationDateValidation(field, args, event, form, silent, message, props);
+    };
+
 LogicECM.module.Errands.createErrandWFLimitationDateValidation =
     function (field, args, event, form, silent, message) {
-        if (field.form) {
-            var radio = field.form["prop_lecmErrandWf_limitationDateRadio"];
-            var days = field.form["prop_lecmErrandWf_limitationDateDays"];
-            var limitationDate = field.form["prop_lecmErrandWf_limitationDate"];
-
-            var radioValue = null;
-            if (radio) {
-                for (var i = 0; i < radio.length; i++) {
-                    if (radio[i].checked == true) {
-                        radioValue = radio[i].value;
-                    }
-                }
-            }
-            if (radioValue == "LIMITLESS") {
-                return true;
-            } else if (radioValue == "DAYS") {
-                return (days.value.length > 0) || (field.name != "prop_lecmErrandWf_limitationDateDays");
-            } else {
-                return (limitationDate && limitationDate.value.length) || (field.name != "prop_lecmErrandWf_limitationDate");
-            }
-        }
-        return true;
+        var props = {
+            radioProp: "lecmErrandWf_limitationDateRadio",
+            daysProp: "lecmErrandWf_limitationDateDays",
+            dateProp: "lecmErrandWf_limitationDate"
+        };
+        return LogicECM.module.Errands.commonLimitationDateValidation(field, args, event, form, silent, message, props);
     };
+
