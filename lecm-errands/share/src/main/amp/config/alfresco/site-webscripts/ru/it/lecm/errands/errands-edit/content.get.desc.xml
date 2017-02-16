@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>errand-edit-content</shortname>
-    <description>errand-edit-content</description>
-	<url>/lecm/errands/edit/content</url>
-	<format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

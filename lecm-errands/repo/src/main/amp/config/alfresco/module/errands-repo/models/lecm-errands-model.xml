@@ -114,11 +114,6 @@
 				</list>
 			</parameter>
 		</constraint>
-		<constraint name="lecm-errands:document-url-constraint" type="ru.it.lecm.documents.constraints.DocumentUrlConstraint">
-			<parameter name="editUrl">
-				<value>errands-edit</value>
-			</parameter>
-		</constraint>
     </constraints>
     <types>
 		<type name="lecm-errands:document">
