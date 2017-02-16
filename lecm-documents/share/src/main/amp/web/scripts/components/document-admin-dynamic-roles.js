@@ -38,14 +38,13 @@ LogicECM.module.DocumentAdmin = LogicECM.module.DocumentAdmin || {};
 		},
 
 		loadRoles: function () {
-			var me = this;
 			Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.PROXY_URI + "lecm/statemachine/getDynamicRoles?nodeRef=" + encodeURIComponent(this.options.documentNodeRef),
 				successCallback: {
 					fn: function (response) {
 						var oResults = response.json;
-						if (oResults != null) {
-							me.drawRoles(oResults);
+						if (oResults) {
+							this.drawRoles(oResults);
 						}
 					},
 					scope: this

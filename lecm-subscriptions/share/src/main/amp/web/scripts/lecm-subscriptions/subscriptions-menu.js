@@ -109,36 +109,38 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 
         draw:function draw() {
             var sUrl = Alfresco.constants.PROXY_URI + "lecm/subscriptions/roots";
-            var callback = {
-                success:function (oResponse) {
-                    var oResults = eval("(" + oResponse.responseText + ")");
-                    if (oResults != null) {
-                        for (var nodeIndex in oResults) {
-                            var root = {
-                                nodeRef:oResults[nodeIndex].nodeRef,
-                                itemType:oResults[nodeIndex].itemType,
-                                page:oResults[nodeIndex].page,
-                                fullDelete:oResults[nodeIndex].fullDelete
-                            };
-                            var namespace = "lecm-subscr";
-                            var page = root.page;
-                            var cType = root.itemType;
-                            root.itemType = namespace + ":" + cType;
-                            root.bubblingLabel = cType;
-                            oResponse.argument.context.roots[page] = root;
+            Alfresco.util.Ajax.jsonGet({
+                url: sUrl,
+                successCallback: {
+                    fn: function (response) {
+                        var oResults = response.json;
+                        if (oResults) {
+                            for (var nodeIndex in oResults) {
+                                var root = {
+                                    nodeRef: oResults[nodeIndex].nodeRef,
+                                    itemType: oResults[nodeIndex].itemType,
+                                    page: oResults[nodeIndex].page,
+                                    fullDelete: oResults[nodeIndex].fullDelete
+                                };
+                                var namespace = "lecm-subscr";
+                                var page = root.page;
+                                var cType = root.itemType;
+                                root.itemType = namespace + ":" + cType;
+                                root.bubblingLabel = cType;
+                                this.roots[page] = root;
+                            }
                         }
-                    }
-                    oResponse.argument.context._draw();
+                        this._draw();
+                    },
+                    scope: this
                 },
-                failure:function (oResponse) {
-                    YAHOO.log("Failed to process XHR transaction.", "info", "example");
-                },
-                argument:{
-                    context:this
-                },
-                timeout:10000
-            };
-            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                failureCallback: {
+                    fn: function (response) {
+                        YAHOO.log("Failed to process XHR transaction.", "info", "example");
+                    },
+                    scope: this
+                }
+            });
         }
     });
 })();

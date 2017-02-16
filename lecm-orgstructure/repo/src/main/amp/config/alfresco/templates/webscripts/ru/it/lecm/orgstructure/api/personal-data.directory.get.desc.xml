@@ -2,7 +2,7 @@
     <shortname>create employee person data</shortname>
     <description>Create employee person data</description>
     <url>/lecm/orgstructure/api/getPersonalDataDirectory</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

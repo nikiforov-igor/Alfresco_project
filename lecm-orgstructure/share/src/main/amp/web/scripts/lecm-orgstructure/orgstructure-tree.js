@@ -133,88 +133,85 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
         _loadTree:function loadNodeData(node, fnLoadComplete) {
             var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/branch";
-            if (node.data.nodeRef != null) {
+            if (node.data.nodeRef) {
                 sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
             }
-            var otree = this;
-            var callback = {
-                success:function (oResponse) {
-                    var oResults = eval("(" + oResponse.responseText + ")");
-                    if (oResults != null) {
-                        node.children = [];
-                        for (var nodeIndex in oResults) {
-                            var newNode = {
-                                label:oResults[nodeIndex].label,
-                                nodeRef:oResults[nodeIndex].nodeRef,
-                                isLeaf:oResults[nodeIndex].isLeaf,
-                                title:oResults[nodeIndex].title,
-                                type: oResults[nodeIndex].type
-                            };
+            Alfresco.util.Ajax.jsonGet({
+		        url: sUrl,
+		        successCallback: {
+			        fn: function (response) {
+                        var oResults = response.json;
+                        if (oResults) {
+                            node.children = [];
+                            for (var nodeIndex in oResults) {
+                                var newNode = {
+                                    label: oResults[nodeIndex].label,
+                                    nodeRef: oResults[nodeIndex].nodeRef,
+                                    isLeaf: oResults[nodeIndex].isLeaf,
+                                    title: oResults[nodeIndex].title,
+                                    type: oResults[nodeIndex].type
+                                };
 
-                            var curElement = new YAHOO.widget.TextNode(newNode, node);
-                            var ref = curElement.data.nodeRef;
-                            curElement.labelElId = ref.slice(ref.lastIndexOf('/') + 1);
-                            curElement.id = curElement.labelElId;
+                                var curElement = new YAHOO.widget.TextNode(newNode, node);
+                                var ref = curElement.data.nodeRef;
+                                curElement.labelElId = ref.slice(ref.lastIndexOf('/') + 1);
+                                curElement.id = curElement.labelElId;
 
-                            if (otree.options.drawEditors) {
-                                otree.options.insituEditors.push(
-                                    {
+                                if (this.options.drawEditors) {
+                                    this.options.insituEditors.push({
                                         context:curElement.labelElId,
-                                        params:{
-                                            showDelay:300,
-                                            hideDelay:300,
-                                            type:"organizationUnit",
-                                            unitID:curElement.labelElId,
-                                            unitName:curElement.label,
-                                            curElem:curElement,
-                                            unitAdmin:otree
+                                        params: {
+                                            showDelay: 300,
+                                            hideDelay: 300,
+                                            type: "organizationUnit",
+                                            unitID: curElement.labelElId,
+                                            unitName: curElement.label,
+                                            curElem: curElement,
+                                            unitAdmin: this
                                         },
-                                        callback:null
+                                        callback: null
                                     });
-                            }
-                        }
-                    }
-                    if (otree.selectedNode != null) {
-                        if (otree.selectedNode.data.type == "lecm-orgstr:structure"
-                            && otree.options.maxNodesOnTopLevel > -1
-                            && otree.selectedNode.children.length >= otree.options.maxNodesOnTopLevel) {
-                            YAHOO.Bubbling.fire("refreshButtonState", {
-                                buttons: {
-                                    "newRowButton": "disabled"
                                 }
-                            });
+                            }
                         }
-                    }
-
-                    if (oResponse.argument.fnLoadComplete != null) {
-                        oResponse.argument.fnLoadComplete();
-                    } else {
-                        if (curElement) {
-                            if (curElement.data.type == "lecm-orgstr:structure") {
-                                curElement.expanded = true;
-                                otree._treeNodeSelected(curElement);
+                        if (this.selectedNode) {
+                            if (this.selectedNode.data.type == "lecm-orgstr:structure"
+                                && this.options.maxNodesOnTopLevel > -1
+                                && this.selectedNode.children.length >= this.options.maxNodesOnTopLevel) {
+                                YAHOO.Bubbling.fire("refreshButtonState", {
+                                    buttons: {
+                                        "newRowButton": "disabled"
+                                    }
+                                });
                             }
                         }
 
-                        otree.tree.render();
-                        if (otree.options.drawEditors){
-                            otree.onExpandComplete(null);
+                        if (YAHOO.lang.isFunction(fnLoadComplete)) {
+                            fnLoadComplete.call();
+                        } else {
+                            if (curElement && curElement.data.type == "lecm-orgstr:structure") {
+                                curElement.expanded = true;
+                                this._treeNodeSelected(curElement);
+                            }
+
+                            this.tree.render();
+                            if (this.options.drawEditors){
+                                this.onExpandComplete(null);
+                            }
                         }
-                    }
+                    },
+                    scope: this
                 },
-                failure:function (oResponse) {
-                    YAHOO.log("Failed to process XHR transaction.", "info", "example");
-                    if (oResponse.argument.fnLoadComplete != null) {
-                        oResponse.argument.fnLoadComplete();
-                    }
-                },
-                argument:{
-                    node:node,
-                    fnLoadComplete:fnLoadComplete
-                },
-                timeout:10000
-            };
-            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                failureCallback: {
+                    fn: function (response) {
+                        YAHOO.log("Failed to process XHR transaction.", "info", "example");
+                        if (YAHOO.lang.isFunction(fnLoadComplete)) {
+                            fnLoadComplete.call();
+                        }
+                    },
+                    scope: this
+                }
+            });
         },
 
         _treeNodeSelected:function (node) {

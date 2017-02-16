@@ -10,25 +10,27 @@
 			<script type="text/javascript">//<![CDATA[
             (function()  {
                 function createDatagrid() {
-                    var sUrl = Alfresco.constants.PROXY_URI + "lecm/subscriptions/roots";
-                    var callback = {
-                        success:function (oResponse) {
-                            var oResults = eval("(" + oResponse.responseText + ")");
-                            if (oResults != null) {
-                                for (var nodeIndex in oResults) {
-                                    if (oResults[nodeIndex].page == "subscriptions-to-object") {
-                                        var root = {
-                                            nodeRef:oResults[nodeIndex].nodeRef,
-                                            itemType:oResults[nodeIndex].itemType,
-                                            page:oResults[nodeIndex].page,
-                                            fullDelete:oResults[nodeIndex].fullDelete
-                                        };
-                                        var namespace = "lecm-subscr";
-                                        var cType = root.itemType;
-                                        root.itemType = namespace + ":" + cType;
-                                        root.bubblingLabel = cType;
+                    var sUrl = Alfresco.constants.PROXY_URI + "lecm/subscriptions/roots";;
+                    Alfresco.util.Ajax.jsonGet({
+                        url: sUrl,
+                        successCallback: {
+                            fn: function (response) {
+                                var oResults = response.json;
+                                if (oResults) {
+                                    for (var nodeIndex in oResults) {
+                                        if (oResults[nodeIndex].page == "subscriptions-to-object") {
+                                            var root = {
+                                                nodeRef: oResults[nodeIndex].nodeRef,
+                                                itemType: oResults[nodeIndex].itemType,
+                                                page: oResults[nodeIndex].page,
+                                                fullDelete: oResults[nodeIndex].fullDelete
+                                            };
+                                            var namespace = "lecm-subscr";
+                                            var cType = root.itemType;
+                                            root.itemType = namespace + ":" + cType;
+                                            root.bubblingLabel = cType;
 
-                                        LogicECM.module.Base.DataGrid.prototype.getCustomCellFormatter = function(grid, elCell, oRecord, oColumn, oData) {
+                                            LogicECM.module.Base.DataGrid.prototype.getCustomCellFormatter = function(grid, elCell, oRecord, oColumn, oData) {
                                                 var html = "";
                                                 // Populate potentially missing parameters
                                                 if (!oRecord) {
@@ -73,52 +75,51 @@
                                                 return html.length > 0 ? html : null;  // возвращаем NULL чтобы вызывался основной метод отрисовки
                                             };
 
-                                        var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions(
-                                                {
-                                                    usePagination:true,
-                                                    showExtendSearchBlock:true,
-                                                    actions: [
-                                                        {
-                                                            type:"datagrid-action-link-${bubblingLabel!''}",
-                                                            id:"onActionEdit",
-                                                            permission:"edit",
-                                                            label:"${msg("actions.edit")}"
-                                                        },
-                                                        {
-                                                            type:"datagrid-action-link-${bubblingLabel!''}",
-                                                            id:"onActionDelete",
-                                                            permission:"delete",
-                                                            label:"${msg("actions.delete-row")}"
-                                                        }
-                                                    ],
-                                                    bubblingLabel: "${bubblingLabel!''}",
-                                                    showCheckboxColumn: true,
-                                                    attributeForShow:"cm:name",
-                                                    advSearchFormId: "${advSearchFormId!''}",
-                                                    datagridMeta:{
-                                                        useFilterByOrg: false,
-                                                        itemType: root.itemType,
-                                                        nodeRef: root.nodeRef,
-                                                        actionsConfig:{
-                                                            fullDelete:true
-                                                        }
+                                            var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions({
+                                                usePagination: true,
+                                                showExtendSearchBlock: true,
+                                                actions: [
+                                                    {
+                                                        type: "datagrid-action-link-${bubblingLabel!''}",
+                                                        id: "onActionEdit",
+                                                        permission: "edit",
+                                                        label: "${msg("actions.edit")}"
+                                                    },
+                                                    {
+                                                        type: "datagrid-action-link-${bubblingLabel!''}",
+                                                        id: "onActionDelete",
+                                                        permission: "delete",
+                                                        label: "${msg("actions.delete-row")}"
                                                     }
-                                                }).setMessages(${messages});
-                                        datagrid.draw();
-                                    }
+                                                ],
+                                                bubblingLabel: "${bubblingLabel!''}",
+                                                showCheckboxColumn: true,
+                                                attributeForShow: "cm:name",
+                                                advSearchFormId: "${advSearchFormId!''}",
+                                                datagridMeta: {
+                                                    useFilterByOrg: false,
+                                                    itemType: root.itemType,
+                                                    nodeRef: root.nodeRef,
+                                                    actionsConfig: {
+                                                        fullDelete: true
+                                                    }
+                                                }
+                                            }).setMessages(${messages});
+                                            datagrid.draw();
+                                        }
 
+                                    }
                                 }
-                            }
+                            },
+                            scope: this
                         },
-                        failure:function (oResponse) {
-                            YAHOO.log("Failed to process XHR transaction.", "info", "example");
-                        },
-                        argument:{
-                            context:this
-                        },
-                        timeout:10000
-                    };
-                    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                        failureCallback: {
+                            fn: function (response) {
+                                YAHOO.log("Failed to process XHR transaction.", "info", "example");
+                            },
+                            scope: this
+                        }
+                    });
                 }
 
                 function init() {

@@ -2,7 +2,7 @@
 	<shortname>staff position unit</shortname>
 	<description>Return unit by staff position</description>
 	<url>/lecm/orgstructure/api/getStaffPositionUnit?nodeRef={nodeRef}</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

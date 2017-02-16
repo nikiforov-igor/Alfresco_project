@@ -2,7 +2,7 @@
     <shortname>Report Template</shortname>
     <description>Report Template</description>
     <url>/lecm/reports-editor/report-source?reportId={reportId}</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

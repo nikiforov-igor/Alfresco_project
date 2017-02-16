@@ -77,8 +77,8 @@ LogicECM.module.OrgStructure.employeeNotHasAnotherOrganizationValidation = funct
             processData: true,
 
             success: function(result, textStatus, jqXHR) {
-                employeeOrganization = result != null ? result.nodeRef : null;
-                if (employeeOrganization != null) {
+                employeeOrganization = result ? result.nodeRef : null;
+                if (employeeOrganization) {
                     jQuery.ajax({
                         url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/orgstructure/api/getStaffPositionUnit?nodeRef=" + field.form["alf_destination"].value,
                         type: "GET",
@@ -89,7 +89,7 @@ LogicECM.module.OrgStructure.employeeNotHasAnotherOrganizationValidation = funct
                         processData: true,
 
                         success: function(result, textStatus, jqXHR) {
-                            var staffUnit = result != null ? result.nodeRef : null;
+                            var staffUnit = result ? result.nodeRef : null;
                             jQuery.ajax({
                                 url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/orgstructure/getOrganization?nodeRef=" + staffUnit,
                                 type: "GET",
@@ -100,8 +100,8 @@ LogicECM.module.OrgStructure.employeeNotHasAnotherOrganizationValidation = funct
                                 processData: true,
 
                                 success: function(result, textStatus, jqXHR) {
-                                    var unitOrganization = result != null ? result.nodeRef : null;
-                                    valid = unitOrganization == null || (unitOrganization != null && (employeeOrganization == unitOrganization));
+                                    var unitOrganization = result ? result.nodeRef : null;
+                                    valid = !unitOrganization || (unitOrganization && (employeeOrganization == unitOrganization));
                                 },
 
                                 error: function(jqXHR, textStatus, errorThrown) {

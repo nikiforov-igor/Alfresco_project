@@ -14,40 +14,33 @@
 	                // Переопределяем метод onActionDelete. Добавляем проверки
 	                LogicECM.module.Base.DataGrid.prototype.onActionDelete =
 	                    function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
-	                        var me = this;
 	                        var orgRoleToDelete = YAHOO.lang.isArray(p_items) ? p_items[0] : p_items;
 
 	                        // Проверим назначены ли на роль сотрудники
 	                        var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getOrgRoleEmployees?nodeRef=" + orgRoleToDelete.nodeRef;
-	                        var callback = {
-	                            success:function (oResponse) {
-	                                var oResults = eval("(" + oResponse.responseText + ")");
-	                                if (oResults && oResults.length > 0) {
-	                                    var employees = [];
-	                                    var i;
-	                                    for (i in oResults) {
-	                                        employees.push(oResults[i].shortName);
-	                                    }
+	                        Alfresco.util.Ajax.jsonGet({
+                                url: sUrl,
+                                successCallback: {
+                                    fn: function (response) {
+	                                    var oResults = response.json;
+	                                    if (oResults && oResults.length > 0) {
+	                                        var employees = [], i;
+	                                        for (i in oResults) {
+	                                            employees.push(oResults[i].shortName);
+	                                        }
 
-	                                    var employeesStr = employees.join(", ");
-	                                    Alfresco.util.PopupManager.displayMessage(
-	                                        {
-	                                            text:me.msg("message.delete.org.role.failure.employees.assigned", employeesStr)
+	                                        var employeesStr = employees.join(", ");
+	                                        Alfresco.util.PopupManager.displayMessage({
+	                                            text: this.msg("message.delete.org.role.failure.employees.assigned", employeesStr)
 	                                        });
-	                                } else {
-	                                    me.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
-	                                }
-	                            },
-	                            failure:function (oResponse) {
-	                                Alfresco.util.PopupManager.displayMessage(
-	                                    {
-	                                        text:me.msg("message.delete.org.role.error")
-	                                    });
-	                            },
-	                            argument:{
-	                            }
-	                        };
-	                        YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+	                                    } else {
+	                                        this.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
+	                                    }
+	                                },
+                                    scope: this
+                                },
+                                failureMessage: this.msg("message.delete.org.role.error")
+                            });
 	                    };
 
 					new LogicECM.module.Base.DataGrid('${id}').setOptions(

@@ -54,106 +54,91 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
             this.showCreateDialog(metaData, onAddCallback);
         },
         onActionEmployeeDelete: function DataGridActions_onActionEmployeeDelete(p_item, owner, actionsConfig, fnDeleteComplete) {
-            var me = this;
             var staffRow = p_item;
             var subnitRow = this.datagridMeta.nodeRef;
             // Подразделение в котором находится сотрудник
             var sUrl =  Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getUnitProperties?nodeRef=" + subnitRow;
-            var callback = {
-                success: function(oResponse){
-                    var oResults = eval("(" + oResponse.responseText + ")");
-                    var subnitRowName = oResults .fullName;
-                    // Получаем для штатного расписания ссылку на сотрудника
-                    var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink?nodeRef=" + staffRow.nodeRef;
-                    var callback = {
-                        success:function (oResponse) {
-                            var oResult = eval("(" + oResponse.responseText + ")");
-                            if (oResult) {
-
-                                var hasNoActiveAbsences = me.checkEmployeeHasNoActiveAbsences(oResult.employee, me.msg('message.employee.position.delete.failure.absence')+'\n');
-
-                                if (hasNoActiveAbsences && !hasNoActiveAbsences.hasNoActiveAbsences){
-                                    return;
-                                }
-
-                                var onPrompt = function (fnAfterPrompt) {
-                                    Alfresco.util.PopupManager.displayPrompt(
-                                        {
-                                            title:me.msg("message.employee.position.delete.title"),
-                                            text: me.msg("message.employee.position.delete.prompt",
-                                                staffRow.itemData["assoc_lecm-orgstr_element-member-employee-assoc"].displayValue,
-                                                staffRow.itemData["assoc_lecm-orgstr_element-member-position-assoc"].displayValue,
-                                                subnitRowName),
-                                            buttons:[
-                                                {
-                                                    text:me.msg("button.employee.remove"),
-                                                    handler:function DataGridActions__onActionDelete_delete() {
-                                                        this.destroy();
-                                                        fnAfterPrompt.call(me, [oResult]);
-                                                    }
-                                                },
-                                                {
-                                                    text:me.msg("button.cancel"),
-                                                    handler:function DataGridActions__onActionDelete_cancel() {
-                                                        this.destroy();
-                                                    },
-                                                    isDefault:true
-                                                }
-                                            ]
-                                        });
-                                };
-
-                                if (("" + oResult.is_primary) == "true") {
-                                    var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeePositions?nodeRef=" + oResult.employee;
-                                    var callback = {
-                                        success:function (oResponse) {
-                                            var oResults = eval("(" + oResponse.responseText + ")");
-                                            if (oResults && oResults.length > 1) { // нельзя удалять руководящую должность, пока есть другие должности
-                                                Alfresco.util.PopupManager.displayMessage(
-                                                    {
-                                                        text:me.msg("message.employee.position.delete.failure.primary")
-                                                    });
-                                            } else { // удаляем! вызов метода из грида
-                                                me.onDelete([oResult], owner, {fullDelete:true, trash:false, successMessage: "message.employee.position.delete.success"}, fnDeleteComplete, onPrompt);
-                                            }
-                                        },
-                                        failure:function (oResponse) {
-                                            Alfresco.util.PopupManager.displayMessage(
-                                                {
-                                                    text:me.msg("message.employee.position.delete.failure")
-                                                });
-                                        },
-                                        argument:{
+            Alfresco.util.Ajax.jsonGet({
+                url: sUrl,
+                successCallback: {
+                    fn: function (response) {
+                        var oResults = response.json;
+                        var subnitRowName = oResults .fullName;
+                        // Получаем для штатного расписания ссылку на сотрудника
+                        var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink?nodeRef=" + staffRow.nodeRef;
+                        Alfresco.util.Ajax.jsonGet({
+                            url: sUrl,
+                            successCallback: {
+						        fn: function (response) {
+                                    var oResult = response.json;
+                                    if (oResult) {
+                                        var hasNoActiveAbsences = this.checkEmployeeHasNoActiveAbsences(oResult.employee, this.msg('message.employee.position.delete.failure.absence')+'\n');
+                                        if (hasNoActiveAbsences && !hasNoActiveAbsences.hasNoActiveAbsences){
+                                            return;
                                         }
-                                    };
-                                    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-                                } else {
-                                    me.onDelete([oResult], owner, {fullDelete:true, trash:false, successMessage: "message.employee.position.delete.success"}, fnDeleteComplete, onPrompt);
-                                }
-                            } else {
-                                Alfresco.util.PopupManager.displayMessage(
-                                    {
-                                        text:this.msg("message.employee.position.delete.failure")
-                                    });
-                            }
-                        },
-                        failure:function (oResponse) {
-                            Alfresco.util.PopupManager.displayMessage(
-                                {
-                                    text:this.msg("message.employee.position.delete.failure")
-                                });
-                        }
-                    };
-                    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-                },
-                failure:function (oResponse) {
-                    Alfresco.util.PopupManager.displayMessage(
-                        {
-                            text:me.msg("message.employee.position.delete.failure.primary")
+                                        var onPrompt = function (fnAfterPrompt) {
+                                            Alfresco.util.PopupManager.displayPrompt({
+                                                title: this.msg("message.employee.position.delete.title"),
+                                                text: this.msg("message.employee.position.delete.prompt",
+                                                    staffRow.itemData["assoc_lecm-orgstr_element-member-employee-assoc"].displayValue,
+                                                    staffRow.itemData["assoc_lecm-orgstr_element-member-position-assoc"].displayValue,
+                                                    subnitRowName),
+                                                buttons:[
+                                                    {
+                                                        text: this.msg("button.employee.remove"),
+                                                        handler: function DataGridActions__onActionDelete_delete() {
+                                                            this.destroy();
+                                                            fnAfterPrompt.call(this, [oResult]);
+                                                        }
+                                                    },
+                                                    {
+                                                        text: this.msg("button.cancel"),
+                                                        handler: function DataGridActions__onActionDelete_cancel() {
+                                                            this.destroy();
+                                                        },
+                                                        isDefault:true
+                                                    }
+                                                ]
+                                            });
+                                        };
+
+                                        if (("" + oResult.is_primary) == "true") {
+                                            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeePositions?nodeRef=" + oResult.employee;
+                                            Alfresco.util.Ajax.jsonGet({
+                                                url: sUrl,
+                                                successCallback: {
+                                                    fn: function (response) {
+                                                        var oResults = response.json;
+                                                        if (oResults && oResults.length > 1) { // нельзя удалять руководящую должность, пока есть другие должности
+                                                            Alfresco.util.PopupManager.displayMessage({
+                                                                text: this.msg("message.employee.position.delete.failure.primary")
+                                                            });
+                                                        } else { // удаляем! вызов метода из грида
+                                                            this.onDelete([oResult], owner, {fullDelete:true, trash:false, successMessage: "message.employee.position.delete.success"}, fnDeleteComplete, onPrompt);
+                                                        }
+                                                    },
+	                                                scope: this
+                                                },
+                                                failureMessage: this.msg("message.employee.position.delete.failure")
+                                            });
+                                        } else {
+                                            this.onDelete([oResult], owner, {fullDelete:true, trash:false, successMessage: "message.employee.position.delete.success"}, fnDeleteComplete, onPrompt);
+                                        }
+                                    } else {
+                                        Alfresco.util.PopupManager.displayMessage({
+                                            text: this.msg("message.employee.position.delete.failure")
+                                        });
+                                    }
+                                },
+                                scope: this
+                            },
+                            failureMessage: this.msg("message.employee.position.delete.failure")
                         });
-                }
-            };
-            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                    },
+                    scope: this
+                },
+                failureMessage: this.msg("message.employee.position.delete.failure.primary")
+            });
         },
         makeJquerySyncRequestForAbsence: function _makeJquerySyncRequestForAbsence(url, payload, showMessage, comment ){
             var result = {};
@@ -225,91 +210,71 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                 comment);
         },
         onActionMakeBoss: function DataGridActions_onActionMakeBoss(p_item, owner, actionsConfig, fnCallback) {
-            var me = this;
             var staffRow = p_item;
             // Получаем для штатного расписания ссылку на сотрудника
             var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink?nodeRef=" + staffRow.nodeRef;
-            var callback = {
-                success:function (oResponse) {
-                    var oResult = eval("(" + oResponse.responseText + ")");
-                    if (oResult) {
-                        Alfresco.util.PopupManager.displayPrompt(
-                            {
-                                title:me.msg("message.position.boss.title"),
-                                text: me.msg("message.position.boss.prompt",
-                                    staffRow.itemData["assoc_lecm-orgstr_element-member-position-assoc"].displayValue),
+            Alfresco.util.Ajax.jsonGet({
+		        url: sUrl,
+		        successCallback: {
+                    fn: function (response) {
+                        var oResult = response.json;
+                        if (oResult) {
+                            Alfresco.util.PopupManager.displayPrompt({
+                                title: this.msg("message.position.boss.title"),
+                                text: this.msg("message.position.boss.prompt", staffRow.itemData["assoc_lecm-orgstr_element-member-position-assoc"].displayValue),
                                 buttons:[
                                     {
-                                        text:me.msg("button.position.makeBoss"),
-                                        handler:function DataGridActions__onActionMakeBoss_make() {
+                                        text: this.msg("button.position.makeBoss"),
+                                        handler: function DataGridActions__onActionMakeBoss_make() {
                                             this.destroy();
 
-                                            var hasNoActiveAbsences = me.checkMakeBossHasNoActiveAbsences(
+                                            var hasNoActiveAbsences = this.checkMakeBossHasNoActiveAbsences(
                                                 staffRow.nodeRef /*oResult.employee*/,
-                                                me.msg('message.employee.position.primary.add.failure.absence') +'\n');
+                                                this.msg('message.employee.position.primary.add.failure.absence') +'\n');
 
                                             if (!(hasNoActiveAbsences && hasNoActiveAbsences.hasNoActiveAbsences)){
                                                 return;
                                             }
 
-                                            var onSuccess = function DataGrid_onActionMakeBoss_makeBossConfirmed(response) {
-                                                YAHOO.Bubbling.fire("datagridRefresh",
-                                                    {
-                                                        bubblingLabel:me.options.bubblingLabel
-                                                    });
-                                                Alfresco.util.PopupManager.displayMessage(
-                                                    {
-                                                        text:me.msg("message.position.boss.success")
-                                                    });
-                                            };
-                                            var onFailure = function DataGrid_onActionEmployeeAdd_onFailure(response) {
-                                                Alfresco.util.PopupManager.displayMessage(
-                                                    {
-                                                        text:me.msg("message.position.boss.failure")
-                                                    });
-                                            };
-                                            Alfresco.util.Ajax.jsonRequest(
-                                                {
-                                                    url:Alfresco.constants.PROXY_URI + "/lecm/orgstructure/action/makeBoss",
-                                                    method:"POST",
-                                                    dataObj:{
-                                                        nodeRef:staffRow.nodeRef
+                                            Alfresco.util.Ajax.jsonPost({
+                                                url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/action/makeBoss",
+                                                dataObj: {
+                                                    nodeRef: staffRow.nodeRef
+                                                },
+                                                successCallback: {
+                                                    fn: function (response) {
+	                                                    YAHOO.Bubbling.fire("datagridRefresh", {
+		                                                    bubblingLabel: this.options.bubblingLabel
+	                                                    });
+	                                                    Alfresco.util.PopupManager.displayMessage({
+		                                                    text: this.msg("message.position.boss.success")
+	                                                    });
                                                     },
-                                                    successCallback:{
-                                                        fn:onSuccess,
-                                                        scope:this
-                                                    },
-                                                    failureCallback:{
-                                                        fn:onFailure,
-                                                        scope:this
-                                                    }
-                                                });
+                                                    scope:this
+                                                },
+                                                failureMessage: this.msg("message.position.boss.failure")
+                                            });
                                         }
                                     },
                                     {
-                                        text:me.msg("button.cancel"),
-                                        handler:function DataGridActions__onActionDelete_cancel() {
+                                        text: this.msg("button.cancel"),
+                                        handler: function DataGridActions__onActionDelete_cancel() {
                                             this.destroy();
                                         },
                                         isDefault:true
                                     }
                                 ]
                             });
-                    } else {
-                        Alfresco.util.PopupManager.displayMessage(
-                            {
-                                text:this.msg("message.position.boss.failure")
+                        } else {
+                            Alfresco.util.PopupManager.displayMessage({
+                                text: this.msg("message.position.boss.failure")
                             });
-                    }
+                        }
+			        },
+			        scope: this
                 },
-                failure:function (oResponse) {
-                    Alfresco.util.PopupManager.displayMessage(
-                        {
-                            text:this.msg("message.position.boss.failure")
-                        });
-                }
-            };
-            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                failureMessage: this.msg("message.position.boss.failure")
+            });
         },
         // Переопределяем метод onActionDelete. Добавляем проверки
         onActionDelete: function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
@@ -321,49 +286,41 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
             } else {
                 //Получаем подразделение сотрудника
                 var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffPositionUnit?nodeRef=" + deletedUnit.nodeRef;
-                var callback = {
-                    success:function (oResponse) {
-                        var oResults = eval("(" + oResponse.responseText + ")");
-                        if (oResults && oResults.nodeRef) {
-                            //Получаем все должности подразделения
-                            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getUnitStaffPositions?nodeRef=" + oResults.nodeRef;
-                            var callback = {
-                                success:function (oResponse) {
-                                    var oResults = eval("(" + oResponse.responseText + ")");
-                                    if (oResults && oResults.length > 1) { // нельзя удалять руководящую должность, пока есть другие должности
-                                        Alfresco.util.PopupManager.displayMessage(
-                                            {
-                                                text:me.msg("message.delete.staff-lest.failure.boss")
-                                            });
-                                    } else { // удаляем! вызов метода из грида
-                                        me.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
-                                    }
-                                },
-                                failure:function (oResponse) {
-                                    Alfresco.util.PopupManager.displayMessage(
-                                        {
-                                            text:me.msg("message.delete.staff-lest.error")
-                                        });
-                                },
-                                argument:{
-                                }
-                            };
-                            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-                        } else {
-                            Alfresco.util.PopupManager.displayMessage(
-                                {
-                                    text:me.msg("message.delete.staff-lest.error")
+                Alfresco.util.Ajax.jsonGet({
+					url: sUrl,
+                    successCallback: {
+                        fn: function (response) {
+                            var oResults = response.json;
+                            if (oResults && oResults.nodeRef) {
+                                //Получаем все должности подразделения
+                                var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getUnitStaffPositions?nodeRef=" + oResults.nodeRef;
+                                Alfresco.util.Ajax.jsonGet({
+                                    url: sUrl,
+                                    successCallback: {
+                                        fn: function (response) {
+                                            var oResults = response.json;
+                                            if (oResults && oResults.length > 1) { // нельзя удалять руководящую должность, пока есть другие должности
+                                                Alfresco.util.PopupManager.displayMessage({
+                                                    text: this.msg("message.delete.staff-lest.failure.boss")
+                                                });
+                                            } else { // удаляем! вызов метода из грида
+                                                this.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
+                                            }
+                                        },
+                                        scope: this
+                                    },
+                                    failureMessage: this.msg("message.delete.staff-lest.error")
                                 });
-                        }
+                            } else {
+                                Alfresco.util.PopupManager.displayMessage({
+                                    text: this.msg("message.delete.staff-lest.error")
+                                });
+                            }
+                        },
+                        scope: this
                     },
-                    failure:function (oResponse) {
-                        Alfresco.util.PopupManager.displayMessage(
-                            {
-                                text:me.msg("message.delete.staff-lest.error")
-                            });
-                    }
-                };
-                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                    failureMessage: this.msg("message.delete.staff-lest.error")
+                });
             }
         }
     });
