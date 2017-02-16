@@ -180,6 +180,7 @@
                     <field id="lecm-base-dummy-aspects:script2" set="commonField">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-view-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">errandsTabsFormScriptLoaded</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:execution-report-status" set="execution-report"/>
@@ -228,7 +229,7 @@
                 </appearance>
             </form>
 
-            <form id="errands-edit-form">
+            <form id="edit">
                 <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <!-- Важное -->
@@ -452,6 +453,7 @@
                     <field id="lecm-base-dummy-aspects:script5" set="afterDateSet">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-view-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">errandsTabsFormScriptLoaded</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script6" set="reports">

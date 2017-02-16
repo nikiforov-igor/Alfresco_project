@@ -14,16 +14,13 @@
     Bubbling.on("errandsReportsTabViewFormScriptLoaded", init);
     Bubbling.on("errandsReportsTabEditFormScriptLoaded", init);
 
-
     function init(layer, args) {
         if (!formId) {
             formId = args[1].formId;
-            var documentNodeRef = null;
+            var documentNodeRef = args[1].nodeRef;
             if (layer == "errandsReportsTabViewFormScriptLoaded") {
-                documentNodeRef = Alfresco.util.ComponentManager.get(formId + "-form").options.arguments.itemId;
                 realFormElId = formId + "_metadata";
             } else {
-                documentNodeRef = Alfresco.util.ComponentManager.get(formId).options.nodeRef;
                 realFormElId = formId;
             }
             if (documentNodeRef) {
