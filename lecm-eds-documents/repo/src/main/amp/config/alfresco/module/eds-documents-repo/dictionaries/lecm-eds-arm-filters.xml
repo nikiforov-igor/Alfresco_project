@@ -50,6 +50,14 @@
                 <property name="lecm-arm:filter-values">ISNOTNULL:'lecm-document-aspects:is-on-control' AND @lecm\\-document\\-aspects:is\\-on\\-control:true|Контрольные,ISNULL:'lecm-document-aspects:is-on-control' OR @lecm\\-document\\-aspects:is\\-on\\-control:false|Не контрольные</property>
                 <property name="lecm-arm:filter-query">#value</property>
             </item>
+            <item name="cm:По типу участия" type="lecm-arm:filter">
+                <property name="cm:name">По типу участия</property>
+                <property name="lecm-arm:filter-code">BY_TYPE_OF_PARTICIPATION</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">@lecm\\-events:initiator\\-assoc\\-ref:'#current-user'|Я - Инициатор,@lecm\\-meetings:chairman\\-assoc\\-ref:'#current-user'|Я - Председатель,@lecm\\-meetings:secretary\\-assoc\\-ref:'#current-user'|Я - Секретарь,@lecm\\-events:temp\\-members\\-assoc\\-ref:'*#current-user*'|Я - Участник,@lecm\\-events:invited\\-members\\-assoc\\-ref:'*#current-user*'|Я - Приглашенный</property>
+                <property name="lecm-arm:filter-query">#value</property>
+            </item>
             <item name="cm:По роли" type="lecm-arm:filter">
                 <property name="cm:name">По роли</property>
                 <property name="lecm-arm:filter-code">BY_ROLE</property>
