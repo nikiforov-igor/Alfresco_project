@@ -145,6 +145,40 @@
                         </roleAssociations>
                         <subFolders/>
                     </node>
+                    <node>
+                        <type>dynamic-role-item</type>
+                        <name>93af5f32-a5f2-48d6-91b3-e2e6ad869c96</name>
+                        <nodeRef>workspace://SpacesStore/bd57e168-6bf6-422f-9005-d6abdcb41f15</nodeRef>
+                        <properties/>
+                        <aspects>
+                            <business-role/>
+                        </aspects>
+                        <associations/>
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>RESOLUTION_CHILD_ERRANDS_CO_EXECUTOR</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders/>
+                    </node>
+                    <node>
+                        <type>dynamic-role-item</type>
+                        <name>a5788f87-5e29-4c7d-a1be-d3a4d57e9bc1</name>
+                        <nodeRef>workspace://SpacesStore/2beee70e-d8d3-45b3-ad0e-7d1a0579631d</nodeRef>
+                        <properties/>
+                        <aspects>
+                            <business-role/>
+                        </aspects>
+                        <associations/>
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>RESOLUTION_CHILD_ERRANDS_EXECUTOR</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders/>
+                    </node>
                 </nodes>
             </subFolder>
             <subFolder>
@@ -1075,6 +1109,53 @@
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>RESOLUTION_CREATOR_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>54ca2e9a-b7f7-48e5-8701-c76f2af98412</name>
+                                        <nodeRef>workspace://SpacesStore/54ca2e9a-b7f7-48e5-8701-c76f2af98412</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CHILD_ERRANDS_CO_EXECUTOR
+                                                </businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>677bd4a5-5c28-455d-9883-8f91f5edd02a</name>
+                                        <nodeRef>workspace://SpacesStore/677bd4a5-5c28-455d-9883-8f91f5edd02a</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CHILD_ERRANDS_EXECUTOR</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -2239,6 +2320,53 @@ if (document) {
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>9a2d910a-e4e8-4093-b710-c098f890375e</name>
+                                        <nodeRef>workspace://SpacesStore/9a2d910a-e4e8-4093-b710-c098f890375e</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CHILD_ERRANDS_CO_EXECUTOR
+                                                </businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>b2445b3a-1437-4d9f-92c3-06c2b81bae67</name>
+                                        <nodeRef>workspace://SpacesStore/b2445b3a-1437-4d9f-92c3-06c2b81bae67</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CHILD_ERRANDS_EXECUTOR</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -3259,6 +3387,53 @@ if (document) {
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>RESOLUTION_CREATOR_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>20072845-9298-4254-b765-0a2f4e4d70ec</name>
+                                        <nodeRef>workspace://SpacesStore/20072845-9298-4254-b765-0a2f4e4d70ec</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CHILD_ERRANDS_CO_EXECUTOR
+                                                </businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>7199b3b3-3876-43a6-bd97-a13114eccc34</name>
+                                        <nodeRef>workspace://SpacesStore/7199b3b3-3876-43a6-bd97-a13114eccc34</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CHILD_ERRANDS_EXECUTOR</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
