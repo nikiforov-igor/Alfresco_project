@@ -137,8 +137,8 @@ function sendDocumentToReview(document, reviewers, initiatingDocument) {
 }
 
 function cancelReviewFromInitiatingDocument(initiatingDocument, reviewItems) {
-    var items = Array.isArray(reviewItems) ? reviewItems : [reviewItems];
-    if (initiatingDocument && items && items.length) {
+    if (initiatingDocument && reviewItems) {
+        var items = Array.isArray(reviewItems) ? reviewItems : [reviewItems];
         items.forEach(function (item) {
             initiatingDocument.removeAssociation(item, "lecm-review-aspects:related-review-records-assoc");
         });
