@@ -155,4 +155,13 @@
         <property name="nodeService" ref="nodeService"/>
         <property name="publicAction" value="false" />
     </bean>
+
+    <bean  id="resolutionErrandsPolicy" class="ru.it.lecm.resolutions.policy.ResolutionErrandsPolicy"
+           init-method="init" depends-on="resolutions.LogicEcmBootstrap, errandsService">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="errandsService" ref="errandsService" />
+        <property name="nodeService" ref="nodeService"/>
+        <property name="stateMachineService" ref="stateMachineHelper"/>
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+    </bean>
 </beans>
