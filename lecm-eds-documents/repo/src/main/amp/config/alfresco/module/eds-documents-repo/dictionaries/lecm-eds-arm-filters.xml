@@ -66,6 +66,14 @@
                 <property name="lecm-arm:filter-values">@lecm\\-eds\\-document:executor\\-assoc\\-ref:'#current-user' OR @lecm\\-resolutions:author\\-assoc\\-ref:'#current-user' OR @lecm\\-errands:initiator\\-assoc\\-ref:'#current-user'|Я - Автор,@lecm\\-document:author\\-assoc\\-ref:'#current-user'|Я - Составитель</property>
                 <property name="lecm-arm:filter-query">#value</property>
             </item>
+            <item name="cm:По важности" type="lecm-arm:filter">
+                <property name="cm:name">По важности</property>
+                <property name="lecm-arm:filter-code">BY_IMPORTANCE</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">@lecm\\-errands:is\\-important:true|Важные;NOT @lecm\\-errands:is\\-important:true OR @lecm\\-errands:is\\-important:false|Простые</property>
+                <property name="lecm-arm:filter-query">#value</property>
+            </item>
         </items>
     </item>
 </items>
