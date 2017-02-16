@@ -46,7 +46,7 @@ var ExecuteErrandScript = {
         }
         if (closeChild) {
             var reason = "Завершено исполнением поручения-основания ";
-            reason += documentScript.wrapperDocumentLink(document, '{lecm-document:present-string}');
+            reason += document.properties["lecm-document:present-string"];
             var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
             var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
             childrenErrands.forEach(function (childErrand) {
