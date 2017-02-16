@@ -64,7 +64,7 @@
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">@lecm\\-eds\\-document:executor\\-assoc\\-ref:'#current-user' OR @lecm\\-resolutions:author\\-assoc\\-ref:'#current-user' OR @lecm\\-errands:initiator\\-assoc\\-ref:'#current-user'|Я - Автор,@lecm\\-document:author\\-assoc\\-ref:'#current-user'|Я - Составитель</property>
-                <property name="lecm-arm:filter-query">#value</property>
+                <property name="lecm-arm:filter-query">#value.</property>
             </item>
         </items>
     </item>
