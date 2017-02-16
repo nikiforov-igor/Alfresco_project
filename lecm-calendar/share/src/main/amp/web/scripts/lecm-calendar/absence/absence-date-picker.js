@@ -32,17 +32,22 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 	YAHOO.lang.extend(LogicECM.module.WCalendar.Absence.DatePicker, LogicECM.DatePicker, {
 		_getDateByKey: function (key) {
 			var date = new Date();
-			if (key != null && key != "NOW") {
-				if (key == "START_YEAR") {
+			switch (key) {
+				case 'START_YEAR':
 					date.setMonth(0);
 					date.setDate(1);
-				} else if (key == "NEXT_MONTH") {
+					break;
+				case 'NEXT_MONTH' :
 					date.setMonth(date.getMonth() + 1);
-				} else if (key == "LAST_MONTH"){
+					break;
+				case 'LAST_MONTH' :
 					date.setMonth(date.getMonth() - 1);
-				} else if (key == "TOMORROW"){
+					break;
+				case 'TOMORROW':
 					date.setDate(date.getDate() + 1);
-				}
+					break;
+				default:
+					break;
 			}
 			return date;
 		}
