@@ -1,7 +1,7 @@
+<#assign params = field.control.params/>
 <#if params.scripts??>
     <#assign formId = args.htmlid?js_string?html/>
-    <#assign fieldId = field.id!"">
-    <#assign params = field.control.params/>
+    <#assign fieldId=field.id!"">
 
     <#assign scriptLoadedFireAction = "scriptLoaded"/>
     <#if field.control.params.scriptLoadedFireAction??>
@@ -23,7 +23,7 @@
                         nodeRef: "${form.arguments.itemId}",
                     </#if>
                     <#list params?keys as key>
-                        <#assign isNotBoolean = 'true' != params[key] && 'false' != params[key]>
+                        <#assign isNotBoolean = 'true' != params[key]?lower_case && 'false' != params[key]?lower_case>
                     '${key}': <#if isNotBoolean>'</#if>${params[key]}<#if isNotBoolean>'</#if>,
                     </#list>
                     formId: "${formId}",
