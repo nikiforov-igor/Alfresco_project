@@ -169,15 +169,18 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 			var nodeRef = args[1].nodeRef;
 			if (nodeRef) {
 				Alfresco.util.Ajax.jsonGet({
-					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/meeting/removeItem?nodeRef=" + nodeRef,
+					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/meeting/removeItem",
+					dataObj: {
+						nodeRef: nodeRef
+					},
 					successCallback: {
+						scope: this,
 						fn: function (response) {
 							var itemBlock = Dom.get(this.ITEM_FORM_PREFIX + nodeRef.replace('workspace://SpacesStore/', '_') + "-form-container");
 							if (itemBlock) {
 								itemBlock.parentNode.removeChild(itemBlock);
 							}
-						},
-						scope: this
+						}
 					}
 				});
 			}

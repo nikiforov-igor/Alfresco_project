@@ -275,24 +275,27 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                         buttons: [
                             {
                                 text: this.msg("lecm.re.btn.ok"),
-                                handler: function dlA_onAction_action() {
-                                    this.destroy();
-                                    Alfresco.util.Ajax.jsonPost({
-                                        url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
-                                        dataObj: {
-                                            items: items,
-                                            actionId: p_oItem.actionId
-                                        },
-                                        successCallback: {
-                                            fn: function (oResponse) {
-                                                this._actionResponse(p_oItem.actionId, oResponse, items);
-                                            },
-                                            scope: this
-                                        },
-                                        failureMessage: this.msg('message.failure'),
-                                        execScripts: true
-                                    });
+                                handler: {
+                                    obj: this,
+                                    fn: function dlA_onAction_action(event, obj) {
+	                                    this.destroy();
+	                                    Alfresco.util.Ajax.jsonPost({
+		                                    url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
+		                                    dataObj: {
+			                                    items: items,
+			                                    actionId: p_oItem.actionId
+		                                    },
+		                                    successCallback: {
+			                                    scope: obj,
+			                                    fn: function (oResponse) {
+				                                    this._actionResponse(p_oItem.actionId, oResponse, items);
+			                                    }
+		                                    },
+		                                    failureMessage: obj.msg('message.failure'),
+		                                    execScripts: true
+	                                    });
 
+                                    }
                                 }
                             },
                             {

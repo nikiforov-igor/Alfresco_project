@@ -114,9 +114,13 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
 
             updateDocTypeData: function () {
                 Alfresco.util.Ajax.jsonGet({
-                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/type/fields?itemType=" + this.currentDocType,
+                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/type/fields",
+	                dataObj: {
+		                itemType: this.currentDocType
+	                },
                     successCallback: {
-                        fn:function (response) {
+	                    scope: this,
+                        fn: function (response) {
                             this.currentDocTypeFields = response.json.fields;
                             this.currentDocTypeFields.sort(function(left, right) {
                                 if (left.label < right.label) {
@@ -128,17 +132,9 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                                 return 0;
                             });
                             Bubbling.fire("docFieldsSet");
-                        },
-                        scope:this
+                        }
                     },
-                    failureCallback: {
-                        fn:function () {
-                            Alfresco.util.PopupManager.displayMessage({
-                                text: this.msg("message.failure")
-                            });
-                        },
-                        scope:this
-                    }
+                    failureMessage: this.msg("message.failure")
                 });
             },
 

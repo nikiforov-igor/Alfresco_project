@@ -24,10 +24,13 @@
                     LogicECM.module.Base.DataGrid.prototype.onActionMakePrimary = function DataGridActions_onActionMakePrimary(p_item) {
                         var staffRow = p_item;
                         // Получаем для штатного расписания ссылку на сотрудника
-                        var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink?nodeRef=" + staffRow.nodeRef;
                         Alfresco.util.Ajax.jsonGet({
-                            url: sUrl,
+                            url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink",
+                            dataObj: {
+                                nodeRef: staffRow.nodeRef
+                            },
                             successCallback: {
+                                scope: this,
                                 fn: function (response) {
                                     var oResult = response.json;
                                     if (oResult) {
@@ -37,26 +40,29 @@
                                             buttons:[
                                                 {
                                                     text: this.msg("button.position.makePrimary"),
-                                                    handler: function DataGridActions_onActionMakePrimary_make() {
-                                                        this.destroy();
-                                                        Alfresco.util.Ajax.jsonPost({
-                                                            url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/action/makePrimary",
-                                                            dataObj: {
-                                                                nodeRef: oResult.nodeRef
-                                                            },
-                                                            successCallback: {
-                                                                fn: function DataGrid_onActionEmployeeAdd_onSuccess(response) {
-                                                                    YAHOO.Bubbling.fire("datagridRefresh", {
-                                                                        bubblingLabel: this.options.bubblingLabel
-                                                                    });
-                                                                    Alfresco.util.PopupManager.displayMessage({
-                                                                        text: this.msg("message.position.primary.success")
-                                                                    });
+                                                    handler: {
+                                                        obj: this,
+                                                        fn: function DataGridActions_onActionMakePrimary_make(event, obj) {
+                                                            this.destroy();
+                                                            Alfresco.util.Ajax.jsonPost({
+                                                                url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/action/makePrimary",
+                                                                dataObj: {
+                                                                    nodeRef: oResult.nodeRef
                                                                 },
-                                                                scope:this
-                                                            },
-                                                            failureMessage: this.msg("message.position.primary.failure")
-                                                        });
+                                                                successCallback: {
+                                                                    scope: obj,
+                                                                    fn: function DataGrid_onActionEmployeeAdd_onSuccess(response) {
+                                                                        YAHOO.Bubbling.fire("datagridRefresh", {
+                                                                            bubblingLabel: this.options.bubblingLabel
+                                                                        });
+                                                                        Alfresco.util.PopupManager.displayMessage({
+                                                                            text: this.msg("message.position.primary.success")
+                                                                        });
+                                                                    }
+                                                                },
+                                                                failureMessage: obj.msg("message.position.primary.failure")
+                                                            });
+                                                        }
                                                     }
                                                 },
                                                 {
@@ -73,8 +79,7 @@
                                             text: this.msg("message.position.primary.failure")
                                         });
                                     }
-                                },
-                                scope: this
+                                }
                             },
                             failureMessage: this.msg("message.position.primary.failure")
                         });

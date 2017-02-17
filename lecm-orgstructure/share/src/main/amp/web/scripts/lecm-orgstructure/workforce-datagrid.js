@@ -58,20 +58,26 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
 
         },
         onActionEmployeeDelete: function DataGridActions_onActionEmployeeDelete(p_item, owner, actionsConfig, fnDeleteComplete) {
-	        var sUrlWorkGroup = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getWorkGroupProperties?nodeRef=" + this.datagridMeta.nodeRef;
 	        Alfresco.util.Ajax.jsonGet({
-		        url: sUrlWorkGroup,
+		        url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getWorkGroupProperties",
+		        dataObj: {
+			        nodeRef: this.datagridMeta.nodeRef
+		        },
 		        successCallback: {
+			        scope: this,
 			        fn: function (response) {
 				        var oResultWorkGroup = response.json;
 				        if (oResultWorkGroup) {
 							var workgroupShortName = oResultWorkGroup.shortName;
 					        var staffRow = p_item;
 					        // Получаем для трудового ресурса (участника раб. группы) ссылку на сотрудника
-					        var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink?nodeRef=" + staffRow.nodeRef;
 				            Alfresco.util.Ajax.jsonGet({
-				                url: sUrl,
+				                url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink",
+					            dataObj: {
+						            nodeRef: staffRow.nodeRef
+					            },
 				                successCallback: {
+					                scope: this,
 							        fn: function (response) {
 								        var oResult = response.json;
 								        if (oResult) {
@@ -84,9 +90,12 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
 											        buttons: [
 												        {
 													        text: this.msg("button.employee.remove"),
-													        handler: function DataGridActions__onActionDelete_delete() {
-														        this.destroy();
-														        fnAfterPrompt.call(this, [oResult]);
+													        handler: {
+														        obj: this,
+														        fn: function DataGridActions__onActionDelete_delete(event, obj) {
+															        this.destroy();
+															        fnAfterPrompt.call(obj, [oResult]);
+														        }
 													        }
 												        },
 												        {
@@ -105,14 +114,14 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
 											        url: Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + new Alfresco.util.NodeRef(p_item.nodeRef).uri,
 											        dataObj: this._buildDataGridParams(),
 											        successCallback: {
+												        scope: this,
 												        fn: function DataGrid_onActionEdit_refreshSuccess(response) {
 													        // Fire "itemUpdated" event
 													        YAHOO.Bubbling.fire("dataItemUpdated", {
 														        item: response.json.item,
 														        bubblingLabel: this.options.bubblingLabel
 													        });
-												        },
-												        scope: this
+												        }
 											        },
 											        failureMessage: this.msg("message.details.failure")
 										        });
@@ -124,15 +133,13 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
 										        text: this.msg("message.employee.role.delete.failure")
 									        });
 								        }
-							        },
-							        scope: this
+							        }
 						        },
 						        failureMessage: this.msg("message.employee.role.delete.failure")
 					        });
 
 				        }
-			        },
-			        scope: this
+			        }
 		        },
 		        failureMessage: this.msg("message.employee.role.delete.failure")
 	        });

@@ -78,8 +78,12 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 
 	        generateModelForms: function() {
 		        Alfresco.util.Ajax.jsonGet({
-			        url: Alfresco.constants.PROXY_URI + "/lecm/docforms/generate?modelName=" + encodeURIComponent(this.options.doctype),
+			        url: Alfresco.constants.PROXY_URI + "/lecm/docforms/generate",
+			        dataObj: {
+				        modelName: this.options.doctype
+			        },
 			        successCallback: {
+				        scope: this,
 				        fn: function (response) {
 						    var oResults = response.json;
 						    if (oResults && oResults.success) {
@@ -87,8 +91,7 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 								    text: this.msg("message.generate.success")
 							    });
 						    }
-					    },
-					    scope: this
+					    }
 				    },
 				    failureMessage: this.msg("message.failure")
 			    });
@@ -96,15 +99,17 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 
 	        deployForms: function() {
 		        Alfresco.util.Ajax.jsonGet({
-				    url:Alfresco.constants.URL_SERVICECONTEXT + "lecm/config/init?reset=true",
-				    dataObj: {},
+				    url:Alfresco.constants.URL_SERVICECONTEXT + "lecm/config/init",
+				    dataObj: {
+					    reset: true
+				    },
 				    successCallback:{
+					    scope: this,
 					    fn:function (response) {
 						    Alfresco.util.PopupManager.displayMessage({
 							    text: this.msg("message.deploy.success")
 						    });
-					    },
-					    scope: this
+					    }
 				    },
 				    failureMessage: this.msg("message.failure")
 			    });
@@ -112,8 +117,12 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 
 	        downloadConfig: function() {
                 Alfresco.util.Ajax.jsonGet({
-				    url: Alfresco.constants.PROXY_URI + "/lecm/docforms/config?modelName=" + encodeURIComponent(this.options.doctype),
+				    url: Alfresco.constants.PROXY_URI + "/lecm/docforms/config",
+	                dataObj: {
+		                modelName: this.options.doctype
+	                },
 				    successCallback: {
+					    scope: this,
 					    fn: function (response) {
 						    var oResults = response.json;
 						    if (oResults && oResults.nodeRef) {
@@ -123,8 +132,7 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 								    text: this.msg("message.downloadConfig.notFound")
 							    });
 						    }
-					    },
-					    scope: this
+					    }
 				    },
 				    failureMessage: this.msg("message.failure")
 			    });
@@ -132,8 +140,12 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 
 	        uploadConfig: function() {
 		        Alfresco.util.Ajax.jsonGet({
-				    url: Alfresco.constants.PROXY_URI + "/lecm/docforms/config?modelName=" + encodeURIComponent(this.options.doctype),
+				    url: Alfresco.constants.PROXY_URI + "/lecm/docforms/config",
+			        dataObj: {
+				        modelName: this.options.doctype
+			        },
 				    successCallback: {
+					    scope: this,
 					    fn: function (response) {
 						    var oResults = response.json;
 						    if (oResults && oResults.nodeRef) {
@@ -160,8 +172,7 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 								    text: this.msg("message.uploadConfig.notFound")
 							    });
 						    }
-					    },
-					    scope: this
+					    }
 				    },
 				    failureMessage: this.msg("message.failure")
 			    });

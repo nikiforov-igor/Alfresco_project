@@ -18,10 +18,13 @@
             var items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
             var deletedUnit = items[0]; // для Оргструктуры одновременно удалить можно ТОЛЬКО ОДНО подразделение
             // Проверим не является ли подразделение корневым (тогда его нельщзя удалять!)
-            var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getUnitParent?nodeRef=" + deletedUnit.nodeRef;
             Alfresco.util.Ajax.jsonGet({
-                url: sUrl,
+                url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getUnitParent",
+                dataObj: {
+                    nodeRef: deletedUnit.nodeRef
+                },
                 successCallback: {
+                    scope: this,
                     fn: function (response) {
                         var oResults = response.json;
                         if (oResults && !oResults.nodeRef && this.totalRecords == 1) {
@@ -30,34 +33,44 @@
                             });
                         } else {
                             // Проверим есть ли у подразделения штатные расписания
-                            var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getUnitStaffPositions?nodeRef=" + deletedUnit.nodeRef;
                             Alfresco.util.Ajax.jsonGet({
-                                url: sUrl,
+                                url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getUnitStaffPositions",
+                                dataObj: {
+                                    nodeRef: deletedUnit.nodeRef
+                                },
                                 successCallback: {
+                                    scope: this,
                                     fn: function (response) {
                                         var oResults = response.json;
-                                        if (oResults && oResults.length > 0) {
+                                        if (oResults && oResults.length) {
                                             Alfresco.util.PopupManager.displayMessage({
                                                 text: this.msg("message.delete.unit.failure.has.composition")
                                             });
                                         } else {
                                             // Проверим нет ли дочерних АКТИВНЫХ подразделений
-                                            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getUnitChildren?nodeRef=" + deletedUnit.nodeRef + "&onlyActive=true";
                                             Alfresco.util.Ajax.jsonGet({
-                                                url: sUrl,
+                                                url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getUnitChildren",
+                                                dataObj: {
+                                                    nodeRef: deletedUnit.nodeRef,
+                                                    onlyActive: true
+                                                },
                                                 successCallback: {
+                                                    scope: this,
                                                     fn: function (response) {
                                                         var oResults = response.json;
-                                                        if (oResults && oResults.length > 0) { // нельзя удалять - есть дочерние подразделения
+                                                        if (oResults && oResults.length) { // нельзя удалять - есть дочерние подразделения
                                                             Alfresco.util.PopupManager.displayMessage({
                                                                 text: this.msg("message.delete.unit.failure.has.children")
                                                             });
                                                         } else {
                                                             // Проверим нет ли связанных номенклатурных дел
-                                                            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/hasUnitNomenclatureCases?nodeRef=" + deletedUnit.nodeRef;
                                                             Alfresco.util.Ajax.jsonGet({
-                                                                url: sUrl,
+                                                                url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/hasUnitNomenclatureCases",
+                                                                dataObj: {
+                                                                    nodeRef: deletedUnit.nodeRef
+                                                                },
                                                                 successCallback: {
+                                                                    scope: this,
                                                                     fn: function (response) {
                                                                         var oResults = response.json;
                                                                         if (oResults && oResults.hasNomenclatureCases && oResults.hasNomenclatureCases == "true") { // Нельзя удалять - есть связанные номенклатурные дела
@@ -67,26 +80,22 @@
                                                                         } else { // Удаляем! вызов метода из грида
                                                                             this.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
                                                                         }
-                                                                    },
-                                                                    scope: this
+                                                                    }
                                                                 },
                                                                 failureMessage: this.msg("message.delete.unit.error")
                                                             });
                                                         }
-                                                    },
-                                                    scope: this
+                                                    }
                                                 },
                                                 failureMessage: this.msg("message.delete.unit.error")
                                             });
                                         }
-                                    },
-                                    scope: this
+                                    }
                                 },
                                 failureMessage: this.msg("message.delete.unit.error")
                             });
                         }
-                    },
-                    scope: this
+                    }
                 },
                 failureMessage: this.msg("message.delete.unit.error")
             });

@@ -208,8 +208,13 @@ LogicECM.control = LogicECM.control || {};
 
 			loadPermissions: function() {
 				Alfresco.util.Ajax.jsonGet({
-					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/security/api/getPermissions?nodeRef=" + encodeURIComponent(this.options.itemNodeRef) + "&permissions=" + encodeURIComponent("_lecmPerm_ContentList,_lecmPerm_ContentAddVer,_lecmPerm_ContentAdd,_lecmPerm_ContentDelete"),
+					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/security/api/getPermissions",
+					dataObj: {
+						nodeRef: this.options.itemNodeRef,
+						permissions: "_lecmPerm_ContentList,_lecmPerm_ContentAddVer,_lecmPerm_ContentAdd,_lecmPerm_ContentDelete"
+					},
 					successCallback: {
+						scope: this,
 						fn: function (response) {
 							var oResults = response.json;
 							if (oResults && oResults.length == 4) {
@@ -226,8 +231,7 @@ LogicECM.control = LogicECM.control || {};
 									Dom.removeClass(this.id + "-uploader-block", "hidden");
 								}
 							}
-						},
-						scope: this
+						}
 					},
 					failureMessage: this.msg("message.failure")
 				});

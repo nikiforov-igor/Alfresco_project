@@ -77,7 +77,7 @@ LogicECM.module.OrgStructure.employeeNotHasAnotherOrganizationValidation = funct
             processData: true,
 
             success: function(result, textStatus, jqXHR) {
-                employeeOrganization = result ? result.nodeRef : null;
+                employeeOrganization = result.nodeRef;
                 if (employeeOrganization) {
                     jQuery.ajax({
                         url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/orgstructure/api/getStaffPositionUnit?nodeRef=" + field.form["alf_destination"].value,
@@ -89,7 +89,7 @@ LogicECM.module.OrgStructure.employeeNotHasAnotherOrganizationValidation = funct
                         processData: true,
 
                         success: function(result, textStatus, jqXHR) {
-                            var staffUnit = result ? result.nodeRef : null;
+                            var staffUnit = result.nodeRef;
                             jQuery.ajax({
                                 url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/orgstructure/getOrganization?nodeRef=" + staffUnit,
                                 type: "GET",
@@ -100,7 +100,7 @@ LogicECM.module.OrgStructure.employeeNotHasAnotherOrganizationValidation = funct
                                 processData: true,
 
                                 success: function(result, textStatus, jqXHR) {
-                                    var unitOrganization = result ? result.nodeRef : null;
+                                    var unitOrganization = result.nodeRef;
                                     valid = !unitOrganization || (unitOrganization && (employeeOrganization == unitOrganization));
                                 },
 

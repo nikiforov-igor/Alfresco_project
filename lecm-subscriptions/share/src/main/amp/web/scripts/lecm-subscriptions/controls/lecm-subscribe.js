@@ -169,11 +169,14 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 
 			loadSubscriptionForEmployee: function() {
 				if (this.options.objectNodeRef && this.currentEmployee && this.currentEmployee.nodeRef) {
-					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/subscriptions/api/getEmployeeSubscriptionToObject?employeeRef=" +
-						this.currentEmployee.nodeRef + "&objectRef=" + this.options.objectNodeRef;
 					Alfresco.util.Ajax.jsonGet({
-						url: sUrl,
+						url: Alfresco.constants.PROXY_URI + "/lecm/subscriptions/api/getEmployeeSubscriptionToObject",
+						dataObj: {
+							employeeRef: this.currentEmployee.nodeRef,
+							objectRef: this.options.objectNodeRef
+						},
 						successCallback: {
+							scope: this,
 							fn: function (response) {
 								var oResults = response.json;
 								if (oResults && oResults.nodeRef) {
@@ -182,14 +185,13 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 									YAHOO.log("Failed to process XHR transaction.", "info", "example");
 								}
 								this.updateFormButtons();
-							},
-							scope: this
+							}
 						},
 						failureCallback: {
+							scope: this,
 							fn: function (response) {
 								YAHOO.log("Failed to process XHR transaction.", "info", "example");
-							},
-							scope: this
+							}
 						}
 					});
 				}
@@ -307,10 +309,13 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 
 			onUnsubscribe: function(e, p_obj) {
 				var fnActionUnsibscribeConfirm = function DataGridActions__onActionDelete_confirm(items) {
-					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/subscriptions/api/unsubscribeObject?nodeRef=" + this.currentEmployeeSubscriptionRef;
 					Alfresco.util.Ajax.jsonGet({
-						url: sUrl,
+						url: Alfresco.constants.PROXY_URI + "/lecm/subscriptions/api/unsubscribeObject",
+						dataObj: {
+							nodeRef: this.currentEmployeeSubscriptionRef
+						},
 						successCallback: {
+							scope: this,
 							fn: function (response) {
 								var oResults = response.json;
 								if (oResults && oResults.success) {
@@ -324,8 +329,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 									});
 								}
 								this.updateFormButtons();
-							},
-							scope: this
+							}
 						},
 						failureMessage: this.msg("message.unsibscribe.failure")
 					});

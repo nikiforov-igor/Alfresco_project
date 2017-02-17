@@ -24,7 +24,10 @@
 				nodeRef = simpleDialog.options.nodeRef;
 			}
 			Alfresco.util.Ajax.jsonGet({
-				url: Alfresco.constants.PROXY_URI + 'lecm/deputy/getCompleteDeputiesList?nodeRef=' + nodeRef,
+				url: Alfresco.constants.PROXY_URI + 'lecm/deputy/getCompleteDeputiesList',
+				dataObj: {
+					nodeRef: nodeRef
+				},
 				successCallback: {
 					scope: this,
 					fn: function (response) {

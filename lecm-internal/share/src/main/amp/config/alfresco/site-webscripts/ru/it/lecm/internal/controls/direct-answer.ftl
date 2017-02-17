@@ -63,16 +63,19 @@
                 },
 
                 onReady: function Toolbar_onReady() {
-                    var url = Alfresco.constants.PROXY_URI + "lecm/document-type/settings?docType=lecm-internal:document";
+                    var url = Alfresco.constants.PROXY_URI + "lecm/document-type/settings";
                     Alfresco.util.Ajax.jsonGet({
                         url: url,
+                        dataObj: {
+                            docType: "lecm-internal:document"
+                        },
                         successCallback: {
+                            scope: this,
                             fn: function (response) {
                                 if (response.json && response.json.nodeRef) {
                                     this.destination = response.json.nodeRef;
                                 }
-                            },
-                            scope: this
+                            }
                         }
                     });
 

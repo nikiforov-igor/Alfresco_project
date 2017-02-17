@@ -85,16 +85,18 @@
 	}
 
 	function loadDictionary() {
-    	var sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent("${args.dictionaryName}");
         Alfresco.util.Ajax.jsonGet({
-            url: sUrl,
+            url: Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary",
+            dataObj: {
+                dicName: "${args.dictionaryName}"
+            },
             successCallback: {
+                scope: this,
                 fn: function (response) {
                     if (response.json) {
                         createDatagrid(response.json);
                     }
-                },
-                scope: this
+                }
             },
             failureMessage: "${msg('message.dictionary.loading.fail')}"
         });

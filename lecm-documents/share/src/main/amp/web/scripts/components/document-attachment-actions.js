@@ -160,18 +160,21 @@ LogicECM.DocumentAttachmentActions = LogicECM.DocumentAttachmentActions || {};
 		},
 
 		onFileCopiedComplete: function(layer, args) {
-			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/attachments/api/logCopy?originalNodeRef=" + encodeURIComponent(this.options.nodeRef) + "&copiedNodeRef=" + encodeURIComponent(args[1].nodeRef);
 			Alfresco.util.Ajax.jsonGet({
-				url: sUrl,
+				url: Alfresco.constants.PROXY_URI + "/lecm/document/attachments/api/logCopy",
+				dataObj: {
+					originalNodeRef: this.options.nodeRef,
+					copiedNodeRef: args[1].nodeRef
+				},
 				successCallback: {
-					fn: function (response) {},
-					scope: this
+					scope: this,
+					fn: function (response) {}
 				},
 				failureCallback: {
+					scope: this,
 					fn: function (response) {
 						YAHOO.log("Failed to process XHR transaction.", "info", "example");
-					},
-					scope: this
+					}
 				}
 			});
 		}

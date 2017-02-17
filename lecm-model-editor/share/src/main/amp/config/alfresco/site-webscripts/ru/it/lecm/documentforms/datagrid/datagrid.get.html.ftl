@@ -69,8 +69,12 @@
 
 			function showFormsDatagrid() {
 				Alfresco.util.Ajax.jsonGet({
-					url: Alfresco.constants.PROXY_URI + "/lecm/docforms/root?modelName=" + encodeURIComponent("${doctype!""}"),
+					url: Alfresco.constants.PROXY_URI + "/lecm/docforms/root",
+                    dataObj: {
+                        modelName: "${doctype!""}"
+                    },
 					successCallback: {
+                        scope: this,
 						fn: function (response) {
 							var oResults = response.json;
 							if (oResults && oResults.nodeRef) {
@@ -84,8 +88,7 @@
 								};
 								datagrid.draw();
 							}
-						},
-						scope: this
+						}
 					},
 					failureMessage: "${msg("message.failure")}"
 				});

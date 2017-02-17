@@ -107,8 +107,12 @@
 
         <#-- Получение рейтинга для текущего пользователя (при загрузке страницы)-->
         Alfresco.util.Ajax.jsonGet({
-            url: Alfresco.constants.PROXY_URI + "lecm/document/api/getRating?nodeRef=" + nodeRef,
+            url: Alfresco.constants.PROXY_URI + "lecm/document/api/getRating",
+            dataObj: {
+                nodeRef: nodeRef
+            },
             successCallback: {
+                scope: this,
                 fn: function refreshSuccess(response) {
                     var json = response.json;
 
@@ -116,14 +120,13 @@
                         var rating = json.myRating;
                         setRating(rating);
                     }
-                },
-                scope: this
+                }
             },
             failureCallback: {
+                scope: this,
                 fn: function refreshFailure(response) {
                     console.log(response);
-                },
-                scope: this
+                }
             }
         });
     });

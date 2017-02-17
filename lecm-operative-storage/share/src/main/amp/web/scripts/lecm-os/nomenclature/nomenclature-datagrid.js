@@ -351,7 +351,10 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 		deleteYearSection_Prompt: function(execFunction, item) {
 			Alfresco.util.Ajax.jsonGet({
-				url: Alfresco.constants.PROXY_URI + 'lecm/dictionary/api/getChildrenItems.json?nodeRef=' + item.nodeRef,
+				url: Alfresco.constants.PROXY_URI + 'lecm/dictionary/api/getChildrenItems.json',
+				dataObj: {
+					nodeRef: item.nodeRef
+				},
 				successCallback: {
 					scope: this,
 					fn: function(response) {

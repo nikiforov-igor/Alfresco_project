@@ -119,7 +119,7 @@ LogicECM.module = LogicECM.module || {};
 							},
 							successCallback:{
 								fn:function(response){
-									if (response.json && response.json.length > 0) {
+									if (response.json && response.json.length) {
 										var menu = [];
 										for (var i = 0; i < response.json.length; i++) {
 											var type = response.json[i];

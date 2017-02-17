@@ -10,10 +10,10 @@
 			<script type="text/javascript">//<![CDATA[
             (function()  {
                 function createDatagrid() {
-                    var sUrl = Alfresco.constants.PROXY_URI + "lecm/subscriptions/roots";;
                     Alfresco.util.Ajax.jsonGet({
-                        url: sUrl,
+                        url: Alfresco.constants.PROXY_URI + "lecm/subscriptions/roots",
                         successCallback: {
+                            scope: this,
                             fn: function (response) {
                                 var oResults = response.json;
                                 if (oResults) {
@@ -107,17 +107,15 @@
                                             }).setMessages(${messages});
                                             datagrid.draw();
                                         }
-
                                     }
                                 }
-                            },
-                            scope: this
+                            }
                         },
                         failureCallback: {
+                            scope: this,
                             fn: function (response) {
                                 YAHOO.log("Failed to process XHR transaction.", "info", "example");
-                            },
-                            scope: this
+                            }
                         }
                     });
                 }

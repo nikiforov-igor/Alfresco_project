@@ -299,13 +299,13 @@ LogicECM.module = LogicECM.module || {};
 			        Alfresco.util.Ajax.jsonGet({
 					    url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
 					    successCallback: {
+						    scope: this,
 						    fn: function (response) {
 							    if (response.json && response.json.nodeRef) {
 								    this.defaultValue = response.json.nodeRef;
 							    }
 							    this.updateViewForm();
-						    },
-							scope: this
+						    }
 				        },
 					    failureMessage: this.msg("message.failure")
 				    });
@@ -1085,6 +1085,7 @@ LogicECM.module = LogicECM.module || {};
             Alfresco.util.Ajax.jsonGet({
                 url: sUrl,
                 successCallback: {
+	                scope: this,
 					fn: function (response) {
                         var oResults = response.json;
                         if (oResults) {
@@ -1125,8 +1126,7 @@ LogicECM.module = LogicECM.module || {};
                         } else {
                             this.tree.draw();
                         }
-                    },
-                    scope: this
+                    }
                 },
                 failureCallback: {
                     fn: function (response) {
@@ -1934,32 +1934,33 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		updateViewForm: function MixAssociationTreeViewer_getSelectedItemsNameSubstituteString() {
-			var sUrl = this._generateRootUrlPath(this.options.rootNodeRef) + this._generateRootUrlParams();
 			Alfresco.util.Ajax.jsonGet({
-				url: sUrl,
+				url: this._generateRootUrlPath(this.options.rootNodeRef) + this._generateRootUrlParams(),
 				successCallback: {
+					scope: this,
 					fn: function (response) {
 						var oResults = response.json;
 						if (oResults) {
 							this.rootNode =  {
-								label:oResults.title,
+								label: oResults.title,
 								data: {
-									nodeRef:oResults.nodeRef,
-									type:oResults.type,
+									nodeRef: oResults.nodeRef,
+									type: oResults.type,
 									displayPath: oResults.displayPath
 								}
 							};
 							this.options.rootNodeRef = oResults.nodeRef;
 							this._loadSelectedItems(this.options.clearFormsOnStart, true);
 						}
-					},
-					scope: this
+					}
 				},
 				failureCallback: {
+					scope: this,
 					fn: function (response) {
-						alert(response.json);
-					},
-					scope: this
+						Alfresco.util.PopupManager.displayMessage({
+							text: response.json ? response.json : this.msg("message.failure")
+						});
+					}
 				}
 			});
 		},

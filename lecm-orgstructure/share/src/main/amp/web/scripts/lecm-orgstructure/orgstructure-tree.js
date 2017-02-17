@@ -132,13 +132,15 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         },
 
         _loadTree:function loadNodeData(node, fnLoadComplete) {
-            var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/branch";
+            var dataObj = {};
             if (node.data.nodeRef) {
-                sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
+	            dataObj.nodeRef = node.data.nodeRef
             }
             Alfresco.util.Ajax.jsonGet({
-		        url: sUrl,
+		        url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/branch",
+                dataObj: dataObj,
 		        successCallback: {
+			        scope: this,
 			        fn: function (response) {
                         var oResults = response.json;
                         if (oResults) {
@@ -199,17 +201,16 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 this.onExpandComplete(null);
                             }
                         }
-                    },
-                    scope: this
+                    }
                 },
                 failureCallback: {
+	                scope: this,
                     fn: function (response) {
                         YAHOO.log("Failed to process XHR transaction.", "info", "example");
                         if (YAHOO.lang.isFunction(fnLoadComplete)) {
                             fnLoadComplete.call();
                         }
-                    },
-                    scope: this
+                    }
                 }
             });
         },

@@ -57,18 +57,24 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
             var staffRow = p_item;
             var subnitRow = this.datagridMeta.nodeRef;
             // Подразделение в котором находится сотрудник
-            var sUrl =  Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getUnitProperties?nodeRef=" + subnitRow;
             Alfresco.util.Ajax.jsonGet({
-                url: sUrl,
-                successCallback: {
+                url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getUnitProperties",
+	            dataObj: {
+		            nodeRef: subnitRow
+	            },
+	            successCallback: {
+		            scope: this,
                     fn: function (response) {
                         var oResults = response.json;
-                        var subnitRowName = oResults .fullName;
+                        var subnitRowName = oResults.fullName;
                         // Получаем для штатного расписания ссылку на сотрудника
-                        var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink?nodeRef=" + staffRow.nodeRef;
                         Alfresco.util.Ajax.jsonGet({
-                            url: sUrl,
-                            successCallback: {
+                            url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink",
+	                        dataObj: {
+		                        nodeRef: staffRow.nodeRef
+	                        },
+	                        successCallback: {
+	                            scope: this,
 						        fn: function (response) {
                                     var oResult = response.json;
                                     if (oResult) {
@@ -86,9 +92,12 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                                                 buttons:[
                                                     {
                                                         text: this.msg("button.employee.remove"),
-                                                        handler: function DataGridActions__onActionDelete_delete() {
-                                                            this.destroy();
-                                                            fnAfterPrompt.call(this, [oResult]);
+                                                        handler: {
+                                                        	obj: this,
+	                                                        fn: function DataGridActions__onActionDelete_delete(event, obj) {
+		                                                        this.destroy();
+		                                                        fnAfterPrompt.call(obj, [oResult]);
+	                                                        }
                                                         }
                                                     },
                                                     {
@@ -103,10 +112,13 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                                         };
 
                                         if (("" + oResult.is_primary) == "true") {
-                                            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeePositions?nodeRef=" + oResult.employee;
                                             Alfresco.util.Ajax.jsonGet({
-                                                url: sUrl,
-                                                successCallback: {
+                                                url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeePositions",
+	                                            dataObj: {
+		                                            nodeRef: oResult.employee
+	                                            },
+	                                            successCallback: {
+	                                                scope: this,
                                                     fn: function (response) {
                                                         var oResults = response.json;
                                                         if (oResults && oResults.length > 1) { // нельзя удалять руководящую должность, пока есть другие должности
@@ -116,8 +128,7 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                                                         } else { // удаляем! вызов метода из грида
                                                             this.onDelete([oResult], owner, {fullDelete:true, trash:false, successMessage: "message.employee.position.delete.success"}, fnDeleteComplete, onPrompt);
                                                         }
-                                                    },
-	                                                scope: this
+                                                    }
                                                 },
                                                 failureMessage: this.msg("message.employee.position.delete.failure")
                                             });
@@ -129,13 +140,11 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                                             text: this.msg("message.employee.position.delete.failure")
                                         });
                                     }
-                                },
-                                scope: this
+                                }
                             },
                             failureMessage: this.msg("message.employee.position.delete.failure")
                         });
-                    },
-                    scope: this
+                    }
                 },
                 failureMessage: this.msg("message.employee.position.delete.failure.primary")
             });
@@ -212,10 +221,13 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
         onActionMakeBoss: function DataGridActions_onActionMakeBoss(p_item, owner, actionsConfig, fnCallback) {
             var staffRow = p_item;
             // Получаем для штатного расписания ссылку на сотрудника
-            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink?nodeRef=" + staffRow.nodeRef;
             Alfresco.util.Ajax.jsonGet({
-		        url: sUrl,
-		        successCallback: {
+		        url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink",
+	            dataObj: {
+		            nodeRef: staffRow.nodeRef
+	            },
+	            successCallback: {
+		            scope: this,
                     fn: function (response) {
                         var oResult = response.json;
                         if (oResult) {
@@ -225,35 +237,38 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                                 buttons:[
                                     {
                                         text: this.msg("button.position.makeBoss"),
-                                        handler: function DataGridActions__onActionMakeBoss_make() {
-                                            this.destroy();
+                                        handler: {
+	                                        obj: this,
+                                            fn: function DataGridActions__onActionMakeBoss_make(event, obj) {
+	                                            this.destroy();
 
-                                            var hasNoActiveAbsences = this.checkMakeBossHasNoActiveAbsences(
-                                                staffRow.nodeRef /*oResult.employee*/,
-                                                this.msg('message.employee.position.primary.add.failure.absence') +'\n');
+	                                            var hasNoActiveAbsences = obj.checkMakeBossHasNoActiveAbsences(
+		                                            staffRow.nodeRef /*oResult.employee*/,
+		                                            obj.msg('message.employee.position.primary.add.failure.absence') +'\n');
 
-                                            if (!(hasNoActiveAbsences && hasNoActiveAbsences.hasNoActiveAbsences)){
-                                                return;
+	                                            if (!(hasNoActiveAbsences && hasNoActiveAbsences.hasNoActiveAbsences)){
+		                                            return;
+	                                            }
+
+	                                            Alfresco.util.Ajax.jsonPost({
+		                                            url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/action/makeBoss",
+		                                            dataObj: {
+			                                            nodeRef: staffRow.nodeRef
+		                                            },
+		                                            successCallback: {
+			                                            scope: obj,
+			                                            fn: function (response) {
+				                                            YAHOO.Bubbling.fire("datagridRefresh", {
+					                                            bubblingLabel: this.options.bubblingLabel
+				                                            });
+				                                            Alfresco.util.PopupManager.displayMessage({
+					                                            text: this.msg("message.position.boss.success")
+				                                            });
+			                                            }
+		                                            },
+		                                            failureMessage: obj.msg("message.position.boss.failure")
+	                                            });
                                             }
-
-                                            Alfresco.util.Ajax.jsonPost({
-                                                url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/action/makeBoss",
-                                                dataObj: {
-                                                    nodeRef: staffRow.nodeRef
-                                                },
-                                                successCallback: {
-                                                    fn: function (response) {
-	                                                    YAHOO.Bubbling.fire("datagridRefresh", {
-		                                                    bubblingLabel: this.options.bubblingLabel
-	                                                    });
-	                                                    Alfresco.util.PopupManager.displayMessage({
-		                                                    text: this.msg("message.position.boss.success")
-	                                                    });
-                                                    },
-                                                    scope:this
-                                                },
-                                                failureMessage: this.msg("message.position.boss.failure")
-                                            });
                                         }
                                     },
                                     {
@@ -270,8 +285,7 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                                 text: this.msg("message.position.boss.failure")
                             });
                         }
-			        },
-			        scope: this
+			        }
                 },
                 failureMessage: this.msg("message.position.boss.failure")
             });
@@ -285,18 +299,24 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                 this.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
             } else {
                 //Получаем подразделение сотрудника
-                var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffPositionUnit?nodeRef=" + deletedUnit.nodeRef;
                 Alfresco.util.Ajax.jsonGet({
-					url: sUrl,
-                    successCallback: {
+					url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffPositionUnit",
+	                dataObj: {
+		                nodeRef: deletedUnit.nodeRef
+	                },
+	                successCallback: {
+		                scope: this,
                         fn: function (response) {
                             var oResults = response.json;
                             if (oResults && oResults.nodeRef) {
                                 //Получаем все должности подразделения
-                                var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getUnitStaffPositions?nodeRef=" + oResults.nodeRef;
                                 Alfresco.util.Ajax.jsonGet({
-                                    url: sUrl,
-                                    successCallback: {
+                                    url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getUnitStaffPositions",
+	                                dataObj: {
+		                                nodeRef: oResults.nodeRef
+	                                },
+	                                successCallback: {
+		                                scope: this,
                                         fn: function (response) {
                                             var oResults = response.json;
                                             if (oResults && oResults.length > 1) { // нельзя удалять руководящую должность, пока есть другие должности
@@ -306,8 +326,7 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                                             } else { // удаляем! вызов метода из грида
                                                 this.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
                                             }
-                                        },
-                                        scope: this
+                                        }
                                     },
                                     failureMessage: this.msg("message.delete.staff-lest.error")
                                 });
@@ -316,8 +335,7 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                                     text: this.msg("message.delete.staff-lest.error")
                                 });
                             }
-                        },
-                        scope: this
+                        }
                     },
                     failureMessage: this.msg("message.delete.staff-lest.error")
                 });

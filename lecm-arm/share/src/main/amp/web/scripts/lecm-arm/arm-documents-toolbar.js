@@ -405,24 +405,26 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         buttons: [
                             {
                                 text: this.msg('lecm.arm.lbl.ok'),
-                                handler: function dlA_onAction_action() {
-                                    this.destroy();
-                                    Alfresco.util.Ajax.jsonPost({
-                                        url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
-                                        dataObj: {
-                                            items: p_oItem.items,
-                                            actionId: p_oItem.actionId
-                                        },
-                                        successCallback: {
-                                            fn: function (oResponse) {
-                                                this._actionResponse(p_oItem.label, oResponse);
+                                handler: {
+                                    obj: this,
+                                    fn: function dlA_onAction_action(event, obj) {
+	                                    this.destroy();
+	                                    Alfresco.util.Ajax.jsonPost({
+                                            url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
+                                            dataObj: {
+                                                items: p_oItem.items,
+                                                actionId: p_oItem.actionId
                                             },
-                                            scope: this
-                                        },
-                                        failureMessage: this.msg('message.failure'),
-                                        execScripts: true
-                                    });
-
+                                            successCallback: {
+                                                scope: obj,
+                                                fn: function (oResponse) {
+                                                    this._actionResponse(p_oItem.label, oResponse);
+                                                }
+                                            },
+                                            failureMessage: obj.msg('message.failure'),
+                                            execScripts: true
+	                                    });
+                                    }
                                 }
                             },
                             {

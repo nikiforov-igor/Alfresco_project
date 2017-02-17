@@ -17,13 +17,16 @@
 	                        var orgRoleToDelete = YAHOO.lang.isArray(p_items) ? p_items[0] : p_items;
 
 	                        // Проверим назначены ли на роль сотрудники
-	                        var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getOrgRoleEmployees?nodeRef=" + orgRoleToDelete.nodeRef;
 	                        Alfresco.util.Ajax.jsonGet({
-                                url: sUrl,
+                                url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getOrgRoleEmployees",
+                                dataObj: {
+                                    nodeRef: orgRoleToDelete.nodeRef
+                                },
                                 successCallback: {
+                                    scope: this,
                                     fn: function (response) {
 	                                    var oResults = response.json;
-	                                    if (oResults && oResults.length > 0) {
+	                                    if (oResults && oResults.length) {
 	                                        var employees = [], i;
 	                                        for (i in oResults) {
 	                                            employees.push(oResults[i].shortName);
@@ -36,8 +39,7 @@
 	                                    } else {
 	                                        this.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
 	                                    }
-	                                },
-                                    scope: this
+	                                }
                                 },
                                 failureMessage: this.msg("message.delete.org.role.error")
                             });

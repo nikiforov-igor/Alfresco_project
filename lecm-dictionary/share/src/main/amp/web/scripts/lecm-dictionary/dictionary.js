@@ -41,10 +41,13 @@ LogicECM.module = LogicECM.module || {};
 
 		loadDictionary: function DictionaryMain_loadDictionary() {
 			if (this.options.dictionaryName) {
-				var  sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent(this.options.dictionaryName);
 				Alfresco.util.Ajax.jsonGet({
-					url: sUrl,
+					url: Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary",
+					dataObj: {
+						dicName: this.options.dictionaryName
+					},
 					successCallback: {
+						scope: this,
 						fn: function (response) {
 							var oResults = response.json;
 							if (oResults) {
@@ -53,8 +56,7 @@ LogicECM.module = LogicECM.module || {};
 									this.loadDatagrid();
 								}
 							}
-						},
-						scope: this
+						}
 					},
 					failureMessage: this.msg('message.dictionary.loading.fail')
 				});

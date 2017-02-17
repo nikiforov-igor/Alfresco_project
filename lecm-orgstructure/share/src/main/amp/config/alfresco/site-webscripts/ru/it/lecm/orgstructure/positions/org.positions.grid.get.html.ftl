@@ -16,10 +16,13 @@
 	                        var positionToDelete = YAHOO.lang.isArray(p_items) ? p_items[0] : p_items;
 
 	                        // Проверим назначены ли на должность сотрудники
-	                        var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getPositionEmployees?nodeRef=" + positionToDelete.nodeRef;
 	                        Alfresco.util.Ajax.jsonGet({
-	                            url: sUrl,
+	                            url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getPositionEmployees",
+                                dataObj: {
+                                    nodeRef: positionToDelete.nodeRef
+                                },
 	                            successCallback: {
+                                    scope: this,
 	                                fn: function (response) {
 	                                    var oResults = response.json;
 	                                    if (oResults && oResults.length > 0) {
@@ -35,8 +38,7 @@
 	                                    } else {
 	                                        this.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
 	                                    }
-	                                },
-	                                scope: this
+	                                }
 	                            },
 	                            failureMessage: this.msg("message.delete.position.error")
                             });

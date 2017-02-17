@@ -559,11 +559,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 // Проверка есть ли у текущего пользователя права на удаление
                 Alfresco.util.Ajax.jsonGet({
-                    url: Alfresco.constants.PROXY_URI + "/lecm/document/api/isChangeComment?nodeRef=" + comment.nodeRef,
+                    url: Alfresco.constants.PROXY_URI + "/lecm/document/api/isChangeComment",
                     dataObj: {
                         nodeRef: comment.nodeRef
                     },
                     successCallback: {
+	                    scope: this,
                         fn: function(response){
                             var permission = eval(response.json.permission);
                             if (permission) {
@@ -593,8 +594,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                 this.busy = true;
                                 YAHOO.lang.later(this.options.loadingMessageDelay, this, this._releaseBusy);
                             }
-                        },
-                        scope: this
+                        }
                     },
                     failureMessage: this.msg("message.connection")
                 });
@@ -634,30 +634,34 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         buttons: [
                             {
                                 text: this.msg("button.delete"),
-                                handler: function CommentsList_onConfirmDeleteCommentClick_delete() {
-                                    // Проверка есть ли у текущего пользователя права на удаление
-                                    Alfresco.util.Ajax.jsonGet({
-                                        url: Alfresco.constants.PROXY_URI + "/lecm/document/api/isChangeComment?nodeRef=" + comment.nodeRef,
-                                        dataObj: {
-                                            nodeRef: comment.nodeRef
-                                        },
-                                        successCallback: {
-                                            fn:function(response){
-                                                var permission = eval(response.json.permission);
-                                                this.destroy();
-                                                if (permission) {
-                                                    this.deleteComment.call(this, comment);
-                                                } else {
-                                                    this._setBusy(this.msg("message.permission"), "message");
-                                                    this.busy= true;
-                                                    YAHOO.lang.later(this.options.loadingMessageDelay, this, this._releaseBusy);
+                                handler: {
+                                    obj: this,
+                                    fn: function CommentsList_onConfirmDeleteCommentClick_delete(event, obj) {
+                                        // Проверка есть ли у текущего пользователя права на удаление
+	                                    Alfresco.util.Ajax.jsonGet({
+                                            url: Alfresco.constants.PROXY_URI + "/lecm/document/api/isChangeComment",
+                                            dataObj: {
+                                                nodeRef: comment.nodeRef
+                                            },
+                                            successCallback: {
+                                                scope: obj,
+                                                obj: this,
+                                                fn: function(response, obj){
+                                                    var permission = eval(response.json.permission);
+                                                    obj.destroy();
+                                                    if (permission) {
+                                                        this.deleteComment.call(this, comment);
+                                                    } else {
+                                                        this._setBusy(this.msg("message.permission"), "message");
+                                                        this.busy= true;
+                                                        YAHOO.lang.later(this.options.loadingMessageDelay, this, this._releaseBusy);
+                                                    }
                                                 }
                                             },
-                                            scope: this
-                                        },
-                                        failureMessage: this.msg("message.connection"),
-                                        comment: comment
-                                    });
+                                            failureMessage: obj.msg("message.connection"),
+                                            comment: comment
+                                        });
+                                    }
                                 }
                             },
                             {

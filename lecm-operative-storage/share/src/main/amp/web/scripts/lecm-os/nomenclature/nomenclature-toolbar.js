@@ -196,14 +196,18 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			var menu = button.getMenu();
 
 			Alfresco.util.Ajax.jsonGet({
-                url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/getCasesForRootAction?nodeRef=' + this.node.nodeRef,
+                url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/getCasesForRootAction',
+				dataObj: {
+					nodeRef: this.node.nodeRef
+				},
                 successCallback: {
+	                scope: this,
                     fn: function (oResponse) {
 						var actionItems = [];
                         var forArchive = oResponse.json.forArchive;
                         var forDestroy = oResponse.json.forDestroy;
 
-						if(forArchive && forArchive.length > 0) {
+						if(forArchive && forArchive.length) {
 							actionItems.push({
 								text: 'Передача номенклатурного дела в архив',
 								value: 'Передача номенклатурного дела в архив',
@@ -221,7 +225,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 							});
 						}
 
-						if(forDestroy && forDestroy.length > 0) {
+						if(forDestroy && forDestroy.length) {
 							actionItems.push({
 								text: 'Уничтожение номенклатурного дела',
 								value: 'Уничтожение номенклатурного дела',
@@ -254,8 +258,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 							menu.addItems(actionItems);
 						}
 
-                    },
-                    scope: this
+                    }
                 },
                 failureMessage: this.msg('message.failure'),
                 execScripts: true
@@ -564,24 +567,26 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 					buttons: [
 						{
 							text: this.msg('lecm.os.btn.ok'),
-							handler: function dlA_onAction_action() {
-								this.destroy();
-								Alfresco.util.Ajax.jsonPost({
-									url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
-									dataObj: {
-										items: p_oItem.items,
-										actionId: p_oItem.actionId
-									},
-									successCallback: {
-										fn: function (oResponse) {
-											this._actionResponse(p_oItem.actionId, oResponse);
+							handler: {
+								obj: this,
+								fn: function dlA_onAction_action(event, obj) {
+									this.destroy();
+									Alfresco.util.Ajax.jsonPost({
+										url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
+										dataObj: {
+											items: p_oItem.items,
+											actionId: p_oItem.actionId
 										},
-										scope: this
-									},
-									failureMessage: this.msg('message.failure'),
-									execScripts: true
-								});
-
+										successCallback: {
+											scope: obj,
+											fn: function (oResponse) {
+												this._actionResponse(p_oItem.actionId, oResponse);
+											}
+										},
+										failureMessage: obj.msg('message.failure'),
+										execScripts: true
+									});
+								}
 							}
 						},
 						{
@@ -910,7 +915,11 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			} else if (this.options.armSelectedNodeRef) {
 				this.getCurrentNodeCasesToDestroy();
 				Alfresco.util.Ajax.jsonGet({
-					url: Alfresco.constants.PROXY_URI + 'api/metadata?nodeRef=' + this.options.armSelectedNodeRef + "&shortQNames",
+					url: Alfresco.constants.PROXY_URI + 'api/metadata',
+					dataObj: {
+						nodeRef: this.options.armSelectedNodeRef,
+						shortQNames: true
+					},
 					successCallback: {
 						scope: this,
 						fn: function(response) {
