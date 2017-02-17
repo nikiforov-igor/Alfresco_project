@@ -1,0 +1,12 @@
+.yui-skin-lecmTheme .main-content div.form-fields div.tab-common .set:first-child .set:first-child {
+    text-align: right;
+}
+
+.yui-skin-lecmTheme .main-content div.form-fields div.tab-common .set:first-child .set:first-child div {
+    margin-left: 0;
+    padding: 0
+}
+
+.yui-skin-lecmTheme .main-content div.form-fields div.tab-common .set:first-child .set:first-child .important-control {
+    color: red;
+}
