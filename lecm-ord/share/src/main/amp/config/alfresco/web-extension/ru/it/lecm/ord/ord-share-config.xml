@@ -594,61 +594,58 @@
             <form>
                 <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true"/>
-                    <show id="lecm-ord-table-structure:item-status-assoc"/>
+                    <show id="lecm-ord-table-structure:item-title"/>
                     <show id="lecm-ord-table-structure:item-content"/>
                     <show id="lecm-ord-table-structure:executor-assoc"/>
-                    <show id="lecm-ord-table-structure:execution-date"/>
-                    <show id="lecm-ord-table-structure:execution-date-real"/>
-                    <show id="lecm-ord-table-structure:item-comment"/>
-                    <show id="lecm-ord-table-structure:errand-assoc"/>
-                    <show id="lecm-base-dummy-aspects:script" force="true" />
+                    <show id="lecm-ord-table-structure:coexecutors-assoc"/>
+                    <show id="lecm-ord-table-structure:report-required"/>
+                    <show id="lecm-ord-table-structure:controller-assoc"/>
+                    <show id="lecm-ord-table-structure:subject-assoc"/>
+                    <!-- Срок исполнения -->
+                    <show id="limitation-date-script" force="true"/>
+                    <show id="lecm-ord-table-structure:item-limitation-date-radio" />
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
+                    <show id="lecm-ord-table-structure:item-limitation-date-days" />
+                    <show id="lecm-ord-table-structure:item-limitation-date-type"/>
+                    <show id="lecm-ord-table-structure:item-limitation-date" />
                 </field-visibility>
                 <appearance>
-                    <set id="item-container" template="/ru/it/lecm/ord/components/class-set.ftl"/>
-                    <set id="first-row" parent="item-container" template="/ru/it/lecm/ord/components/class-set.ftl"/>
-                    <set id="item0" parent="first-row" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-                    <set id="item1" parent="item-container"/>
-                    <set id="item2" parent="item-container" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-                    <set id="item3" parent="item-container"/>
-                    <set id="item4" parent="item-container" template="/ru/it/lecm/ord/components/class-set.ftl"/>
+                    <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
+                    <set id="bottom"/>
 
-                    <field id="lecm-document:indexTableRow" set="item0"/>
-                    <field id="lecm-ord-table-structure:item-status-assoc" set="item0">
-                        <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-                            <control-param name="formatString">{lecm-ord-table-structure:item-status-assoc/cm:name}</control-param>
+                    <field id="lecm-ord-table-structure:controller-assoc" set="bottom"/>
+                    <field id="lecm-ord-table-structure:subject-assoc" set="bottom"/>
+                    <field id="lecm-ord-table-structure:item-limitation-date-radio" set="limitation-date"  mandatory="true">
+                        <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
+                            <control-param name="defaultValue">DAYS</control-param>
+                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-ord-table-structure:item-limitation-date-days" set="limitation-date" mandatory="true">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-ord-table-structure:item-limitation-date-type" set="limitation-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                    <field id="lecm-ord-table-structure:item-limitation-date" set="limitation-date">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="limitation-date-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
                         </control>
                     </field>
-                    <field id="lecm-ord-table-structure:item-content" set="item1">
-                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">4</control-param>
+                    <field id="lecm-base-dummy-aspects:script" set="limitation-date">
+                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                            <control-param name="textCode">label.errand.limitless</control-param>
                         </control>
-                    </field>
-                    <field id="lecm-ord-table-structure:executor-assoc" set="item2"/>
-                    <field id="lecm-ord-table-structure:execution-date" set="item2">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
-                            <control-param name="dateFormatString">lecm.date-format.defaultDateOnly</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-ord-table-structure:execution-date-real" set="item2" read-only="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="dateFormatString">lecm.date-format.defaultDateOnly</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-ord-table-structure:item-comment" set="item3">
-                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-ord-table-structure:errand-assoc" set="item4">
-                        <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-                            <control-param name="formatString">
-                                <![CDATA[<a href='/{~SHARE_CONTEXT}/page/document?nodeRef={lecm-ord-table-structure:errand-assoc/nodeRef}'>{lecm-ord-table-structure:errand-assoc/lecm-document:present-string}</a>]]>
-                            </control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-base-dummy-aspects:script" set="item4">
-                        <control template="/ru/it/lecm/ord/components/controls/execute-point-control.ftl"/>
                     </field>
                 </appearance>
             </form>
@@ -670,47 +667,68 @@
     <config evaluator="model-type" condition="lecm-ord-table-structure:item">
         <forms>
             <form>
-                <field-visibility>
-                    <show id="lecm-document:indexTableRow" force="true"/>
-                    <show id="lecm-ord-table-structure:item-content"/>
-                    <show id="lecm-ord-table-structure:executor-assoc"/>
-                    <show id="lecm-ord-table-structure:execution-date"/>
-                    <show id="lecm-ord-table-structure:item-comment"/>
-                </field-visibility>
-                <appearance>
-                    <set id="item-container" template="/ru/it/lecm/ord/components/class-set.ftl"/>
-                    <set id="item0" parent="item-container" template="/ru/it/lecm/ord/components/class-set.ftl"/>
-                    <set id="item1" parent="item-container"/>
-                    <set id="item2" parent="item-container" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-                    <set id="item3" parent="item-container"/>
+            <field-visibility>
+                <show id="lecm-document:indexTableRow" force="true"/>
+                <show id="lecm-ord-table-structure:item-title"/>
+                <show id="lecm-ord-table-structure:item-content"/>
+                <show id="lecm-ord-table-structure:executor-assoc"/>
+                <show id="lecm-ord-table-structure:coexecutors-assoc"/>
+                <show id="lecm-ord-table-structure:report-required"/>
+                <show id="lecm-ord-table-structure:controller-assoc"/>
+                <show id="lecm-ord-table-structure:subject-assoc"/>
+                <!-- Срок исполнения -->
+                <show id="limitation-date-script" force="true"/>
+                <show id="lecm-ord-table-structure:item-limitation-date-radio" />
+                <show id="lecm-base-dummy-aspects:script" force="true"/>
+                <show id="lecm-ord-table-structure:item-limitation-date-days" />
+                <show id="lecm-ord-table-structure:item-limitation-date-type"/>
+                <show id="lecm-ord-table-structure:item-limitation-date" />
+            </field-visibility>
+            <appearance>
+                <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
+                <set id="bottom"/>
 
-                    <field id="lecm-document:indexTableRow" set="item0"/>
-
-                    <field id="lecm-ord-table-structure:item-content" set="item1">
-                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-ord-table-structure:executor-assoc" set="item2"/>
-                    <field id="lecm-ord-table-structure:execution-date" set="item2">
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-                            <control-param name="minLimitCurrentDate">true</control-param>
-							<control-param name="dateFormatString">lecm.date-format.defaultDateOnly</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-ord-table-structure:item-comment" set="item3">
-                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
-                    </field>
-
-                </appearance>
-            </form>
+                <field id="lecm-ord-table-structure:controller-assoc" set="bottom"/>
+                <field id="lecm-ord-table-structure:subject-assoc" set="bottom"/>
+                <field id="lecm-ord-table-structure:item-limitation-date-radio" set="limitation-date"  mandatory="true">
+                    <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
+                        <control-param name="defaultValue">DAYS</control-param>
+                        <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                    </control>
+                    <constraint-handlers>
+                        <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                    </constraint-handlers>
+                </field>
+                <field id="lecm-ord-table-structure:item-limitation-date-days" set="limitation-date" mandatory="true">
+                    <constraint-handlers>
+                        <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                    </constraint-handlers>
+                </field>
+                <field id="lecm-ord-table-structure:item-limitation-date-type" set="limitation-date">
+                    <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                </field>
+                <field id="lecm-ord-table-structure:item-limitation-date" set="limitation-date">
+                    <constraint-handlers>
+                        <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                    </constraint-handlers>
+                </field>
+                <field id="limitation-date-script">
+                    <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                        <control-param name="scripts">scripts/lecm-ord/ord-table-item-change-limitation-date.js</control-param>
+                    </control>
+                </field>
+                <field id="lecm-base-dummy-aspects:script" set="limitation-date">
+                    <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                        <control-param name="textCode">label.errand.limitless</control-param>
+                    </control>
+                </field>
+            </appearance>
+        </form>
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-ord-table-structure:executor-assoc"/>
-                    <show id="lecm-ord-table-structure:execution-date"/>
+                    <show id="lecm-ord-table-structure:item-limitation-date-text"/>
                     <show id="lecm-ord-table-structure:item-status-assoc"/>
                 </field-visibility>
             </form>
