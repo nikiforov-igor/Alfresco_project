@@ -1,4 +1,16 @@
 <@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/lecm-document-errands.js"></@script>
+<@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/document-errands.js"></@script>
+<@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/lecm-errands-dashlet.js"></@script>
+<@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/lecm-document-errands.js"></@script>
+<@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/errands-links.js"></@script>
+
+<!-- Document Metadata Header -->
+<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-metadata.css" />
+<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-form.css" />
+<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata-form-edit.css" />
+<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-main-form.css" />
+<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/document-errands.css" />
+
 <#assign id=args.htmlid/>
 
 <script type="text/javascript">

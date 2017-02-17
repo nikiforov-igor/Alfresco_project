@@ -49,6 +49,8 @@
 
 <script type="text/javascript">//<![CDATA[
 (function () {
+    LogicECM.module.Documents.ERRANDS_SETTINGS = LogicECM.module.Documents.ERRANDS_SETTINGS || <#if errandsSettings?? >${errandsSettings?string}<#else>{}</#if>;
+
     function initComponent() {
         Alfresco.util.createTwister("${id}-heading", "DocumentErrands", {
             panel: "${id}-formContainer"

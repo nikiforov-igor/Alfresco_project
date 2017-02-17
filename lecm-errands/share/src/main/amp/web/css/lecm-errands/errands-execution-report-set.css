@@ -1,0 +1,28 @@
+.main-content .set .metadata-form .errands-execution-report-set .errands-execution-report-status {
+    float: right;
+    width: 100px;
+    text-align: right
+}
+
+.errands-execution-report-set .errands-execution-report-status.decline .form-field div span {
+    color: red;
+}
+
+.errands-execution-report-empty {
+    clear:left;
+}
+
+.errands-execution-report-empty span {
+    font-style: italic;
+}
+
+.errands-execution-report-set .errands-hidden-execution-report-processing textarea{
+    font-size: large;
+    text-align: center;
+    resize: none;
+    font-style:italic;
+}
+
+div.form-fields .errands-execution-report-set .errands-execution-report-status .viewmode-field .viewmode-label {
+    display: none;
+}
