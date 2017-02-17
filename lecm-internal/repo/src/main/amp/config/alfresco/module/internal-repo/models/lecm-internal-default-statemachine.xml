@@ -1027,7 +1027,10 @@ if (doc) {
   	docExecutor = docExecutorAssoc[0];
   }
   if (docExecutor && docCompiler && !docExecutor.nodeRef.equals(docCompiler.nodeRef)) {
-  	 notifications.sendNotificationFromCurrentUser({
+    if (!lecmPermission.hasEmployeeDynamicRole(doc, docExecutor, "BR_INITIATOR")) {
+	  	statemachine.grandDynamicRoleForEmployee(doc, docExecutor, "BR_INITIATOR", task);
+    }
+    notifications.sendNotificationFromCurrentUser({
         recipients: [docExecutor],
         templateCode: 'EDS_EXECUTOR_NEW',
         templateConfig: {
