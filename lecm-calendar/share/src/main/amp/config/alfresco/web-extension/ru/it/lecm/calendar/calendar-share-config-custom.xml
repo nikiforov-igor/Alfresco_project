@@ -386,6 +386,7 @@
 							<control-param name="dateMaxWidth">6em</control-param>
 							<control-param name="validateHandler">LogicECM.module.WCalendar.Absence.dateIntervalValidation</control-param>
 							<control-param name="messageHandler">LogicECM.module.WCalendar.Absence.dateIntervalValidation.message</control-param>
+							<control-param name="dateDefault">TOMORROW</control-param>
 						</control>
 					</field>
 					<field id="lecm-absence:end" mandatory="true" set="dates">
@@ -394,6 +395,7 @@
 							<control-param name="dateMaxWidth">6em</control-param>
 							<control-param name="validateHandler">LogicECM.module.WCalendar.Absence.dateIntervalValidation</control-param>
 							<control-param name="messageHandler">LogicECM.module.WCalendar.Absence.dateIntervalValidation.message</control-param>
+							<control-param name="dateDefault">TOMORROW</control-param>
 						</control>
 					</field>
 					<field id="lecm-absence:unlimited" set="unlimited">
