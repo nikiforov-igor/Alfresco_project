@@ -5,12 +5,14 @@ if (errand) {
 
     var connectedDocuments = [];
     var errandConnectedDocuments = errand.assocs["lecm-errands:execution-connected-document-assoc"];
-    errandConnectedDocuments.forEach(function (doc) {
-        connectedDocuments.push({
-            doc: doc,
-            viewPage: documentScript.getViewUrl(doc)
+    if (errandConnectedDocuments && errandConnectedDocuments.length) {
+        errandConnectedDocuments.forEach(function (doc) {
+            connectedDocuments.push({
+                doc: doc,
+                viewPage: documentScript.getViewUrl(doc)
+            });
         });
-    });
+    }
     model.connectedDocuments = connectedDocuments;
     model.attachments = errand.assocs["lecm-errands:execution-report-attachment-assoc"];
 }
