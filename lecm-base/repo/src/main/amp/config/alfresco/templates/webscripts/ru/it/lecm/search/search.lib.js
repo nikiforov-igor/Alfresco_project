@@ -24,6 +24,9 @@
  items: Array of objects containing the search results
  */
 
+/*Блок констант*/
+var NOT_SINGLE_QUERY_PATTERN = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i;
+
 /**
  * Processes the search results. Filters out unnecessary nodes
  *
@@ -125,13 +128,17 @@ function escapeString(value) {
 
 function getFiltersQuery(filters) {
     var resQuery = "";
+
+    var singleNotQuery = false;
+
     for (var index in filters) {
         var filter = filters[index];
-        if (filter.query != null && ("" + filter.query).length > 0) {
-            resQuery = resQuery + "(" + filter.query + ") AND ";
+        if (filter.query && ("" + filter.query).length) {
+            singleNotQuery = filter.query.indexOf("NOT") == 0 && !NOT_SINGLE_QUERY_PATTERN.test(filter.query);
+            resQuery += ((resQuery.length !== 0 ? ' AND ' : '') + (!singleNotQuery ? '(' : '') + filter.query + (!singleNotQuery ? ')' : ''));
         }
     }
-    return resQuery.length > 5 ? resQuery.substring(0, resQuery.length - 5) : resQuery;
+    return resQuery;
 }
 
 function getSearchQuery(params) {
@@ -358,16 +365,15 @@ function getSearchQuery(params) {
 		ftsQuery += (typesQuery.length !== 0 ? '(' + typesQuery + ')' : '');
 		ftsQuery += (formQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND' : '') + '(' + formQuery + ')') : '');
 
-        var notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i;
         var singleNotQuery = false;
 
         if (filter.length !== 0) {
-            singleNotQuery = filter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(filter);
+            singleNotQuery = filter.indexOf("NOT") == 0 && !NOT_SINGLE_QUERY_PATTERN.test(filter);
             ftsQuery += ((ftsQuery.length !== 0 ? ' AND ' : '') + (!singleNotQuery ? '(' : '') + filter + (!singleNotQuery ? ')' : ''));
         }
 
         if (filtersQuery.length !== 0 ) {
-            singleNotQuery = !(filtersQuery.indexOf("NOT") == 0 || !notSingleQueryPattern.test(filtersQuery));
+            singleNotQuery = filtersQuery.indexOf("NOT") == 0 && !NOT_SINGLE_QUERY_PATTERN.test(filtersQuery);
             ftsQuery += ((ftsQuery.length !== 0 ? ' AND ' : '') + (!singleNotQuery ? '(' : '') + filtersQuery + (!singleNotQuery ? ')' : ''));
         }
 		ftsQuery += (fullTextSearchQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND ' : '') + '(' + fullTextSearchQuery + ')') : '');
