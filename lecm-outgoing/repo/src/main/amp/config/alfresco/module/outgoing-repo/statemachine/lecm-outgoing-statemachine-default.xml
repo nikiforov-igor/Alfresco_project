@@ -962,7 +962,10 @@
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[<import resource="classpath:/alfresco/module/eds-documents-repo/workflow/scripts/eds-executor-script.js">
-EDSExecutorScript.notificateExecutor();]]></value>
+var doc = bpm_package.children[0];
+if (doc) {
+    EDSExecutorScript.notificateExecutor(doc);
+}]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
