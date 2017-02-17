@@ -83,7 +83,7 @@ LogicECM.errands = LogicECM.errands || {};
                     showOtherActionColumn: true,
                     showCheckboxColumn: false,
                     attributeForShow: this.options.attributeForShow,
-                    pageSize: this.tableData.pageSize != null && this.tableData.pageSize > 0 ? this.tableData.pageSize : 10,
+                    pageSize: this.tableData.pageSize ? this.tableData.pageSize : 10,
                     useCookieForSort: false,
                     overrideSortingWith: this.options.isTableSortable,
                     refreshAfterCreate: this.options.refreshAfterCreate,
