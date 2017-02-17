@@ -1257,13 +1257,13 @@
                     <show id="lecm-errands:type-assoc"/>
                     <show id="lecm-errands:title"/>
                     <show id="lecm-errands:executor-assoc"/>
-                    <show id="lecm-errands:coexecutors-assoc"/>
-                    <show id="lecm-errands:controller-assoc"/>
                     <show id="lecm-errands:limitation-date-text"/>
                     <show id="lecm-errands:report-required"/>
-                    <show id="lecm-errands:report-recipient-type"/>
                     <show id="lecm-statemachine:status" force="true"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-errands:limitation-date-text" label-id="label.execution.date"/>
+                </appearance>
             </form>
             <form id="statemachine-editable-fields">
                 <field-visibility>
