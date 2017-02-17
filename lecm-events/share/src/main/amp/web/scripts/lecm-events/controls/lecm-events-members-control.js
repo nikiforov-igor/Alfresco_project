@@ -1487,7 +1487,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					formId: this.endDateField.formId
 				});
 			} else if (this.allDay) {
-				this.requestAllDayMembersTime();
+				this.requestMembersTime();
 			}
 		},
 
