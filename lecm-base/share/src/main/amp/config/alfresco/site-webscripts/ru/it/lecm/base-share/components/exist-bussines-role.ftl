@@ -76,7 +76,7 @@
 									}
 								}
 							},
-							failureMessage: {
+                            failureCallback: {
 								fn: function () {
 									console.log("Failed to load current Employee.");
 								}
