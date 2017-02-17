@@ -23,8 +23,9 @@
 		model.node = node;
 		return;
 	}
-	//Проверить, является ли отображаемый контент аттачментом базового документа (где бы он ни находился).
-	if (documentAttachments.isInnerAttachment(node)) {
+	//Проверить, является ли отображаемый контент аттачментом (или его рабочей копией) базового документа (где бы он ни находился).
+	if (documentAttachments.isInnerAttachment(node) ||
+		(node.hasAspect("cm:workingcopy") && node.assocs['cm:original'].length > 0 && documentAttachments.isInnerAttachment(node.assocs['cm:original'][0]))) {
 		model.redirect = true;
 		model.type = 'DOCUMENT_ATTACHMENT';
 		model.node = node;
