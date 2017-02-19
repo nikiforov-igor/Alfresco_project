@@ -1,4 +1,11 @@
 <alfresco-config>
+    <config>
+        <forms>
+            <dependencies>
+                <js src="/scripts/lecm-ord/constraint/ord-constraint.js"/>
+            </dependencies>
+        </forms>
+    </config>
     <config evaluator="model-type" condition="lecm-ord:document">
         <forms>
             <form>
@@ -621,12 +628,12 @@
                             <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
                     <field id="lecm-ord-table-structure:item-limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
                     <field id="lecm-ord-table-structure:item-limitation-date-type" set="limitation-date">
@@ -634,7 +641,7 @@
                     </field>
                     <field id="lecm-ord-table-structure:item-limitation-date" set="limitation-date">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
                     <field id="limitation-date-script">
@@ -696,12 +703,12 @@
                         <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
                     </control>
                     <constraint-handlers>
-                        <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                        <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.limitationDateValidation" event="change" />
                     </constraint-handlers>
                 </field>
                 <field id="lecm-ord-table-structure:item-limitation-date-days" set="limitation-date" mandatory="true">
                     <constraint-handlers>
-                        <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                        <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.limitationDateValidation" event="change" />
                     </constraint-handlers>
                 </field>
                 <field id="lecm-ord-table-structure:item-limitation-date-type" set="limitation-date">
@@ -709,7 +716,7 @@
                 </field>
                 <field id="lecm-ord-table-structure:item-limitation-date" set="limitation-date">
                     <constraint-handlers>
-                        <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                        <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.limitationDateValidation" event="change" />
                     </constraint-handlers>
                 </field>
                 <field id="limitation-date-script">
