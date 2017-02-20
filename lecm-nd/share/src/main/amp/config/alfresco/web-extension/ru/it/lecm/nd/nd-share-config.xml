@@ -38,7 +38,7 @@
                     <field id="lecm-eds-document:document-type-assoc" mandatory="true">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_НД</control-param>
-                            <control-param name="endpointType">lecm-nd-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true">
@@ -138,7 +138,7 @@
                     <field id="lecm-eds-document:document-type-assoc" mandatory="true">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_НД</control-param>
-                            <control-param name="endpointType">lecm-nd-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true">
@@ -243,7 +243,7 @@
                     <field id="lecm-eds-document:document-type-assoc" label="Вид документа" set="nd-document-search-common-set">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_НД</control-param>
-                            <control-param name="endpointType">lecm-nd-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:title" set="nd-document-search-common-set" mandatory="false">
@@ -310,7 +310,7 @@
                     <field id="lecm-eds-document:document-type-assoc">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_НД</control-param>
-                            <control-param name="endpointType">lecm-nd-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -393,7 +393,7 @@
                     <field id="lecm-eds-document:document-type-assoc"  set="common" mandatory="true">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_НД</control-param>
-                            <control-param name="endpointType">lecm-nd-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-document-aspects:additional-organization-unit-assoc" set="common" mandatory="true">
@@ -494,7 +494,7 @@
                     <field id="lecm-eds-document:document-type-assoc">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_НД</control-param>
-                            <control-param name="endpointType">lecm-nd-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                 </appearance>
