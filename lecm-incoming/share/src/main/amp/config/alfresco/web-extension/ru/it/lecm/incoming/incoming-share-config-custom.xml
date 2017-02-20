@@ -251,6 +251,14 @@
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-incoming:delivery-method-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-eds-document:document-type-assoc">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_входящего</control-param>
+                            <control-param name="endpointType">lecm-incoming-dic:documentType</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
             <!-- Форма с набором полей для дашлета Общие сведения на карточке документа-->
             <form id="document-dashlet">

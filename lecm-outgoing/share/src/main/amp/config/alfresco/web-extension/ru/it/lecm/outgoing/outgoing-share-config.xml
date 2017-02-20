@@ -330,7 +330,12 @@
 						</control>
 					</field>
 					<field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler"/>
-					<field id="lecm-eds-document:executor-assoc"/>
+                    <field id="lecm-eds-document:document-type-assoc">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
+                            <control-param name="endpointType">lecm-outgoing-dic:documentType</control-param>
+                        </control>
+                    </field>
                 </appearance>
 			</form>
 
