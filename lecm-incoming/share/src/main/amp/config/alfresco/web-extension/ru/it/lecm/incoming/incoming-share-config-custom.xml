@@ -421,14 +421,11 @@
             <!-- Форма с набором дашлетов на главной странице-->
             <form id="main-page-dashlets">
                 <field-visibility>
-                    <show id="line1"/>
+                    <show id="viewMetadata"/>
                 </field-visibility>
                 <appearance>
-                    <field id="line1">
-                        <control template="/ru/it/lecm/documents/controls/document-dashlet-control.ftl">
-                            <control-param name="first">/lecm/components/dashlets/document-main;/lecm/incoming/components/dashlets/document-members</control-param>
-                            <control-param name="second">/lecm/components/dashlets/document-attachments;/lecm/components/dashlets/errands-by-doc</control-param>
-                        </control>
+                    <field id="viewMetadata">
+                        <control template="/ru/it/lecm/documents/controls/document-view-metadata-control.ftl"/>
                     </field>
                 </appearance>
             </form>
