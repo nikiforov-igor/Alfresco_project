@@ -47,7 +47,7 @@
 					<field id="lecm-eds-document:document-type-assoc" set="common" mandatory="true">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
-                            <control-param name="endpointType">lecm-outgoing-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
 					<field id="lecm-outgoing:delivery-method-assoc" set="common"/>
@@ -330,7 +330,12 @@
 						</control>
 					</field>
 					<field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler"/>
-					<field id="lecm-eds-document:executor-assoc"/>
+                    <field id="lecm-eds-document:document-type-assoc">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
+                            <control-param name="plane">true</control-param>
+                        </control>
+                    </field>
                 </appearance>
 			</form>
 
@@ -502,7 +507,7 @@
 					<field id="lecm-eds-document:document-type-assoc" mandatory="true">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
-                            <control-param name="endpointType">lecm-outgoing-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
 					<field id="lecm-outgoing:delivery-method-assoc"/>
@@ -713,7 +718,7 @@
                     <field id="lecm-eds-document:document-type-assoc" mandatory="true">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
-                            <control-param name="endpointType">lecm-outgoing-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
 					<field id="lecm-outgoing:contractor-assoc">
@@ -861,6 +866,12 @@
 					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель -->
 				</field-visibility>
 				<appearance>
+                    <field id="lecm-eds-document:document-type-assoc" mandatory="false">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
+                            <control-param name="plane">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-eds-document:summaryContent" mandatory="false">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
@@ -1041,7 +1052,7 @@
                     <field id="lecm-eds-document:document-type-assoc" mandatory="true">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_исходящего</control-param>
-                            <control-param name="endpointType">lecm-outgoing-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
 					<field id="lecm-document:present-string" label="Название"/>
