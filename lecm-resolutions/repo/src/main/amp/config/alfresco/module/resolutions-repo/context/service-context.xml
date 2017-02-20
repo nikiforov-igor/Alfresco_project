@@ -167,12 +167,8 @@
     </bean>
 
     <bean id="resolutionBaseDocumentType" class="ru.it.lecm.eds.policy.EDSBaseDocumentTypePolicy"
-          init-method="init" depends-on="resolutions.LogicEcmBootstrap">
+          parent="baseDocumentTypeBean" init-method="init" depends-on="resolutions.LogicEcmBootstrap">
         <property name="policyComponent" ref="policyComponent"/>
-        <property name="nodeService" ref="nodeService"/>
-        <property name="edsDocumentService" ref="edsService"/>
-        <property name="documentService" ref="documentService"/>
-        <property name="namespaceService" ref="namespaceService"/>
         <property name="type" value="lecm-resolutions:document"/>
         <property name="assocBaseDocumentType" value="lecm-resolutions:base-document-assoc"/>
     </bean>

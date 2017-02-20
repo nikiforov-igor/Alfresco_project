@@ -350,7 +350,6 @@
 
             <mandatory-aspects>
                 <aspect>lecm-errands-aspect:errandsExecutorsAspect</aspect>
-                <aspect>lecm-eds-document-aspects:base-document-type-aspect</aspect>
             </mandatory-aspects>
         </type>
     </types>

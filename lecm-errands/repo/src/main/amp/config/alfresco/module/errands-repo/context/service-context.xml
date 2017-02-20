@@ -705,13 +705,9 @@
         </property>
     </bean>
 
-    <bean id="errandsBaseDocumentType" class="ru.it.lecm.eds.policy.EDSBaseDocumentTypePolicy"
+    <bean id="errandsBaseDocumentType" class="ru.it.lecm.eds.policy.EDSBaseDocumentTypePolicy" parent="baseDocumentTypeBean"
           init-method="init" depends-on="errands.LogicEcmModelsBootstrap">
         <property name="policyComponent" ref="policyComponent"/>
-        <property name="nodeService" ref="nodeService"/>
-        <property name="edsDocumentService" ref="edsService"/>
-        <property name="documentService" ref="documentService"/>
-        <property name="namespaceService" ref="namespaceService"/>
         <property name="type" value="lecm-errands:document"/>
         <property name="assocBaseDocumentType" value="lecm-errands:base-assoc"/>
     </bean>

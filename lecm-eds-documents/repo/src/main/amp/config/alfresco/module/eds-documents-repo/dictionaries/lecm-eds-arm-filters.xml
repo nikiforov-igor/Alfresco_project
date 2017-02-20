@@ -80,7 +80,7 @@
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">Входящий|Входящие,Внутренний|Внутренние,Исходящий|Исходящие,ОРД|ОРД,НД|НД,Протокол|Протоколы,Поручение|Поручения,Без документа-основания|Без документа-основания</property>
-                <property name="lecm-arm:filter-query">@lecm\-eds\-aspect\:base\-document\-type:'*#value*'</property>
+                <property name="lecm-arm:filter-query">@lecm\-eds\-aspect\:base\-document\-type:'#value'</property>
             </item>
         </items>
     </item>
