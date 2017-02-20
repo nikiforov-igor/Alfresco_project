@@ -12,12 +12,14 @@ import org.alfresco.repo.transaction.TransactionListener;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.MalformedNodeRefException;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.StateMachineAction;
@@ -43,6 +45,7 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 	private TransactionListener transactionListener;
 	private TransactionService transactionService;
 	private LifecycleStateMachineHelper stateMachineHelper;
+	private OrgstructureBean orgstructureService;
 	final static Logger logger = LoggerFactory.getLogger(WaitForDocumentChangeListenerPolicy.class);
 
 	private static final String WAIT_FOR_DOCUMENT_CHANGE_TRANSACTION_LISTENER = "wait_for_document_change_transaction_listener";
@@ -105,6 +108,10 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 		this.stateMachineHelper = stateMachineHelper;
 	}
 
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
+	}
+
 	private class WaitForDocumentChangePolicyTransactionListener implements TransactionListener {
 
 		@Override
@@ -165,11 +172,32 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 			return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<String>() {
 				@Override
 				public String execute() throws Throwable {
-					return (String) nodeService.getProperty(documentNodeRef, ContentModel.PROP_MODIFIER);
+					String login = null;
+					String documentModifierRef = (String) nodeService.getProperty(documentNodeRef, DocumentService.PROP_DOCUMENT_MODIFIER_REF);
+
+					try {
+						 NodeRef documentModifier = new NodeRef(documentModifierRef);
+						if (nodeService.exists(documentModifier)) {
+							login = orgstructureService.getEmployeeLogin(documentModifier);
+						}
+					} catch (MalformedNodeRefException ex) {
+						logger.warn("Cannot get document modifier for document {}", documentNodeRef, ex);
+					} 
+
+					if (login == null) {
+						login = (String) nodeService.getProperty(documentNodeRef, ContentModel.PROP_MODIFIER);
+					}
+					
+					if (AuthenticationUtil.SYSTEM_USER_NAME.equals(login)) {
+						logger.warn("Modifier is System. Using admin instead");
+						login = AuthenticationUtil.getAdminUserName();
+					}
+					
+					return login;
 				}
 			}, true);
 		}
-
+				
 		@Override
 		public void afterCommit() {
 			if (logger.isDebugEnabled()) {

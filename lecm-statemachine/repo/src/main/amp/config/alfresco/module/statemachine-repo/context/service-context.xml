@@ -180,6 +180,7 @@
         <property name="threadPoolExecutor" ref="waitForChangeThreadPool"/>
         <property name="transactionService" ref="transactionService"/>
         <property name="stateMachineHelper" ref="lifecycleStateMachineHelper"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
 
 	<bean id="workflowUtil" class="ru.it.lecm.statemachine.util.DocumentWorkflowUtil" >
