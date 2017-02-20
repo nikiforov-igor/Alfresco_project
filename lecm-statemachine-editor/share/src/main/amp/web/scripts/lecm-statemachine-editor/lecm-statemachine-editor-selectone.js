@@ -45,21 +45,18 @@ LogicECM.module = LogicECM.module || {};
 
         onReady: function SelectOne_onReady() {
             YAHOO.util.Event.on(this.id, "change", this.onSelectChange, this, true);
-            var url;
-            if (this.options.webscriptType != null && this.options.webscriptType == "server") {
-                url = Alfresco.constants.PROXY_URI;
-            } else {
-                url = Alfresco.constants.URL_SERVICECONTEXT;
-            }
-            url += this.options.webscript;
-            var symbol = url.indexOf("?") > 0 ? "&" : "?";
-            if (this.options.destination != null && this.options.destination != "" && this.options.destination != "{destination}") {
-                url += symbol + "nodeRef=" + this.options.destination + "&type=create";
-            } else if (this.options.currentNodeRef != null) {
-                url += symbol + "nodeRef=" + this.options.currentNodeRef + "&type=edit";
+            var url = YAHOO.lang.substitute('{context}{webscript}', {
+                context: this.options.webscriptType == "server" ? Alfresco.constants.PROXY_URI : Alfresco.constants.URL_SERVICECONTEXT,
+                webscript: this.options.webscript
+            });
+            var dataObj = {};
+            if (this.options.destination) {
+	            dataObj.nodeRef = this.options.destination != "{destination}" ? this.options.destination : this.options.currentNodeRef;
+	            dataObj.type = this.options.destination != "{destination}" ? 'create' : 'edit';
             }
             Alfresco.util.Ajax.jsonGet({
                 url: url,
+	            dataObj: dataObj,
                 successCallback: {
                     fn: function (response) {
                         var oResults = response.json;
