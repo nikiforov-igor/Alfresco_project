@@ -30,6 +30,7 @@
                     <show id="lecm-document-aspects:template-ref" force="true"/>
                     <show id="loadAuthorScript" force="true"/>
                     <show id="editExecutorScript" force="true"/>
+                    <show id="lecm-ord:temp-items-assoc"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document:title"/>
@@ -134,6 +135,26 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">editExecutorCreateFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-ord:temp-items-assoc" label-id="label.points">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-datagrid-control.ftl">
+                            <control-param name="itemType">lecm-ord-table-structure:item</control-param>
+                            <control-param name="allowCreate">true</control-param>
+                            <control-param name="allowExpand">false</control-param>
+                            <control-param name="showActions">true</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
+                            <control-param name="rootNode">{usertemp}</control-param>
+                            <control-param name="showCreateButton">true</control-param>
+                            <control-param name="showSearch">false</control-param>
+                            <control-param name="showLabel">true</control-param>
+                            <control-param name="newRowDialogTitle">ord.item.create.form.title</control-param>
+                            <control-param name="editRowDialogTitle">ord.item.edit.form.title</control-param>
+                            <control-param name="datagridFormId">datagrid_create</control-param>
+                            <control-param name="editFormId">ord-create-view-point</control-param>
+                            <control-param name="jsDependencies">scripts/lecm-meetings/protocol-points-association-datagrid.js</control-param>
+                            <control-param name="jsObjectName">LogicECM.module.Meetings.protocolPointsAssociationDataGrid</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -517,6 +538,7 @@
                             <control-param name="expandDataSource">components/form?formId=table-structure-info</control-param>
                             <control-param name="isTableSortable">false</control-param>
                             <control-param name="refreshAfterCreate">true</control-param>
+                            <control-param name="forceEditable">true</control-param>
                             <!--<control-param name="deleteMessageFunction"></control-param>-->
                             <control-param name="editFormTitleMsg">ord.item.edit.form.title</control-param>
                             <control-param name="createFormTitleMsg">ord.item.create.form.title</control-param>
@@ -605,56 +627,12 @@
                     <show id="lecm-ord-table-structure:item-content"/>
                     <show id="lecm-ord-table-structure:executor-assoc"/>
                     <show id="lecm-ord-table-structure:coexecutors-assoc"/>
+                    <!-- Срок исполнения -->
+                    <show id="lecm-ord-table-structure:item-limitation-date-text"/>
                     <show id="lecm-ord-table-structure:report-required"/>
                     <show id="lecm-ord-table-structure:controller-assoc"/>
                     <show id="lecm-ord-table-structure:subject-assoc"/>
-                    <!-- Срок исполнения -->
-                    <show id="limitation-date-script" force="true"/>
-                    <show id="lecm-ord-table-structure:item-limitation-date-radio" />
-                    <show id="lecm-base-dummy-aspects:script" force="true"/>
-                    <show id="lecm-ord-table-structure:item-limitation-date-days" />
-                    <show id="lecm-ord-table-structure:item-limitation-date-type"/>
-                    <show id="lecm-ord-table-structure:item-limitation-date" />
                 </field-visibility>
-                <appearance>
-                    <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
-                    <set id="bottom"/>
-
-                    <field id="lecm-ord-table-structure:controller-assoc" set="bottom"/>
-                    <field id="lecm-ord-table-structure:subject-assoc" set="bottom"/>
-                    <field id="lecm-ord-table-structure:item-limitation-date-radio" set="limitation-date"  mandatory="true">
-                        <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
-                            <control-param name="defaultValue">DAYS</control-param>
-                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
-                        </control>
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.limitationDateValidation" event="change" />
-                        </constraint-handlers>
-                    </field>
-                    <field id="lecm-ord-table-structure:item-limitation-date-days" set="limitation-date" mandatory="true">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.limitationDateValidation" event="change" />
-                        </constraint-handlers>
-                    </field>
-                    <field id="lecm-ord-table-structure:item-limitation-date-type" set="limitation-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
-                    </field>
-                    <field id="lecm-ord-table-structure:item-limitation-date" set="limitation-date">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.limitationDateValidation" event="change" />
-                        </constraint-handlers>
-                    </field>
-                    <field id="limitation-date-script">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-base-dummy-aspects:script" set="limitation-date">
-                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
-                            <control-param name="textCode">label.errand.limitless</control-param>
-                        </control>
-                    </field>
-                </appearance>
             </form>
             <form id="table-structure-info">
                 <field-visibility>
@@ -695,6 +673,7 @@
                 <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                 <set id="bottom"/>
 
+                <field id="lecm-document:indexTableRow" mandatory="true"/>
                 <field id="lecm-ord-table-structure:controller-assoc" set="bottom"/>
                 <field id="lecm-ord-table-structure:subject-assoc" set="bottom"/>
                 <field id="lecm-ord-table-structure:item-limitation-date-radio" set="limitation-date"  mandatory="true">
@@ -721,7 +700,12 @@
                 </field>
                 <field id="limitation-date-script">
                     <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                        <control-param name="scripts">scripts/lecm-ord/ord-table-item-change-limitation-date.js</control-param>
+                        <control-param name="scripts">scripts/lecm-eds-documents/complex-date-listener.js</control-param>
+                        <control-param name="scriptLoadedFireAction">complexDateScriptLoaded</control-param>
+                        <control-param name="bubblingName">changeLimitationDateRadio</control-param>
+                        <control-param name="dateField">lecm-ord-table-structure:item-limitation-date</control-param>
+                        <control-param name="daysCountField">lecm-ord-table-structure:item-limitation-date-days</control-param>
+                        <control-param name="daysTypeField">lecm-ord-table-structure:item-limitation-date-type</control-param>
                     </control>
                 </field>
                 <field id="lecm-base-dummy-aspects:script" set="limitation-date">
@@ -737,6 +721,12 @@
                     <show id="lecm-ord-table-structure:executor-assoc"/>
                     <show id="lecm-ord-table-structure:item-limitation-date-text"/>
                     <show id="lecm-ord-table-structure:item-status-assoc"/>
+                </field-visibility>
+            </form>
+            <form id="datagrid_create">
+                <field-visibility>
+                    <show id="lecm-document:indexTableRow" force="true"/>
+                    <show id="lecm-ord-table-structure:executor-assoc"/>
                 </field-visibility>
             </form>
         </forms>

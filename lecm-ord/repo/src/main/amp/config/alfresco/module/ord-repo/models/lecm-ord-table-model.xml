@@ -40,11 +40,6 @@
             <parent>lecm-document:tableDataRow</parent>
 
             <properties>
-                <!-- Срок исполнения -->
-                <property name="lecm-ord-table-structure:execution-date">
-                    <type>d:date</type>
-                    <mandatory>true</mandatory>
-                </property>
                 <!-- содержание - textarea-->
                 <property name="lecm-ord-table-structure:item-content">
                     <type>d:text</type>
@@ -103,7 +98,6 @@
                         <constraint ref="lecm-ord-table-structure:item-limitation-date-type-const"/>
                     </constraints>
                 </property>
-                
                 <!--служебные--> 
                 <property name="lecm-ord-table-structure:item-status-assoc-text-content">
                     <type>d:text</type>
@@ -127,7 +121,6 @@
                     <default>false</default>
                 </property>
             </properties>
-
             <associations>
                 <!-- Статус -->
                 <association name="lecm-ord-table-structure:item-status-assoc">
@@ -153,8 +146,6 @@
                         <many>false</many>
                     </target>
                 </association>
-                
-                
                 <!-- Исполнитель -->
                 <association name="lecm-ord-table-structure:executor-assoc">
                     <source>
@@ -203,7 +194,6 @@
                         <many>false</many>
                     </target>
                 </association>
-                
             </associations>
         </type>
      
