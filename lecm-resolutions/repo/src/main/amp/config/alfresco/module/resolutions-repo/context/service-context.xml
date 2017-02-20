@@ -22,7 +22,8 @@
     <bean id="resolutions.LogicEcmBootstrap" parent="modelsToRepositoryLoader"
           depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
 					 documents.LogicEcmModelsBootstrap,
-                     errands.LogicEcmModelsBootstrap">
+                     errands.LogicEcmModelsBootstrap,
+                     eds.models.bootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-resolutions-dictionaries-model.xml</value>
@@ -154,5 +155,16 @@
         <property name="businessJournalService" ref="businessJournalService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="publicAction" value="false" />
+    </bean>
+
+    <bean id="resolutionBaseDocumentType" class="ru.it.lecm.eds.policy.EDSBaseDocumentTypePolicy"
+          init-method="init" depends-on="resolutions.LogicEcmBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="edsDocumentService" ref="edsService"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="type" value="lecm-resolutions:document"/>
+        <property name="assocBaseDocumentType" value="lecm-resolutions:base-document-assoc"/>
     </bean>
 </beans>

@@ -47,6 +47,9 @@ public interface EDSDocumentService {
     QName PROP_COMPLETION_SIGNAL_REASON = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "completion-signal-reason");
     QName PROP_COMPLETION_SIGNAL_CLOSE_CHILD = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "completion-signal-close-child");
     QName ASPECT_COMPLETION_SIGNAL = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "completion-signal-aspect");
+
+    QName PROP_BASE_DOCUMENT_TYPE = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "base-document-type");
+
     /**
      * Отправка сигнала об изменении дочерних документов
      * @param baseDoc Документ, которому отправляется сигнал

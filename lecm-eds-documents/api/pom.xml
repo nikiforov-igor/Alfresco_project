@@ -24,5 +24,20 @@
 			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.resolutions</groupId>
+			<artifactId>resolutions-repo-api</artifactId>
+			<version>1.8.6</version>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.errands</groupId>
+			<artifactId>errands-repo-api</artifactId>
+			<version>1.8.6</version>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.documents</groupId>
+			<artifactId>documents-repo-api</artifactId>
+			<version>1.8.6</version>
+		</dependency>
 	</dependencies>
 </project>
