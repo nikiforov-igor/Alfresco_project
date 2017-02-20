@@ -121,6 +121,9 @@
             <list>
                 <value>lecm-document:indexTableRow</value>
                 <value>lecm-ord-table-structure:execution-date</value>
+                <value>lecm-ord-table-structure:item-limitation-date-radio</value>
+                <value>lecm-ord-table-structure:item-limitation-date-days</value>
+                <value>lecm-ord-table-structure:item-limitation-date-type</value>
                 <value>lecm-ord-table-structure:item-content</value>
                 <value>lecm-ord-table-structure:item-comment</value>
             </list>
