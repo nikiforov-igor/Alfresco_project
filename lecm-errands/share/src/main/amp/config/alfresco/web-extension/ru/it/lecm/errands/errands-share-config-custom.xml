@@ -1398,7 +1398,7 @@
                     </field>
                     <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
@@ -1409,7 +1409,7 @@
                             <control-param name="maxLimitArg">parentDocLimitationDate</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                 </appearance>
@@ -1465,9 +1465,6 @@
                             <control-param name="defaultValue">DAYS</control-param>
                             <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
                         </control>
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
-                        </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
                         <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
@@ -1476,7 +1473,7 @@
                     </field>
                     <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
@@ -1487,7 +1484,7 @@
                             <control-param name="maxLimitArg">parentDocLimitationDate</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                 </appearance>
