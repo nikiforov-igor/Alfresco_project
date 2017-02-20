@@ -3,7 +3,7 @@
 function main() {
     var urlArgs = {};
     var nodeRef = "";
-    var formId = "";
+    var formId = "edit";
     for (var prop in page.url.args) {
         if (prop == "nodeRef") {
             nodeRef = page.url.args[prop];

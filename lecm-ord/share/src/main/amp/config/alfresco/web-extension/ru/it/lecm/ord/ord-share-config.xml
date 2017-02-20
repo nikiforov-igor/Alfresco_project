@@ -29,7 +29,7 @@
                     <field id="lecm-eds-document:document-type-assoc" mandatory="true">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
-                            <control-param name="endpointType">lecm-ord-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:execution-date">
@@ -151,7 +151,7 @@
                     <field id="lecm-eds-document:document-type-assoc" mandatory="true">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
-                            <control-param name="endpointType">lecm-ord-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:execution-date">
@@ -299,7 +299,7 @@
                     <field id="lecm-eds-document:document-type-assoc" label="Вид документа" set="line1">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
-                            <control-param name="endpointType">lecm-ord-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-statemachine:status" set="line1" mandatory="false">
@@ -376,7 +376,7 @@
                     <field id="lecm-eds-document:document-type-assoc">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
-                            <control-param name="endpointType">lecm-ord-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecmSignAspects:signingDate">
@@ -439,7 +439,7 @@
                     <field id="lecm-eds-document:document-type-assoc" set="ord-document-form-common-set" mandatory="true">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
-                            <control-param name="endpointType">lecm-ord-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:execution-date" set="ord-document-form-common-set">
@@ -573,6 +573,14 @@
                     <show id="lecm-document:title"/>
                     <show id="lecm-statemachine:status"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-eds-document:document-type-assoc">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
+                            <control-param name="endpointType">lecm-ord-dic:documentType</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
             <!-- Форма просмотра на главной странице-->
             <form id="main-page-dashlets">

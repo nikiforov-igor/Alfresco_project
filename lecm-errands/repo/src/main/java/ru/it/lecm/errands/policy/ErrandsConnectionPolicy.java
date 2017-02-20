@@ -75,6 +75,9 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
                 ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_ERRANDS_EXECUTOR, new JavaBehaviour(this, "onCreateErrandExecutor"));
+
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+                ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateBaseDocAssociation"));
     }
 
     /**
@@ -125,21 +128,23 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
 
         //установка ассоциации документа-основания
         List<AssociationRef> baseDocAssocRefs = null;
-        if (additionalDoctype.equals(ErrandsService.TYPE_ERRANDS)) {
-            baseDocAssocRefs = nodeService.getTargetAssocs(additionalDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
-        } else if (additionalDoctype.equals(ResolutionsService.TYPE_RESOLUTION_DOCUMENT)) {
-            baseDocAssocRefs = nodeService.getTargetAssocs(additionalDoc, ResolutionsService.ASSOC_BASE_DOCUMENT);
-        }
-        //если документа-основания нет, то родительский документ  является документом основанием.
-        NodeRef baseDoc;
+        baseDocAssocRefs = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
+        // если документ-основание не установлен в документе, то берем ассоциацию из основания
         if (baseDocAssocRefs == null || baseDocAssocRefs.size() == 0) {
-            baseDoc = additionalDoc;
-        } else {
-            baseDoc = baseDocAssocRefs.get(0).getTargetRef();
+            if (additionalDoctype.equals(ErrandsService.TYPE_ERRANDS)) {
+                baseDocAssocRefs = nodeService.getTargetAssocs(additionalDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
+            } else if (additionalDoctype.equals(ResolutionsService.TYPE_RESOLUTION_DOCUMENT)) {
+                baseDocAssocRefs = nodeService.getTargetAssocs(additionalDoc, ResolutionsService.ASSOC_BASE_DOCUMENT);
+            }
+            //если документа-основания нет, то родительский документ  является документом основанием.
+            NodeRef baseDoc;
+            if (baseDocAssocRefs == null || baseDocAssocRefs.size() == 0) {
+                baseDoc = additionalDoc;
+            } else {
+                baseDoc = baseDocAssocRefs.get(0).getTargetRef();
+            }
+            nodeService.createAssociation(errandDoc, baseDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
         }
-        nodeService.createAssociation(errandDoc, baseDoc, ErrandsService.ASSOC_BASE_DOCUMENT);
-        String baseRegNum = (String) nodeService.getProperty(baseDoc, ErrandsService.PROP_BASE_DOC_NUMBER);
-        nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, baseRegNum);
 
         //		TODO: Метод transferRightToBaseDocument в итоге использует метод erransService.getSettingsNode,
 //		который ранее был типа getOrCreate, поэтому здесь надо бы проверить ноду на
@@ -158,6 +163,27 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
             this.transferRightToBaseDocument(errandDoc);
         } catch (WriteTransactionNeededException ex) {
             throw new RuntimeException(ex);
+        }
+    }
+
+    public void onCreateBaseDocAssociation(AssociationRef associationRef) {
+        NodeRef baseDoc = associationRef.getTargetRef();
+        NodeRef errandDoc = associationRef.getSourceRef();
+
+        if (nodeService.getProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER) == null) {
+            String baseRegNum = documentService.getDocumentActualNumber(baseDoc);
+            if (baseRegNum == null) {
+                baseRegNum = documentService.getProjectRegNumber(baseDoc);
+            }
+            if (baseRegNum != null && !baseRegNum.isEmpty()) {
+                nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, baseRegNum);
+            }
+        }
+        //установка ассоциации основания
+        List<AssociationRef> baseAssocRefs = null;
+        baseAssocRefs = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
+        if (baseAssocRefs == null || baseAssocRefs.size() == 0) {
+            nodeService.createAssociation(errandDoc, baseDoc, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
         }
     }
 

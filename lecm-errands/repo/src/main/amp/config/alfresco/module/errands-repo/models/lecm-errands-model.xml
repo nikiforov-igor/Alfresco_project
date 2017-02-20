@@ -116,7 +116,6 @@
 			</parameter>
 		</constraint>
     </constraints>
-
     <types>
 		<type name="lecm-errands:document">
 			<title>Logic Ecm Errands Document</title>

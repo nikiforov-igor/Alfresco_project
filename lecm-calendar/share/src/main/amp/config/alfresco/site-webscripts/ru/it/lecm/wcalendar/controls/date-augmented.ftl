@@ -134,6 +134,9 @@
 		      minLimit: "${minLimit}",
 			  maxLimit: "${maxLimit}",
               showTime: ${showTime?string},
+			   <#if field.control.params.dateDefault??>
+				   dateDefault: "${field.control.params.dateDefault?string}",
+			   </#if>
               mandatory: ${field.mandatory?string},
               validateHandler: <#if validateHandler??>${validateHandler}<#else>null</#if>,
               message: <#if errorMessage??>${errorMessage}<#else>"${msg('lecm.absence.msg.wrong.value')}"</#if>

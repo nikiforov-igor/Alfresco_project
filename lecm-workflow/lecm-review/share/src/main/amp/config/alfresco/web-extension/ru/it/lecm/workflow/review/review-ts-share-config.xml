@@ -190,6 +190,21 @@
 					<field id="lecm-review-ts:initiating-documents" substituteString="{..lecm-review-aspects:related-review-records-assoc/cm:name}"/>
 				</appearance>
 			</form>
+            <form id="relatedReviewDatagrid">
+				<field-visibility>
+					<show id="lecm-review-ts:reviewer-assoc"/>
+					<show id="lecm-review-ts:review-state"/>
+					<show id="lecm-review-ts:review-start-date"/>
+					<show id="lecm-review-ts:review-finish-date"/>
+					<show id="lecm-review-ts:initiator-assoc"/>
+					<show id="lecm-review-ts:initiator-username"/>
+					<show id="lecm-review-ts:initiating-documents"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-review-ts:initiator-username" substituteString="{lecm-review-ts:initiator-assoc/lecm-orgstr:employee-person-assoc/cm:userName}"/>
+					<field id="lecm-review-ts:initiating-documents" substituteString="{..lecm-review-aspects:related-review-records-assoc/cm:name}"/>
+				</appearance>
+			</form>
 		</forms>
 	</config>
 

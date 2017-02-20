@@ -16,6 +16,8 @@ function main() {
             model.subjectAssoc = nodeDetails.item.node.properties["lecm-document:subject-assoc-ref"];
         }
     }
+    var uri = '/lecm/document-type/settings?docType=lecm-errands:document';
+    model.errandsSettings = jsonUtils.toJSONString(remote.connect("alfresco").get(uri));
 }
 
 function getErrands(nodeRef) {
@@ -28,5 +30,4 @@ function getErrands(nodeRef) {
     }
     return eval('(' + result + ')');
 }
-
 main();

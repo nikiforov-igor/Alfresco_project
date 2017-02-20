@@ -137,7 +137,7 @@
                     messages: ${messages},
                     bubblingLabel: "${bubblingId}",
                     containerId: "${containerId}",
-                    datagridFormId: "${params.datagridFormId!"datagrid"}",
+                    datagridFormId: "${params.datagridFormId!"relatedReviewDatagrid"}",
                     attributeForShow: "${attributeForShow}",
                     mode: "${controlMode?string}",
                     disabled: ${field.disabled?string},
