@@ -3079,63 +3079,60 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
             },
 
-	        onExportCsv: function DataGrid__onExportCsv(fileName)
-	        {
-		        var selectedItems = this.getSelectedItems();
+            onExportCsv: function DataGrid__onExportCsv(fileName) {
+                var form = document.createElement("form");
+                form.enctype = "multipart/form-data";
+                form.action = Alfresco.constants.PROXY_URI + "lecm/base/action/export-csv";
+                form.method = "POST";
 
-		        var form = document.createElement("form");
-		        form.enctype = "multipart/form-data";
-		        form.action = Alfresco.constants.PROXY_URI + "lecm/base/action/export-csv";
-		        form.method = "POST";
+                var inputFileName = document.createElement("input");
+                inputFileName.type = "hidden";
+                inputFileName.name = "fileName";
+                inputFileName.value = encodeURIComponent(fileName);
+                form.appendChild(inputFileName);
 
-		        var inputFileName = document.createElement("input");
-		        inputFileName.type = "hidden";
-		        inputFileName.name = "fileName";
-		        inputFileName.value = encodeURIComponent(fileName);
-		        form.appendChild(inputFileName);
+                var inputTimeZone = document.createElement("input");
+                inputTimeZone.type = "hidden";
+                inputTimeZone.name = "timeZoneOffset";
+                inputTimeZone.value = new Date().getTimezoneOffset();
+                form.appendChild(inputTimeZone);
 
-		        var inputTimeZone = document.createElement("input");
-		        inputTimeZone.type = "hidden";
-		        inputTimeZone.name = "timeZoneOffset";
-		        inputTimeZone.value = new Date().getTimezoneOffset();
-		        form.appendChild(inputTimeZone);
+                for(var key in this.selectedItems) {
+                    var inputNodeRef = document.createElement("input");
+                    inputNodeRef.type = "hidden";
+                    inputNodeRef.name = "nodeRef";
+                    inputNodeRef.value = key;
+                    form.appendChild(inputNodeRef);
+                }
 
-		        for (var i = 0; i < selectedItems.length;i++) {
-			        var inputNodeRef = document.createElement("input");
-			        inputNodeRef.type = "hidden";
-			        inputNodeRef.name = "nodeRef";
-			        inputNodeRef.value = selectedItems[i].nodeRef;
-			        form.appendChild(inputNodeRef);
-		        }
+                for (i = 0; i < this.datagridColumns.length; i++) {
+                    var column = this.datagridColumns[i];
+                    var label = column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_"));
+                    var property = column.name;
+                    if (column.nameSubstituteString != null) {
+                        property = column.nameSubstituteString
+                    } else if (column.type == "association") {
+                        property = "{" + property + "/cm:name}";
+                    } else {
+                        property = "{" + property + "}";
+                    }
+                    var inputField = document.createElement("input");
+                    inputField.type = "hidden";
+                    inputField.name = "field";
+                    inputField.value = property;
+                    form.appendChild(inputField);
 
-		        for (i = 0; i < this.datagridColumns.length; i++) {
-			        var column = this.datagridColumns[i];
-			        var label = column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_"));
-			        var property = column.name;
-			        if (column.nameSubstituteString != null) {
-				        property = column.nameSubstituteString
-			        } else if (column.type == "association") {
-				        property = "{" + property + "/cm:name}";
-			        } else {
-				        property = "{" + property + "}";
-			        }
-			        var inputField = document.createElement("input");
-			        inputField.type = "hidden";
-			        inputField.name = "field";
-			        inputField.value = property;
-			        form.appendChild(inputField);
+                    var inputFieldLabel = document.createElement("input");
+                    inputFieldLabel.type = "hidden";
+                    inputFieldLabel.name = "fieldLabel";
+                    inputFieldLabel.value = label;
+                    form.appendChild(inputFieldLabel);
+                }
 
-			        var inputFieldLabel = document.createElement("input");
-			        inputFieldLabel.type = "hidden";
-			        inputFieldLabel.name = "fieldLabel";
-			        inputFieldLabel.value = label;
-			        form.appendChild(inputFieldLabel);
-		        }
+                document.body.appendChild(form);
 
-		        document.body.appendChild(form);
-
-		        form.submit();
-	        },
+                form.submit();
+            },
 
             onReCreateDatagrid: function DataGrid_onChangeDatagrid(layer, args) {
                 var obj = args[1];
