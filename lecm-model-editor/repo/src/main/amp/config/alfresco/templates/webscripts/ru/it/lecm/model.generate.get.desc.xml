@@ -5,7 +5,7 @@
 	modelName
 	</description>
 	<url>/lecm/docforms/generate?modelName={modelName}</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>admin</authentication>
 	<transaction>required</transaction>
 </webscript>

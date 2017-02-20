@@ -2,7 +2,7 @@
     <shortname>Сводная информация</shortname>
     <description>Получение сводной информации о количестве документов по стутусам</description>
     <url>/lecm/documents/summary?docType={docType}&amp;archive={archive}</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

@@ -2,6 +2,6 @@
 	<shortname>Create subscribe object</shortname>
 	<description>Create subscribe object</description>
 	<url>/lecm/subscriptions/api/createSubscribeObject</url>
-	<format default="json">argument</format>
+	<format default="json"/>
 	<authentication>user</authentication>
 </webscript>

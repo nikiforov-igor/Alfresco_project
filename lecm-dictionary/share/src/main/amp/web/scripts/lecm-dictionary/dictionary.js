@@ -40,27 +40,26 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		loadDictionary: function DictionaryMain_loadDictionary() {
-			if (this.options.dictionaryName != "") {
-				var me = this;
-				var  sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent(this.options.dictionaryName);
-
-				var callback = {
-					success:function (oResponse) {
-						var oResults = eval("(" + oResponse.responseText + ")");
-						if (oResults != null) {
-							me.rootNode = oResults;
-							if (me.options.plane) {
-								me.loadDatagrid();
+			if (this.options.dictionaryName) {
+				Alfresco.util.Ajax.jsonGet({
+					url: Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary",
+					dataObj: {
+						dicName: this.options.dictionaryName
+					},
+					successCallback: {
+						scope: this,
+						fn: function (response) {
+							var oResults = response.json;
+							if (oResults) {
+								this.rootNode = oResults;
+								if (this.options.plane) {
+									this.loadDatagrid();
+								}
 							}
 						}
 					},
-					failure:function (oResponse) {
-						alert(me.msg('message.dictionary.loading.fail'));
-					},
-					argument:{
-					}
-				};
-				YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+					failureMessage: this.msg('message.dictionary.loading.fail')
+				});
 			}
 		},
 

@@ -83,23 +83,22 @@ LogicECM.module = LogicECM.module || {};
             if (this.options.defaultValue != null) {
                 this.defaultValue = this.options.defaultValue;
                 this.updateField(false);
-            } else if (this.options.defaultValueDataSource != null) {
-                Alfresco.util.Ajax.request(
-                    {
-                        url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource
-                        + (this.options.defaultValueDataSource.indexOf("?") != -1 ? "&" : "?") + "id=" + encodeURIComponent(this.options.parentId),
-                        successCallback: {
-                            scope: this,
-                            fn: function (response) {
-                                var oResults = eval("(" + response.serverResponse.responseText + ")");
-                                if (oResults != null && oResults.value != null) {
-                                    this.defaultValue = oResults.value;
-                                }
-                                this.updateField(false);
+            } else if (this.options.defaultValueDataSource) {
+                Alfresco.util.Ajax.jsonGet({
+                    url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource
+                    + (this.options.defaultValueDataSource.indexOf("?") != -1 ? "&" : "?") + "id=" + encodeURIComponent(this.options.parentId),
+                    successCallback: {
+                        scope: this,
+                        fn: function (response) {
+                            var oResults = response.json;
+                            if (oResults && oResults.value) {
+                                this.defaultValue = oResults.value;
                             }
-                        },
-                        failureMessage: "message.failure"
-                    });
+                            this.updateField(false);
+                        }
+                    },
+                    failureMessage: this.msg("message.failure")
+                });
             }
         },
 

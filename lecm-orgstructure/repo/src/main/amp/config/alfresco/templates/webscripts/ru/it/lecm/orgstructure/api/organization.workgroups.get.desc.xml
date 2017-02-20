@@ -2,7 +2,7 @@
 	<shortname>Organization workgroups</shortname>
 	<description>Get Organization Workgroups</description>
 	<url>/lecm/orgstructure/api/getOrganizationWorkgroups?onlyActive={onlyActive}</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

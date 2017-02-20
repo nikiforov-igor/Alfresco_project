@@ -195,16 +195,19 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			var button = this.toolbarButtons["defaultActive"].groupActionsButton;
 			var menu = button.getMenu();
 
-			Alfresco.util.Ajax.jsonRequest({
-                method: "GET",
-                url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/getCasesForRootAction?nodeRef=' + this.node.nodeRef,
+			Alfresco.util.Ajax.jsonGet({
+                url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/getCasesForRootAction',
+				dataObj: {
+					nodeRef: this.node.nodeRef
+				},
                 successCallback: {
+	                scope: this,
                     fn: function (oResponse) {
 						var actionItems = [];
                         var forArchive = oResponse.json.forArchive;
                         var forDestroy = oResponse.json.forDestroy;
 
-						if(forArchive != null && forArchive.length > 0) {
+						if(forArchive && forArchive.length) {
 							actionItems.push({
 								text: 'Передача номенклатурного дела в архив',
 								value: 'Передача номенклатурного дела в архив',
@@ -222,7 +225,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 							});
 						}
 
-						if(forDestroy != null && forDestroy.length > 0) {
+						if(forDestroy && forDestroy.length) {
 							actionItems.push({
 								text: 'Уничтожение номенклатурного дела',
 								value: 'Уничтожение номенклатурного дела',
@@ -242,7 +245,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 
 						if (actionItems.length == 0) {
 							actionItems.push({
-								text: Alfresco.util.message('lecm.os.msg.no.operations'),
+								text: this.msg('lecm.os.msg.no.operations'),
 								disabled: true
 							});
 						}
@@ -255,14 +258,9 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 							menu.addItems(actionItems);
 						}
 
-                    },
-                    scope: this
-                },
-                failureCallback: {
-                    fn: function () {
                     }
                 },
-                scope: this,
+                failureMessage: this.msg('message.failure'),
                 execScripts: true
             });
 		},
@@ -562,96 +560,90 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 		onGroupActionsClick: function onGroupActionsClick(p_sType, p_aArgs, p_oItem) {
 			if (p_oItem.withForm) {
 				this._createScriptForm(p_oItem);
-			} else {
-				if (p_oItem.type == "lecm-group-actions:script-action") {
-					var me = this;
-					Alfresco.util.PopupManager.displayPrompt(
+			} else if (p_oItem.type == "lecm-group-actions:script-action") {
+				Alfresco.util.PopupManager.displayPrompt({
+					title: this.msg('lecm.os.ttl.action.performing'),
+					text: this.msg('lecm.os.ttl.confirm.action') + " \"" + p_oItem.actionId + "\"",
+					buttons: [
 						{
-							title: Alfresco.util.message('lecm.os.ttl.action.performing'),
-							text: Alfresco.util.message('lecm.os.ttl.confirm.action') + " \"" + p_oItem.actionId + "\"",
-							buttons: [
-								{
-									text: Alfresco.util.message('lecm.os.btn.ok'),
-									handler: function dlA_onAction_action() {
-										this.destroy();
-										Alfresco.util.Ajax.jsonRequest({
-											method: "POST",
-											url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
-											dataObj: {
-												items: p_oItem.items,
-												actionId: p_oItem.actionId
-											},
-											successCallback: {
-												fn: function (oResponse) {
-													me._actionResponse(p_oItem.actionId, oResponse);
-												}
-											},
-											failureCallback: {
-												fn: function () {
-												}
-											},
-											scope: me,
-											execScripts: true
-										});
-
-									}
-								},
-								{
-									text: Alfresco.util.message('lecm.os.btn.cancel'),
-									handler: function dlA_onActionDelete_cancel() {
-										this.destroy();
-									},
-									isDefault: true
+							text: this.msg('lecm.os.btn.ok'),
+							handler: {
+								obj: this,
+								fn: function dlA_onAction_action(event, obj) {
+									this.destroy();
+									Alfresco.util.Ajax.jsonPost({
+										url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
+										dataObj: {
+											items: p_oItem.items,
+											actionId: p_oItem.actionId
+										},
+										successCallback: {
+											scope: obj,
+											fn: function (oResponse) {
+												this._actionResponse(p_oItem.actionId, oResponse);
+											}
+										},
+										failureMessage: obj.msg('message.failure'),
+										execScripts: true
+									});
 								}
-							]
-						});
-				} else if (p_oItem.type == "lecm-group-actions:workflow-action") {
-					if (this.doubleClickLock) return;
-					this.doubleClickLock = true;
-
-					this.options.currentSelectedItems = p_oItem.items;
-					var templateUrl = Alfresco.constants.URL_SERVICECONTEXT;
-					var formWidth = "84em";
-
-					templateUrl += "lecm/components/form";
-					var templateRequestParams = {
-							itemKind: "workflow",
-							itemId: p_oItem.workflowId,
-							mode: "create",
-							submitType: "json",
-							formId: "workflow-form",
-							showCancelButton: true
-						};
-					var responseHandler = function(response) {
-							document.location.href = document.location.href;
-						}
-					var me = this;
-                    LogicECM.CurrentModules = LogicECM.CurrentModules || {};
-					LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
-						width: formWidth,
-						templateUrl: templateUrl,
-						templateRequestParams: templateRequestParams,
-						actionUrl: null,
-						destroyOnHide: true,
-						doBeforeDialogShow: {
-							scope: this,
-							fn: function(p_form, p_dialog) {
-								p_dialog.dialog.setHeader(this.msg("logicecm.workflow.runAction.label", p_oItem.label));
-								var contId = p_dialog.id + "-form-container";
-								Dom.addClass(contId, "metadata-form-edit");
-								Dom.addClass(contId, "no-form-type");
-
-								this.doubleClickLock = false;
-
-								p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 							}
 						},
-						onSuccess: {
-							scope: this,
-							fn: responseHandler
+						{
+							text: this.msg('lecm.os.btn.cancel'),
+							handler: function dlA_onActionDelete_cancel() {
+								this.destroy();
+							},
+							isDefault: true
 						}
-					}).show();
-				}
+					]
+				});
+			} else if (p_oItem.type == "lecm-group-actions:workflow-action") {
+				if (this.doubleClickLock) return;
+				this.doubleClickLock = true;
+
+				this.options.currentSelectedItems = p_oItem.items;
+				var templateUrl = Alfresco.constants.URL_SERVICECONTEXT;
+				var formWidth = "84em";
+
+				templateUrl += "lecm/components/form";
+				var templateRequestParams = {
+						itemKind: "workflow",
+						itemId: p_oItem.workflowId,
+						mode: "create",
+						submitType: "json",
+						formId: "workflow-form",
+						showCancelButton: true
+					};
+				var responseHandler = function(response) {
+						document.location.href = document.location.href;
+					}
+				var me = this;
+                LogicECM.CurrentModules = LogicECM.CurrentModules || {};
+				LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
+					width: formWidth,
+					templateUrl: templateUrl,
+					templateRequestParams: templateRequestParams,
+					actionUrl: null,
+					destroyOnHide: true,
+					doBeforeDialogShow: {
+						scope: this,
+						fn: function(p_form, p_dialog) {
+							p_dialog.dialog.setHeader(this.msg("logicecm.workflow.runAction.label", p_oItem.label));
+							var contId = p_dialog.id + "-form-container";
+							Dom.addClass(contId, "metadata-form-edit");
+							Dom.addClass(contId, "no-form-type");
+
+							this.doubleClickLock = false;
+
+							p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+						}
+					},
+					onSuccess: {
+						scope: this,
+						fn: responseHandler
+					}
+				}).show();
 			}
 		},
 
@@ -888,8 +880,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 
 		createBJRecord: function(nodeRef, evType) {
 			var logText = '#initiator создал элемент номенклатуры дел.';
-			Alfresco.util.Ajax.jsonRequest({
-				method: 'POST',
+			Alfresco.util.Ajax.jsonPost({
 				url: Alfresco.constants.PROXY_URI + 'lecm/business-journal/api/record/create',
 				dataObj: {
 					mainObject: nodeRef,
@@ -902,10 +893,8 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 		},
 
 		loadSelectedTreeNode: function() {
-
 			if (this.options.isRoot) {
-				Alfresco.util.Ajax.request({
-					method: "GET",
+				Alfresco.util.Ajax.jsonGet({
 					url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/os/nomenclature/getNomenclatureFolder',
 					successCallback: {
 						scope: this,
@@ -920,15 +909,17 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 							}
 						}
 					},
-					failureMessage: "message.failure",
+					failureMessage: this.msg("message.failure"),
 					execScripts: true,
-					scope: this
 				});
-			} else if (this.options.armSelectedNodeRef != null) {
+			} else if (this.options.armSelectedNodeRef) {
 				this.getCurrentNodeCasesToDestroy();
-				Alfresco.util.Ajax.jsonRequest({
-					method: 'GET',
-					url: Alfresco.constants.PROXY_URI + 'api/metadata?nodeRef=' + this.options.armSelectedNodeRef + "&shortQNames",
+				Alfresco.util.Ajax.jsonGet({
+					url: Alfresco.constants.PROXY_URI + 'api/metadata',
+					dataObj: {
+						nodeRef: this.options.armSelectedNodeRef,
+						shortQNames: true
+					},
 					successCallback: {
 						scope: this,
 						fn: function(response) {
@@ -962,7 +953,6 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 						}
 					},
 					failureMessage: this.msg('message.failure'),
-					scope: this,
 					execScripts: true
 				});
 			}

@@ -2,7 +2,7 @@
     <shortname>all positions</shortname>
     <description>Return all staff-list positions</description>
     <url>/lecm/orgstructure/api/getAllPositions?onlyActive={onlyActive}</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

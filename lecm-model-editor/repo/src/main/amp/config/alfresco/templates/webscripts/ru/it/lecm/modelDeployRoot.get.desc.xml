@@ -2,7 +2,7 @@
 	<shortname>Model editor: Получения папки для развёртывания форм</shortname>
 	<description>Возвращает nodeRef папки для разворачивания форм</description>
 	<url>/lecm/docforms/deployRoot</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>user</authentication>
 	<transaction>none</transaction>
 </webscript>

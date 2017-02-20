@@ -1,7 +1,7 @@
-<#escape x as (x!"")?js_string>
-	{
-		"boss": "${boss!""}",
-        "bossRef": "${boss!""}",
-        "bossShortName": "${bossShortName!""}"
-	}
+<#escape x as jsonUtils.encodeJSONString(x)!''>
+{
+	"boss": "${boss!""}",
+	"bossRef": "${boss!""}",
+	"bossShortName": "${bossShortName!""}"
+}
 </#escape>

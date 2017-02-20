@@ -557,53 +557,47 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     formContainer = Dom.get(rowId + '-form-container'),
                     commentEl = Dom.get(rowId + '-comment-container');
 
-                //проверка есть ли у текущего пользователя права на удаление
-                Alfresco.util.Ajax.request(
-                    {
-                        url: Alfresco.constants.PROXY_URI + "/lecm/document/api/isChangeComment?nodeRef=" + comment.nodeRef,
-                        dataObj: {
-                            nodeRef: comment.nodeRef
-                        },
-                        successCallback: {
-                            fn:function(response){
-                                var permission = eval(response.json.permission);
-                                var me = response.config.scope;
-                                if (permission) {
-                                    // Hide previously opened form and restore row
-                                    me.restoreEditForm();
+                // Проверка есть ли у текущего пользователя права на удаление
+                Alfresco.util.Ajax.jsonGet({
+                    url: Alfresco.constants.PROXY_URI + "/lecm/document/api/isChangeComment",
+                    dataObj: {
+                        nodeRef: comment.nodeRef
+                    },
+                    successCallback: {
+	                    scope: this,
+                        fn: function(response){
+                            var permission = eval(response.json.permission);
+                            if (permission) {
+                                // Hide previously opened form and restore row
+                                this.restoreEditForm();
 
-                                    me.currentEditedRowId = rowId;
+                                this.currentEditedRowId = rowId;
 
-                                    // Hide the row and display the empty form container
-                                    Dom.addClass(formContainer.parentNode, "theme-bg-color-4");
-                                    Dom.addClass(commentEl, "hidden");
-                                    Dom.removeClass(formContainer, "hidden");
+                                // Hide the row and display the empty form container
+                                Dom.addClass(formContainer.parentNode, "theme-bg-color-4");
+                                Dom.addClass(commentEl, "hidden");
+                                Dom.removeClass(formContainer, "hidden");
 
-                                    // Create form markup inside the absolute positioned div
-                                    me.widgets.editFormWrapper.innerHTML = me.formMarkup(rowId, comment.author.username, comment.content);
+                                // Create form markup inside the absolute positioned div
+                                this.widgets.editFormWrapper.innerHTML = this.formMarkup(rowId, comment.author.username, comment.content);
 
-                                    // Initialize form with editor
-                                    me.setupCommentForm(rowId, comment.nodeRef, true);
+                                // Initialize form with editor
+                                this.setupCommentForm(rowId, comment.nodeRef, true);
 
-                                    // make sure the new form is placed above the empty form placeholder in the datatable
-                                    me.synchronizeElements(me.widgets.editFormWrapper, formContainer);
+                                // make sure the new form is placed above the empty form placeholder in the datatable
+                                this.synchronizeElements(me.widgets.editFormWrapper, formContainer);
 
-                                    // Display the form
-                                    Dom.removeClass(me.widgets.editFormWrapper, "hidden");
-                                } else {
-                                    me._setBusy(me.msg("message.permission"),"message");
-                                    me.busy= true;
-                                    YAHOO.lang.later(me.options.loadingMessageDelay, me, me._releaseBusy);
-                                }
-                            },
-                            scope: this
-                        },
-                        failureMessage: this.msg("message.connection"),
-                        scope: this
-
-                    });
-
-
+                                // Display the form
+                                Dom.removeClass(this.widgets.editFormWrapper, "hidden");
+                            } else {
+                                this._setBusy(this.msg("message.permission"),"message");
+                                this.busy = true;
+                                YAHOO.lang.later(this.options.loadingMessageDelay, this, this._releaseBusy);
+                            }
+                        }
+                    },
+                    failureMessage: this.msg("message.connection")
+                });
             },
 
             /**
@@ -633,49 +627,46 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onConfirmDeleteCommentClick: function CommentsList_onConfirmDeleteCommentClick(recordId)
             {
-                var comment =  this.widgets.alfrescoDataTable.getData(recordId),
-                    me = this;
-                Alfresco.util.PopupManager.displayPrompt(
-                    {
+                var comment =  this.widgets.alfrescoDataTable.getData(recordId);
+                Alfresco.util.PopupManager.displayPrompt({
                         title: this.msg("message.confirm.delete.title"),
                         text: this.msg("message.confirm.delete"),
                         buttons: [
                             {
                                 text: this.msg("button.delete"),
-                                handler: function CommentsList_onConfirmDeleteCommentClick_delete()
-                                {
-                                    //проверка есть ли у текущего пользователя права на удаление
-                                    Alfresco.util.Ajax.request(
-                                        {
-                                            url: Alfresco.constants.PROXY_URI + "/lecm/document/api/isChangeComment?nodeRef=" + comment.nodeRef,
+                                handler: {
+                                    obj: this,
+                                    fn: function CommentsList_onConfirmDeleteCommentClick_delete(event, obj) {
+                                        // Проверка есть ли у текущего пользователя права на удаление
+	                                    Alfresco.util.Ajax.jsonGet({
+                                            url: Alfresco.constants.PROXY_URI + "/lecm/document/api/isChangeComment",
                                             dataObj: {
                                                 nodeRef: comment.nodeRef
                                             },
                                             successCallback: {
-                                                fn:function(response){
+                                                scope: obj,
+                                                obj: this,
+                                                fn: function(response, obj){
                                                     var permission = eval(response.json.permission);
-                                                    this.destroy();
+                                                    obj.destroy();
                                                     if (permission) {
-                                                        me.deleteComment.call(me, comment);
+                                                        this.deleteComment.call(this, comment);
                                                     } else {
-                                                        me._setBusy(me.msg("message.permission"),"message");
-                                                        me.busy= true;
-                                                        YAHOO.lang.later(me.options.loadingMessageDelay, me, me._releaseBusy);
+                                                        this._setBusy(this.msg("message.permission"), "message");
+                                                        this.busy= true;
+                                                        YAHOO.lang.later(this.options.loadingMessageDelay, this, this._releaseBusy);
                                                     }
-                                                },
-                                                scope: this
+                                                }
                                             },
-                                            failureMessage: me.msg("message.connection"),
-                                            scope: me,
+                                            failureMessage: obj.msg("message.connection"),
                                             comment: comment
                                         });
-
+                                    }
                                 }
                             },
                             {
                                 text: this.msg("button.cancel"),
-                                handler: function CommentsList_onConfirmDeleteCommentClick_cancel()
-                                {
+                                handler: function CommentsList_onConfirmDeleteCommentClick_cancel() {
                                     this.destroy();
                                 },
                                 isDefault: true

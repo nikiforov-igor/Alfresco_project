@@ -2,7 +2,7 @@
     <shortname>Errands</shortname>
     <description>Errands</description>
     <url>/lecm/errands/dashlet/issued</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

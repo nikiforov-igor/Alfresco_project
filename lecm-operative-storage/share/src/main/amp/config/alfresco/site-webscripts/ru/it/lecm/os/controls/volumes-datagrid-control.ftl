@@ -147,8 +147,7 @@
 					},
 
 					createBJRecord: function(nodeRef, desc, category) {
-						Alfresco.util.Ajax.jsonRequest({
-							method: 'POST',
+						Alfresco.util.Ajax.jsonPost({
 							url: Alfresco.constants.PROXY_URI + 'lecm/business-journal/api/record/create',
 							dataObj: {
 								mainObject: "${form.arguments.itemId}",

@@ -2,7 +2,7 @@
 	<shortname>Errands Module User Settings Node</shortname>
 	<description>Errands Module User Settings Node</description>
 	<url>/lecm/errands/getUserSettings</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>
