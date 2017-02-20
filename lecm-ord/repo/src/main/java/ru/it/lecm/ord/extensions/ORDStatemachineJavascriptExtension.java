@@ -52,16 +52,11 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private DocumentEventService documentEventService;
 	private LecmPermissionService lecmPermissionService;
 	private ORDDocumentService ordDocumentService;
-	private DictionaryBean dictionaryService;
 
 	private ORDReportsService ordReportsService;
 
 	public void setNodeService(final NodeService nodeService) {
 		this.nodeService = nodeService;
-	}
-
-	public void setDictionaryService(DictionaryBean dictionaryService) {
-		this.dictionaryService = dictionaryService;
 	}
 
 	public void setDocumentService(final DocumentService documentService) {
