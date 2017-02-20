@@ -629,7 +629,7 @@
                     <show id="lecm-ord-table-structure:controller-assoc"/>
                     <show id="lecm-ord-table-structure:subject-assoc"/>
                     <!-- Срок исполнения -->
-                    <show id="limitation-date-script" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
                     <show id="lecm-ord-table-structure:item-limitation-date-radio" />
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-ord-table-structure:item-limitation-date-days" />
@@ -649,7 +649,7 @@
                     <field id="lecm-ord-table-structure:item-limitation-date-radio" set="limitation-date"  mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DAYS</control-param>
-                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                            <control-param name="fireChangeEventName">ordChangeLimitationDateRadio</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change" />
@@ -668,11 +668,11 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
-                    <field id="limitation-date-script">
+                    <field id="lecm-base-dummy-aspects:script2">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/complex-date-listener.js</control-param>
                             <control-param name="scriptLoadedFireAction">complexDateScriptLoaded</control-param>
-                            <control-param name="bubblingName">changeLimitationDateRadio</control-param>
+                            <control-param name="bubblingName">ordChangeLimitationDateRadio</control-param>
                             <control-param name="dateField">lecm-ord-table-structure:execution-date</control-param>
                             <control-param name="daysCountField">lecm-ord-table-structure:item-limitation-date-days</control-param>
                             <control-param name="daysTypeField">lecm-ord-table-structure:item-limitation-date-type</control-param>
@@ -680,7 +680,7 @@
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
                         <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
-                            <control-param name="textCode">label.errand.limitless</control-param>
+                            <control-param name="textCode">label.ord.limitless</control-param>
                         </control>
                     </field>
                     <field id="lecm-ord-table-structure:report-required" read-only="true" />
@@ -716,7 +716,7 @@
                 <show id="lecm-ord-table-structure:controller-assoc"/>
                 <show id="lecm-ord-table-structure:subject-assoc"/>
                 <!-- Срок исполнения -->
-                <show id="limitation-date-script" force="true"/>
+                <show id="lecm-base-dummy-aspects:script2" force="true"/>
                 <show id="lecm-ord-table-structure:item-limitation-date-radio" />
                 <show id="lecm-base-dummy-aspects:script" force="true"/>
                 <show id="lecm-ord-table-structure:item-limitation-date-days" />
@@ -752,7 +752,7 @@
                         <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change" />
                     </constraint-handlers>
                 </field>
-                <field id="limitation-date-script">
+                <field id="lecm-base-dummy-aspects:script2">
                     <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                         <control-param name="scripts">scripts/lecm-eds-documents/complex-date-listener.js</control-param>
                         <control-param name="scriptLoadedFireAction">complexDateScriptLoaded</control-param>
@@ -764,7 +764,7 @@
                 </field>
                 <field id="lecm-base-dummy-aspects:script" set="limitation-date">
                     <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
-                        <control-param name="textCode">label.errand.limitless</control-param>
+                        <control-param name="textCode">label.ord.limitless</control-param>
                     </control>
                 </field>
             </appearance>
