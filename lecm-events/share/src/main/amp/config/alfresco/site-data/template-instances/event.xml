@@ -104,7 +104,16 @@
             </properties>
         </component>
 
-        <!-- Связи -->
+		<!-- История -->
+		<component>
+			<region-id>document-history</region-id>
+			<url>/lecm/components/document/document-history</url>
+			<properties>
+				<nodeRef>{nodeRef}</nodeRef>
+			</properties>
+		</component>
+
+	   <!-- Связи -->
         <component>
             <region-id>document-connections</region-id>
             <url>/lecm/components/document/connections</url>
