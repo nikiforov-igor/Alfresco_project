@@ -41,7 +41,7 @@
 
             <properties>
                 <!-- Срок исполнения -->
-                <property name="lecm-ord-table-structure:item-limitation-date">
+                <property name="lecm-ord-table-structure:execution-date">
                     <type>d:date</type>
                     <mandatory>true</mandatory>
                 </property>
@@ -74,6 +74,11 @@
                         <stored>false</stored>
                         <tokenised>false</tokenised>
                     </index>
+                </property>
+                <!-- Фактическая дата исполнения -->
+                <property name="lecm-ord-table-structure:execution-date-real">
+                    <type>d:date</type>
+                    <mandatory>false</mandatory>
                 </property>
                 <!-- Срок исполнения -->
                 <property name="lecm-ord-table-structure:item-limitation-date-text">

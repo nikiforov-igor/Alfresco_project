@@ -27,7 +27,6 @@ public final class ORDModel {
 	public final static QName PROP_ORD_TABLE_EXECUTION_DATE = QName.createQName(ORD_TABLE_NAMESPACE, "execution-date");
 	public final static QName PROP_ORD_TABLE_EXECUTION_DATE_REAL = QName.createQName(ORD_TABLE_NAMESPACE, "execution-date-real");
 	public final static QName PROP_ORD_TABLE_ITEM_TITLE = QName.createQName(ORD_TABLE_NAMESPACE, "item-title");
-	public final static QName PROP_ORD_TABLE_ITEM_DATE = QName.createQName(ORD_TABLE_NAMESPACE, "item-limitation-date");
 	public final static QName PROP_ORD_TABLE_ITEM_DATE_TEXT = QName.createQName(ORD_TABLE_NAMESPACE, "item-limitation-date-text");
 	public final static QName PROP_ORD_TABLE_ITEM_DATE_RADIO = QName.createQName(ORD_TABLE_NAMESPACE, "item-limitation-date-radio");
 	public final static QName PROP_ORD_TABLE_ITEM_DATE_DAYS = QName.createQName(ORD_TABLE_NAMESPACE, "item-limitation-date-days");

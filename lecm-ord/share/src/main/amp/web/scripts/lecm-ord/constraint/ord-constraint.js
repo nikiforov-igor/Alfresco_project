@@ -8,9 +8,9 @@ LogicECM.module.ORD = LogicECM.module.ORD || {};
 LogicECM.module.ORD.commonLimitationDateValidation =
     function (field, args, event, form, silent, message, props) {
         if (field.form) {
-            var radio = field.form["prop_" + props.radioProp];
-            var days = field.form["prop_" + props.daysProp];
-            var limitationDate = field.form["prop_" + props.dateProp];
+            var radio = field.form["prop_lecm-ord-table-structure_item-limitation-date-radio"];
+            var days = field.form["prop_lecm-ord-table-structure_item-limitation-date-days"];
+            var limitationDate = field.form["prop_lecm-ord-table-structure_execution-date"];
 
             var radioValue = null;
             if (radio) {
@@ -24,20 +24,10 @@ LogicECM.module.ORD.commonLimitationDateValidation =
             if (radioValue == "LIMITLESS") {
                 return true;
             } else if (radioValue == "DAYS") {
-                return (days.value.length > 0) || (field.name != "prop_" + props.daysProp);
+                return (days.value.length > 0) || (field.name != "prop_lecm-ord-table-structure_item-limitation-date-days");
             } else {
-                return (limitationDate && limitationDate.value.length) || (field.name != "prop_" + props.dateProp);
+                return (limitationDate && limitationDate.value.length) || (field.name != "prop_lecm-ord-table-structure_execution-date");
             }
         }
         return true;
-    };
-
-LogicECM.module.ORD.limitationDateValidation =
-    function (field, args, event, form, silent, message) {
-        var props = {
-            radioProp: "lecm-ord-table-structure_item-limitation-date-radio",
-            daysProp: "lecm-ord-table-structure_item-limitation-date-days",
-            dateProp: "lecm-ord-table-structure_item-limitation-date"
-        };
-        return LogicECM.module.ORD.commonLimitationDateValidation(field, args, event, form, silent, message, props);
     };

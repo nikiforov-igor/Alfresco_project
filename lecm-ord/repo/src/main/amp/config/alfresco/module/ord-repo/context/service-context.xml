@@ -38,7 +38,7 @@
           p:models-ref="ord.models"
 		  p:labels-ref="ord.models.labels"/>
 
-    <bean id="errandsLimitationDatePolicy" class="ru.it.lecm.eds.policy.ComplexDatePolicy"
+    <bean id="ordLimitationDatePolicy" class="ru.it.lecm.eds.policy.ComplexDatePolicy"
           init-method="init" depends-on="ord.document.models.bootstrap">
         <property name="policyComponent" ref="policyComponent"/>
         <property name="nodeService" ref="nodeService"/>
@@ -46,7 +46,7 @@
         <property name="namespaceService" ref="namespaceService"/>
         <property name="type" value="lecm-ord-table-structure:item"/>
         <property name="propDateRadio" value="lecm-ord-table-structure:item-limitation-date-radio"/>
-        <property name="propDate" value="lecm-ord-table-structure:item-limitation-date"/>
+        <property name="propDate" value="lecm-ord-table-structure:execution-date"/>
         <property name="propDateDaysCount" value="lecm-ord-table-structure:item-limitation-date-days"/>
         <property name="propDateDaysType" value="lecm-ord-table-structure:item-limitation-date-type"/>
         <property name="propDateText" value="lecm-ord-table-structure:item-limitation-date-text"/>
@@ -120,7 +120,7 @@
         <property name="propsToCopy">
             <list>
                 <value>lecm-document:indexTableRow</value>
-                <value>lecm-ord-table-structure:item-limitation-date-text</value>
+                <value>lecm-ord-table-structure:execution-date</value>
                 <value>lecm-ord-table-structure:item-content</value>
                 <value>lecm-ord-table-structure:item-comment</value>
             </list>

@@ -8,6 +8,7 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang.StringUtils;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
@@ -52,6 +53,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private DocumentEventService documentEventService;
 	private LecmPermissionService lecmPermissionService;
 	private ORDDocumentService ordDocumentService;
+	private DictionaryBean dictionaryService;
 
 	private ORDReportsService ordReportsService;
 
@@ -61,6 +63,10 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 
 	public void setDocumentService(final DocumentService documentService) {
 		this.documentService = documentService;
+	}
+
+	public void setDictionaryService(DictionaryBean dictionaryService) {
+		this.dictionaryService = dictionaryService;
 	}
 
 	public void setOrgstructureService(final OrgstructureBean orgstructureService) {
@@ -296,7 +302,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				properties.put("lecm-errands:periodically", "false");
 				properties.put("lecm-errands:report-recipient-type", "CONTROLLER");
 				//Срок исполнения
-				properties.put("lecm-errands:limitation-date", (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE));
+				properties.put("lecm-errands:limitation-date", (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE));
 				properties.put("lecm-errands:limitation-date-text", (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_TEXT));
 				properties.put("lecm-errands:limitation-date-days",  nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_DAYS).toString());
 				properties.put("lecm-errands:limitation-date-radio", (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_RADIO));
@@ -314,7 +320,8 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 					associations.put("lecm-errands:initiator-assoc", controller.toString());
 				}
 				//Тип поручения
-				associations.put("lecm-errands:type-assoc", "workspace://SpacesStore/b888028b-0294-4fac-8975-6b5dd4dafbb2");
+                NodeRef type = dictionaryService.getRecordByParamValue(ErrandsService.ERRANDS_DICTIONARY_NAME, ContentModel.PROP_NAME, ErrandsService.ERRAND_ON_POINT_ORD);
+				associations.put("lecm-errands:type-assoc", type.toString());
 				//исполнитель
 				List<AssociationRef> pointExecutorAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_EXECUTOR);
 				if (pointExecutorAssocs.size() > 0) {
@@ -329,9 +336,13 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				}
 				//соисполнители
 				List<AssociationRef> pointCoExecutorsAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_COEXECUTORS);
-				for (AssociationRef coexecutors :pointCoExecutorsAssocs) {
-					NodeRef coexecutor = coexecutors.getTargetRef();
-					associations.put("lecm-errands:coexecutors-assoc", coexecutor.toString());
+				if (pointCoExecutorsAssocs.size() > 0) {
+                    ArrayList<NodeRef> coexecutorsList = new ArrayList<>();
+					for (AssociationRef coexecutors : pointCoExecutorsAssocs) {
+						coexecutorsList.add(coexecutors.getTargetRef());
+					}
+					String coexecutorsNode = StringUtils.join(coexecutorsList, ",");
+					associations.put("lecm-errands:coexecutors-assoc", coexecutorsNode);
 				}
 				//тематика поручения
 				List<AssociationRef> subjectAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_SUBJECT);
