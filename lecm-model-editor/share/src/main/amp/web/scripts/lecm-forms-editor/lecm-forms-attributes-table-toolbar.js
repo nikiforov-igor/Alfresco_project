@@ -173,27 +173,23 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 			},
 
 			addFields: function() {
-				var me = this;
-				Alfresco.util.Ajax.jsonPost(
-					{
-						url: Alfresco.constants.PROXY_URI + '/lecm/docforms/addAttributes',
-						dataObj: {
-							formNodeRef: this.options.itemNodeRef,
-							attributes: this.getSelectedItems()
-						},
-						successCallback: {
-							fn: function (response) {
-								YAHOO.Bubbling.fire('datagridRefresh',
-									{
-										bubblingLabel:me.options.bubblingLabel
-									});
-
-								this.widgets.dialog.hide();
-							},
-							scope: this
-						},
-						failureMessage: 'message.failure'
-					});
+				Alfresco.util.Ajax.jsonPost({
+					url: Alfresco.constants.PROXY_URI + '/lecm/docforms/addAttributes',
+					dataObj: {
+						formNodeRef: this.options.itemNodeRef,
+						attributes: this.getSelectedItems()
+					},
+					successCallback: {
+						scope: this,
+						fn: function (response) {
+							YAHOO.Bubbling.fire('datagridRefresh', {
+								bubblingLabel: this.options.bubblingLabel
+							});
+							this.widgets.dialog.hide();
+						}
+					},
+					failureMessage: this.msg('message.failure')
+				});
 			},
 
 			closeDialog: function() {
