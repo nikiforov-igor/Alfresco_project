@@ -101,7 +101,12 @@
                     </field>
                     <field id="lecm-base-dummy-aspects:script10" set="start-right-start" >
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-resolution/resolutions-change-limitation-date.js</control-param>
+                            <control-param name="scripts">scripts/lecm-eds-documents/complex-date-listener.js</control-param>
+                            <control-param name="scriptLoadedFireAction">complexDateScriptLoaded</control-param>
+                            <control-param name="bubblingName">changeResolutionLimitationDateRadio</control-param>
+                            <control-param name="dateField">lecm-resolutions:limitation-date</control-param>
+                            <control-param name="daysCountField">lecm-resolutions:limitation-date-days</control-param>
+                            <control-param name="daysTypeField">lecm-resolutions:limitation-date-type</control-param>
                         </control>
                     </field>
                     <field id="lecm-resolutions:limitation-date-radio" set="limitation-date" mandatory="true">
@@ -154,7 +159,12 @@
                     </field>
                     <field id="lecm-base-dummy-aspects:script7" set="errands">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
+                            <control-param name="scripts">scripts/lecm-eds-documents/complex-date-listener.js</control-param>
+                            <control-param name="scriptLoadedFireAction">complexDateScriptLoaded</control-param>
+                            <control-param name="bubblingName">changeLimitationDateRadio</control-param>
+                            <control-param name="dateField">lecm-errands:limitation-date</control-param>
+                            <control-param name="daysCountField">lecm-errands:limitation-date-days</control-param>
+                            <control-param name="daysTypeField">lecm-errands:limitation-date-type</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script6" set="errands">
@@ -581,7 +591,12 @@
                     </field>
                     <field id="lecm-base-dummy-aspects:script4" set="start-right-start" >
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-resolution/resolutions-change-limitation-date.js</control-param>
+                            <control-param name="scripts">scripts/lecm-eds-documents/complex-date-listener.js</control-param>
+                            <control-param name="scriptLoadedFireAction">complexDateScriptLoaded</control-param>
+                            <control-param name="bubblingName">changeResolutionLimitationDateRadio</control-param>
+                            <control-param name="dateField">lecm-resolutions:limitation-date</control-param>
+                            <control-param name="daysCountField">lecm-resolutions:limitation-date-days</control-param>
+                            <control-param name="daysTypeField">lecm-resolutions:limitation-date-type</control-param>
                         </control>
                     </field>
                     <field id="lecm-resolutions:limitation-date-radio" set="limitation-date" mandatory="true">
@@ -633,7 +648,12 @@
                     </field>
                     <field id="lecm-base-dummy-aspects:script7" set="errands">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
+                            <control-param name="scripts">scripts/lecm-eds-documents/complex-date-listener.js</control-param>
+                            <control-param name="scriptLoadedFireAction">complexDateScriptLoaded</control-param>
+                            <control-param name="bubblingName">changeLimitationDateRadio</control-param>
+                            <control-param name="dateField">lecm-errands:limitation-date</control-param>
+                            <control-param name="daysCountField">lecm-errands:limitation-date-days</control-param>
+                            <control-param name="daysTypeField">lecm-errands:limitation-date-type</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script6" set="errands">
