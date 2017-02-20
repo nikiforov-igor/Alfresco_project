@@ -52,7 +52,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>false</tokenised>
+                        <tokenised>both</tokenised>
                     </index>
                 </property>
                 <!-- Заголовок - textarea-->
@@ -72,7 +72,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>false</tokenised>
+                        <tokenised>both</tokenised>
                     </index>
                 </property>
                 <!-- Фактическая дата исполнения -->
@@ -110,7 +110,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>false</tokenised>
+                        <tokenised>both</tokenised>
                     </index>
                 </property>
                 <property name="lecm-ord-table-structure:executor-assoc-text-content">
@@ -118,7 +118,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>false</tokenised>
+                        <tokenised>both</tokenised>
                     </index>
                 </property>
                 <!-- Требуется отчет -->
