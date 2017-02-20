@@ -1705,6 +1705,90 @@ if (document) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>8c1eb417-877b-4442-ac02-942924a60213</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/9c7b0a87-8ca5-4b7e-b6a5-a5022caa6a24
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:completion-signal-aspect") AND doc.attr("lecm-eds-aspect:completion-signal") == true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+if (document) {
+  var signalSender = null;
+  var signalSenderAssoc = document.assocs["lecm-eds-aspect:completion-signal-sender-assoc"];
+  if (signalSenderAssoc && signalSenderAssoc.length) {
+    signalSender = signalSenderAssoc[0];
+  }
+  var signalReason = document.properties["lecm-eds-aspect:completion-signal-reason"];
+
+  var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
+  if (childErrands) {
+    childErrands.forEach(function (errand) {
+      edsDocument.sendCompletionSignal(errand, signalReason, signalSender);
+    });
+  }
+
+  var recipients = [];
+  var authorAssoc = document.assocs["lecm-resolutions:author-assoc"];
+  if (authorAssoc && authorAssoc.length) {
+    recipients.push(authorAssoc[0]);
+  }
+  var creatorAssoc = document.assocs["lecm-document:author-assoc"];
+  if (creatorAssoc && creatorAssoc.length) {
+    recipients.push(creatorAssoc[0]);
+  }
+
+  var controllerAssoc = document.assocs["lecm-resolutions:controller-assoc"];
+  if (controllerAssoc && controllerAssoc.length) {
+    recipients.push(controllerAssoc[0]);
+  }
+  notifications.sendNotificationFromCurrentUser({
+    recipients: recipients,
+    templateCode: 'RESOLUTION_COMPLETION',
+    templateConfig: {
+      mainObject: document,
+      reason: signalReason
+    },
+    dontCheckAccessToObject: true
+  });
+
+  var logText = "Исполнение резолюции #mainobject ";
+  logText += documentScript.wrapperTitle("завершено", signalReason ? signalReason : "");
+  businessJournal.log(document.nodeRef.toString(), "EXECUTE_DOCUMENT", logText, []);
+
+  edsDocument.resetCompletionSignal(document);
+}]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/8ccf2c48-f1a3-4674-b032-b50d0c897e84
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>

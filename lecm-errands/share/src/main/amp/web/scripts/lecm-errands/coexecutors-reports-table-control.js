@@ -170,37 +170,36 @@ LogicECM.errands = LogicECM.errands || {};
             });
 
             //получаем кнопку переноса отчетов
-            var coexecutorsReportElementId = Dom.get(this.id).parentElement.parentElement.parentElement.id;
-            var formTemplateString = coexecutorsReportElementId.substring(0, coexecutorsReportElementId.indexOf("-coexecutors-reports", 0));
-            var transferSelectedReportsButton = Dom.get(formTemplateString + "-exec-report-transfer-coexecutors-reports");
-            //скрываем кнопку переноса отчетов если поручение в неподходящих статусах.
+            var transferSelectedReportsButton = Dom.get(this.id + "-cntrl-exec-report-transfer-coexecutors-reports");
+            var buttonEl = YAHOO.util.Selector.query("span button", transferSelectedReportsButton, true);
             var isStatusOK = "На исполнении" == datagrid.options.currentDocumentStatus || "На доработке" == datagrid.options.currentDocumentStatus;
-            if (!isStatusOK || !datagrid.options.currentUser.isExecutor) {
-                YAHOO.util.Dom.setStyle(transferSelectedReportsButton, "display", "none");
-            }
+
+            YAHOO.Bubbling.on("selectedItemsChanged", function (layer, args) {
+                if (datagrid.options.bubblingLabel == args[1]) {
+                    var selectedRows = this.getSelectedItems();
+                    var allItemsOk = false;
+                    if (selectedRows && selectedRows.length) {
+                        allItemsOk = selectedRows.every(function (row) {
+                            return row.itemData["prop_lecm-errands-ts_coexecutor-report-status"].value == "ACCEPT";
+                        });
+                    }
+                    if (allItemsOk && isStatusOK && datagrid.options.currentUser.isExecutor) {
+                        YAHOO.util.Dom.removeClass(transferSelectedReportsButton, "disabled-button");
+                        buttonEl.disabled = false;
+                    } else {
+                        YAHOO.util.Dom.addClass(transferSelectedReportsButton, "disabled-button");
+                        buttonEl.disabled = true;
+                    }
+                }
+            }, datagrid, true);
 
             YAHOO.util.Event.on(transferSelectedReportsButton, "click", function () {
                 var selectedRows = this.getSelectedItems();
                 if (selectedRows && selectedRows.length) {
-                    //проверка на статусы выбранных отчетов
-                    var allItemsOk = true;
-                    var i, reportsRefs = [];
-                    for (i = 0; i < selectedRows.length; i++) {
-                        var reportStatus = selectedRows[i].itemData["prop_lecm-errands-ts_coexecutor-report-status"];
-                        if (reportStatus.value != "ACCEPT") {
-                            Alfresco.util.PopupManager.displayMessage({
-                                text: Alfresco.util.message("lecm.errands.coexecutors.reports.msg.wrong.report")
-                            });
-                            allItemsOk = false;
-                            break;
-                        } else {
-                            reportsRefs.push(selectedRows[i].nodeRef);
-                        }
-                    }
-                    //если все очтеты в статусе Принят - переносим
-                    if (allItemsOk) {
-                        this.doReportsTransfer(reportsRefs);
-                    }
+                    var reportsRefs = selectedRows.map(function(row){
+                        return row.nodeRef;
+                    });
+                    this.doReportsTransfer(reportsRefs);
                 } else {
                     Alfresco.util.PopupManager.displayMessage({
                         text: Alfresco.util.message("lecm.errands.coexecutors.reports.msg.not.selected")

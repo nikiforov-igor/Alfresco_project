@@ -44,6 +44,7 @@ if (requestContent) {
         } else {
             ExecuteErrandScript.executeErrand(document, closeChild);
         }
+        document.properties["lecm-errands:project-report-ref"] = null;
         document.save();
         model.success = true;
     }
