@@ -40,6 +40,11 @@
             <parent>lecm-document:tableDataRow</parent>
 
             <properties>
+                <!-- Срок исполнения -->
+                <property name="lecm-ord-table-structure:item-limitation-date">
+                    <type>d:date</type>
+                    <mandatory>true</mandatory>
+                </property>
                 <!-- содержание - textarea-->
                 <property name="lecm-ord-table-structure:item-content">
                     <type>d:text</type>
@@ -73,10 +78,6 @@
                 <!-- Срок исполнения -->
                 <property name="lecm-ord-table-structure:item-limitation-date-text">
                     <type>d:text</type>
-                    <mandatory>false</mandatory>
-                </property>
-                <property name="lecm-ord-table-structure:item-limitation-date">
-                    <type>d:date</type>
                     <mandatory>false</mandatory>
                 </property>
                 <property name="lecm-ord-table-structure:item-limitation-date-radio">
