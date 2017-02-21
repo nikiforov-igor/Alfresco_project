@@ -26,8 +26,7 @@
 		  links.LogicEcmBootstrap,
 		  documents.dictionaries.LogicEcmModelsBootstrap,
 		  errands.tableStructure.LogicEcmModelsBootstrap,
-          errands.dictionaries.LogicEcmModelsBootstrap,
-          eds.models.bootstrap">
+          errands.dictionaries.LogicEcmModelsBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-errands-model.xml</value>
@@ -705,9 +704,7 @@
         </property>
     </bean>
 
-    <bean id="errandsBaseDocumentType" class="ru.it.lecm.eds.policy.EDSBaseDocumentTypePolicy" parent="baseDocumentTypeBean"
-          init-method="init" depends-on="errands.LogicEcmModelsBootstrap">
-        <property name="policyComponent" ref="policyComponent"/>
+    <bean id="errandsBaseDocumentType" parent="baseDocumentTypeBean" depends-on="errands.LogicEcmModelsBootstrap">
         <property name="type" value="lecm-errands:document"/>
         <property name="assocBaseDocumentType" value="lecm-errands:base-assoc"/>
     </bean>

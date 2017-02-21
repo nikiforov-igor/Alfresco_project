@@ -71,7 +71,6 @@
             <properties>
                 <property name="lecm-eds-aspect:base-document-type">
                     <type>d:text</type>
-                    <default>"Без документа-основания"</default>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>

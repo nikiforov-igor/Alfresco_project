@@ -13,7 +13,6 @@
         <import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
 		<import uri="http://www.it.ru/logicECM/errands/table-structure/1.0" prefix="lecm-errands-ts"/>
 		<import uri="http://www.it.ru/logicECM/errands/dictionaries/1.0" prefix="lecm-errands-dic"/>
-		<import uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-document-aspects"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/errands/1.0" prefix="lecm-errands"/>

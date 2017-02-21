@@ -5,28 +5,46 @@ import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.eds.api.EDSDocumentService;
-import ru.it.lecm.eds.BaseDocumentTypeBean;
 
 /**
  * Created by ABurlakov on 20.02.2017.
  */
-public class EDSBaseDocumentTypePolicy extends BaseDocumentTypeBean
-        implements NodeServicePolicies.OnCreateAssociationPolicy,
+
+public class EDSBaseDocumentTypePolicy implements NodeServicePolicies.OnCreateAssociationPolicy,
         NodeServicePolicies.OnDeleteAssociationPolicy {
 
+    private NodeService nodeService;
     private PolicyComponent policyComponent;
+    private NamespaceService namespaceService;
+    private EDSDocumentService edsDocumentService;
+    private DocumentService documentService;
 
     private String type;
     private String assocBaseDocumentType;
 
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
+
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
+    }
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
+
+    public void setEdsDocumentService(EDSDocumentService edsDocumentService) {
+        this.edsDocumentService = edsDocumentService;
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
     }
 
     public void setType(String type) {
