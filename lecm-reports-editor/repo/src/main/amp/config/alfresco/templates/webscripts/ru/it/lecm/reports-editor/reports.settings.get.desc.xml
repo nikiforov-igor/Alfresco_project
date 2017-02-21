@@ -2,7 +2,7 @@
     <shortname>Reports Editor Settings</shortname>
     <description>Reports Editor Settings</description>
     <url>/lecm/reports-editor/settings</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction>required</transaction>
 </webscript>

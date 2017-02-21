@@ -117,60 +117,56 @@ LogicECM.module = LogicECM.module || {};
 
             _loadRootNode: function () {
                 var sUrl = this._generateRootUrlPath(this.options.rootNodeRef) + this._generateRootUrlParams();
-                var me = this;
-                Alfresco.util.Ajax.jsonGet(
-                    {
-                        url: sUrl,
-                        successCallback: {
-                            fn: function (response) {
+                Alfresco.util.Ajax.jsonGet({
+                    url: sUrl,
+                    successCallback: {
+                        fn: function (response) {
+                            if (this.options.useDeferedReinit) {
+                                this.reinitDeferedList.fulfil("rootNodeLoaded");
+                            }
 
-                                if (me.options.useDeferedReinit) {
-                                    me.reinitDeferedList.fulfil("rootNodeLoaded");
-                                }
-
-                                var oResults = response.json;
-                                if (oResults != null) {
-                                    if (me.options.showParentNodeInTreeView) {
-                                        var newNode = {
-                                            label: oResults.title,
-                                            nodeRef: oResults.nodeRef,
-                                            isLeaf: oResults.isLeaf,
-                                            type: oResults.type,
-                                            isContainer: oResults.isContainer,
-                                            displayPath: oResults.displayPath,
-                                            path: oResults.path,
-                                            simplePath: oResults.simplePath,
-                                            isSelectable: oResults.selectable != null ? oResults.selectable : true,
-                                            renderHidden: true
-                                        };
-                                        me.rootNode = new YAHOO.widget.TextNode(newNode, me.tree.getRoot());
-                                        if (!newNode.isSelectable) {
-                                            me.rootNode.contentStyle = "not-selectable";
-                                        }
-                                    } else {
-                                        me.rootNode = me.tree.getRoot();
-                                        var augmented = Alfresco.util.deepCopy(me.tree.getRoot());
-                                        augmented.data = {
-                                            nodeRef: oResults.nodeRef
-                                        };
-                                        me._loadNode(augmented);
+                            var oResults = response.json;
+                            if (oResults) {
+                                if (this.options.showParentNodeInTreeView) {
+                                    var newNode = {
+                                        label: oResults.title,
+                                        nodeRef: oResults.nodeRef,
+                                        isLeaf: oResults.isLeaf,
+                                        type: oResults.type,
+                                        isContainer: oResults.isContainer,
+                                        displayPath: oResults.displayPath,
+                                        path: oResults.path,
+                                        simplePath: oResults.simplePath,
+                                        isSelectable: oResults.selectable != null ? oResults.selectable : true,
+                                        renderHidden: true
+                                    };
+                                    this.rootNode = new YAHOO.widget.TextNode(newNode, this.tree.getRoot());
+                                    if (!newNode.isSelectable) {
+                                        this.rootNode.contentStyle = "not-selectable";
                                     }
-                                    me.options.rootNodeRef = oResults.nodeRef;
-
-                                    me.tree.draw();
+                                } else {
+                                    this.rootNode = this.tree.getRoot();
+                                    var augmented = Alfresco.util.deepCopy(this.tree.getRoot());
+                                    augmented.data = {
+                                        nodeRef: oResults.nodeRef
+                                    };
+                                    this._loadNode(augmented);
                                 }
-                            },
-                            scope: this
+                                this.options.rootNodeRef = oResults.nodeRef;
+
+                                this.tree.draw();
+                            }
                         },
-                        failureCallback: {
-                            fn: function (oResponse) {
-                                var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-                                this.widgets.dataTable.set("MSG_ERROR", response.message);
-                                this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
-                            },
-                            scope: this
-                        }
-                    });
+                        scope: this
+                    },
+                    failureCallback: {
+                        fn: function (response) {
+                            this.widgets.dataTable.set("MSG_ERROR", response.json.message);
+                            this.widgets.dataTable.showTableMessage(response.json.message, YAHOO.widget.DataTable.CLASS_ERROR);
+                        },
+                        scope: this
+                    }
+                });
             },
 
             _generateRootUrlPath: function (nodeRef) {
@@ -190,66 +186,63 @@ LogicECM.module = LogicECM.module || {};
 
             _loadNode: function (node, fnLoadComplete) {
                 var sUrl = this._generateItemsUrlPath(node.data.nodeRef) + this._generateItemsUrlParams();
-
-                var callback = {
-                    success: function (oResponse) {
-                        var oResults = eval("(" + oResponse.responseText + ")");
-                        if (oResults != null) {
-                            node.children = [];
-                            for (var nodeIndex in oResults) {
-                                var nodeRef = oResults[nodeIndex].nodeRef;
-                                var ignore = false;
-                                if (this.argument.context.options.ignoreNodesInTreeView) {
-                                    var ignoreNodes = this.argument.context.options.ignoreNodes;
-                                    if (ignoreNodes != null) {
-                                        for (var i = 0; i < ignoreNodes.length; i++) {
-                                            if (ignoreNodes[i] == nodeRef) {
-                                                ignore = true;
+                Alfresco.util.Ajax.jsonGet({
+                    url: sUrl,
+                    successCallback: {
+                        fn: function (response) {
+                            var oResults = response.json;
+                            if (oResults) {
+                                node.children = [];
+                                for (var nodeIndex in oResults) {
+                                    var nodeRef = oResults[nodeIndex].nodeRef;
+                                    var ignore = false;
+                                    if (this.options.ignoreNodesInTreeView) {
+                                        var ignoreNodes = this.options.ignoreNodes;
+                                        if (ignoreNodes != null) {
+                                            for (var i = 0; i < ignoreNodes.length; i++) {
+                                                if (ignoreNodes[i] == nodeRef) {
+                                                    ignore = true;
+                                                }
                                             }
                                         }
                                     }
-                                }
 
-                                if (!ignore) {
-                                    var newNode = {
-                                        label: oResults[nodeIndex].label,
-                                        title: oResults[nodeIndex].title,
-                                        nodeRef: oResults[nodeIndex].nodeRef,
-                                        isLeaf: oResults[nodeIndex].isLeaf,
-                                        type: oResults[nodeIndex].type,
-                                        isContainer: oResults[nodeIndex].isContainer,
-                                        isSelectable: oResults[nodeIndex].selectable != null ? oResults[nodeIndex].selectable : true,
-                                        renderHidden: true
-                                    };
+                                    if (!ignore) {
+                                        var newNode = {
+                                            label: oResults[nodeIndex].label,
+                                            title: oResults[nodeIndex].title,
+                                            nodeRef: oResults[nodeIndex].nodeRef,
+                                            isLeaf: oResults[nodeIndex].isLeaf,
+                                            type: oResults[nodeIndex].type,
+                                            isContainer: oResults[nodeIndex].isContainer,
+                                            isSelectable: oResults[nodeIndex].selectable != null ? oResults[nodeIndex].selectable : true,
+                                            renderHidden: true
+                                        };
 
-                                    var textNode = new YAHOO.widget.TextNode(newNode, node);
-                                    if (!newNode.isSelectable) {
-                                        textNode.contentStyle = "not-selectable";
+                                        var textNode = new YAHOO.widget.TextNode(newNode, node);
+                                        if (!newNode.isSelectable) {
+                                            textNode.contentStyle = "not-selectable";
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        if (oResponse.argument.fnLoadComplete != null) {
-                            oResponse.argument.fnLoadComplete();
-                        } else {
-                            oResponse.argument.tree.draw();
-                        }
+                            if (YAHOO.lang.isFunction(fnLoadComplete)) {
+                                fnLoadComplete.call();
+                            } else {
+                                this.tree.draw();
+                            }
+                        },
+                        scope: this
                     },
-                    failure: function (oResponse) {
-                        var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-                        this.widgets.dataTable.set("MSG_ERROR", response.message);
-                        this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
-                    },
-                    argument: {
-                        node: node,
-                        fnLoadComplete: fnLoadComplete,
-                        tree: this.tree,
-                        context: this
-                    },
-                    timeout: 60000
-                };
-                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                    failureCallback: {
+                        fn: function (response) {
+                            this.widgets.dataTable.set("MSG_ERROR", response.json.message);
+                            this.widgets.dataTable.showTableMessage(response.json.message, YAHOO.widget.DataTable.CLASS_ERROR);
+                        },
+                        scope: this
+                    }
+                });
             },
 
             _generateItemsUrlPath: function (nodeRef) {

@@ -3,6 +3,6 @@
 	<shortname>Generate Report and Save it</shortname>
 	<url>/lecm/reports/rptmanager/buildReportAndSave?reportCode={reportCode}&amp;destFolderRef={destFolderRef}&amp;args={args}</url>
 	<authentication>user</authentication>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<transaction>required</transaction>
 </webscript>

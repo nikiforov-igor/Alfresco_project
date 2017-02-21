@@ -434,7 +434,9 @@
                     <field id="lecm-document-aspects:reg-project-data-number" set="afterDates"/>
                     <field id="lecm-document-aspects:reg-project-data-date" set="afterDates"/>
 					<field id="lecmApproveAspects:approvalFolderRef" set="approvalTab">
-						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
+						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl">
+                            <control-param name="forceEditable">true</control-param>
+                        </control>
 					</field>
 					<field id="lecmSignAspects:signerEmployeeAssoc" set="common">
 						<control>

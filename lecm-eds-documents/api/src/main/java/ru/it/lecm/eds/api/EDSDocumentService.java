@@ -59,6 +59,10 @@ public interface EDSDocumentService {
             return inProcess ? IN_PROCESS : allFinal && anyExecuted ? COMPLETE : NOT_REQUIRED;
         }
     }
+
+    QName ASPECT_BASE_DOCUMENT_TYPE = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "base-document-type-aspect");
+    QName PROP_BASE_DOCUMENT_TYPE = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "base-document-type");
+
     /**
      * Отправка сигнала об изменении дочерних документов
      * @param baseDoc Документ, которому отправляется сигнал

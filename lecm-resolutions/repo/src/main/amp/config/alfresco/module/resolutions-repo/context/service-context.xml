@@ -156,12 +156,23 @@
         <property name="publicAction" value="false" />
     </bean>
 
-    <bean  id="resolutionErrandsPolicy" class="ru.it.lecm.resolutions.policy.ResolutionErrandsPolicy"
+    <bean id="resolutionErrandsPolicy" class="ru.it.lecm.resolutions.policy.ResolutionErrandsPolicy"
            init-method="init" depends-on="resolutions.LogicEcmBootstrap, errandsService">
         <property name="policyComponent" ref="policyComponent"/>
         <property name="errandsService" ref="errandsService" />
         <property name="nodeService" ref="nodeService"/>
         <property name="stateMachineService" ref="stateMachineHelper"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+    </bean>
+
+    <bean id="resolutionBaseDocumentPolicy" class="ru.it.lecm.resolutions.policy.ResolutionBaseDocumentPolicy"
+           init-method="init" depends-on="resolutions.LogicEcmBootstrap, documentConnectionService">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="documentConnectionService" ref="documentConnectionService"/>
+    </bean>
+
+    <bean id="resolutionBaseDocumentType" parent="edsBaseDocumentTypeBean" depends-on="resolutions.LogicEcmBootstrap">
+        <property name="type" value="lecm-resolutions:document"/>
+        <property name="assocBaseDocumentType" value="lecm-resolutions:base-document-assoc"/>
     </bean>
 </beans>

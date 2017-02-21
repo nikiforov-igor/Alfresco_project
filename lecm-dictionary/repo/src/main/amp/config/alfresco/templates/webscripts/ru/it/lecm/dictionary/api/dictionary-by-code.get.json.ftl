@@ -1,5 +1,5 @@
-<#escape x as x!""?js_string>
-    {
-        "nodeRef": "${dictionary.getNodeRef()}"
-    }
+<#escape x as jsonUtils.encodeJSONString(x)!''>
+{
+    "nodeRef": "${dictionary.getNodeRef()}"
+}
 </#escape>

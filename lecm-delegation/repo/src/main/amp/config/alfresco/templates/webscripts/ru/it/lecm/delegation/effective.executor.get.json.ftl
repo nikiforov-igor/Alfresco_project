@@ -1,7 +1,7 @@
-<#escape x as x?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 {
 	<#if effectiveExecutor??>
-		effectiveExecutor: "${effectiveExecutor}"
+		"effectiveExecutor": "${effectiveExecutor}"
 	</#if>
 }
 </#escape>

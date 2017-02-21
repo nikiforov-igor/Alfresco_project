@@ -8,11 +8,9 @@
 			var formId = args[1].eventGroup.options.formId;
 			if(fieldId == 'os-aspects:nomenclature-organization-assoc') {
 				if(!LogicECM.Nomenclature.isCentralized) {
-					Alfresco.util.Ajax.jsonGet(
-					{
+					Alfresco.util.Ajax.jsonGet({
 						url: Alfresco.constants.PROXY_URI + "/lecm/os/nomenclature/getOrgPath",
-						successCallback:
-						{
+						successCallback: {
 							fn: function (response) {
 								var oResults = response.json;
 								orgXPath = oResults.xPath;

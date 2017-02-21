@@ -86,33 +86,27 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
 				}
 
-				if (this.options.currentValues[0] != "")
+				if (this.options.currentValues[0])
 					this.choosenItems = this.options.currentValues;
 
-				var me = this;
 				var url = Alfresco.constants.PROXY_URI + this.options.dataSource + (this.options.dataSource.indexOf("?") != -1 ? "&" : "?") + "itemId=" + encodeURIComponent(this.options.itemId);
-				if (this.options.destination != null) {
+				if (this.options.destination) {
 					url += "&destination=" + encodeURIComponent(this.options.destination);
 				}
-				Alfresco.util.Ajax.request(
-					{
-						url: url,
-						successCallback: {
-							fn: function (response) {
-								var items = response.json.items;
-
-								if(items != null) {
-									me.allItems = items;
-									me.showAlreadySelectedItems();
-								}
-
+				Alfresco.util.Ajax.jsonGet({
+					url: url,
+					successCallback: {
+						fn: function (response) {
+							var items = response.json.items;
+							if (items) {
+								this.allItems = items;
+								this.showAlreadySelectedItems();
 							}
 						},
-						failureMessage: "message.failure"
+						scope: this
+					},
+					failureMessage: this.msg("message.failure")
 				});
-
-
-
 			},
 
 			showAddFromModelDialog: function() {

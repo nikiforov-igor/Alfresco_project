@@ -188,28 +188,25 @@
     function initialize() {
         new YAHOO.widget.Button("${id}-editPersonalData", { onclick: { fn: editPersonalData} });
         new YAHOO.widget.Button("${id}-createPersonalData", { onclick: { fn: createPersonalData} });
-        var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getEmployeePersonalData?nodeRef=${employeeRef}";
-        var callback = {
-            success: function (oResponse) {
-                var oResults = eval("(" + oResponse.responseText + ")");
-                if (oResults != null) {
-                    if (oResults.nodeRef == null) {
-                        // скрываем кнопку редактировать
-                        Dom.removeClass("${id}-createPersonalData", 'hidden');
-                    } else {
+		Alfresco.util.Ajax.jsonGet({
+			url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getEmployeePersonalData",
+			dataObj: {
+				nodeRef: "${employeeRef}"
+			},
+			successCallback: {
+				fn: function (oResponse) {
+					if (oResponse.json && oResponse.json.nodeRef) {
                         drawForm(oResults.nodeRef);
                         // скрываем кнопку создать
                         Dom.removeClass("${id}-editPersonalData", 'hidden');
-                    }
-                }
-            },
-            failure: function () {
-                alert("${msg('message.personal-data.load.fail')}");
-            },
-            argument: {
-            }
-        };
-        YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+					} else {
+                        // скрываем кнопку редактировать
+                        Dom.removeClass("${id}-createPersonalData", 'hidden');
+					}
+				}
+			},
+			failureMessage: "${msg('message.personal-data.load.fail')}"
+		});
     }
 
     YAHOO.util.Event.onContentReady("${id}-buttonPersonalData", initialize, this);

@@ -2,7 +2,7 @@
 <webscript>
 	<shortname>Получить xPath корневой организации</shortname>
 	<url>/lecm/os/nomenclature/getOrgPath</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>user</authentication>
 	<transaction allow="readonly">required</transaction>
 </webscript>

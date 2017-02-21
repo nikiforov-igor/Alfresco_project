@@ -48,7 +48,6 @@
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-objectType-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-business-journal-eventCategory-items.xml</value>
         <value>alfresco/module/${artifactId}/dictionaries/lecm-document-type.xml</value>
-        <value>alfresco/module/${artifactId}/dictionaries/lecm-document-type-items.xml</value>
 	</util:list>
 	<bean id="eds.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
@@ -153,7 +152,7 @@
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
 
-	<bean  id="edsExecutorPolicy" class="ru.it.lecm.eds.policy.EDSExecutorPolicy"
+	<bean id="edsExecutorPolicy" class="ru.it.lecm.eds.policy.EDSExecutorPolicy"
 		   init-method="init" depends-on="eds.models.bootstrap, eds.dictionary.bootstrap">
 		<property name="authenticationService" ref="authenticationService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
@@ -168,6 +167,14 @@
 	<bean id="filterByDictionaryAttributeValueProcessor" class="ru.it.lecm.eds.processors.FilterByDictionaryAttributeValueProcessor" parent="searchQueryBaseProccesor">
 		<property name="id" value="FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE"/>
 		<property name="dictionaryBean" ref="serviceDictionary"/>
+	</bean>
+	<bean id="edsBaseDocumentTypeBean" class="ru.it.lecm.eds.policy.EDSBaseDocumentTypePolicy"
+		  init-method="init" abstract="true">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="edsDocumentService" ref="edsService"/>
+		<property name="documentService" ref="documentService"/>
+		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 	<bean id="edsDocumentBaseBean" class="ru.it.lecm.eds.beans.EdsDocumentBaseBean" abstract="true"
 		  depends-on="nodeService, policyComponent, stateMachineHelper, errandsService, namespaceService" >

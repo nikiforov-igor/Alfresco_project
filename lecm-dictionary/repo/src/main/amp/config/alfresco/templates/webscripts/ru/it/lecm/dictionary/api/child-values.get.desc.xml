@@ -2,7 +2,7 @@
 	<shortname>Dictionary child values</shortname>
 	<description>Get children of dictionary value</description>
 	<url>/lecm/dictionary/api/getChildrenItems</url>
-	<format default="xml">extension</format>
+	<format default="xml"/>
 	<authentication>user</authentication>
     <transaction allow="readonly">required</transaction>
 </webscript>
