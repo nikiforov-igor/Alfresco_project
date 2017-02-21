@@ -257,10 +257,10 @@
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
 					<show id="lecm-review-ts:review-table-assoc"/>
                     <show id="lecm-eds-document:executor-assoc"/>
-                    <appearance>
-                        <field id="lecmApproveAspects:approvalFolderRef" label="Согласование"/>
-                    </appearance>
                 </field-visibility>
+                <appearance>
+                    <field id="lecmApproveAspects:approvalFolderRef" label="Согласование"/>
+                </appearance>
             </form>
 
             <!-- Форма атрибутивного поиска -->
