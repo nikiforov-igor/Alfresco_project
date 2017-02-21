@@ -24,5 +24,15 @@
 			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
+        <dependency>
+            <groupId>ru.it.lecm.statemachine</groupId>
+            <artifactId>statemachine-api</artifactId>
+            <version>${platform.version}</version>
+        </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.errands</groupId>
+			<artifactId>errands-repo-api</artifactId>
+			<version>${platform.version}</version>
+		</dependency>
 	</dependencies>
 </project>

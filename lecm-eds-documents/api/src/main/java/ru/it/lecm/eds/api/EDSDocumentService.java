@@ -36,6 +36,7 @@ public interface EDSDocumentService {
     QName PROP_EXECUTOR_TEXT_CONTENT = QName.createQName(EDS_NAMESPACE_URI, "executor-assoc-text-content");
     QName PROP_EXECUTOR_REF = QName.createQName(EDS_NAMESPACE_URI, "executor-assoc-ref");
 
+    QName ASPECT_CHILD_CHANGE_SIGNAL = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "child-change-signal");
 	QName PROP_CHILD_CHANGE_SIGNAL_COUNT = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "child-change-signal-count");
 
 	QName ASPECT_CHANGE_DUE_DATE_SIGNAL = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "changeDueDateSignal");
@@ -47,6 +48,13 @@ public interface EDSDocumentService {
     QName PROP_COMPLETION_SIGNAL_REASON = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "completion-signal-reason");
     QName PROP_COMPLETION_SIGNAL_CLOSE_CHILD = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "completion-signal-close-child");
     QName ASPECT_COMPLETION_SIGNAL = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "completion-signal-aspect");
+
+    QName PROP_EXECUTION_STATE = QName.createQName(EDS_ASPECTS_NAMESPACE_URI,"execution-state");
+    QName PROP_EXECUTION_STATISTICS = QName.createQName(EDS_ASPECTS_NAMESPACE_URI,"execution-statistics");
+
+    enum EXECUTION_STATE{
+        IN_PROCESS,COMPLETE,NOT_REQUIRED
+    }
     /**
      * Отправка сигнала об изменении дочерних документов
      * @param baseDoc Документ, которому отправляется сигнал

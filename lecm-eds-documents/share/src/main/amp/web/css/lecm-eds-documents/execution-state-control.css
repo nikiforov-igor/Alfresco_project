@@ -1,0 +1,11 @@
+.execution-state.control .execution-statistics-icon.collapsed {
+    background: transparent url(../../components/images/collapsed.png) no-repeat scroll left center;
+}
+
+.execution-state.control .execution-statistics-icon.expanded {
+    background: transparent url(../../components/images/expanded.png) no-repeat scroll left center;
+}
+
+.execution-state.control a.execution-state-value {
+    padding-left: 10px;
+}

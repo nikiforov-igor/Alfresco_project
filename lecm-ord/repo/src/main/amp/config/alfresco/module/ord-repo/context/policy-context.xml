@@ -28,4 +28,14 @@
 		  p:stateMachineService-ref="stateMachineHelper"
 		  p:lecmPermissionService-ref="lecmPermissionServiceBean"/>
 
+	<util:constant static-field="ru.it.lecm.ord.api.ORDModel.TYPE_ORD" id="ordTypeQName"/>
+
+	<bean  id="ord.ORDExecutionStatePolicy" class="ru.it.lecm.eds.policy.ExecutionStatePolicy"
+		   init-method="init" depends-on="ord.document.models.bootstrap, eds.models.bootstrap">
+		<property name="nodeService" ref="nodeService"/>
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="stateMachineService" ref="stateMachineHelper"/>
+		<property name="errandsService" ref="errandsService"/>
+		<property name="typeQName" ref="ordTypeQName"/>
+	</bean>
 </beans>

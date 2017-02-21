@@ -10,6 +10,17 @@
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
     </namespaces>
+    <constraints>
+        <constraint name="lecm-eds-aspect:execution-state-const" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>IN_PROCESS</value>
+                    <value>COMPLETE</value>
+                    <value>NOT_REQUIRED</value>
+                </list>
+            </parameter>
+        </constraint>
+    </constraints>
 
     <aspects>
         <aspect name="lecm-eds-aspect:child-change-signal">
@@ -66,6 +77,27 @@
                     </target>
                 </association>
             </associations>
+        </aspect>
+        <aspect name="lecm-eds-aspect:execution-state-aspect">
+            <properties>
+                <!-- состояние исполнения -->
+                <property name="lecm-eds-aspect:execution-state">
+                    <type>d:text</type>
+                    <default>NOT_REQUIRED</default>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                    <constraints>
+                        <constraint ref="lecm-eds-aspect:execution-state-const"/>
+                    </constraints>
+                </property>
+                <!-- json {["статус": "кол-во"]}-->
+                <property name="lecm-eds-aspect:execution-statistics">
+                    <type>d:text</type>
+                </property>
+            </properties>
         </aspect>
     </aspects>
 </model>
