@@ -171,7 +171,7 @@
         <property name="documentConnectionService" ref="documentConnectionService"/>
     </bean>
 
-    <bean id="resolutionBaseDocumentType" parent="baseDocumentTypeBean" depends-on="resolutions.LogicEcmBootstrap">
+    <bean id="resolutionBaseDocumentType" parent="edsBaseDocumentTypeBean" depends-on="resolutions.LogicEcmBootstrap">
         <property name="type" value="lecm-resolutions:document"/>
         <property name="assocBaseDocumentType" value="lecm-resolutions:base-document-assoc"/>
     </bean>

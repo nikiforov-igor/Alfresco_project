@@ -168,7 +168,7 @@
 		<property name="id" value="FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE"/>
 		<property name="dictionaryBean" ref="serviceDictionary"/>
 	</bean>
-	<bean id="baseDocumentTypeBean" class="ru.it.lecm.eds.policy.EDSBaseDocumentTypePolicy"
+	<bean id="edsBaseDocumentTypeBean" class="ru.it.lecm.eds.policy.EDSBaseDocumentTypePolicy"
 		  init-method="init" abstract="true">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
