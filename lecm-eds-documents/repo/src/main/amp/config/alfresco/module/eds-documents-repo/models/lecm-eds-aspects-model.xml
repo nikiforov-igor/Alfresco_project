@@ -96,6 +96,7 @@
                 <!-- json {["статус": "кол-во"]}-->
                 <property name="lecm-eds-aspect:execution-statistics">
                     <type>d:text</type>
+                    <index enabled="false"/>
                 </property>
             </properties>
         </aspect>

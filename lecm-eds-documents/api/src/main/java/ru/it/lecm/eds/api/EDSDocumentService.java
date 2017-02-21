@@ -53,7 +53,11 @@ public interface EDSDocumentService {
     QName PROP_EXECUTION_STATISTICS = QName.createQName(EDS_ASPECTS_NAMESPACE_URI,"execution-statistics");
 
     enum EXECUTION_STATE{
-        IN_PROCESS,COMPLETE,NOT_REQUIRED
+        IN_PROCESS,COMPLETE,NOT_REQUIRED;
+
+        public static EXECUTION_STATE computeState(boolean allFinal, boolean anyExecuted, boolean inProcess){
+            return inProcess ? IN_PROCESS : allFinal && anyExecuted ? COMPLETE : NOT_REQUIRED;
+        }
     }
     /**
      * Отправка сигнала об изменении дочерних документов

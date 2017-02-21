@@ -6,6 +6,11 @@
     background: transparent url(../../components/images/expanded.png) no-repeat scroll left center;
 }
 
-.execution-state.control a.execution-state-value {
+.execution-state.control .execution-state-value {
     padding-left: 10px;
+    color: #303030;
+}
+
+.execution-state.control .value-div span {
+    vertical-align: -webkit-baseline-middle;
 }

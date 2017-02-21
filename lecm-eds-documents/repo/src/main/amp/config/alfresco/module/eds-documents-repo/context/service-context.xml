@@ -169,4 +169,12 @@
 		<property name="id" value="FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE"/>
 		<property name="dictionaryBean" ref="serviceDictionary"/>
 	</bean>
+	<bean id="edsDocumentBaseBean" class="ru.it.lecm.eds.beans.EdsDocumentBaseBean" abstract="true"
+		  depends-on="nodeService, policyComponent, stateMachineHelper, errandsService, namespaceService" >
+		<property name="nodeService" ref="nodeService"/>
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="stateMachineService" ref="stateMachineHelper"/>
+		<property name="errandsService" ref="errandsService"/>
+		<property name="namespaceService" ref="namespaceService"/>
+	</bean>
 </beans>

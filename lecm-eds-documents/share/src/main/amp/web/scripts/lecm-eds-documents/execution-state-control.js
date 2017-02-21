@@ -15,11 +15,17 @@ LogicECM.module = LogicECM.module || {};
 
     YAHOO.extend(LogicECM.module.ExecutionStateControl, Alfresco.component.Base,
         {
+            statisticsLoaded: false,
+
             options: {
                 documentNodeRef: null,
                 formId: null,
                 fieldId: null,
-                value: null
+                value: null,
+                expandable: true,
+                showEmptyStatuses: false,
+                statusesOrder: null,
+                statisticsField: null
             },
 
             onReady: function () {
@@ -28,13 +34,30 @@ LogicECM.module = LogicECM.module || {};
                         url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                         dataObj: {
                             nodeRef: this.options.documentNodeRef,
-                            substituteString: "{lecm-eds-aspect:execution-state}"
+                            substituteString: "{" + this.options.fieldId + "}"
                         },
                         successCallback: {
                             fn: function (response) {
                                 if (response && response.json.formatString) {
                                     Dom.get(this.id + "-displayValue").innerHTML = response.json.formatString;
-                                    this.loadStatistics();
+                                    if (this.options.expandable) {
+                                        Event.addListener(this.id + "-displayValue", "click", function () {
+                                            var statisticsBlock = Dom.get(this.id + "-statistics");
+                                            var iconSpan = Dom.get(this.id + "-displayValue").parentElement;
+                                            if (statisticsBlock.classList.contains("hidden1")) {
+                                                if (!this.statisticsLoaded) {
+                                                    this.loadStatistics();
+                                                }
+                                                Dom.removeClass(statisticsBlock, "hidden1");
+                                                Dom.removeClass(iconSpan, "collapsed");
+                                                Dom.addClass(iconSpan, "expanded");
+                                            } else {
+                                                Dom.addClass(statisticsBlock, "hidden1");
+                                                Dom.removeClass(iconSpan, "expanded");
+                                                Dom.addClass(iconSpan, "collapsed");
+                                            }
+                                        }, this, true);
+                                    }
                                 }
                             },
                             scope: this
@@ -50,13 +73,14 @@ LogicECM.module = LogicECM.module || {};
                     url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                     dataObj: {
                         nodeRef: this.options.documentNodeRef,
-                        substituteString: "{lecm-eds-aspect:execution-statistics}"
+                        substituteString: "{" + this.options.statisticsField + "}"
                     },
                     successCallback: {
                         fn: function (response) {
                             if (response && response.json.formatString) {
                                 executionStatistics = JSON.parse(response.json.formatString);
                                 if (executionStatistics) {
+                                    this.statisticsLoaded = true;
                                     this.drawStats(executionStatistics);
                                 }
                             }
@@ -69,53 +93,33 @@ LogicECM.module = LogicECM.module || {};
             },
             drawStats: function (statistics) {
                 var ul = document.createElement("ul");
-                var temp = {};
-                Object.keys(statistics).forEach(function (key) {
-                    if (statistics[key] > 0) {
-                        var html = key + ": " + statistics[key];
-                        if (key == "Ожидает исполнения") {
-                            temp["1"] = html;
-                        }
-                        if (key == "На исполнении") {
-                            temp["2"] = html;
-                        }
-                        if (key == "На доработке") {
-                            temp["3"] = html;
-                        }
-                        if (key == "На контроле") {
-                            temp["4"] = html;
-                        }
-                        if (key == "Исполнено") {
-                            temp["5"] = html;
-                        }
-                        if (key == "Отменено") {
-                            temp["6"] = html;
+                var order = this.options.statusesOrder;
+                if (order && order instanceof Array && order.length) {
+                    for (var i = 0; i < order.length; i++) {
+                        if (!statistics[order[i]] && !this.options.showEmptyStatuses) {
+                            continue;
+                        } else {
+                            ul.appendChild(this.getStatisticsItemView(statistics, status));
                         }
                     }
-                });
-                Object.keys(temp).sort(function (a, b) {
-                    return parseInt(a) > parseInt(b);
-                }).forEach(function (key) {
-                    var li = document.createElement("li");
-                    li.innerHTML = temp[key];
-                    ul.appendChild(li);
-                });
-
+                } else {
+                    var statuses = Object.keys(statistics);
+                    for (var i = 0; i < statuses.length; i++) {
+                        if (!statistics[statuses[i]] && !this.options.showEmptyStatuses) {
+                            continue;
+                        } else {
+                            ul.appendChild(this.getStatisticsItemView(statistics, statuses[i]));
+                        }
+                    }
+                }
                 var statisticsBlock = Dom.get(this.id + "-statistics");
                 statisticsBlock.append(ul);
-                var iconSpan = Dom.get(this.id + "-displayValue").parentElement;
-                Event.addListener(this.id + "-displayValue", "click", function () {
-                    if (statisticsBlock.classList.contains("hidden1")) {
-                        Dom.removeClass(statisticsBlock, "hidden1");
-                        Dom.removeClass(iconSpan, "collapsed");
-                        Dom.addClass(iconSpan, "expanded");
+            },
 
-                    } else {
-                        Dom.addClass(statisticsBlock, "hidden1");
-                        Dom.removeClass(iconSpan, "expanded");
-                        Dom.addClass(iconSpan, "collapsed");
-                    }
-                });
+            getStatisticsItemView: function (statistics, status) {
+                var li = document.createElement("li");
+                li.innerHTML = status + ": " + statistics[status];
+                return li;
             }
         });
 })();

@@ -9,75 +9,41 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.json.simple.JSONObject;
 import ru.it.lecm.eds.api.EDSDocumentService;
+import ru.it.lecm.eds.beans.EdsDocumentBaseBean;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Created by APanyukov on 20.02.2017.
  */
-public class ExecutionStatePolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy {
+public class ExecutionStatePolicy extends EdsDocumentBaseBean implements NodeServicePolicies.OnUpdatePropertiesPolicy {
 
-    private PolicyComponent policyComponent;
-    private NodeService nodeService;
-    private StateMachineServiceBean stateMachineService;
-    private ErrandsService errandsService;
-    private QName typeQName;
+    private String type;
+    private String statusesOrder;
 
-    public QName getTypeQName() {
-        return typeQName;
+    public String getType() {
+        return type;
     }
 
-    public void setTypeQName(QName typeQName) {
-        this.typeQName = typeQName;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public ErrandsService getErrandsService() {
-        return errandsService;
+    public String getStatusesOrder() {
+        return statusesOrder;
     }
 
-    public void setErrandsService(ErrandsService errandsService) {
-        this.errandsService = errandsService;
-    }
-
-    public PolicyComponent getPolicyComponent() {
-        return policyComponent;
-    }
-
-    public void setPolicyComponent(PolicyComponent policyComponent) {
-        this.policyComponent = policyComponent;
-    }
-
-    public NodeService getNodeService() {
-        return nodeService;
-    }
-
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
-
-    public StateMachineServiceBean getStateMachineService() {
-        return stateMachineService;
-    }
-
-    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
-        this.stateMachineService = stateMachineService;
+    public void setStatusesOrder(String statusesOrder) {
+        this.statusesOrder = statusesOrder;
     }
 
     public final void init() {
-        PropertyCheck.mandatory(this, "nodeService", nodeService);
-        PropertyCheck.mandatory(this, "policyComponent", policyComponent);
-        PropertyCheck.mandatory(this, "stateMachineService", stateMachineService);
-        PropertyCheck.mandatory(this, "errandsService", errandsService);
-
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-                typeQName, new JavaBehaviour(this, "onUpdateProperties"));
+                QName.createQName(type, namespaceService), new JavaBehaviour(this, "onUpdateProperties"));
 
     }
 
@@ -91,30 +57,43 @@ public class ExecutionStatePolicy implements NodeServicePolicies.OnUpdatePropert
             JSONObject json = new JSONObject();
             List<NodeRef> childErrands = errandsService.getChildErrands(nodeRef);
             if (childErrands != null && childErrands.size() != 0) {
-                List<String> statuses = stateMachineService.getStatuses(ErrandsService.TYPE_ERRANDS, true, true);
-                Map<String, Integer> errandsCountByStatus = new HashMap<>();
+                List<String> statuses;
+                if (statusesOrder != null && !Objects.equals(statusesOrder, "")) {
+                    statuses = Arrays.asList(statusesOrder.split(","));
+                } else {
+                    statuses = stateMachineService.getStatuses(ErrandsService.TYPE_ERRANDS, true, true);
+                }
+                Map<String, Integer> errandsCountByStatus = new LinkedHashMap<>();
+                for (String status : statuses) {
+                    errandsCountByStatus.put(status, 0);
+                }
                 Boolean inProcess = false;
                 Boolean isAnyExecuted = false;
-                int finalCount = 0;
+                Boolean allFinal = true;
+
                 for (NodeRef errand : childErrands) {
-                    for (String status : statuses) {
-                        if (nodeService.getProperty(errand, StatemachineModel.PROP_STATUS).equals(status)) {
-                            if (errandsCountByStatus.containsKey(status)) {
-                                errandsCountByStatus.put(status, errandsCountByStatus.get(status) + 1);
-                            } else {
-                                errandsCountByStatus.put(status, 1);
-                            }
+                    String errandStatus = (String) nodeService.getProperty(errand, StatemachineModel.PROP_STATUS);
+                    if (statuses.contains(errandStatus)) {
+                        if (errandsCountByStatus.containsKey(errandStatus)) {
+                            errandsCountByStatus.put(errandStatus, errandsCountByStatus.get(errandStatus) + 1);
+                        } else {
+                            errandsCountByStatus.put(errandStatus, 1);
                         }
                     }
-                    inProcess = !stateMachineService.isDraft(errand) && !stateMachineService.isFinal(errand);
-                    isAnyExecuted = nodeService.getProperty(errand, StatemachineModel.PROP_STATUS).equals("Исполнено");
-                    if (stateMachineService.isFinal(errand)) {
-                        finalCount++;
+                    if (!inProcess) {
+                        inProcess = !stateMachineService.isDraft(errand) && !stateMachineService.isFinal(errand);
+                    }
+                    if (!isAnyExecuted) {
+                        isAnyExecuted = errandStatus.equals("Исполнено");
+                    }
+                    if (!stateMachineService.isFinal(errand)) {
+                        allFinal = false;
                     }
                 }
-                Boolean allFinal = finalCount == childErrands.size();
-                executionState = inProcess ? String.valueOf(EDSDocumentService.EXECUTION_STATE.IN_PROCESS) : allFinal && isAnyExecuted ? String.valueOf(EDSDocumentService.EXECUTION_STATE.COMPLETE) : executionState;
-                json.putAll(errandsCountByStatus);
+                executionState = String.valueOf(EDSDocumentService.EXECUTION_STATE.computeState(allFinal, isAnyExecuted, inProcess));
+                for (Map.Entry<String, Integer> entry : errandsCountByStatus.entrySet()) {
+                    json.put(entry.getKey(), entry.getValue());
+                }
             }
             nodeService.setProperty(nodeRef, EDSDocumentService.PROP_EXECUTION_STATE, executionState);
             nodeService.setProperty(nodeRef, EDSDocumentService.PROP_EXECUTION_STATISTICS, json.toJSONString());
