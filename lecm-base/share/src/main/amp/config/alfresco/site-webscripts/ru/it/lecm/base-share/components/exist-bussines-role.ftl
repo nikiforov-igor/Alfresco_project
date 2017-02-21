@@ -51,48 +51,46 @@
         var isBRole = (brPermission.indexOf("~") < 0);
         brPermission = brPermission.replace("!", "").replace("~", "");
 
-        Alfresco.util.Ajax.request(
-                {
-                    url: Alfresco.constants.PROXY_URI + (isBRole ? "lecm/orgstructure/isCurrentEmployeeHasBusinessRole" : "lecm/security/api/getPermission"),
-                    dataObj: {
-                        nodeRef: "${form.arguments.itemId}",
-                        roleId: brPermission,
-                        permission: brPermission
-                    },
-                    successCallback: {
-                        fn: function (response) {
-                            if ((notCase && response.json != false) || (!notCase && response.json == false)) {
-                                // НЕ УДАЛАЯТЬ!
-                                // Для карточки сотрудника:
-                                // показывать содержимое, если сотрудник просматривает свою карточку, иначе - скрыть
-                                Alfresco.util.Ajax.request(
-                                        {
-                                            url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getCurrentEmployee",
-                                            successCallback: {
-                                                fn: function (response) {
-                                                    var emplNodeRef = response.json.nodeRef;
-                                                    var formNodeRef = "${form.arguments.itemId}";
+        Alfresco.util.Ajax.jsonGet({
+			url: Alfresco.constants.PROXY_URI + (isBRole ? "lecm/orgstructure/isCurrentEmployeeHasBusinessRole" : "lecm/security/api/getPermission"),
+			dataObj: {
+				nodeRef: "${form.arguments.itemId}",
+				roleId: brPermission,
+				permission: brPermission
+			},
+			successCallback: {
+				fn: function (response) {
+					if ((notCase && response.json === true) || (!notCase && response.json === false)) {
+						// НЕ УДАЛАЯТЬ!
+						// Для карточки сотрудника:
+						// показывать содержимое, если сотрудник просматривает свою карточку, иначе - скрыть
+						Alfresco.util.Ajax.jsonGet({
+							url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getCurrentEmployee",
+							successCallback: {
+								fn: function (response) {
+									var emplNodeRef = response.json.nodeRef;
+									var formNodeRef = "${form.arguments.itemId}";
 
-                                                    if (emplNodeRef != formNodeRef) {
-                                                          hidePanel();
-                                                    }
-                                                }
-                                            },
-                                            failureMessage: {
-                                                fn: function () {
-                                                    console.log("Failed to load current Employee.");
-                                                }
-                                            }
-                                        });
-                            }
-                        }
-                    },
-                    failureMessage: {
-                        fn: function (response) {
-                            alert(response.responseText);
-                        }
-                    }
-                });
+									if (emplNodeRef != formNodeRef) {
+										  hidePanel();
+									}
+								}
+							},
+                            failureCallback: {
+								fn: function () {
+									console.log("Failed to load current Employee.");
+								}
+							}
+						});
+					}
+				}
+			},
+			failureCallback: {
+				fn: function () {
+					console.log("Failed to load current Employee.");
+				}
+			}
+		});
     }
 
     Event.onContentReady(idPanel, init);

@@ -1,4 +1,4 @@
-<#escape x as x?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 [
 	<@build nodes=units/>
 ]
@@ -21,4 +21,3 @@
 		}<#if unit_has_next>,</#if>
 	</#list>
 </#macro>
-

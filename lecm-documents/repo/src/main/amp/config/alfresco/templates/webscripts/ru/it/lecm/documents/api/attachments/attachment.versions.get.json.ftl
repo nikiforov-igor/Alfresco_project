@@ -1,4 +1,4 @@
-<#escape x as (x!"")?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 [
 	<#if versions??>
 		<#list versions as version>

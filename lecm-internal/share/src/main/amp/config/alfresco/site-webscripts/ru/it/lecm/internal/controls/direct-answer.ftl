@@ -63,19 +63,21 @@
                 },
 
                 onReady: function Toolbar_onReady() {
-                    var me = this;
-                    var url = Alfresco.constants.PROXY_URI + "lecm/document-type/settings?docType=lecm-internal:document";
-                    var callback = {
-                        success: function (oResponse) {
-                            var oResults = eval("(" + oResponse.responseText + ")");
-                            me.destination = oResults.nodeRef;
+                    var url = Alfresco.constants.PROXY_URI + "lecm/document-type/settings";
+                    Alfresco.util.Ajax.jsonGet({
+                        url: url,
+                        dataObj: {
+                            docType: "lecm-internal:document"
                         },
-                        argument: {
-                            parent: this
-                        },
-                        timeout: 60000
-                    };
-                    YAHOO.util.Connect.asyncRequest('GET', url, callback);
+                        successCallback: {
+                            scope: this,
+                            fn: function (response) {
+                                if (response.json && response.json.nodeRef) {
+                                    this.destination = response.json.nodeRef;
+                                }
+                            }
+                        }
+                    });
 
                     YAHOO.util.Event.on(this.id + "-first-selector", "click", this.onFirst, null, this);
                     YAHOO.util.Event.on(this.id + "-second-selector", "click", this.onSecond, null, this);

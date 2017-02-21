@@ -14,8 +14,7 @@
             }).setMessages(${messages});
 
     new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
-    Alfresco.util.Ajax.jsonRequest({
-        method: "GET",
+    Alfresco.util.Ajax.jsonGet({
         url: Alfresco.constants.PROXY_URI + "lecm/errands/dashlet/settings/url",
         dataObj: {},
         successCallback: {

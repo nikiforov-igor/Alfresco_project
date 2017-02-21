@@ -2,7 +2,7 @@
 	<shortname>Получить список зарегистрированных в системе типов документов</shortname>
 	<description>Получить список зарегистрированных в системе типов документов</description>
 	<url>/lecm/documents/types</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>none</authentication>
 	<transaction allow="readonly">required</transaction>
 </webscript>

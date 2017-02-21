@@ -35,20 +35,21 @@
                     }
 
                     function loadDictionary() {
-                        var sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent("Категория события");
-
-                        var callback = {
-                            success: function (oResponse) {
-                                var oResults = eval("(" + oResponse.responseText + ")");
-                                if (oResults != null) {
-                                        createDatagrid(oResults);
+                        Alfresco.util.Ajax.jsonGet({
+                            url: Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary",
+                            dataObj: {
+                                dicName: "Категория события"
+                            },
+                            successCallback: {
+                                scope: this,
+                                fn: function (response) {
+                                    if (response.json) {
+                                        createDatagrid(response.json);
+                                    }
                                 }
                             },
-                            failure: function (oResponse) {
-                                alert("Справочник не был загружен. Попробуйте обновить страницу.");
-                            }
-                        };
-                        YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                            failureMessage: "${msg('message.dictionary.wasnt.load')}"
+                        });
                     }
 
                     function init() {

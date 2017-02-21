@@ -2,7 +2,7 @@
     <shortname>unit childrens</shortname>
     <description>Return all unit childrens</description>
     <url>/lecm/orgstructure/api/getUnitChildren?nodeRef={nodeRef}&amp;onlyActive={onlyActive}</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction allow="readonly">required</transaction>
 </webscript>

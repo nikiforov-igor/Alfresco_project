@@ -44,25 +44,24 @@
 	<script type="text/javascript">//<![CDATA[
 	    (function () {
 		    function updateFilterCount(query, filterId, containerId) {
-			    Alfresco.util.Ajax.request(
-					    {
-						    url: Alfresco.constants.PROXY_URI_RELATIVE  + "lecm/contracts/additionalDocsCount",
-						    dataObj:{
-							    type: query,
-							    considerFilter: filterId,
-							    active: "${args.active?string}"
-						    },
-						    successCallback:{
-							    fn:function(response){
-								    var result = response.json;
-								    if (result){
-									    YAHOO.util.Dom.get(containerId).innerHTML = result.length;
-								    }
-							    }
-						    },
-						    failureMessage:"message.failure",
-						    execScripts:true
-					    });
+			    Alfresco.util.Ajax.jsonGet({
+					url: Alfresco.constants.PROXY_URI_RELATIVE  + "lecm/contracts/additionalDocsCount",
+					dataObj:{
+						type: query,
+						considerFilter: filterId,
+						active: "${args.active?string}"
+					},
+					successCallback:{
+						fn:function(response){
+							var result = response.json;
+							if (result){
+								YAHOO.util.Dom.get(containerId).innerHTML = result.length;
+							}
+						}
+					},
+					failureMessage: "${msg("message.failure")}",
+					execScripts:true
+				});
 		    }
 
 	        function updateFilterSelect(containerId, query) {

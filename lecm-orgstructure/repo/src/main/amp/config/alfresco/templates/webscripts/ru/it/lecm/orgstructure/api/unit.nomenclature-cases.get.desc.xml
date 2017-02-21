@@ -2,7 +2,7 @@
     <shortname>unit staff list positions</shortname>
     <description>Return all unit staff-list positions</description>
     <url>/lecm/orgstructure/api/hasUnitNomenclatureCases?nodeRef={nodeRef}</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction allow="readonly">required</transaction>
 </webscript>

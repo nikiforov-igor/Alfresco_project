@@ -207,60 +207,58 @@ LogicECM.control = LogicECM.control || {};
 			},
 
 			loadPermissions: function() {
-				Alfresco.util.Ajax.jsonGet(
-					{
-						url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/security/api/getPermissions?nodeRef=" + encodeURIComponent(this.options.itemNodeRef) + "&permissions=" + encodeURIComponent("_lecmPerm_ContentList,_lecmPerm_ContentAddVer,_lecmPerm_ContentAdd,_lecmPerm_ContentDelete"),
-						successCallback:
-						{
-							fn: function (response) {
-								var oResults = response.json;
-								if (oResults != null && oResults.length == 4) {
-									this.hasViewContentRight = response.json[0];
-									this.hasNewVersionContentRight = response.json[1];
-									this.hasAddContentRight = response.json[2];
-									this.hasDeleteContentRight = response.json[3];
+				Alfresco.util.Ajax.jsonGet({
+					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/security/api/getPermissions",
+					dataObj: {
+						nodeRef: this.options.itemNodeRef,
+						permissions: "_lecmPerm_ContentList,_lecmPerm_ContentAddVer,_lecmPerm_ContentAdd,_lecmPerm_ContentDelete"
+					},
+					successCallback: {
+						scope: this,
+						fn: function (response) {
+							var oResults = response.json;
+							if (oResults && oResults.length == 4) {
+								this.hasViewContentRight = response.json[0];
+								this.hasNewVersionContentRight = response.json[1];
+								this.hasAddContentRight = response.json[2];
+								this.hasDeleteContentRight = response.json[3];
 
-									if (this.hasViewContentRight) {
-										this.loadSelectedItems();
-									}
-
-									if (this.hasAddContentRight) {
-										Dom.removeClass(this.id + "-uploader-block", "hidden");
-									}
+								if (this.hasViewContentRight) {
+									this.loadSelectedItems();
 								}
-							},
-							scope: this
-						},
-						failureMessage: "message.failure"
-					});
+
+								if (this.hasAddContentRight) {
+									Dom.removeClass(this.id + "-uploader-block", "hidden");
+								}
+							}
+						}
+					},
+					failureMessage: this.msg("message.failure")
+				});
 			},
 
 			loadRootNode: function () {
-				Alfresco.util.Ajax.jsonGet(
-					{
-						url: this.generateRootUrlPath(),
-						successCallback:
-						{
-							fn: function (response) {
-								var oResults = response.json;
-								if (oResults != null) {
-									this.rootNodeRef = oResults.nodeRef;
-									this.initUploader();
-								}
-							},
-							scope: this
+				Alfresco.util.Ajax.jsonGet({
+					url: this.generateRootUrlPath(),
+					successCallback: {
+						fn: function (response) {
+							var oResults = response.json;
+							if (oResults) {
+								this.rootNodeRef = oResults.nodeRef;
+								this.initUploader();
+							}
 						},
-						failureCallback:
-						{
-							fn: function (oResponse) {
-								Alfresco.util.PopupManager.displayPrompt(
-									{
-										text: this.msg("message.load.dnd-uploader.failure")
-									});
-							},
-							scope: this
-						}
-					});
+						scope: this
+					},
+					failureCallback: {
+						fn: function (oResponse) {
+							Alfresco.util.PopupManager.displayPrompt({
+								text: this.msg("message.load.dnd-uploader.failure")
+							});
+						},
+						scope: this
+					}
+				});
 			},
 
 			generateRootUrlPath: function () {

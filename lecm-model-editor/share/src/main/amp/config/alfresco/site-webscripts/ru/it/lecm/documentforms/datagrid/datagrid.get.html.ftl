@@ -68,28 +68,30 @@
 			}
 
 			function showFormsDatagrid() {
-				Alfresco.util.Ajax.jsonGet(
-						{
-							url: Alfresco.constants.PROXY_URI + "/lecm/docforms/root?modelName=" + encodeURIComponent("${doctype!""}"),
-							successCallback: {
-								fn: function (response) {
-									var oResults = response.json;
-									if (oResults != null && oResults.nodeRef != null) {
-										datagrid.options.datagridMeta = {
-											useFilterByOrg: false,
-											itemType: "lecm-forms-editor:form",
-											nodeRef: oResults.nodeRef,
-											actionsConfig:{
-												fullDelete:true
-											}
-										};
-										datagrid.draw();
+				Alfresco.util.Ajax.jsonGet({
+					url: Alfresco.constants.PROXY_URI + "/lecm/docforms/root",
+                    dataObj: {
+                        modelName: "${doctype!""}"
+                    },
+					successCallback: {
+                        scope: this,
+						fn: function (response) {
+							var oResults = response.json;
+							if (oResults && oResults.nodeRef) {
+								datagrid.options.datagridMeta = {
+									useFilterByOrg: false,
+									itemType: "lecm-forms-editor:form",
+									nodeRef: oResults.nodeRef,
+									actionsConfig: {
+										fullDelete: true
 									}
-								},
-								scope: this
-							},
-							failureMessage: "message.failure"
-						});
+								};
+								datagrid.draw();
+							}
+						}
+					},
+					failureMessage: "${msg("message.failure")}"
+				});
 			}
 
 			YAHOO.util.Event.onDOMReady(initFormEditor);

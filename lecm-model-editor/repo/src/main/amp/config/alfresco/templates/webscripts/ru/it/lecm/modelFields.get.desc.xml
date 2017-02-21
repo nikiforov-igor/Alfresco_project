@@ -4,7 +4,7 @@
 	formNodeRef
 	</description>
 	<url>/lecm/docforms/fields?formNodeRef={formNodeRef}</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>user</authentication>
 	<transaction allow="readonly">required</transaction>
 </webscript>

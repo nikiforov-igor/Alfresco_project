@@ -1,7 +1,7 @@
 <#if msg?? && msg?length gt 0>
     "${msg}"
 <#else>
-    <#escape x as x?js_string>
+    <#escape x as jsonUtils.encodeJSONString(x)!''>
     {
         "rating": "${rating!0}",
         "ratedPersonsCount": "${ratedPersonsCount!0}",

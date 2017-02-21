@@ -1,4 +1,4 @@
-<#escape x as jsonUtils.encodeJSONString(x)>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 {
 	"chief": "${chief?js_string}",
 	"newTasksSecretary": "${newTasksSecretary?js_string}",

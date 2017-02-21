@@ -102,41 +102,49 @@ LogicECM.module = LogicECM.module || {};
                 nodeRef:encodeURI(this.cDoc)
             });
 
-            var callback = {
-                success:function (oResponse) {
-                    var oExperts = eval("(" + oResponse.responseText + ")");
-                    oResponse.argument.context.addExperts(oExperts);
-                    oResponse.argument.context.button.set('disabled', false);
+            Alfresco.util.Ajax.jsonGet({
+                url: serviceUrl,
+                successCallback: {
+                    fn: function (response) {
+                        this.addExperts(response.json);
+                        this.button.set('disabled', false);
+                    },
+                    scope: this
                 },
-                failure:function (o) {
-                    alert("Failed to get experts. " + "[" + o.statusText + "]");
-                    o.argument.context.button.set('disabled', false);
-                },
-                argument:{
-                    context:this
+                failureCallback: {
+                    fn: function (response) {
+						Alfresco.util.PopupManager.displayMessage({
+                            text: "Failed to get experts. " + "[" + response.statusText + "]"
+                        });
+                        this.button.set('disabled', false);
+                    },
+                    scope: this
                 }
-            };
-            YAHOO.util.Connect.asyncRequest('GET', serviceUrl, callback);
+            });
         },
         _loadTable:function () {
             var sUrl = Alfresco.constants.PROXY_URI + this.getService;
-            if (this.cDoc != null) {
+            if (this.cDoc) {
                 sUrl += "?nodeRef=" + encodeURI(this.cDoc);
             }
-            var callback = {
-                success:function (oResponse) {
-                    var oResults = eval("(" + oResponse.responseText + ")");
-                    oResponse.argument.context.addExperts(oResults);
-                    oResponse.argument.context._draw();
+            Alfresco.util.Ajax.jsonGet({
+                url: sUrl,
+                successCallback: {
+                    fn: function (response) {
+						this.addExperts(response.json);
+                        this._draw();
+                    },
+                    scope: this
                 },
-                failure:function (oResponse) {
-                    alert("Failed to load experts. " + "[" + oResponse.statusText + "]");
-                },
-                argument:{
-                    context:this
+                failureCallback: {
+                    fn: function (response) {
+                        Alfresco.util.PopupManager.displayMessage({
+                            text: "Failed to load experts. " + "[" + response.statusText + "]"
+                        });
+                    },
+                    scope: this
                 }
-            };
-            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+            });
         }
     });
 })();

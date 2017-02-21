@@ -1,10 +1,10 @@
-<#escape x as x?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 {
-    nodeRef: "${nodeRef}",
-    draftPath: "${draftPath}",
-    documentPath: "${documentPath}",
-    archivePath: "${archivePath}",
-    defaultFilter: "${defaultFilter}",
-    defaultKey: "${defaultKey}"
+    "nodeRef": "${nodeRef}",
+    "draftPath": "${draftPath}",
+    "documentPath": "${documentPath}",
+    "archivePath": "${archivePath}",
+    "defaultFilter": "${defaultFilter}",
+    "defaultKey": "${defaultKey}"
 }
 </#escape>
