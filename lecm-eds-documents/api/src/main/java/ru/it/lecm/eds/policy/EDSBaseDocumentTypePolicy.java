@@ -72,6 +72,6 @@ public class EDSBaseDocumentTypePolicy implements NodeServicePolicies.OnCreateAs
 
     @Override
     public void onDeleteAssociation(AssociationRef associationRef) {
-        nodeService.setProperty(associationRef.getSourceRef(), EDSDocumentService.PROP_BASE_DOCUMENT_TYPE, "Без документа-основания");
+        nodeService.removeAspect(associationRef.getSourceRef(), EDSDocumentService.ASPECT_BASE_DOCUMENT_TYPE);
     }
 }

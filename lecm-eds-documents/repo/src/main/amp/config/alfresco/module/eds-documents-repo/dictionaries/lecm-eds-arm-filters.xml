@@ -79,7 +79,7 @@
                 <property name="lecm-arm:filter-code">BY_BASE_DOCUMENT_TYPE</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
-                <property name="lecm-arm:filter-values">@lecm\\-eds\\-aspect:base\\-document\\-type:'Входящий документ'|Входящие,@lecm\\-eds\\-aspect:base\\-document\\-type:'Внутренний документ'|Внутренние,@lecm\\-eds\\-aspect:base\\-document\\-type:'Исходящий документ'|Исходящие,@lecm\\-eds\\-aspect:base\\-document\\-type:'ОРД'|ОРД,@lecm\\-eds\\-aspect:base\\-document\\-type:'НД'|НД,@lecm\\-eds\\-aspect:base\\-document\\-type:'Протокол'|Протоколы,@lecm\\-eds\\-aspect:base\\-document\\-type:'Поручение'|Поручения,(NOT ASPECT:'lecm-eds-aspect:base-document-type-aspect' OR @lecm\\-eds\\-aspect:base\\-document\\-type:'Без документа-основания')|Без документа-основания</property>
+                <property name="lecm-arm:filter-values">@lecm\\-eds\\-aspect:base\\-document\\-type:'Входящий документ'|Входящие,@lecm\\-eds\\-aspect:base\\-document\\-type:'Внутренний документ'|Внутренние,@lecm\\-eds\\-aspect:base\\-document\\-type:'Исходящий документ'|Исходящие,@lecm\\-eds\\-aspect:base\\-document\\-type:'ОРД'|ОРД,@lecm\\-eds\\-aspect:base\\-document\\-type:'НД'|НД,@lecm\\-eds\\-aspect:base\\-document\\-type:'Протокол'|Протоколы,@lecm\\-eds\\-aspect:base\\-document\\-type:'Поручение'|Поручения,NOT ASPECT:'lecm-eds-aspect:base-document-type-aspect'|Без документа-основания</property>
                 <property name="lecm-arm:filter-query">#value</property>
             </item>
         </items>

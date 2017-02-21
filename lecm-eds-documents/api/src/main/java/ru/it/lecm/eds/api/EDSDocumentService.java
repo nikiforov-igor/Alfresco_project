@@ -48,6 +48,7 @@ public interface EDSDocumentService {
     QName PROP_COMPLETION_SIGNAL_CLOSE_CHILD = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "completion-signal-close-child");
     QName ASPECT_COMPLETION_SIGNAL = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "completion-signal-aspect");
 
+    QName ASPECT_BASE_DOCUMENT_TYPE = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "base-document-type-aspect");
     QName PROP_BASE_DOCUMENT_TYPE = QName.createQName(EDS_ASPECTS_NAMESPACE_URI, "base-document-type");
 
     /**
