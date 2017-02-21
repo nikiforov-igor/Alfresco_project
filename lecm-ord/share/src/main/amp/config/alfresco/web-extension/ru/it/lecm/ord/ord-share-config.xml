@@ -622,7 +622,7 @@
                 <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-ord-table-structure:title"/>
-                    <show id="lecm-ord-table-structure:content"/>
+                    <show id="lecm-ord-table-structure:item-content"/>
                     <show id="lecm-ord-table-structure:executor-assoc"/>
                     <show id="lecm-ord-table-structure:coexecutors-assoc"/>
                     <show id="lecm-ord-table-structure:report-required"/>
@@ -635,17 +635,17 @@
                     <show id="lecm-ord-table-structure:limitation-date-days" />
                     <show id="lecm-ord-table-structure:limitation-date-type"/>
                     <show id="lecm-ord-table-structure:execution-date" />
-                    <show id="lecm-ord-table-structure:status-assoc"/>
+                    <show id="lecm-ord-table-structure:item-status-assoc"/>
                     <show id="lecm-ord-table-structure:errand-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <set id="limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
+                    <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="bottom"/>
 
                     <field id="lecm-document:indexTableRow" mandatory="true"/>
                     <field id="lecm-ord-table-structure:controller-assoc" set="bottom"/>
                     <field id="lecm-ord-table-structure:subject-assoc" set="bottom"/>
-                    <field id="lecm-ord-table-structure:status-assoc" set="bottom"/>
+                    <field id="lecm-ord-table-structure:item-status-assoc" set="bottom"/>
                     <field id="lecm-ord-table-structure:limitation-date-radio" set="limitation-date"  mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DAYS</control-param>
@@ -684,16 +684,16 @@
                         </control>
                     </field>
                     <field id="lecm-ord-table-structure:report-required" read-only="true" />
-                    <field id="lecm-ord-table-structure:status-assoc" read-only="true" set="bottom"/>
+                    <field id="lecm-ord-table-structure:item-status-assoc" read-only="true" set="bottom"/>
                     <field id="lecm-ord-table-structure:errand-assoc" read-only="true" set="bottom"/>
                 </appearance>
             </form>
             <form id="table-structure-info">
                 <field-visibility>
-                    <show id="lecm-ord-table-structure:content"/>
+                    <show id="lecm-ord-table-structure:item-content"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-ord-table-structure:content">
+                    <field id="lecm-ord-table-structure:item-content">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                             <control-param name="columns">155</control-param>
@@ -709,7 +709,7 @@
             <field-visibility>
                 <show id="lecm-document:indexTableRow" force="true"/>
                 <show id="lecm-ord-table-structure:title"/>
-                <show id="lecm-ord-table-structure:content"/>
+                <show id="lecm-ord-table-structure:item-content"/>
                 <show id="lecm-ord-table-structure:executor-assoc"/>
                 <show id="lecm-ord-table-structure:coexecutors-assoc"/>
                 <show id="lecm-ord-table-structure:report-required"/>
@@ -774,7 +774,7 @@
                     <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-ord-table-structure:executor-assoc"/>
                     <show id="lecm-ord-table-structure:limitation-date-text"/>
-                    <show id="lecm-ord-table-structure:status-assoc"/>
+                    <show id="lecm-ord-table-structure:item-status-assoc"/>
                 </field-visibility>
             </form>
             <form id="datagrid-create">

@@ -341,8 +341,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 					for (AssociationRef coexecutors : pointCoExecutorsAssocs) {
 						coexecutorsList.add(coexecutors.getTargetRef());
 					}
-					String coexecutorsNode = StringUtils.join(coexecutorsList, ",");
-					associations.put("lecm-errands:coexecutors-assoc", coexecutorsNode);
+					associations.put("lecm-errands:coexecutors-assoc", StringUtils.join(coexecutorsList, ","));
 				}
 				//тематика поручения
 				List<AssociationRef> subjectAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_SUBJECT);

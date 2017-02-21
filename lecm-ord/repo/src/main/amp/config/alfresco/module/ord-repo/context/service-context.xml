@@ -124,8 +124,8 @@
                 <value>lecm-ord-table-structure:limitation-date-radio</value>
                 <value>lecm-ord-table-structure:limitation-date-days</value>
                 <value>lecm-ord-table-structure:limitation-date-type</value>
-                <value>lecm-ord-table-structure:content</value>
-                <value>lecm-ord-table-structure:comment</value>
+                <value>lecm-ord-table-structure:item-content</value>
+                <value>lecm-ord-table-structure:item-comment</value>
             </list>
         </property>
         <property name="assocsToCopy">
