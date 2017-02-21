@@ -87,7 +87,7 @@
                     <assoc type="lecm-rpeditor:reportTemplateType"
                            path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип отчета/Jasper"/>
                     <assoc type="lecm-rpeditor:reportTemplateFile"
-                           path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Исполнительская дисциплина по инициаторам/exec-discipline-by-creator_tmpl.jrxml"/>
+                           path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Исполнительская дисциплина по авторам/exec-discipline-by-creator_tmpl.jrxml"/>
                 </assocs>
             </item>
             <item name="cm:exec-discipline-by-creator_tmpl.jrxml" type="cm:content">
@@ -108,7 +108,7 @@
             <assoc type="lecm-rpeditor:reportProviderAssoc"
                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип провайдера/Reporting SQLProvider"/>
             <assoc type="lecm-rpeditor:reportTemplateAssoc"
-                   path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Исполнительская дисциплина по инициаторам/Шаблон"/>
+                   path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Исполнительская дисциплина по авторам/Шаблон"/>
         </assocs>
     </item>
 </items>
