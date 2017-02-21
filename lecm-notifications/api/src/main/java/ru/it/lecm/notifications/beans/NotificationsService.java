@@ -59,8 +59,11 @@ public interface NotificationsService {
 	QName TYPE_NOTIFICATIONS_USER_SETTINGS = QName.createQName(NOTIFICATIONS_SETTINGS_NAMESPACE_URI, "user");
 	QName ASSOC_DEFAULT_NOTIFICATIONS_TYPES = QName.createQName(NOTIFICATIONS_SETTINGS_NAMESPACE_URI, "default-types-assoc");
 
+	@Deprecated
 	QName TYPE_NOTIFICATIONS_GLOBAL_SETTINGS = QName.createQName(NOTIFICATIONS_SETTINGS_NAMESPACE_URI, "global");
+	@Deprecated
 	QName PROP_ENABLE_PASSIVE_NOTIFICATIONS = QName.createQName(NOTIFICATIONS_SETTINGS_NAMESPACE_URI, "enable-passive");
+	@Deprecated
 	QName PROP_N_DAYS = QName.createQName(NOTIFICATIONS_SETTINGS_NAMESPACE_URI, "n-days");
 
 	String NOTIFICATIONS_SETTINGS_NODE_NAME = "Settings";
@@ -209,11 +212,13 @@ public interface NotificationsService {
     /**
      * @return Включены или выключены пассивные уведомления
      */
+	@Deprecated
     boolean isEnablePassiveNotifications();
 
     /**
      * @return Количество рабочих дней за которое должно высылаться уведомление
      */
+	@Deprecated
     int getSettingsNDays();
 
     /**

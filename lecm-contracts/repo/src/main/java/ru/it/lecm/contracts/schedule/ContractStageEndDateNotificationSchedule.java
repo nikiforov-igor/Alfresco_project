@@ -8,8 +8,8 @@ import org.alfresco.service.namespace.QName;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.quartz.Trigger;
+import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.notifications.beans.NotificationsService;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -38,7 +38,7 @@ public class ContractStageEndDateNotificationSchedule extends AbstractScheduledA
 
     private DocumentService documentService;
 
-    private NotificationsService notificationsService;
+    private DocumentGlobalSettingsService documentGlobalSettings;
 
     DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -112,8 +112,8 @@ public class ContractStageEndDateNotificationSchedule extends AbstractScheduledA
         this.documentService = documentService;
     }
 
-    public void setNotificationsService(NotificationsService notificationsService) {
-        this.notificationsService = notificationsService;
+    public void setDocumentGlobalSettings(DocumentGlobalSettingsService documentGlobalSettings) {
+        this.documentGlobalSettings = documentGlobalSettings;
     }
 
     @Override
@@ -142,7 +142,7 @@ public class ContractStageEndDateNotificationSchedule extends AbstractScheduledA
         final String MIN = DateFormatISO8601.format(calendar.getTime());
 
         calendar.setTime(now);
-        calendar.add(Calendar.DAY_OF_YEAR, notificationsService.getSettingsNDays());
+        calendar.add(Calendar.DAY_OF_YEAR, documentGlobalSettings.getSettingsNDays());
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);

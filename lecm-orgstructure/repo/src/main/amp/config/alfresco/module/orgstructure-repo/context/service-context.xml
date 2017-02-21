@@ -275,6 +275,7 @@
         <property name="authorityService" ref="authorityService"/>
         <property name="dictionaryService" ref="dictionaryService" />
         <property name="publicAction" value="false" />
+        <property name="documentGlobalSettings" ref="documents.global-settings.service"/>
     </bean>
 
     <bean id="orgstructure.exportEmployees.model" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">

@@ -8,6 +8,7 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.incoming.beans.IncomingServiceImpl;
 import ru.it.lecm.notifications.beans.Notification;
@@ -27,6 +28,7 @@ public class ExecutionNotificationExecutor extends ActionExecuterAbstractBase {
     private NotificationsService notificationsService;
     private NodeService nodeService;
     private IWorkCalendar calendarBean;
+    private DocumentGlobalSettingsService documentGlobalSettings;
 
     public void setNotificationsService(NotificationsService notificationsService) {
         this.notificationsService = notificationsService;
@@ -38,6 +40,10 @@ public class ExecutionNotificationExecutor extends ActionExecuterAbstractBase {
 
     public void setCalendarBean(IWorkCalendar calendarBean) {
         this.calendarBean = calendarBean;
+    }
+
+    public void setDocumentGlobalSettings(DocumentGlobalSettingsService documentGlobalSettings) {
+        this.documentGlobalSettings = documentGlobalSettings;
     }
 
     @Override
@@ -63,7 +69,7 @@ public class ExecutionNotificationExecutor extends ActionExecuterAbstractBase {
         Date now = normalizeDate(new Date());
         Date incomingExecutionDate = (Date) nodeService.getProperty(nodeRef, DocumentService.PROP_EDS_EXECUTION_DATE);
         incomingExecutionDate = normalizeDate(incomingExecutionDate);
-        int days = notificationsService.getSettingsNDays();
+        int days = documentGlobalSettings.getSettingsNDays();
         Date workCalendarDate = calendarBean.getNextWorkingDate(now, days, Calendar.DAY_OF_MONTH);
 
         String notificationTemplateCode = null;

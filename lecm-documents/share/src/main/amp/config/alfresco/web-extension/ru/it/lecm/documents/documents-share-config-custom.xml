@@ -1288,6 +1288,8 @@
                 <field-visibility>
                     <show id="lecm-document-global-settings:links-view-mode"/>
                     <show id="lecm-document-global-settings:hide-properties-for-recipients"/>
+                    <show id="lecm-document-global-settings:enable-passive"/>
+                    <show id="lecm-document-global-settings:n-days"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document-global-settings:links-view-mode">
@@ -1304,6 +1306,8 @@
                 <field-visibility>
                     <show id="lecm-document-global-settings:links-view-mode"/>
                     <show id="lecm-document-global-settings:hide-properties-for-recipients"/>
+                    <show id="lecm-document-global-settings:enable-passive"/>
+                    <show id="lecm-document-global-settings:n-days"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document-global-settings:links-view-mode">

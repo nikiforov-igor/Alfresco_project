@@ -744,7 +744,7 @@
         <property name="id" value="ACTIVE_TASKS_ONLY"/>
         <property name="stateMachineService" ref="stateMachineHelper"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
-	    <property name="notificationsService" ref="notificationsService"/>
+        <property name="documentGlobalSettings" ref="documents.global-settings.service"/>
     </bean>
 
     <bean id="activeProcessFinishedTasksProcessor" class="ru.it.lecm.documents.processors.ActiveProcFinishTasksProcessor" parent="searchQueryBaseProccesor">
