@@ -109,6 +109,7 @@ public interface ErrandsService {
     QName ASSOC_ERRANDS_INITIATOR = QName.createQName(ERRANDS_NAMESPACE_URI, "initiator-assoc");
     QName ASSOC_ERRANDS_CONTROLLER = QName.createQName(ERRANDS_NAMESPACE_URI, "controller-assoc");
     QName ASSOC_ERRANDS_EXECUTOR = QName.createQName(ERRANDS_NAMESPACE_URI, "executor-assoc");
+    QName ASSOC_ERRANDS_TYPE = QName.createQName(ERRANDS_NAMESPACE_URI, "type-assoc");
     QName ASSOC_ERRANDS_CO_EXECUTORS = QName.createQName(ERRANDS_NAMESPACE_URI, "coexecutors-assoc");
     QName ASSOC_ERRANDS_LINKS = QName.createQName(ERRANDS_NAMESPACE_URI, "links-assoc");
     QName ASSOC_ERRANDS_EXECUTION_LINKS = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-links-assoc");
