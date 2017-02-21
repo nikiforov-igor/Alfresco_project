@@ -1,0 +1,4 @@
+.form-fields .form-tabs .tab-reports .set:first-child .set:first-child .set-title {
+    float: left;
+    width: calc(100% - 100px);
+}

@@ -8,7 +8,6 @@
                 var additionalFilter = "AND (";
                 for (var i=0; i < additionalFilterFields.length; ++i) {
                     var formatedField = additionalFilterFields[i].replace(/:/g, "\\:").replace(/-/g, "\\-");
-                    formatedField += "\\-ref";
                     additionalFilter += ("@" + formatedField + ": \"*" + employee + "*\"");
                     if (i < additionalFilterFields.length - 1) {
                         additionalFilter += " OR ";

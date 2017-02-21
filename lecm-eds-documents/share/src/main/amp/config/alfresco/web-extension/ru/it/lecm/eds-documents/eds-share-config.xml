@@ -4,7 +4,10 @@
             <default-controls>
                 <type name="association:lecm-doc-dic-dt:documentType" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа</control-param>
-                    <control-param name="plane">true</control-param>
+                    <control-param name="plane">false</control-param>
+                    <control-param name="checkType">false</control-param>
+                    <control-param name="treeItemType">lecm-doc-dic-dt:typeDictionary</control-param>
+                    <control-param name="additionalFilter">ISNOTNULL:\"sys:node-dbid\"</control-param>
                 </type>
             </default-controls>
         </forms>

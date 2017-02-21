@@ -27,7 +27,7 @@
                     <show id="lecm-base-dummy-aspects:script8" force="true"/>
                     <show id="lecm-resolutions:closers"/>
 
-                    <show id="lecm-base-dummy-aspects:script4" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script10" force="true"/>
                     <show id="lecm-resolutions:limitation-date-radio"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
                     <show id="lecm-resolutions:limitation-date-days"/>
@@ -79,6 +79,7 @@
                     <field id="lecm-resolutions:controller-assoc" set="start-left">
                         <control>
                             <control-param name="changeItemsFireAction">resolutionControllerChanged</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.controllerValidation" event="change" />
@@ -98,9 +99,14 @@
                             <control-param name="fireMandatoryByChange">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-base-dummy-aspects:script4" set="start-right-start" >
+                    <field id="lecm-base-dummy-aspects:script10" set="start-right-start" >
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-resolution/resolutions-change-limitation-date.js</control-param>
+                            <control-param name="scripts">scripts/lecm-eds-documents/complex-date-listener.js</control-param>
+                            <control-param name="scriptLoadedFireAction">complexDateScriptLoaded</control-param>
+                            <control-param name="bubblingName">changeResolutionLimitationDateRadio</control-param>
+                            <control-param name="dateField">lecm-resolutions:limitation-date</control-param>
+                            <control-param name="daysCountField">lecm-resolutions:limitation-date-days</control-param>
+                            <control-param name="daysTypeField">lecm-resolutions:limitation-date-type</control-param>
                         </control>
                     </field>
                     <field id="lecm-resolutions:limitation-date-radio" set="limitation-date" mandatory="true">
@@ -153,7 +159,12 @@
                     </field>
                     <field id="lecm-base-dummy-aspects:script7" set="errands">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
+                            <control-param name="scripts">scripts/lecm-eds-documents/complex-date-listener.js</control-param>
+                            <control-param name="scriptLoadedFireAction">complexDateScriptLoaded</control-param>
+                            <control-param name="bubblingName">changeLimitationDateRadio</control-param>
+                            <control-param name="dateField">lecm-errands:limitation-date</control-param>
+                            <control-param name="daysCountField">lecm-errands:limitation-date-days</control-param>
+                            <control-param name="daysTypeField">lecm-errands:limitation-date-type</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script6" set="errands">
@@ -246,6 +257,13 @@
                     <show id="lecm-resolutions:limitation-date"/>
                     <show id="lecm-resolutions:reviewers-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-resolutions:controller-assoc">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
 
             <!-- Форма с набором полей, редактируемых в машине состояний -->
@@ -268,7 +286,15 @@
 
                     <show id="lecm-resolutions:base-assoc"/>
                     <show id="lecm-resolutions:base-document-assoc"/>
+                    <show id="lecm-review-aspects:related-review-records-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-resolutions:controller-assoc">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
 
             <!-- Форма атрибутивного поиска -->
@@ -383,14 +409,25 @@
 
                     <show id="lecm-resolutions:errands-json" force="true"/>
 
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
                     <show id="lecm-resolutions:reviewers-assoc"/>
+                    <show id="lecm-review-aspects:related-review-records-assoc" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="limitation-date" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-view-limitation-date-set.ftl"/>
 
                     <set id="execution" appearance="title" label-id="label.execution"/>
-                    <set id="reviewers" appearance="title" label-id="label.review"/>
+                    <set id="reviewers-hidden" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="reviewers" parent="reviewers-hidden" appearance="title" label-id="label.review"/>
+                    <set id="reviewers-list-hidden" parent="reviewers" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="reviewers-table-hidden" parent="reviewers" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
 
+                    <field id="lecm-base-dummy-aspects:script2">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-resolution/lecm-view-resolution-form.js</control-param>
+                            <control-param name="scriptLoadedFireAction">resolutionViewFormScriptLoaded</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-resolutions:base-document-assoc" read-only="true">
                         <control>
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
@@ -422,7 +459,7 @@
                         </control>
                     </field>
 
-                    <field id="lecm-resolutions:reviewers-assoc" set="reviewers">
+                    <field id="lecm-resolutions:reviewers-assoc" set="reviewers-list-hidden">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
                             <control-param name="items">employee,orgUnit,workGroup,reviewItem</control-param>
                             <!-- lecm-orgstr:employee -->
@@ -463,6 +500,19 @@
                             <control-param name="reviewItem_showSearch">true</control-param>
                             <control-param name="reviewItem_childrenDataSource">lecm/review/ds/allowedReviewLists</control-param>
                             <control-param name="reviewItem_sortProp">cm:title</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-review-aspects:related-review-records-assoc" set="reviewers-table-hidden">
+                        <control template="/ru/it/lecm/workflow/review/controls/related-review-list-datagrid-control.ftl">
+                            <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
+                            <control-param name="datagridFormId">relatedReviewDatagrid</control-param>
+                            <control-param name="isTableSortable">false</control-param>
+                            <control-param name="editable">true</control-param>
+                            <control-param name="forceEditable">true</control-param>
+                            <control-param name="showCreateBtn">false</control-param>
+                            <control-param name="allowCreate">false</control-param>
+                            <control-param name="allowEdit">false</control-param>
+                            <control-param name="allowDelete">false</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -519,6 +569,7 @@
                     <field id="lecm-resolutions:controller-assoc" set="start-left">
                         <control>
                             <control-param name="changeItemsFireAction">resolutionControllerChanged</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.controllerValidation" event="change" />
@@ -540,7 +591,12 @@
                     </field>
                     <field id="lecm-base-dummy-aspects:script4" set="start-right-start" >
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-resolution/resolutions-change-limitation-date.js</control-param>
+                            <control-param name="scripts">scripts/lecm-eds-documents/complex-date-listener.js</control-param>
+                            <control-param name="scriptLoadedFireAction">complexDateScriptLoaded</control-param>
+                            <control-param name="bubblingName">changeResolutionLimitationDateRadio</control-param>
+                            <control-param name="dateField">lecm-resolutions:limitation-date</control-param>
+                            <control-param name="daysCountField">lecm-resolutions:limitation-date-days</control-param>
+                            <control-param name="daysTypeField">lecm-resolutions:limitation-date-type</control-param>
                         </control>
                     </field>
                     <field id="lecm-resolutions:limitation-date-radio" set="limitation-date" mandatory="true">
@@ -592,7 +648,12 @@
                     </field>
                     <field id="lecm-base-dummy-aspects:script7" set="errands">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
+                            <control-param name="scripts">scripts/lecm-eds-documents/complex-date-listener.js</control-param>
+                            <control-param name="scriptLoadedFireAction">complexDateScriptLoaded</control-param>
+                            <control-param name="bubblingName">changeLimitationDateRadio</control-param>
+                            <control-param name="dateField">lecm-errands:limitation-date</control-param>
+                            <control-param name="daysCountField">lecm-errands:limitation-date-days</control-param>
+                            <control-param name="daysTypeField">lecm-errands:limitation-date-type</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script6" set="errands">

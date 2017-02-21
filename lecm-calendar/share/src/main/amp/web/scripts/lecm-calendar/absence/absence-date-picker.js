@@ -29,7 +29,31 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 		return this;
 	};
 
-	YAHOO.lang.extend(LogicECM.module.WCalendar.Absence.DatePicker, LogicECM.DatePicker);
+	YAHOO.lang.extend(LogicECM.module.WCalendar.Absence.DatePicker, LogicECM.DatePicker, {
+		_getDateByKey: function (key) {
+			var date = new Date();
+			switch (key) {
+				case 'START_YEAR':
+					date.setMonth(0);
+					date.setDate(1);
+					break;
+				case 'NEXT_MONTH' :
+					date.setMonth(date.getMonth() + 1);
+					break;
+				case 'LAST_MONTH' :
+					date.setMonth(date.getMonth() - 1);
+					break;
+				case 'TOMORROW':
+					date.setDate(date.getDate() + 1);
+					break;
+				default:
+					break;
+			}
+			return date;
+		}
+	});
+
+	LogicECM.module.WCalendar.Absence.DatePicker.prototype.options.dateDefault = ""; //NOW, NEXT_MONTH, START_YEAR, LAST_MONTH, NOW, TOMORROW
 
 	LogicECM.module.WCalendar.Absence.DatePicker.prototype.draw = function () {
 		if (!this.options.currentValue) {
@@ -37,6 +61,8 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			var iso8601DateString = Dom.get(this.currentValueHtmlId).value;
 			if (iso8601DateString) {
 				this.options.currentValue = Alfresco.util.fromISO8601(iso8601DateString);
+			} else if (this.options.dateDefault && this.options.dateDefault.length) {
+				this.options.currentValue = this._getDateByKey(this.options.dateDefault);
 			}
 		}
 		// Calculate current date

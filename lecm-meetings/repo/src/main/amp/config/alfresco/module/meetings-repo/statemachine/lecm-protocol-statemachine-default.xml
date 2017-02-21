@@ -4631,9 +4631,8 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
             executionDate.setMinutes(0);
             executionDate.setSeconds(0);
             executionDate.setMilliseconds(0);
-            if (executionDate.getTime() < currentDate.getTime()) {
-                protocolService.changePointStatus(point.nodeRef.toString(), 'EXPIRED_STATUS');
-            }
+
+			protocolService.changePointStatus(point.nodeRef.toString(), executionDate.getTime() >= currentDate.getTime() ? 'PERFORMANCE_STATUS' : 'EXPIRED_STATUS');
         }
     }
 })();]]></value>

@@ -17,9 +17,11 @@
     });
 
 
-	YAHOO.Bubbling.on('errandTypeChanged', reInit);
+	YAHOO.Bubbling.on('errandTypeChanged', reInit, {reinitLimitationDate: true});
+	YAHOO.Bubbling.on('resolutionErrandTypeChanged', reInit, {reinitLimitationDate: false});
+    YAHOO.Bubbling.on('createErrandsWFErrandTypeChanged', reInit);
 
-	function reInit(layer, args) {
+	function reInit(layer, args, param) {
 		var obj = args[1];
 		var nodeRef;
 
@@ -31,10 +33,24 @@
 		}
 
 		if(nodeRef) {
-            var titleElement = Dom.get(obj.formId + "_prop_lecm-errands_title");
-            var contentElement = Dom.get(obj.formId + "_prop_lecm-errands_content");
-            var reportRequiredElement = Dom.get(obj.formId + "_prop_lecm-errands_report-required");
-            var limitationDateRadio = Dom.get(obj.formId + "_prop_lecm-errands_limitation-date-radio");
+		    var titleProp = "lecm-errands_title";
+            var contentProp = "lecm-errands_content";
+            var reportRequiredProp = "lecm-errands_report-required";
+            var limitationDateRadioProp = "lecm-errands_limitation-date-radio";
+            var reportRequiredChangedFireEvent = "errandReportRequiredChanged";
+            var limitationDateRadioChangedEvent = "changeLimitationDateRadio";
+		    if (layer == "createErrandsWFErrandTypeChanged") {
+                titleProp = "lecmErrandWf_title";
+                contentProp = "lecmErrandWf_content";
+                reportRequiredProp = "lecmErrandWf_reportRequired";
+                limitationDateRadioProp = "lecmErrandWf_limitationDateRadio";
+                reportRequiredChangedFireEvent = "createErrandsWFErrandReportRequiredChanged";
+                limitationDateRadioChangedEvent = "createErrandsWFChangeLimitationDateRadio";
+            }
+            var titleElement = Dom.get(obj.formId + "_prop_" + titleProp);
+            var contentElement = Dom.get(obj.formId + "_prop_" + contentProp);
+            var reportRequiredElement = Dom.get(obj.formId + "_prop_" + reportRequiredProp);
+            var limitationDateRadio = Dom.get(obj.formId + "_prop_" + limitationDateRadioProp);
             if (errandsTypes[nodeRef]) {
                 if (titleElement) {
                     titleElement.value = errandsTypes[nodeRef].defaultTitle;
@@ -42,7 +58,7 @@
                 if (contentElement && !contentElement.value) {
                     contentElement.value = errandsTypes[nodeRef].defaultTitle;
                 }
-                if (limitationDateRadio) {
+                if (limitationDateRadio && param.reinitLimitationDate) {
                     var checkedRadioButton = YAHOO.util.Selector.query("input[checked]", limitationDateRadio.parentElement, true);
                     checkedRadioButton.checked = false;
                     if (errandsTypes[nodeRef].limitless) {
@@ -54,10 +70,10 @@
                         var daysRadioButton = YAHOO.util.Selector.query("input[type=radio][value='DAYS']", limitationDateRadio.parentElement, true);
                         daysRadioButton.checked = true;
                     }
-                    YAHOO.Bubbling.fire("changeLimitationDateRadio", {
+                    YAHOO.Bubbling.fire(limitationDateRadioChangedEvent, {
                         value: limitationDateRadio.value,
                         formId: obj.formId,
-                        fieldId: "lecm-errands:limitation-date-radio"
+                        fieldId: limitationDateRadioProp.replace("_",":")
                     });
                 }
                 if (reportRequiredElement) {
@@ -69,9 +85,9 @@
                         reportRequiredElement.value = false;
                         reportRequiredCheckBox.checked = false;
                     }
-                    YAHOO.Bubbling.fire("errandReportRequiredChanged", {
+                    YAHOO.Bubbling.fire(reportRequiredChangedFireEvent, {
                         formId: obj.formId,
-                        fieldId: "lecm-errands:report-required"
+                        fieldId: reportRequiredProp.replace("_",":")
                     });
                 }
             }

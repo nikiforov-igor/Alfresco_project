@@ -74,6 +74,12 @@
 				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
 				<property name="lecm-orgstr:business-role-description">Пользователи, включенные в данную бизнес-роль, и только они имеют право на выбор Автора поручения и резолюции.</property>
 			</item>
+			<item name="cm:СЭД. Контролёры" type="lecm-orgstr:business-role">
+				<property name="cm:name">СЭД. Контролёры</property>
+				<property name="lecm-orgstr:business-role-identifier">DA_CONTROLLERS</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудники, имеющие право контролировать исполнение документов СЭД</property>
+			</item>
 		</items>
 	</item>
 </items>

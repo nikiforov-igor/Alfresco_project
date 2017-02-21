@@ -291,15 +291,6 @@
                 <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
             </action>
 
-            <!-- View in Explorer client -->
-            <action id="view-in-explorer" type="link" label="actions.folder.explorer-view">
-                <param name="href">{explorerViewUrl}</param>
-                <param name="target">_blank</param>
-                <!-- repository-url config set, not in portlet mode -->
-                <evaluator>evaluator.doclib.action.viewInExplorer</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
-            </action>
-
             <!-- Transferred node: View in source repository -->
             <action id="document-view-in-source-repository" type="link" label="actions.document.view-source-repository">
                 <!-- calculated from siteId, item.location.repositoryId, replicationUrlMapping from share-config-custom.xml and node.type -->

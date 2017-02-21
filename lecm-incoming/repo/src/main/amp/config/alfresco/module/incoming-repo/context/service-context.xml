@@ -22,7 +22,7 @@
           depends-on="dictionaryBootstrap,dictionary.fileRegister.LogicEcmModelsBootstrap,
           eds.models.bootstrap, ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap,
 		  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, dictionary.LogicEcmDictionaryCurrencyModelBootstrap,
-		  documents.LogicEcmModelsConnectionsBootstrap,documents.dictionaries.LogicEcmModelsBootstrap, lecm.signed-docflow.model-bootstrap, review.model.bootstrap">
+		  documents.LogicEcmModelsConnectionsBootstrap,documents.dictionaries.LogicEcmModelsBootstrap, lecm.signed-docflow.model-bootstrap, review.model.bootstrap, errands.LogicEcmModelsBootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-incoming-dictionaries-model.xml</value>
