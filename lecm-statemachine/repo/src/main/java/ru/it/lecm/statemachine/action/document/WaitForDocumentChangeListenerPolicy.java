@@ -45,7 +45,6 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 	private TransactionListener transactionListener;
 	private TransactionService transactionService;
 	private LifecycleStateMachineHelper stateMachineHelper;
-	private OrgstructureBean orgstructureService;
 	final static Logger logger = LoggerFactory.getLogger(WaitForDocumentChangeListenerPolicy.class);
 
 	private static final String WAIT_FOR_DOCUMENT_CHANGE_TRANSACTION_LISTENER = "wait_for_document_change_transaction_listener";
@@ -106,10 +105,6 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 
 	public void setStateMachineHelper(LifecycleStateMachineHelper stateMachineHelper) {
 		this.stateMachineHelper = stateMachineHelper;
-	}
-
-	public void setOrgstructureService(OrgstructureBean orgstructureService) {
-		this.orgstructureService = orgstructureService;
 	}
 
 	private class WaitForDocumentChangePolicyTransactionListener implements TransactionListener {
