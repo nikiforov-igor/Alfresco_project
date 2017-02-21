@@ -215,7 +215,10 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
                     Object curValues = filter.has(CUR_VALUE) ? filter.get(CUR_VALUE) : null;
                     if (curValues != null) {
                         if (curValues instanceof NativeArray) {
-                            values.addAll((List<String>) getValueConverter().convertValueForJava(curValues));
+                            Object curValuesObj = getValueConverter().convertValueForJava(curValues);
+                            if (curValuesObj != null) {
+                                values.addAll((List<String>)curValuesObj);
+                            }
                         } else {
                             values.addAll(Arrays.asList(((String) curValues).split(",")));
                         }
