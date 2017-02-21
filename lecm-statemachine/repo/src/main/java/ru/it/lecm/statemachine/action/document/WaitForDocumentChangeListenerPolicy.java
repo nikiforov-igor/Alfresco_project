@@ -12,14 +12,12 @@ import org.alfresco.repo.transaction.TransactionListener;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.repository.MalformedNodeRefException;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.StateMachineAction;
@@ -180,7 +178,7 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 				}
 			}, true);
 		}
-				
+
 		@Override
 		public void afterCommit() {
 			if (logger.isDebugEnabled()) {
