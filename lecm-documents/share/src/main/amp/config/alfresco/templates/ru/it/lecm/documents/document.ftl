@@ -64,7 +64,6 @@
 	                <@region id="comments" scope="template"/>
 	            </div>
 	            <div id="custom-region" class="hidden1"></div>
-		        <@region id="document-status-string" scope="template"/>
 	        </div>
         </div>
     </#if>

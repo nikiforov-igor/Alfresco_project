@@ -1,7 +1,7 @@
-<#escape x as x?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 {
 	<#if boss??>
-	bossExists:"${boss.getNodeRef()}"
+	"bossExists": "${boss.getNodeRef()}"
 	</#if>
 }
 </#escape>

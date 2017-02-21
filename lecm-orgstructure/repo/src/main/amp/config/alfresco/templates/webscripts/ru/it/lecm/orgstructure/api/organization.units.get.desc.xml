@@ -2,7 +2,7 @@
 	<shortname>Organization units</shortname>
 	<description>Get Organization Units</description>
 	<url>/lecm/orgstructure/api/getOrganizationUnits?onlyActive={onlyActive}</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>user</authentication>
     <transaction allow="readonly">required</transaction>
 </webscript>

@@ -1,7 +1,7 @@
-<#escape x as x?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 {
     <#if result??>
-    nodeRef: "${result}"
+    "nodeRef": "${result}"
     </#if>
 }
 </#escape>

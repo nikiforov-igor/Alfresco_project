@@ -77,99 +77,105 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 			},
 
 	        generateModelForms: function() {
-		        Alfresco.util.Ajax.jsonGet(
-			        {
-				        url: Alfresco.constants.PROXY_URI + "/lecm/docforms/generate?modelName=" + encodeURIComponent(this.options.doctype),
-				        successCallback: {
-					        fn: function (response) {
-						        var oResults = response.json;
-						        if (oResults != null && oResults.success) {
-							        Alfresco.util.PopupManager.displayMessage({
-								        text: this.msg("message.generate.success")
-							        });
-						        }
-					        },
-					        scope: this
-				        },
-				        failureMessage: "message.failure"
-			        });
+		        Alfresco.util.Ajax.jsonGet({
+			        url: Alfresco.constants.PROXY_URI + "/lecm/docforms/generate",
+			        dataObj: {
+				        modelName: this.options.doctype
+			        },
+			        successCallback: {
+				        scope: this,
+				        fn: function (response) {
+						    var oResults = response.json;
+						    if (oResults && oResults.success) {
+							    Alfresco.util.PopupManager.displayMessage({
+								    text: this.msg("message.generate.success")
+							    });
+						    }
+					    }
+				    },
+				    failureMessage: this.msg("message.failure")
+			    });
 	        },
 
 	        deployForms: function() {
-		        Alfresco.util.Ajax.request(
-			        {
-				        url:Alfresco.constants.URL_SERVICECONTEXT + "lecm/config/init?reset=true",
-				        dataObj:{},
-				        successCallback:{
-					        fn:function (response) {
-						        Alfresco.util.PopupManager.displayMessage({
-							        text: this.msg("message.deploy.success")
-						        });
-					        },
-					        scope: this
-				        },
-				        failureMessage:"message.failure"
-			        });
-
+		        Alfresco.util.Ajax.jsonGet({
+				    url:Alfresco.constants.URL_SERVICECONTEXT + "lecm/config/init",
+				    dataObj: {
+					    reset: true
+				    },
+				    successCallback:{
+					    scope: this,
+					    fn:function (response) {
+						    Alfresco.util.PopupManager.displayMessage({
+							    text: this.msg("message.deploy.success")
+						    });
+					    }
+				    },
+				    failureMessage: this.msg("message.failure")
+			    });
 	        },
 
 	        downloadConfig: function() {
-                Alfresco.util.Ajax.jsonGet(
-			        {
-				        url: Alfresco.constants.PROXY_URI + "/lecm/docforms/config?modelName=" + encodeURIComponent(this.options.doctype),
-				        successCallback: {
-					        fn: function (response) {
-						        var oResults = response.json;
-						        if (oResults != null && oResults.nodeRef != null) {
-							        window.open(Alfresco.constants.PROXY_URI + "api/node/content/" + oResults.nodeRef.replace("://", "/") + "/" + oResults.name + "?a=true", "_self");
-						        } else {
-							        Alfresco.util.PopupManager.displayMessage({
-								        text: this.msg("message.downloadConfig.notFound")
-							        });
-						        }
-					        },
-					        scope: this
-				        },
-				        failureMessage: "message.failure"
-			        });
+                Alfresco.util.Ajax.jsonGet({
+				    url: Alfresco.constants.PROXY_URI + "/lecm/docforms/config",
+	                dataObj: {
+		                modelName: this.options.doctype
+	                },
+				    successCallback: {
+					    scope: this,
+					    fn: function (response) {
+						    var oResults = response.json;
+						    if (oResults && oResults.nodeRef) {
+							    window.open(Alfresco.constants.PROXY_URI + "api/node/content/" + oResults.nodeRef.replace("://", "/") + "/" + oResults.name + "?a=true", "_self");
+						    } else {
+							    Alfresco.util.PopupManager.displayMessage({
+								    text: this.msg("message.downloadConfig.notFound")
+							    });
+						    }
+					    }
+				    },
+				    failureMessage: this.msg("message.failure")
+			    });
 	        },
 
 	        uploadConfig: function() {
-		        Alfresco.util.Ajax.jsonGet(
-			        {
-				        url: Alfresco.constants.PROXY_URI + "/lecm/docforms/config?modelName=" + encodeURIComponent(this.options.doctype),
-				        successCallback: {
-					        fn: function (response) {
-						        var oResults = response.json;
-						        if (oResults != null && oResults.nodeRef != null) {
-							        if (this.fileUpload == null) {
-								        this.fileUpload = Alfresco.getFileUploadInstance();
-							        }
+		        Alfresco.util.Ajax.jsonGet({
+				    url: Alfresco.constants.PROXY_URI + "/lecm/docforms/config",
+			        dataObj: {
+				        modelName: this.options.doctype
+			        },
+				    successCallback: {
+					    scope: this,
+					    fn: function (response) {
+						    var oResults = response.json;
+						    if (oResults && oResults.nodeRef) {
+							    if (!this.fileUpload) {
+								    this.fileUpload = Alfresco.getFileUploadInstance();
+							    }
 
-							        var uploadConfig = {
-								        updateNodeRef: oResults.nodeRef,
-								        updateFilename: oResults.name,
-								        updateVersion: oResults.version,
-								        overwrite: true,
-								        filter: [
-									        {
-										        description: this.msg("label.filter-description", oResults.name),
-										        extensions: "*.xml"
-									        }],
-								        mode: this.fileUpload.MODE_SINGLE_UPDATE,
-								        thumbnails: "doclib"
-							        };
-							        this.fileUpload.show(uploadConfig);
-						        } else {
-							        Alfresco.util.PopupManager.displayMessage({
-								        text: this.msg("message.uploadConfig.notFound")
-							        });
-						        }
-					        },
-					        scope: this
-				        },
-				        failureMessage: "message.failure"
-			        });
+							    var uploadConfig = {
+								    updateNodeRef: oResults.nodeRef,
+								    updateFilename: oResults.name,
+								    updateVersion: oResults.version,
+								    overwrite: true,
+								    filter: [
+									    {
+										    description: this.msg("label.filter-description", oResults.name),
+										    extensions: "*.xml"
+									    }],
+								    mode: this.fileUpload.MODE_SINGLE_UPDATE,
+								    thumbnails: "doclib"
+							    };
+							    this.fileUpload.show(uploadConfig);
+						    } else {
+							    Alfresco.util.PopupManager.displayMessage({
+								    text: this.msg("message.uploadConfig.notFound")
+							    });
+						    }
+					    }
+				    },
+				    failureMessage: this.msg("message.failure")
+			    });
 	        },
 
 			showImportDialog: function () {

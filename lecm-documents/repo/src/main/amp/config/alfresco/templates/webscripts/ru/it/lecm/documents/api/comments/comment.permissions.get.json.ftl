@@ -1,5 +1,5 @@
-<#escape x as x?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 {
-    "permission":"${permission?string}"
+    "permission": "${permission?string}"
 }
 </#escape>

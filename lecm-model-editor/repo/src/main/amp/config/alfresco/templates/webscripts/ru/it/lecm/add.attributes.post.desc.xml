@@ -6,6 +6,6 @@
 	attributes{name, title}
 	</description>
 	<url>/lecm/docforms/addAttributes</url>
-	<format default="json">argument</format>
+	<format default="json"/>
 	<authentication>user</authentication>
 </webscript>

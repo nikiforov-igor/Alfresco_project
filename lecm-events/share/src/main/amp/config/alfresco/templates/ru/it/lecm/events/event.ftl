@@ -50,6 +50,7 @@
 				<@region id="document-actions" scope="template"/>
                 <@region id="document-attachments" scope="template"/>
                 <@region id="document-connections" scope="template"/>
+				<@region id="document-history" scope="template"/>
             </div>
             <div id="main-content" class="main-content">
                 <div id="main-region" class="event-page">

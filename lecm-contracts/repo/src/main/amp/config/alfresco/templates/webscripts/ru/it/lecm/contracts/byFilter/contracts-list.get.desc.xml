@@ -2,7 +2,7 @@
     <shortname>Список договоров по фильтрам</shortname>
     <description>Список договоров по фльтрам: дата изменения, пользователи</description>
     <url>/lecm/contracts/getContractsByFilters</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <lifecycle>internal</lifecycle>
     <authentication>user</authentication>
     <transaction allow="readonly">required</transaction>

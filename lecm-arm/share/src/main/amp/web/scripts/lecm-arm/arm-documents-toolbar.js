@@ -1,4 +1,4 @@
-if (typeof LogicECM == "undefined" || !LogicECM) {
+﻿if (typeof LogicECM == "undefined" || !LogicECM) {
     LogicECM = {};
 }
 
@@ -398,97 +398,91 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             onGroupActionsClick: function onGroupActionsClick(p_sType, p_aArgs, p_oItem) {
                 if (p_oItem.withForm) {
                     this._createScriptForm(p_oItem);
-                } else {
-                    if (p_oItem.type == "lecm-group-actions:script-action") {
-                        var me = this;
-                        Alfresco.util.PopupManager.displayPrompt(
+                } else if (p_oItem.type == "lecm-group-actions:script-action") {
+                    Alfresco.util.PopupManager.displayPrompt({
+                        title: this.msg('lecm.arm.ttl.action.perform'),
+                        text: this.msg('lecm.arm.msg.action.confirm') + " \"" + p_oItem.label + "\"",
+                        buttons: [
                             {
-                                title: Alfresco.util.message('lecm.arm.ttl.action.perform'),
-                                text: Alfresco.util.message('lecm.arm.msg.action.confirm') + " \"" + p_oItem.label + "\"",
-                                buttons: [
-                                    {
-                                        text: Alfresco.util.message('lecm.arm.lbl.ok'),
-                                        handler: function dlA_onAction_action() {
-                                            this.destroy();
-                                            Alfresco.util.Ajax.jsonRequest({
-                                                method: "POST",
-                                                url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
-                                                dataObj: {
-                                                    items: p_oItem.items,
-                                                    actionId: p_oItem.actionId
-                                                },
-                                                successCallback: {
-                                                    fn: function (oResponse) {
-                                                        me._actionResponse(p_oItem.label, oResponse);
-                                                    }
-                                                },
-                                                failureCallback: {
-                                                    fn: function () {
-                                                    }
-                                                },
-                                                scope: me,
-                                                execScripts: true
-                                            });
-
-                                        }
-                                    },
-                                    {
-                                        text: Alfresco.util.message('lecm.arm.lbl.cancel'),
-                                        handler: function dlA_onActionDelete_cancel() {
-                                            this.destroy();
-                                        },
-                                        isDefault: true
+                                text: this.msg('lecm.arm.lbl.ok'),
+                                handler: {
+                                    obj: this,
+                                    fn: function dlA_onAction_action(event, obj) {
+	                                    this.destroy();
+	                                    Alfresco.util.Ajax.jsonPost({
+                                            url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
+                                            dataObj: {
+                                                items: p_oItem.items,
+                                                actionId: p_oItem.actionId
+                                            },
+                                            successCallback: {
+                                                scope: obj,
+                                                fn: function (oResponse) {
+                                                    this._actionResponse(p_oItem.label, oResponse);
+                                                }
+                                            },
+                                            failureMessage: obj.msg('message.failure'),
+                                            execScripts: true
+	                                    });
                                     }
-                                ]
-                            });
-                    } else if (p_oItem.type == "lecm-group-actions:workflow-action") {
-                        if (this.doubleClickLock) return;
-                        this.doubleClickLock = true;
-
-                        this.options.currentSelectedItems = p_oItem.items;
-                        var templateUrl = Alfresco.constants.URL_SERVICECONTEXT;
-                        var formWidth = "84em";
-
-                        templateUrl += "lecm/components/form";
-                        var templateRequestParams = {
-                                itemKind: "workflow",
-                                itemId: p_oItem.workflowId,
-                                mode: "create",
-                                submitType: "json",
-                                formId: "workflow-form",
-                                showCancelButton: true,
-								showCaption: false
-                            };
-                        var responseHandler = function(response) {
-                                document.location.reload();
-                            }
-                        var me = this;
-                        LogicECM.CurrentModules = {};
-                        LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
-                            width: formWidth,
-                            templateUrl: templateUrl,
-                            templateRequestParams: templateRequestParams,
-                            actionUrl: null,
-                            destroyOnHide: true,
-                            doBeforeDialogShow: {
-                                scope: this,
-                                fn: function(p_form, p_dialog) {
-                                    p_dialog.dialog.setHeader(this.msg("logicecm.workflow.runAction.label", p_oItem.label));
-                                    var contId = p_dialog.id + "-form-container";
-                                    Dom.addClass(contId, "metadata-form-edit");
-                                    Dom.addClass(contId, "no-form-type");
-
-                                    this.doubleClickLock = false;
-
-                                    p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
                                 }
                             },
-                            onSuccess: {
-                                scope: this,
-                                fn: responseHandler
+                            {
+                                text: this.msg('lecm.arm.lbl.cancel'),
+                                handler: function dlA_onActionDelete_cancel() {
+                                    this.destroy();
+                                },
+                                isDefault: true
                             }
-                        }).show();
-                    }
+                        ]
+                    });
+                } else if (p_oItem.type == "lecm-group-actions:workflow-action") {
+                    if (this.doubleClickLock) return;
+                    this.doubleClickLock = true;
+
+                    this.options.currentSelectedItems = p_oItem.items;
+                    var templateUrl = Alfresco.constants.URL_SERVICECONTEXT;
+                    var formWidth = "84em";
+
+                    templateUrl += "lecm/components/form";
+                    var templateRequestParams = {
+                            itemKind: "workflow",
+                            itemId: p_oItem.workflowId,
+                            mode: "create",
+                            submitType: "json",
+                            formId: "workflow-form",
+                            showCancelButton: true,
+                            showCaption: false
+                        };
+                    var responseHandler = function(response) {
+                            document.location.reload();
+                        }
+                    var me = this;
+                    LogicECM.CurrentModules = {};
+                    LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
+                        width: formWidth,
+                        templateUrl: templateUrl,
+                        templateRequestParams: templateRequestParams,
+                        actionUrl: null,
+                        destroyOnHide: true,
+                        doBeforeDialogShow: {
+                            scope: this,
+                            fn: function(p_form, p_dialog) {
+                                p_dialog.dialog.setHeader(this.msg("logicecm.workflow.runAction.label", p_oItem.label));
+                                var contId = p_dialog.id + "-form-container";
+                                Dom.addClass(contId, "metadata-form-edit");
+                                Dom.addClass(contId, "no-form-type");
+
+                                this.doubleClickLock = false;
+
+                                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                            }
+                        },
+                        onSuccess: {
+                            scope: this,
+                            fn: responseHandler
+                        }
+                    }).show();
                 }
             },
 

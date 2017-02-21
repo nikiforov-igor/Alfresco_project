@@ -2,7 +2,7 @@
    <shortname>Status Fields</shortname>
    <description>Status Fields Data Webscript</description>
    <url>/lecm/statemachine/editor/ds/categories</url>
-   <format default="json">argument</format>
+   <format default="json"/>
    <authentication>user</authentication>
    <transaction allow="readonly">required</transaction>
 </webscript>

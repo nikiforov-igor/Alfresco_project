@@ -23,26 +23,23 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 	YAHOO.extend(LogicECM.ErrandsUserSettings, Alfresco.component.Base,
 		{
-			onReady: function ()
-			{
+			onReady: function () {
 				this.loadSettings();
 			},
 
 			loadSettings: function() {
-				var me = this;
-				Alfresco.util.Ajax.request(
-					{
-						url: Alfresco.constants.PROXY_URI + "lecm/errands/getUserSettings",
-						successCallback: {
-							fn: function (response) {
-								var oResults = eval("(" + response.serverResponse.responseText + ")");
-								if (oResults != null && oResults.nodeRef != null ) {
-									me.loadForm(oResults.nodeRef);
-								}
+				Alfresco.util.Ajax.jsonGet({
+					url: Alfresco.constants.PROXY_URI + "lecm/errands/getUserSettings",
+					successCallback: {
+						fn: function (response) {
+							if (response.json && response.json.nodeRef) {
+								this.loadForm(response.json.nodeRef);
 							}
 						},
-						failureMessage: "message.failure"
-					});
+						scope: this
+					},
+					failureMessage: this.msg("message.failure")
+				});
 			},
 
 			loadForm: function(settingsNode) {
