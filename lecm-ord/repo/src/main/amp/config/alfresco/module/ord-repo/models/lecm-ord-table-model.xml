@@ -46,7 +46,7 @@
                     <mandatory>true</mandatory>
                 </property>
                 <!-- содержание - textarea-->
-                <property name="lecm-ord-table-structure:content">
+                <property name="lecm-ord-table-structure:item-content">
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                     <index enabled="true">
@@ -66,7 +66,7 @@
                     </index>
                 </property>
                 <!-- примечание - textarea-->
-                <property name="lecm-ord-table-structure:comment">
+                <property name="lecm-ord-table-structure:item-comment">
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                     <index enabled="true">
@@ -105,7 +105,7 @@
                     </constraints>
                 </property>
                 <!--служебные--> 
-                <property name="lecm-ord-table-structure:status-assoc-text-content">
+                <property name="lecm-ord-table-structure:item-status-assoc-text-content">
                     <type>d:text</type>
                     <index enabled="true">
                         <atomic>true</atomic>
@@ -129,7 +129,7 @@
             </properties>
             <associations>
                 <!-- Статус -->
-                <association name="lecm-ord-table-structure:status-assoc">
+                <association name="lecm-ord-table-structure:item-status-assoc">
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>

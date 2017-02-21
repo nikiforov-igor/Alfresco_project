@@ -23,7 +23,7 @@ public final class ORDModel {
 
 	public final static QName ASSOC_ORD_TABLE_ITEMS = QName.createQName(ORD_TABLE_NAMESPACE, "items-assoc");
 	public final static QName TYPE_ORD_TABLE_ITEM = QName.createQName(ORD_TABLE_NAMESPACE, "item");
-	public final static QName PROP_ORD_TABLE_ITEM_CONTENT = QName.createQName(ORD_TABLE_NAMESPACE, "content");
+	public final static QName PROP_ORD_TABLE_ITEM_CONTENT = QName.createQName(ORD_TABLE_NAMESPACE, "item-content");
 	public final static QName PROP_ORD_TABLE_EXECUTION_DATE = QName.createQName(ORD_TABLE_NAMESPACE, "execution-date");
 	public final static QName PROP_ORD_TABLE_EXECUTION_DATE_REAL = QName.createQName(ORD_TABLE_NAMESPACE, "execution-date-real");
 	public final static QName PROP_ORD_TABLE_ITEM_TITLE = QName.createQName(ORD_TABLE_NAMESPACE, "title");
@@ -37,7 +37,7 @@ public final class ORDModel {
 	public final static QName ASSOC_ORD_TABLE_SUBJECT = QName.createQName(ORD_TABLE_NAMESPACE, "subject-assoc");
 	public final static QName ASSOC_ORD_TABLE_CONTROLLER = QName.createQName(ORD_TABLE_NAMESPACE, "controller-assoc");
 	public final static QName ASSOC_ORD_TABLE_ERRAND = QName.createQName(ORD_TABLE_NAMESPACE, "errand-assoc");
-	public final static QName ASSOC_ORD_TABLE_ITEM_STATUS = QName.createQName(ORD_TABLE_NAMESPACE, "status-assoc");
+	public final static QName ASSOC_ORD_TABLE_ITEM_STATUS = QName.createQName(ORD_TABLE_NAMESPACE, "item-status-assoc");
 
 	public final static QName ASSOC_DOCUMENT_FILE_REGISTER_UNIT = QName.createQName(DOCUMENT_FILE_REGISTER_NAMESPACE, "organization-unit-assoc");
 
