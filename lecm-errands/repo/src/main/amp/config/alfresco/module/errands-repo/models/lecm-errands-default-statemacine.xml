@@ -3269,6 +3269,34 @@ if (document) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>380ddd2c-e8e2-47dd-a135-16af79628b9c</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/a28b8381-e97e-4c9c-be42-4a5fce51a488
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Установка флага "на контроле"]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var doc = bpm_package.children[0];
+if (doc) {
+  var controllerAssoc = doc.assocs["lecm-errands:controller-assoc"];
+  if (controllerAssoc && controllerAssoc.length){
+    doc.properties["lecm-document-aspects:is-on-control"] = true;
+    doc.save();
+  }
+}]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -3410,7 +3438,7 @@ if (document) {
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
