@@ -170,4 +170,9 @@
         <property name="policyComponent" ref="policyComponent"/>
         <property name="documentConnectionService" ref="documentConnectionService"/>
     </bean>
+
+    <bean id="resolutionBaseDocumentType" parent="edsBaseDocumentTypeBean" depends-on="resolutions.LogicEcmBootstrap">
+        <property name="type" value="lecm-resolutions:document"/>
+        <property name="assocBaseDocumentType" value="lecm-resolutions:base-document-assoc"/>
+    </bean>
 </beans>

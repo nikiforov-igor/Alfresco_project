@@ -152,7 +152,7 @@
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
 
-	<bean  id="edsExecutorPolicy" class="ru.it.lecm.eds.policy.EDSExecutorPolicy"
+	<bean id="edsExecutorPolicy" class="ru.it.lecm.eds.policy.EDSExecutorPolicy"
 		   init-method="init" depends-on="eds.models.bootstrap, eds.dictionary.bootstrap">
 		<property name="authenticationService" ref="authenticationService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
@@ -167,5 +167,13 @@
 	<bean id="filterByDictionaryAttributeValueProcessor" class="ru.it.lecm.eds.processors.FilterByDictionaryAttributeValueProcessor" parent="searchQueryBaseProccesor">
 		<property name="id" value="FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE"/>
 		<property name="dictionaryBean" ref="serviceDictionary"/>
+	</bean>
+	<bean id="edsBaseDocumentTypeBean" class="ru.it.lecm.eds.policy.EDSBaseDocumentTypePolicy"
+		  init-method="init" abstract="true">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="edsDocumentService" ref="edsService"/>
+		<property name="documentService" ref="documentService"/>
+		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 </beans>
