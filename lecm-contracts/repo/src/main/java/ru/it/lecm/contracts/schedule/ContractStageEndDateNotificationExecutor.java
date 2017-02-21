@@ -8,6 +8,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
@@ -30,6 +31,8 @@ public class ContractStageEndDateNotificationExecutor extends ActionExecuterAbst
     private OrgstructureBean orgstructureService;
     private NodeService nodeService;
     private NamespaceService namespaceService;
+    private DocumentGlobalSettingsService documentGlobalSettings;
+
     private String templateCode = "CONTRACT_STAGE_END";
 
     public void setNodeService(NodeService nodeService) {
@@ -64,6 +67,10 @@ public class ContractStageEndDateNotificationExecutor extends ActionExecuterAbst
         this.documentMembersService = documentMembersService;
     }
 
+    public void setDocumentGlobalSettings(DocumentGlobalSettingsService documentGlobalSettings) {
+        this.documentGlobalSettings = documentGlobalSettings;
+    }
+
     @Override
     protected void executeImpl(Action action, NodeRef stageRef) {
         NodeRef contractRef = documentTableService.getDocumentByTableDataRow(stageRef);
@@ -74,7 +81,7 @@ public class ContractStageEndDateNotificationExecutor extends ActionExecuterAbst
 
         final Date contractStatusDate = (Date) nodeService.getProperty(contractRef, QName.createQName("lecm-document:status-changed-date", namespaceService));
         final Date stageEndDate = (Date) nodeService.getProperty(stageRef, QName.createQName("lecm-contract-table-structure:end-date", namespaceService));
-        if ((stageEndDate.getTime() - contractStatusDate.getTime()) < 1000 * 3600 * 24 * notificationsService.getSettingsNDays()) {
+        if ((stageEndDate.getTime() - contractStatusDate.getTime()) < 1000 * 3600 * 24 * documentGlobalSettings.getSettingsNDays()) {
             return; //Если с момента регистрации (возобновления действия) договора и до ближайшей даты завершения этапа по договору осталось менее указанного количества дней, уведомление не рассылается
         }
 

@@ -148,6 +148,9 @@
                         <entry key="connectionService">
                             <ref bean="documentConnectionService"/>
                         </entry>
+                        <entry key="documentGlobalSettings">
+                            <ref bean="documents.global-settings.service"/>
+                        </entry>
                     </map>
                 </property>
             </bean>

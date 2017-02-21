@@ -11,6 +11,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.internal.api.InternalService;
@@ -38,6 +39,7 @@ public class InternalNotificationExecutor implements Job {
     private static final String KEY_INTERNAL_SERVICE = "internalService";
     private static final String KEY_CONNECTION_SERVICE = "connectionService";
     private static final String KEY_TRANSACTION_SERVICE = "transactionService";
+    private static final String KEY_DOC_SETTINGS = "documentGlobalSettings";
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
@@ -48,6 +50,7 @@ public class InternalNotificationExecutor implements Job {
         final InternalServiceImpl internalService = (InternalServiceImpl) jobExecutionContext.getJobDetail().getJobDataMap().get(KEY_INTERNAL_SERVICE);
         final DocumentConnectionService connectionService = (DocumentConnectionService) jobExecutionContext.getJobDetail().getJobDataMap().get(KEY_CONNECTION_SERVICE);
         final TransactionService transactionService = (TransactionService) jobExecutionContext.getJobDetail().getJobDataMap().get(KEY_TRANSACTION_SERVICE);
+        final DocumentGlobalSettingsService documentGlobalSettings = (DocumentGlobalSettingsService) jobExecutionContext.getJobDetail().getJobDataMap().get(KEY_DOC_SETTINGS);
 
         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
             public Object doWork() {
@@ -55,7 +58,7 @@ public class InternalNotificationExecutor implements Job {
 //                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 //                    @Override
 //                    public NodeRef execute() throws Throwable {
-                        List<NodeRef> internals = getInternal(documentService, notificationsService, calendarBean);
+                        List<NodeRef> internals = getInternal(documentService, documentGlobalSettings, calendarBean);
 
                         List<NodeRef> connectedDocs = new ArrayList<>();
                         for (NodeRef internal : internals) {
@@ -86,7 +89,7 @@ public class InternalNotificationExecutor implements Job {
                             Date now = normalizeDate(new Date());
                             Date internalExecutionDate = (Date) nodeService.getProperty(internal, InternalService.PROP_INTERNAL_RESPONSE_DATE);
                             internalExecutionDate = normalizeDate(internalExecutionDate);
-                            int days = notificationsService.getSettingsNDays();
+                            int days = documentGlobalSettings.getSettingsNDays();
                             Date workCalendarDate = calendarBean.getNextWorkingDate(now, days, Calendar.DAY_OF_MONTH);
 
                             String notificationTemplateCode = null;
@@ -118,12 +121,12 @@ public class InternalNotificationExecutor implements Job {
         return calendar.getTime();
     }
 
-    private List<NodeRef> getInternal(DocumentService documentService, NotificationsService notificationsService, IWorkCalendar calendarBean) {
+    private List<NodeRef> getInternal(DocumentService documentService, DocumentGlobalSettingsService documentlSettings, IWorkCalendar calendarBean) {
         // ищем внутренние документы, в статусе "Направлен", срок исполнения которых истекается менее чем через N дней
         Date start = new Date(0);
 
         Calendar calendar = Calendar.getInstance();
-        int days = notificationsService.getSettingsNDays();
+        int days = documentlSettings.getSettingsNDays();
         Date end = calendarBean.getNextWorkingDate(new Date(), days, Calendar.DAY_OF_MONTH);
         calendar.setTime(end);
         calendar.add(Calendar.DAY_OF_MONTH, 1);
