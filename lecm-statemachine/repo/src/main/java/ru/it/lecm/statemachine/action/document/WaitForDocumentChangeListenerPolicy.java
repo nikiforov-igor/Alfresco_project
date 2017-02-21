@@ -173,20 +173,8 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 				@Override
 				public String execute() throws Throwable {
 					String login = null;
-					String documentModifierRef = (String) nodeService.getProperty(documentNodeRef, DocumentService.PROP_DOCUMENT_MODIFIER_REF);
 
-					try {
-						 NodeRef documentModifier = new NodeRef(documentModifierRef);
-						if (nodeService.exists(documentModifier)) {
-							login = orgstructureService.getEmployeeLogin(documentModifier);
-						}
-					} catch (MalformedNodeRefException ex) {
-						logger.warn("Cannot get document modifier for document {}", documentNodeRef, ex);
-					} 
-
-					if (login == null) {
-						login = (String) nodeService.getProperty(documentNodeRef, ContentModel.PROP_MODIFIER);
-					}
+					login = (String) nodeService.getProperty(documentNodeRef, ContentModel.PROP_MODIFIER);
 					
 					if (AuthenticationUtil.SYSTEM_USER_NAME.equals(login)) {
 						logger.warn("Modifier is System. Using admin instead");
