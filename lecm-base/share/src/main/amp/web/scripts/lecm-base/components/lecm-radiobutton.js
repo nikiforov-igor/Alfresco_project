@@ -88,27 +88,23 @@ LogicECM.module = LogicECM.module || {};
 					}
 				},
                 loadDefaultValue: function AssociationSelectOne__loadDefaultValue() {
-                    if (this.options.defaultValue != null) {
+                    if (this.options.defaultValue) {
                         this.checkbox.checked = this.options.defaultValue == "true";
-                    } else {
-                        if (this.options.defaultValueDataSource != null) {
-                            var me = this;
-                            Alfresco.util.Ajax.request(
-								{
-									url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
-									successCallback: {
-										fn: function(response) {
-											var oResults = eval("(" + response.serverResponse.responseText + ")");
-											if (oResults != null && oResults.checked != null) {
-												me.options.defaultValue = oResults.checked;
-												me.checkbox.checked = oResults.checked == "true";
-											}
-										}
-									},
-									failureMessage: "message.failure"
-								});
-                        }
-                    }
+                    } else if (this.options.defaultValueDataSource) {
+                        Alfresco.util.Ajax.jsonGet({
+							url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
+							successCallback: {
+								fn: function(response) {
+									if (response.json && response.json.checked) {
+										this.options.defaultValue = response.json.checked;
+										this.checkbox.checked = response.json.checked == "true";
+									}
+								},
+								scope: this
+							},
+							failureMessage: this.msg("message.failure")
+						});
+					}
                 },
                 onChange: function() {
                     var el = Dom.get(this.id);

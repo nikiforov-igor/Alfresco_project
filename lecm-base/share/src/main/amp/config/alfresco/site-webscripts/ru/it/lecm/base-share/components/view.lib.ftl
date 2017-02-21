@@ -1,3 +1,4 @@
+<#-- DEPRECATED! UNUSED! -->
 <#macro viewForm formId="view-node-form">
 	<script type="text/javascript">//<![CDATA[
 	var viewDialog = null;
@@ -63,27 +64,24 @@
 	}
 
     function showEmployeeViewByLink(employeeLinkNodeRef, title) {
-        var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeeByLink?nodeRef=" + employeeLinkNodeRef;
-        var callback = {
-            success:function (oResponse) {
-                var oResults = eval("(" + oResponse.responseText + ")");
-                if (oResults && oResults.nodeRef) {
-                    viewAttributes(oResults.nodeRef, null, title);
-                } else {
-                    Alfresco.util.PopupManager.displayMessage(
-                            {
-                                text:me.msg("message.details.failure")
-                            });
-                }
-            },
-            failure:function (oResponse) {
-                Alfresco.util.PopupManager.displayMessage(
-                        {
-                            text:me.msg("message.details.failure")
-                        });
-            }
-        };
-        YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+		Alfresco.util.Ajax.jsonGet({
+			url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getEmployeeByLink",
+			dataObj: {
+				nodeRef: employeeLinkNodeRef
+			},
+			successCallback: {
+				fn: function (oResponse) {
+	                if (oResponse.json && oResponse.json.nodeRef) {
+		                viewAttributes(oResponse.json.nodeRef, null, title);
+			        } else {
+						Alfresco.util.PopupManager.displayMessage({
+							text: Alfresco.util.message("message.details.failure")
+						});
+					}
+				}
+			},
+			failureMessage: Alfresco.util.message("message.details.failure")
+		});
     }
 
 	//инициализация view-node-form для того, чтобы каждый раз самостоятельно не вызывать этот метод

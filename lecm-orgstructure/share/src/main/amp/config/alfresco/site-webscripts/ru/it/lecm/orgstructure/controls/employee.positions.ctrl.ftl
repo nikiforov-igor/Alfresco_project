@@ -22,81 +22,67 @@
 
                 function init() {
                     LogicECM.module.Base.DataGrid.prototype.onActionMakePrimary = function DataGridActions_onActionMakePrimary(p_item) {
-	                    var me = this;
                         var staffRow = p_item;
                         // Получаем для штатного расписания ссылку на сотрудника
-                        var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink?nodeRef=" + staffRow.nodeRef;
-                        var callback = {
-                            success:function (oResponse) {
-                                var oResult = eval("(" + oResponse.responseText + ")");
-                                if (oResult) {
-                                    Alfresco.util.PopupManager.displayPrompt(
-                                            {
-                                                title:me.msg("message.position.primary.title"),
-                                                text: me.msg("message.position.primary.prompt", staffRow.itemData["assoc_lecm-orgstr_element-member-position-assoc"].displayValue),
-                                                buttons:[
-                                                    {
-                                                        text:me.msg("button.position.makePrimary"),
-                                                        handler:function DataGridActions_onActionMakePrimary_make() {
+                        Alfresco.util.Ajax.jsonGet({
+                            url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink",
+                            dataObj: {
+                                nodeRef: staffRow.nodeRef
+                            },
+                            successCallback: {
+                                scope: this,
+                                fn: function (response) {
+                                    var oResult = response.json;
+                                    if (oResult) {
+                                        Alfresco.util.PopupManager.displayPrompt({
+                                            title: this.msg("message.position.primary.title"),
+                                            text: this.msg("message.position.primary.prompt", staffRow.itemData["assoc_lecm-orgstr_element-member-position-assoc"].displayValue),
+                                            buttons:[
+                                                {
+                                                    text: this.msg("button.position.makePrimary"),
+                                                    handler: {
+                                                        obj: this,
+                                                        fn: function DataGridActions_onActionMakePrimary_make(event, obj) {
                                                             this.destroy();
-                                                            var onSuccess = function DataGrid_onActionEmployeeAdd_onSuccess(response) {
-                                                                YAHOO.Bubbling.fire("datagridRefresh",
-                                                                        {
-                                                                            bubblingLabel:me.options.bubblingLabel
+                                                            Alfresco.util.Ajax.jsonPost({
+                                                                url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/action/makePrimary",
+                                                                dataObj: {
+                                                                    nodeRef: oResult.nodeRef
+                                                                },
+                                                                successCallback: {
+                                                                    scope: obj,
+                                                                    fn: function DataGrid_onActionEmployeeAdd_onSuccess(response) {
+                                                                        YAHOO.Bubbling.fire("datagridRefresh", {
+                                                                            bubblingLabel: this.options.bubblingLabel
                                                                         });
-                                                                Alfresco.util.PopupManager.displayMessage(
-                                                                        {
-                                                                            text:me.msg("message.position.primary.success")
+                                                                        Alfresco.util.PopupManager.displayMessage({
+                                                                            text: this.msg("message.position.primary.success")
                                                                         });
-                                                            };
-                                                            var onFailure = function DataGrid_onActionEmployeeAdd_onFailure(response) {
-                                                                Alfresco.util.PopupManager.displayMessage(
-                                                                        {
-                                                                            text:me.msg("message.position.primary.failure")
-                                                                        });
-                                                            };
-                                                            Alfresco.util.Ajax.jsonRequest(
-                                                                    {
-                                                                        url:Alfresco.constants.PROXY_URI + "/lecm/orgstructure/action/makePrimary",
-                                                                        method:"POST",
-                                                                        dataObj:{
-                                                                            nodeRef:oResult.nodeRef
-                                                                        },
-                                                                        successCallback:{
-                                                                            fn:onSuccess,
-                                                                            scope:this
-                                                                        },
-                                                                        failureCallback:{
-                                                                            fn:onFailure,
-                                                                            scope:this
-                                                                        }
-                                                                    });
+                                                                    }
+                                                                },
+                                                                failureMessage: obj.msg("message.position.primary.failure")
+                                                            });
                                                         }
-                                                    },
-                                                    {
-                                                        text:me.msg("button.cancel"),
-                                                        handler:function DataGridActions_onActionMakePrimary_cancel() {
-                                                            this.destroy();
-                                                        },
-                                                        isDefault:true
                                                     }
-                                                ]
-                                            });
-                                } else {
-                                    Alfresco.util.PopupManager.displayMessage(
-                                            {
-                                                text:this.msg("message.position.primary.failure")
-                                            });
+                                                },
+                                                {
+                                                    text: this.msg("button.cancel"),
+                                                    handler: function DataGridActions_onActionMakePrimary_cancel() {
+                                                        this.destroy();
+                                                    },
+                                                    isDefault: true
+                                                }
+                                            ]
+                                        });
+                                    } else {
+                                        Alfresco.util.PopupManager.displayMessage({
+                                            text: this.msg("message.position.primary.failure")
+                                        });
+                                    }
                                 }
                             },
-                            failure:function (oResponse) {
-                                Alfresco.util.PopupManager.displayMessage(
-                                        {
-                                            text:this.msg("message.position.primary.failure")
-                                        });
-                            }
-                        };
-                        YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                            failureMessage: this.msg("message.position.primary.failure")
+                        });
                     };
 
 	                var bublingLabel = "${containerId}" + Alfresco.util.generateDomId();

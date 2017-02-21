@@ -2,7 +2,7 @@
     <shortname>employee staff list positions</shortname>
     <description>Return all employee staff positions</description>
     <url>/lecm/orgstructure/api/getEmployeePositions?nodeRef={nodeRef}</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction allow="readonly">required</transaction>
 </webscript>

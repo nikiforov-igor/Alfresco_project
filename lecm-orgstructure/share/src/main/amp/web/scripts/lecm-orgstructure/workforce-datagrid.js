@@ -58,102 +58,91 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
 
         },
         onActionEmployeeDelete: function DataGridActions_onActionEmployeeDelete(p_item, owner, actionsConfig, fnDeleteComplete) {
-            var me = this;
-
-	        var sUrlWorkGroup = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getWorkGroupProperties?nodeRef=" + this.datagridMeta.nodeRef;
-	        var callbackWorkGroup = {
-		        success: function (oResponse) {
-			        var oResultWorkGroup = eval("(" + oResponse.responseText + ")");
-			        if (oResultWorkGroup) {
-						var workgroupShortName = oResultWorkGroup.shortName;
-
-				        var staffRow = p_item;
-				        // Получаем для трудового ресурса (участника раб. группы) ссылку на сотрудника
-				        var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink?nodeRef=" + staffRow.nodeRef;
-				        var callback = {
-					        success: function (oResponse) {
-						        var oResult = eval("(" + oResponse.responseText + ")");
-						        if (oResult) {
-							        var onPrompt = function (fnAfterPrompt) {
-								        Alfresco.util.PopupManager.displayPrompt(
-									        {
-										        title: this.msg("message.employee.role.delete.title"),
-										        text: this.msg("message.employee.role.delete.prompt",
-											        staffRow.itemData["assoc_lecm-orgstr_element-member-employee-assoc"].displayValue,
-											        workgroupShortName),
-										        buttons: [
-											        {
-												        text: this.msg("button.employee.remove"),
-												        handler: function DataGridActions__onActionDelete_delete() {
-													        this.destroy();
-													        fnAfterPrompt.call(me, [oResult]);
+	        Alfresco.util.Ajax.jsonGet({
+		        url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getWorkGroupProperties",
+		        dataObj: {
+			        nodeRef: this.datagridMeta.nodeRef
+		        },
+		        successCallback: {
+			        scope: this,
+			        fn: function (response) {
+				        var oResultWorkGroup = response.json;
+				        if (oResultWorkGroup) {
+							var workgroupShortName = oResultWorkGroup.shortName;
+					        var staffRow = p_item;
+					        // Получаем для трудового ресурса (участника раб. группы) ссылку на сотрудника
+				            Alfresco.util.Ajax.jsonGet({
+				                url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink",
+					            dataObj: {
+						            nodeRef: staffRow.nodeRef
+					            },
+				                successCallback: {
+					                scope: this,
+							        fn: function (response) {
+								        var oResult = response.json;
+								        if (oResult) {
+									        var onPrompt = function (fnAfterPrompt) {
+										        Alfresco.util.PopupManager.displayPrompt({
+											        title: this.msg("message.employee.role.delete.title"),
+											        text: this.msg("message.employee.role.delete.prompt",
+												        staffRow.itemData["assoc_lecm-orgstr_element-member-employee-assoc"].displayValue,
+												        workgroupShortName),
+											        buttons: [
+												        {
+													        text: this.msg("button.employee.remove"),
+													        handler: {
+														        obj: this,
+														        fn: function DataGridActions__onActionDelete_delete(event, obj) {
+															        this.destroy();
+															        fnAfterPrompt.call(obj, [oResult]);
+														        }
+													        }
+												        },
+												        {
+													        text: this.msg("button.cancel"),
+													        handler: function DataGridActions__onActionDelete_cancel() {
+														        this.destroy();
+													        },
+													        isDefault: true
+												        }
+											        ]
+										        });
+									        };
+									        var fnDeleteComplete = function () {
+										        // Reload the node's metadata
+										        Alfresco.util.Ajax.jsonPost({
+											        url: Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + new Alfresco.util.NodeRef(p_item.nodeRef).uri,
+											        dataObj: this._buildDataGridParams(),
+											        successCallback: {
+												        scope: this,
+												        fn: function DataGrid_onActionEdit_refreshSuccess(response) {
+													        // Fire "itemUpdated" event
+													        YAHOO.Bubbling.fire("dataItemUpdated", {
+														        item: response.json.item,
+														        bubblingLabel: this.options.bubblingLabel
+													        });
 												        }
 											        },
-											        {
-												        text: this.msg("button.cancel"),
-												        handler: function DataGridActions__onActionDelete_cancel() {
-													        this.destroy();
-												        },
-												        isDefault: true
-											        }
-										        ]
-									        });
-							        };
-							        var fnDeleteComplete = function () {
-								        // Reload the node's metadata
-								        Alfresco.util.Ajax.jsonPost(
-									        {
-										        url: Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + new Alfresco.util.NodeRef(p_item.nodeRef).uri,
-										        dataObj: this._buildDataGridParams(),
-										        successCallback: {
-											        fn: function DataGrid_onActionEdit_refreshSuccess(response) {
-												        // Fire "itemUpdated" event
-												        YAHOO.Bubbling.fire("dataItemUpdated",
-													        {
-														        item: response.json.item,
-														        bubblingLabel: me.options.bubblingLabel
-													        });
-											        },
-											        scope: this
-										        },
-										        failureCallback: {
-											        fn: function DataGrid_onActionEdit_refreshFailure(response) {
-												        Alfresco.util.PopupManager.displayMessage(
-													        {
-														        text: this.msg("message.details.failure")
-													        });
-											        },
-											        scope: this
-										        }
-									        });
-							        }.bind(me);
+											        failureMessage: this.msg("message.details.failure")
+										        });
+									        }.bind(this);
 
-							        me.onDelete([oResult], owner, {fullDelete: true, trash: false, successMessage: "message.employee.role.delete.success"}, fnDeleteComplete, onPrompt);
-						        } else {
-							        Alfresco.util.PopupManager.displayMessage(
-								        {
-									        text: this.msg("message.employee.role.delete.failure")
-								        });
-						        }
-					        },
-					        failure: function (oResponse) {
-						        Alfresco.util.PopupManager.displayMessage(
-							        {
-								        text: this.msg("message.employee.role.delete.failure")
-							        });
-					        }
-				        };
-				        YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+									        this.onDelete([oResult], owner, {fullDelete: true, trash: false, successMessage: "message.employee.role.delete.success"}, fnDeleteComplete, onPrompt);
+								        } else {
+									        Alfresco.util.PopupManager.displayMessage({
+										        text: this.msg("message.employee.role.delete.failure")
+									        });
+								        }
+							        }
+						        },
+						        failureMessage: this.msg("message.employee.role.delete.failure")
+					        });
+
+				        }
 			        }
 		        },
-		        failure: function (oResponse) {
-			        Alfresco.util.PopupManager.displayMessage(
-				        {
-					        text: this.msg("message.employee.role.delete.failure")
-				        });
-		        }
-	        };
-	        YAHOO.util.Connect.asyncRequest('GET', sUrlWorkGroup, callbackWorkGroup);
+		        failureMessage: this.msg("message.employee.role.delete.failure")
+	        });
         }
     }, true);
 })();

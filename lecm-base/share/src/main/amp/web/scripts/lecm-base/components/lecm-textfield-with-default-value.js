@@ -36,7 +36,7 @@ LogicECM.module = LogicECM.module || {};
 		},
 		loadDefaultValue: function() {
 			if (this.options.defaultValueDataSource) {
-				Alfresco.util.Ajax.request({
+				Alfresco.util.Ajax.jsonGet({
 					url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
 					successCallback: {
 						scope: this,

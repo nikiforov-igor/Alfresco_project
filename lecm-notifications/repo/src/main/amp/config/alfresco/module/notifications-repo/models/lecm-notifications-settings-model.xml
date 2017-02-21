@@ -16,6 +16,13 @@
 		<namespace uri="http://www.it.ru/lecm/notifications/settings/1.0" prefix="lecm-notf-settings"/>
 	</namespaces>
 
+	<constraints>
+		<constraint name="lecm-notf-settings:natural-number-constraint" type="REGEX">
+			<parameter name="expression"><value>^\+?(0|[1-9]\d*)$</value></parameter>
+			<parameter name="requiresMatch"><value>true</value></parameter>
+		</constraint>
+	</constraints>
+
 	<types>
 		<type name="lecm-notf-settings:user">
 			<title>Notifications user settings</title>
@@ -50,17 +57,26 @@
 					<type>d:int</type>
 					<mandatory>true</mandatory>
 					<default>1</default>
+					<constraints>
+						<constraint ref="lecm-notf-settings:natural-number-constraint"/>
+					</constraints>
 				</property>
 				<!--Для долгосрочного исполнения-->
 				<property name="lecm-notf-settings:n-days">
 					<type>d:int</type>
 					<mandatory>true</mandatory>
 					<default>5</default>
+					<constraints>
+						<constraint ref="lecm-notf-settings:natural-number-constraint"/>
+					</constraints>
 				</property>
 				<!--Краткий срок исполнения-->
 				<property name="lecm-notf-settings:short-limit-days">
 					<type>d:int</type>
 					<default>10</default>
+					<constraints>
+						<constraint ref="lecm-notf-settings:natural-number-constraint"/>
+					</constraints>
 				</property>
 			</properties>
 		</type>

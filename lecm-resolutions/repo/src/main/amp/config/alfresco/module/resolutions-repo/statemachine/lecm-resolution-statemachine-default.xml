@@ -145,6 +145,40 @@
                         </roleAssociations>
                         <subFolders/>
                     </node>
+                    <node>
+                        <type>dynamic-role-item</type>
+                        <name>93af5f32-a5f2-48d6-91b3-e2e6ad869c96</name>
+                        <nodeRef>workspace://SpacesStore/bd57e168-6bf6-422f-9005-d6abdcb41f15</nodeRef>
+                        <properties/>
+                        <aspects>
+                            <business-role/>
+                        </aspects>
+                        <associations/>
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>RESOLUTION_CHILD_ERRANDS_CO_EXECUTOR</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders/>
+                    </node>
+                    <node>
+                        <type>dynamic-role-item</type>
+                        <name>a5788f87-5e29-4c7d-a1be-d3a4d57e9bc1</name>
+                        <nodeRef>workspace://SpacesStore/2beee70e-d8d3-45b3-ad0e-7d1a0579631d</nodeRef>
+                        <properties/>
+                        <aspects>
+                            <business-role/>
+                        </aspects>
+                        <associations/>
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>RESOLUTION_CHILD_ERRANDS_EXECUTOR</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders/>
+                    </node>
                 </nodes>
             </subFolder>
             <subFolder>
@@ -1079,6 +1113,53 @@
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>54ca2e9a-b7f7-48e5-8701-c76f2af98412</name>
+                                        <nodeRef>workspace://SpacesStore/54ca2e9a-b7f7-48e5-8701-c76f2af98412</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CHILD_ERRANDS_CO_EXECUTOR
+                                                </businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>677bd4a5-5c28-455d-9883-8f91f5edd02a</name>
+                                        <nodeRef>workspace://SpacesStore/677bd4a5-5c28-455d-9883-8f91f5edd02a</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CHILD_ERRANDS_EXECUTOR</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -1391,7 +1472,9 @@
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var document = stm_document;
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/workflow/review/form/review-ts.form.lib.js">
+
+var document = stm_document;
 if (document) {
   var annulReason = document.properties["lecm-resolutions:annul-signal-reason"];
 
@@ -1406,6 +1489,11 @@ if (document) {
   var baseDocAssoc = document.assocs["lecm-resolutions:base-document-assoc"];
   if (baseDocAssoc && baseDocAssoc.length) {
     edsDocument.sendChildChangeSignal(baseDocAssoc[0]);
+  }
+
+  var reviewItemsAssocs = document.assocs["lecm-review-aspects:related-review-records-assoc"];
+  if (reviewItemsAssocs && reviewItemsAssocs.length) {
+    cancelReviewFromInitiatingDocument(document, reviewItemsAssocs);
   }
 
   if (annulReason) {
@@ -1473,44 +1561,19 @@ if (document) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var document = bpm_package.children[0];
-if (document) {
-  var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
-  if (childrenErrands && childrenErrands.length) {
-    var canceledCount = 0;
-    var executedCount = 0;
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/resolutions-repo/workflow/scripts/resolution-scripts-lib.js">
 
-    childrenErrands.forEach(function (errand) {
-      if ("Исполнено" == errand.properties["lecm-statemachine:status"]) {
-        executedCount++;
-      } else if ("Отменено" == errand.properties["lecm-statemachine:status"]) {
-        canceledCount++;
-      }
-    });
-
-    if (childrenErrands.length == (executedCount + canceledCount)) {
-      if (childrenErrands.length == executedCount) {
-        document.properties["lecm-resolutions:auto-complete"] = true;
-      } if (childrenErrands.length == canceledCount) {
-        document.properties["lecm-resolutions:annul-signal"] = true;
-      } else {
-        document.properties["lecm-resolutions:require-closers-decision"] = true;
-
-        notifications.sendNotificationFromCurrentUser({
-          recipients: resolutionsScript.getResolutionClosers(document),
-          templateCode: 'RESOLUTION_REQUIRES_SOLUTION_CLOSERS',
-          templateConfig: {
-            mainObject: document
-          },
-          dontCheckAccessToObject: true
-        });
-      }
-    }
+(function(){
+  var document = bpm_package.children[0];
+  if (document) {
+    lecmPermission.pushAuthentication();
+    lecmPermission.setRunAsUserSystem();
+	LECMResolutionActions.processChangeChildSignal(document);
+    edsDocument.resetChildChangeSignal(document);
+    lecmPermission.popAuthentication();
   }
-
-  document.properties["lecm-eds-aspect:child-change-signal-count"] = 0;
-  document.save();
-}]]></value>
+})();
+]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -1595,6 +1658,134 @@ if (document) {
                                                             <transitionStatusAspect/>
                                                         </aspects>
                                                         <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>fdf44554-e72a-4880-bc7c-e1664dc5a3ce</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/6b81997b-dad9-42cd-8622-7010da173672
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-review-aspects:related-review-records-change-count") > 0]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/resolutions-repo/workflow/scripts/resolution-scripts-lib.js">
+
+(function(){
+  var document = bpm_package.children[0];
+  if (document) {
+    lecmPermission.pushAuthentication();
+    lecmPermission.setRunAsUserSystem();
+	LECMResolutionActions.processChangeChildSignal(document);
+    review.resetRelatedReviewChangeCount(document);
+    lecmPermission.popAuthentication();
+  }
+})();
+]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>8c1eb417-877b-4442-ac02-942924a60213</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/9c7b0a87-8ca5-4b7e-b6a5-a5022caa6a24
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:completion-signal-aspect") AND doc.attr("lecm-eds-aspect:completion-signal") == true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+if (document) {
+  var signalSender = null;
+  var signalSenderAssoc = document.assocs["lecm-eds-aspect:completion-signal-sender-assoc"];
+  if (signalSenderAssoc && signalSenderAssoc.length) {
+    signalSender = signalSenderAssoc[0];
+  }
+  var signalReason = document.properties["lecm-eds-aspect:completion-signal-reason"];
+
+  var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
+  if (childErrands) {
+    childErrands.forEach(function (errand) {
+      edsDocument.sendCompletionSignal(errand, signalReason, signalSender);
+    });
+  }
+
+  var recipients = [];
+  var authorAssoc = document.assocs["lecm-resolutions:author-assoc"];
+  if (authorAssoc && authorAssoc.length) {
+    recipients.push(authorAssoc[0]);
+  }
+  var creatorAssoc = document.assocs["lecm-document:author-assoc"];
+  if (creatorAssoc && creatorAssoc.length) {
+    recipients.push(creatorAssoc[0]);
+  }
+
+  var controllerAssoc = document.assocs["lecm-resolutions:controller-assoc"];
+  if (controllerAssoc && controllerAssoc.length) {
+    recipients.push(controllerAssoc[0]);
+  }
+  notifications.sendNotificationFromCurrentUser({
+    recipients: recipients,
+    templateCode: 'RESOLUTION_COMPLETION',
+    templateConfig: {
+      mainObject: document,
+      reason: signalReason
+    },
+    dontCheckAccessToObject: true
+  });
+
+  var logText = "Исполнение резолюции #mainobject ";
+  logText += documentScript.wrapperTitle("завершено", signalReason ? signalReason : "");
+  businessJournal.log(document.nodeRef.toString(), "EXECUTE_DOCUMENT", logText, []);
+
+  edsDocument.resetCompletionSignal(document);
+}]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/8ccf2c48-f1a3-4674-b032-b50d0c897e84
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
@@ -2209,6 +2400,53 @@ if (document) {
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>RESOLUTION_CREATOR_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>9a2d910a-e4e8-4093-b710-c098f890375e</name>
+                                        <nodeRef>workspace://SpacesStore/9a2d910a-e4e8-4093-b710-c098f890375e</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CHILD_ERRANDS_CO_EXECUTOR
+                                                </businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>b2445b3a-1437-4d9f-92c3-06c2b81bae67</name>
+                                        <nodeRef>workspace://SpacesStore/b2445b3a-1437-4d9f-92c3-06c2b81bae67</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CHILD_ERRANDS_EXECUTOR</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -3233,6 +3471,53 @@ if (document) {
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>RESOLUTION_CREATOR_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>20072845-9298-4254-b765-0a2f4e4d70ec</name>
+                                        <nodeRef>workspace://SpacesStore/20072845-9298-4254-b765-0a2f4e4d70ec</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CHILD_ERRANDS_CO_EXECUTOR
+                                                </businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>7199b3b3-3876-43a6-bd97-a13114eccc34</name>
+                                        <nodeRef>workspace://SpacesStore/7199b3b3-3876-43a6-bd97-a13114eccc34</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_CHILD_ERRANDS_EXECUTOR</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>

@@ -703,4 +703,9 @@
             </list>
         </property>
     </bean>
+
+    <bean id="errandsBaseDocumentType" parent="edsBaseDocumentTypeBean" depends-on="errands.LogicEcmModelsBootstrap">
+        <property name="type" value="lecm-errands:document"/>
+        <property name="assocBaseDocumentType" value="lecm-errands:base-assoc"/>
+    </bean>
 </beans>

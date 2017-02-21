@@ -2,7 +2,7 @@
     <shortname>Dictionary by code</shortname>
     <description>Dictionary by code</description>
     <url>/lecm/dictionary/api/getDictionaryByCode</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction allow="readonly">required</transaction>
 </webscript>

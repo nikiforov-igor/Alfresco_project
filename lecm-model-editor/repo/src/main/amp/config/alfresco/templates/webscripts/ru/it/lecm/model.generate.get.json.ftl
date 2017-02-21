@@ -1,5 +1,5 @@
-<#escape x as x?js_string>
-	{
-		"success": ${success?string}
-	}
+<#escape x as jsonUtils.encodeJSONString(x)!''>
+{
+	"success": ${success?string}
+}
 </#escape>

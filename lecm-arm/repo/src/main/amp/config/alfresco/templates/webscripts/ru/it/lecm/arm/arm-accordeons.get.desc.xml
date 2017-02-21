@@ -2,7 +2,7 @@
     <shortname>ARM Root Nodes</shortname>
     <description>Получение списка корневых узлов АРМ по его коду</description>
     <url>/lecm/arm/root-nodes?armRef={armRef}</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction allow="readonly">required</transaction>
 </webscript>

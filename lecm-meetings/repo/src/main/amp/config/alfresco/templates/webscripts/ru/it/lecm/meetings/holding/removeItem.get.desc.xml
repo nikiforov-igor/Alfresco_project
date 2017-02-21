@@ -3,7 +3,7 @@
     <shortname>remove item</shortname>
     <description>remove meeting holding item</description>
     <url>/lecm/meeting/removeItem</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction>required</transaction>
 </webscript>

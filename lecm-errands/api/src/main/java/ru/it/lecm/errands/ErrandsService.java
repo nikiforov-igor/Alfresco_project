@@ -42,6 +42,7 @@ public interface ErrandsService {
     QName PROP_ERRANDS_CONTROLLER_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "controller-assoc-ref");
     QName PROP_ERRANDS_ADDITIONAL_DOCUMENT_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "additional-document-assoc-ref");
 
+    QName PROP_ERRANDS_IS_SHORT = QName.createQName(ERRANDS_NAMESPACE_URI, "is-short");
     QName PROP_ERRANDS_IS_IMPORTANT = QName.createQName(ERRANDS_NAMESPACE_URI, "is-important");
     QName PROP_ERRANDS_EXECUTION_DATE = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-date");
     QName PROP_ERRANDS_IS_EXPIRED = QName.createQName(ERRANDS_NAMESPACE_URI, "is-expired");
@@ -65,6 +66,8 @@ public interface ErrandsService {
     QName PROP_ERRANDS_LIMITATION_DATE_TYPE = QName.createQName(ERRANDS_NAMESPACE_URI,"limitation-date-type");
     QName PROP_ERRANDS_HALF_LIMIT_DATE = QName.createQName(ERRANDS_NAMESPACE_URI,"half-limit-date");
     QName PROP_ERRANDS_IS_LIMIT_SHORT_DATE = QName.createQName(ERRANDS_NAMESPACE_URI,"is-limit-short");
+
+    QName PROP_ERRANDS_IS_PERIODICALLY = QName.createQName(ERRANDS_NAMESPACE_URI, "periodically");
 
     QName PROP_ERRANDS_CANCELLATION_SIGNAL = QName.createQName(ERRANDS_NAMESPACE_URI,"cancellation-signal");
     QName PROP_ERRANDS_CANCELLATION_SIGNAL_REASON = QName.createQName(ERRANDS_NAMESPACE_URI,"cancellation-signal-reason");

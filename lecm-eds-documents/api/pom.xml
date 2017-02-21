@@ -24,5 +24,11 @@
 			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.documents</groupId>
+			<artifactId>documents-repo-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>

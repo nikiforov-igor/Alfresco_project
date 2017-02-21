@@ -1,6 +1,6 @@
-<#escape x as x?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 {
-"success": ${success?string}
+    "success": ${success?string}
     <#if reportRef??>
     ,
     "reportRef": "${reportRef}",

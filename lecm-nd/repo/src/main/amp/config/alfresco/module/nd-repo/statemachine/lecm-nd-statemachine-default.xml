@@ -1172,24 +1172,13 @@
                                                         <properties>
                                                             <property>
                                                                 <name>actionScript</name>
-                                                                <value><![CDATA[var doc = bpm_package.children[0];
+                                                                <value><![CDATA[
+<import resource="classpath:/alfresco/module/eds-documents-repo/workflow/scripts/eds-executor-script.js">
+var doc = bpm_package.children[0];
 if (doc) {
-  var docCompiler = doc.assocs["lecm-document:author-assoc"][0];
-  var docExecutorAssoc = doc.assocs["lecm-eds-document:executor-assoc"];
-  var docExecutor = null;
-  if (docExecutorAssoc && docExecutorAssoc.length) {
-  	docExecutor = docExecutorAssoc[0];
-  }
-  if (docExecutor && docCompiler && !docExecutor.nodeRef.equals(docCompiler.nodeRef)) {
-  	 notifications.sendNotificationFromCurrentUser({
-        recipients: [docExecutor],
-        templateCode: 'EDS_EXECUTOR_NEW',
-        templateConfig: {
-            mainObject: doc
-        }
-    });
-  }
-}]]></value>
+    EDSExecutorScript.notificateExecutor(doc);
+}
+]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>

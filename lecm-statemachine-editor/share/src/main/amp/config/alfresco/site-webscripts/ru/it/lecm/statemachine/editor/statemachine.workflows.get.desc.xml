@@ -2,6 +2,6 @@
 	<shortname>Statemachine Editor Module Main page</shortname>
 	<description>Statemachine Editor Module Main page</description>
 	<url>/lecm/statemachine/editor/workflows</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>none</authentication>
 </webscript>

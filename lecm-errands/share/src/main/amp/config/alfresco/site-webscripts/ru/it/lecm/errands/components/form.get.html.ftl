@@ -156,17 +156,15 @@
                             return;
                         }
 
-					    Alfresco.util.Ajax.jsonRequest(
-                            {
-                                method: "POST",
-                                url: Alfresco.constants.PROXY_URI + "lecm/errands/api/setExecutionReport",
-                                dataObj: {
-                                    nodeRef: "${nodeRef}",
-                                    executionReport: setExecutionReport.editor.getContent()
-                                },
-                                successMessage: "${msg("message.setExecutionReport.success")}",
-                                failureMessage: "${msg("message.setExecutionReport.failure")}"
-                            });
+					    Alfresco.util.Ajax.jsonPost({
+                            url: Alfresco.constants.PROXY_URI + "lecm/errands/api/setExecutionReport",
+                            dataObj: {
+                                nodeRef: "${nodeRef}",
+                                executionReport: setExecutionReport.editor.getContent()
+                            },
+                            successMessage: "${msg("message.setExecutionReport.success")}",
+                            failureMessage: "${msg("message.setExecutionReport.failure")}"
+                        });
 				    });
 
 				    Alfresco.util.createYUIButton(YAHOO.util.Dom.get(htmlId), "exec-report-reset", function() {

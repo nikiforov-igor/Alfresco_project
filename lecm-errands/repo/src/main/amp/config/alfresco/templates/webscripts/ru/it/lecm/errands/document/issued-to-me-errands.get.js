@@ -84,7 +84,7 @@ function main() {
         model.records.push(    {
             "nodeRef": record.getNodeRef().toString(),
             "record": record.properties["lecm-document:present-string"],
-            "date": record.properties["lecm-errands:limitation-date"],
+            "date": record.properties["lecm-errands:limitation-date-text"],
             "title": record.properties["lecm-errands:title"],
             "summary":record.properties["lecm-errands:content"],
             "status":record.properties["lecm-statemachine:status"],

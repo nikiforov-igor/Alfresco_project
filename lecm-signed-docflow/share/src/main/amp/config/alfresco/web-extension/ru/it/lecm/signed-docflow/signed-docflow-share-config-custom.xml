@@ -109,11 +109,6 @@
 	<!-- Конфиг для апплета АйТиШтамп -->
 	<config>
 		<forms>
-			<dependencies>
-				<!-- JS для регистрации action'а "Разблокировать документ,
-				добавлен сюда, ибо иначе на странице вложения не цепляется-->
-				<js src="/scripts/signed-docflow/document-unlock.js" />
-			</dependencies>
 			<form id="auth-form">
 				<create-form template="/ru/it/lecm/signed/docflow/forms/auth-form.ftl" />
 			</form>
@@ -121,29 +116,5 @@
 				<create-form template="/ru/it/lecm/signed/docflow/forms/multiple-sign-form.ftl" />
 			</form>
 		</forms>
-	</config>
-	<!-- Добавление action'a "Разблокировать документа" -->
-	<config evaluator="string-compare" condition="DocLibActions">
-		<actions>
-			<action id="document-unlock" type="javascript" label="actions.document.unlock">
-				<param name="function">onUnlockAction</param>
-				<evaluator>evaluator.lecm.signed.docflow.showUnlockButton</evaluator>
-			</action>
-			<action id="document-upload-new-version" type="javascript" label="actions.document.upload-new-version">
-				<param name="function">onActionUploadNewVersion</param>
-				<permissions>
-					<permission allow="true">Write</permission>
-				</permissions>
-				<evaluator>evaluator.lecm.signed.docflow.showNewVersionButton</evaluator>
-			</action>
-		</actions>
-		<actionGroups>
-			<actionGroup id="document-details">
-				<action index="101" id="document-unlock" />
-			</actionGroup>
-			<actionGroup id="document-browse">
-				<action index="101" id="document-unlock" />
-			</actionGroup>
-		</actionGroups>
 	</config>
 </alfresco-config>
