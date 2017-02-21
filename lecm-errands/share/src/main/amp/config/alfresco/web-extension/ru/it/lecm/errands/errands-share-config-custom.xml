@@ -1304,13 +1304,6 @@
                     <!-- Без утверждения инициатором -->
                     <show id="lecm-errands:without-initiator-approval"/>
                 </field-visibility>
-                <appearance>
-                    <field id="lecm-errands:controller-assoc">
-                        <control>
-                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
-                        </control>
-                    </field>
-                </appearance>
             </form>
             <form id="searchQueryGrid">
                 <field-visibility>

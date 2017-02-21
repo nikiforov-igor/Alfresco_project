@@ -258,14 +258,6 @@
 					<show id="lecm-review-ts:review-table-assoc"/>
                     <show id="lecm-eds-document:executor-assoc"/>
                 </field-visibility>
-				<appearance>
-					<field id="lecmApproveAspects:approvalFolderRef" label="Согласование"/>
-                    <field id="lecm-errands:controller-assoc">
-                        <control>
-                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
-                        </control>
-                    </field>
-				</appearance>
             </form>
 
             <!-- Форма атрибутивного поиска -->
