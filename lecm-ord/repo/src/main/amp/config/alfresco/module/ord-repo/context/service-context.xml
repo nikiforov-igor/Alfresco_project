@@ -45,11 +45,11 @@
         <property name="edsDocumentService" ref="edsService"/>
         <property name="namespaceService" ref="namespaceService"/>
         <property name="type" value="lecm-ord-table-structure:item"/>
-        <property name="propDateRadio" value="lecm-ord-table-structure:item-limitation-date-radio"/>
+        <property name="propDateRadio" value="lecm-ord-table-structure:limitation-date-radio"/>
         <property name="propDate" value="lecm-ord-table-structure:execution-date"/>
-        <property name="propDateDaysCount" value="lecm-ord-table-structure:item-limitation-date-days"/>
-        <property name="propDateDaysType" value="lecm-ord-table-structure:item-limitation-date-type"/>
-        <property name="propDateText" value="lecm-ord-table-structure:item-limitation-date-text"/>
+        <property name="propDateDaysCount" value="lecm-ord-table-structure:limitation-date-days"/>
+        <property name="propDateDaysType" value="lecm-ord-table-structure:limitation-date-type"/>
+        <property name="propDateText" value="lecm-ord-table-structure:limitation-date-text"/>
     </bean>
 
 	<bean id="ord.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
@@ -121,11 +121,11 @@
             <list>
                 <value>lecm-document:indexTableRow</value>
                 <value>lecm-ord-table-structure:execution-date</value>
-                <value>lecm-ord-table-structure:item-limitation-date-radio</value>
-                <value>lecm-ord-table-structure:item-limitation-date-days</value>
-                <value>lecm-ord-table-structure:item-limitation-date-type</value>
-                <value>lecm-ord-table-structure:item-content</value>
-                <value>lecm-ord-table-structure:item-comment</value>
+                <value>lecm-ord-table-structure:limitation-date-radio</value>
+                <value>lecm-ord-table-structure:limitation-date-days</value>
+                <value>lecm-ord-table-structure:limitation-date-type</value>
+                <value>lecm-ord-table-structure:content</value>
+                <value>lecm-ord-table-structure:comment</value>
             </list>
         </property>
         <property name="assocsToCopy">

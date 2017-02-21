@@ -120,8 +120,8 @@ public interface ErrandsService {
     QName ASSOC_ERRANDS_TS_EXECUTION_REPORTS = QName.createQName(ERRANDS_TS_NAMESPACE_URI, "execution-reports-assoc");
     String BUSINESS_ROLE_ERRANDS_INITIATOR_ID = "ERRANDS_INITIATOR";
     String BUSINESS_ROLE_CHOOSING_INITIATOR = "CHOOSING_INITIATOR";
-    String ERRANDS_DICTIONARY_NAME = "Типы поручений";
-    String ERRAND_ON_POINT_ORD = "Поручение по пункту ОРД";
+    String ERRANDS_TYPE_DICTIONARY_NAME = "Типы поручений";
+    String ERRAND_TYPE_ON_POINT_ORD = "Поручение по пункту ОРД";
 
     QName ASPECT_ERRANDS_EXECUTORS = QName.createQName(ERRANDS_ASPECT_NAMESPACE_URI, "errandsExecutorsAspect");
     QName ASSOC_ERRANDS_EXECUTORS_FIRST_LEVEL = QName.createQName(ERRANDS_ASPECT_NAMESPACE_URI, "errands-executors-assoc");

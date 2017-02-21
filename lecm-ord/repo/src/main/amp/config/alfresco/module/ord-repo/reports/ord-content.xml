@@ -148,7 +148,7 @@
                             <item name="cm:Содержание пункта" type="lecm-rpeditor:reportDataColumn">
                                 <property name="cm:name"><![CDATA[Содержание пункта]]></property>
                                 <property name="lecm-rpeditor:dataColumnExpression">
-                                    <![CDATA[{lecm-ord-table-structure:item-content}]]></property>
+                                    <![CDATA[{lecm-ord-table-structure:content}]]></property>
                                 <property name="lecm-rpeditor:dataColumnCode"><![CDATA[ord-item-content]]></property>
                                 <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                 <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
@@ -184,7 +184,7 @@
                             </item>
                             <item name="cm:Инфо" type="lecm-rpeditor:reportDataColumn">
                                 <property name="cm:name"><![CDATA[Инфо]]></property>
-                                <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecm-ord-table-structure:item-content}. Ответственный: {lecm-ord-table-structure:executor-assoc/lecm-orgstr:employee-short-name}
+                                <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecm-ord-table-structure:content}. Ответственный: {lecm-ord-table-structure:executor-assoc/lecm-orgstr:employee-short-name}
 Срок исполнения {lecm-ord-table-structure:execution-date?dd.MM.yyyy}]]></property>
                                 <property name="lecm-rpeditor:dataColumnCode"><![CDATA[ord-item-info]]></property>
                                 <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>

@@ -290,9 +290,9 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				Date ordRegDate = (Date) nodeService.getProperty(ord, DocumentService.PROP_REG_DATA_DOC_DATE);
 				String ordRegDateStr = new SimpleDateFormat("dd.MM.yyyy").format(ordRegDate);
 
-				StringBuilder errandTtitle = new StringBuilder();
-				errandTtitle.append("Поручение по пункту № ").append(pointNumber.toString()).append(" ").append(pointTitle);
-				properties.put("lecm-errands:title", errandTtitle.toString());
+				StringBuilder errandTitle = new StringBuilder();
+				errandTitle.append("Поручение по пункту № ").append(pointNumber.toString()).append(" ").append(pointTitle);
+				properties.put("lecm-errands:title", errandTitle.toString());
 				//содержание
 				String content = (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_CONTENT);
 				properties.put("lecm-errands:content", content);
@@ -320,7 +320,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 					associations.put("lecm-errands:initiator-assoc", controller.toString());
 				}
 				//Тип поручения
-                NodeRef type = dictionaryService.getRecordByParamValue(ErrandsService.ERRANDS_DICTIONARY_NAME, ContentModel.PROP_NAME, ErrandsService.ERRAND_ON_POINT_ORD);
+                NodeRef type = dictionaryService.getRecordByParamValue(ErrandsService.ERRANDS_TYPE_DICTIONARY_NAME, ContentModel.PROP_NAME, ErrandsService.ERRAND_TYPE_ON_POINT_ORD);
 				associations.put("lecm-errands:type-assoc", type.toString());
 				//исполнитель
 				List<AssociationRef> pointExecutorAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_EXECUTOR);

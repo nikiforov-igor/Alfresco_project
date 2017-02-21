@@ -16,7 +16,7 @@
         <namespace uri="http://www.it.ru/lecm/ORD/table-structure/1.0" prefix="lecm-ord-table-structure"/>
     </namespaces>
     <constraints>
-        <constraint name="lecm-ord-table-structure:item-limitation-date-radio-const" type="LIST">
+        <constraint name="lecm-ord-table-structure:limitation-date-radio-const" type="LIST">
             <parameter name="allowedValues">
                 <list>
                     <value>DAYS</value>
@@ -25,7 +25,7 @@
                 </list>
             </parameter>
         </constraint>
-        <constraint name="lecm-ord-table-structure:item-limitation-date-type-const" type="LIST">
+        <constraint name="lecm-ord-table-structure:limitation-date-type-const" type="LIST">
             <parameter name="allowedValues">
                 <list>
                     <value>WORK</value>
@@ -46,7 +46,7 @@
                     <mandatory>true</mandatory>
                 </property>
                 <!-- содержание - textarea-->
-                <property name="lecm-ord-table-structure:item-content">
+                <property name="lecm-ord-table-structure:content">
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                     <index enabled="true">
@@ -56,7 +56,7 @@
                     </index>
                 </property>
                 <!-- Заголовок - textarea-->
-                <property name="lecm-ord-table-structure:item-title">
+                <property name="lecm-ord-table-structure:title">
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                     <index enabled="true">
@@ -66,7 +66,7 @@
                     </index>
                 </property>
                 <!-- примечание - textarea-->
-                <property name="lecm-ord-table-structure:item-comment">
+                <property name="lecm-ord-table-structure:comment">
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                     <index enabled="true">
@@ -81,31 +81,31 @@
                     <mandatory>false</mandatory>
                 </property>
                 <!-- Срок исполнения -->
-                <property name="lecm-ord-table-structure:item-limitation-date-text">
+                <property name="lecm-ord-table-structure:limitation-date-text">
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                 </property>
-                <property name="lecm-ord-table-structure:item-limitation-date-radio">
+                <property name="lecm-ord-table-structure:limitation-date-radio">
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                     <constraints>
-                        <constraint ref="lecm-ord-table-structure:item-limitation-date-radio-const"/>
+                        <constraint ref="lecm-ord-table-structure:limitation-date-radio-const"/>
                     </constraints>
                 </property>
-                <property name="lecm-ord-table-structure:item-limitation-date-days">
+                <property name="lecm-ord-table-structure:limitation-date-days">
                     <type>d:int</type>
                     <mandatory>false</mandatory>
                     <default>1</default>
                 </property>
-                <property name="lecm-ord-table-structure:item-limitation-date-type">
+                <property name="lecm-ord-table-structure:limitation-date-type">
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                     <constraints>
-                        <constraint ref="lecm-ord-table-structure:item-limitation-date-type-const"/>
+                        <constraint ref="lecm-ord-table-structure:limitation-date-type-const"/>
                     </constraints>
                 </property>
                 <!--служебные--> 
-                <property name="lecm-ord-table-structure:item-status-assoc-text-content">
+                <property name="lecm-ord-table-structure:status-assoc-text-content">
                     <type>d:text</type>
                     <index enabled="true">
                         <atomic>true</atomic>
@@ -129,7 +129,7 @@
             </properties>
             <associations>
                 <!-- Статус -->
-                <association name="lecm-ord-table-structure:item-status-assoc">
+                <association name="lecm-ord-table-structure:status-assoc">
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>
