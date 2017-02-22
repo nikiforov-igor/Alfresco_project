@@ -19,6 +19,7 @@
                     <show id="lecm-eds-document:summaryContent"/>
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                     <show id="lecm-ord:controller-assoc"/>
+                    <show id="lecm-ord:confirm-completion"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -31,6 +32,7 @@
                     <show id="loadAuthorScript" force="true"/>
                     <show id="editExecutorScript" force="true"/>
                     <show id="lecm-ord:temp-items-assoc"/>
+                    <show id="confirmCompletionHandler" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document:title"/>
@@ -54,7 +56,11 @@
                         <control>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                            <control-param name="changeItemsFireAction">ordControllerChangedEvent</control-param>
                         </control>
+                    </field>
+                    <field id="lecm-ord:confirm-completion">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
                     <field id="lecm-eds-document:note">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
@@ -153,6 +159,11 @@
                             <control-param name="editRowDialogTitle">ord.item.edit.form.title</control-param>
                             <control-param name="datagridFormId">datagrid-create</control-param>
                             <control-param name="editFormId">ord-create-view-point</control-param>
+                        </control>
+                    </field>
+                    <field id="confirmCompletionHandler">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-ord/confirm-completion-handler-script.js</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -416,6 +427,7 @@
                 <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
+                    <show id="lecm-eds-aspect:execution-state" force="true"/>
 	                <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
 	                <show id="lecm-document-aspects:reg-data-date"/>
 	                <show id="lecm-document:title"/>
@@ -423,6 +435,7 @@
                     <show id="lecm-eds-document:execution-date"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-ord:controller-assoc"/>
+                    <show id="lecm-ord:confirm-completion"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -447,6 +460,12 @@
                     <set id="ord-document-items" label-id="label.ord.items"/>
                     <set id="approvalTab" appearance="" label="Согласование"/>
 					<set id="review" label="Ознакомление"/>
+
+                    <field id="lecm-eds-aspect:execution-state" set="ord-document-form-common-set">
+                        <control template="/ru/it/lecm/eds/controls/execution-state-control.ftl">
+                            <control-param name="statisticsField">lecm-eds-aspect:execution-statistics</control-param>
+                        </control>
+                    </field>
 
 					<field id="lecm-document:regnum" set="ord-document-form-common-set" mandatory="true">
 						<constraint-handlers>
@@ -478,6 +497,9 @@
                             <control-param name="showSearch">true</control-param>
                             <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
+                    </field>
+                    <field id="lecm-ord:confirm-completion" set="ord-document-form-common-set">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
                     <field id="lecm-eds-document:note"  set="ord-document-form-common-set">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
@@ -599,7 +621,7 @@
                     <field id="lecm-eds-document:document-type-assoc">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
-                            <control-param name="endpointType">lecm-ord-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -646,7 +668,11 @@
                     <set id="bottom"/>
 
                     <field id="lecm-document:indexTableRow" mandatory="true"/>
-                    <field id="lecm-ord-table-structure:controller-assoc" set="bottom"/>
+                    <field id="lecm-ord-table-structure:controller-assoc" set="bottom">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-ord-table-structure:subject-assoc" set="bottom"/>
                     <field id="lecm-ord-table-structure:item-status-assoc" set="bottom"/>
                     <field id="lecm-ord-table-structure:limitation-date-radio" set="limitation-date"  mandatory="true">
@@ -731,7 +757,11 @@
                 <set id="bottom"/>
 
                 <field id="lecm-document:indexTableRow" mandatory="true"/>
-                <field id="lecm-ord-table-structure:controller-assoc" set="bottom"/>
+                <field id="lecm-ord-table-structure:controller-assoc" set="bottom">
+                    <control>
+                        <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                    </control>
+                </field>
                 <field id="lecm-ord-table-structure:subject-assoc" set="bottom"/>
                 <field id="lecm-ord-table-structure:limitation-date-radio" set="limitation-date"  mandatory="true">
                     <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">

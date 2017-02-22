@@ -74,7 +74,13 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
-
+				<property name="lecm-ord:confirm-completion">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<property name="lecm-ord:real-end-date">
+					<type>d:date</type>
+				</property>
 				<property name="lecm-ord:signers-assoc-ref">
 					<type>d:text</type>
 					<index enabled="true">

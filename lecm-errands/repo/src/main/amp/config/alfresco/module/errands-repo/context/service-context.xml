@@ -657,6 +657,7 @@
         <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
         <property name="dictionaries">
             <list>
+                <value>alfresco/module/${artifactId}/reports/errands-expiring-to-date.xml</value>
                 <value>alfresco/module/${artifactId}/reports/exec-doc-tree.xml</value>
                 <value>alfresco/module/${artifactId}/reports/exec-discipline-by-creator.xml</value>
                 <value>alfresco/module/${artifactId}/reports/exec-discipline-by-unit.xml</value>
@@ -670,6 +671,7 @@
     <bean id="errands.reportsDeployer" parent="reportsDeployer">
         <property name="reportsForDeploy">
             <list>
+                <value>errands-expiring-to-date</value>
                 <value>exec-doc-tree</value>
                 <value>exec-discipline-by-creator</value>
                 <value>exec-discipline-by-unit</value>
