@@ -247,7 +247,7 @@
 		</property>
 		<property name="documentService" ref="documentService"/>
 		<property name="calendarBean" ref="WorkCalendarService"/>
-		<property name="notificationsService" ref="notificationsService"/>
+		<property name="documentGlobalSettings" ref="documents.global-settings.service"/>
 	</bean>
 
 	<bean id="currentUserResoucesProcessor" class="ru.it.lecm.events.processor.CurrentResourcesProcessor" parent="searchQueryBaseProccesor">
