@@ -3,7 +3,6 @@ package ru.it.lecm.arm.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
@@ -16,8 +15,6 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import java.io.Serializable;
 import java.util.*;
 import java.util.regex.Matcher;
-import org.alfresco.service.cmr.repository.StoreRef;
-import org.alfresco.service.cmr.search.SearchParameters;
 
 /**
  * User: dbashmakov
