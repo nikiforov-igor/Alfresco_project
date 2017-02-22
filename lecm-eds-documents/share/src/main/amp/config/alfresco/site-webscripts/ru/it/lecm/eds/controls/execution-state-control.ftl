@@ -11,10 +11,6 @@
 <#if params.showEmptyStatuses?? && params.showEmptyStatuses == "true">
     <#assign showEmptyStatuses = true>
 </#if>
-<#assign showEmptyStatuses = false>
-<#if params.showEmptyStatuses?? && params.showEmptyStatuses == "true">
-    <#assign showEmptyStatuses = true>
-</#if>
 
 <script>
     function init() {
