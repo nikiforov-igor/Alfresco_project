@@ -81,7 +81,7 @@ public class SearchCounterImpl implements SearchCounter {
                 results = searchService.query(sp);
                 return (long) results.length();
             }
-        } catch (Throwable err) {
+        } catch (Exception err) {
             if (exceptionOnError) {
                 throw new AlfrescoRuntimeException("Failed to execute search: " + sp.getQuery(), err);
             } else if (logger.isDebugEnabled()) {
