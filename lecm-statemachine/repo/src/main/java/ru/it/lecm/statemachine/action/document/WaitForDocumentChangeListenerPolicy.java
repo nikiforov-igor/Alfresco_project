@@ -165,7 +165,16 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 			return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<String>() {
 				@Override
 				public String execute() throws Throwable {
-					return (String) nodeService.getProperty(documentNodeRef, ContentModel.PROP_MODIFIER);
+					String login = null;
+
+					login = (String) nodeService.getProperty(documentNodeRef, ContentModel.PROP_MODIFIER);
+					
+					if (AuthenticationUtil.SYSTEM_USER_NAME.equals(login)) {
+						logger.warn("Modifier is System. Using admin instead");
+						login = AuthenticationUtil.getAdminUserName();
+					}
+					
+					return login;
 				}
 			}, true);
 		}
