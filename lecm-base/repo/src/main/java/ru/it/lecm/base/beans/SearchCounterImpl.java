@@ -12,8 +12,8 @@ import org.alfresco.service.cmr.search.LimitBy;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -21,7 +21,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class SearchCounterImpl implements SearchCounter {
 	
-	private static Log logger = LogFactory.getLog(SearchCounterImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(SearchCounterImpl.class);
 
     private SearchService searchService;
     private StoreRef storeRef;

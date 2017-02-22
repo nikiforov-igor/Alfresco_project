@@ -12,8 +12,8 @@ import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.mozilla.javascript.Scriptable;
 
 import ru.it.lecm.base.beans.BaseWebScript;
@@ -26,7 +26,7 @@ import ru.it.lecm.base.beans.SearchQueryProcessorService;
  */
 public class SearchCounterWebScriptBean extends BaseWebScript {
 	
-	private static Log logger = LogFactory.getLog(SearchCounterWebScriptBean.class);
+	private static final Logger logger = LoggerFactory.getLogger(SearchCounterWebScriptBean.class);
 	
 	private SearchCounter searchCounter;
 	private SearchQueryProcessorService processorService;
