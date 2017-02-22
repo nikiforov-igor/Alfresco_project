@@ -2359,6 +2359,8 @@
                                     </item>
                                 </items>
                             </item>
+                        </items>
+                    </item>
                     <item name="cm:Навигатор" type="lecm-arm:accordion">
                         <property name="cm:name"><![CDATA[Навигатор]]></property>
                         <property name="lecm-arm:order"><![CDATA[20]]></property>
