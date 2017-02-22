@@ -390,6 +390,7 @@
                     <field id="lecm-errands:controller-assoc" set="afterDateSet">
                         <control>
                             <control-param name="showSearch">true</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:report-required" set="afterDateSet">
@@ -3198,12 +3199,6 @@
                             <control-param name="showSearch">true</control-param>
                         </control>
                     </field>
-
-                    <field id="lecmErrandWf:controllerAssoc">
-                        <control>
-                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
-                        </control>
-                    </field>
                     <field id="lecmErrandWf:coexecutorsAssoc">
                         <control>
                             <control-param name="showSearch">true</control-param>
@@ -3254,6 +3249,7 @@
                         <control>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="changeItemsFireAction">createErrandsWFErrandControllerChanged</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                     </field>
 
