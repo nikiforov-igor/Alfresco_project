@@ -16,6 +16,8 @@
 		  p:lecmDictionaryService-ref="serviceDictionary"
 		  p:businessJournalService-ref="businessJournalService"
 		  p:documentEventService-ref="documentEventService"
+		  p:dictionaryService-ref="serviceDictionary"
+		  p:namespaceService-ref="namespaceService"
 
 		  p:ordDocumentService-ref="ordDocumentService"
 		  p:ordReportsService-ref="ordReportsService"

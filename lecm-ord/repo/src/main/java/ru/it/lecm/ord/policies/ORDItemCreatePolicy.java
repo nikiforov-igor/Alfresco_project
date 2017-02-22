@@ -64,7 +64,7 @@ public class ORDItemCreatePolicy implements NodeServicePolicies.OnCreateNodePoli
     public void onCreateNode(ChildAssociationRef childAssocRef) {
         NodeRef node = childAssocRef.getChildRef();
         if (nodeService.getTargetAssocs(node, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS).isEmpty()) {
-            nodeService.createAssociation(node, dictionaryService.getRecordByParamValue(ORDModel.ORD_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, ORDModel.ORD_POINT_PERFORMANCE_STATUS), ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS);
+            nodeService.createAssociation(node, dictionaryService.getRecordByParamValue(ORDModel.ORD_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, ORDModel.ORD_POINT_WAIT_PERFORMANCE_STATUS), ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS);
         }
     }
 
