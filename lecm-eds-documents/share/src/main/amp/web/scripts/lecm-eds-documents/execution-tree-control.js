@@ -107,8 +107,8 @@ LogicECM.module = LogicECM.module || {};
 
                                 var template =
                                     '<div class="item-description">' +
-                                    '   <img class="document-type" src="/share/res/images/lecm-documents/type-icons/{docTypeIcon}.png" ' +
-                                    '       onerror="this.src = \'/share/res/images/lecm-documents/type-icons/default_document.png\';"/>' +
+                                    '   <img class="document-type" src=' + Alfresco.constants.URL_RESCONTEXT + '"images/lecm-documents/type-icons/{docTypeIcon}.png" ' +
+                                    '       onerror="this.src = \'' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/type-icons/default_document.png\';"/>' +
                                     '   <span class="link-span{classNotHaveAccess}">' +
                                     '       <a target="_blank" href="{documentUrl}">{documentName}</a>' +
                                     '       <div>' +
