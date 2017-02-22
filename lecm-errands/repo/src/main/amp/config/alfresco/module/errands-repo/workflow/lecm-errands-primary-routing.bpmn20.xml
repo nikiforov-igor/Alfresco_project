@@ -24,6 +24,7 @@
 	                                    if (initiator) {
 	                                        errand["assoc_lecm-errands_initiator-assoc"] = initiator.nodeRef.toString();
 	                                    }
+	                                    errand["prop_lecm-errands_child-index-counter"] = "" + i;
 	                                    errands.createErrands(errand);
 	                                }
 	                            }
