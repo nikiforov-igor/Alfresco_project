@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/incoming/workflow/finishWork/1.0">
+    <process id="incomingFinishWork" name="Входящие: завершить работу">
+        <startEvent id="startFinishWork" name="Start" activiti:formKey="lecmIncomingWf:finishWork"></startEvent>
+        <endEvent id="endFinishWork" name="End"></endEvent>
+        <scriptTask id="doFinishWork" name="Finish work" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start"
+                                            class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+                          	var document = bpm_package.children[0];
+                          	var reason = lecmIncomingWf_finishWorkReason;
+                          	var currentUser = orgstructure.getCurrentEmployee();
+                          	if (document && reason && currentUser) {
+                          	    var reasonText;
+
+                          	    var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
+			                    if (childErrands) {
+			                        childErrands.forEach(function (errand) {
+                                        reasonText = "Поручение автоматически закрыто в связи с завершением работы по документу ";
+                                        reasonText += document.properties["lecm-document:present-string"];
+                                        reasonText += " пользователем  ";
+                                        reasonText += currentUser.properties["lecm-orgstr:employee-short-name"];
+
+                                        errands.sendCancelSignal(errand.nodeRef.toString(), reasonText, currentUser.nodeRef.toString());
+                                    });
+			                    }
+
+			                    var childResolutions = document.sourceAssocs["lecm-resolutions:base-document-assoc"];
+			                    if (childResolutions) {
+			                        childResolutions.forEach(function (resolution) {
+                                        reasonText = "Резолюция автоматически аннулирована в связи с завершением работы по документу ";
+                                        reasonText += document.properties["lecm-document:present-string"];
+                                        reasonText += " пользователем  ";
+                                        reasonText += currentUser.properties["lecm-orgstr:employee-short-name"];
+
+                                        resolutionsScript.sendAnnulSignal(resolution.nodeRef.toString(), reasonText);
+                                    });
+			                    }
+
+                                var reviewTableAssoc = document.assocs['lecm-review-ts:review-table-assoc'];
+                                if (reviewTableAssoc) {
+                                    var reviewTsItems = reviewTableAssoc[0].getChildAssocsByType('lecm-review-ts:review-table-item');
+                                    reviewTsItems.forEach(function (item) {
+                                        if (item.properties['lecm-review-ts:review-state'] == "NOT_REVIEWED") {
+                                            item.properties['lecm-review-ts:review-state'] = "CANCELLED";
+                                            item.properties['lecm-review-ts:review-finish-date'] = new Date();
+                                            item.save();
+                                        }
+                                    });
+                                }
+
+                                var logText = "#initiator ";
+                                logText += documentScript.wrapperTitle("завершил", reason);
+                                logText += " работу по документу #mainobject.";
+                                businessJournal.log(document.nodeRef.toString(), "EXECUTE_DOCUMENT", logText, []);
+
+                                var recipients = lecmPermission.getEmployeesByDynamicRole(document, "DA_RECIPIENT_DYN");
+                                notifications.sendNotificationFromCurrentUser({
+                                    recipients: recipients,
+                                    templateCode: 'INCOMING_FINISH_WORK_WITH_DOCUMENT',
+                                    templateConfig: {
+                                        mainObject: document,
+                                        eventExecutor: orgstructure.getCurrentEmployee(),
+                                        reason: reason
+                                    }
+                                });
+                          	}
+						]]></activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script>var test=1;</script>
+        </scriptTask>
+        <receiveTask id="incomingReceiveTask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startFinishWork" targetRef="doFinishWork"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="doFinishWork" targetRef="incomingReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="incomingReceiveTask" targetRef="endFinishWork"></sequenceFlow>
+    </process>
+</definitions>
