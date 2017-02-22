@@ -16,6 +16,8 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import java.io.Serializable;
 import java.util.*;
 import java.util.regex.Matcher;
+import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.search.SearchParameters;
 
 /**
  * User: dbashmakov
@@ -482,13 +484,8 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         }
     }
 
-    private long execSearchQuery(String queryToExecute) {
-        Map<Serializable, Serializable> searchProps = new HashMap<>();
-        searchProps.put("query", queryToExecute);
-        searchProps.put("language", SearchService.LANGUAGE_FTS_ALFRESCO);
-        searchProps.put("onerror", "no-results");
-
+    private long execSearchQuery(String queryToExecute) {		
         //вызываем counter с дефолтными настройками (как сейчас в АРМе)
-        return searchCounter.query(searchProps, true, false);
+        return searchCounter.query(queryToExecute, true, false);
     }
 }
