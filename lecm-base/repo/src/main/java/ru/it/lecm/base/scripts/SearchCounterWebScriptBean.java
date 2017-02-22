@@ -108,15 +108,13 @@ public class SearchCounterWebScriptBean extends BaseWebScript {
         }
         // error handling opions
         boolean exceptionOnError = true;
-        if (onerror != null) {
-            if (onerror.equals("exception")) {
-                // default value, do nothing
-            } else if (onerror.equals("no-results")) {
-                exceptionOnError = false;
-            } else {
-                throw new AlfrescoRuntimeException("Failed to search: Unknown value supplied for 'onerror': " + onerror);
-            }
-        }
+		if ("exception".equals(onerror)) {
+			// default value, do nothing
+		} else if ("no-results".equals(onerror)) {
+			exceptionOnError = false;
+		} else {
+			throw new AlfrescoRuntimeException("Failed to search: Unknown value supplied for 'onerror': " + onerror);
+		}
 
         // execute search based on search definition        
 		result = searchCounter.query(sp, exceptionOnError, maxResults, skipResults);
