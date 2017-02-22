@@ -183,5 +183,7 @@
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="stateMachineService" ref="stateMachineHelper"/>
 		<property name="errandsService" ref="errandsService"/>
-	</bean>
+        <property name="statusesOrder" value="${lecm.eds.execution.statistics.statuses.order}"/>
+        <property name="executedStatus" value="${lecm.eds.execution.statistics.statuses.executed}"/>
+    </bean>
 </beans>

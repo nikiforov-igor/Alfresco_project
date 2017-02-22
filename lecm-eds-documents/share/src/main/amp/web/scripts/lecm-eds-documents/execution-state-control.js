@@ -81,7 +81,7 @@ LogicECM.module = LogicECM.module || {};
                                 executionStatistics = JSON.parse(response.json.formatString);
                                 if (executionStatistics) {
                                     this.statisticsLoaded = true;
-                                    this.drawStats(executionStatistics);
+                                    this.drawStatistics(executionStatistics);
                                 }
                             }
                         },
@@ -91,7 +91,7 @@ LogicECM.module = LogicECM.module || {};
                     scope: this
                 });
             },
-            drawStats: function (statistics) {
+            drawStatistics: function (statistics) {
                 var ul = document.createElement("ul");
                 var order = this.options.statusesOrder;
                 if (order && order instanceof Array && order.length) {
