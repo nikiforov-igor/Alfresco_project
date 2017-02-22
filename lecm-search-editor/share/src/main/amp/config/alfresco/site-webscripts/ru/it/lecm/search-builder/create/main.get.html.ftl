@@ -32,33 +32,32 @@
             }
 
             function drawForm(htmlId) {
-                Alfresco.util.Ajax.request(
-                        {
-                            url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/control",
-                            dataObj: {
-                                template: "/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl",
-                                fieldId: "searchQuery-selectType",
-                                labelId: "searchQuery-selectType",
-                                params: YAHOO.lang.JSON.stringify({
-                                    webscriptType: "server",
-                                    webscript: "lecm/search-queries/types",
-                                    needSort:false,
-                                    withEmpty: true,
-                                    changeItemFireAction: "searchQueryChangeDocType"
-                                }),
-                                htmlid: htmlId
-                            },
-                            successCallback: {
-                                fn: function (response) {
-                                    container = Dom.get('${id}_container_select_type');
-                                    if (container != null) {
-                                        container.innerHTML = response.serverResponse.responseText;
-                                    }
+                Alfresco.util.Ajax.jsonGet({
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/control",
+                        dataObj: {
+                            template: "/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl",
+                            fieldId: "searchQuery-selectType",
+                            labelId: "searchQuery-selectType",
+                            params: YAHOO.lang.JSON.stringify({
+                                webscriptType: "server",
+                                webscript: "lecm/search-queries/types",
+                                needSort:false,
+                                withEmpty: true,
+                                changeItemFireAction: "searchQueryChangeDocType"
+                            }),
+                            htmlid: htmlId
+                        },
+                        successCallback: {
+                            fn: function (response) {
+                                container = Dom.get('${id}_container_select_type');
+                                if (container) {
+                                    container.innerHTML = response.serverResponse.responseText;
                                 }
-                            },
-                            failureMessage: "message.failure",
-                            execScripts: true
-                        });
+                            }
+                        },
+                        failureMessage: "${msg('message.failure')}",
+                        execScripts: true
+                    });
             }
 
             YAHOO.util.Event.onDOMReady(init);

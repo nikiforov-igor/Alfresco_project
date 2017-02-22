@@ -31,26 +31,16 @@
         // Спасаем "тонущие" всплывающие сообщения.
         Alfresco.util.PopupManager.zIndex = 9000;
 
-        Alfresco.util.Ajax.request({
-
-            method: "POST",
-            requestContentType: "application/json",
-            responseContentType: "application/json",
-
+        Alfresco.util.Ajax.jsonPost({
             url: Alfresco.constants.PROXY_URI_RELATIVE + "${dataUrl}",
-
             dataObj: {
                 "childRef": "${currentItemRef}"
             },
-
             successCallback:{
-                fn: function( response ) {
-
+                fn: function(response) {
                     var blockElem;
-
                     if( response.json.status === "success" ) {
-
-                        if (response.json.parentName != null) {
+                        if (response.json.parentName) {
 	                        blockElem = YAHOO.util.Dom.get( "${formId}-view-link-block" );
 	                        blockElem.innerHTML = '<a id="${formId}-view-link-ref" href="javascript:void(0);"/>' + response.json.parentName + '</a>';
                             YAHOO.util.Event.addListener("${formId}-view-link-ref", "click", function () {

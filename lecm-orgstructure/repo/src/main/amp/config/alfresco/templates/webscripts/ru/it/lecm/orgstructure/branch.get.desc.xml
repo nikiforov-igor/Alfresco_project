@@ -2,7 +2,7 @@
     <shortname>Branch</shortname>
     <description>Returns branch of organization strucuture</description>
     <url>/lecm/orgstructure/branch</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction allow="readonly">required</transaction>
 </webscript>

@@ -27,31 +27,24 @@
 	            }).setMessages(${messages});
 
 	    new Alfresco.widget.DashletResizer("${jsid}", "${instance.object.id}");
-        Alfresco.util.Ajax.jsonRequest({
-            method: "GET",
+        Alfresco.util.Ajax.jsonGet({
             url: Alfresco.constants.PROXY_URI + "lecm/contracts/dashlet/settings/url",
-            dataObj: {},
             successCallback: {
                 fn: function (oResponse) {
                     if (oResponse.json) {
-                        new Alfresco.widget.DashletTitleBarActions("${jsid}").setOptions(
-                            {
-                                actions: [
-                                    {
-                                        cssClass: "arm",
-                                        linkOnClick: window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "arm?code=" + encodeURI(oResponse.json.armCode) + "&path="  + encodeURI(oResponse.json.armPath),
-                                        tooltip: "${msg("dashlet.arm.tooltip")?js_string}"
-                                    }
-                                ]
-                            });
+                        new Alfresco.widget.DashletTitleBarActions("${jsid}").setOptions({
+                            actions: [
+                                {
+                                    cssClass: "arm",
+                                    linkOnClick: window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "arm?code=" + encodeURI(oResponse.json.armCode) + "&path="  + encodeURI(oResponse.json.armPath),
+                                    tooltip: "${msg("dashlet.arm.tooltip")?js_string}"
+                                }
+                            ]
+                        });
                     }
                 }
             },
-            failureCallback: {
-                fn: function (oResponse) {
-                }
-            },
-            scope: this,
+            failureMessage: "${msg("message.failure")}",
             execScripts: true
         });
 

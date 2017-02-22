@@ -55,30 +55,29 @@
                     },
 
                     drawForm: function Draw_form() {
-                        Alfresco.util.Ajax.jsonGet(
-                                {
-                                    url: Alfresco.constants.PROXY_URI + encodeURI("lecm/errands/dashlet/issued"),
-                                    successCallback: {
-                                        fn: function (response) {
-                                            if (this.container != null) {
-                                                this.container.innerHTML = '';
-                                                if (response.json != null) {
-                                                    var list = response.json.list;
-                                                    for (var index in list) {
-                                                        var innerHtml = "<div class='column first'>" + this.message[list[index].key] + ":" + "</div>" +
-                                                                "<div class='column second'><a class=\"status-button text-cropped\" " +
-                                                                "href=\"" + Alfresco.constants.URL_PAGECONTEXT + "arm?code=" + encodeURI(list[index].armCode) + "&path="  + encodeURI(list[index].path) + "\">" + list[index].allCount + "</a></div>" +
-                                                                "<div class='column third'><a style=\"color:red;\" class=\"status-button text-cropped\" " +
-                                                                "href=\"" + Alfresco.constants.URL_PAGECONTEXT + "arm?code=" + encodeURI(list[index].armCode) + "&path="  + encodeURI(list[index].importantPath)+ "\">(" + list[index].importantCount + ")</a></div>";
-                                                        this.createRow(innerHtml);
-                                                    }
-                                                }
+                        Alfresco.util.Ajax.jsonGet({
+                            url: Alfresco.constants.PROXY_URI + encodeURI("lecm/errands/dashlet/issued"),
+                            successCallback: {
+                                fn: function (response) {
+                                    if (this.container) {
+                                        this.container.innerHTML = '';
+                                        if (response.json) {
+                                            var list = response.json.list;
+                                            for (var index in list) {
+                                                var innerHtml = "<div class='column first'>" + this.message[list[index].key] + ":" + "</div>" +
+                                                        "<div class='column second'><a class=\"status-button text-cropped\" " +
+                                                        "href=\"" + Alfresco.constants.URL_PAGECONTEXT + "arm?code=" + encodeURI(list[index].armCode) + "&path="  + encodeURI(list[index].path) + "\">" + list[index].allCount + "</a></div>" +
+                                                        "<div class='column third'><a style=\"color:red;\" class=\"status-button text-cropped\" " +
+                                                        "href=\"" + Alfresco.constants.URL_PAGECONTEXT + "arm?code=" + encodeURI(list[index].armCode) + "&path="  + encodeURI(list[index].importantPath)+ "\">(" + list[index].importantCount + ")</a></div>";
+                                                this.createRow(innerHtml);
                                             }
-                                        },
-                                        scope: this
-                                    },
-                                    failureMessage: "message.failure"
-                                });
+                                        }
+                                    }
+                                },
+                                scope: this
+                            },
+                            failureMessage: "${msg("message.failure")}"
+                        });
                     }
                 });
     })();
@@ -86,8 +85,7 @@
 
     new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
 
-    Alfresco.util.Ajax.jsonRequest({
-        method: "GET",
+    Alfresco.util.Ajax.jsonGet({
         url: Alfresco.constants.PROXY_URI + "lecm/errands/dashlet/settings/url",
         dataObj: {},
         successCallback: {

@@ -2,7 +2,7 @@
     <shortname>Event Category</shortname>
     <description>Returns relative event category from drop-down</description>
     <url>/lecm/subscriptions/event-category</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction allow="readonly">required</transaction>
 </webscript>

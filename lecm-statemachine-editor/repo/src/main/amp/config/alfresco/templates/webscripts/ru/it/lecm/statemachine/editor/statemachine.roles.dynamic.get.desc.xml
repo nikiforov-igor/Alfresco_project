@@ -2,6 +2,6 @@
 	<shortname>User Dynamic Roles for Status of Statemachine</shortname>
 	<description>User Dynamic Roles for Status of Statemachine</description>
 	<url>/lecm/statemachine/editor/roles/dynamic</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>user</authentication>
 </webscript>

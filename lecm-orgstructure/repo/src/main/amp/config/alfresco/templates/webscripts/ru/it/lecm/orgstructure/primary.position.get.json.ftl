@@ -1,7 +1,7 @@
-<#escape x as x?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 {
 	<#if position??>
-	"primaryPosition":"${position.getNodeRef()}"
+	"primaryPosition": "${position.getNodeRef()}"
 	</#if>
 }
 </#escape>

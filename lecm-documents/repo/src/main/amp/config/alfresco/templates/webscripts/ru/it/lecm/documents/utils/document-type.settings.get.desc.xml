@@ -2,7 +2,7 @@
     <shortname>Document Type Settings</shortname>
     <description>Document Type Settings</description>
     <url>/lecm/document-type/settings</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction>required</transaction>
 </webscript>

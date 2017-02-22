@@ -2,23 +2,6 @@
 <template-instance>
     <template-type>ru/it/lecm/events/event</template-type>
     <components>
-        <!-- Заголовок -->
-        <component>
-            <region-id>title</region-id>
-            <sub-components>
-                <sub-component id="default">
-                    <evaluations>
-                        <evaluation id="lecm-document">
-                            <url>/lecm/components/document/title</url>
-                            <properties>
-                                <nodeRef>{nodeRef}</nodeRef>
-                            </properties>
-                        </evaluation>
-                    </evaluations>
-                </sub-component>
-            </sub-components>
-        </component>
-
         <!-- Хэдер -->
         <component>
             <region-id>document-header</region-id>
@@ -59,25 +42,6 @@
                 </sub-component>
             </sub-components>
         </component>
-
-        <!-- Вложения -->
-        <component>
-            <region-id>attachments</region-id>
-            <sub-components>
-                <sub-component id="default">
-                    <evaluations>
-                        <evaluation>
-                            <url>/lecm/components/dashlets/document-attachments</url>
-                            <properties>
-                                <nodeRef>{nodeRef}</nodeRef>
-                                <view>{view}</view>
-                            </properties>
-                        </evaluation>
-                    </evaluations>
-                </sub-component>
-            </sub-components>
-        </component>
-
 
         <!-- Комментарии -->
         <component>
@@ -131,15 +95,6 @@
             </properties>
         </component>
 
-		<!-- Основные сведения -->
-        <component>
-            <region-id>document-metadata</region-id>
-            <url>/lecm/components/document/document-meta</url>
-            <properties>
-                <nodeRef>{nodeRef}</nodeRef>
-            </properties>
-        </component>
-
         <!-- Вложения -->
         <component>
             <region-id>document-attachments</region-id>
@@ -149,7 +104,16 @@
             </properties>
         </component>
 
-        <!-- Связи -->
+		<!-- История -->
+		<component>
+			<region-id>document-history</region-id>
+			<url>/lecm/components/document/document-history</url>
+			<properties>
+				<nodeRef>{nodeRef}</nodeRef>
+			</properties>
+		</component>
+
+	   <!-- Связи -->
         <component>
             <region-id>document-connections</region-id>
             <url>/lecm/components/document/connections</url>

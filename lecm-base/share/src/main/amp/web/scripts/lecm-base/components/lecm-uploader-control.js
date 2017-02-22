@@ -85,29 +85,25 @@ LogicECM.control = LogicECM.control || {};
 		},
 
 		loadRootNode: function () {
-			Alfresco.util.Ajax.jsonGet(
-				{
-					url: this.generateRootUrlPath(),
-					successCallback:
-					{
-						fn: function (response) {
-							var oResults = response.json;
-							if (oResults != null) {
-								this.rootNodeRef = oResults.nodeRef;
-							}
-						},
-						scope: this
+			Alfresco.util.Ajax.jsonGet({
+				url: this.generateRootUrlPath(),
+				successCallback: {
+					fn: function (response) {
+						var oResults = response.json;
+						if (oResults) {
+							this.rootNodeRef = oResults.nodeRef;
+						}
 					},
-					failureCallback:
-					{
-						fn: function (oResponse) {
-							var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-							this.widgets.dataTable.set("MSG_ERROR", response.message);
-							this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
-						},
-						scope: this
-					}
-				});
+					scope: this
+				},
+				failureCallback: {
+					fn: function (response) {
+						this.widgets.dataTable.set("MSG_ERROR", response.json.message);
+						this.widgets.dataTable.showTableMessage(response.json.message, YAHOO.widget.DataTable.CLASS_ERROR);
+					},
+					scope: this
+				}
+			});
 		},
 
         loadFileName: function () {

@@ -71,9 +71,9 @@
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>
                     <!-- Отчет об исполнении -->
                     <!-- Статус отчета -->
-                    <show id="lecm-errands:execution-report-status"/>
+                    <show id="lecm-errands:execution-report-status" force="true"/>
                     <!-- Причина отмены -->
-                    <show id="lecm-errands:execution-report-decline-reason"/>
+                    <show id="lecm-errands:execution-report-decline-reason" force="true"/>
                     <!-- Текст отчета -->
                     <show id="lecm-errands:execution-report"/>
                     <!-- Связи -->
@@ -81,7 +81,7 @@
                     <!-- Вложения -->
                     <show id="lecm-errands:execution-report-attachment-assoc"/>
                     <!-- Предидущие отчеты -->
-                    <show id="lecm-errands-ts:execution-reports-assoc"/>
+                    <show id="lecm-errands-ts:execution-reports-assoc" force="true"/>
                     <!-- Разделительная линия -->
                     <show id="lecm-base-dummy-aspects:script4" force="true"/>
                     <show id="lecm-base-dummy-aspects:script5" force="true"/>
@@ -274,9 +274,9 @@
                     <show id="lecm-document:subject-assoc"/>
                     <!-- Отчет об исполнении -->
                     <!-- Статус отчета -->
-                    <show id="lecm-errands:execution-report-status"/>
+                    <show id="lecm-errands:execution-report-status" force="true"/>
                     <!-- Причина отклонения -->
-                    <show id="lecm-errands:execution-report-decline-reason"/>
+                    <show id="lecm-errands:execution-report-decline-reason" force="true"/>
                     <!-- Текст отчета -->
                     <show id="lecm-errands:execution-report"/>
                     <!-- Связи -->
@@ -284,7 +284,7 @@
                     <!-- Вложения -->
                     <show id="lecm-errands:execution-report-attachment-assoc"/>
                     <!-- Предидущие отчеты -->
-                    <show id="lecm-errands-ts:execution-reports-assoc"/>
+                    <show id="lecm-errands-ts:execution-reports-assoc" force="true"/>
                     <!-- Разделительная линия -->
                     <show id="lecm-base-dummy-aspects:script8" force="true"/>
                     <!-- Отчеты соисполнителей -->
@@ -390,6 +390,7 @@
                     <field id="lecm-errands:controller-assoc" set="afterDateSet">
                         <control>
                             <control-param name="showSearch">true</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:report-required" set="afterDateSet">
@@ -3198,12 +3199,6 @@
                             <control-param name="showSearch">true</control-param>
                         </control>
                     </field>
-
-                    <field id="lecmErrandWf:controllerAssoc">
-                        <control>
-                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
-                        </control>
-                    </field>
                     <field id="lecmErrandWf:coexecutorsAssoc">
                         <control>
                             <control-param name="showSearch">true</control-param>
@@ -3254,6 +3249,7 @@
                         <control>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="changeItemsFireAction">createErrandsWFErrandControllerChanged</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                     </field>
 

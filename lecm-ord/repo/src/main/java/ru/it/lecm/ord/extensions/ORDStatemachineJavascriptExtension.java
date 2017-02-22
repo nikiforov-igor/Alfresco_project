@@ -7,7 +7,9 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang.StringUtils;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
@@ -52,6 +54,8 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private DocumentEventService documentEventService;
 	private LecmPermissionService lecmPermissionService;
 	private ORDDocumentService ordDocumentService;
+	private DictionaryBean dictionaryService;
+	private NamespaceService namespaceService;
 
 	private ORDReportsService ordReportsService;
 
@@ -61,6 +65,14 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 
 	public void setDocumentService(final DocumentService documentService) {
 		this.documentService = documentService;
+	}
+
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
+	}
+
+	public void setDictionaryService(DictionaryBean dictionaryService) {
+		this.dictionaryService = dictionaryService;
 	}
 
 	public void setOrgstructureService(final OrgstructureBean orgstructureService) {
@@ -273,6 +285,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				Map<String, String> properties = new HashMap<String, String>();
 				//заголовок
 				Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
+				String pointTitle = (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_TITLE);
 				List<AssociationRef> ordDocTypeAssocs = nodeService.getTargetAssocs(ord, EDSDocumentService.ASSOC_DOCUMENT_TYPE);
 				String ordDocType = "";
 				if (ordDocTypeAssocs.size() > 0) {
@@ -283,15 +296,24 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				Date ordRegDate = (Date) nodeService.getProperty(ord, DocumentService.PROP_REG_DATA_DOC_DATE);
 				String ordRegDateStr = new SimpleDateFormat("dd.MM.yyyy").format(ordRegDate);
 
-				StringBuilder errandTtitle = new StringBuilder();
-				errandTtitle.append("Пункт № ").append(pointNumber.toString()).append(" документа ").append(ordDocType);
-				errandTtitle.append(" №").append(ordNumber).append(" от ").append(ordRegDateStr);
-				properties.put("lecm-errands:title", errandTtitle.toString());
+				StringBuilder errandTitle = new StringBuilder();
+				errandTitle.append("Поручение по пункту № ").append(pointNumber.toString()).append(" ").append(pointTitle);
+				properties.put(ErrandsService.PROP_ERRANDS_TITLE.toPrefixString(namespaceService), errandTitle.toString());
 				//содержание
 				String content = (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_CONTENT);
-				properties.put("lecm-errands:content", content);
+				properties.put(ErrandsService.PROP_ERRANDS_CONTENT.toPrefixString(namespaceService), content);
 				//важность
-				properties.put("lecm-errands:is-important", "true");
+				properties.put(ErrandsService.PROP_ERRANDS_IS_IMPORTANT.toPrefixString(namespaceService), "false");
+				properties.put(ErrandsService.PROP_ERRANDS_JUST_IN_TIME.toPrefixString(namespaceService), "false");
+				properties.put(ErrandsService.PROP_ERRANDS_IS_PERIODICALLY.toPrefixString(namespaceService), "false");
+				properties.put(ErrandsService.PROP_ERRANDS_REPORT_RECIPIENT_TYPE.toPrefixString(namespaceService), "CONTROLLER");
+				//Срок исполнения
+				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE.toPrefixString(namespaceService), (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE));
+				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TEXT.toPrefixString(namespaceService), (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_TEXT));
+				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_DAYS.toPrefixString(namespaceService),  nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_DAYS).toString());
+				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO.toPrefixString(namespaceService), (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_RADIO));
+				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TYPE.toPrefixString(namespaceService), (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_TYPE));
+				properties.put(ErrandsService.PROP_ERRANDS_REPORT_REQUIRED.toPrefixString(namespaceService), nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_REPORT_REQUIRED).toString());
 
 				//ассоциации поручения
 				Map<String, String> associations = new HashMap<String, String>();
@@ -301,32 +323,45 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				if (controllerAssocs.size() > 0) {
 					NodeRef controller = controllerAssocs.get(0).getTargetRef();
 					errandInitiator = controller;
-					associations.put("lecm-errands:initiator-assoc", controller.toString());
+					associations.put(ErrandsService.ASSOC_ERRANDS_INITIATOR.toPrefixString(namespaceService), controller.toString());
 				}
+				//Тип поручения
+                NodeRef type = dictionaryService.getRecordByParamValue(ErrandsService.ERRANDS_TYPE_DICTIONARY_NAME, ContentModel.PROP_NAME, ErrandsService.ERRAND_TYPE_ON_POINT_ORD);
+				associations.put(ErrandsService.ASSOC_ERRANDS_TYPE.toPrefixString(namespaceService), type.toString());
 				//исполнитель
 				List<AssociationRef> pointExecutorAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_EXECUTOR);
 				if (pointExecutorAssocs.size() > 0) {
 					NodeRef executor = pointExecutorAssocs.get(0).getTargetRef();
-					associations.put("lecm-errands:executor-assoc", executor.toString());
+					associations.put(ErrandsService.ASSOC_ERRANDS_EXECUTOR.toPrefixString(namespaceService), executor.toString());
+				}
+				//контролер
+				List<AssociationRef> pointControllerAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_CONTROLLER);
+				if (pointControllerAssocs.size() > 0) {
+					NodeRef Controller = pointControllerAssocs.get(0).getTargetRef();
+					associations.put(ErrandsService.ASSOC_ERRANDS_CONTROLLER.toPrefixString(namespaceService), Controller.toString());
+				}
+				//соисполнители
+				List<AssociationRef> pointCoExecutorsAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_COEXECUTORS);
+				if (pointCoExecutorsAssocs.size() > 0) {
+                    ArrayList<NodeRef> coexecutorsList = new ArrayList<>();
+					for (AssociationRef coexecutors : pointCoExecutorsAssocs) {
+						coexecutorsList.add(coexecutors.getTargetRef());
+					}
+					associations.put(ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS.toPrefixString(namespaceService), StringUtils.join(coexecutorsList, ","));
 				}
 				//тематика поручения
-				List<AssociationRef> subjectAssocs = nodeService.getTargetAssocs(ord, DocumentService.ASSOC_SUBJECT);
+				List<AssociationRef> subjectAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_SUBJECT);
 				if (subjectAssocs.size() > 0) {
 					NodeRef subject = subjectAssocs.get(0).getTargetRef();
-					associations.put("lecm-document:subject-assoc", subject.toString());
+					associations.put(DocumentService.ASSOC_SUBJECT.toPrefixString(namespaceService), subject.toString());
 				}
 
-				NodeRef errand = documentService.createDocument("lecm-errands:document", properties, associations);
+				NodeRef errand = documentService.createDocument(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService), properties, associations);
 
 				// выдадим права контролеру
 				if (null != errandInitiator){
 					lecmPermissionService.grantDynamicRole("BR_INITIATOR", errand, errandInitiator.getId(), "LECM_BASIC_PG_Initiator");
 				}
-
-				// срок поручения
-				Date limitationDate = (Date) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE);
-				nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, limitationDate);
-
 				//дата начала
 				NodeRef singFolder = nodeService.getChildByName(ord, ContentModel.ASSOC_CONTAINS, "Подписание");
 				if (null != singFolder) {

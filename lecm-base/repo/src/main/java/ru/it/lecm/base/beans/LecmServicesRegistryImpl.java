@@ -46,12 +46,12 @@ public class LecmServicesRegistryImpl extends AbstractLifecycleBean implements L
 	 */
 	@Override
 	protected void onBootstrap(ApplicationEvent ae) {
-		lecmTransactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
 			@Override
-			public Void execute() throws Throwable {
-				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+			public Void doWork() throws Exception {
+				return lecmTransactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
 					@Override
-					public Void doWork() throws Exception {
+					public Void execute() throws Throwable {
 						for (LecmService service : services) {
 							if (logger.isTraceEnabled()) {
 								logger.trace("Going to bootstrap service {}", service);
@@ -61,9 +61,9 @@ public class LecmServicesRegistryImpl extends AbstractLifecycleBean implements L
 						
 						return null;
 					}
-				});
+				}, false);
 			}
-		}, false);
+		});
 	}
 
 	@Override

@@ -1,8 +1,8 @@
-<#escape x as x?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 [
     <#list docs as doc>
     {
-    "nodeRef": "${doc.getNodeRef().toString()}"
+        "nodeRef": "${doc.getNodeRef().toString()}"
     }
         <#if doc_has_next>,</#if>
     </#list>

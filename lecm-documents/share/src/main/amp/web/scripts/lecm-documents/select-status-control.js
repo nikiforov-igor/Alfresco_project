@@ -38,7 +38,7 @@ LogicECM.module.Document = LogicECM.module.Document|| {};
                 successCallback: {
                     fn: function (response) {
                         var oResults = response.json;
-                        if (oResults != null) {
+                        if (oResults) {
                             var select = document.getElementById(this.id);
                             for (var i = 0; i < oResults.length; i++) {
                                 var option = document.createElement("option");

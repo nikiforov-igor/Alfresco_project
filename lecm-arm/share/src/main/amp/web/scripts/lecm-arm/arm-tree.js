@@ -31,7 +31,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 					success:function (oResponse) {
 						var oResults = eval("(" + oResponse.responseText + ")");
 						if (oResults != null && oResults.nodeRef != null) {
-							nodeDictionary = oResults.nodeRef;
 							me.rootNode = oResults;
 						}
 

@@ -1,7 +1,7 @@
-<#escape x as x?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 {
 	<#if photo??>
-		nodeRef:"${photo.getNodeRef()}"
+		"nodeRef": "${photo.getNodeRef()}"
 	</#if>
 }
 </#escape>
