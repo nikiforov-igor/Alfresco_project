@@ -105,11 +105,7 @@ public class ExecutionStatePolicy implements NodeServicePolicies.OnUpdatePropert
                 for (NodeRef errand : childErrands) {
                     String errandStatus = (String) nodeService.getProperty(errand, StatemachineModel.PROP_STATUS);
                     if (statuses.contains(errandStatus)) {
-                        if (errandsCountByStatus.containsKey(errandStatus)) {
-                            errandsCountByStatus.put(errandStatus, errandsCountByStatus.get(errandStatus) + 1);
-                        } else {
-                            errandsCountByStatus.put(errandStatus, 1);
-                        }
+                        errandsCountByStatus.put(errandStatus, errandsCountByStatus.get(errandStatus) + 1);
                     }
                     if (!inProcess) {
                         inProcess = !stateMachineService.isDraft(errand) && !stateMachineService.isFinal(errand);
