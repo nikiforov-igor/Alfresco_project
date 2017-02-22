@@ -10,6 +10,8 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.eds.api.EDSDocumentService;
+import ru.it.lecm.errands.ErrandsService;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 /**
  * Created by ABurlakov on 20.02.2017.
@@ -18,14 +20,24 @@ import ru.it.lecm.eds.api.EDSDocumentService;
 public class EDSBaseDocumentTypePolicy implements NodeServicePolicies.OnCreateAssociationPolicy,
         NodeServicePolicies.OnDeleteAssociationPolicy {
 
-    private NodeService nodeService;
-    private PolicyComponent policyComponent;
-    private NamespaceService namespaceService;
-    private EDSDocumentService edsDocumentService;
-    private DocumentService documentService;
+    protected NodeService nodeService;
+    protected PolicyComponent policyComponent;
+    protected NamespaceService namespaceService;
+    protected EDSDocumentService edsDocumentService;
+    protected DocumentService documentService;
+    protected ErrandsService errandsService;
+    protected StateMachineServiceBean stateMachineService;
 
-    private String type;
-    private String assocBaseDocumentType;
+    protected String type;
+    protected String assocBaseDocumentType;
+
+    public void setErrandsService(ErrandsService errandsService) {
+        this.errandsService = errandsService;
+    }
+
+    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+        this.stateMachineService = stateMachineService;
+    }
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -55,7 +67,7 @@ public class EDSBaseDocumentTypePolicy implements NodeServicePolicies.OnCreateAs
         this.assocBaseDocumentType = assocBaseDocumentType;
     }
 
-    final public void init() {
+    public void init() {
         QName typeQName = QName.createQName(type, namespaceService);
         QName assocQName = QName.createQName(assocBaseDocumentType, namespaceService);
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,

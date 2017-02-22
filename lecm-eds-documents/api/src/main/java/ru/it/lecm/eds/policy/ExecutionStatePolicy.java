@@ -2,16 +2,12 @@ package ru.it.lecm.eds.policy;
 
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
-import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.PropertyCheck;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import ru.it.lecm.eds.api.EDSDocumentService;
-import ru.it.lecm.eds.beans.EdsDocumentBaseBean;
 import ru.it.lecm.errands.ErrandsService;
-import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
@@ -20,18 +16,9 @@ import java.util.*;
 /**
  * Created by APanyukov on 20.02.2017.
  */
-public class ExecutionStatePolicy extends EdsDocumentBaseBean implements NodeServicePolicies.OnUpdatePropertiesPolicy {
+public class ExecutionStatePolicy extends EDSBaseDocumentTypePolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy {
 
-    private String type;
     private String statusesOrder;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public String getStatusesOrder() {
         return statusesOrder;
@@ -54,7 +41,7 @@ public class ExecutionStatePolicy extends EdsDocumentBaseBean implements NodeSer
         if (nodeService.hasAspect(nodeRef, EDSDocumentService.ASPECT_CHILD_CHANGE_SIGNAL) && !Objects.equals(oldChildChangeSignalCount, newChildChangeSignalCount)
                 && newChildChangeSignalCount != 0) {
             String executionState = String.valueOf(EDSDocumentService.EXECUTION_STATE.NOT_REQUIRED);
-            JSONObject json = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
             List<NodeRef> childErrands = errandsService.getChildErrands(nodeRef);
             if (childErrands != null && childErrands.size() != 0) {
                 List<String> statuses;
@@ -92,11 +79,13 @@ public class ExecutionStatePolicy extends EdsDocumentBaseBean implements NodeSer
                 }
                 executionState = String.valueOf(EDSDocumentService.EXECUTION_STATE.computeState(allFinal, isAnyExecuted, inProcess));
                 for (Map.Entry<String, Integer> entry : errandsCountByStatus.entrySet()) {
-                    json.put(entry.getKey(), entry.getValue());
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put(entry.getKey(), entry.getValue());
+                    jsonArray.add(jsonObject);
                 }
             }
             nodeService.setProperty(nodeRef, EDSDocumentService.PROP_EXECUTION_STATE, executionState);
-            nodeService.setProperty(nodeRef, EDSDocumentService.PROP_EXECUTION_STATISTICS, json.toJSONString());
+            nodeService.setProperty(nodeRef, EDSDocumentService.PROP_EXECUTION_STATISTICS, jsonArray.toJSONString());
         }
     }
 }

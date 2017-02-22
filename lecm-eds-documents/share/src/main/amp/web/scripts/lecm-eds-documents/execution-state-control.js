@@ -25,7 +25,7 @@ LogicECM.module = LogicECM.module || {};
                 expandable: true,
                 showEmptyStatuses: false,
                 statusesOrder: null,
-                statisticsField: null
+                statisticsField: ""
             },
 
             onReady: function () {
@@ -45,7 +45,7 @@ LogicECM.module = LogicECM.module || {};
                                             var statisticsBlock = Dom.get(this.id + "-statistics");
                                             var iconSpan = Dom.get(this.id + "-displayValue").parentElement;
                                             if (statisticsBlock.classList.contains("hidden1")) {
-                                                if (!this.statisticsLoaded) {
+                                                if (!this.statisticsLoaded && this.options.statisticsField) {
                                                     this.loadStatistics();
                                                 }
                                                 Dom.removeClass(statisticsBlock, "hidden1");
@@ -96,19 +96,25 @@ LogicECM.module = LogicECM.module || {};
                 var order = this.options.statusesOrder;
                 if (order && order instanceof Array && order.length) {
                     for (var i = 0; i < order.length; i++) {
-                        if (!statistics[order[i]] && !this.options.showEmptyStatuses) {
-                            continue;
-                        } else {
-                            ul.appendChild(this.getStatisticsItemView(statistics, status));
+                        for (var j = 0; j < statistics.length; j++) {
+                            var status = Object.keys(statistics[j])[0];
+                            if (order[i] == status) {
+                                if (!statistics[j][status] && !this.options.showEmptyStatuses) {
+                                    break;
+                                } else {
+                                    ul.appendChild(this.getStatisticsItemView(statistics[j], status));
+                                    break;
+                                }
+                            }
                         }
                     }
                 } else {
-                    var statuses = Object.keys(statistics);
-                    for (var i = 0; i < statuses.length; i++) {
-                        if (!statistics[statuses[i]] && !this.options.showEmptyStatuses) {
+                    for (var i = 0; i < statistics.length; i++) {
+                        var status = Object.keys(statistics[i])[0];
+                        if (!statistics[i][status] && !this.options.showEmptyStatuses) {
                             continue;
                         } else {
-                            ul.appendChild(this.getStatisticsItemView(statistics, statuses[i]));
+                            ul.appendChild(this.getStatisticsItemView(statistics[i], status));
                         }
                     }
                 }
@@ -116,9 +122,9 @@ LogicECM.module = LogicECM.module || {};
                 statisticsBlock.append(ul);
             },
 
-            getStatisticsItemView: function (statistics, status) {
+            getStatisticsItemView: function (statistic, status) {
                 var li = document.createElement("li");
-                li.innerHTML = status + ": " + statistics[status];
+                li.innerHTML = status + ": " + statistic[status];
                 return li;
             }
         });
