@@ -1475,14 +1475,14 @@
                                                                 <value><![CDATA[<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/workflow/review/form/review-ts.form.lib.js">
 
 var document = stm_document;
-if (document) {
+var currentUser = orgstructure.getCurrentEmployee();
+if (document && currentUser) {
   var annulReason = document.properties["lecm-resolutions:annul-signal-reason"];
 
   var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
   if (childErrands) {
     childErrands.forEach(function (errand) {
-      errand.properties["lecm-errands:cancellation-signal"] = true;
-      errand.save();
+      errands.sendCancelSignal(errand.nodeRef.toString(), annulReason, currentUser.nodeRef.toString());
     });
   }
 

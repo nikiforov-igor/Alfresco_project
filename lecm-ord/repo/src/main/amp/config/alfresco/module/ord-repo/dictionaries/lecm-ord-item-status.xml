@@ -8,6 +8,9 @@
         <property name="lecm-dic:plane">true</property>
         <property name="lecm-dic:active">true</property>
 		<items>
+			<item name="cm:Ожидает исполнения" type="lecm-dic:plane_dictionary_values">
+				<property name="cm:name">Ожидает исполнения</property>
+			</item>
 			<item name="cm:На исполнении" type="lecm-dic:plane_dictionary_values">
 				<property name="cm:name">На исполнении</property>
 			</item>

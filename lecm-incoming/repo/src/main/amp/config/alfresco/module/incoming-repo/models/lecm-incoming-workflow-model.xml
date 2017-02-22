@@ -92,5 +92,17 @@
             </mandatory-aspects>
         </type>
 
+        <type name="lecmIncomingWf:finishWork">
+            <parent>bpm:startTask</parent>
+            <properties>
+                <property name="lecmIncomingWf:finishWorkReason">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+            <mandatory-aspects>
+                <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+            </mandatory-aspects>
+        </type>
 	</types>
 </model>

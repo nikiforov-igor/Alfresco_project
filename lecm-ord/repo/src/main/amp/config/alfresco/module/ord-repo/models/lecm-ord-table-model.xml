@@ -6,6 +6,7 @@
     <imports>
         <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
         <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+        <import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
@@ -14,7 +15,25 @@
     <namespaces>
         <namespace uri="http://www.it.ru/lecm/ORD/table-structure/1.0" prefix="lecm-ord-table-structure"/>
     </namespaces>
-
+    <constraints>
+        <constraint name="lecm-ord-table-structure:limitation-date-radio-const" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>DAYS</value>
+                    <value>DATE</value>
+                    <value>LIMITLESS</value>
+                </list>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-ord-table-structure:limitation-date-type-const" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>WORK</value>
+                    <value>CALENDAR</value>
+                </list>
+            </parameter>
+        </constraint>
+    </constraints>
     <types>
         <type name="lecm-ord-table-structure:item">
             <title>Пункт ОРД</title>
@@ -29,11 +48,21 @@
                 <!-- содержание - textarea-->
                 <property name="lecm-ord-table-structure:item-content">
                     <type>d:text</type>
-                    <mandatory>true</mandatory>
+                    <mandatory>false</mandatory>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
                         <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!-- Заголовок - textarea-->
+                <property name="lecm-ord-table-structure:title">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <!-- примечание - textarea-->
@@ -50,8 +79,31 @@
                 <property name="lecm-ord-table-structure:execution-date-real">
                     <type>d:date</type>
                     <mandatory>false</mandatory>
-                </property> 
-                
+                </property>
+                <!-- Срок исполнения -->
+                <property name="lecm-ord-table-structure:limitation-date-text">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
+                <property name="lecm-ord-table-structure:limitation-date-radio">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <constraints>
+                        <constraint ref="lecm-ord-table-structure:limitation-date-radio-const"/>
+                    </constraints>
+                </property>
+                <property name="lecm-ord-table-structure:limitation-date-days">
+                    <type>d:int</type>
+                    <mandatory>false</mandatory>
+                    <default>1</default>
+                </property>
+                <property name="lecm-ord-table-structure:limitation-date-type">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <constraints>
+                        <constraint ref="lecm-ord-table-structure:limitation-date-type-const"/>
+                    </constraints>
+                </property>
                 <!--служебные--> 
                 <property name="lecm-ord-table-structure:item-status-assoc-text-content">
                     <type>d:text</type>
@@ -69,8 +121,12 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+                <!-- Требуется отчет -->
+                <property name="lecm-ord-table-structure:report-required">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
             </properties>
-
             <associations>
                 <!-- Статус -->
                 <association name="lecm-ord-table-structure:item-status-assoc">
@@ -96,8 +152,6 @@
                         <many>false</many>
                     </target>
                 </association>
-                
-                
                 <!-- Исполнитель -->
                 <association name="lecm-ord-table-structure:executor-assoc">
                     <source>
@@ -110,8 +164,42 @@
                         <many>false</many>
                     </target>
                 </association>
-                
-                
+                <!-- Контролер -->
+                <association name="lecm-ord-table-structure:controller-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!-- Соисполнители -->
+                <association name="lecm-ord-table-structure:coexecutors-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+                <!-- Тематика -->
+                <association name="lecm-ord-table-structure:subject-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-doc-dic:subjects</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
             </associations>
         </type>
      
