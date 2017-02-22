@@ -34,6 +34,33 @@
 		<#assign defaultDate=form.arguments[field.name + "-date-range"]>
 	</#if>
 </#if>
+<!-- From -->
+<#assign minFromLimit = ""/>
+<#if field.control.params.minFromLimit??>
+    <#assign minFromLimit = field.control.params.minFromLimit!"" />
+<#elseif field.control.params.minFromLimitCurrentDate?? && field.control.params.minFromLimitCurrentDate == "true">
+    <#assign minFromLimit = .now?string("yyyy-MM-dd")/>
+</#if>
+<#assign maxFromLimit = ""/>
+<#if field.control.params.maxFromLimit??>
+    <#assign maxFromLimit = field.control.params.maxFromLimit!"" />
+<#elseif field.control.params.maxFromLimitCurrentDate?? && field.control.params.maxFromLimitCurrentDate == "true">
+    <#assign maxFromLimit = .now?string("yyyy-MM-dd")/>
+</#if>
+
+<!-- To -->
+<#assign minToLimit = ""/>
+<#if field.control.params.minToLimit??>
+    <#assign minToLimit = field.control.params.minToLimit!"" />
+<#elseif field.control.params.minToLimitCurrentDate?? && field.control.params.minToLimitCurrentDate == "true">
+    <#assign minToLimit = .now?string("yyyy-MM-dd")/>
+</#if>
+<#assign maxToLimit = ""/>
+<#if field.control.params.maxToLimit??>
+    <#assign maxToLimit = field.control.params.maxToLimit!"" />
+<#elseif field.control.params.maxToLimitCurrentDate?? && field.control.params.maxToLimitCurrentDate == "true">
+    <#assign maxToLimit = .now?string("yyyy-MM-dd")/>
+</#if>
 
 <#assign controlId = fieldHtmlId + "-cntrl">
 
@@ -46,15 +73,19 @@
     }
 
     function createDateRangeControl() {
-        var dsf = new LogicECM.DateRangeControl("${controlId}", "${fieldHtmlId}").setOptions(
+        new LogicECM.DateRangeControl("${controlId}", "${fieldHtmlId}").setOptions(
                 {
                 fillDates:<#if field.control.params.fillDates??>${field.control.params.fillDates?string}<#else>false</#if>,
                 <#if field.control.params.toDateDefault??>
                     toDateDefault: "${field.control.params.toDateDefault?string}",
                 </#if>
                 <#if field.control.params.fromDateDefault??>
-                    fromDateDefault: "${field.control.params.fromDateDefault?string}"
+                    fromDateDefault: "${field.control.params.fromDateDefault?string}",
                 </#if>
+                    minFromLimit: "${minFromLimit?string}",
+                    maxFromLimit: "${maxFromLimit?string}",
+                    minToLimit: "${minToLimit?string}",
+                    maxToLimit: "${maxToLimit?string}"
                 }
         ).setMessages(${messages});
     }
