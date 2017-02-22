@@ -176,4 +176,14 @@
 		<property name="documentService" ref="documentService"/>
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
+	<bean id="edsBaseExecutionStateBean" class="ru.it.lecm.eds.policy.ExecutionStatePolicy"
+		  init-method="init" abstract="true">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="namespaceService" ref="namespaceService"/>
+		<property name="stateMachineService" ref="stateMachineHelper"/>
+		<property name="errandsService" ref="errandsService"/>
+        <property name="statusesOrder" value="${lecm.eds.execution.statistics.statuses.order}"/>
+        <property name="executedStatus" value="${lecm.eds.execution.statistics.statuses.executed}"/>
+    </bean>
 </beans>

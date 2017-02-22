@@ -8899,7 +8899,7 @@ if (doc) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Исполнить]]></value>
+                                                                <value><![CDATA[Завершить работу]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
@@ -9843,7 +9843,7 @@ if (doc) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Исполнить]]></value>
+                                                                <value><![CDATA[Завершить работу]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>do-not-ask-for-confirmation</name>
