@@ -4,6 +4,7 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.PropertyCheck;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import ru.it.lecm.eds.api.EDSDocumentService;
@@ -19,6 +20,7 @@ import java.util.*;
 public class ExecutionStatePolicy extends EDSBaseDocumentTypePolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy {
 
     private String statusesOrder;
+    private String executedStatus;
 
     public String getStatusesOrder() {
         return statusesOrder;
@@ -28,7 +30,16 @@ public class ExecutionStatePolicy extends EDSBaseDocumentTypePolicy implements N
         this.statusesOrder = statusesOrder;
     }
 
+    public String getExecutedStatus() {
+        return executedStatus;
+    }
+
+    public void setExecutedStatus(String executedStatus) {
+        this.executedStatus = executedStatus;
+    }
+
     public final void init() {
+        PropertyCheck.mandatory(this, "executedStatus", executedStatus);
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 QName.createQName(type, namespaceService), new JavaBehaviour(this, "onUpdateProperties"));
 
@@ -71,7 +82,7 @@ public class ExecutionStatePolicy extends EDSBaseDocumentTypePolicy implements N
                         inProcess = !stateMachineService.isDraft(errand) && !stateMachineService.isFinal(errand);
                     }
                     if (!isAnyExecuted) {
-                        isAnyExecuted = errandStatus.equals("Исполнено");
+                        isAnyExecuted = errandStatus.equals(executedStatus);
                     }
                     if (!stateMachineService.isFinal(errand)) {
                         allFinal = false;
