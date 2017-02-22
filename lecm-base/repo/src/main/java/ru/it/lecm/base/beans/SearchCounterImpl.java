@@ -149,7 +149,7 @@ public class SearchCounterImpl implements SearchCounter {
 
 
         SearchParameters sp = new SearchParameters();
-        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        sp.addStore(this.storeRef);
         sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 
         sp.setQuery(queryBuffer.toString());
