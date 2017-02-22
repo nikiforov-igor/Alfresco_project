@@ -2,13 +2,17 @@ package ru.it.lecm.eds.policy;
 
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
+import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
@@ -17,29 +21,58 @@ import java.util.*;
 /**
  * Created by APanyukov on 20.02.2017.
  */
-public class ExecutionStatePolicy extends EDSBaseDocumentTypePolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy {
+public class ExecutionStatePolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy {
 
+    private String type;
     private String statusesOrder;
     private String executedStatus;
-
-    public String getStatusesOrder() {
-        return statusesOrder;
-    }
+    private NodeService nodeService;
+    private PolicyComponent policyComponent;
+    private NamespaceService namespaceService;
+    private ErrandsService errandsService;
+    private StateMachineServiceBean stateMachineService;
 
     public void setStatusesOrder(String statusesOrder) {
         this.statusesOrder = statusesOrder;
-    }
-
-    public String getExecutedStatus() {
-        return executedStatus;
     }
 
     public void setExecutedStatus(String executedStatus) {
         this.executedStatus = executedStatus;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
+
+    public void setPolicyComponent(PolicyComponent policyComponent) {
+        this.policyComponent = policyComponent;
+    }
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
+
+    public void setErrandsService(ErrandsService errandsService) {
+        this.errandsService = errandsService;
+    }
+
+    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+        this.stateMachineService = stateMachineService;
+    }
+
     public final void init() {
+        PropertyCheck.mandatory(this, "type", type);
         PropertyCheck.mandatory(this, "executedStatus", executedStatus);
+        PropertyCheck.mandatory(this, "policyComponent", policyComponent);
+        PropertyCheck.mandatory(this, "nodeService", nodeService);
+        PropertyCheck.mandatory(this, "namespaceService", namespaceService);
+        PropertyCheck.mandatory(this, "stateMachineService", stateMachineService);
+        PropertyCheck.mandatory(this, "errandsService", errandsService);
+
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 QName.createQName(type, namespaceService), new JavaBehaviour(this, "onUpdateProperties"));
 
