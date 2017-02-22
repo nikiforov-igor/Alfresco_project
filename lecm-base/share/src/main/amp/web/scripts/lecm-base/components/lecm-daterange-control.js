@@ -182,7 +182,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     Event.addListener(this.id + "-icon-to", "click", this._showPicker, this, true);
                 }
 
-                if (this.options.mask != null) {
+                if (this.options.mask) {
                     $("#" + this.id + "-date-from").inputmask(this.options.mask, {
                         placeholder: this.options.placeholder
                     });

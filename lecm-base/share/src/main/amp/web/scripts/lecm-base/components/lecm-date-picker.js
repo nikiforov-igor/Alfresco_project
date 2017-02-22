@@ -284,7 +284,7 @@
                         me.widgets.calendar.render();
                     }
 
-                    if (this.options.mask != null) {
+                    if (this.options.mask) {
                         $("#" + me.id + "-date").inputmask(this.options.mask, {
                             placeholder:this.options.placeholder
                         });
