@@ -49,7 +49,7 @@
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Диапазон"/>
                         </assocs>
                     </item>
-                    <item name="cm:Подразделение исполнителя" type="lecm-rpeditor:reportDataColumn">
+                    <item name="cm:Подразделение-исполнитель" type="lecm-rpeditor:reportDataColumn">
                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnClass">
                             <![CDATA[lecm-orgstr:organization-unit]]></property>
@@ -65,7 +65,7 @@
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Список"/>
                         </assocs>
                     </item>
-                    <item name="cm:Важное" type="lecm-rpeditor:reportDataColumn">
+                    <item name="cm:Только важные" type="lecm-rpeditor:reportDataColumn">
                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:boolean]]></property>
                         <property name="cm:name"><![CDATA[Важное]]></property>
