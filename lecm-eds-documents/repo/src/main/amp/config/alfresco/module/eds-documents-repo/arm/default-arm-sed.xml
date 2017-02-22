@@ -7409,15 +7409,18 @@
 	                <property name="lecm-arm:expression"><![CDATA[user.currentUser().hasBusinessRole("DA_REGISTRARS")]]></property>
                         <items updateMode="CreateOrUpdate">
                             <item name="cm:Черновики" type="lecm-arm:node">
-                                <property name="cm:name"><![CDATA[Черновики]]></property>
-                                <property name="lecm-arm:order"><![CDATA[0]]></property>
-                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-                                <property name="lecm-arm:types"><![CDATA[]]></property>
-                                <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <property name="lecm-arm:search-query">
                                     <![CDATA[@lecm\-statemachine\-aspects\:is\-draft:true]]></property>
-                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                                <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="lecm-arm:counter-description"><![CDATA[]]></property>
+                                <property name="cm:name"><![CDATA[Черновики]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:expression"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+                                <property name="lecm-arm:order"><![CDATA[0]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
                                 <items>
                                     <item name="cm:10c4aefb-8df7-4012-8d53-030bc5473acf" type="lecm-arm:field">
                                         <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
@@ -7495,11 +7498,14 @@
                                         <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
                                     </item>
                                     <item name="cm:26c026b5-816e-4bcf-bdb9-df10a865728b" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[6]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:registrator-assoc]]></property>
                                         <property name="lecm-arm:field-title"><![CDATA[Регистратор]]></property>
                                         <property name="cm:name"><![CDATA[673f9692-f955-41dc-82e9-9536d42e9833]]></property>
+                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
                                     </item>
                                 </items>
                                 <assocs>
@@ -9196,12 +9202,15 @@
                                                 <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                             </item>
                                             <item name="cm:271cf0a7-16d1-4520-bba1-5d5c3de46c0a" type="lecm-arm:field">
+                                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[6]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:registrator-assoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Регистратор]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[07b7660d-2d50-4b56-af40-83902b7f10f0]]></property>
+                                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                                <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
                                             </item>
                                             <item name="cm:1a3e13cc-fdc3-4547-a26f-d0649bbf1cd5" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
@@ -9630,7 +9639,7 @@
                                         <property name="lecm-arm:order"><![CDATA[5]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-eds-document:execution-date]]></property>
-                                        <property name="lecm-arm:field-title"><![CDATA[Срок исполнения]]></property>
+                                        <property name="lecm-arm:field-title"><![CDATA[Исполнить к]]></property>
                                         <property name="cm:name"><![CDATA[8b8c954c-09ad-4396-8f64-a921a34bddff]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                         <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
@@ -9839,7 +9848,7 @@
                                         <property name="lecm-arm:order"><![CDATA[5]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-eds-document:execution-date]]></property>
-                                        <property name="lecm-arm:field-title"><![CDATA[Срок исполнения]]></property>
+                                        <property name="lecm-arm:field-title"><![CDATA[Исполнить к]]></property>
                                         <property name="cm:name"><![CDATA[86adb25a-dacf-479d-a28a-e942f3470075]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                         <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
