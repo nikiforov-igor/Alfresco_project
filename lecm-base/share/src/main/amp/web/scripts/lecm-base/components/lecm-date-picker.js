@@ -122,7 +122,9 @@
                     maxLimit: null,
 	                fieldId: null,
 	                formId: false,
-                    changeFireAction: null
+                    changeFireAction: null,
+                    mask: "dd.mm.yyyy",
+                    placeholder: Alfresco.util.message("lecm.form.control.date-picker.display.date.format")
                 },
 
                 /**
@@ -280,6 +282,12 @@
 
                         // render the calendar control
                         me.widgets.calendar.render();
+                    }
+
+                    if (this.options.mask != null) {
+                        $("#" + me.id + "-date").inputmask(this.options.mask, {
+                            placeholder:this.options.placeholder
+                        });
                     }
 
                     Event.addListener(me.id + "-date", "keyup", me._inputKeyup, me, true);
