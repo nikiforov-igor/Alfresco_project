@@ -101,12 +101,8 @@ public class ErrandsExecutionStatePolicy implements NodeServicePolicies.OnUpdate
                 if (statuses.contains(errandStatus)) {
                     errandsCountByStatus.put(errandStatus, errandsCountByStatus.get(errandStatus) + 1);
                 }
-                if (!inProcess) {
-                    inProcess = !stateMachineService.isDraft(errand) && !stateMachineService.isFinal(errand);
-                }
-                if (!isAnyExecuted) {
-                    isAnyExecuted = errandStatus.equals(executedStatus);
-                }
+                inProcess = inProcess || (!stateMachineService.isDraft(errand) && !stateMachineService.isFinal(errand));
+                isAnyExecuted = isAnyExecuted || errandStatus.equals(executedStatus);
                 if (!stateMachineService.isFinal(errand)) {
                     allFinal = false;
                 }
