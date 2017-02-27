@@ -26,6 +26,9 @@
                 <#if field.control.params.datagridFormId??>
                     datagridFormId: "${field.control.params.datagridFormId}",
                 </#if>
+                <#if field.control.params.attributeForShow??>
+                    attributeForShow: "${field.control.params.attributeForShow}",
+                </#if>
                 datagridContainerId: "${containerId}",
                 documentNodeRef: "${form.arguments.itemId}",
                 jsonValue: '${field.value}'
