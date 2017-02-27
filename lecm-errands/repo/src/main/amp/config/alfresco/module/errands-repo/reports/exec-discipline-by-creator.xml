@@ -32,8 +32,8 @@
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Диапазон"/>
                         </assocs>
                     </item>
-                    <item name="cm:Инициатор" type="lecm-rpeditor:reportDataColumn">
-                        <property name="cm:name"><![CDATA[Инициатор]]></property>
+                    <item name="cm:Автор" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Автор]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[lecm-orgstr:employee]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[par_Creator]]></property>
