@@ -212,12 +212,21 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				this.widgets.datatable.showTableMessage(failureResponse.json.message, YAHOO.widget.DataTable.CLASS_ERROR);
 			}
 
+			var dataObj = {
+				titleProperty: 'cm:name' //this.options.treeRoteNodeTitleProperty
+			};
+			if (this.options.rootLocation) {
+				dataObj.xpath = this.options.rootLocation;
+			} else if (this.options.xPathLocation) {
+				dataObj.xPathLocation = this.options.xPathLocation;
+				if (this.options.xPathLocationRoot) {
+					dataObj.xPathRoot = this.options.xPathLocationRoot;
+				}
+			}
+
 			Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/forms/node/search',
-				dataObj: {
-					titleProperty: 'cm:name', //this.options.treeRoteNodeTitleProperty
-					xpath: this.options.rootLocation
-				},
+				dataObj: dataObj,
 				successCallback: {
 					scope: this,
 					fn: onSuccess
@@ -437,7 +446,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			this.currentState.skipItemsCount = initializeTable ? 0 : this.currentState.skipItemsCount;
 			this.currentState.searchTerm = searchTerm;
 			this.currentState.exSearchFilter = exSearchFilter;
-			params = ACUtils.generateChildrenUrlParams(this.options, this.currentState.searchTerm, this.currentState.skipItemsCount, false, this.currentState.exSearchFilter);
+			params = ACUtils.generateRequest(this, this.currentState.searchTerm, this.currentState.skipItemsCount, false, this.currentState.exSearchFilter);
 			this.widgets.datatable.load({
 				request: this.currentState.nodeData.nodeRef.replace('://', '/') + '/children' + params,
 				callback: {

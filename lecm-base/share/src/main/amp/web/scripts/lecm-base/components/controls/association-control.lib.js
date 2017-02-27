@@ -13,8 +13,9 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 	LogicECM.module.AssociationComplexControl.Utils = {
 
-		generateChildrenUrlParams: function (options, searchTerm, skipItemsCount, forAutocomplete, exSearchFilter) {
+		generateRequest: function (context, searchTerm, skipItemsCount, forAutocomplete, exSearchFilter) {
 			/* построение параметров для запроса данных датагрида */
+			var options = context.options;
 			var additionalFilter = options.additionalFilter,
 				allowedNodesFilter,
 				ignoreNodesFilter,
@@ -54,7 +55,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					additionalFilter = exSearchFilter;
 				}
 			}
-			return Alfresco.util.toQueryString({
+
+			var paramsObj = {
 				selectableType: options.itemType,
 				searchTerm: searchTerm ? searchTerm : '',
 				size: LogicECM.module.AssociationComplexControl.Utils.getMaxSearchResult(options, forAutocomplete),
@@ -69,8 +71,72 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				useObjectDescription: (!!options.useObjectDescription).toString(),
 				rootNodeRef: options.rootNodeRef,
 				xpath: forAutocomplete ? options.rootLocation : undefined,
-				skipCount: forAutocomplete ? undefined : skipItemsCount.toString()
-			});
+				skipCount: forAutocomplete ? undefined : skipItemsCount.toString(),
+				elementsParams: LogicECM.module.AssociationComplexControl.Utils.getElementsParams(context, forAutocomplete)
+			};
+
+			return options.autocompleteDataSourceMethodPost ? YAHOO.lang.JSON.stringify(paramsObj) : Alfresco.util.toQueryString(paramsObj);
+		},
+
+		getElementsParams: function(context, forAutocomplete) {
+			// Передача параметров отдельных элементов
+			var options = context.options,
+				elementsParams = [];
+			if (options.itemsOptions && options.itemsOptions.length) {
+				for (var i=0; i < options.itemsOptions.length; ++i) {
+					if (LogicECM.module.AssociationComplexControl.Utils.isTypeSelectedOrEmpty(options.itemsOptions[i].options.itemType, context)) {
+						var itemObj = {};
+						if (options.itemsOptions[i].options.nameSubstituteString) {
+							itemObj.nameSubstituteString = options.itemsOptions[i].options.nameSubstituteString;
+						}
+						if (options.itemsOptions[i].options.titleNameSubstituteString) {
+							itemObj.titleNameSubstituteString = options.itemsOptions[i].options.titleNameSubstituteString;
+						}
+						if (options.itemsOptions[i].options.itemType) {
+							itemObj.selectableType = options.itemsOptions[i].options.itemType;
+						}
+						if (options.itemsOptions[i].options.additionalFilter) {
+							itemObj.additionalFilter = options.itemsOptions[i].options.additionalFilter;
+						}
+						if (options.itemsOptions[i].options.rootLocation && forAutocomplete) {
+							itemObj.xpath = options.itemsOptions[i].options.rootLocation;
+						}
+						if (options.itemsOptions[i].options.rootLocation) {
+							itemObj.pathRoot = options.itemsOptions[i].options.rootLocation;
+						}
+						if (options.itemsOptions[i].options.xPathLocation) {
+							itemObj.xPathLocation = options.itemsOptions[i].options.xPathLocation;
+						}
+						if (options.itemsOptions[i].options.xPathLocationRoot) {
+							itemObj.xPathRoot = options.itemsOptions[i].options.xPathLocationRoot;
+						}
+						if (options.itemsOptions[i].itemKey) {
+							itemObj.itemKey = options.itemsOptions[i].itemKey;
+						}
+						elementsParams.push(itemObj);
+					}
+				}
+			}
+			return elementsParams;
+		},
+
+		isTypeSelectedOrEmpty: function (itemType, context) {
+			var isSelected = false;
+			if (itemType && context && context.widgets && context.widgets.picker) {
+				var selected = context.widgets.picker.selected;
+				if (selected) {
+					if (!Object.keys(selected).length) {
+						return true;
+					} else {
+						Object.keys(selected).forEach(function (key) {
+							if (selected[key].type && selected[key].type == itemType) {
+								isSelected = true;
+							}
+						});
+					}
+				}
+			}
+			return isSelected;
 		},
 
 		getMaxSearchResult: function (options, forAutocomplete) {
