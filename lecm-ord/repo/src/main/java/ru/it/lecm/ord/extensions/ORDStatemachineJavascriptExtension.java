@@ -308,7 +308,6 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				properties.put(ErrandsService.PROP_ERRANDS_IS_PERIODICALLY.toPrefixString(namespaceService), "false");
 				properties.put(ErrandsService.PROP_ERRANDS_REPORT_RECIPIENT_TYPE.toPrefixString(namespaceService), "CONTROLLER");
 				//Срок исполнения
-				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE.toPrefixString(namespaceService), (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE));
 				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TEXT.toPrefixString(namespaceService), (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_TEXT));
 				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_DAYS.toPrefixString(namespaceService),  nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_DAYS).toString());
 				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO.toPrefixString(namespaceService), (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_RADIO));
@@ -361,6 +360,12 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				// выдадим права контролеру
 				if (null != errandInitiator){
 					lecmPermissionService.grantDynamicRole("BR_INITIATOR", errand, errandInitiator.getId(), "LECM_BASIC_PG_Initiator");
+				}
+
+				// срок поручения
+				Date limitationDate = (Date) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE);
+				if (limitationDate != null) {
+					nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, limitationDate);
 				}
 				//дата начала
 				NodeRef singFolder = nodeService.getChildByName(ord, ContentModel.ASSOC_CONTAINS, "Подписание");
