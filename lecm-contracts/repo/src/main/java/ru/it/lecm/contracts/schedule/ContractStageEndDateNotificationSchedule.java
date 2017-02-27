@@ -2,8 +2,8 @@ package ru.it.lecm.contracts.schedule;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.notifications.beans.NotificationsService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,7 +23,7 @@ public class ContractStageEndDateNotificationSchedule extends BaseTransactionalS
     public static final QName TYPE_CONTRACT_STAGE = QName.createQName("http://www.it.ru/logicECM/contract/table-structure/1.0", "stage");
     private DocumentService documentService;
 
-    private NotificationsService notificationsService;
+    private DocumentGlobalSettingsService documentGlobalSettings;
 
     DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -35,8 +35,8 @@ public class ContractStageEndDateNotificationSchedule extends BaseTransactionalS
         this.documentService = documentService;
     }
 
-    public void setNotificationsService(NotificationsService notificationsService) {
-        this.notificationsService = notificationsService;
+    public void setDocumentGlobalSettings(DocumentGlobalSettingsService documentGlobalSettings) {
+        this.documentGlobalSettings = documentGlobalSettings;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ContractStageEndDateNotificationSchedule extends BaseTransactionalS
         final String MIN = DateFormatISO8601.format(calendar.getTime());
 
         calendar.setTime(now);
-        calendar.add(Calendar.DAY_OF_YEAR, notificationsService.getSettingsNDays());
+        calendar.add(Calendar.DAY_OF_YEAR, documentGlobalSettings.getSettingsNDays());
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);

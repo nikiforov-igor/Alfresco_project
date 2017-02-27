@@ -17,6 +17,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import ru.it.lecm.base.beans.BaseTransactionalSchedule;
+import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 
 /**
  * User: dbashmakov
@@ -29,6 +30,7 @@ public class InternalNotificationSchedule extends BaseTransactionalSchedule {
 	private IWorkCalendar calendarBean;
 	private NotificationsService notificationsService;
 	private DocumentConnectionService connectionService;
+	private DocumentGlobalSettingsService documentGlobalSettingsService;
 
 	public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
@@ -46,12 +48,16 @@ public class InternalNotificationSchedule extends BaseTransactionalSchedule {
 		this.connectionService = connectionService;
 	}
 
+	public void setDocumentGlobalSettingsService(DocumentGlobalSettingsService documentGlobalSettingsService) {
+		this.documentGlobalSettingsService = documentGlobalSettingsService;
+	}
+	
 	@Override
 	public List<NodeRef> getNodesInTx() {
 		// TODO: Попытаться понять и разомкнуть логику. Пока не вижу как можно
 		// вынести отдельного executor'а для каждого документа, т.к нужен список
 		// connectedDocs, который опять же собирается по всем документам
-		List<NodeRef> internals = getInternal(documentService, notificationsService, calendarBean);
+		List<NodeRef> internals = getInternal();
 
 		List<NodeRef> connectedDocs = new ArrayList<>();
 		for (NodeRef internal : internals) {
@@ -82,7 +88,7 @@ public class InternalNotificationSchedule extends BaseTransactionalSchedule {
 			Date now = normalizeDate(new Date());
 			Date internalExecutionDate = (Date) nodeService.getProperty(internal, InternalService.PROP_INTERNAL_RESPONSE_DATE);
 			internalExecutionDate = normalizeDate(internalExecutionDate);
-			int days = notificationsService.getSettingsNDays();
+			int days = documentGlobalSettingsService.getSettingsNDays();
 			Date workCalendarDate = calendarBean.getNextWorkingDate(now, days, Calendar.DAY_OF_MONTH);
 
 			String notificationTemplateCode = null;
@@ -111,12 +117,12 @@ public class InternalNotificationSchedule extends BaseTransactionalSchedule {
         return calendar.getTime();
     }
 
-    private List<NodeRef> getInternal(DocumentService documentService, NotificationsService notificationsService, IWorkCalendar calendarBean) {
+    private List<NodeRef> getInternal() {
         // ищем внутренние документы, в статусе "Направлен", срок исполнения которых истекается менее чем через N дней
         Date start = new Date(0);
 
         Calendar calendar = Calendar.getInstance();
-        int days = notificationsService.getSettingsNDays();
+        int days = documentGlobalSettingsService.getSettingsNDays();
         Date end = calendarBean.getNextWorkingDate(new Date(), days, Calendar.DAY_OF_MONTH);
         calendar.setTime(end);
         calendar.add(Calendar.DAY_OF_MONTH, 1);

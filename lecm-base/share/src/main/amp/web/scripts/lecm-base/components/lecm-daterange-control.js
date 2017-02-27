@@ -66,7 +66,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             options: {
                 toDateDefault: "NOW", //NEXT_MONTH, START_YEAR, LAST_MONTH, NOW
                 fromDateDefault: "LAST_MONTH",
-                fillDates: false
+                fillDates: false,
+                mask: "dd.mm.yyyy",
+                placeholder: Alfresco.util.message("lecm.form.control.date-picker.display.date.format")
             },
 
             /**
@@ -178,6 +180,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     // setup keyboard enter events on the image instead of the link to get focus outline displayed
                     Alfresco.util.useAsButton(iconEl, this._showPicker, null, this);
                     Event.addListener(this.id + "-icon-to", "click", this._showPicker, this, true);
+                }
+
+                if (this.options.mask) {
+                    $("#" + this.id + "-date-from").inputmask(this.options.mask, {
+                        placeholder: this.options.placeholder
+                    });
+                    $("#" + this.id + "-date-to").inputmask(this.options.mask, {
+                        placeholder: this.options.placeholder
+                    });
                 }
 
                 // Hide Calendar if we click anywhere in the document other than the calendar

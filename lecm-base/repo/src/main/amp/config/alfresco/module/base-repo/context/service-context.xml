@@ -435,7 +435,7 @@
 	<bean id="searchQueryProcessorService" class="ru.it.lecm.base.beans.SearchQueryProcessorServiceImpl">
 		<property name="processorManager" ref="searchQueryProcessorManager"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="notificationsService" ref="notificationsService"/>
+		<property name="documentGlobalSettings" ref="documents.global-settings.service"/>
 		<property name="workCalendarService" ref="WorkCalendarService"/>
 	</bean>
 
