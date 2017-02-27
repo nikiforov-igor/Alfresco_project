@@ -93,7 +93,7 @@
                         <constraint ref="lecm-eds-aspect:execution-state-const"/>
                     </constraints>
                 </property>
-                <!-- json {["статус": "кол-во"]}-->
+                <!-- json [{"state": "статус", "count": "кол-во"}]-->
                 <property name="lecm-eds-aspect:execution-statistics">
                     <type>d:text</type>
                     <index enabled="false"/>

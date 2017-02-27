@@ -712,4 +712,14 @@
         <property name="type" value="lecm-errands:document"/>
         <property name="assocBaseDocumentType" value="lecm-errands:base-assoc"/>
     </bean>
+
+    <bean id="errandsExecutionStateBean" class="ru.it.lecm.errands.policy.ErrandsExecutionStatePolicy"
+          init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="stateMachineService" ref="stateMachineHelper"/>
+        <property name="errandsService" ref="errandsService"/>
+        <property name="statusesOrder" value="${lecm.eds.execution.statistics.statuses.order}"/>
+        <property name="executedStatus" value="${lecm.eds.execution.statistics.statuses.executed}"/>
+    </bean>
 </beans>
