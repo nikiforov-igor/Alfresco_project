@@ -445,7 +445,7 @@
                         <control template="/ru/it/lecm/resolutions/controls/resolution-execution-datagrid-control.ftl">
                             <control-param name="datagridFormId">resolution-execution-datagrid</control-param>
                             <control-param name="expandFormId">resolution-execution-datagrid-expand</control-param>
-                            <control-param name="attributeForShow">lecm-errands:child-index-counter</control-param>
+                            <control-param name="attributeForOpen">lecm-errands:child-index-counter</control-param>
                         </control>
                     </field>
 
