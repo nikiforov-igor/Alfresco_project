@@ -68,6 +68,16 @@
         Bubbling.on("showControl", this.onShowControl, this);
 	    Bubbling.on("handleFieldChange", this.onHandleFieldChange, this);
 	    Bubbling.on("showDatePicker", this.hidePickerWhenAnotherIsOpening, this);
+		
+        // ALFFIVE-139
+        // Изначально загружается версия 1.6.2 с плагином inputmask
+        // Однако, потом отрабатывает dojo и перекрывает версию на 1.11		
+        // noConflict верёт версию 1.6.2 со всеми плагинами
+
+        if(!$.inputmask) {
+            $.noConflict();
+            $ = $ || jQuery; // Возможен вариант, когда предыдущей версии нету, восстановим что есть
+        }        
 
         return this;
     };
