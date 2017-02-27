@@ -859,22 +859,23 @@
                     <show id="lecm-document:subject-assoc"/>                                                            <!-- Тематика -->
                 </field-visibility>
                 <appearance>
-                    <set id="two_colum" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="base"/>
-
-                    <field id="lecm-eds-document:document-type-assoc" set="two_colum" mandatory="true">
+                    <field id="lecm-eds-document:document-type-assoc" mandatory="true">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory"
+                                        event="keyup"/>
                         </constraint-handlers>
                         <control>
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_входящего</control-param>
+                            <control-param name="rootLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_входящего
+                            </control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-statemachine:status" set="two_colum"  mandatory="false">
+                    <field id="lecm-statemachine:status" mandatory="false">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory"
+                                        event="keyup"/>
                         </constraint-handlers>
                         <control template="/ru/it/lecm/documents/controls/select-status-control.ftl">
                             <control-param name="docType">lecm-incoming:document</control-param>
@@ -882,39 +883,44 @@
                             <control-param name="valuesDelimiter">,</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:regnum" set="base"/>
-                    <field id="lecm-document:doc-date" set="base">
+                    <field id="lecm-document:regnum"/>
+                    <field id="lecm-document:doc-date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
-                    <field id="lecm-document:title" set="base">
+                    <field id="lecm-document:title">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory"
+                                        event="keyup"/>
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-incoming:outgoing-number" set="base"/>
-                    <field id="lecm-incoming:outgoing-date" set="base">
+                    <field id="lecm-incoming:outgoing-number"/>
+                    <field id="lecm-incoming:outgoing-date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
-                    <field id="lecm-incoming:sender-assoc" set="base">
+                    <field id="lecm-incoming:sender-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="nameSubstituteString">{lecm-contractor:shortname}</control-param>
                             <control-param name="endpointMany">true</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="endpointType">lecm-contractor:contractor-type</control-param>
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="rootLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты
+                            </control-param>
                         </control>
                     </field>
-                    <field id="lecm-incoming:recipient-assoc" set="base">
+                    <field id="lecm-incoming:recipient-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                             <control-param name="plane">true</control-param>
                             <control-param name="endpointType">lecm-orgstr:employee</control-param>
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+                            <control-param name="rootLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники
+                            </control-param>
                         </control>
                     </field>
-                    <field id="lecm-eds-document:execution-date" set="base">
+                    <field id="lecm-eds-document:execution-date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
-                    <field id="lecm-document:subject-assoc" set="base"/>
+                    <field id="lecm-document:subject-assoc"/>
                 </appearance>
             </form>
             <!-- Форма с набором полей, редактируемых в машине состояний-->
