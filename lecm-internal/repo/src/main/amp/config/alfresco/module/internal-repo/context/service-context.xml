@@ -129,6 +129,7 @@
 		<property name="triggerName" value="internal-notification-trigger"/>
 		<property name="triggerGroup" value="internal-triggers"/>
 		<property name="actionName" value="internalNotificationExecutor"/>
+		<property name="documentGlobalSettingsService" ref="documents.global-settings.service"/>
 	</bean>
 	
     <bean id="internalCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">

@@ -7,7 +7,7 @@ import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SearchQueryProcessor;
-import ru.it.lecm.notifications.beans.NotificationsService;
+import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
@@ -26,7 +26,7 @@ public class ActiveTasksProcessor extends SearchQueryProcessor{
 
     private StateMachineServiceBean stateMachineService;
     private OrgstructureBean orgstructureBean;
-	private NotificationsService notificationsService;
+    private DocumentGlobalSettingsService documentGlobalSettings;
 
     public void setStateMachineService(StateMachineServiceBean stateMachineService) {
         this.stateMachineService = stateMachineService;
@@ -36,9 +36,9 @@ public class ActiveTasksProcessor extends SearchQueryProcessor{
         this.orgstructureBean = orgstructureBean;
     }
 
-	public void setNotificationsService(NotificationsService notificationsService) {
-		this.notificationsService = notificationsService;
-	}
+    public void setDocumentGlobalSettings(DocumentGlobalSettingsService documentGlobalSettings) {
+        this.documentGlobalSettings = documentGlobalSettings;
+    }
 
 	@Override
     public String getQuery(Map<String, Object> params) {
@@ -78,7 +78,7 @@ public class ActiveTasksProcessor extends SearchQueryProcessor{
 
 	    Integer remainingDays = null;
 	    if (onlyUrgentAndOverdue) {
-			remainingDays = notificationsService.getSettingsNDays();
+			remainingDays = documentGlobalSettings.getSettingsNDays();
 	    } else if (params != null && params.get("remainingDays") != null) {
 			remainingDays = (Integer) params.get("remainingDays");
 	    }

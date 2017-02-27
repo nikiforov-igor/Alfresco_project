@@ -163,6 +163,7 @@
         <property name="nodeService" ref="nodeService"/>
         <property name="calendarBean" ref="WorkCalendarService"/>
         <property name="publicAction" value="false" />
+        <property name="documentGlobalSettings" ref="documents.global-settings.service"/>
     </bean>
 
     <bean id="incoming.executionNotificationSchedule" class="ru.it.lecm.incoming.schedule.ExecutionNotificationSchedule" parent="baseTransactionalSchedule">
@@ -186,7 +187,7 @@
         </property>
         <property name="documentService" ref="documentService"/>
         <property name="calendarBean" ref="WorkCalendarService"/>
-        <property name="notificationsService" ref="notificationsService"/>
+        <property name="documentGlobalSettings" ref="documents.global-settings.service"/>
     </bean>
 
     <bean id="repositoryReceiverExecutor" class="ru.it.lecm.incoming.external.RepositoryExecutor" parent="action-executer">

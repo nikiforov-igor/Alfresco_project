@@ -17,10 +17,9 @@
     <#assign disabled=false>
 </#if>
 
-<#if field.control.params.hideDateFormat?? && field.control.params.hideDateFormat == "true">
-    <#assign hideDateFormat=true>
-<#else>
-    <#assign hideDateFormat=false>
+<#assign hideDateFormat=true>
+<#if field.control.params.hideDateFormat??>
+    <#assign hideDateFormat=field.control.params.hideDateFormat == "true">
 </#if>
 
 <#assign viewFormat>${msg("form.control.date-picker.view.date.format")}</#assign>

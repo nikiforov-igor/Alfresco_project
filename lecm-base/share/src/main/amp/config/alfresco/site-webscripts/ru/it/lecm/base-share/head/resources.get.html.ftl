@@ -37,6 +37,8 @@
 	</@>
 
 	<@script type="text/javascript" src="${url.context}/res/jquery/jquery-1.6.2.js" group="lecm-head-resources"/>
+	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/third-party/jquery.inputmask.js" group="lecm-head-resources"/>
+	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/third-party/jquery.inputmask.date.extensions.js" group="lecm-head-resources"/>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base64.js" group="lecm-head-resources"/>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js" group="lecm-head-resources"/>
 	<#-- Исправление баги alfresco: при некоторых условиях во время добавления тега страница перезагружается -->
