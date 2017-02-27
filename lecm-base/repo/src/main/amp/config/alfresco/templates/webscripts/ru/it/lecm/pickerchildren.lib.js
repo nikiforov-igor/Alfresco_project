@@ -208,11 +208,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams) {
 			var containerResults = new Array(),
 				contentResults = new Array();
 
-			for each(var result
-		in
-			childNodes
-		)
-			{
+			for each(var result in childNodes) {
 				if (result.isContainer || result.type == "{http://www.alfresco.org/model/application/1.0}folderlink") {
 					resultObj =
 						{
