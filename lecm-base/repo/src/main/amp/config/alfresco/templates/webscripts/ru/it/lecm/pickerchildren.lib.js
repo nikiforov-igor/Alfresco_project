@@ -54,19 +54,19 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams) {
 
 		// determine if we need to resolve the parent NodeRef
 
-		if (argsXPath != null) {
+		if (argsXPath) {
 			// resolve the provided XPath to a NodeRef
 			var nodes = search.xpathSearch(argsXPath);
 			if (nodes.length > 0) {
 				nodeRef = String(nodes[0].nodeRef);
 			}
 		}
-		if (argsXPathLocation != null) {
+		if (argsXPathLocation) {
 			var root = businessPlatform.getHomeRef();
 			// resolve the root for XPath
 			if (argsXPathRoot != null) {
 				var node = resolveNode(argsXPathRoot);
-				if (node != null) {
+				if (node) {
 					root = node;
 				}
 			}
@@ -81,13 +81,13 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams) {
 		}
 
 		var skipCount = 0;
-		if (argsSkipCount != null) {
+		if (argsSkipCount) {
 			// force the argsMaxResults var to be treated as a number
 			skipCount = parseInt(argsSkipCount, 10) || skipCount;
 		}
 		// default to max of 100 results
 		var maxResults = 20;
-		if (argsMaxResults != null) {
+		if (argsMaxResults) {
 			// force the argsMaxResults var to be treated as a number
 			maxResults = parseInt(argsMaxResults, 10) || maxResults;
 		}
@@ -102,10 +102,9 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams) {
 			if (lastPathElement == "siblings") {
 				// the provided nodeRef is the node we want the siblings of so get it's parent
 				var node = search.findNode(nodeRef);
-				if (node !== null) {
+				if (node) {
 					nodeRef = node.parent.nodeRef;
-				}
-				else {
+				} else {
 					// if the provided node was not found default to companyhome
 					nodeRef = "alfresco://company/home";
 				}
@@ -124,11 +123,11 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams) {
 				status.setCode(status.STATUS_NOT_FOUND, "Not a valid nodeRef: '" + nodeRef + "'");
 				return null;
 			}
-			if (argsRootNode != null) {
+			if (argsRootNode) {
 				rootNode = resolveNode(argsRootNode) || businessPlatform.getHomeRef();
 			}
 
-			if (parent != null && (argsSearchTerm == null || argsSearchTerm == "") && (argsAdditionalFilter == null || argsAdditionalFilter == "") && (filter == null || filter == "")) {
+			if (parent && (argsSearchTerm == null || argsSearchTerm == "") && (argsAdditionalFilter == null || argsAdditionalFilter == "") && (filter == null || filter == "")) {
 				var ignoreTypes = null;
 				if (argsFilterType != null) {
 					if (logger.isLoggingEnabled()) {
@@ -145,9 +144,9 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams) {
 				childNodes = base.getChilds(parent, childType, ignoreTypes, maxResults, skipCount, sortProp, true, true, doNotCheck, useOnlyInSameOrg).page;
 			} else {
 				var parentXPath = null, query;
-				if (parent != null) {
+				if (parent) {
 					parentXPath = parent.getQnamePath();
-				} else if (argsXPath != null) {
+				} else if (argsXPath) {
 					parentXPath = argsXPath;
 				}
 
@@ -166,7 +165,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams) {
 				}
 
 				query = addAdditionalFilter(query, "" + searchQueryProcessor.processQuery(argsAdditionalFilter));
-				if (filter != null) {
+				if (filter) {
 					query = addAdditionalFilter(query, filter);
 				}
 
@@ -189,16 +188,15 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams) {
 						});
 					}
 
-					childNodes = search.query(
-						{
-							query: searchQueryProcessor.processQuery(query),
-							language: "fts-alfresco",
-							page: {
-								skipCount: skipCount,
-								maxItems: maxResults
-							},
-							sort: sort
-						});
+					childNodes = search.query({
+						query: searchQueryProcessor.processQuery(query),
+						language: "fts-alfresco",
+						page: {
+							skipCount: skipCount,
+							maxItems: maxResults
+						},
+						sort: sort
+					});
 				}
 			}
 
@@ -210,20 +208,17 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams) {
 
 			for each(var result in childNodes) {
 				if (result.isContainer || result.type == "{http://www.alfresco.org/model/application/1.0}folderlink") {
-					resultObj =
-						{
-							item: result,
-							selectable: isItemSelectable(result, argsSelectableType)
-						};
+					resultObj = {
+						item: result,
+						selectable: isItemSelectable(result, argsSelectableType)
+					};
 					containerResults.push(resultObj);
-				}
-				else {
+				} else {
 					// wrap result and determine if it is selectable in the UI
-					resultObj =
-						{
-							item: result,
-							selectable: isItemSelectable(result, argsSelectableType)
-						};
+					resultObj = {
+						item: result,
+						selectable: isItemSelectable(result, argsSelectableType)
+					};
 					//проверку можно оставить, так как используется на данный момент в одном месте - при выборе логотипа организации
 					// и в том месте ограничение по максимальному числу результатов остутсвует (=1000 - то есть все элементы на одном уровне репозитория)
 					if (checkDocType(result, docType)) {
@@ -244,7 +239,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams) {
 				var path = "/";
 				var simplePath = "/";
 
-				if (argsPathRoot != null) {
+				if (argsPathRoot) {
 					var rootNodes = search.xpathSearch(argsPathRoot);
 					if (rootNodes.length > 0) {
 						var pathRoot = rootNodes[0];
@@ -286,21 +281,19 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams) {
 
 			// TODO: Better way of finding this
 			var rootCategories = classification.getRootCategories(catAspect);
-			if (rootCategories != null && rootCategories.length > 0) {
+			if (rootCategories && rootCategories.length > 0) {
 				rootNode = rootCategories[0].parent;
 				if (nodeRef == "alfresco://category/root") {
 					parent = rootNode;
 					categoryResults = classification.getRootCategories(catAspect);
-				}
-				else {
+				} else {
 					parent = search.findNode(nodeRef);
 					categoryResults = parent.children;
 				}
 
-				if (argsSearchTerm != null) {
+				if (argsSearchTerm) {
 					var filteredResults = [];
-					for each(result in categoryResults)
-					{
+					for each(result in categoryResults) {
 						if (result.properties.name.indexOf(argsSearchTerm) == 0) {
 							filteredResults.push(result);
 						}
@@ -310,16 +303,11 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams) {
 				categoryResults.sort(sortByName);
 
 				// make each result an object and indicate it is selectable in the UI
-				for each(var result
-			in
-				categoryResults
-			)
-				{
-					results.push(
-						{
-							item: result,
-							selectable: true
-						});
+				for each(var result in categoryResults) {
+					results.push({
+						item: result,
+						selectable: true
+					});
 				}
 			}
 		}
@@ -329,8 +317,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams) {
 			}
 			else if (argsSelectableType == "cm:authorityContainer" || argsSelectableType.indexOf("cm:authorityContainer") > 0) {
 				findGroups(argsSearchTerm, maxResults, results);
-			}
-			else {
+			} else {
 				// combine groups and users
 				findGroups(argsSearchTerm, maxResults, results);
 				findUsers(argsSearchTerm, maxResults, results);
