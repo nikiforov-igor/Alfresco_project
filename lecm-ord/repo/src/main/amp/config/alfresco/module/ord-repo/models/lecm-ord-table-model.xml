@@ -177,6 +177,11 @@
                         <tokenised>false</tokenised>
                     </index>
                 </property>
+                <!-- Требуется отчет -->
+                <property name="lecm-ord-table-structure:report-required">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
             </properties>
             <associations>
                 <!-- Статус -->
