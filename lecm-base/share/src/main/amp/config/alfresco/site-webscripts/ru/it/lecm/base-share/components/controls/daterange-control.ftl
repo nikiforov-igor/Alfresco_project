@@ -34,31 +34,31 @@
 		<#assign defaultDate=form.arguments[field.name + "-date-range"]>
 	</#if>
 </#if>
-<!-- From -->
+<#-- From -->
 <#assign minFromLimit = ""/>
 <#if field.control.params.minFromLimit??>
     <#assign minFromLimit = field.control.params.minFromLimit!"" />
-<#elseif field.control.params.minFromLimitCurrentDate?? && field.control.params.minFromLimitCurrentDate == "true">
+<#elseif field.control.params.minFromLimitCurrentDate?? && field.control.params.minFromLimitCurrentDate?lower_case == "true">
     <#assign minFromLimit = .now?string("yyyy-MM-dd")/>
 </#if>
 <#assign maxFromLimit = ""/>
 <#if field.control.params.maxFromLimit??>
     <#assign maxFromLimit = field.control.params.maxFromLimit!"" />
-<#elseif field.control.params.maxFromLimitCurrentDate?? && field.control.params.maxFromLimitCurrentDate == "true">
+<#elseif field.control.params.maxFromLimitCurrentDate?? && field.control.params.maxFromLimitCurrentDate?lower_case  == "true">
     <#assign maxFromLimit = .now?string("yyyy-MM-dd")/>
 </#if>
 
-<!-- To -->
+<#-- To -->
 <#assign minToLimit = ""/>
 <#if field.control.params.minToLimit??>
     <#assign minToLimit = field.control.params.minToLimit!"" />
-<#elseif field.control.params.minToLimitCurrentDate?? && field.control.params.minToLimitCurrentDate == "true">
+<#elseif field.control.params.minToLimitCurrentDate?? && field.control.params.minToLimitCurrentDate?lower_case  == "true">
     <#assign minToLimit = .now?string("yyyy-MM-dd")/>
 </#if>
 <#assign maxToLimit = ""/>
 <#if field.control.params.maxToLimit??>
     <#assign maxToLimit = field.control.params.maxToLimit!"" />
-<#elseif field.control.params.maxToLimitCurrentDate?? && field.control.params.maxToLimitCurrentDate == "true">
+<#elseif field.control.params.maxToLimitCurrentDate?? && field.control.params.maxToLimitCurrentDate?lower_case  == "true">
     <#assign maxToLimit = .now?string("yyyy-MM-dd")/>
 </#if>
 
