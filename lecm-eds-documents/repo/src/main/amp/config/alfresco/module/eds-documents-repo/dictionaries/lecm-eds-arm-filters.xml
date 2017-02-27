@@ -103,7 +103,7 @@
                 <property name="lecm-arm:filter-code">BY_EXECUTION_TYPE</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
-                <property name="lecm-arm:filter-values">@lecm\\-errands:type\\-assoc\\-ref:{{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dictionary:'Типы поручений', attribute:'lecm-errands-dic:errand-type-launch-review', value:true})}}|Рассмотрение;@lecm\\-errands:type\\-assoc\\-ref:{{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dictionary:'Типы поручений', attribute:'lecm-errands-dic:errand-type-launch-review', value:false})}}|Исполнение</property>
+                <property name="lecm-arm:filter-values">@lecm\\-errands:type\\-assoc\\-ref:{{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dictionary:'Типы поручений', attribute:'lecm-errands-dic:errand-type-launch-review', value:true})}}|Рассмотрение;NOT @lecm\\-errands:type\\-assoc\\-ref:{{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dictionary:'Типы поручений', attribute:'lecm-errands-dic:errand-type-launch-review', value:true})}}|Исполнение</property>
                 <property name="lecm-arm:filter-query">#value</property>
             </item>
         </items>
