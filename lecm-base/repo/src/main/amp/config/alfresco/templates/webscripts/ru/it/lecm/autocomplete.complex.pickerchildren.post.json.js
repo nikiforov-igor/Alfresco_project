@@ -1,15 +1,13 @@
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/pickerchildren.lib.js">
 
-function main() {
-	var itemsParams = json.has('elementsParams') ? json.get('elementsParams') : null,
+(function () {
+	var obj = eval('(' + json.toString() + ')'),
 		data = {},
-		dataPart,
-		result;
-	if (itemsParams && itemsParams.length()) {
+		dataPart;
+	if (obj.elementsParams && obj.elementsParams.length) {
 		data.results = [];
-		for (var i=0; i < itemsParams.length(); ++i) {
-			var itemsParamObj = eval('(' + itemsParams.get(i) + ')');
-			dataPart = getPickerChildrenItems('ISNOTNULL:"sys:node-dbid"', null, true, itemsParamObj);
+		for (var i=0; i < obj.elementsParams.length; ++i) {
+			dataPart = getPickerChildrenItems('ISNOTNULL:"sys:node-dbid"', null, true, obj.elementsParams[i]);
 			data.results = data.results.concat(dataPart.results);
 
 			data.parent = dataPart.parent;
@@ -25,6 +23,4 @@ function main() {
 	model.rootNode = data.rootNode;
 	model.results = data.results;
 	model.additionalProperties = data.additionalProperties;
-}
-
-main();
+})();

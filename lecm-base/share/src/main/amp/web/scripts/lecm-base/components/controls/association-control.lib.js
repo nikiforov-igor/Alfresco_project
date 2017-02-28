@@ -84,7 +84,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				elementsParams = [];
 			if (options.itemsOptions && options.itemsOptions.length) {
 				for (var i=0; i < options.itemsOptions.length; ++i) {
-					if (LogicECM.module.AssociationComplexControl.Utils.isTypeSelectedOrEmpty(options.itemsOptions[i].options.itemType, context)) {
+					if (LogicECM.module.AssociationComplexControl.Utils.isKeySelectedOrEmpty(options.itemsOptions[i].itemKey, context)) {
 						var itemObj = {};
 						if (options.itemsOptions[i].options.nameSubstituteString) {
 							itemObj.nameSubstituteString = options.itemsOptions[i].options.nameSubstituteString;
@@ -120,18 +120,16 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			return elementsParams;
 		},
 
-		isTypeSelectedOrEmpty: function (itemType, context) {
+		isKeySelectedOrEmpty: function (itemKey, context) {
 			var isSelected = false;
-			if (itemType && context && context.widgets && context.widgets.picker) {
+			if (itemKey && context && context.widgets && context.widgets.picker) {
 				var selected = context.widgets.picker.selected;
 				if (selected) {
 					if (!Object.keys(selected).length) {
 						return true;
 					} else {
-						Object.keys(selected).forEach(function (key) {
-							if (selected[key].type && selected[key].type == itemType) {
-								isSelected = true;
-							}
+						isSelected = Object.keys(selected).some(function (element, index, array) {
+							return (selected[element] && selected[element].itemKey == itemKey);
 						});
 					}
 				}

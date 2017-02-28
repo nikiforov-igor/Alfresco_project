@@ -59,7 +59,7 @@ LogicECM.module = LogicECM.module || {};
 			changeItemsFireAction: null,
 			additionalFilter: '',
 			isComplex: null,
-			autocompleteDataSource: 'lecm/forms/picker',
+			autocompleteDataSource: 'lecm/autocomplete/complex/picker',
 			autocompleteDataSourceMethodPost: false,
 			maxSearchAutocompleteResults: 10,
 			showAutocomplete: null,
