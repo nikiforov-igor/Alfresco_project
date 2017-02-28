@@ -13,7 +13,7 @@
                     ""
                 </#if>
             "startDate": <#if workflow.startDate?exists>
-                    "${workflow.startDate?date}"
+                    "${workflow.startDate?date?string}"
                 <#else>
                     " - "
                 </#if>
@@ -31,7 +31,7 @@
                     ""
                 </#if>
             "startDate": <#if workflow.startDate?exists>
-                    "${workflow.startDate?date}"
+                    "${workflow.startDate?date?string}"
                 <#else>
                     " - "
                 </#if>
