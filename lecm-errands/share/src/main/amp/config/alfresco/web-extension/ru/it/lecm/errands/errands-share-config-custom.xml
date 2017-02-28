@@ -1032,7 +1032,7 @@
                     </field>
                     <field id="lecm-errands:limitation-date-radio" label-id="label.errand.limitless">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
-                            <control-param name="options">LIMITLESS|Без срока,*|Все</control-param>
+                            <control-param name="options">LIMITLESS|Да,DATE|Нет</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:is-important">
