@@ -124,7 +124,7 @@
 		<property name="service" ref="armService"/>
 		<property name="substitudeService" ref="substitudeService"/>
 		<property name="dictionaryBean" ref="serviceDictionary"/>
-		<property name="searchCounter" ref="lecmSearchCounterScript"/>
+		<property name="searchCounter" ref="searchCounterBean"/>
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 

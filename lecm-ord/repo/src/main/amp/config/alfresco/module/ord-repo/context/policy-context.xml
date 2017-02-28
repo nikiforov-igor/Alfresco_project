@@ -32,8 +32,4 @@
 		  init-method="init"
 		  parent="logicEcmAssociationPolicy"
 		  depends-on="eds.models.bootstrap"/>
-
-	<bean  id="ord.ORDExecutionStatePolicy" parent="edsBaseExecutionStateBean" depends-on="ord.document.models.bootstrap, eds.models.bootstrap">
-		<property name="type" value="lecm-ord:document"/>
-	</bean>
 </beans>

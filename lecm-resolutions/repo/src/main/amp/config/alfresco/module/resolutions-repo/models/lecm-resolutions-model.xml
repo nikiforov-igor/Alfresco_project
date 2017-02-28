@@ -10,6 +10,7 @@
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
         <import uri="http://www.it.ru/logicECM/resolutions/dictionaries/1.0" prefix="lecm-resolutions-dic"/>
         <import uri="http://www.it.ru/logicECM/errands-aspects/1.0" prefix="lecm-errands-aspect"/>
+        <import uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/resolutions/1.0" prefix="lecm-resolutions"/>
@@ -349,6 +350,7 @@
 
             <mandatory-aspects>
                 <aspect>lecm-errands-aspect:errandsExecutorsAspect</aspect>
+                <aspect>lecm-eds-aspect:execution-state-aspect</aspect>
             </mandatory-aspects>
         </type>
     </types>

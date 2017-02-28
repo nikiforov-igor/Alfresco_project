@@ -319,17 +319,16 @@
 			<value>deleteAction</value>
 		</property>
 	</bean>
+	
+	<bean id="searchCounterBean" class="ru.it.lecm.base.beans.SearchCounterImpl">
+		<property name="processorService" ref="searchQueryProcessorService"/>
+		<property name="searchService" ref="searchService"/>
+		<property name="storeRef" value="${spaces.store}"/>
+	</bean>
 
-	<bean id="lecmSearchCounterScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.beans.SearchCounter">
-		<property name="extensionName">
-			<value>searchCounter</value>
-		</property>
-		<property name="searchService">
-			<ref bean="searchService"/>
-		</property>
-		<property name="storeUrl">
-			<value>${spaces.store}</value>
-		</property>
+	<bean id="lecmSearchCounterScript" parent="baseScript" class="ru.it.lecm.base.scripts.SearchCounterWebScriptBean">
+		<property name="extensionName" value="searchCounter"/>
+		<property name="searchCounter" ref="searchCounterBean"/>
 		<property name="processorService" ref="searchQueryProcessorService"/>
 	</bean>
 

@@ -97,12 +97,12 @@ LogicECM.module = LogicECM.module || {};
                 if (order && order instanceof Array && order.length) {
                     for (var i = 0; i < order.length; i++) {
                         for (var j = 0; j < statistics.length; j++) {
-                            var status = Object.keys(statistics[j])[0];
+                            var status = statistics[j].state;
                             if (order[i] == status) {
-                                if (!statistics[j][status] && !this.options.showEmptyStatuses) {
+                                if (!statistics[j].count && !this.options.showEmptyStatuses) {
                                     break;
                                 } else {
-                                    ul.appendChild(this.getStatisticsItemView(statistics[j], status));
+                                    ul.appendChild(this.getStatisticsItemView(statistics[j]));
                                     break;
                                 }
                             }
@@ -110,11 +110,10 @@ LogicECM.module = LogicECM.module || {};
                     }
                 } else {
                     for (var i = 0; i < statistics.length; i++) {
-                        var status = Object.keys(statistics[i])[0];
-                        if (!statistics[i][status] && !this.options.showEmptyStatuses) {
+                        if (!statistics[i].count && !this.options.showEmptyStatuses) {
                             continue;
                         } else {
-                            ul.appendChild(this.getStatisticsItemView(statistics[i], status));
+                            ul.appendChild(this.getStatisticsItemView(statistics[i]));
                         }
                     }
                 }
@@ -122,9 +121,9 @@ LogicECM.module = LogicECM.module || {};
                 statisticsBlock.append(ul);
             },
 
-            getStatisticsItemView: function (statistic, status) {
+            getStatisticsItemView: function (item) {
                 var li = document.createElement("li");
-                li.innerHTML = status + ": " + statistic[status];
+                li.innerHTML = item.state + ": " + item.count;
                 return li;
             }
         });
