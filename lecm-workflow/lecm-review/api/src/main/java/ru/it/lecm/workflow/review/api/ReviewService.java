@@ -13,12 +13,24 @@ import java.util.List;
  * Created by dkuchurkin on 11.04.2016.
  */
 public interface ReviewService extends InitializingBean {
+    /**
+     * @deprecated  использовать {@link REVIEW_ITEM_STATE.NOT_REVIEWED}
+     */
     @Deprecated
     String CONSTRAINT_REVIEW_TS_STATE_IN_PROCESS = "NOT_REVIEWED";
+    /**
+     * @deprecated  использовать {@link REVIEW_ITEM_STATE.REVIEWED}
+     */
     @Deprecated
     String CONSTRAINT_REVIEW_TS_STATE_REVIEWED = "REVIEWED";
+    /**
+     * @deprecated  использовать {@link REVIEW_ITEM_STATE.NOT_STARTED}
+     */
     @Deprecated
     String CONSTRAINT_REVIEW_TS_STATE_NOT_STARTED = "NOT_STARTED";
+    /**
+     * @deprecated  использовать {@link REVIEW_ITEM_STATE.CANCELLED}
+     */
     @Deprecated
     String CONSTRAINT_REVIEW_TS_STATE_CANCELLED = "CANCELLED";
     String REVIEW_TS_NAMESPACE = "http://www.it.ru/logicECM/model/review-ts/1.0";
@@ -56,7 +68,7 @@ public interface ReviewService extends InitializingBean {
     enum REVIEW_STATE {
         IN_PROCESS,
         COMPLETE,
-        NOT_REQUIRED;
+        NOT_REQUIRED
     }
 
     enum REVIEW_ITEM_STATE {
