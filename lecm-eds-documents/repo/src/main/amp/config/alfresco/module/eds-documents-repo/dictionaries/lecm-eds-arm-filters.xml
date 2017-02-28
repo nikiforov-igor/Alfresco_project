@@ -106,6 +106,14 @@
                 <property name="lecm-arm:filter-values">@lecm\\-errands:type\\-assoc\\-ref:{{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dictionary:'Типы поручений', attribute:'lecm-errands-dic:errand-type-launch-review', value:true})}}|Рассмотрение;NOT @lecm\\-errands:type\\-assoc\\-ref:{{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dictionary:'Типы поручений', attribute:'lecm-errands-dic:errand-type-launch-review', value:true})}}|Исполнение</property>
                 <property name="lecm-arm:filter-query">#value</property>
             </item>
+            <item name="cm:Я - регистратор" type="lecm-arm:filter">
+                <property name="cm:name">Я - регистратор</property>
+                <property name="lecm-arm:filter-code">BY_REGISTRATOR</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">true</property>
+                <property name="lecm-arm:filter-values">@lecm\\-document\\-aspects:registrator\\-assoc\\-ref:'#current-user'|Я - регистратор</property>
+                <property name="lecm-arm:filter-query">#value</property>
+            </item>
         </items>
     </item>
 </items>
