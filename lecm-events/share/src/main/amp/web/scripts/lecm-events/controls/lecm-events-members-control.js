@@ -70,7 +70,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
                             fn: function(response) {
                                 if (response.json && response.json.propsString) {
                                     this.options.busyTimeMembersFieldsFromService = response.json.propsString;
-                                    
+
                                     LogicECM.module.AssociationTokenControl.prototype.onReady.call(this);
                                     var prevDate = Dom.get(this.id + "-date-cntrl-prevDate");
                                     if (prevDate) {
@@ -551,7 +551,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						fn: function(response) {
 							if (response.json && response.config.dataObj.date == Alfresco.util.formatDate(this.selectedDate, "yyyy-mm-dd")) {
 								this.busytime = response.json;
-								this.fillBusyTime(response.json);
+								this.fillBusyTime();
 							}
 							if (this.allDay) {
 								this.requestAllDayMembersTime();
