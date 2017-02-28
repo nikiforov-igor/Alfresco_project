@@ -3232,6 +3232,8 @@
                                                     </item>
                                                 </items>
                                                 <assocs>
+                                                    <assoc type="lecm-arm:filters-assoc"
+                                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Я - регистратор"/>
                                                     <assoc type="lecm-arm:fields-assoc"
                                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Входящие/Зарегестрирован/5a415bed-b1da-478a-8f39-e6c7cfc9df14"/>
                                                     <assoc type="lecm-arm:fields-assoc"
@@ -3389,7 +3391,11 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:filters-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Я - регистратор"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По срокам"/>
+                                            <assoc type="lecm-arm:filters-assoc"
+                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По контролю"/>
+                                            <assoc type="lecm-arm:filters-assoc"
+                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Мои документы"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Входящие/22b0083c-792d-44c3-961a-e94321899fef"/>
                                             <assoc type="lecm-arm:fields-assoc"
@@ -7567,6 +7573,8 @@
                                                             </item>
                                                         </items>
                                                         <assocs>
+                                                            <assoc type="lecm-arm:filters-assoc"
+                                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Я - регистратор"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Регистрация/На регистрации/Входящие/22b0083c-792d-44c3-961a-e94321899fef"/>
                                                             <assoc type="lecm-arm:fields-assoc"
@@ -7745,6 +7753,8 @@
                                                             </item>
                                                         </items>
                                                         <assocs>
+                                                            <assoc type="lecm-arm:filters-assoc"
+                                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Я - регистратор"/>
                                                             <assoc type="lecm-arm:fields-assoc"
                                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/Регистрация/Зарегестрирован/Входящие/5a415bed-b1da-478a-8f39-e6c7cfc9df14"/>
                                                             <assoc type="lecm-arm:fields-assoc"
