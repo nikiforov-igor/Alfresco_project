@@ -390,6 +390,7 @@
                     <field id="lecm-errands:controller-assoc" set="afterDateSet">
                         <control>
                             <control-param name="showSearch">true</control-param>
+                            <control-param name="changeItemsFireAction">errandControllerChanged</control-param>
                             <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                     </field>
