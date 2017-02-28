@@ -2504,6 +2504,10 @@
                                                 <property name="lecm-arm:search-query">
                                                     <![CDATA[@lecm\-statemachine\:status:'Новый' OR @lecm\-statemachine\:status:'На обработке регистратором']]></property>
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                                                <assocs>
+                                                    <assoc type="lecm-arm:filters-assoc"
+                                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Я - регистратор"/>
+                                                </assocs>
                                             </item>
                                             <item name="cm:На исполнении" type="lecm-arm:node">
                                                 <property name="cm:name"><![CDATA[На исполнении]]></property>
@@ -3385,7 +3389,7 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:filters-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По срокам"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Я - регистратор"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Входящие/22b0083c-792d-44c3-961a-e94321899fef"/>
                                             <assoc type="lecm-arm:fields-assoc"
@@ -3410,10 +3414,6 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Входящие/2c945cf9-d507-42f8-b4a4-d1836c71bfb8"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Входящие/cfbbcb3b-e2da-4e98-9aed-4a04384fad0e"/>
-                                            <assoc type="lecm-arm:filters-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По контролю"/>
-                                            <assoc type="lecm-arm:filters-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Мои документы"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:Исходящие" type="lecm-arm:node">
