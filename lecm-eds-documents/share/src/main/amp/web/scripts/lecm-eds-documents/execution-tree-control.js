@@ -184,7 +184,7 @@ LogicECM.module = LogicECM.module || {};
                  **/
                 myDataTable.on('renderEvent', this.colorRows);
                 myDataTable.subscribe('cellClickEvent', myDataTable.onEventToggleRowExpansion);
-                myDataTable.set("MSG_EMPTY", Alfresco.util.message("errands.tree.no_errands"));
+                myDataTable.set("MSG_EMPTY", Alfresco.util.message("execution.tree.no_errands_and_resolutions"));
                 myDataTable.set("MSG_ERROR", Alfresco.util.message("msg.forbiden"));
 
                 myDataTable.nativeCollapseRow = myDataTable.collapseRow;
