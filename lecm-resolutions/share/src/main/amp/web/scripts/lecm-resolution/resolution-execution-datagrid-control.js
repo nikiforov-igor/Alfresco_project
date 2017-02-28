@@ -31,7 +31,8 @@ LogicECM.module.Resolutions = LogicECM.module.Resolutions || {};
                 jsonValue: null,
                 datagridContainerId: null,
                 datagridFormId: "datagrid",
-                expandFormId: "expandFormId"
+                expandFormId: "expandFormId",
+                attributeForOpen: ""
             },
 
             datagrid: null,
@@ -80,6 +81,7 @@ LogicECM.module.Resolutions = LogicECM.module.Resolutions || {};
                                                 }
                                             },
                                             bubblingLabel: this.options.datagridContainerId,
+                                            attributeForOpen: this.options.attributeForOpen,
                                             allowCreate: false,
                                             showActionColumn: false,
                                             showCheckboxColumn: false

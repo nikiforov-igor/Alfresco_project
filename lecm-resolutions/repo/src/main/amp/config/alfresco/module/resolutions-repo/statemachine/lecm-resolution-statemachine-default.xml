@@ -1923,6 +1923,8 @@ if (document && !regnumbers.isDocumentRegistered(document)) {
     var errandsList = eval('(' + document.properties["lecm-resolutions:errands-json"] + ')');
     if (errandsList && errandsList.length) {
       var i = 0;
+      lecmPermission.pushAuthentication();
+      lecmPermission.setRunAsUserSystem();
       errandsList.forEach(function(errand) {
         errand["assoc_lecm-errands_additional-document-assoc"] = document.nodeRef.toString();
         errand["assoc_lecm-errands_initiator-assoc"] = document.properties["lecm-resolutions:author-assoc-ref"];
@@ -1931,6 +1933,7 @@ if (document && !regnumbers.isDocumentRegistered(document)) {
         errand["prop_lecm-errands_additional-doc-number"] = document.properties["lecm-resolutions:number"];
         errands.createErrands(errand);
       });
+      lecmPermission.popAuthentication();
     }
   }
 }]]></value>

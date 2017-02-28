@@ -22,7 +22,7 @@
     <constraints>
         <constraint name="lecm-incoming:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
             <parameter name="presentString">
-                <value><![CDATA[{lecm-eds-document:document-type-assoc/cm:name} №{~REGNUM} от {~REGDATE}, от: {lecm-incoming:sender-assoc/lecm-contractor:contractor-to-legalform-association/lecm-legalform:short-title} '{lecm-incoming:sender-assoc/lecm-contractor:shortname}', получатель {lecm-incoming:recipient-assoc/lecm-orgstr:employee-short-name}{lecm-incoming:recipient-assoc/lecm-orgstr:element-short-name}]]></value>
+                <value><![CDATA[{lecm-eds-document:document-type-assoc/cm:name} №{~REGNUM} от {~REGDATE}, от {lecm-incoming:sender-assoc/lecm-contractor:contractor-to-legalform-association/lecm-legalform:short-title} '{lecm-incoming:sender-assoc/lecm-contractor:shortname}', получатель {lecm-incoming:recipient-assoc-text-content}]]></value>
             </parameter>
         </constraint>
         <constraint name="lecm-incoming:attachment-categories" type="LIST">
