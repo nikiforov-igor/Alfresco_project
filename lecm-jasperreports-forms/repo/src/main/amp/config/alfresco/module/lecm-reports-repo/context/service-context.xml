@@ -374,5 +374,7 @@
 
     <bean id="getDocumentUrl" class="ru.it.lecm.reports.utils.GetDocumentUrl">
         <property name="sysAdminParams" ref="sysAdminParams"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="nodeService" ref="nodeService"/>
     </bean>
 </beans>
