@@ -81,7 +81,7 @@
 					<value>AUTHOR</value>
 					<value>CONTROLLER</value>
 					<value>AUTHOR_AND_CONTROLLER</value>
-					<value>NULL</value>
+					<value>NOT_REQUIRED</value>
 				</list>
 			</parameter>
 		</constraint>
