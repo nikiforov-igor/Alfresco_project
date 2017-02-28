@@ -81,6 +81,7 @@
 					<value>AUTHOR</value>
 					<value>CONTROLLER</value>
 					<value>AUTHOR_AND_CONTROLLER</value>
+					<value>NULL</value>
 				</list>
 			</parameter>
 		</constraint>
