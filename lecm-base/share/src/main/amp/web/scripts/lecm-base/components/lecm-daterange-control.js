@@ -42,6 +42,16 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
         this.currentFromDate = "";
         this.currentToDate = "";
 
+		// ALFFIVE-139
+        // Изначально загружается версия 1.6.2 с плагином inputmask
+        // Однако, потом отрабатывает dojo и перекрывает версию на 1.11		
+        // noConflict вернёт версию 1.6.2 со всеми плагинами
+
+        if(!$.inputmask) {
+            $.noConflict();
+            $ = $ || jQuery; // Возможен вариант, когда предыдущей версии нету, восстановим что есть
+        } 
+
         return this;
     };
 
