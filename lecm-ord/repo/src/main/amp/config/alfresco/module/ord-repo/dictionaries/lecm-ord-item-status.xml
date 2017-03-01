@@ -17,11 +17,14 @@
 			<item name="cm:Исполнен" type="lecm-dic:plane_dictionary_values">
 				<property name="cm:name">Исполнен</property>
 			</item>
-			<item name="cm:Не исполнен" type="lecm-dic:plane_dictionary_values">
-				<property name="cm:name">Не исполнен</property>
+			<item name="cm:Отменен" type="lecm-dic:plane_dictionary_values">
+				<property name="cm:name">Отменен</property>
 			</item>
-			<item name="cm:Просрочен" type="lecm-dic:plane_dictionary_values">
-				<property name="cm:name">Просрочен</property>
+			<item name="cm:Исполнен Контролером" type="lecm-dic:plane_dictionary_values">
+				<property name="cm:name">Исполнен Контролером</property>
+			</item>
+			<item name="cm:Отменен Контролером" type="lecm-dic:plane_dictionary_values">
+				<property name="cm:name">Отменен Контролером</property>
 			</item>
 		</items>
 	</item>

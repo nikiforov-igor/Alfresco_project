@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Get number of new ORD Item</shortname>
+    <description>Get number of new ORD Item</description>
+    <url>/lecm/ord/items/getNumber?tableDataRef={tableDataRef}</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+</webscript>

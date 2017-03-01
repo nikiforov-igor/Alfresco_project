@@ -21,8 +21,10 @@ public final class ORDModel {
 	public final static QName ASSOC_ORD_CANCELED = QName.createQName(ORD_NAMESPACE, "canceled-assoc");
 	public final static QName ASSOC_ORD_ACCEPT = QName.createQName(ORD_NAMESPACE, "accepted-assoc");
 
+	public static final QName TYPE_ORD_ITEMS_TABLE = QName.createQName(ORD_TABLE_NAMESPACE, "itemsTable");
 	public final static QName ASSOC_ORD_TABLE_ITEMS = QName.createQName(ORD_TABLE_NAMESPACE, "items-assoc");
 	public final static QName TYPE_ORD_TABLE_ITEM = QName.createQName(ORD_TABLE_NAMESPACE, "item");
+	public final static QName PROP_ORD_TABLE_TEMP_ITEM_INDEX = QName.createQName(ORD_TABLE_NAMESPACE, "temp-item-index");
 	public final static QName PROP_ORD_TABLE_ITEM_CONTENT = QName.createQName(ORD_TABLE_NAMESPACE, "item-content");
 	public final static QName PROP_ORD_TABLE_EXECUTION_DATE = QName.createQName(ORD_TABLE_NAMESPACE, "execution-date");
 	public final static QName PROP_ORD_TABLE_EXECUTION_DATE_REAL = QName.createQName(ORD_TABLE_NAMESPACE, "execution-date-real");
@@ -38,7 +40,8 @@ public final class ORDModel {
 	public final static QName ASSOC_ORD_TABLE_CONTROLLER = QName.createQName(ORD_TABLE_NAMESPACE, "controller-assoc");
 	public final static QName ASSOC_ORD_TABLE_ERRAND = QName.createQName(ORD_TABLE_NAMESPACE, "errand-assoc");
 	public final static QName ASSOC_ORD_TABLE_ITEM_STATUS = QName.createQName(ORD_TABLE_NAMESPACE, "item-status-assoc");
-
+	public final static QName ASSOC_ORD_TABLE_ITEM_AUTHOR = QName.createQName(ORD_TABLE_NAMESPACE, "author-assoc");
+	public final static QName ASSOC_ORD_TABLE_ITEM_COMPILER = QName.createQName(ORD_TABLE_NAMESPACE,"compiler-assoc");
 	public final static QName ASSOC_DOCUMENT_FILE_REGISTER_UNIT = QName.createQName(DOCUMENT_FILE_REGISTER_NAMESPACE, "organization-unit-assoc");
 
 	public static final String ORD_POINT_DICTIONARY_NAME = "Статусы пунктов ОРД";
