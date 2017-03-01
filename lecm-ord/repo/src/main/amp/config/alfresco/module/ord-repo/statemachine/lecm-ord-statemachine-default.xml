@@ -10997,7 +10997,7 @@ if (doc) {
                     </node>
                     <node>
                         <type>endEvent</type>
-                        <name>Исполнен</name>
+                        <name>Работа завершена</name>
                         <nodeRef>workspace://SpacesStore/f4e57530-b61a-4c8d-acfa-f49b48d25f33</nodeRef>
                         <properties/>
                         <aspects/>
