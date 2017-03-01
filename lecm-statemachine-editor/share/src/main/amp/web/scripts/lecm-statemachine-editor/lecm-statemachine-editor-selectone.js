@@ -49,14 +49,12 @@ LogicECM.module = LogicECM.module || {};
                 context: this.options.webscriptType == "server" ? Alfresco.constants.PROXY_URI : Alfresco.constants.URL_SERVICECONTEXT,
                 webscript: this.options.webscript
             });
-            var dataObj = {};
-            if (this.options.destination) {
-	            dataObj.nodeRef = this.options.destination != "{destination}" ? this.options.destination : this.options.currentNodeRef;
-	            dataObj.type = this.options.destination != "{destination}" ? 'create' : 'edit';
-            }
             Alfresco.util.Ajax.jsonGet({
                 url: url,
-	            dataObj: dataObj,
+	            dataObj: {
+					nodeRef: this.options.destination && this.options.destination != "{destination}" ? this.options.destination : this.options.currentNodeRef,
+					type: this.options.destination && this.options.destination != "{destination}" ? "create" : "edit"
+				},
                 successCallback: {
                     fn: function (response) {
                         var oResults = response.json;

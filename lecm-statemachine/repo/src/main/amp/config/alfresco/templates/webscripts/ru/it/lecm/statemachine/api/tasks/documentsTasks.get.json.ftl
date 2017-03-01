@@ -14,12 +14,12 @@
         "workflowTaskPriority": "${task.workflowTaskPriority}",
         "priorityMessage": "${task.priorityMessage}",
         "dueDate": <#if task.dueDate?exists>
-            "${task.dueDate?date}"
+            "${task.dueDate?date?string}"
         <#else>
             ""
         </#if>,
         "startDate": <#if task.startDate?exists>
-            "${task.startDate?date}"
+            "${task.startDate?date?string}"
         <#else>
             ""
         </#if>
