@@ -65,4 +65,24 @@ public class DocumentGlobalSettingsServiceImpl extends BaseBean implements Docum
         }
         return mode != null ? mode : "VIEW_ALL";
     }
+
+    @Override
+    public boolean isEnablePassiveNotifications() {
+        NodeRef globalSettingsNode = getSettingsNode();
+        if (globalSettingsNode != null) {
+            return (Boolean) nodeService.getProperty(globalSettingsNode, PROP_ENABLE_PASSIVE_NOTIFICATIONS);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int getSettingsNDays() {
+        NodeRef globalSettingsNode = getSettingsNode();
+        if (globalSettingsNode != null) {
+            return (Integer) nodeService.getProperty(globalSettingsNode, PROP_N_DAYS);
+        } else {
+            return DEFAULT_N_DAYS;
+        }
+    }
 }

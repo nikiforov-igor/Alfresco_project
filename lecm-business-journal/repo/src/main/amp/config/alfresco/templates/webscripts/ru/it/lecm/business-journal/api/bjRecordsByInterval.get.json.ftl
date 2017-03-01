@@ -3,7 +3,7 @@
 	<#list records as record>
 	{
         <!#--"nodeRef": "${record.getNodeRef().toString()}",-->
-		"lecm-busjournal:bjRecord-date": "${record.properties["lecm-busjournal:bjRecord-date"]?datetime}",
+		"lecm-busjournal:bjRecord-date": "${record.properties["lecm-busjournal:bjRecord-date"]?datetime?string}",
 	    "lecm-busjournal:bjRecord-description": "${record.properties["lecm-busjournal:bjRecord-description"]}",
 	    "lecm-busjournal:bjRecord-initiator": "${record.properties["lecm-busjournal:bjRecord-initiator"]}",
 	    "lecm-busjournal:bjRecord-mainObject": "${record.properties["lecm-busjournal:bjRecord-mainObject"]}",

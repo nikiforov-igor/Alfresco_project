@@ -5,7 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.notifications.beans.NotificationsService;
+import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
@@ -27,15 +27,11 @@ public class SearchQueryProcessorServiceImpl implements SearchQueryProcessorServ
 
     private SearchQueryProcManager processorManager;
     private OrgstructureBean orgstructureService;
-    private NotificationsService notificationsService;
+    private DocumentGlobalSettingsService documentGlobalSettings;
     private IWorkCalendar workCalendarService;
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
-    }
-
-    public void setNotificationsService(NotificationsService notificationsService) {
-        this.notificationsService = notificationsService;
     }
 
     public void setWorkCalendarService(IWorkCalendar workCalendarService) {
@@ -44,6 +40,10 @@ public class SearchQueryProcessorServiceImpl implements SearchQueryProcessorServ
 
     public void setProcessorManager(SearchQueryProcManager processorManager) {
         this.processorManager = processorManager;
+    }
+
+    public void setDocumentGlobalSettings(DocumentGlobalSettingsService documentGlobalSettings) {
+        this.documentGlobalSettings = documentGlobalSettings;
     }
 
     @Override
@@ -80,7 +80,7 @@ public class SearchQueryProcessorServiceImpl implements SearchQueryProcessorServ
             }
         }
         if (query.contains(CURRENT_DATE)) {
-            int limitDays = notificationsService.getSettingsNDays();
+            int limitDays = documentGlobalSettings.getSettingsNDays();
             Date nextWorkDate = workCalendarService.getNextWorkingDate(new Date(), limitDays, Calendar.DAY_OF_MONTH);
             query = query.replaceAll(CURRENT_DATE, BaseBean.DateFormatISO8601.format(nextWorkDate));
         }

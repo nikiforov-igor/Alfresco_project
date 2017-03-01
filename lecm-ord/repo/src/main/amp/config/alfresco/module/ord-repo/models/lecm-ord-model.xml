@@ -14,6 +14,7 @@
 		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
 		<import uri="http://www.it.ru/logicECM/model/review-ts/1.0" prefix="lecm-review-ts"/>
 		<import uri="http://www.it.ru/logicECM/errands-aspects/1.0" prefix="lecm-errands-aspect"/>
+		<import uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/lecm/ORD/1.0" prefix="lecm-ord"/>
@@ -102,6 +103,14 @@
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
+				<property name="lecm-ord:items-assoc-controller-assoc-ref">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
+				</property>
 			</properties>
 			<associations>
 				<association name="lecm-ord:controller-assoc">
@@ -171,6 +180,7 @@
 				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
 				<aspect>lecm-review-ts:review-aspect</aspect>
 				<aspect>lecm-errands-aspect:errandsExecutorsAspect</aspect>
+				<aspect>lecm-eds-aspect:execution-state-aspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>

@@ -42,6 +42,7 @@
 				</association>
 			</associations>
 		</type>
+		<!--@deprecated Нужно использовать lecm-document-global-settings:settings-->
 		<type name="lecm-notf-settings:global">
 			<title>Notifications global settings</title>
 			<parent>cm:cmobject</parent>

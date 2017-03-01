@@ -4,9 +4,9 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.quartz.CronTrigger;
 import org.quartz.SchedulerException;
+import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.incoming.beans.IncomingServiceImpl;
-import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.text.DateFormat;
@@ -27,14 +27,10 @@ public class ExecutionNotificationSchedule extends BaseTransactionalSchedule {
 
     private DocumentService documentService;
     private IWorkCalendar calendarBean;
-    private NotificationsService notificationsService;
+    private DocumentGlobalSettingsService documentGlobalSettings;
 
     public ExecutionNotificationSchedule() {
         super();
-    }
-
-    public void setNotificationsService(NotificationsService notificationsService) {
-        this.notificationsService = notificationsService;
     }
 
     public void setCalendarBean(IWorkCalendar calendarBean) {
@@ -43,6 +39,10 @@ public class ExecutionNotificationSchedule extends BaseTransactionalSchedule {
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
+    }
+
+    public void setDocumentGlobalSettings(DocumentGlobalSettingsService documentGlobalSettings) {
+        this.documentGlobalSettings = documentGlobalSettings;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ExecutionNotificationSchedule extends BaseTransactionalSchedule {
         Date start = new Date(0);
 
         Calendar calendar = Calendar.getInstance();
-        int days =  notificationsService.getSettingsNDays();
+        int days = documentGlobalSettings.getSettingsNDays();
         Date end = calendarBean.getNextWorkingDate(new Date(), days, Calendar.DAY_OF_MONTH);
         calendar.setTime(end);
         calendar.add(Calendar.DAY_OF_MONTH, 1);

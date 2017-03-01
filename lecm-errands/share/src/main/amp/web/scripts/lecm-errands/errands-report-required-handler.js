@@ -34,6 +34,15 @@
         if (requiredReportField && recipientField) {
             var requiredReport = requiredReportField.value == "true";
             Dom.setStyle(recipientField.parentNode.parentNode.parentNode, "display", !requiredReport ? "none" : "block");
+            if(propName == "lecm-errands_report-recipient-type") {
+                if (!requiredReport) {
+                    recipientField.options[3].hidden = false;
+                    Dom.get(args[1].formId + '_prop_' + propName).selectedIndex = 3;
+                } else {
+                    recipientField.options[3].hidden = true;
+                    Dom.get(args[1].formId + '_prop_' + propName).selectedIndex = 0;
+                }
+            }
         }
     }
 })();

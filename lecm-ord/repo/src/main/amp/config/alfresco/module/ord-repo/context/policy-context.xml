@@ -29,6 +29,11 @@
 		  p:nodeService-ref="nodeService"
 		  p:stateMachineService-ref="stateMachineHelper"
 		  p:lecmPermissionService-ref="lecmPermissionServiceBean"/>
+	<bean id="ord.PointControllerPolicy"
+		  class="ru.it.lecm.ord.policies.PointControllerPolicy"
+		  init-method="init"
+		  parent="logicEcmAssociationPolicy"
+		  depends-on="eds.models.bootstrap"/>
 
 	<bean id="ord.ORDItemAssociationPolicy" class="ru.it.lecm.ord.policies.ORDItemAssociationPolicy"
 		init-method="init" parent="logicEcmAssociationPolicy" depends-on="ord.document.models.bootstrap"/>

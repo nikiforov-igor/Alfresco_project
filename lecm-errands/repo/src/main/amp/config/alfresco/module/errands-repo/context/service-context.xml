@@ -657,11 +657,14 @@
         <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
         <property name="dictionaries">
             <list>
+                <value>alfresco/module/${artifactId}/reports/unexecuted-errands-expired.xml</value>
+                <value>alfresco/module/${artifactId}/reports/errands-expiring-to-date.xml</value>
                 <value>alfresco/module/${artifactId}/reports/exec-doc-tree.xml</value>
                 <value>alfresco/module/${artifactId}/reports/exec-discipline-by-creator.xml</value>
                 <value>alfresco/module/${artifactId}/reports/exec-discipline-by-unit.xml</value>
                 <value>alfresco/module/${artifactId}/reports/exec-discipline-by-executor.xml</value>
 				<value>alfresco/module/${artifactId}/reports/errands-barcode-generic.xml</value>
+                <value>alfresco/module/${artifactId}/reports/errands-executed-out-of-time.xml</value>
             </list>
         </property>
         <property name="xmlImportListener" ref="errands.reportsDeployer"/>
@@ -670,11 +673,14 @@
     <bean id="errands.reportsDeployer" parent="reportsDeployer">
         <property name="reportsForDeploy">
             <list>
+                <value>unexecuted-errands-expired</value>
+                <value>errands-expiring-to-date</value>
                 <value>exec-doc-tree</value>
                 <value>exec-discipline-by-creator</value>
                 <value>exec-discipline-by-unit</value>
                 <value>exec-discipline-by-executor</value>
 				<value>errands-barcode-generic</value>
+                <value>errands-executed-out-of-time</value>
             </list>
         </property>
     </bean>
@@ -707,5 +713,15 @@
     <bean id="errandsBaseDocumentType" parent="edsBaseDocumentTypeBean" depends-on="errands.LogicEcmModelsBootstrap">
         <property name="type" value="lecm-errands:document"/>
         <property name="assocBaseDocumentType" value="lecm-errands:base-assoc"/>
+    </bean>
+
+    <bean id="errandsExecutionStateBean" class="ru.it.lecm.errands.policy.ErrandsExecutionStatePolicy"
+          init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="stateMachineService" ref="stateMachineHelper"/>
+        <property name="errandsService" ref="errandsService"/>
+        <property name="statusesOrder" value="${lecm.eds.execution.statistics.statuses.order}"/>
+        <property name="executedStatus" value="${lecm.eds.execution.statistics.statuses.executed}"/>
     </bean>
 </beans>

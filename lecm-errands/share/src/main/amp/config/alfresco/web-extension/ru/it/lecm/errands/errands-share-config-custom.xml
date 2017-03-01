@@ -390,6 +390,7 @@
                     <field id="lecm-errands:controller-assoc" set="afterDateSet">
                         <control>
                             <control-param name="showSearch">true</control-param>
+                            <control-param name="changeItemsFireAction">errandControllerChanged</control-param>
                             <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
                     </field>
@@ -1032,7 +1033,7 @@
                     </field>
                     <field id="lecm-errands:limitation-date-radio" label-id="label.errand.limitless">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
-                            <control-param name="options">LIMITLESS|Без срока,*|Все</control-param>
+                            <control-param name="options">LIMITLESS|Да,DATE|Нет</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:is-important">
@@ -2531,7 +2532,7 @@
                         <control template="/ru/it/lecm/documents/controls/workflow/format-packageItems-document.ftl">
                             <control-param name="substituteString">
                                 <![CDATA[
-					                <a href='/share/page/view-metadata?nodeRef={lecm-errands:executor-assoc/nodeRef}'>
+					                <a href='/{~SHARE_CONTEXT}/view-metadata?nodeRef={lecm-errands:executor-assoc/nodeRef}'>
 					                    {lecm-errands:executor-assoc/lecm-orgstr:employee-short-name} {lecm-errands:executor-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}
 					                </a>
 				                ]]>

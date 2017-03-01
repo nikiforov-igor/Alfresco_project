@@ -626,7 +626,7 @@
                     <field id="lecm-eds-document:document-type-assoc">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
-                            <control-param name="endpointType">lecm-ord-dic:documentType</control-param>
+                            <control-param name="plane">true</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -689,6 +689,12 @@
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.itemControllerValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
                         </constraint-handlers>
+                    </field>
+                    <field id="lecm-document:indexTableRow" mandatory="true"/>
+                    <field id="lecm-ord-table-structure:controller-assoc" set="bottom">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                        </control>
                     </field>
                     <field id="lecm-ord-table-structure:subject-assoc" set="bottom"/>
                     <field id="lecm-ord-table-structure:item-status-assoc" set="bottom"/>
@@ -831,6 +837,11 @@
                     <constraint-handlers>
                         <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.itemControllerValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
                     </constraint-handlers>
+                </field>
+                <field id="lecm-ord-table-structure:controller-assoc" set="bottom">
+                    <control>
+                        <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                    </control>
                 </field>
                 <field id="lecm-ord-table-structure:subject-assoc" set="bottom"/>
                 <field id="lecm-ord-table-structure:limitation-date-radio" set="limitation-date"  mandatory="true">

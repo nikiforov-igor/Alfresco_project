@@ -107,8 +107,8 @@ LogicECM.module = LogicECM.module || {};
 
                                 var template =
                                     '<div class="item-description">' +
-                                    '   <img class="document-type" src="/share/res/images/lecm-documents/type-icons/{docTypeIcon}.png" ' +
-                                    '       onerror="this.src = \'/share/res/images/lecm-documents/type-icons/default_document.png\';"/>' +
+                                    '   <img class="document-type" src=' + Alfresco.constants.URL_RESCONTEXT + '"images/lecm-documents/type-icons/{docTypeIcon}.png" ' +
+                                    '       onerror="this.src = \'' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/type-icons/default_document.png\';"/>' +
                                     '   <span class="link-span{classNotHaveAccess}">' +
                                     '       <a target="_blank" href="{documentUrl}">{documentName}</a>' +
                                     '       <div>' +
@@ -184,7 +184,7 @@ LogicECM.module = LogicECM.module || {};
                  **/
                 myDataTable.on('renderEvent', this.colorRows);
                 myDataTable.subscribe('cellClickEvent', myDataTable.onEventToggleRowExpansion);
-                myDataTable.set("MSG_EMPTY", Alfresco.util.message("errands.tree.no_errands"));
+                myDataTable.set("MSG_EMPTY", Alfresco.util.message("execution.tree.no_errands_and_resolutions"));
                 myDataTable.set("MSG_ERROR", Alfresco.util.message("msg.forbiden"));
 
                 myDataTable.nativeCollapseRow = myDataTable.collapseRow;
@@ -299,24 +299,49 @@ LogicECM.module = LogicECM.module || {};
             expandResolutionContent: function (nodeRef) {
                 var container = Dom.get("expanded-block-" + nodeRef.replace('workspace://SpacesStore/', ''));
                 if (container && !container.innerHTML.length) {
-                    var content = "";
-                    content += "<table class='execution-expanded-content type-resolution'>";
-                    content += "    <tr>";
-                    content += "        <td class='label-column'>{errandsStatisticLabel}</td>";
-                    content += "        <td>{errandsStatisticList}";
-                    content += "    </tr>";
-                    content += "    <tr>";
-                    content += "        <td class='label-column'>{reviewStatisticLabel}</td>";
-                    content += "        <td>{reviewStatisticList}";
-                    content += "        </td>";
-                    content += "    </tr>";
-                    content += "</table>";
+                    Alfresco.util.Ajax.jsonPost({
+                        url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                        dataObj: {
+                            nodeRef: nodeRef,
+                            substituteString: "{lecm-eds-aspect:execution-statistics}"
+                        },
+                        successCallback: {
+                            fn: function (response) {
+                                if (response && response.json.formatString) {
+                                    var executionStatistics = JSON.parse(response.json.formatString);
+                                    if (executionStatistics) {
+                                        var content = "";
+                                        content += "<table class='execution-expanded-content type-resolution'>";
+                                        content += "    <tr>";
+                                        content += "        <td class='label-column'>{errandsStatisticLabel}</td>";
+                                        content += "        <td>{errandsStatisticList}";
+                                        content += "    </tr>";
+                                        content += "    <tr>";
+                                        content += "        <td class='label-column'>{reviewStatisticLabel}</td>";
+                                        content += "        <td>{reviewStatisticList}";
+                                        content += "        </td>";
+                                        content += "    </tr>";
+                                        content += "</table>";
 
-                    container.innerHTML = YAHOO.lang.substitute(content, {
-                        errandsStatisticLabel: this.msg("msg.resolution.errands.statistic.label"),
-                        reviewStatisticLabel: this.msg("msg.resolution.review.statistic.label"),
-                        errandsStatisticList: this.getTableListLayout(["На исполнении: 1", "Исполнено: 4"]), //todo заглушка
-                        reviewStatisticList: this.getTableListLayout(["На ознакомлении: 4", "Ознакомлены: 20"]) //todo заглушка
+                                        var executionList = executionStatistics.filter(function (item) {
+                                            return item.count > 0;
+                                        }).map(function(item) {
+                                            return item.state + ": " + item.count;
+                                        });
+
+                                        container.innerHTML = YAHOO.lang.substitute(content, {
+                                            errandsStatisticLabel: this.msg("msg.resolution.errands.statistic.label"),
+                                            reviewStatisticLabel: this.msg("msg.resolution.review.statistic.label"),
+                                            errandsStatisticList: this.getTableListLayout(executionList),
+                                            reviewStatisticList: this.getTableListLayout(["На ознакомлении: 4", "Ознакомлены: 20"]) //todo заглушка
+                                        });
+                                    }
+                                }
+                            },
+                            scope: this
+                        },
+                        failureMessage: Alfresco.util.message("message.details.failure"),
+                        scope: this
                     });
                 }
             },

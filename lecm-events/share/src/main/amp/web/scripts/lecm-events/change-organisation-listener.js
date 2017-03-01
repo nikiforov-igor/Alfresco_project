@@ -5,6 +5,7 @@
 		forms = Alfresco.util.ComponentManager.find({
 			name: 'Alfresco.FormUI'
 		}),
+        currentOrganization = null,
 		resourceForms = forms.filter(function (form) {
 			var isProperForm = form.options.fields && form.options.fields.some(function (field) {
 				return field.id === 'change-organisation-script';
@@ -17,41 +18,35 @@
 	}
 	controlReadyId = LogicECM.module.Base.Util.getComponentReadyElementId(componentReadyFormId, "lecm-events-dic:resources-responsible-assoc");
 
-	YAHOO.util.Event.onAvailable(controlReadyId, function () {
-		YAHOO.Bubbling.on("organisationSelected", function (layer, args) {
-			var organization, controls,
-				selectedItems = args[1].selectedItems,
-				formId = args[1].formId;
+    YAHOO.util.Event.onAvailable(controlReadyId, function () {
+        YAHOO.Bubbling.on("organisationSelected", function (layer, args) {
+            var organization,
+                selectedItems = args[1].selectedItems,
+                formId = args[1].formId;
 
-			if (selectedItems) {
-				organization = selectedItems[Object.keys(selectedItems)[0]];
-			}
+            if (selectedItems) {
+                organization = selectedItems[Object.keys(selectedItems)[0]];
+            }
 
-			if (formId) {
-
-				controls = Alfresco.util.ComponentManager.find({id: formId + "_assoc_lecm-events-dic_resources-responsible-assoc"});
-
-				if (controls && controls.length) {
-					Object.keys(controls[0].selectedItems).forEach(function (item) {
-						delete this.selectedItems[item];
-					}, controls[0]);
-					controls[0].singleSelectedItem = null;
-					controls[0].updateSelectedItems();
-					controls[0].updateAddButtons();
-					controls[0].updateFormFields();
-				}
-
-				if (organization && organization.nodeRef) {
-					LogicECM.module.Base.Util.enableControl(formId, "lecm-events-dic:resources-responsible-assoc");
-					YAHOO.Bubbling.fire("refreshItemList", {
-						formId: formId,
-						fieldId: "lecm-events-dic:resources-responsible-assoc",
-						childrenDataSource: 'lecm/employees/EVENTS_RESPONSIBLE_FOR_RESOURCES/byOrg/' + organization.nodeRef.replace('://', '/') + '/picker'
-					});
-				} else {
-					LogicECM.module.Base.Util.disableControl(formId, "lecm-events-dic:resources-responsible-assoc");
-				}
-			}
-		});
-	});
+            if (formId) {
+                if (organization && organization.nodeRef) {
+                    if (currentOrganization == null) {
+                        currentOrganization = organization.nodeRef;
+                    }
+                    LogicECM.module.Base.Util.enableControl(formId, "lecm-events-dic:resources-responsible-assoc");
+                    LogicECM.module.Base.Util.reInitializeControl(formId, 'lecm-events-dic:resources-responsible-assoc', {
+                        childrenDataSource: 'lecm/employees/EVENTS_RESPONSIBLE_FOR_RESOURCES/byOrg/' + organization.nodeRef.replace('://', '/') + '/picker',
+                        resetValue: currentOrganization != organization.nodeRef
+                    });
+                    currentOrganization = organization.nodeRef;
+                } else {
+                    currentOrganization = null;
+                    LogicECM.module.Base.Util.reInitializeControl(formId, 'lecm-events-dic:resources-responsible-assoc', {
+                        resetValue: true
+                    });
+                    LogicECM.module.Base.Util.disableControl(formId, "lecm-events-dic:resources-responsible-assoc");
+                }
+            }
+        });
+    });
 })();

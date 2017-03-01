@@ -82,6 +82,38 @@
                 <property name="lecm-arm:filter-values">@lecm\\-eds\\-aspect:base\\-document\\-type:'Входящий документ'|Входящие,@lecm\\-eds\\-aspect:base\\-document\\-type:'Внутренний документ'|Внутренние,@lecm\\-eds\\-aspect:base\\-document\\-type:'Исходящий документ'|Исходящие,@lecm\\-eds\\-aspect:base\\-document\\-type:'ОРД'|ОРД,@lecm\\-eds\\-aspect:base\\-document\\-type:'НД'|НД,@lecm\\-eds\\-aspect:base\\-document\\-type:'Протокол'|Протоколы,@lecm\\-eds\\-aspect:base\\-document\\-type:'Поручение'|Поручения,NOT ASPECT:'lecm-eds-aspect:base-document-type-aspect'|Без документа-основания</property>
                 <property name="lecm-arm:filter-query">#value</property>
             </item>
+            <item name="cm:По состоянию исполнения" type="lecm-arm:filter">
+                <property name="cm:name">По состоянию исполнения</property>
+                <property name="lecm-arm:filter-code">BY_EXECUTION_STATE</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">IN_PROCESS|В процессе,COMPLETE|Завершено,NOT_REQUIRED|Не требуется</property>
+                <property name="lecm-arm:filter-query">@lecm\-eds\-aspect:execution\-state:'#value'</property>
+            </item>
+            <item name="cm:Тип контроля" type="lecm-arm:filter">
+                <property name="cm:name">Тип контроля</property>
+                <property name="lecm-arm:filter-code">BY_TYPE_OF_CONTROL</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">ISNOTNULL:'lecm-ord:controller-assoc-ref' AND @lecm\\-ord\\:controller\\-assoc\\-ref:*#current-user*|Контролер документа,ISNOTNULL:'lecm-ord:items-assoc-controller-assoc-ref' AND @lecm\\-ord\\:items\\-assoc\\-controller\\-assoc\\-ref:*#current-user*|Контролер пункта</property>
+                <property name="lecm-arm:filter-query">#value</property>
+            </item>
+            <item name="cm:По типу исполнения" type="lecm-arm:filter">
+                <property name="cm:name">По типу исполнения</property>
+                <property name="lecm-arm:filter-code">BY_EXECUTION_TYPE</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">@lecm\\-errands:type\\-assoc\\-ref:{{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dictionary:'Типы поручений', attribute:'lecm-errands-dic:errand-type-launch-review', value:true})}}|Рассмотрение;NOT @lecm\\-errands:type\\-assoc\\-ref:{{FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE({dictionary:'Типы поручений', attribute:'lecm-errands-dic:errand-type-launch-review', value:true})}}|Исполнение</property>
+                <property name="lecm-arm:filter-query">#value</property>
+            </item>
+            <item name="cm:Я - регистратор" type="lecm-arm:filter">
+                <property name="cm:name">Я - регистратор</property>
+                <property name="lecm-arm:filter-code">BY_REGISTRATOR</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">true</property>
+                <property name="lecm-arm:filter-values">@lecm\\-document\\-aspects:registrator\\-assoc\\-ref:'#current-user'|Я - регистратор</property>
+                <property name="lecm-arm:filter-query">#value</property>
+            </item>
         </items>
     </item>
 </items>

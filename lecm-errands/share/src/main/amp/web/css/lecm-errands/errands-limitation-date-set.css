@@ -14,7 +14,7 @@
 }
 .errands-limitation-date-set .errands-limitation-date-set-radio .control input {
     margin-top: 8px;
-    margin-bottom: 21px;
+    margin-bottom: 20px;
 }
 
 .errands-limitation-date-set .errands-limitation-date-set-days {
@@ -25,17 +25,9 @@
 .errands-limitation-date-set .errands-limitation-date-set-days .control .value-div input {
     width: 40px;
 }
-.errands-limitation-date-set .errands-limitation-date-set-days .control.editmode .container .value-div input[type=text] {
-    margin-bottom: 0;
-}
 
 .errands-limitation-date-set .errands-limitation-date-set-limitless {
     float: left;
-    margin-top: -3px;
-}
-
-.errands-limitation-date-set .errands-limitation-date-set-limitless .control {
-    margin-bottom: 8px;
 }
 
 .errands-limitation-date-set .errands-limitation-date-set-type {
@@ -47,13 +39,13 @@
     float: left;
     width: calc(100% - 210px);
 }
-.errands-limitation-date-set .errands-limitation-date-set-date .control,
-.errands-limitation-date-set .errands-limitation-date-set-radio .control {
-    margin-bottom: 0;
-}
 .errands-limitation-date-set .errands-limitation-date-set-radio .control input:last-of-type {
-    margin-top: 14px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+}
+.errands-limitation-date-set .control .container .value-div input[type=text] {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
 }
 .errands-limitation-date-set .errands-limitation-date-set-radio .label-div {
     display:block;
