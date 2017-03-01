@@ -12,37 +12,6 @@
     <#assign showEmptyStatuses = true>
 </#if>
 
-<script>
-    function init() {
-        LogicECM.module.Base.Util.loadResources([
-                    'scripts/lecm-documents/state-statistics-control.js'
-                ], [
-                    'css/lecm-documents/state-statistics-control.css'
-                ],
-                createControl
-        );
-    }
-
-    function createControl() {
-        var control = new LogicECM.module.StateStatisticsControl("${fieldHtmlId}");
-        control.setOptions({
-            fieldId: "${field.configName}",
-            formId: "${args.htmlid}",
-            value: "${field.value}",
-            documentNodeRef: "${nodeRef}",
-            expandable: ${expandable?string},
-            showEmptyStatuses: ${showEmptyStatuses?string}
-        <#if field.control.params.statusesWithOrder??>,
-            statusesWithOrder: "${field.control.params.statusesWithOrder}".split(",")
-        </#if>
-        <#if field.control.params.statisticsField??>,
-            statisticsField: "${field.control.params.statisticsField}"
-        </#if>
-        });
-    }
-    YAHOO.util.Event.onDOMReady(init);
-</script>
-
 <div id="${fieldHtmlId}-cntrl" class="state-statistics control viewmode">
     <div class="label-div">
         <label>${field.label?html}:</label>
@@ -66,3 +35,31 @@
         </div>
     </div>
 </div>
+
+<script>
+    LogicECM.module.Base.Util.loadResources([
+                'scripts/lecm-documents/state-statistics-control.js'
+            ], [
+                'css/lecm-documents/state-statistics-control.css'
+            ],
+            createControl
+    );
+
+    function createControl() {
+        var control = new LogicECM.module.StateStatisticsControl("${fieldHtmlId}");
+        control.setOptions({
+            fieldId: "${field.configName}",
+            formId: "${args.htmlid}",
+            value: "${field.value}",
+            documentNodeRef: "${nodeRef}",
+            expandable: ${expandable?string},
+            showEmptyStatuses: ${showEmptyStatuses?string}
+        <#if field.control.params.statusesWithOrder??>,
+            statusesWithOrder: "${field.control.params.statusesWithOrder}".split(",")
+        </#if>
+        <#if field.control.params.statisticsField??>,
+            statisticsField: "${field.control.params.statisticsField}"
+        </#if>
+        });
+    }
+</script>

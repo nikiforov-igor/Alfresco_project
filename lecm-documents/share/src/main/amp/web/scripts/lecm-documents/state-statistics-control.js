@@ -62,7 +62,7 @@ LogicECM.module = LogicECM.module || {};
                             },
                             scope: this
                         },
-                        failureMessage: Alfresco.util.message("message.details.failure"),
+                        failureMessage: this.msg("message.details.failure"),
                         scope: this
                     });
                 }
@@ -87,7 +87,7 @@ LogicECM.module = LogicECM.module || {};
                         },
                         scope: this
                     },
-                    failureMessage: Alfresco.util.message("message.details.failure"),
+                    failureMessage: this.msg("message.details.failure"),
                     scope: this
                 });
             },
@@ -97,7 +97,7 @@ LogicECM.module = LogicECM.module || {};
                 var order = this.options.statusesWithOrder;
 
                 var i, status;
-                if (order && order instanceof Array && order.length) {
+                if (order && order.length) {
                     for (i = 0; i < order.length; i++) {
                         for (var j = 0; j < statistics.length; j++) {
                             status = statistics[j].state;
