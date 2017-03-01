@@ -84,13 +84,17 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				elementsParams = [];
 			if (options.itemsOptions && options.itemsOptions.length) {
 				for (var i=0; i < options.itemsOptions.length; ++i) {
-					if (LogicECM.module.AssociationComplexControl.Utils.isKeySelectedOrEmpty(options.itemsOptions[i].itemKey, context)) {
+					var logic = options.dataSourceLogic;
+					if (logic == 'AND' || (logic == 'OR' && LogicECM.module.AssociationComplexControl.Utils.isKeySelectedOrEmpty(options.itemsOptions[i].itemKey, context))) {
 						var itemObj = {};
 						if (options.itemsOptions[i].options.nameSubstituteString) {
 							itemObj.nameSubstituteString = options.itemsOptions[i].options.nameSubstituteString;
 						}
 						if (options.itemsOptions[i].options.titleNameSubstituteString) {
 							itemObj.titleNameSubstituteString = options.itemsOptions[i].options.titleNameSubstituteString;
+						}
+						if (options.itemsOptions[i].options.selectedItemsNameSubstituteString) {
+							itemObj.selectedItemsNameSubstituteString = options.itemsOptions[i].options.selectedItemsNameSubstituteString;
 						}
 						if (options.itemsOptions[i].options.itemType) {
 							itemObj.selectableType = options.itemsOptions[i].options.itemType;
@@ -113,6 +117,9 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 						if (options.itemsOptions[i].itemKey) {
 							itemObj.itemKey = options.itemsOptions[i].itemKey;
 						}
+						if (options.itemsOptions[i].options.useStrictFilterByOrg) {
+							itemObj.onlyInSameOrg = options.itemsOptions[i].options.useStrictFilterByOrg;
+						}
 						elementsParams.push(itemObj);
 					}
 				}
@@ -129,7 +136,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 						return true;
 					} else {
 						isSelected = Object.keys(selected).some(function (element, index, array) {
-							return (selected[element] && selected[element].itemKey == itemKey);
+							return (selected[element] && selected[element].key == itemKey);
 						});
 					}
 				}
@@ -155,10 +162,21 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			return options.selectedItemsNameSubstituteString ? options.selectedItemsNameSubstituteString : options.nameSubstituteString;
 		},
 
-		canItemBeSelected: function (id, options, selected, parentControl) {
+		canItemBeSelected: function (id, options, selected, parentControl, key) {
 			var canSelect = true, i;
-			if (options.endpointMany && parentControl.options.multipleSelectMode) {
+			if (options.endpointMany && parentControl.options.endpointMany) {
 				canSelect = !selected.hasOwnProperty(id);
+				if (canSelect && parentControl.options.dataSourceLogic == 'OR' && key) {
+					// Дополнительная проверка не выбран ли элемент из другого источника
+					for (i = 0; canSelect && (i < parentControl.options.itemsOptions.length); i++) {
+						var curKey = parentControl.options.itemsOptions[i].itemKey;
+						var temporarySelectedCount = Object.keys(parentControl.widgets[curKey].currentState.temporarySelected).length;
+						if (curKey != key && temporarySelectedCount) {
+							canSelect = false;
+							break;
+						}
+					}
+				}
 			} else {
                 if (!parentControl.options.isComplex) {
                     canSelect = Object.keys(selected).length === 0;

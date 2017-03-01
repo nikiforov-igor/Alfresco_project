@@ -99,6 +99,9 @@
 				<#if params.autocompleteDataSource??>
 				autocompleteDataSource: '${params.autocompleteDataSource}',
 				</#if>
+				<#if params.dataSourceLogic??>
+                dataSourceLogic: '${params.dataSourceLogic}',
+				</#if>
                 autocompleteDataSourceMethodPost: ${autocompleteDataSourceMethodPost?string},
 				<#if params.changeItemsFireAction??>
 				changeItemsFireAction: '${params.changeItemsFireAction}',

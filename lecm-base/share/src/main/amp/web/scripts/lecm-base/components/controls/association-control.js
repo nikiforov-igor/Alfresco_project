@@ -61,6 +61,7 @@ LogicECM.module = LogicECM.module || {};
 			isComplex: null,
 			autocompleteDataSource: 'lecm/autocomplete/complex/picker',
 			autocompleteDataSourceMethodPost: false,
+			dataSourceLogic: 'AND',
 			maxSearchAutocompleteResults: 10,
 			showAutocomplete: null,
 			pickerButtonTitle: null,
