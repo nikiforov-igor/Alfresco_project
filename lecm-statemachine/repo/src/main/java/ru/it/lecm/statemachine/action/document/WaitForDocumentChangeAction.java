@@ -49,6 +49,11 @@ public class WaitForDocumentChangeAction extends StateMachineAction implements P
 //			this.expressions.add(new Expression(expression, outputVariable, outputValue, stopSubWorkflows, script));
 //		}
 	}
+	
+	@Override
+    public String toString(){
+    	return "{expressions: "+expressions+"}";
+    }
 
 	public List<Expression> getExpressions() {
 		return expressions;
@@ -131,6 +136,10 @@ public class WaitForDocumentChangeAction extends StateMachineAction implements P
 
         public String getScript() {
             return script;
+        }
+        @Override
+        public String toString(){
+        	return "{expression: "+expression+", outputVariable: "+outputVariable+", outputValue: "+outputValue+", stopSubWorkflows"+stopSubWorkflows+", script: "+script+"}";
         }
     }
 }

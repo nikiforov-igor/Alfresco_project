@@ -17,9 +17,9 @@
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-data-model</artifactId>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-		</dependency>
+		</dependency> -->
 	</dependencies>
 </project>

@@ -44,9 +44,10 @@
 	<dependencies>
         <dependency>
             <groupId>org.alfresco</groupId>
-            <artifactId>alfresco-share</artifactId>
+            <artifactId>share</artifactId>
+            <classifier>classes</classifier>
         </dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 		</dependency>
@@ -56,15 +57,15 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.extensions.surf</groupId>
-            <artifactId>spring-surf</artifactId>
-        </dependency>
+            <artifactId>spring-surf-core</artifactId>
+        </dependency>-->
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>
 
 	<build>
         <plugins>
             <!-- Needed for cross OS compatibility in acp/zip encoding -->
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
             </plugin>
@@ -78,7 +79,7 @@
             </plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
+			</plugin> -->
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>yuicompressor-maven-plugin</artifactId>
@@ -86,7 +87,6 @@
 			<plugin>
 				<groupId>org.alfresco.maven.plugin</groupId>
 				<artifactId>alfresco-maven-plugin</artifactId>
-                <version>1.1.1</version>
                 <extensions>true</extensions>
 			</plugin>
 		</plugins>
@@ -97,7 +97,7 @@
 		<resources><resource>
                 <filtering>true</filtering>
                 <directory>src/main/amp</directory>
-                <targetPath>../${project.build.finalName}</targetPath>
+                <targetPath>${app.amp.output.folder}</targetPath>
                 <excludes>
                     <exclude>**README-*</exclude>
                 </excludes>

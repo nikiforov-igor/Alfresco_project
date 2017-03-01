@@ -3,6 +3,6 @@
 	<description>Document Attachments as list</description>
 	<url>/lecm/document/attachments/api/list?documentNodeRef={documentNodeRef}</url>
 	<authentication>user</authentication>
-	<transaction>none</transaction>
+	<transaction allow="readonly">required</transaction>
 	<format default="html"/>
 </webscript>

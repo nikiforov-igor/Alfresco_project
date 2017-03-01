@@ -1,24 +1,32 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-    <item name="cm:Подписки" type="lecm-arm:accordion">
-        <property name="cm:name"><![CDATA[Подписки]]></property>
-        <property name="lecm-arm:order"><![CDATA[60]]></property>
-        <property name="lecm-arm:search-type"><![CDATA[]]></property>
-        <property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
-        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-        <property name="lecm-arm:search-query"><![CDATA[]]></property>
-        <property name="lecm-arm:expression"><![CDATA[user.currentUser().hasBusinessRole("BR_SUBSCRIPTIONS_ENGINEER")]]></property>
-        <items>
-            <item name="cm:Подписки на экземпляры" type="lecm-arm:html-node">
-                <property name="cm:name"><![CDATA[Подписки на экземпляры]]></property>
-                <property name="lecm-arm:order"><![CDATA[10]]></property>
-                <property name="lecm-arm:html-url"><![CDATA[page/subscriptions-to-object]]></property>
-            </item>
-            <item name="cm:Подписки на типы" type="lecm-arm:html-node">
-                <property name="cm:name"><![CDATA[Подписки на типы]]></property>
-                <property name="lecm-arm:order"><![CDATA[20]]></property>
-                <property name="lecm-arm:html-url"><![CDATA[page/subscriptions-to-type]]></property>
-            </item>
-        </items>
-    </item>
+	<item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary">
+		<items>
+		    <item name="cm:Администрирование" type="lecm-arm:arm">
+		        <items>
+				    <item name="cm:Подписки" type="lecm-arm:accordion">
+				        <property name="cm:name"><![CDATA[Подписки]]></property>
+				        <property name="lecm-arm:order"><![CDATA[60]]></property>
+				        <property name="lecm-arm:search-type"><![CDATA[]]></property>
+				        <property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
+				        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+				        <property name="lecm-arm:search-query"><![CDATA[]]></property>
+				        <property name="lecm-arm:expression"><![CDATA[user.currentUser().hasBusinessRole("BR_SUBSCRIPTIONS_ENGINEER")]]></property>
+				        <items>
+				            <item name="cm:Подписки на экземпляры" type="lecm-arm:html-node">
+				                <property name="cm:name"><![CDATA[Подписки на экземпляры]]></property>
+				                <property name="lecm-arm:order"><![CDATA[10]]></property>
+				                <property name="lecm-arm:html-url"><![CDATA[page/subscriptions-to-object]]></property>
+				            </item>
+				            <item name="cm:Подписки на типы" type="lecm-arm:html-node">
+				                <property name="cm:name"><![CDATA[Подписки на типы]]></property>
+				                <property name="lecm-arm:order"><![CDATA[20]]></property>
+				                <property name="lecm-arm:html-url"><![CDATA[page/subscriptions-to-type]]></property>
+				            </item>
+				        </items>
+				    </item>
+				</items>
+			</item>
+		</items>
+	</item>
 </items>

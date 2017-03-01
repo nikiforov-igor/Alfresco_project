@@ -7,5 +7,5 @@
 	<url>/lecm/docforms/forms?modelName={modelName}</url>
 	<format default="json"/>
 	<authentication>user</authentication>
-	<transaction>none</transaction>
+	<transaction allow="readonly">required</transaction>
 </webscript>

@@ -1,8 +1,11 @@
 package ru.it.lecm.workflow.beans;
 
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.workflow.api.WorkflowFoldersService;
@@ -38,4 +41,5 @@ public class WorkflowFoldersServiceImpl extends BaseBean implements WorkflowFold
 	public NodeRef getAssigneesListWorkingCopyFolder() {
             return getFolder(ASSIGNEES_LISTS_WORKING_COPY_FOLDER);
 	}
+	
 }

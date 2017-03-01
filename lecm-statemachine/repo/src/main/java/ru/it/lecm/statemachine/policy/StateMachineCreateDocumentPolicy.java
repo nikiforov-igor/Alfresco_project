@@ -39,8 +39,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
-import ru.it.lecm.statemachine.bean.SimpleDocumentRegistryImpl;
-import ru.it.lecm.statemachine.SimpleDocumentRegistryItem;
 
 /**
  * User: PMelnikov
@@ -56,7 +54,6 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
     private TransactionListener transactionListener;
     private BusinessJournalService businessJournalService;
 	private DocumentConnectionService documentConnectionService;
-    private SimpleDocumentRegistryImpl simpleDocumentRegistry;
     private DocumentService documentService;
     private RepositoryStructureHelper repositoryStructureHelper;
 
@@ -67,10 +64,6 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
     public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
 		this.documentConnectionService = documentConnectionService;
 	}
-
-    public void setSimpleDocumentRegistry(SimpleDocumentRegistryImpl simpleDocumentRegistry) {
-        this.simpleDocumentRegistry = simpleDocumentRegistry;
-    }
 
     final static Logger logger = LoggerFactory.getLogger(StateMachineCreateDocumentPolicy.class);
     private StateMachineServiceBean stateMachineHelper;
@@ -106,6 +99,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 
 	@Override
 	public void onCreateNode(final ChildAssociationRef childAssocRef) {
+		logger.debug("!!!!!!!! onCreateNode");
         final NodeRef docRef = childAssocRef.getChildRef();
         final NodeService nodeService = serviceRegistry.getNodeService();
         final QName type = nodeService.getType(docRef);
@@ -124,7 +118,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
             logger.error("Cannot create connections root folder", ex);
         }
 
-        if (!simpleDocumentRegistry.isSimpleDocument(type)) {
+        if (!stateMachineHelper.isSimpleDocument(type)) {
             // Ensure that the transaction listener is bound to the transaction
             AlfrescoTransactionSupport.bindListener(this.transactionListener);
 
@@ -144,12 +138,14 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
             AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
                 @Override
                 public Object doWork() throws Exception {
-                    SimpleDocumentRegistryItem registryItem = simpleDocumentRegistry.getRegistryItem(type);
-
-                    String rootFolder = documentService.execStringExpression(docRef, registryItem.getStorePath());
+					String archiveFolderStr = stateMachineHelper.getArchiveFolder(type);
+					
+                    String rootFolder = documentService.execStringExpression(docRef, archiveFolderStr);
                     if (rootFolder == null) {
                         rootFolder = "/Документы без МС";
                     }
+					
+					stateMachineHelper.checkArchiveFolder(type, false);
 
                     NodeRef archiveFolder = repositoryStructureHelper.getCompanyHomeRef();
                     //Создаем основной путь до папки
@@ -184,17 +180,18 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
         final HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
         props.put(ContentModel.PROP_NAME, name);
         try {
-            ChildAssociationRef childAssocRef = serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef>() {
-                @Override
-                public ChildAssociationRef execute() throws Throwable {
-                    return nodeService.createNode(
+//            ChildAssociationRef childAssocRef = serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef>() {
+//                @Override
+//                public ChildAssociationRef execute() throws Throwable {
+//                    return 
+        	ChildAssociationRef childAssocRef = nodeService.createNode(
                             parent,
                             ContentModel.ASSOC_CONTAINS,
                             QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)),
                             ContentModel.TYPE_FOLDER,
                             props);
-                }
-            }, false, true);
+//                }
+//            }, false, true);
             return childAssocRef.getChildRef();
         } catch(DuplicateChildNodeNameException e) {
             return nodeService.getChildByName(parent, ContentModel.ASSOC_CONTAINS, name);
@@ -212,21 +209,22 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 
         @Override
         public void flush() {
-
+        	logger.debug("!!!!!!!! flush");
         }
 
         @Override
         public void beforeCommit(boolean readOnly) {
-
+        	logger.debug("!!!!!!!! beforeCommit");
         }
 
         @Override
         public void beforeCompletion() {
-
+        	logger.debug("!!!!!!!! beforeCompletion");
         }
 
         @Override
         public void afterCommit() {
+        	logger.debug("!!!!!!!! afterCommit");
             final NodeService nodeService = serviceRegistry.getNodeService();
             final String currentUser = AuthenticationUtil.getFullyAuthenticatedUser();
             List<NodeRef> pendingDocs = AlfrescoTransactionSupport.getResource(STM_POST_TRANSACTION_PENDING_DOCS);
@@ -239,81 +237,85 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                         final String stateMashineId = prefixes.get(0) + "_" + type.getLocalName();
                         Runnable runnable = new Runnable() {
                             public void run() {
-                                AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
-                                    @Override
-                                    public Void doWork() throws Exception {
-										//TODO transaction in loop!!!
-                                        return serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-                                            @Override
-                                            public Void execute() throws Throwable {
-                                                PersonService personService = serviceRegistry.getPersonService();
-                                                NodeRef assigneeNodeRef = personService.getPerson("workflow");
+                            	//TODO transaction in loop!!!
+								AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
+									@Override
+									public Void doWork() throws Exception {
+										return serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+											@Override
+											public Void execute() throws Throwable {
+												logger.debug("!!!!!!!! afterCommit execute");
+												PersonService personService = serviceRegistry.getPersonService();
+												NodeRef assigneeNodeRef = personService.getPerson("workflow");
 
-                                                Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
+												Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
 
-                                                final WorkflowService workflowService = serviceRegistry.getWorkflowService();
+												final WorkflowService workflowService = serviceRegistry.getWorkflowService();
+												logger.debug("!!!!!!!! afterCommit createPackage");
+												NodeRef stateProcessPackage = workflowService.createPackage(null);
+												nodeService.addChild(stateProcessPackage, docRef, WorkflowModel.ASSOC_PACKAGE_CONTAINS, type);
 
-                                                NodeRef stateProcessPackage = workflowService.createPackage(null);
-                                                nodeService.addChild(stateProcessPackage, docRef, WorkflowModel.ASSOC_PACKAGE_CONTAINS, type);
+												workflowProps.put(WorkflowModel.ASSOC_PACKAGE, stateProcessPackage);
+												workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, assigneeNodeRef);
 
-                                                workflowProps.put(WorkflowModel.ASSOC_PACKAGE, stateProcessPackage);
-                                                workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, assigneeNodeRef);
+												workflowProps.put(QName.createQName("{}stm_document"), docRef);
+												serviceRegistry.getPermissionService().setPermission(docRef, "workflow",
+														PermissionService.ALL_PERMISSIONS, true);
 
-                                                workflowProps.put(QName.createQName("{}stm_document"), docRef);
-                                                serviceRegistry.getPermissionService().setPermission(docRef, "workflow",
-                                                        PermissionService.ALL_PERMISSIONS, true);
+												// get the moderated workflow
+												WorkflowDefinition wfDefinition = workflowService.getDefinitionByName("activiti$" + stateMashineId);
+												if (wfDefinition == null) {
+													wfDefinition = workflowService.getDefinitionByName("activiti$default_statemachine");
+												}
+												if (wfDefinition == null) {
+													throw new IllegalStateException("no workflow: " + stateMashineId);
+												}
+												// start the workflow
 
-                                                // get the moderated workflow
-                                                WorkflowDefinition wfDefinition = workflowService.getDefinitionByName("activiti$" + stateMashineId);
-                                                if (wfDefinition == null) {
-                                                    wfDefinition = workflowService.getDefinitionByName("activiti$default_statemachine");
-                                                }
-                                                if (wfDefinition == null) {
-                                                    throw new IllegalStateException("no workflow: " + stateMashineId);
-                                                }
-                                                // start the workflow
+												//AuthenticationUtil.setFullyAuthenticatedUser("workflow");
+												WorkflowPath path = null;
+												try {
+													logger.debug("!!!!!!!! afterCommit startWorkflow");
+													path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
+												} catch (Exception e) {
+													logger.error("Error while start statemachine", e);
+												} finally {
+													AuthenticationUtil.setFullyAuthenticatedUser(currentUser);
+												}
+												logger.debug("!!!!!!!! afterCommit addAspect");
+												HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
+												aspectProps.put(StatemachineModel.PROP_STATEMACHINE_ID, path.getInstance().getId());
+												nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATEMACHINE, aspectProps);
 
-                                                //AuthenticationUtil.setFullyAuthenticatedUser("workflow");
-                                                WorkflowPath path = null;
-                                                try {
-                                                    path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
-                                                } catch (Exception e) {
-                                                    logger.error("Error while start statemachine", e);
-                                                } finally {
-                                                    AuthenticationUtil.setFullyAuthenticatedUser(currentUser);
-                                                }
-                                                HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
-                                                aspectProps.put(StatemachineModel.PROP_STATEMACHINE_ID, path.getInstance().getId());
-                                                nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATEMACHINE, aspectProps);
+												HashMap<QName, Serializable> properties = new HashMap<QName, Serializable>(1, 1.0f);
+												properties.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
+												nodeService.addAspect(docRef, ContentModel.ASPECT_OWNABLE, properties);
 
-                                                HashMap<QName, Serializable> properties = new HashMap<QName, Serializable>(1, 1.0f);
-                                                properties.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
-                                                nodeService.addAspect(docRef, ContentModel.ASPECT_OWNABLE, properties);
+												final String pathId = path.getId();
+												AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+													@Override
+													public Void doWork() throws Exception {
+														List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(pathId);
+														for (WorkflowTask task : tasks) {
+															logger.debug("!!!!!!!! afterCommit endTask");
+															workflowService.endTask(task.getId(), null);
+														}
+														return null;
+													}
+												});
+												//stateMachineHelper.executePostponedActions(path.getInstance().getId());
 
-                                                final String pathId = path.getId();
-                                                AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-                                                    @Override
-                                                    public Void doWork() throws Exception {
-		                                                List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(pathId);
-		                                                for (WorkflowTask task : tasks) {
-		                                                    workflowService.endTask(task.getId(), null);
-		                                                }
-		                                                return null;
-                                                    }
-                                                });
-                                                //stateMachineHelper.executePostponedActions(path.getInstance().getId());
-
-                                                String status = (String) nodeService.getProperty(docRef, StatemachineModel.PROP_STATUS);
-                                                List<String> objects = new ArrayList<String>(1);
-                                                if (status != null) {
-                                                    objects.add(status);
-                                                }
-                                                businessJournalService.log(docRef, EventCategory.ADD, "#initiator создал(а) новый документ \"#mainobject\" в статусе \"#object1\"", objects);
-                                                return null;
-                                            }
-                                        }, false, true);
-                                    }
-                                }, currentUser);
+												String status = (String) nodeService.getProperty(docRef, StatemachineModel.PROP_STATUS);
+												List<String> objects = new ArrayList<String>(1);
+												if (status != null) {
+													objects.add(status);
+												}
+												businessJournalService.log(docRef, EventCategory.ADD, "#initiator создал(а) новый документ \"#mainobject\" в статусе \"#object1\"", objects);
+												return null;
+											}
+										}, false, true);
+									}
+								}, currentUser);
                             }
                         };
 
@@ -321,6 +323,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                     }
                 }
             }
+            logger.debug("!!!!!!!! afterCommit end");
         }
 
         @Override

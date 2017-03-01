@@ -23,6 +23,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 public class ReportEditorDAOImpl extends BaseBean implements ReportEditorDAO {
 
@@ -469,4 +472,5 @@ public class ReportEditorDAOImpl extends BaseBean implements ReportEditorDAO {
         }
         return (subReports.isEmpty()) ? null : new ArrayList<ReportDescriptor>(subReports);
     }
+
 }

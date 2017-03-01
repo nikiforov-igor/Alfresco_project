@@ -106,7 +106,8 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
                 itemId: item.nodeRef,
                 mode: "edit",
                 submitType: "json",
-                showCancelButton: true
+                showCancelButton: true,
+				showCaption: false
             };
             if (this.options.editForm) {
                 templateRequestParams.formId = this.options.editForm;

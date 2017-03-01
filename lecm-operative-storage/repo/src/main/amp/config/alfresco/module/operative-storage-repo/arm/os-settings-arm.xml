@@ -1,8 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-	<item name="cm:Настройки оперативного хранения" type="lecm-arm:html-node">
-		<property name="cm:name"><![CDATA[Настройки оперативного хранения]]></property>
-		<property name="lecm-arm:order"><![CDATA[50]]></property>
-		<property name="lecm-arm:html-url"><![CDATA[page/operative-storage-settings]]></property>
+	<item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary">
+		<items>
+			<item name="cm:Администрирование" type="lecm-arm:arm">
+				<items>
+					<item name="cm:Настройки СЭД" type="lecm-arm:accordion">
+						<items>
+							<item name="cm:Настройки оперативного хранения" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Настройки оперативного хранения]]></property>
+								<property name="lecm-arm:order"><![CDATA[50]]></property>
+								<property name="lecm-arm:html-url"><![CDATA[page/operative-storage-settings]]></property>
+							</item>
+						</items>
+					</item>
+				</items>
+			</item>
+		</items>
 	</item>
 </items>

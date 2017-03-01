@@ -4,4 +4,5 @@
 	<url>/lecm/components/type/fields?type={type}</url>
 	<format default="json"/>
 	<authentication>none</authentication>
+	<transaction allow="readonly">required</transaction>
 </webscript>

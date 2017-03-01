@@ -107,6 +107,7 @@ public class DocumentTablePolicy extends BaseBean {
 
         //TODO Refactoring in process...
 	public void onAddAspect(NodeRef nodeRef, QName aspectTypeQName) {
+		logger.debug("ДОКУМЕНТ. onAddAspect");
 		if (dictionaryService.isSubClass(aspectTypeQName, DocumentTableService.ASPECT_TABLE_DATA)) {
 			AspectDefinition aspectDefinition = dictionaryService.getAspect(aspectTypeQName);
 			Map<QName, AssociationDefinition> associations = aspectDefinition.getAssociations();
@@ -150,6 +151,7 @@ public class DocumentTablePolicy extends BaseBean {
 	}
 
 	public void onCreateDocument(ChildAssociationRef childAssocRef) {
+		logger.debug("ДОКУМЕНТ. onCreateDocument");
 		NodeRef document = childAssocRef.getChildRef();
 		Set<QName> aspects = nodeService.getAspects(document);
 		for (QName aspect : aspects) {
@@ -158,6 +160,7 @@ public class DocumentTablePolicy extends BaseBean {
 	}
 
 	public void createTableDataRow(ChildAssociationRef childAssocRef) {
+		logger.debug("ДОКУМЕНТ. createTableDataRow");
 		NodeRef tableData = childAssocRef.getParentRef();
 		NodeRef tableRow = childAssocRef.getChildRef();
 
@@ -227,6 +230,7 @@ public class DocumentTablePolicy extends BaseBean {
 	}
 
 	public void onUpdatePropertiesOfTableDataRow(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+		logger.debug("ДОКУМЕНТ. onUpdatePropertiesOfTableDataRow");
 		NodeRef tableData = documentTableService.getTableDataByRow(nodeRef);
 		if (tableData != null) {
 			Set<QName> changedProperties = getChangedProperties(before, after, nodeService.getType(nodeRef));
@@ -250,6 +254,7 @@ public class DocumentTablePolicy extends BaseBean {
 	}
 
     private int changeRowIndex(NodeRef rowRef, NodeRef tableData, Integer oldIndex, Integer newIndex) {
+    	logger.debug("ДОКУМЕНТ. changeRowIndex");
         //Получение максимального индекса
         List<NodeRef> tableRowList = documentTableService.getTableDataRows(tableData);
         int maxIndex = 1;
@@ -295,6 +300,7 @@ public class DocumentTablePolicy extends BaseBean {
     }
 
     public void logEditTableDataRow(NodeRef document, NodeRef tableData, NodeRef tableDataRow) {
+    	logger.debug("ДОКУМЕНТ. logEditTableDataRow");
 		String transactionId = AlfrescoTransactionSupport.getTransactionId();
 		if (!this.lastTransactionId.equals(transactionId)) {
 			this.lastTransactionId = transactionId;
@@ -307,6 +313,7 @@ public class DocumentTablePolicy extends BaseBean {
 	}
 
 	public Set<QName> getChangedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after, QName type) {
+		logger.debug("ДОКУМЕНТ. getChangedProperties");
 		Set<QName> result = new HashSet<QName>();
 		TypeDefinition typeDefinition = dictionaryService.getType(type);
 		if (typeDefinition != null) {
@@ -325,6 +332,7 @@ public class DocumentTablePolicy extends BaseBean {
 	}
 
 	public void deleteTableDataRow(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
+		logger.debug("ДОКУМЕНТ. deleteTableDataRow");
 		NodeRef tableData = childAssocRef.getParentRef();
 
 		//Пересчёт результирующей строки
@@ -337,6 +345,7 @@ public class DocumentTablePolicy extends BaseBean {
 	 * Добавление связи при создании поручения на основании документа
 	 */
 	public void onCreateAttachmentAssoc(AssociationRef associationRef) {
+		logger.debug("ДОКУМЕНТ. onCreateAttachmentAssoc");
 		NodeRef tableDataRowRef = associationRef.getSourceRef();
 		NodeRef attachmentRef = associationRef.getTargetRef();
 
@@ -350,7 +359,11 @@ public class DocumentTablePolicy extends BaseBean {
 				//категории могли быть ещё не созданы,
 				// тогда они создаются и заново пытаемся получить категорию
 				if (categoryRef == null) {
-					documentAttachmentsService.getCategories(document);
+					try {
+						documentAttachmentsService.getCategories(document);
+					} catch (WriteTransactionNeededException e){
+						logger.error("error: ",e);
+					}
 					categoryRef = documentAttachmentsService.getCategory(categoryName, document);
 				}
 
@@ -370,6 +383,7 @@ public class DocumentTablePolicy extends BaseBean {
 	}
 
 	public String getCategoryNameByTableDataRow(NodeRef documentTableDataRef, QName assocType) {
+		logger.debug("ДОКУМЕНТ. getCategoryNameByTableDataRow");
 		String assocQName = assocType.toPrefixString(namespaceService);
 
 		QName propertyCategoryQName = QName.createQName(assocQName + "-category", namespaceService);
@@ -384,6 +398,7 @@ public class DocumentTablePolicy extends BaseBean {
 	}
 
 	public PropertyDefinition getCategoryPropertyByTableDataRow(NodeRef documentTableDataRef, QName assocType) {
+		logger.debug("ДОКУМЕНТ. getCategoryPropertyByTableDataRow");
 		String assocQName = assocType.toPrefixString(namespaceService);
 
 		QName propertyCategoryQName = QName.createQName(assocQName + "-category", namespaceService);
@@ -391,6 +406,7 @@ public class DocumentTablePolicy extends BaseBean {
 	}
 
 	public void onDeleteAttachmentAssoc(AssociationRef associationRef) {
+		logger.debug("ДОКУМЕНТ. onDeleteAttachmentAssoc");
 		NodeRef tableDataRow = associationRef.getSourceRef();
 
 		removeAttachment(tableDataRow, associationRef);
@@ -406,6 +422,7 @@ public class DocumentTablePolicy extends BaseBean {
 	}
 
 	public void beforeDeleteTableDataRow(NodeRef nodeRef) {
+		logger.debug("ДОКУМЕНТ. beforeDeleteTableDataRow");
 		final NodeRef tableDataRow = nodeRef;
 
 		//Пересчёт индексов
@@ -439,6 +456,7 @@ public class DocumentTablePolicy extends BaseBean {
 	}
 
 	public void removeAttachment(NodeRef documentTableDataRef, AssociationRef assoc) {
+		logger.debug("ДОКУМЕНТ. removeAttachment");
 		PropertyDefinition categoryName = getCategoryPropertyByTableDataRow(documentTableDataRef, assoc.getTypeQName());
 
 		if (categoryName != null && nodeService.exists(assoc.getTargetRef())) {

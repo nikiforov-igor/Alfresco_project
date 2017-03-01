@@ -1,15 +1,29 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-    <item name="cm:Настройки поручений" type="lecm-arm:html-node">
-        <property name="cm:name"><![CDATA[Настройки поручений]]></property>
-        <property name="lecm-arm:order"><![CDATA[20]]></property>
-        <property name="lecm-arm:html-url">
-            <![CDATA[page/components/console/errands-settings]]></property>
-    </item>
-    <item name="cm:Настройка дашлетов поручений" type="lecm-arm:html-node">
-        <property name="cm:name"><![CDATA[Настройка дашлетов поручений]]></property>
-        <property name="lecm-arm:order"><![CDATA[30]]></property>
-        <property name="lecm-arm:html-url">
-            <![CDATA[page/components/console/errands-dashlet-settings]]></property>
-    </item>
+	<item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary">
+		<items>
+			<item name="cm:Администрирование" type="lecm-arm:arm">
+				<items>
+					<item name="cm:Настройки СЭД" type="lecm-arm:accordion">
+						<items>
+							<item name="cm:Настройки поручений" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Настройки поручений]]></property>
+								<property name="lecm-arm:order"><![CDATA[20]]></property>
+								<property name="lecm-arm:html-url">
+									<![CDATA[page/components/console/errands-settings]]>
+								</property>
+							</item>
+							<item name="cm:Настройка дашлетов поручений" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Настройка дашлетов поручений]]></property>
+								<property name="lecm-arm:order"><![CDATA[30]]></property>
+								<property name="lecm-arm:html-url">
+									<![CDATA[page/components/console/errands-dashlet-settings]]>
+								</property>
+							</item>
+						</items>
+					</item>
+				</items>
+			</item>
+		</items>
+	</item>
 </items>

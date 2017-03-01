@@ -3,7 +3,8 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-template:actions"/>
+					<!-- Действия -->
+					<show id="lecm-base-dummy-aspects:script" force="true"/>
 					<show id="cm:title"/>
 					<show id="lecm-template:organizationAssoc"/>
 					<show id="lecm-template:unitAssoc"/>
@@ -46,7 +47,7 @@
 						<field id="lecm-template:readonly" set="top2">
 							<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 						</field>
-						<field id="lecm-template:actions" set="top">
+						<field id="lecm-base-dummy-aspects:script" set="top">
 							<control template="/ru/it/lecm/documents-templates/components/controls/actions.ftl"/>
 						</field>
 						<field id="lecm-template:doc-type" set="bottom">
@@ -63,7 +64,8 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-template:actions"/>
+					<!-- Действия -->
+					<show id="lecm-base-dummy-aspects:script" force="true"/>
 					<show id="cm:title"/>
 					<show id="lecm-template:organizationAssoc"/>
 					<show id="lecm-template:unitAssoc"/>
@@ -106,7 +108,7 @@
 						<field id="lecm-template:readonly" set="top2">
 							<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 						</field>
-						<field id="lecm-template:actions" set="top">
+						<field id="lecm-base-dummy-aspects:script" set="top">
 							<control template="/ru/it/lecm/documents-templates/components/controls/actions.ftl"/>
 						</field>
 						<field id="lecm-template:doc-type" set="bottom">

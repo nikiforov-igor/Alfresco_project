@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * User: dbashmakov
@@ -312,4 +314,5 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
 		}
 		return pgGranting;
 	}
+
 }

@@ -16,21 +16,21 @@
 		and include them in the AMP, they are provided by Alfresco
 	-->
 	<dependencies>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-core</artifactId>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-repository</artifactId>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-data-model</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.extensions.surf</groupId>
-			<artifactId>spring-surf</artifactId>
+			<artifactId>spring-surf-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>ru.it.lecm.orgstructure</groupId>
 			<artifactId>orgstructure-repo-api</artifactId>
@@ -64,7 +64,7 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>ru.it.lecm.notifications</groupId>
 			<artifactId>notifications-repo-api</artifactId>
 			<version>${project.version}</version>
@@ -75,19 +75,19 @@
 			<artifactId>statemachine-api</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>ru.it.lecm.calendar</groupId>
 			<artifactId>lecm-calendar-repo-api</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>ru.it.lecm.security</groupId>
 			<artifactId>lecm-security-api</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>ru.it.lecm.workflow</groupId>
 			<artifactId>workflow-repo-api</artifactId>
@@ -111,16 +111,11 @@
 		The scm is required for the buildnumber-maven-plugin which is required
 		for AMP version numbering
 	-->
-	<scm>
-		<connection>scm:svn:http://domain.com/svn/trunk/</connection>
-		<developerConnection>scm:svn:https://${user.name}@domain.com/svn/trunk/</developerConnection>
-		<url>http://domain.com/svn/trunk/</url>
-	</scm>
 
 	<build>
 		<plugins>
 			<!-- Needed for cross OS compatibility in acp/zip encoding -->
-			<plugin>
+			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 			</plugin>
@@ -134,11 +129,10 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
+			</plugin> -->
 			<plugin>
 				<groupId>org.alfresco.maven.plugin</groupId>
 				<artifactId>alfresco-maven-plugin</artifactId>
-				<version>1.1.1</version>
 				<extensions>true</extensions>
 			</plugin>
 		</plugins>
@@ -146,7 +140,7 @@
 			<resource>
 				<filtering>true</filtering>
 				<directory>src/main/amp</directory>
-				<targetPath>../${project.build.finalName}</targetPath>
+				<targetPath>${app.amp.output.folder}</targetPath>
 				<excludes>
 					<exclude>**README-*</exclude>
 				</excludes>

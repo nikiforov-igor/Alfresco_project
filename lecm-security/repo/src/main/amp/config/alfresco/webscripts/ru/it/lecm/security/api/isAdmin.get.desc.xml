@@ -4,5 +4,5 @@
 	<url>/lecm/security/api/isAdmin?login={login}</url>
 	<format default="json">extension</format>
 	<authentication runas="admin">none</authentication>
-	<transaction>none</transaction>
+	<transaction allow="readonly">required</transaction>
 </webscript>

@@ -59,10 +59,8 @@ function processResults(nodes, fields, nameSubstituteStrings, startIndex, total)
         }
     }
 
-    var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
-
     for (i = 0, j = nodes.length; i < j; i++) {
-        results.push(Evaluator.run(nodes[i], flds, nameSubstituteStrings == null ? null : nameSubstituteStrings.split(","), ctx));
+        results.push(Evaluator.run(nodes[i], flds, nameSubstituteStrings == null ? null : nameSubstituteStrings.split(",")));
         added++;
     }
     var versionable = false;

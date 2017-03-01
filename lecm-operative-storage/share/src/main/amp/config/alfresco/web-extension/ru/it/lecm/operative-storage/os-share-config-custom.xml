@@ -539,7 +539,7 @@
 
                     <show id="os-aspects:sort-value"/>
                     <show id="os-aspects:common-index"/>
-                    <show id="actions-fake-field" force="true" />
+                    <show id="lecm-base-dummy-aspects:script" force="true" />
                     <!-- <show id="nomenclature-case-references"/> -->
                 </field-visibility>
                 <appearance>
@@ -565,7 +565,7 @@
                         </control>
                     </field>
 
-                    <field id="actions-fake-field" set="set1">
+                    <field id="lecm-base-dummy-aspects:script" set="set1">
                         <control template="/ru/it/lecm/os/controls/status-control.ftl">
                         </control>
                     </field>

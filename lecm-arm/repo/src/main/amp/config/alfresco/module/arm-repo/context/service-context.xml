@@ -40,7 +40,7 @@
 
 	<bean id="arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
 	      depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap, documents.LogicEcmConnectionTypesBootstrap">
-        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ"/>
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
 		<property name="dictionaries">
 			<list>
                 <value>alfresco/module/${artifactId}/dictionary/default-arm-admin.xml</value>
@@ -52,7 +52,7 @@
 
 	<bean id="armService" class="ru.it.lecm.arm.beans.ArmServiceImpl" parent="baseBean"
 		  depends-on="ServiceRegistry, nodeService, transactionService">
-		<property name="nodeService" ref="NodeService"/><!--TODO: убрать, если в baseBean исправят аналогичное проперти на NodeService-->
+		<!--<property name="nodeService" ref="NodeService"/>--><!--TODO: убрать, если в baseBean исправят аналогичное проперти на NodeService-->
 		<property name="dictionaryService" ref="serviceDictionary"/>
 		<property name="searchService" ref="searchService"/>
 		<property name="namespaceService" ref="namespaceService"/>
@@ -124,7 +124,7 @@
 		<property name="service" ref="armService"/>
 		<property name="substitudeService" ref="substitudeService"/>
 		<property name="dictionaryBean" ref="serviceDictionary"/>
-		<property name="searchCounter" ref="lecmSearchCounterScript"/>
+		<property name="searchCounter" ref="searchCounterBean"/>
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 

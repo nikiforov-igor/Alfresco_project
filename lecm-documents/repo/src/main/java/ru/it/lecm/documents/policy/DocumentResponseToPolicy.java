@@ -51,6 +51,7 @@ public class DocumentResponseToPolicy implements NodeServicePolicies.OnCreateAss
 	 */
 	@Override
 	public void onCreateAssociation(AssociationRef associationRef) {
+		logger.debug("ДОКУМЕНТ. onCreateAssociation");
 		documentConnectionService.createConnection(associationRef.getSourceRef(), associationRef.getTargetRef(), "inResponseTo", true);
 	}
 

@@ -26,12 +26,12 @@
             <groupId>ru.it.lecm.reports</groupId>
             <artifactId>lecm-reports-api</artifactId>
             <version>${project.version}</version>
-            <exclusions>
+            <!-- <exclusions>
                 <exclusion>
                     <artifactId>juh</artifactId>
                     <groupId>org.openoffice</groupId>
                 </exclusion>
-            </exclusions>
+            </exclusions> -->
         </dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
@@ -55,7 +55,7 @@
 	<build>
 		<plugins>
 			<!-- Needed for cross OS compatibility in acp/zip encoding -->
-			<plugin>
+			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 			</plugin>
@@ -69,18 +69,18 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
+			</plugin> -->
 			<plugin>
 				<groupId>org.alfresco.maven.plugin</groupId>
 				<artifactId>alfresco-maven-plugin</artifactId>
-                <version>1.1.1</version>
                 <extensions>true</extensions>
 			</plugin>
 		</plugins>
-		<resources><resource>
+		<resources>
+			<resource>
                 <filtering>true</filtering>
                 <directory>src/main/amp</directory>
-                <targetPath>../${project.build.finalName}</targetPath>
+                <targetPath>${app.amp.output.folder}</targetPath>
                 <excludes>
                     <exclude>**README-*</exclude>
                 </excludes>
@@ -108,7 +108,7 @@
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/amp/reportdefinitions</directory>
-                <targetPath>reportdefinitions</targetPath>
+                <targetPath>${app.amp.output.folder}/reportdefinitions</targetPath>
             </resource>
 		</resources>
 	</build>

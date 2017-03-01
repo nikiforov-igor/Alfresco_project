@@ -155,7 +155,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	@Override
 	public List<NodeRef> getAvailableConnectionTypes(NodeRef primaryDocumentRef, QName connectedDocumentType) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, primaryDocumentRef);
-		List<NodeRef> result = getAllConnectionTypes();
+		List<NodeRef> result = new ArrayList(getAllConnectionTypes());
 		List<NodeRef> notAvailableTypes = getNotAvailableConnectionTypes(primaryDocumentRef, connectedDocumentType);
 		if (notAvailableTypes != null) {
 			result.removeAll(notAvailableTypes);

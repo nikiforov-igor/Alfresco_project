@@ -15,15 +15,15 @@
 	<description>Logic ECM Registration Numbers Repo</description>
 
 	<dependencies>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-core</artifactId>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-repository</artifactId>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-data-model</artifactId>
 		</dependency>
@@ -58,7 +58,7 @@
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
 			<scope>provided</scope>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>ru.it.lecm.regnumbers</groupId>
 			<artifactId>lecm-regnumbers-repo-api</artifactId>
@@ -88,10 +88,10 @@
 			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-		</dependency>
+		</dependency>-->
         <dependency>
             <groupId>ru.it.lecm.business-journal</groupId>
             <artifactId>business-journal-repo-api</artifactId>
@@ -100,15 +100,9 @@
         </dependency>
     </dependencies>
 
-	<scm>
-		<connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk</connection>
-		<developerConnection>scm:svn:https://vlevin@datateh.ru/alfrescoecm/Business Platform/trunk/</developerConnection>
-		<url>https://svn.datateh.ru/alfrescoecm/Business Platform/trunk</url>
-	</scm>
-
 	<build>
 		<plugins>
-			<plugin>
+			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 			</plugin>
@@ -122,18 +116,18 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
+			</plugin> -->
 			<plugin>
 				<groupId>org.alfresco.maven.plugin</groupId>
 				<artifactId>alfresco-maven-plugin</artifactId>
-                <version>1.1.1</version>
                 <extensions>true</extensions>
 			</plugin>
 		</plugins>
-		<resources><resource>
+		<resources>
+			<resource>
                 <filtering>true</filtering>
                 <directory>src/main/amp</directory>
-                <targetPath>../${project.build.finalName}</targetPath>
+                <targetPath>${app.amp.output.folder}</targetPath>
                 <excludes>
                     <exclude>**README-*</exclude>
                 </excludes>

@@ -77,7 +77,7 @@
 		<entry key="#{reviewFolder}" value="Сервис Ознакомление документов"/>
 	</util:map>
 	<bean id="reviewService" class="ru.it.lecm.workflow.review.ReviewServiceImpl"
-		  parent="baseBean" depends-on="review.model.bootstrap" init-method="init"
+		  parent="baseBean" depends-on="review.model.bootstrap"
 		  p:documentTableService-ref="documentTableService"
 		  p:orgstructureBean-ref="serviceOrgstructure"
 		  p:searchService-ref="searchService"
@@ -107,7 +107,7 @@
 	</util:list>
 	<bean id="review.admin.arm.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="arm.settings.LogicEcmBootstrap"
-		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки"
+		  p:rootPath="/Business platform/LECM/Сервис АРМ"
 		  p:dictionaries-ref="review.admin.arm.dictionaries"/>
 
 	<util:list id="review.my-profile.arm.dictionaries">
@@ -115,7 +115,7 @@
 	</util:list>
 	<bean id="review.my-profile.arm.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap"
-		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Логика ECM. Мой профиль/Настройки"
+		  p:rootPath="/Business platform/LECM/Сервис АРМ"
 		  p:dictionaries-ref="review.my-profile.arm.dictionaries"/>
 
 	<bean id="reviewNotificationExecutor" class="ru.it.lecm.workflow.review.schedule.ReviewNotificationExecutor" parent="action-executer"
@@ -127,23 +127,16 @@
 		  p:reviewService-ref="reviewService"
 	/>
 
-	<bean id="reviewNotificationSchedule" class="ru.it.lecm.workflow.review.schedule.ReviewNotificationSchedule"
-		  p:transactionMode="ISOLATED_TRANSACTIONS"
-		  p:compensatingActionMode="IGNORE"
+	<bean id="reviewNotificationSchedule" class="ru.it.lecm.workflow.review.schedule.ReviewNotificationSchedule" parent="baseTransactionalSchedule"
           p:cronExpression="0 0 5 */1 * ?"
-          p:firstStartExpression="0 */15 * * * ?"
-          p:onServerStart="false"
           p:jobName="review-notification"
 		  p:jobGroup="review"
 		  p:triggerName="review-notification-trigger"
 		  p:triggerGroup="review-trigger"
-		  p:runAsUser="System"
-		  p:scheduler-ref="schedulerFactory"
+		  p:actionName="reviewNotificationExecutor"
 		  p:documentService-ref="documentService"
 		  p:reviewService-ref="reviewService"
 		  p:calendarBean-ref="WorkCalendarService"
-		  p:actionService-ref="ActionService"
-		  p:transactionService-ref="TransactionService"
 	/>
 
 	<bean parent="ServiceFolderPermissionHelper">

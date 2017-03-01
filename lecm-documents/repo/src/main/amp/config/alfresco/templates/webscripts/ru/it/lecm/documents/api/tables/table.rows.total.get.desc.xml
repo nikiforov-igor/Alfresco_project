@@ -3,6 +3,6 @@
 	<description>Document Tables Data Total Rows</description>
 	<url>/lecm/document/tables/api/getTotalRows?tableDataRef={tableDataRef}</url>
 	<authentication>user</authentication>
-	<transaction>none</transaction>
+	<transaction allow="readonly">required</transaction>
 	<format default="json"/>
 </webscript>

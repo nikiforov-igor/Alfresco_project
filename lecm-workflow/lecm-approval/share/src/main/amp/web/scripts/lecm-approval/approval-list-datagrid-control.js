@@ -413,7 +413,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					itemKind: 'type',
 					mode: 'create',
 					showCancelButton: true,
-					submitType: 'json'
+					submitType: 'json',
+					showCaption: false
 				},
 				destroyOnHide: true,
 				doBeforeDialogShow: {
@@ -577,7 +578,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					itemKind: 'node',
 					mode: 'edit',
 					showCancelButton: true,
-					submitType: 'json'
+					submitType: 'json',
+					showCaption: false
 				},
 				destroyOnHide: true,
 				doBeforeDialogShow: {
@@ -813,7 +815,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					mode: 'edit',
 					itemKind: 'node',
 					showCancelButton: true,
-					documentNodeRef: this.documentNodeRef
+					documentNodeRef: this.documentNodeRef,
+					showCaption: false
 				},
 				destroyOnHide: true,
 				doBeforeDialogShow: {

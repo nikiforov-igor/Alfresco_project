@@ -69,7 +69,8 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
                         mode: 'edit',
                         showCancelButton: true,
                         submitType: 'json',
-                        isApprovalListContext: isApprovalListContext
+                        isApprovalListContext: isApprovalListContext,
+						showCaption: false
                     },
                     destroyOnHide: true,
                     doBeforeDialogShow: {
@@ -197,7 +198,8 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
                     itemKind: 'node',
                     mode: 'edit',
                     showCancelButton: true,
-                    submitType: 'json'
+                    submitType: 'json',
+					showCaption: false
                 },
                 destroyOnHide: true,
                 doBeforeDialogShow: {
@@ -279,7 +281,8 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
                     submitType: 'json',
                     showCancelButton: true,
                     routeOrganization: this.routeOrganization ? this.routeOrganization : null,
-                    allowedNodesScript: "lecm/workflow/routes/getEmployeesForStage?stage=" + destination + (this.routeOrganization ? "&organization=" + this.routeOrganization : "")
+                    allowedNodesScript: "lecm/workflow/routes/getEmployeesForStage?stage=" + destination + (this.routeOrganization ? "&organization=" + this.routeOrganization : ""),
+					showCaption: false
                 },
                 destroyOnHide: true,
                 doBeforeDialogShow: {

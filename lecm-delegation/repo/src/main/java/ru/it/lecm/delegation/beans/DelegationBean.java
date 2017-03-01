@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.TransactionNeededException;
@@ -65,6 +66,9 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 	private DocumentMembersService documentMembersService;
 	private LecmPermissionService lecmPermissionService;
 	private SecretarySecurityService secretarySecurityService;
+	
+	private NodeRef delegationOptsContainer;
+	private NodeRef globalSettigsNode;
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -129,30 +133,17 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 		PropertyCheck.mandatory(this, "documentMembersService", documentMembersService);
 		PropertyCheck.mandatory(this, "lecmPermissionService", lecmPermissionService);
 		PropertyCheck.mandatory(this, "secretarySecurityService", secretarySecurityService);
-
+	}
+	
+	@Override
+	public void initServiceImpl() {		
 		//создание контейнера для хранения параметров делегирования
-		AuthenticationUtil.runAsSystem(new RunAsWork<Void>() {
-
-			@Override
-			public Void doWork() throws Exception {
-				return lecmTransactionHelper.doInRWTransaction(new RetryingTransactionCallback<Void>() {
-
-					@Override
-					public Void execute() throws Throwable {
-						if (null == getDelegationOptsContainer()) {
-							createDelegationOptsContainer();
-						}
-						if (null == getGlobalSettingsNode()) {
-							createGlobalSettingsNode();
-						}
-						return null;
-					}
-				});
-
-			}
-		});
-
-		//возможно здесь еще будет штука для создания параметров делегирования для уже существующих пользователей
+		if (null == getDelegationOptsContainer()) {
+			createDelegationOptsContainer();
+		}
+		if (null == getGlobalSettingsNode()) {
+			createGlobalSettingsNode();
+		}
 	}
 
 	private NodeRef createDelegationOptsContainer() {
@@ -176,9 +167,10 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 
 	@Override
 	public NodeRef getDelegationOptsContainer() {
-		NodeRef delegationHome = getDelegationFolder();
-		NodeRef container = nodeService.getChildByName(delegationHome, ContentModel.ASSOC_CONTAINS, CONTAINER);
-		return container;
+		if (delegationOptsContainer == null) {
+			delegationOptsContainer = nodeService.getChildByName(getDelegationFolder(), ContentModel.ASSOC_CONTAINS, CONTAINER);
+		}
+		return delegationOptsContainer;
 	}
 
 	@Override
@@ -886,7 +878,10 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 
 	@Override
 	public NodeRef getGlobalSettingsNode() {
-		return nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, DELEGATION_SETTINGS_NODE_NAME);
+		if (globalSettigsNode == null) {
+			globalSettigsNode = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, DELEGATION_SETTINGS_NODE_NAME);
+		}
+		return globalSettigsNode;
 	}
 
 	private NodeRef createGlobalSettingsNode() throws WriteTransactionNeededException {

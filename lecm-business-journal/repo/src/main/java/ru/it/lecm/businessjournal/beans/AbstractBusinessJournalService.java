@@ -38,8 +38,6 @@ import java.util.*;
  */
 public abstract class AbstractBusinessJournalService extends BaseBean {
 
-    protected String bjRootID;
-    protected String bjArchiveID;
     protected LecmPermissionService lecmPermissionService;
     protected StateMachineServiceBean stateMachineService;
     private DictionaryBean dictionaryService;
@@ -322,11 +320,11 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
         return getUrlService().wrapAsWorkflowLink(executionId, getWorkflowDescription(executionId));
     }
 
-    public void log(final Date date, final NodeRef initiator, final NodeRef mainObject, final String eventCategory, final String defaultDescription, final List<String> objects) {
+    public void log(final Date date, final NodeRef initiator, NodeRef mainObject, final String eventCategory, final String defaultDescription, final List<String> objects) {
         try {
             if (mainObject == null) {
-                logger.warn("Main Object not set!");
-                return;
+                logger.warn("Main Object not set! Setting default one");
+                mainObject = repository.getCompanyHome();
             }
             IgnoredCounter counter = threadSettings.get();
             if (counter != null) {
@@ -504,14 +502,6 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
 
     public void setPersonService(PersonService personService) {
         this.personService = personService;
-    }
-
-    public NodeRef getBusinessJournalDirectory() {
-	return getFolder(bjRootID);
-    }
-
-    public NodeRef getBusinessJournalArchiveDirectory() {
-        return getFolder(bjArchiveID);
     }
 
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {

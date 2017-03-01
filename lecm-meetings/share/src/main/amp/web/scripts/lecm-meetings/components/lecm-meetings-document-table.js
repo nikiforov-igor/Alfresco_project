@@ -525,7 +525,8 @@ LogicECM.module.MeetingsDocumentTableDataGrid = LogicECM.module.MeetingsDocument
 				itemId: item.nodeRef,
 				mode: "edit",
 				submitType: "json",
-				showCancelButton: true
+				showCancelButton: true,
+				showCaption: false
 			};
 
 			templateRequestParams.formId = 'editWorkspace';

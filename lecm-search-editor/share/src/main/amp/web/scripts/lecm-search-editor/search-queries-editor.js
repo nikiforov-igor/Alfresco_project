@@ -192,7 +192,7 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                                 var attrConf = {
                                     id: !record.getData().isOperator ? fieldId : this.operatorKey,
                                     type: !record.getData().isOperator ? this._getTypeByFieldId(fieldId, false) : this.operatorKey,
-                                    case: !record.getData().isOperator ? this._getCaseByRecord(record) : this.operatorKey,
+                                    "case": !record.getData().isOperator ? this._getCaseByRecord(record) : this.operatorKey,
                                     value: !record.getData().isOperator ? (isEncode ? encodeURIComponent(this._getValueByRecord(record).trim()) : this._getValueByRecord(record)): this._getOperatorByRecord(record)
                                 };
                                 config.attributes.push(attrConf);
@@ -331,7 +331,7 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                         this.dataTable.addRow({
                             checkbox: this.operatorKey,
                             selector: this.operatorKey,
-                            case: this.operatorKey,
+                            "case": this.operatorKey,
                             control: this.operatorKey,
                             isOperator: true
                         })
@@ -340,7 +340,7 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                     this.dataTable.addRow({
                         checkbox: "",
                         selector: "",
-                        case: "",
+                        "case": "",
                         control: "",
                         isOperator: false
                     });
@@ -422,7 +422,8 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                         mode: isCreate ? "create" : "edit",
                         formId: "",
                         submitType:"json",
-                        showCancelButton: true
+                        showCancelButton: true,
+						showCaption: false
                     };
 
                     var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
@@ -509,7 +510,7 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                     this.dataTable.addRow({
                         checkbox: "",
                         selector: row.id != this.operatorKey ? row.id : row.value,
-                        case: row.case,
+                        "case": row["case"],
                         control: decodeURIComponent(row.value),
                         type: row.type,
                         isOperator: row.id == this.operatorKey
@@ -550,7 +551,7 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                             var option = document.createElement("option");
                             option.value = casesArray[i];
                             option.innerHTML = this.msg("msg.case." + casesArray[i]);
-                            option.selected = (casesArray[i] == record.getData().case);
+                            option.selected = (casesArray[i] == record.getData()["case"]);
                             select.appendChild(option);
                         }
                     }

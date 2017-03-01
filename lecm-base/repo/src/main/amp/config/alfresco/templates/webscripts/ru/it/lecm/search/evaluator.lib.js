@@ -163,19 +163,21 @@ var Evaluator = {
      * @param value {String} default value
      * @return {String}
      */
-	translateField: function Evaluator_translateField(propertyDef, value, dictionaryService) {
-		if (propertyDef == null || propertyDef == "") {
+	
+	translateField: function Evaluator_translateField(objDef, value) {
+		if (!objDef) {
 			return null;
 		}
-		if (propertyDef.getConstraints() != null) {
-			for (var i = 0, len = propertyDef.getConstraints().size(); i < len; ++i) {
-                var constraint = propertyDef.getConstraints().get(i).getConstraint();
-				if ("LIST" == constraint.getType()) {
-					var allowedV = constraint.getAllowedValues();
+
+		if (objDef.constraints) {
+			for (var i = 0, len = objDef.constraints.size(); i < len; ++i) {
+                var constraint = objDef.constraints.get(i).constraint;
+				if ("LIST" == constraint.type) {
+					var allowedV = constraint.allowedValues;
 					for (var j = 0; j < allowedV.size(); ++j) {
-						var allowedVasString = "" + allowedV.get(j);
-                        if (value == allowedVasString) {
-                            return constraint.getDisplayLabel(allowedVasString, dictionaryService);
+						var allowedValue = "" + allowedV.get(j);
+                        if (value == allowedValue) {
+                            return base.getListConstraintDisplayValue(constraint, allowedValue);
                         }
 					}
 				}
@@ -187,7 +189,7 @@ var Evaluator = {
 	/**
 	 * Node Evaluator - main entrypoint
 	 */
-    run: function Evaluator_run(node, fields, nameSubstituteStrings, ctx) {
+    run: function Evaluator_run(node, fields, nameSubstituteStrings) {
         var permissions = {},
 	        createdBy = Common.getPerson(node.properties["cm:creator"]),
 	        modifiedBy = Common.getPerson(node.properties["cm:modifier"]),
@@ -208,15 +210,10 @@ var Evaluator = {
             "delete": deletePermission
         };
 
-        //сервисы
-        var dictionaryService = ctx.getBean("dictionaryService");
-        var namespaceService = ctx.getBean("namespaceService");
-
         for (var i = 0; i < fields.length; i++) {
             //fields[i] = напримери, cm_name
             var fName = fields[i];
             var realFieldName = fields[i].replace("_", ":");
-            var fieldQName = Packages.org.alfresco.service.namespace.QName.createQName(realFieldName, namespaceService);
 
             var nameSubstituteStringDef = null;
             if (nameSubstituteStrings != null && nameSubstituteStrings[i] != null && nameSubstituteStrings[i] != "") {
@@ -228,16 +225,18 @@ var Evaluator = {
             // вытащить дефинишены
             var propDefinition = null, assocDefinition = null;
 
-            propDefinition = dictionaryService.getProperty(fieldQName);
+			///////////// PropertyDefinition
+            propDefinition = base.getProperty(realFieldName);
             if (propDefinition == null) {
-                assocDefinition = dictionaryService.getAssociation(fieldQName);
+            ///////////// assocDefinition
+                assocDefinition = base.getAssociation(realFieldName);
             }
 
             if (propDefinition != null || assocDefinition != null) {
                 var isAssoc = assocDefinition != null,
                     type = isAssoc ?
-                        assocDefinition.getTargetClass().getName().toPrefixString(namespaceService) :
-                        propDefinition.getDataType().getName().toPrefixString(namespaceService),
+                        base.toPrefixString(assocDefinition) :
+                        base.toPrefixString(propDefinition),
                     endpointMany = isAssoc ? assocDefinition.isTargetMany() : false;
 
                 if (!isAssoc && type.indexOf("d:") == 0) {
@@ -283,7 +282,7 @@ var Evaluator = {
                     }
                 } else {
                     fieldData.value = value;
-                    fieldData.displayValue =  isAssoc ? value : Evaluator.translateField(propDefinition, value, dictionaryService);
+                    fieldData.displayValue =  isAssoc ? value : Evaluator.translateField(propDefinition, value);
 
                     if (Evaluator.decorateFieldData(fieldData, node, nameSubstituteStringDef)) {
                         nodeData[(isAssoc ? "assoc_" : "prop_") + fName] = fieldData;

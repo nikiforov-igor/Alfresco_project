@@ -3,7 +3,6 @@ package ru.it.lecm.arm.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
@@ -482,13 +481,8 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         }
     }
 
-    private long execSearchQuery(String queryToExecute) {
-        Map<Serializable, Serializable> searchProps = new HashMap<>();
-        searchProps.put("query", queryToExecute);
-        searchProps.put("language", SearchService.LANGUAGE_FTS_ALFRESCO);
-        searchProps.put("onerror", "no-results");
-
+    private long execSearchQuery(String queryToExecute) {		
         //вызываем counter с дефолтными настройками (как сейчас в АРМе)
-        return searchCounter.query(searchProps, true, false);
+        return searchCounter.query(queryToExecute, true, false);
     }
 }

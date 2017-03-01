@@ -15,6 +15,10 @@
 						   http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
 						   http://cxf.apache.org/bindings/soap http://cxf.apache.org/schemas/configuration/soap.xsd">
 
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+    
 	<http:conduit name="{http://tempuri.org}GateWcfServiceHttps.http-conduit">
 		<!--<http:tlsClientParameters disableCNCheck="true">
 			<sec:keyManagers keyPassword="password">

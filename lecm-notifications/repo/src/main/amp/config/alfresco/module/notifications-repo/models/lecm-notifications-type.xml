@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<items>
+<items updateMode="CreateOrUpdate">
     <item name="lecm-dic:Типы доставки уведомлений" type="lecm-dic:dictionary">
         <property name="lecm-dic:attributeForShow">cm:name</property>
         <property name="lecm-dic:type">lecm-notf-type:notification-type</property>

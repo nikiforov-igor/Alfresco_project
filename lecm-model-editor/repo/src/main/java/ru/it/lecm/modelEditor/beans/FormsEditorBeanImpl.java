@@ -2,7 +2,6 @@ package ru.it.lecm.modelEditor.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
-import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
@@ -71,7 +70,6 @@ public class FormsEditorBeanImpl extends BaseBean {
 
 	protected NamespaceService namespaceService;
 	protected DictionaryService dictionaryService;
-	protected Repository repository;
 
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -84,10 +82,6 @@ public class FormsEditorBeanImpl extends BaseBean {
 
 	public void setDictionaryService(DictionaryService dictionaryService) {
 		this.dictionaryService = dictionaryService;
-	}
-
-	public void setRepository(Repository repository) {
-		this.repository = repository;
 	}
 
 	/**
@@ -681,4 +675,5 @@ public class FormsEditorBeanImpl extends BaseBean {
 			}
 		}
 	}
+	
 }

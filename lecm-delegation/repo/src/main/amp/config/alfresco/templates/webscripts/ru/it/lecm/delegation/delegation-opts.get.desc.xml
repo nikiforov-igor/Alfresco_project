@@ -6,5 +6,5 @@
 	<authentication>user</authentication>
 	<format default="json"/>
 	<transaction>required</transaction>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 </webscript>

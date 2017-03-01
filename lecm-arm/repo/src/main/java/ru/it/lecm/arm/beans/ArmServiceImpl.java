@@ -32,6 +32,8 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 import java.io.Serializable;
 import java.util.*;
 import java.util.regex.Matcher;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * User: AIvkin
@@ -171,7 +173,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
 
     @Override
 	public NodeRef getServiceRootFolder() {
-            return getFolder(ARM_ROOT_ID);
+		return getFolder(ARM_ROOT_ID);
 	}
 
 	@Override
@@ -816,7 +818,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
     }
     public void setSecretaryService(SecretaryService secretaryService) {
         this.secretaryService = secretaryService;
-}
+	}
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

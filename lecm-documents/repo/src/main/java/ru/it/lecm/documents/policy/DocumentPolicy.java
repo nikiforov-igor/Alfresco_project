@@ -165,7 +165,6 @@ public class DocumentPolicy extends BaseBean
         PropertyCheck.mandatory(this, "authenticationService", authenticationService);
         PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
 
-
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
@@ -176,6 +175,7 @@ public class DocumentPolicy extends BaseBean
      * Метод переназначает документ новому сотруднику и выделяем ему соответствующие права
      */
     public void documentTransmit(NodeRef documentRef, Map<QName, Serializable> before, Map<QName, Serializable> after, QName authorPropertyQName) throws WriteTransactionNeededException {
+    	logger.debug("ДОКУМЕНТ. documentTransmit");
         NodeRef beforeAuthor = new NodeRef(before.get(authorPropertyQName).toString());
         NodeRef afterAuthor = new NodeRef(after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF).toString());
         Set<AccessPermission> permissionsDoc = permissionService.getAllSetPermissions(documentRef);
@@ -251,6 +251,7 @@ public class DocumentPolicy extends BaseBean
     }
 
     private QName getAuthorProperty(NodeRef nodeRef) {
+    	logger.debug("ДОКУМЕНТ. getAuthorProperty");
         QName type = nodeService.getType(nodeRef);
         ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(type.getNamespaceURI(), DocumentService.CONSTRAINT_AUTHOR_PROPERTY));
         return (constraint == null) ? null : QName.createQName(((AuthorPropertyConstraint)constraint.getConstraint()).getAuthorProperty(), namespaceService);
@@ -259,6 +260,7 @@ public class DocumentPolicy extends BaseBean
     //TODO сложная длинная логика. Нужно разобраться, попытаться упростить.
     @Override
     public void onUpdateProperties(final NodeRef nodeRef, final Map<QName, Serializable> before, Map<QName, Serializable> after) {
+    	logger.debug("ДОКУМЕНТ. onUpdateProperties");
         //изменилась одна из дат регистрации (проекта или документа)
         if (isChangeProperty(before, after, DocumentService.PROP_REG_DATA_DOC_DATE)
                 || isChangeProperty(before, after, DocumentService.PROP_REG_DATA_PROJECT_DATE)) {
@@ -409,6 +411,7 @@ public class DocumentPolicy extends BaseBean
 
     //TODO сложная длинная логика. Нужно разобраться, попытаться упростить.
     private void updatePresentString(final NodeRef nodeRef) {
+    	logger.debug("ДОКУМЕНТ. updatePresentString");
         String presentString = "{cm:name}";
 
         QName type = nodeService.getType(nodeRef);
@@ -461,6 +464,7 @@ public class DocumentPolicy extends BaseBean
     }
 
 	private void updateMLPresentString(final TypeDefinition typeDef, final NodeRef nodeRef, final String presentStringValue) {
+		logger.debug("ДОКУМЕНТ. updateMLPresentString");
 		if (lecmMessageService.isMlSupported()) {
 			String typename = typeDef.getName().toPrefixString(namespaceService).replace(':', '_');
 			String propname = DocumentService.PROP_ML_PRESENT_STRING.toPrefixString(namespaceService).replace(':', '_');
@@ -501,6 +505,7 @@ public class DocumentPolicy extends BaseBean
 	}
 
     private boolean changeIgnoredProperties(Map<QName, Serializable> before, Map<QName, Serializable> after) {
+    	logger.debug("ДОКУМЕНТ. changeIgnoredProperties");
         for (QName ignored : IGNORED_PROPERTIES) {
             if (isChangeProperty(before, after, ignored)) return true;
         }
@@ -508,6 +513,7 @@ public class DocumentPolicy extends BaseBean
     }
 
     private boolean isChangeProperty(Map<QName, Serializable> before, Map<QName, Serializable> after, QName prop) {
+    	logger.debug("ДОКУМЕНТ. isChangeProperty");
         Object prev = before.get(prop);
         Object cur = after.get(prop);
         return cur != null && !cur.equals(prev);
@@ -516,6 +522,7 @@ public class DocumentPolicy extends BaseBean
     @Override
     //TODO сложная длинная логика. Нужно разобраться, попытаться упростить.
     public void onCreateNode(ChildAssociationRef childAssocRef) {
+    	logger.debug("ДОКУМЕНТ. onCreateNode");
 	    NodeRef document = childAssocRef.getChildRef();
 
         final QName type = nodeService.getType(document);
@@ -584,6 +591,7 @@ public class DocumentPolicy extends BaseBean
 	}
 
 	public NodeRef getDocumentSearchObject(final NodeRef documentRef) {
+		logger.debug("ДОКУМЕНТ. getDocumentSearchObject");
 		NodeRef result = null;
 		Object extPresentString = nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING);
 		if (extPresentString != null) {
@@ -643,6 +651,7 @@ public class DocumentPolicy extends BaseBean
 	}
 
     public void updateDocumentSearchObject(final NodeRef documentRef, final NodeRef objectRef) {
+    	logger.debug("ДОКУМЕНТ. updateDocumentSearchObject");
         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
             @Override
             public Object doWork() throws Exception {
@@ -674,6 +683,7 @@ public class DocumentPolicy extends BaseBean
     }
 
 	public Map<String, Serializable> getDocumentSearchProperties(NodeRef documentRef) {
+		logger.debug("ДОКУМЕНТ. getDocumentSearchProperties");
 		Map<String, Serializable> result = new HashMap<String, Serializable>();
 
 		Map<QName, Serializable> doumentProperties = nodeService.getProperties(documentRef);
@@ -707,6 +717,7 @@ public class DocumentPolicy extends BaseBean
 	}
 
 	public NodeRef createDocumentSearchObjectThumbnail(final NodeRef objectRef, final NodeRef documentRef) {
+		logger.debug("ДОКУМЕНТ. createDocumentSearchObjectThumbnail");
 			AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 				@Override
 				public NodeRef doWork() throws Exception {

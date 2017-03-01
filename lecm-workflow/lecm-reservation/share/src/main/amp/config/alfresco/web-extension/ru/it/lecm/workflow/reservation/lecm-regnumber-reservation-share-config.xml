@@ -54,6 +54,7 @@
 					<show id="lecmRegnumRes:decision" />
 					<show id="bpm:comment" />
 					<show id="style" />
+					<show id="transitions" force="true" />
 				</field-visibility>
 				<appearance>
 					<field id="reservationWf:presentString">
@@ -74,6 +75,11 @@
 					</field>
 					<field id="style">
 						<control template="/ru/it/lecm/workflow/reservation/controls/dialog-narrow.ftl" />
+					</field>
+					<field id="transitions">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl">
+							<control-param name="fieldValue">Next</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>

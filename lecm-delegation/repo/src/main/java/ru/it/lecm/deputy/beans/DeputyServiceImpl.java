@@ -12,8 +12,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import javax.transaction.UserTransaction;
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -22,6 +25,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.GUID;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.deputy.DeputyService;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
@@ -36,6 +40,7 @@ public class DeputyServiceImpl extends BaseBean implements DeputyService {
 	private OrgstructureBean orgstructureService;
 	private DictionaryBean lecmDictionaryService;
 	private String defultSubjectDictionaryName;
+	private NodeRef deputySettingsNode;
 
 	public void setDefultSubjectDictionaryName(String defultSubjectDictionaryName) {
 		this.defultSubjectDictionaryName = defultSubjectDictionaryName;
@@ -58,26 +63,13 @@ public class DeputyServiceImpl extends BaseBean implements DeputyService {
 	public NodeRef getDeputyFolder() {
 		return getFolder(DEPUTY_FOLDER);
 	}
-
+	
 	@Override
-	public void init() {
-		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-
-			@Override
-			public Void doWork() throws Exception {
-				return lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-
-					@Override
-					public Void execute() throws Throwable {
-						if (getDeputySettingsNode() == null) {
-							createDeputySettingsNode();
-						}
-						return null;
-					}
-				});
-
-			}
-		});
+	public void initServiceImpl()
+	{
+		if (getDeputySettingsNode() == null) {
+			createDeputySettingsNode();
+		}
 	}
 
 	@Override
@@ -87,14 +79,19 @@ public class DeputyServiceImpl extends BaseBean implements DeputyService {
 
 	@Override
 	public NodeRef getDeputySettingsNode() {
-		NodeRef settingsFolder = getDeputySettingsFolder();
-		List<ChildAssociationRef> settingsNodeAssocs = nodeService.getChildAssocs(settingsFolder);
+		if (deputySettingsNode == null) {
+			NodeRef settingsFolder = getDeputySettingsFolder();
+			List<ChildAssociationRef> settingsNodeAssocs = null;
+			if(settingsFolder!=null)
+				settingsNodeAssocs = nodeService.getChildAssocs(settingsFolder);
 
-		if (settingsNodeAssocs != null && !settingsNodeAssocs.isEmpty()) {
-			return settingsNodeAssocs.get(0).getChildRef();
+			if (settingsNodeAssocs != null && !settingsNodeAssocs.isEmpty()) {
+//				return settingsNodeAssocs.get(0).getChildRef();
+				deputySettingsNode = settingsNodeAssocs.get(0).getChildRef();
+			}
+			
 		}
-
-		return null;
+		return deputySettingsNode;
 	}
 
 	@Override
@@ -265,7 +262,4 @@ public class DeputyServiceImpl extends BaseBean implements DeputyService {
 			}
 		}
 	}
-
-
-
 }

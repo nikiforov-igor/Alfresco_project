@@ -237,7 +237,7 @@
 
     <bean id="documents.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="arm.settings.LogicEcmBootstrap">
-        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки"/>
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/documents-repo/arm/documents-settings-arm.xml</value>
@@ -250,7 +250,7 @@
     <util:map id="documents.global-settings.folders">
         <entry key="#{DOCUMENT_GLOBAL_SETTINGS_FOLDER_ID}" value="#{DOCUMENT_GLOBAL_SETTINGS_FOLDER_NAME}"/>
     </util:map>
-    <bean id="documents.global-settings.service" init-method="init" parent="baseBean"
+    <bean id="documents.global-settings.service" parent="baseBean"
           depends-on="documents.logicEcmModelsDocumentsGlobalSettingsBootstrap"
           class="ru.it.lecm.documents.beans.DocumentGlobalSettingsServiceImpl">
         <property name="folders" ref="documents.global-settings.folders"/>

@@ -110,6 +110,7 @@ public class OrgstructureGenerateNamesPolicy extends BaseBean
 
     private String generateOrgElementName(NodeRef parent, NodeRef element) {
         String newName = (String) nodeService.getProperty(element, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME);
+        if(OrgstructureBean.HOLDING_ROOT_NAME.equals(newName)){ return newName; }
 	    newName = FileNameValidator.getValidFileName(newName);
 	    return getUniqueNodeName(parent, newName);
     }

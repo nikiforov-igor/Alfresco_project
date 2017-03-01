@@ -296,7 +296,8 @@ LogicECM.module.GroupActions = LogicECM.module.GroupActions || {};
                         destination: "${nodeRef!""}",
                         mode: "create",
                         submitType: "json",
-                        showCancelButton: true
+                        showCancelButton: true,
+						showCaption: false
                     };
 
                     // Using Forms Service, so always create new instance

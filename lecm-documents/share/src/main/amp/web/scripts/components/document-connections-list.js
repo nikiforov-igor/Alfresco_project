@@ -146,7 +146,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 							formId: this.id + "-create-form",
 							submitType:"json",
 						ignoreNodes: this.options.documentNodeRef,
-						showCancelButton: true
+						showCancelButton: true,
+						showCaption: false
 					};
 
 					//				// Using Forms Service, so always create new instance

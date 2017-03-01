@@ -132,6 +132,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
     @Override
     public void onCreateNode(ChildAssociationRef childAssocRef) {
+    	logger.debug("ДОКУМЕНТ. onCreateNode");
         // создание ассоциации документ -> участник
         NodeRef member = childAssocRef.getChildRef();
         NodeRef document = nodeService.getPrimaryParent(childAssocRef.getParentRef()).getParentRef();
@@ -141,6 +142,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
     @Override
     public void onCreateAssociation(AssociationRef nodeAssocRef) {
+    	logger.debug("ДОКУМЕНТ. onCreateAssociation");
         NodeRef member = nodeAssocRef.getSourceRef();
         if (nodeService.exists(member)) {
             NodeRef folder = nodeService.getPrimaryParent(member).getParentRef();
@@ -206,6 +208,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
     @Override
     public void onDeleteAssociation(AssociationRef nodeAssocRef) {
+    	logger.debug("ДОКУМЕНТ. onDeleteAssociation");
         NodeRef docRef = null;
         try {
             NodeRef member = nodeAssocRef.getSourceRef();
@@ -223,6 +226,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
     @Override
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+    	logger.debug("ДОКУМЕНТ. onUpdateProperties");
         Object prevGroup = before.get(DocumentMembersService.PROP_MEMBER_GROUP);
         Object curGroup = after.get(DocumentMembersService.PROP_MEMBER_GROUP);
         if (before.size() == after.size() && curGroup != prevGroup) {
@@ -233,6 +237,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
     }
 
     public void onCreateNodeLog(ChildAssociationRef childAssocRef) {
+    	logger.debug("ДОКУМЕНТ. onCreateNodeLog");
         NodeRef member = childAssocRef.getChildRef();
         NodeRef folder = childAssocRef.getParentRef();
 
@@ -251,6 +256,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
     }
 
     public void onCreateDocument(ChildAssociationRef childAssocRef) {
+    	logger.debug("ДОКУМЕНТ. onCreateDocument");
         // добаваление сотрудника, создавшего документ в участники
         final NodeRef docRef = childAssocRef.getChildRef();
         final String userName = (String) nodeService.getProperty(docRef, ContentModel.PROP_CREATOR);
@@ -268,6 +274,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
     }
 
     public void onUpdateDocument(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+    	logger.debug("ДОКУМЕНТ. onUpdateDocument");
         /* не добавлять сотрудника как участника
             1) если изменения выполняет система
             2) если сотрудник добавляет комментарий, ставит рейтинг и документ находится на финальном статусе
@@ -311,6 +318,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
     }
 
     private boolean hasDoNotAddMemberUpdatedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after, QName[] notAffectedProperties) {
+    	logger.debug("ДОКУМЕНТ. hasDoNotAddMemberUpdatedProperties");
         for (QName affected : notAffectedProperties) {
             Object prev = before.get(affected);
             Object cur = after.get(affected);
@@ -322,6 +330,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
     }
 
     private String generateMemberNodeName(NodeRef member) {
+    	logger.debug("ДОКУМЕНТ. generateMemberNodeName");
         Object propGroup = nodeService.getProperty(member, DocumentMembersService.PROP_MEMBER_GROUP);
         String groupName = propGroup != null ? (String) propGroup : "";
 
@@ -333,6 +342,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
     @Override
     public void beforeDeleteNode(NodeRef member) {
+    	logger.debug("ДОКУМЕНТ. beforeDeleteNode");
         try {
             if (nodeService.exists(member)) {
                 NodeRef folder = nodeService.getPrimaryParent(member).getParentRef();
@@ -348,6 +358,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
     }
 
     private void revokePermission(NodeRef member, NodeRef docRef, NodeRef employee) {
+    	logger.debug("ДОКУМЕНТ. revokePermission");
         LecmPermissionGroup pgRevoking = null;
         String permGroup = (String) nodeService.getProperty(member, DocumentMembersService.PROP_MEMBER_GROUP);
         if (permGroup != null && !permGroup.isEmpty()) {

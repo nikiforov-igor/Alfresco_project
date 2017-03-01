@@ -23,8 +23,9 @@ public class DocumentGlobalSettingsServiceImpl extends BaseBean implements Docum
         return getFolder(DOCUMENT_GLOBAL_SETTINGS_FOLDER_ID);
     }
 
-    public void init() {
-        if (null == getSettingsNode()) {
+	@Override
+	protected void initServiceImpl() {
+		if (null == getSettingsNode()) {
             lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
                 @Override
                 public NodeRef execute() throws Throwable {
@@ -32,7 +33,7 @@ public class DocumentGlobalSettingsServiceImpl extends BaseBean implements Docum
                 }
             });
         }
-    }
+	}
 
     @Override
     public NodeRef getSettingsNode() {

@@ -7,6 +7,7 @@ import org.alfresco.util.UrlUtil;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.util.Properties;
+import org.alfresco.repo.admin.SysAdminParams;
 
 /**
  * User: dbashmakov
@@ -21,6 +22,11 @@ public class LecmURLServiceImpl implements LecmURLService, InitializingBean {
 
     private ServiceRegistry serviceRegistry;
     private Properties globalProperties;
+	private SysAdminParams adminParams;
+
+	public void setAdminParams(SysAdminParams adminParams) {
+		this.adminParams = adminParams;
+	}
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
@@ -77,7 +83,7 @@ public class LecmURLServiceImpl implements LecmURLService, InitializingBean {
     public String wrapperLink(String nodeRef, String description, String linkUrl) {
         /*убираем /share или share - чтобы избежать дублирования*/
         linkUrl = linkUrl.replaceAll("^//?" + getShareContext(), "");
-        return "<a href=\"" + UrlUtil.getShareUrl(serviceRegistry.getSysAdminParams()) + linkUrl + "?nodeRef=" + nodeRef + "\">"
+        return "<a href=\"" + UrlUtil.getShareUrl(adminParams) + linkUrl + "?nodeRef=" + nodeRef + "\">"
                 + description + "</a>";
     }
 
@@ -96,7 +102,7 @@ public class LecmURLServiceImpl implements LecmURLService, InitializingBean {
      * @return
      */
     public String getShareContext() {
-        return serviceRegistry.getSysAdminParams().getShareContext();
+        return adminParams.getShareContext();
     }
 
     /**
@@ -115,6 +121,6 @@ public class LecmURLServiceImpl implements LecmURLService, InitializingBean {
      * @return
      */
     public String wrapAsWorkflowLink(String executionId, String description) {
-        return "<a href=\"" + UrlUtil.getShareUrl(serviceRegistry.getSysAdminParams()) + getWorkflowLinkUrl() + "?workflowId=" + executionId + "\">" + description + "</a>";
+        return "<a href=\"" + UrlUtil.getShareUrl(adminParams) + getWorkflowLinkUrl() + "?workflowId=" + executionId + "\">" + description + "</a>";
     }
 }

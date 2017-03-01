@@ -1,32 +1,36 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-    <item name="cm:Справочник организации" type="lecm-arm:arm">
-        <property name="cm:name"><![CDATA[Справочник организации]]></property>
-        <property name="lecm-arm:code"><![CDATA[orgstructure]]></property>
-        <property name="lecm-arm:show-create-button"><![CDATA[false]]></property>
-        <property name="lecm-arm:order"><![CDATA[10]]></property>
-        <property name="lecm-arm:show-in-menu"><![CDATA[true]]></property>
-        <items>
-            <item name="cm:Справочник организации" type="lecm-arm:accordion">
-                <property name="cm:name"><![CDATA[Справочник организации]]></property>
-                <property name="lecm-arm:order"><![CDATA[0]]></property>
-                <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                <property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
-                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                <property name="lecm-arm:search-query"><![CDATA[]]></property>
-                <items>
-                    <item name="cm:Структура" type="lecm-arm:html-node">
-                        <property name="cm:name"><![CDATA[Структура]]></property>
-                        <property name="lecm-arm:order"><![CDATA[10]]></property>
-                        <property name="lecm-arm:html-url"><![CDATA[page/structure]]></property>
-                    </item>
-                    <item name="cm:Сотрудники" type="lecm-arm:html-node">
-                        <property name="cm:name"><![CDATA[Сотрудники]]></property>
-                        <property name="lecm-arm:order"><![CDATA[20]]></property>
-                        <property name="lecm-arm:html-url"><![CDATA[page/employees]]></property>
-                    </item>
-                </items>
-            </item>
-        </items>
-    </item>
+	<item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary">
+		<items>
+		    <item name="cm:Справочник организации" type="lecm-arm:arm">
+		        <property name="cm:name"><![CDATA[Справочник организации]]></property>
+		        <property name="lecm-arm:code"><![CDATA[orgstructure]]></property>
+		        <property name="lecm-arm:show-create-button"><![CDATA[false]]></property>
+		        <property name="lecm-arm:order"><![CDATA[10]]></property>
+		        <property name="lecm-arm:show-in-menu"><![CDATA[true]]></property>
+		        <items>
+		            <item name="cm:Справочник организации" type="lecm-arm:accordion">
+		                <property name="cm:name"><![CDATA[Справочник организации]]></property>
+		                <property name="lecm-arm:order"><![CDATA[0]]></property>
+		                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+		                <property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
+		                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+		                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+		                <items>
+		                    <item name="cm:Структура" type="lecm-arm:html-node">
+		                        <property name="cm:name"><![CDATA[Структура]]></property>
+		                        <property name="lecm-arm:order"><![CDATA[10]]></property>
+		                        <property name="lecm-arm:html-url"><![CDATA[page/structure]]></property>
+		                    </item>
+		                    <item name="cm:Сотрудники" type="lecm-arm:html-node">
+		                        <property name="cm:name"><![CDATA[Сотрудники]]></property>
+		                        <property name="lecm-arm:order"><![CDATA[20]]></property>
+		                        <property name="lecm-arm:html-url"><![CDATA[page/employees]]></property>
+		                    </item>
+		                </items>
+		            </item>
+		        </items>
+		    </item>
+		</items>
+	</item>
 </items>

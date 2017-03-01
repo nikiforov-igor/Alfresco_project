@@ -9,13 +9,9 @@
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
-		<import uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
 		<import uri="http://www.it.ru/logicECM/contract/dictionaries/1.0" prefix="lecm-contract-dic"/>
 		<import uri="http://www.it.ru/logicECM/dictionary/currency/1.0" prefix="lecm-currency"/>
-		<import uri="http://www.it.ru/lecm/contractors/model/representative/1.0" prefix="lecm-representative"/>
-		<import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
 		<import uri="http://www.it.ru/lecm/model/signed-docflow/1.0" prefix="lecm-signed-docflow"/>
-		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
 		<import uri="http://www.it.ru/logicECM/contract/table-structure/1.0" prefix="lecm-contract-table-structure"/>
 		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
 	</imports>

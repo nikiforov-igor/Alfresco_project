@@ -1,7 +1,6 @@
 package ru.it.lecm.eds;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
@@ -32,6 +31,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
     private NamespaceService namespaceService;
 	private DictionaryBean dictionaryService;
 	private DocumentGlobalSettingsService documentGlobalSettingsService;
+	private NodeRef settingsNode;
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -53,28 +53,27 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	public NodeRef getServiceRootFolder() {
             return getFolder(EDS_GLOBAL_SETTINGS_FOLDER_ID);
 	}
-
-	public void init() {
-		if (null == getSettingsNode()) {
-			//TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
-			lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-				@Override
-				public NodeRef execute() throws Throwable {
-					return createSettingsNode();
+	
+	private void initPotentialRolesMap() {
+		if (potentialRolesMap == null) {
+			potentialRolesMap = new HashMap<String, Map<String, NodeRef>>();
+				
+			NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(POTENTIAL_ROLES_DICTIONARY_NAME);
+			List<NodeRef> potentialRolesRefs = dictionaryService.getChildren(potentialRolesDictionary);
+			for (NodeRef potentialRoleRef : potentialRolesRefs) {
+				Serializable businessRole = nodeService.getProperty(potentialRoleRef, PROP_POTENTIAL_ROLE_BUSINESS_ROLE_REF);
+				Serializable organizationElement = nodeService.getProperty(potentialRoleRef, PROP_POTENTIAL_ROLE_ORG_ELEMENT_REF);
+				if (businessRole != null && organizationElement != null) {
+					updatePotentialRolesMap(businessRole.toString(), organizationElement.toString(), potentialRoleRef);
 				}
-			});
-
-		}
-		this.potentialRolesMap = new HashMap<String, Map<String, NodeRef>>();
-
-		NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(POTENTIAL_ROLES_DICTIONARY_NAME);
-		List<NodeRef> potentialRolesRefs = dictionaryService.getChildren(potentialRolesDictionary);
-		for (NodeRef potentialRoleRef : potentialRolesRefs) {
-			Serializable businessRole = nodeService.getProperty(potentialRoleRef, PROP_POTENTIAL_ROLE_BUSINESS_ROLE_REF);
-			Serializable organizationElement = nodeService.getProperty(potentialRoleRef, PROP_POTENTIAL_ROLE_ORG_ELEMENT_REF);
-			if (businessRole != null && organizationElement != null) {
-				updatePotentialRolesMap(businessRole.toString(), organizationElement.toString(), potentialRoleRef);
 			}
+		}
+	}
+	
+	@Override
+	public void initServiceImpl() {
+		if (null == getSettingsNode()) {
+			settingsNode = createSettingsNode();
 		}
 	}
 
@@ -107,6 +106,8 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 		if (businessRoleRef == null || organizationElementRef == null) {
 			return result;
 		}
+		
+		initPotentialRolesMap();
 
 		Map<String, NodeRef> orgElementRoles = this.potentialRolesMap.containsKey(businessRoleRef.toString()) ?
 			this.potentialRolesMap.get(businessRoleRef.toString()) :
@@ -138,6 +139,9 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 		if (businessRoleRef == null || orgElementRef == null) {
 			return;
 		}
+		
+		initPotentialRolesMap();
+		
 		Map<String, NodeRef> orgElementRoles = this.potentialRolesMap.containsKey(businessRoleRef.toString()) ?
 			this.potentialRolesMap.get(businessRoleRef.toString()) :
 			new HashMap<String, NodeRef>();
@@ -185,6 +189,8 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 			employeesRefs.isEmpty() || nodeService.getType(orgElementRef).equals(orgstructureService.TYPE_ORGANIZATION)) {
 			return null;
 		}
+		
+		initPotentialRolesMap();
 
 		NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(POTENTIAL_ROLES_DICTIONARY_NAME);
 		NodeRef potentialRoleRef = nodeService.createNode(
@@ -207,13 +213,17 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	@Override
 	public NodeRef getSettingsNode() {
 //		TODO: Метод разделён, создание вынесено в createSettingsNode
-            return nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, EDS_GLOBAL_SETTINGS_NODE_NAME);
-        }
+		if (settingsNode == null) {
+			settingsNode = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, EDS_GLOBAL_SETTINGS_NODE_NAME);
+		}
+		return settingsNode;
+//		return nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, EDS_GLOBAL_SETTINGS_NODE_NAME);
+	}
 
         /**
          * создание ноды с настройками. создаётся при инициализации бина
          */
-        private NodeRef createSettingsNode() throws WriteTransactionNeededException {
+        public NodeRef createSettingsNode() throws WriteTransactionNeededException {
     //		Проверим, открыта ли транзакция
             //проверяется в createNode
 //            try {

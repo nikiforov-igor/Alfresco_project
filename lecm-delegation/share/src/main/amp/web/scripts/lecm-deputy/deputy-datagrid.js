@@ -36,7 +36,8 @@ LogicECM.module.Deputy = LogicECM.module.Deputy || {};
 				mode: 'edit',
 				formId: 'employee-deputy-edit',
 				submitType: 'json',
-				showCancelButton: true
+				showCancelButton: true,
+				showCaption: false
 			};
 
 			// Using Forms Service, so always create new instance

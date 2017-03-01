@@ -451,7 +451,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             mode: "create",
                             submitType: "json",
                             formId: "workflow-form",
-                            showCancelButton: true
+                            showCancelButton: true,
+                            showCaption: false
                         };
                     var responseHandler = function(response) {
                             document.location.reload();
@@ -560,7 +561,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		            formId: "scriptForm",
 		            mode: "create",
 		            submitType: "json",
-		            items: JSON.stringify(item.items)
+		            items: JSON.stringify(item.items),
+					showCaption: false
 	            };
 
                 // Using Forms Service, so always create new instance

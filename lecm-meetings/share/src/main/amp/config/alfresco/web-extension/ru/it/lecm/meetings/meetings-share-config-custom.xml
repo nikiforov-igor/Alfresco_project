@@ -1366,7 +1366,7 @@
 		<forms>
 			<form id="holding">
 				<field-visibility>
-					<show id="removeItem" force="true"/>
+					<show id="lecm-base-dummy-aspects:script" force="true"/>
 					<show id="lecm-document:indexTableRow" force="true"/>
 					<show id="lecm-meetings-ts:holding-reporter-assoc"/>
 					<show id="lecm-meetings-ts:holding-item-name"/>
@@ -1379,7 +1379,7 @@
 				<appearance>
 					<set id="parent" appearance="" template="/ru/it/lecm/meetings/holding/meeting-holding-set.ftl"/>
 
-					<field id="removeItem" set="parent">
+					<field id="lecm-base-dummy-aspects:script" set="parent">
 						<control template="/ru/it/lecm/meetings/holding/meeting-holding-remove-item-control.ftl"/>
 					</field>
 					<field id="lecm-document:indexTableRow" read-only="true" set="parent" label-id="label.meeting.holding.item.number"/>

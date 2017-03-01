@@ -5,5 +5,5 @@
     <url>/bosh</url>
     <format default="xml"/>
     <authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 </webscript>

@@ -7,11 +7,9 @@
 		<import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
-		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/logicECM/events/1.0" prefix="lecm-events"/>
 		<import uri="http://www.it.ru/logicECM/model/approval/aspects/1.0" prefix="lecmApproveAspects"/>
-		<!--<import uri="http://www.it.ru/logicECM/meetings/dictionaries/1.0" prefix="lecm-meetings-dic"/>-->
 		<import uri="http://www.it.ru/logicECM/meetings/table-structure/1.0" prefix="lecm-meetings-ts"/>
 		<import uri="http://www.it.ru/lecm/contractors/model/representative/1.0" prefix="lecm-representative"/>
 	</imports>

@@ -18,10 +18,10 @@
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-data-model</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-repository</artifactId>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>ru.it.lecm.base</groupId>
 			<artifactId>base-repo-api</artifactId>

@@ -315,7 +315,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			        itemId: this.options.nodeRef,
 			        mode: "edit",
 			        submitType: "json",
-			        showCancelButton: true
+			        showCancelButton: true,
+					showCaption: false
 		        };
 
 		        new Alfresco.module.SimpleDialog(this.id + "-addLink").setOptions({

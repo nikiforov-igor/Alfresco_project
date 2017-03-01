@@ -117,7 +117,7 @@
 
 	<bean id="operative.storage.arm.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="arm.settings.LogicEcmBootstrap,eds.documents.arm.settings.LogicEcmBootstrap"
-		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Настройки СЭД"
+		  p:rootPath="/Business platform/LECM/Сервис АРМ"
 		  p:dictionaries-ref="operative.storage.arm.dictionaries"/>
 
 	<bean id="operative.storage.reports.bootstrap" parent="lecmDictionaryBootstrap"
@@ -133,7 +133,7 @@
 
 	<bean id="operative.storage.arm.bootstrap.main" parent="lecmDictionaryBootstrap"
 		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap,operative.storage.dictionary.bootstrap"
-		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ"
+		  p:rootPath="/Business platform/LECM/Сервис АРМ"
 		  p:dictionaries-ref="operative.storage.arm.os"/>
 
 	<bean id="operative.storage.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
@@ -152,7 +152,7 @@
 		  p:rootPath="/Business platform/LECM/Сервис Оперативное хранение"
 		  p:dictionaries-ref="operative.storage.customDictionaries" />
 
-	<bean id="lecmOperativeStorageService" parent="baseBean" class="ru.it.lecm.operativestorage.beans.OperativeStorageImpl" init-method="init"
+	<bean id="lecmOperativeStorageService" parent="baseBean" class="ru.it.lecm.operativestorage.beans.OperativeStorageImpl"
 		  depends-on="lecmPermissionServiceBean"
 		  p:folders-ref="lecmOperativeStorageFolders"
 		  p:lecmPermissionService-ref="lecmPermissionServiceBean"

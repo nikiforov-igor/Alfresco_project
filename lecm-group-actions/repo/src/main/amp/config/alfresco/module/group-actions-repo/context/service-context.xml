@@ -21,7 +21,7 @@
     <util:constant id="GA_ROOT_ID" static-field="ru.it.lecm.actions.bean.GroupActionsService.GA_ROOT_ID"/>
     <util:constant id="GA_ROOT_NAME" static-field="ru.it.lecm.actions.bean.GroupActionsService.GA_ROOT_NAME"/>
 
-    <bean id="groupActionsService" init-method="init" parent="baseBean"
+    <bean id="groupActionsService" parent="baseBean"
 		  class="ru.it.lecm.actions.bean.GroupActionsServiceImpl"
 		  depends-on="groupActions.modelBootstrap, statemachineEditor.editorModelBootstrap">
         <property name="dictionaryService" ref="dictionaryService"/>

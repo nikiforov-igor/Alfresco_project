@@ -80,6 +80,7 @@
 					<show id="lecmApprove3:commentAssoc"/>
 					<show id="lecmApprove3:approveTaskValidatorFake" force="true"/>
 					<!--<show id="bpm:reassignable"/>-->
+					<show id="transitions" force="true" />
 				</field-visibility>
 				<appearance>
 					<field id="lecmApprove3:presentString">
@@ -112,6 +113,11 @@
 					<!--<field id="bpm:reassignable" set="right-set">
 						<control template="/ru/it/lecm/base-share/components/controls/reassign-task-control.ftl"/>
 					</field>-->
+					<field id="transitions">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl">
+                            <control-param name="fieldValue">Next</control-param>
+                        </control>
+                    </field>
 				</appearance>
 			</form>
 		</forms>

@@ -371,19 +371,17 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 	public ScriptNode getCurrentUserSettingsNode() {
 		NodeRef settings = service.getCurrentUserSettingsNode();
 		if(settings == null) {
-                    logger.debug("Notifications user settings not found. Try to create.");
-                    settings = lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>(){
-
-                            @Override
-                            public NodeRef execute() throws Throwable {
-                                    if(service.getCurrentUserSettingsNode() == null) {
-                                            return service.createCurrentUserSettingsNode();
-                                    }
-                                    return null;
-                            }
-
-                    });
-                    logger.debug("Notification user settings created. NodeRef = " + settings);
+			logger.debug("Notifications user settings not found. Try to create.");
+			settings = lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>(){
+				@Override
+				public NodeRef execute() throws Throwable {
+					if(service.getCurrentUserSettingsNode() == null) {									
+						 return service.createCurrentUserSettingsNode();
+					}
+					return null;
+				}
+			});
+			logger.debug("Notification user settings created. NodeRef = " + settings);
 		}
 		return new ScriptNode(settings, serviceRegistry, getScope());
 	}
@@ -405,8 +403,15 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 	 * @return узел с глобальными настройками уведомлений
 	 */
 	public ScriptNode getGlobalSettingsNode() {
-            //globalSettingsNode создаётся при инициализации сервиса.
-            return new ScriptNode(service.getGlobalSettingsNode(), serviceRegistry, getScope());
+        //globalSettingsNode создаётся при инициализации сервиса.
+		NodeRef settings = service.getGlobalSettingsNode();
+		if(settings == null) {
+			settings = service.createGlobalSettingsNode(); 
+		}
+		if(settings != null) {
+            return new ScriptNode(settings, serviceRegistry, getScope());
+		}
+		return null;
 	}
 
 	/**

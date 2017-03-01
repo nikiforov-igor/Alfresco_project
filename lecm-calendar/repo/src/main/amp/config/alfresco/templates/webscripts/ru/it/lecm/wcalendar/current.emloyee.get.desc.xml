@@ -4,6 +4,6 @@
 	<description>Get current employee nodeRef</description>
 	<url>/lecm/wcalendar/get/currentEmployee</url>
 	<authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 	<format default="json"/>
 </webscript>

@@ -4,4 +4,5 @@
 	<url>/lecm/search-queries/types</url>
 	<format default="json"/>
 	<authentication>none</authentication>
+	<transaction allow="readonly">required</transaction>
 </webscript>

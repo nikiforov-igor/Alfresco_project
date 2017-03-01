@@ -63,7 +63,7 @@
 
 	<bean id="notifications.arm.myProfile.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
 	      depends-on="userProfile.arm.LogicEcmBootstrap">
-		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Логика ECM. Мой профиль/Настройки"/>
+		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/arm/default-arm-my-profile-items.xml</value>
@@ -88,7 +88,7 @@
 			<value>20</value>
 		</property>
 		<property name="threadPriority">
-			<value>1</value>
+			<value>5</value>
 		</property>
 	</bean>
 

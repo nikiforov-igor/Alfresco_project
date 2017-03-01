@@ -5,5 +5,5 @@
     <url>/lecm/representatives/{contractor_store}/{contractor_store_id}/{contractor_id}/picker/{type}/children</url>
   <format default="json"/>
   <authentication>user</authentication>
-  <transaction>none</transaction>
+  <transaction allow="readonly">required</transaction>
 </webscript>

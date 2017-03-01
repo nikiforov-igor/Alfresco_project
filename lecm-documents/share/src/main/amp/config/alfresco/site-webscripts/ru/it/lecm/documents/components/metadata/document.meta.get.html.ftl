@@ -35,7 +35,7 @@
 	//TODO:
 	var documentMetadataComponent = null;
 	(function(){
-	    new Alfresco.DocumentMetadata("${el}").setOptions(
+	    var alfrescoDocumentMetadata = new Alfresco.DocumentMetadata("${el}").setOptions(
 	            {
 	                nodeRef: "${nodeRef}",
 	                site: null,
@@ -46,6 +46,14 @@
 	                nodeRef: "${nodeRef}",
 	                title:"${msg('heading')}"
 	            }).setMessages(${messages});
+
+		// ALFFIVE-32
+		// В новой версии DocumentMetadata зачем то есть подписка на metadataRefresh
+		// что в свою очередь вызывает странное поведение модуля. Т.к в нашем функционале
+		// нету завязки на такую логику - безопаснее будет вырубить её
+		// TODO: Выяснить, точно ли нам не нужна такая логика
+
+		YAHOO.Bubbling.unsubscribe("metadataRefresh", alfrescoDocumentMetadata.doRefresh, alfrescoDocumentMetadata);
 	})();
 	//]]></script>
 	</#if>

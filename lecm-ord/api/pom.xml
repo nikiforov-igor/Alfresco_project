@@ -17,16 +17,16 @@
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-data-model</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-repository</artifactId>
 		</dependency>
-	 <dependency>
-	  <groupId>ru.it.lecm.workflow</groupId>
-	  <artifactId>workflow-repo-api</artifactId>
-	  <version>${platform.version}</version>
-	  <type>jar</type>
-	 </dependency>
+		 <dependency>
+			  <groupId>ru.it.lecm.workflow</groupId>
+			  <artifactId>workflow-repo-api</artifactId>
+			  <version>${platform.version}</version>
+			  <type>jar</type>
+		 </dependency> -->
 	</dependencies>
 
 </project>

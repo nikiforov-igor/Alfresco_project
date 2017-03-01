@@ -15,7 +15,7 @@
 	</bean>
 
 	<bean id="reportingAlfresco_SqlSessionFactory" class="org.alfresco.ibatis.HierarchicalSqlSessionFactoryBean">
-		<property name="useLocalCaches" value="${mybatis.useLocalCaches}"/> 
+		<!--<property name="useLocalCaches" value="${mybatis.useLocalCaches}"/>--> 
 		<property name="resourceLoader" ref="dialectResourceLoader"/>
 		<property name="dataSource" ref="alfrescoDataSource"/>
 		<property name="configLocation">		<!--  #resource.dialect# -->
@@ -114,7 +114,7 @@
 	</bean>	
 	
 	<bean id="reporting_SqlSessionFactory" 	class="org.alfresco.ibatis.HierarchicalSqlSessionFactoryBean">
-		<property name="useLocalCaches" value="${mybatis.useLocalCaches}"/> 
+		<!--<property name="useLocalCaches" value="${mybatis.useLocalCaches}"/>--> 
 		<property name="resourceLoader" ref="reportingDialectResourceLoader"/>
 		<property name="dataSource" ref="reportingDataSource"/>
 		<property name="configLocation">

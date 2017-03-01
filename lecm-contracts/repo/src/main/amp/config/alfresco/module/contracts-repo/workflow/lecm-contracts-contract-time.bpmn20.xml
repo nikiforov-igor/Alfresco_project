@@ -26,7 +26,7 @@
 					</activiti:field>
 				</activiti:executionListener>
 			</extensionElements>
-			<script></script>
+			<script>var test=1;</script>
 		</scriptTask>
         <receiveTask id="receivetask1" name="Receive Task"></receiveTask>
 		<sequenceFlow id="flow4" name="" sourceRef="startContractTime" targetRef="deleteContractTime"></sequenceFlow>

@@ -8,6 +8,7 @@
 		  class="ru.it.lecm.workflow.extensions.WorkflowServiceJavascriptExtension"
 		  p:extensionName="lecmWorkflowService"
 		  p:workflowAssigneesListService-ref="workflowAssigneesListService"
+		  p:workflowFoldersService-ref="lecm.workflow.folders.bootstrap"
 		  p:orgstructureService-ref="serviceOrgstructure"
 		  p:nodeService-ref="nodeService"/>
 

@@ -5,7 +5,6 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.repo.version.VersionModel;
 import org.alfresco.service.cmr.repository.ContentReader;
@@ -44,6 +43,7 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 	private DocumentService documentService;
 	private DocumentAttachmentsService attachmentsService;
     private ContentService contentService;
+	private NodeRef settingsNode;
 
 	public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
@@ -60,26 +60,31 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
     public void setContentService(ContentService contentService) {
         this.contentService = contentService;
     }
-
-    public void init() {
-		if (null == getSettings()) {
-			AuthenticationUtil.runAsSystem(this);
+    
+    @Override
+	public void initServiceImpl() {
+		// TODO: Нужно либо добавлять throws везде, либо разворачивать логику
+		try {
+			doWork();
+		} catch (Exception ex) {
 		}
 	}
 
 	@Override
 	public NodeRef doWork() throws Exception {
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-		return transactionHelper.doInTransaction(this, false, true);
+		if (null == getSettings()) {
+			PropertyMap props = new PropertyMap();
+			if (defaultApprovalTerm != null) {
+				props.put(ApprovalGlobalSettingsModel.PROP_DEFAULT_APPROVAL_TERM, defaultApprovalTerm);
+			}
+			return createNode(getApprovalFolder(), ApprovalGlobalSettingsModel.TYPE_SETTINGS, APPROVAL_GLOBAL_SETTINGS_NAME, props);
+		}
+		return null;
 	}
 
 	@Override
 	public NodeRef execute() throws Throwable {
-		PropertyMap props = new PropertyMap();
-		if (defaultApprovalTerm != null) {
-			props.put(ApprovalGlobalSettingsModel.PROP_DEFAULT_APPROVAL_TERM, defaultApprovalTerm);
-		}
-		return createNode(getApprovalFolder(), ApprovalGlobalSettingsModel.TYPE_SETTINGS, APPROVAL_GLOBAL_SETTINGS_NAME, props);
+		return AuthenticationUtil.runAsSystem(this);
 	}
 
 	@Override
@@ -94,7 +99,11 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 
 	@Override
 	public NodeRef getSettings() {
-		return nodeService.getChildByName(getApprovalFolder(), ContentModel.ASSOC_CONTAINS, APPROVAL_GLOBAL_SETTINGS_NAME);
+		if (settingsNode == null) {
+			settingsNode = nodeService.getChildByName(getApprovalFolder(), ContentModel.ASSOC_CONTAINS, APPROVAL_GLOBAL_SETTINGS_NAME);
+		}
+		
+		return settingsNode;
 	}
 
 	@Override
@@ -115,7 +124,12 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, DOCUMENT_APPROVAL_FOLDER);
 		PropertyMap props = new PropertyMap();
 		props.put(ContentModel.PROP_NAME, DOCUMENT_APPROVAL_FOLDER);
-		return nodeService.createNode(documentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, props).getChildRef();
+		NodeRef approvalFolder = nodeService.createNode(documentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, props).getChildRef();
+		if (!nodeService.hasAspect(documentRef, ASPECT_APPROVAL_DATA)) {
+			nodeService.addAspect(documentRef, ASPECT_APPROVAL_DATA, null);
+			nodeService.createAssociation(documentRef, approvalFolder, ASSOC_APPROVAL_FOLDER);
+		}
+		return approvalFolder;
 	}
 
 	@Override

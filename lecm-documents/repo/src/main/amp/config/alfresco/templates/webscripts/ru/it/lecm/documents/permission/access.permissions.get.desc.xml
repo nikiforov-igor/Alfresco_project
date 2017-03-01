@@ -4,6 +4,6 @@
 	<url>/lecm/documents/accessPermissions?docType={docType}</url>
 	<format default="json"/>
 	<authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
     <internal>true</internal>
 </webscript>

@@ -613,7 +613,8 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 						mode: "create",
 						submitType: "json",
 						formId: "workflow-form",
-						showCancelButton: true
+						showCancelButton: true,
+						showCaption: false
 					};
 				var responseHandler = function(response) {
 						document.location.href = document.location.href;
@@ -713,7 +714,8 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 					mode: "create",
 					formId: "",
 					submitType: "json",
-					showCancelButton: true
+					showCancelButton: true,
+					showCaption: false
 				};
 
 				// Using Forms Service, so always create new instance

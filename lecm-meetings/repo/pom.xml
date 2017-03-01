@@ -18,69 +18,69 @@
        and include them in the AMP, they are provided by Alfresco
    -->
     <dependencies>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-core</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-repository</artifactId>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-        </dependency>
+        </dependency> -->
 
         <!-- Don't add here amp dependencies as it will break amp packaging -->
         <dependency>
             <groupId>ru.it.lecm.base</groupId>
             <artifactId>base-repo-api</artifactId>
-            <version>${platform.version}</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ru.it.lecm.documents</groupId>
             <artifactId>documents-repo-api</artifactId>
-            <version>${platform.version}</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
 		<dependency>
             <groupId>ru.it.lecm.meetings</groupId>
             <artifactId>meetings-repo-api</artifactId>
-            <version>${platform.version}</version>
+            <version>${project.version}</version>
         </dependency>
 		<dependency>
 			<groupId>ru.it.lecm.eds-documents</groupId>
 			<artifactId>eds-documents-repo-api</artifactId>
-			<version>${platform.version}</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
             <groupId>ru.it.lecm.documents</groupId>
             <artifactId>documents-repo-api</artifactId>
-            <version>${platform.version}</version>
+            <version>${project.version}</version>
 			<scope>provided</scope>
-        </dependency>
+        </dependency>-->
 		<dependency>
             <groupId>ru.it.lecm.orgstructure</groupId>
             <artifactId>orgstructure-repo-api</artifactId>
-            <version>${platform.version}</version>
+            <version>${project.version}</version>
 			<scope>provided</scope>
         </dependency>
 		<dependency>
             <groupId>ru.it.lecm.contractors</groupId>
             <artifactId>lecm-contractors-api</artifactId>
-            <version>${platform.version}</version>
+            <version>${project.version}</version>
 			<scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ru.it.lecm.security</groupId>
             <artifactId>lecm-security-api</artifactId>
-            <version>${platform.version}</version>
+            <version>${project.version}</version>
 			<scope>provided</scope>
         </dependency>
 		<dependency>
@@ -98,15 +98,15 @@
         <dependency>
 			<groupId>ru.it.lecm.workflow.routes</groupId>
 			<artifactId>routes-repo-api</artifactId>
-			<version>${platform.version}</version>
-            <scope>provided</scope>
+			<version>${project.version}</version>
+			<scope>provided</scope>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.10</version>
             <scope>test</scope>
-        </dependency>
+        </dependency> -->
 		<dependency>
             <groupId>ru.it.lecm.statemachine</groupId>
             <artifactId>statemachine-api</artifactId>
@@ -117,7 +117,6 @@
             <groupId>ru.it.lecm.reports</groupId>
             <artifactId>lecm-reports-api</artifactId>
             <version>${platform.version}</version>
-            <type>jar</type>
 			<scope>provided</scope>
         </dependency>
         <dependency>
@@ -130,7 +129,7 @@
 		<dependency>
             <groupId>ru.it.lecm.notifications</groupId>
             <artifactId>notifications-repo-api</artifactId>
-            <version>${platform.version}</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
 		<dependency>
@@ -144,16 +143,11 @@
        The scm is required for the buildnumber-maven-plugin which is required
        for AMP version numbering
    -->
-    <scm>
-        <connection>scm:svn:http://domain.com/svn/trunk/</connection>
-        <developerConnection>scm:svn:https://${user.name}@domain.com/svn/trunk/</developerConnection>
-        <url>http://domain.com/svn/trunk/</url>
-    </scm>
 
     <build>
         <plugins>
             <!-- Needed for cross OS compatibility in acp/zip encoding -->
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
             </plugin>
@@ -167,11 +161,10 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
+            </plugin> -->
             <plugin>
                 <groupId>org.alfresco.maven.plugin</groupId>
                 <artifactId>alfresco-maven-plugin</artifactId>
-                <version>1.1.1</version>
                 <extensions>true</extensions>
             </plugin>
         </plugins>
@@ -179,7 +172,7 @@
 			<resource>
                 <filtering>true</filtering>
                 <directory>src/main/amp</directory>
-                <targetPath>../${project.build.finalName}</targetPath>
+                <targetPath>${app.amp.output.folder}</targetPath>
                 <excludes>
                     <exclude>**README-*</exclude>
                 </excludes>

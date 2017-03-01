@@ -1,47 +1,41 @@
 package ru.it.lecm.statemachine;
 
 import org.activiti.engine.task.Task;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.statemachine.bean.SimpleDocumentRegistryImpl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.security.AccessPermission;
+import org.alfresco.service.cmr.security.PermissionService;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.security.Types;
 
 /**
  * Created by pmelnikov on 08.04.2015.
  *
  * Класс работы с документами без жизненного цикла
  */
-public class SimpleStatemachineHelper implements StateMachineServiceBean {
+public class SimpleStatemachineHelper extends LifecycleStateMachineHelper {
 
     final private static Logger logger = LoggerFactory.getLogger(SimpleStatemachineHelper.class);
+	
+	private PermissionService permissionService;
 
-    private SimpleDocumentRegistryImpl simpleDocumentRegistry;
-    private ServiceRegistry serviceRegistry;
-    private OrgstructureBean orgstructureBean;
-
-    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-        this.serviceRegistry = serviceRegistry;
-    }
-
-    public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
-        this.orgstructureBean = orgstructureBean;
-    }
-
-    public void setSimpleDocumentRegistry(SimpleDocumentRegistryImpl simpleDocumentRegistry) {
-        this.simpleDocumentRegistry = simpleDocumentRegistry;
-    }
+	public void setPermissionService(PermissionService permissionService) {
+		this.permissionService = permissionService;
+	}
 
     @Override
     public boolean isReadOnlyCategory(NodeRef document, String category) {
@@ -53,9 +47,31 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
         logger.error(ex.getMessage(), ex);
         return ex;
     }
+	
+	private void rebuildACL(String type, NodeRef typeRoot) {
+		Map<String, String> permissions = getPermissions(type);
+		Map<String, LecmPermissionService.LecmPermissionGroup> permissionGroups = new HashMap<>();
+		for (Map.Entry<String, String> role : permissions.entrySet()) {
+			LecmPermissionService.LecmPermissionGroup permissionGroup = lecmPermissionService.findPermissionGroup(role.getValue());
+			if (permissionGroup != null) {
+				permissionGroups.put(role.getKey(), permissionGroup);
+			}
+		}
+		
+		Set<AccessPermission> allowedPermissions = permissionService.getAllSetPermissions(typeRoot);
+		for (AccessPermission permission : allowedPermissions) {
+			if (permission.isSetDirectly() && permission.getAuthority().startsWith(PermissionService.GROUP_PREFIX + Types.PFX_LECM)) {
+				permissionService.deletePermission(typeRoot, permission.getAuthority(), permission.getPermission());
+			}
+		}
+
+		if (!permissionGroups.isEmpty()) {
+			lecmPermissionService.rebuildStaticACL(typeRoot, permissionGroups);
+		}
+	}
 
     @Override
-    public boolean hasActiveStatemachine(NodeRef document) {
+    public boolean hasActiveStatemachine(NodeRef document) {		
         throw createNotImplementedException();
     }
 
@@ -75,35 +91,6 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
     }
 
     @Override
-    public boolean isStarter(String type) {
-        Set<String> accessRoles = getStarterRoles(type);
-        NodeRef employee = orgstructureBean.getCurrentEmployee();
-        final String employeeLogin = orgstructureBean.getEmployeeLogin(employee);
-        @SuppressWarnings("unchecked")
-        Set<String> auth = (Set<String>) AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-            @Override
-            public Object doWork() throws Exception {
-                return serviceRegistry.getAuthorityService().getAuthoritiesForUser(employeeLogin);
-            }
-        });
-        for (String accessRole : accessRoles) {
-            if (auth.contains("GROUP__LECM$BR%" + accessRole)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public Set<String> getStarterRoles(String documentType) {
-        Set<String> result = new HashSet<>();
-        QName typeQName = QName.createQName(documentType, serviceRegistry.getNamespaceService());
-        SimpleDocumentRegistryItem item = simpleDocumentRegistry.getRegistryItem(typeQName);
-        result.addAll(item.getStarters());
-        return result;
-    }
-
-    @Override
     public NodeRef getTaskDocument(WorkflowTask task, List<String> documentTypes) {
         throw createNotImplementedException();
     }
@@ -111,12 +98,6 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
     @Override
     public List<WorkflowTask> getDocumentTasks(NodeRef documentRef, boolean activeTasks) {
         throw createNotImplementedException();
-    }
-
-    @Override
-    public boolean isNotArmCreate(String type) {
-        QName typeQName = QName.createQName(type, serviceRegistry.getNamespaceService());
-        return simpleDocumentRegistry.getRegistryItem(typeQName).isNotArmCreated();
     }
 
     @Override
@@ -260,9 +241,9 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
 
     @Override
     public Set<String> getArchiveFolders(String documentType) {
-        return new HashSet<>();
-    }
-
+		return new HashSet<>();
+	}
+		
     @Override
     public void resetStateMachene() {
         throw createNotImplementedException();
@@ -278,4 +259,46 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
         throw createNotImplementedException();
     }
 
+	@Override
+	public void checkArchiveFolder(String type, boolean forceRebuildACL) {
+		String pathStr = "Документы без МС";
+		String archiveFolder = getArchiveFolder(type);
+		boolean rebuildACLRequired = forceRebuildACL;
+
+		if (archiveFolder != null && !archiveFolder.isEmpty()) {
+			String[] storePath = archiveFolder.split("/");
+			for (String pathItem : storePath) {
+				if (!"".equals(pathItem)) {
+					pathStr = pathItem;
+					break;
+				}
+			}
+		}
+
+		NodeRef typeRoot = getFolder(repositoryHelper.getCompanyHome(), pathStr);
+		if (typeRoot == null) {
+			String user = AuthenticationUtil.getFullyAuthenticatedUser();
+			AuthenticationUtil.setFullyAuthenticatedUser(AuthenticationUtil.getSystemUserName());
+			try {
+				List<String> paths = new ArrayList<>();
+				paths.add(pathStr);
+				typeRoot = createPath(repositoryHelper.getCompanyHome(), paths);
+				
+				rebuildACLRequired = true;
+			} catch (WriteTransactionNeededException ex) {
+				logger.error("Failed to create Simple Document folder due lack of RW transaction", ex);
+			} finally {
+				AuthenticationUtil.setFullyAuthenticatedUser(user);
+			}
+		}
+
+		if (rebuildACLRequired) {
+			rebuildACL(type, typeRoot);
+		}
+	}
+
+	@Override
+	public void afterPropertiesSet() {
+		// DO NOTHING
+	}	
 }
