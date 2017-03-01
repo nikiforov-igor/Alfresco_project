@@ -370,4 +370,10 @@
         <property name="loadConfigs" value="${lecm.reports.loadConfigs}"/>
         <property name="overrideExisting" value="${lecm.reports.overrideExisting}"/>
     </bean>
+
+    <bean id="getDocumentUrl" class="ru.it.lecm.reports.utils.GetDocumentUrl">
+        <property name="sysAdminParams" ref="sysAdminParams"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
 </beans>
