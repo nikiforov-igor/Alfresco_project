@@ -1,5 +1,6 @@
 <#assign id = args.htmlid?js_string>
-<div class="metadata-form">
+<div class="panel-header">
+    <div class="panel-title">${msg("label.title")}</div>
     <div class="lecm-dashlet-actions">
         <a id="${id}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
     </div>

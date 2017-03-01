@@ -44,12 +44,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             onReady: function DocumentHistory_onReady() {
                 var id = this.newId ? this.newId : this.id;
 
-                var expandEl = Dom.get(id + "-action-expand");
-                if (expandEl != null) {
-                    expandEl.onclick = this.onExpand.bind(this);
-                }
+                var expandButton = Dom.getElementsByClassName('members-expand');
+                Event.addListener(expandButton, 'click', this.onExpand, this, true);
 
                 Alfresco.util.createTwister(id + "-heading", "DocumentMembers");
+
+                LogicECM.services = LogicECM.services || {};
+                if(LogicECM.services.DocumentViewPreferences) {
+                    var lastCustomPanelViewTitle = this.getLastCustomPanelView();
+                    if (lastCustomPanelViewTitle == this.getTitle() && this.isSplitPanel()) {
+                        this.onExpand();
+                    }
+                }
             },
 
             onExpand: function () {

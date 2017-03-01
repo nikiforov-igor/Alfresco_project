@@ -46,10 +46,16 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @method onReady
              */
             onReady: function DocumentConnections_onReady() {
-                var expandEl = Dom.get(this.id + "-action-expand");
-                if (expandEl != null) {
-                    expandEl.onclick = this.onExpand.bind(this);
-                }
+				var expandButton = Dom.getElementsByClassName('connections-expand');
+				Event.addListener(expandButton, 'click', this.onExpand, this, true);
+
+                LogicECM.services = LogicECM.services || {};
+				if (LogicECM.services.DocumentViewPreferences) {
+					var lastCustomPanelViewTitle = this.getLastCustomPanelView();
+					if (lastCustomPanelViewTitle == this.getTitle() && this.isSplitPanel()) {
+						this.onExpand();
+					}
+				}
             },
 
             onExpand: function () {

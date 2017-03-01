@@ -1,7 +1,5 @@
 <#assign id = args.htmlid?js_string>
 
-<#if data??>
-
 <script type="text/javascript">
     function hideButton() {
         if(location.hash != "#expanded") {
@@ -11,12 +9,14 @@
     YAHOO.util.Event.onAvailable("${id}-action-collapse", hideButton);
 </script>
 
-<div class="metadata-form">
+<div class="panel-header">
+    <div class="panel-title">${msg("label.title")}</div>
     <div class="lecm-dashlet-actions">
         <a id="${id}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
     </div>
 </div>
 
+<#if data??>
 <div class="list-container">
     <div class="body scrollableList" id="${id}_results">
 

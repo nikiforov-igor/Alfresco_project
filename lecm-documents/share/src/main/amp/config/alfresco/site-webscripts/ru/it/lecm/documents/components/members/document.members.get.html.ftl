@@ -3,6 +3,7 @@
 </@>
 <@markup id="css">
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-members-list.css" />
+    <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-members.css" />
 </@>
 
 <@markup id="html">
@@ -16,13 +17,13 @@
         var documentMembersComponent = null;
     </script>
 
-    <div id="${el}" class="widget-bordered-panel">
-        <div class="document-components-panel">
+    <div id="${el}" class="widget-bordered-panel members-panel">
+        <div id="${el}-wide-view" class="document-components-panel">
             <h2 id="${el}-heading" class="dark">
             ${msg("heading")}
                 <span class="alfresco-twister-actions">
-	            <a id="${el}-action-expand" href="javascript:void(0);" onclick="documentMembersComponent.onExpand()"
-                   class="expand"
+	            <a id="${el}-action-expand" href="javascript:void(0);" onclick=""
+                   class="expand members-expand"
                    title="${msg("label.expand")}">&nbsp</a>
 	         </span>
             </h2>
@@ -75,6 +76,27 @@
             //]]>
             </script>
         </div>
+        <div id="${el}-short-view" class="document-components-panel short-view">
+        <span class="alfresco-twister-actions">
+            <a href="javascript:void(0);" onclick="" class="expand members-expand" title="${msg("label.expand")}">&nbsp</a>
+        </span>
+            <div id="${el}-formContainer" class="right-block-content">
+            <span class="yui-button yui-push-button">
+               <span class="first-child">
+                  <button type="button" title="${msg('heading')}"></button>
+               </span>
+            </span>
+            </div>
+        </div>
+    <script type="text/javascript">//<![CDATA[
+    LogicECM.services = LogicECM.services || {};
+    var shortView = LogicECM.services.DocumentViewPreferences.getShowRightPartShort();
+    if (shortView) {
+        Dom.addClass("${el}-wide-view", "hidden");
+    } else {
+        Dom.addClass("${el}-short-view", "hidden");
+    }
+    //]]></script>
     </div>
     </#if>
 </@>

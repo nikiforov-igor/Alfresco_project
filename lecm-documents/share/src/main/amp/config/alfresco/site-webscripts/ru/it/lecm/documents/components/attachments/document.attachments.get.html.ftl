@@ -16,8 +16,8 @@
 	<#assign el=args.htmlid/>
 	<#if attachments??>
 	<!-- Markup -->
-	<div class="widget-bordered-panel">
-	<div class="document-metadata-header document-components-panel">
+	<div class="widget-bordered-panel attachments-panel">
+	<div id="${el}-wide-view" class="document-metadata-header document-components-panel">
 	    <h2 id="${el}-heading" class="dark">
 	        ${msg("heading")}
 	        <span class="alfresco-twister-actions">
@@ -94,6 +94,34 @@
 	    //]]>
 	    </script>
 	</div>
-	</div>
+
+    <div id="${el}-short-view" class="document-components-panel short-view">
+        <span class="alfresco-twister-actions">
+            <a href="javascript:void(0);" onclick="" class="expand attachments-expand" title="${msg("label.expand")}">&nbsp</a>
+        </span>
+        <div id="${el}-formContainer" class="right-block-content">
+            <span class="yui-button yui-push-button">
+               <span class="first-child">
+                  <button type="button" title="${msg('heading')}"></button>
+               </span>
+            </span>
+		</div>
+    </div>
+</div>
+<script type="text/javascript">//<![CDATA[
+(function () {
+    LogicECM.services = LogicECM.services || {};
+    if (LogicECM.services.DocumentViewPreferences) {
+        var shortView = LogicECM.services.DocumentViewPreferences.getShowRightPartShort();
+        if (shortView) {
+            Dom.addClass("${el}-wide-view", "hidden");
+        } else {
+			Dom.addClass("${el}-short-view", "hidden");
+		}
+    } else {
+        Dom.addClass("${el}-short-view", "hidden");
+	}
+}) ();
+//]]></script>
 	</#if>
 </@>

@@ -18,8 +18,8 @@
 	    <#assign el=args.htmlid/>
 	
 	<!-- Markup -->
-	<div class="widget-bordered-panel">
-	    <div class="document-metadata-header document-components-panel">
+	<div class="widget-bordered-panel metadata-panel">
+	    <div id="${el}-wide-view" class="document-metadata-header document-components-panel">
 	        <h2 id="${el}-heading" class="dark">
 	            ${msg("heading")}
 	            <span class="alfresco-twister-actions">
@@ -28,8 +28,31 @@
 	        </h2>
 	        <div id="${el}-formContainer"></div>
 	    </div>
+
+        <div id="${el}-short-view" class="document-metadata-header document-components-panel short-view">
+        <span class="alfresco-twister-actions">
+            <a href="javascript:void(0);" onclick="" class="expand metadata-expand" title="${msg("label.view")}">&nbsp</a>
+        </span>
+            <div id="${el}-formContainer" class="right-block-content">
+            <span class="yui-button yui-push-button">
+               <span class="first-child">
+                  <button type="button" title="${msg('heading')}"></button>
+               </span>
+            </span>
+            </div>
+        </div>
 	</div>
-	
+
+    <script type="text/javascript">//<![CDATA[
+    LogicECM.services = LogicECM.services || {};
+    var shortView = LogicECM.services.DocumentViewPreferences.getShowRightPartShort();
+    if (shortView) {
+        Dom.addClass("${el}-wide-view", "hidden");
+    } else {
+        Dom.addClass("${el}-short-view", "hidden");
+    }
+    //]]></script>
+
 	<!-- Javascript instance -->
 	<script type="text/javascript">//<![CDATA[
 	//TODO:

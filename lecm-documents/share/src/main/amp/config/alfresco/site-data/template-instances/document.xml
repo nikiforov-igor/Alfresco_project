@@ -115,7 +115,7 @@
       <!-- Комментарии -->
       <component>
          <region-id>comments</region-id>
-         <url>/lecm/components/comments/list</url>
+         <url>/lecm/components/document/comments</url>
          <properties>
             <nodeRef>{nodeRef}</nodeRef>
             <activityType>document</activityType>
@@ -147,6 +147,23 @@
                    <evaluations>
                        <evaluation>
                            <url>/lecm/components/dashlets/document-actions</url>
+                           <properties>
+                               <nodeRef>{nodeRef}</nodeRef>
+                           </properties>
+                       </evaluation>
+                   </evaluations>
+               </sub-component>
+           </sub-components>
+       </component>
+
+       <!-- Действия с документом-основанием -->
+       <component>
+           <region-id>base-doc-actions</region-id>
+           <sub-components>
+               <sub-component id="default">
+                   <evaluations>
+                       <evaluation>
+                           <url>/lecm/components/dashlets/base-doc-actions</url>
                            <properties>
                                <nodeRef>{nodeRef}</nodeRef>
                            </properties>

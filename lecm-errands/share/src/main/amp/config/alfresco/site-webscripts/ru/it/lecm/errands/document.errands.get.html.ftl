@@ -23,16 +23,42 @@
     //]]>
 </script>
 
-<div class="widget-bordered-panel">
-    <div class="document-metadata-header document-components-panel" id="${id}-results">
-        <h2 id="${id}-heading" class="dark">
-        ${msg("heading")}
-            <span class="alfresco-twister-actions">
+<div class="widget-bordered-panel errands-panel">
+    <div id="${id}-wide-view">
+        <div class="document-metadata-header document-components-panel" id="${id}-results">
+            <h2 id="${id}-heading" class="dark">
+            ${msg("heading")}
+                <span class="alfresco-twister-actions">
                     <a id="${id}-action-expand" href="javascript:void(0);" onclick="" class="expand errands-expand"
                        title="${msg("label.expand")}">&nbsp;</a>
                 </span>
-        </h2>
+            </h2>
 
-        <div id="${id}-formContainer"></div>
+            <div id="${id}-formContainer"></div>
+        </div>
+    </div>
+
+    <div id="${id}-short-view" class="document-components-panel short-view hidden">
+        <span class="alfresco-twister-actions">
+            <a href="javascript:void(0);" onclick="" class="expand errands-expand"
+               title="${msg("label.expand")}">&nbsp</a>
+        </span>
+        <div id="${id}-formContainer" class="right-block-content">
+            <span id="${id}-errands-icon" class="yui-button yui-push-button">
+               <span class="first-child">
+                  <button type="button" title="${msg('heading')}"></button>
+               </span>
+            </span>
+        </div>
     </div>
 </div>
+<script type="text/javascript">//<![CDATA[
+LogicECM.services = LogicECM.services || {};
+if (LogicECM.services.DocumentViewPreferences) {
+    var shortView = LogicECM.services.DocumentViewPreferences.getShowRightPartShort();
+    if (shortView) {
+        Dom.addClass("${id}-wide-view", "hidden");
+        Dom.removeClass("${id}-short-view", "hidden");
+    }
+}
+//]]></script>

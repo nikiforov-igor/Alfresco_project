@@ -224,6 +224,11 @@
 </#if>
 
 <div id="${id}_metadata" class="metadata-form errands-main-form">
+
+    <div class="metadata-form">
+        <div class="lecm-dashlet-actions"></div>
+    </div>
+
     <div id="${id}-form-fields" class="form-fields">
         <div class="title">
             ${props["lecm-errands:title"]}

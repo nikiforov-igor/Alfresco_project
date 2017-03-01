@@ -113,12 +113,11 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
 
                             detail = "<div class=\"workflow-task-item\">";
                         detail +=   "<div class=\"workflow-task-list-picture " + isImportant + "\" title=\"" + isImportantTitle + "\">&nbsp;</div>";
-                        detail +=   "<div style=\"float: left;\">";
+                        detail +=   "<div style=\"margin-left: 30px;\">";
                         detail +=       "<div>";
-                        detail +=           "<div class=\"workflow-task-title workflow-task-list-left-column\" style=\"font-size: 16px;\">";
+                        detail +=           "<div class=\"workflow-task-title\" style=\"font-size: 16px;\">";
                         detail +=           "<a href=\""+window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT+"document?nodeRef="+ errand.nodeRef +"\">" + errand.title + ":</a>";
                         detail +=           "</div>";
-                        detail +=           "<span class=\"workflow-task-status "+ statusClass +"\">" + status + "</span>";
                         detail +=       "</div>";
                         detail +=       "<div style=\"clear: both;\"></div>";
                         detail +=       "<div class=\"workflow-task-description\">" + errand.description + "</div>";
@@ -126,7 +125,10 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         detail +=           "<div class=\"workflow-task-list-left-column\">";
                         detail +=               "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.duedate") + ": </span>" + errand.dueDate;
                         detail +=           "</div>";
-                        detail +=           "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.status") + ": </span>" + errand.statusMessage+"<br/>";
+                        detail +=           "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.status") + ": </span>" + errand.statusMessage;
+
+                        detail +=           "<span class=\"workflow-task-status "+ statusClass +"\">" + status + "</span>"+"<br/>";
+
                             url = YAHOO.lang.substitute(Alfresco.constants.URL_PAGECONTEXT + template,
                                     {
                                         nodeRef: errand.executor

@@ -48,6 +48,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     expandEl.onclick = this.onExpand.bind(this);
                 }
 
+                var lastCustomPanelViewTitle = this.getLastCustomPanelView();
+                if (lastCustomPanelViewTitle == this.getTitle() && this.isSplitPanel()) {
+                    this.onExpand();
+                }
             },
 
             onExpand: function () {

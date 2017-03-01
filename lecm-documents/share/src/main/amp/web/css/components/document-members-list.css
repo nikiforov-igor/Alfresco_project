@@ -4,7 +4,7 @@
 }
 .members-list .members-title {
     width: 100%;
-    padding: 0 .4em .4em;
+    padding: 0;
 }
 .members-list .members-title .members-name {
     color: #666666;
@@ -14,7 +14,6 @@
     font-weight: bold;
     text-align: left;
     text-decoration: none;
-    padding-left: 1em;
 }
 
 .members-list .members-title  .member-add {
@@ -80,7 +79,6 @@
     text-decoration: none;
     color: #333333;
     float:left;
-    width: 64%;
     padding: 6px 6px;
 }
 

@@ -14,6 +14,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
  * @namespace LogicECM
  * @class LogicECM.DocumentHistory
  */
+
+LogicECM.services = LogicECM.services || {};
+
 (function () {
     /**
      * YUI Library aliases
@@ -31,6 +34,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
     LogicECM.DocumentComponentBase = function DocumentConnections_constructor(htmlId) {
         LogicECM.DocumentComponentBase.superclass.constructor.call(this, "LogicECM.DocumentComponentBase", htmlId);
         Event.onDOMReady(this.setListeners, this, true);
+        this.services.docViewPreferences = LogicECM.services.DocumentViewPreferences;
         return this;
     };
 
@@ -62,6 +66,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 dashletId: null
             },
 
+            isExpanded: false,
+
+            preferencesService: null,
 
             /**
              * Навешиваем обаботчики
@@ -70,6 +77,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             setListeners: function Base_setListeners() {
                 // Нажатие на кнопку "Свернуть"
                 YAHOO.util.Event.delegate('Share', 'click', this.onCollapse, '.collapse', this, true);
+
+                if (this.isHasPreferences()) {
+                    YAHOO.Bubbling.on("panelSplitedChanged", this.onPanelSplitedChanged, this);
+                    YAHOO.Bubbling.on("showRightPartShortChanged", this.onShowRightPartShortChanged, this);
+                }
+
                 YAHOO.util.Event.addListener(window, 'hashchange', this.onHashChange, this, true);
             },
 
@@ -81,7 +94,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             onHashChange: function Base_onHashChange(event) {
                 //Проверка на хэш развёрнутого дашлета. Надо допиливать, ибо в случае перехода
                 //на любой отличный от 'expanded' хэщ произойдёт сворачивание дашлета
-                if(event.oldURL != null && event.oldURL.split('#')[1] == 'expanded') {
+                if (event.oldURL != null && event.oldURL.split('#')[1] == 'expanded') {
                     this.collapseView();
                 }
             },
@@ -101,10 +114,21 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     // подменяем заголовок
                     var titleEl = this.getDocumentTitle();
                     if (titleEl != null) {
-                        titleEl.innerHTML = " :: " + this.getTitle();
+                        if (this.isHasPreferences()) {
+                            this.setLastCustomPanelView(this.getTitle());
+                        }
                     }
-                    // скрываем основной регион
-                    Dom.setStyle(this.MAIN_REGION, "display", "none");
+                    if (this.isHasPreferences()) {
+                        if (this.isSplitPanel()) {
+                            // основноый регион остается
+                            this.showSplitedPanel();
+                        } else {
+                            // скрываем основной регион
+                            this.showOverflowedPanel();
+                        }
+                    } else {
+                        this.showOverflowedPanel();
+                    }
                     // отображаем дашлет
                     Dom.setStyle(this.CUSTOM_REGION, "display", "block");
                     // добавляем в header ссылку на главную страницу документа
@@ -113,13 +137,25 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     location.hash = 'expanded';
                 }
 
-	            YAHOO.Bubbling.fire("updateDocumentPage",
-		            {
-			            title: this.getTitle()
-		            });
+                this.isExpanded = true;
+
+                YAHOO.Bubbling.fire("updateDocumentPage",
+                    {
+                        title: this.getTitle()
+                    });
             },
 
-            getDocumentTitle: function(){
+            showSplitedPanel: function () {
+                Dom.setStyle(this.MAIN_REGION, "display", "block");
+                Dom.addClass(this.CUSTOM_REGION, "split");
+            },
+
+            showOverflowedPanel: function () {
+                Dom.setStyle(this.MAIN_REGION, "display", "none");
+                Dom.removeClass(this.CUSTOM_REGION, "split");
+            },
+
+            getDocumentTitle: function () {
                 return Dom.get("document-title-breadcrumb");
             },
 
@@ -137,9 +173,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 if (titleEl != null) {
                     titleEl.innerHTML = "";
                 }
-                
+
                 Dom.setStyle(this.TITLE, "display", "none");
                 Dom.setStyle(this.TITLE + "-span", "display", "inline-block");
+                this.isExpanded = false;
             },
 
             /**
@@ -163,11 +200,78 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 return Dom.get("custom-region");
             },
 
-            onExpand: function() {
+            isSplitPanel: function () {
+                return this.services.docViewPreferences.getPanelSplited();
+            },
+
+            setLastCustomPanelView: function (panelName) {
+                this.services.docViewPreferences.setLastCustomPanelView(panelName);
+            },
+
+            getLastCustomPanelView: function () {
+                return this.services.docViewPreferences.getLastCustomPanelView();
+            },
+
+            getShowRightPartShort: function () {
+                return this.services.docViewPreferences.getShowRightPartShort();
+            },
+
+            setShowRightPartShort: function(showRightPartShort) {
+                this.services.docViewPreferences.setShowRightPartShort(showRightPartShort);
+            },
+
+            onExpand: function () {
                 this.expandView(this.msg("msg.no_data"));
             },
-            onCollapse: function(){
-                this.collapseView();
+
+            onCollapse: function () {
+                if (this.isHasPreferences()) {
+                    this.services.docViewPreferences.setPanelSplited(false);
+                } else {
+                    this.collapseView();
+                }
+            },
+
+            onPanelSplitedChanged: function (layer, args) {
+                var obj = args[1];
+
+                if (obj.panelSplit != null && obj.panelSplit != undefined) {
+                    var panelMustBeSplit = obj.panelSplit;
+                } else {
+                    panelMustBeSplit = this.isSplitPanel();
+                }
+
+                var lastCustomPanelTitle = this.getLastCustomPanelView();
+
+                if (this.isExpanded) {
+                    if (panelMustBeSplit) {
+                        this.showSplitedPanel();
+                    } else {
+                        this.collapseView();
+                    }
+                } else {
+                    if (lastCustomPanelTitle === this.getTitle() && panelMustBeSplit) {
+                        this.onExpand();
+                    }
+                }
+            },
+
+            onShowRightPartShortChanged: function (layer, args) {
+                var rightPartWide = Dom.get(this.id + "-wide-view");
+                var rightPartShort = Dom.get(this.id + "-short-view");
+                if(this.getShowRightPartShort()) {
+                    Dom.addClass(rightPartWide, "hidden");
+                    Dom.removeClass(rightPartShort, "hidden");
+                } else {
+                    Dom.addClass(rightPartShort, "hidden");
+                    Dom.removeClass(rightPartWide, "hidden");
+                }
+            },
+
+            isHasPreferences: function () {
+                if (LogicECM.services.DocumentViewPreferences) {
+                    return true;
+                }
             }
         }, true);
 })();

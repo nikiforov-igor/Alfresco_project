@@ -8,13 +8,52 @@
                 YAHOO.util.Dom.setStyle(this, 'display', 'none');
             }
         }
+        function hideShowPreviewerButton() {
+            if(location.hash != "#expanded") {
+                YAHOO.util.Dom.setStyle(this, 'display', 'none');
+            }
+        }
         YAHOO.util.Event.onAvailable("${el}-action-collapse", hideButton);
+        YAHOO.util.Event.onAvailable("${el}-action-show-previewer", function () {
+            hideShowPreviewerButton();
+            YAHOO.util.Event.addListener("${el}-action-show-previewer", 'click', function () {
+                Alfresco.util.Ajax.request(
+                        {
+                            url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/attachments/preview"<#if inclBaseDoc> + "?inclBaseDoc=${inclBaseDoc?string("true","false")}"</#if>,
+                            dataObj: {
+                                nodeRef: "${nodeRef}",
+                                htmlid: "${el}" + Alfresco.util.generateDomId()
+                            },
+                            successCallback: {
+                                fn:function(response){
+                                    var html = response.serverResponse.responseText;
+                                    var formEl = Dom.get("custom-region");
+                                    if (formEl != null) {
+                                        formEl.innerHTML = "";
+                                        formEl.innerHTML = html;
+                                    }
+                                    LogicECM.services = LogicECM.services || {};
+									if (LogicECM.services.DocumentViewPreferences) {
+                                        LogicECM.services.DocumentViewPreferences.setIsDocAttachmentsInPreview(true);
+                                    }
+                                },
+                                scope: this
+                            },
+                            failureMessage: "${msg("message.failure")}",
+                            scope: this,
+                            execScripts: true
+                        });
+            });
+        });
 	</script>
-	<div class="metadata-form">
-		<div class="lecm-dashlet-actions">
+    <div class="panel-header">
+		<div class="panel-title">${msg("label.title")}</div>
+        <div class="lecm-dashlet-actions">
         	<a id="${el}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
+            <a id="${el}-action-show-previewer" class="show-previewer" title="${msg("btn.show-previewer")}"></a>
     	</div>
     </div>
+
 	<div id="${el}">
 	    <#if categories??>
 	        <#list categories as category>

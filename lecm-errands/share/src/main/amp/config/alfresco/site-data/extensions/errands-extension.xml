@@ -22,6 +22,32 @@
 				</component>
 				<component>
 					<scope>template</scope>
+					<region-id>base-doc-actions</region-id>
+					<source-id>document</source-id>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="errand-base-doc-actions">
+									<evaluators>
+										<evaluator type="evaluator.ru.it.lecm.base.evaluators.DocumentTypeEvaluator">
+											<params>
+												<nodeRef>{nodeRef}</nodeRef>
+												<type>{http://www.it.ru/logicECM/errands/1.0}document</type>
+											</params>
+										</evaluator>
+									</evaluators>
+									<url>/lecm/components/dashlets/base-doc-actions</url>
+									<properties>
+										<nodeRef>{nodeRef}</nodeRef>
+										<baseDocAssocName>lecm-errands:additional-document-assoc</baseDocAssocName>
+									</properties>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+				<component>
+					<scope>template</scope>
 					<region-id>document-attachments</region-id>
 					<source-id>document</source-id>
 					<sub-components>
