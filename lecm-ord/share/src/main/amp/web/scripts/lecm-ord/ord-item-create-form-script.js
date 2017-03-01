@@ -4,6 +4,10 @@
         Bubbling = YAHOO.Bubbling,
         Util = LogicECM.module.Base.Util;
 
+    LogicECM.module.Base.Util.loadCSS([
+        'css/lecm-ord/ord-date-set-with-icon.css'
+    ]);
+
     if (Bubbling.addLayer("ordItemCreateFormScriptLoaded")) {
         Bubbling.on('ordItemCreateFormScriptLoaded', processForm);
     }

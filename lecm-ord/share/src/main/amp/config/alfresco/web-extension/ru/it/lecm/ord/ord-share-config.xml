@@ -707,7 +707,7 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change"  message-id="Alfresco.forms.validation.mandatory.message"/>
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-ord-table-structure:limitation-date-type" set="limitation-date">
+                    <field id="lecm-ord-table-structure:limitation-date-type" set="limitation-date" help-id="ord.item.limitation-date.help.title">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
                     <field id="lecm-ord-table-structure:execution-date" set="limitation-date">
@@ -848,7 +848,7 @@
                         <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
                     </constraint-handlers>
                 </field>
-                <field id="lecm-ord-table-structure:limitation-date-type" set="limitation-date">
+                <field id="lecm-ord-table-structure:limitation-date-type" set="limitation-date" help-id="ord.item.limitation-date.help.title">
                     <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                 </field>
                 <field id="lecm-ord-table-structure:execution-date" set="limitation-date">
