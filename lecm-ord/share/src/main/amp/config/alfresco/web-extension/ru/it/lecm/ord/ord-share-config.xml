@@ -691,11 +691,6 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-document:indexTableRow" mandatory="true"/>
-                    <field id="lecm-ord-table-structure:controller-assoc" set="bottom">
-                        <control>
-                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-ord-table-structure:subject-assoc" set="bottom"/>
                     <field id="lecm-ord-table-structure:item-status-assoc" set="bottom"/>
                     <field id="lecm-ord-table-structure:limitation-date-radio" set="limitation-date"  mandatory="true">
@@ -837,11 +832,6 @@
                     <constraint-handlers>
                         <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.itemControllerValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
                     </constraint-handlers>
-                </field>
-                <field id="lecm-ord-table-structure:controller-assoc" set="bottom">
-                    <control>
-                        <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
-                    </control>
                 </field>
                 <field id="lecm-ord-table-structure:subject-assoc" set="bottom"/>
                 <field id="lecm-ord-table-structure:limitation-date-radio" set="limitation-date"  mandatory="true">

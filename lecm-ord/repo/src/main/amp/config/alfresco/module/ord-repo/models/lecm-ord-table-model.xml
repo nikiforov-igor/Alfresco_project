@@ -181,11 +181,6 @@
                         <stored>false</stored>
                         <tokenised>false</tokenised>
                     </index>
-                <property name="lecm-ord-table-structure:executor-assoc-ref">
-                    <type>d:text</type>
-                </property>
-                <property name="lecm-ord-table-structure:controller-assoc-ref">
-                    <type>d:text</type>
                 </property>
                 <!-- Требуется отчет -->
                 <property name="lecm-ord-table-structure:report-required">
