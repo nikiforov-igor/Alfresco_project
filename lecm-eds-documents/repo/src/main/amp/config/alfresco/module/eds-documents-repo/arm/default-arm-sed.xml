@@ -4304,10 +4304,10 @@
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'Ожидают отправки по маршруту']]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'Проект']]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
-                                                <property name="cm:name"><![CDATA[Проекты]]></property>
+                                                <property name="cm:name"><![CDATA[Ожидают отправки по маршруту]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                                 <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[10]]></property>
