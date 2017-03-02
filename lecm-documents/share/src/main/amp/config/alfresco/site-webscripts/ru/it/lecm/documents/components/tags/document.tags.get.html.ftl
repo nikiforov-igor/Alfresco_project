@@ -13,7 +13,7 @@
     <h2 id="${el}-heading" class="dark">
         ${msg("document.tags")}
         <span class="alfresco-twister-actions">
-			<a id="${el}-action-cloud" href="javascript:void(0);" onclick="" class="expand" title="${msg("label.expand")}">&nbsp</a>
+			<a id="${el}-action-cloud" href="javascript:void(0);" class="expand" title="${msg("label.expand")}">&nbsp</a>
         </span>
     </h2>
 
@@ -154,7 +154,7 @@ function initTags() {
     if (!semanticEl){
         var tagAction = YAHOO.util.Dom.get("${el}-action-cloud");
         if (tagAction){
-            YAHOO.util.Dom.setStyle(tagAction, 'display', 'none');
+            YAHOO.util.Dom.addClass(tagAction, 'hidden');
         }
 
     }

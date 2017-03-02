@@ -149,8 +149,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
             loadDocument: function () {
                 if (this.options.itemId != null) {
                     if (this.options.forTask === true) {
-                        Alfresco.util.Ajax.request({
-                            method: "GET",
+                        Alfresco.util.Ajax.jsonGet({
                             url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/GetDocumentDataByTaskId?taskID=" + this.options.itemId,
                             successCallback: {
                                 fn: function (response) {
@@ -172,8 +171,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 
             loadDocumentAttachments: function () {
                 if (this.options.itemId != null) {
-                    Alfresco.util.Ajax.request({
-                        method: "GET",
+                    Alfresco.util.Ajax.jsonGet({
                         url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/attachments/api/get",
                         dataObj: {
                             documentNodeRef: this.documentNodeRef,
@@ -202,7 +200,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 
             reloadAttachmentPreview: function () {
                 if (this.selectedAttachment) {
-                    Alfresco.util.Ajax.request(
+                    Alfresco.util.Ajax.jsonGet(
                         {
                             url: Alfresco.constants.URL_SERVICECONTEXT + "components/preview/web-preview",
                             dataObj: {

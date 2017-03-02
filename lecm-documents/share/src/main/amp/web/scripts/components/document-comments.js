@@ -63,7 +63,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             onExpand: function DocumentComments_onExpand() {
-                Alfresco.util.Ajax.request(
+                Alfresco.util.Ajax.jsonGet(
                     {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/comments/list",
                         dataObj: {

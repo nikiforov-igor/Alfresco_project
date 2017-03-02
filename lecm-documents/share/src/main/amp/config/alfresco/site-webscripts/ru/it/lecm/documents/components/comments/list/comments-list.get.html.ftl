@@ -15,14 +15,19 @@ new LogicECM.CommentsList("${el}").setOptions(
             editorConfig: {
                 inline_styles: false,
                 convert_fonts_to_spans: false,
-                theme: "advanced",
-                theme_advanced_buttons1: "bold,italic,underline,|,bullist,numlist,|,forecolor,|,undo,redo,removeformat",
-                theme_advanced_toolbar_location: "top",
-                theme_advanced_toolbar_align: "left",
-                theme_advanced_resizing: true,
-                theme_advanced_buttons2: null,
-                theme_advanced_buttons3: null,
-                theme_advanced_path: false,
+                toolbar_location: "top",
+                toolbar_align: "left",
+                statusbar_location: "bottom",
+                path: false,
+                plugins: "fullscreen table paste textcolor",
+                paste_remove_styles_if_webkit: false,
+                menu: {},
+                toolbar: [
+                    "bold italic underline strikethrough | fontselect fontsizeselect | fullscreen",
+                    "alignleft aligncenter alignright alignjustify | bullist numlist table | undo redo | forecolor backcolor"
+                ],
+                paste_as_text: true,
+                resize: false,
                 language: "${locale?substring(0, 2)?js_string}"
             },
             permissions: {
@@ -36,7 +41,7 @@ ${messages}
 <script type="text/javascript">
     function hideButton() {
         if(location.hash != "#expanded") {
-            YAHOO.util.Dom.setStyle(this, 'display', 'none');
+            YAHOO.util.Dom.addClass(this, 'hidden');
         }
     }
     YAHOO.util.Event.onAvailable("${el}-action-collapse", hideButton);

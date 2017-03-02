@@ -54,12 +54,15 @@
                 ], createControl);
 
         YAHOO.util.Event.addListener("${el}-show-list", 'click', function () {
-            Alfresco.util.Ajax.request(
+            Alfresco.util.Ajax.jsonGet(
                     {
-                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/attachments-list"<#if inclBaseDoc> + "?inclBaseDoc=${inclBaseDoc?string("true", "false")}"</#if>,
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/attachments-list",
                         dataObj: {
                             nodeRef: "${nodeRef}",
-                            htmlid: "${el}" + Alfresco.util.generateDomId(),
+                            htmlid: "${el}" + Alfresco.util.generateDomId()
+                            <#if inclBaseDoc>,
+                                inclBaseDoc: ${inclBaseDoc?string("true", "false")}
+                            </#if>
                         },
                         successCallback: {
                             fn:function(response){

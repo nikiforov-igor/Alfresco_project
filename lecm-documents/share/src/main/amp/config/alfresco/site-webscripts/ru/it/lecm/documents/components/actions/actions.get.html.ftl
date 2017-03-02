@@ -15,9 +15,8 @@
     <div id="${el}-wide-view" class="widget-panel-grey widget-bordered-panel">
         <h2 id="${el}-heading" class="dark">
         ${msg("label.title")}
-            <span id="${el}-show-right-part-short-container" class="alfresco-twister-actions">
+            <span id="${el}-show-right-part-short-container" class="alfresco-twister-actions show-right-part-short">
                    <a id="${el}-action-show-right-part-short" href="javascript:void(0);"
-                      onclick="" class="show-right-part-short"
                       title="${msg("label.show-right-part-short")}">&nbsp</a>
                </span>
         </h2>
@@ -32,8 +31,8 @@
         </div>
     </div>
     <div id="${el}-short-view" class="widget-panel-grey widget-bordered-panel short-view">
-        <span class="alfresco-twister-actions">
-            <a href="javascript:void(0);" onclick="" class="show-right-part-wide"
+        <span class="alfresco-twister-actions show-right-part-wide">
+            <a href="javascript:void(0);"
                title="${msg("label.show-right-part-wide")}">&nbsp</a>
         </span>
         <div class="right-block-content">

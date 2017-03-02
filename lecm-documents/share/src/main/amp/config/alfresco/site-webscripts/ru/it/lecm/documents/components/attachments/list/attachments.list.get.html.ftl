@@ -5,24 +5,27 @@
 	<script type="text/javascript">
 		function hideButton() {
             if(location.hash != "#expanded") {
-                YAHOO.util.Dom.setStyle(this, 'display', 'none');
+                YAHOO.util.Dom.addClass(this, 'hidden');
             }
         }
         function hideShowPreviewerButton() {
             if(location.hash != "#expanded") {
-                YAHOO.util.Dom.setStyle(this, 'display', 'none');
+                YAHOO.util.Dom.addClass(this, 'hidden');
             }
         }
         YAHOO.util.Event.onAvailable("${el}-action-collapse", hideButton);
         YAHOO.util.Event.onAvailable("${el}-action-show-previewer", function () {
             hideShowPreviewerButton();
             YAHOO.util.Event.addListener("${el}-action-show-previewer", 'click', function () {
-                Alfresco.util.Ajax.request(
+                Alfresco.util.Ajax.jsonGet(
                         {
-                            url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/attachments/preview"<#if inclBaseDoc> + "?inclBaseDoc=${inclBaseDoc?string("true","false")}"</#if>,
+                            url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/attachments/preview",
                             dataObj: {
                                 nodeRef: "${nodeRef}",
                                 htmlid: "${el}" + Alfresco.util.generateDomId()
+								<#if inclBaseDoc>,
+									inclBaseDoc: ${inclBaseDoc?string("true","false")}
+								</#if>,
                             },
                             successCallback: {
                                 fn:function(response){

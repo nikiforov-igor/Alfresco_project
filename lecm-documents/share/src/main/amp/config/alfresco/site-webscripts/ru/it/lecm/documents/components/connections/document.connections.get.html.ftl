@@ -23,7 +23,7 @@
                 <h2 id="${el}-heading" class="dark">
                 ${msg("heading")}
                     <span class="alfresco-twister-actions">
-                        <a id="${el}-action-expand" href="javascript:void(0);" onclick="" class="expand connections-expand" title="${msg("label.expand")}">&nbsp</a>
+                        <a id="${el}-action-expand" href="javascript:void(0);" class="expand connections-expand" title="${msg("label.expand")}">&nbsp</a>
                     </span>
                 </h2>
 
@@ -83,7 +83,7 @@
 
             <div id="${el}-short-view" class="document-components-panel short-view">
                 <span class="alfresco-twister-actions">
-                    <a href="javascript:void(0);" onclick="" class="expand connections-expand" title="${msg("label.expand")}">&nbsp</a>
+                    <a href="javascript:void(0);" class="expand connections-expand" title="${msg("label.expand")}">&nbsp</a>
                 </span>
                 <div id="${el}-formContainer" class="right-block-content">
                     <span class="yui-button yui-push-button">

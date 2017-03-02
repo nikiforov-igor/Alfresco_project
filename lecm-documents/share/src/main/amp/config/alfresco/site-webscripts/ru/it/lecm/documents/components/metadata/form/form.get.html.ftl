@@ -44,7 +44,7 @@
 
         function hideButton() {
             if(location.hash != "#expanded") {
-                YAHOO.util.Dom.setStyle(this, 'display', 'none');
+                YAHOO.util.Dom.addClass(this, 'hidden');
             }
         }
 

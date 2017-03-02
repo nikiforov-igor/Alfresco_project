@@ -71,7 +71,7 @@
 
     <div id="${id}-short-view" class="document-components-panel short-view hidden">
         <span class="alfresco-twister-actions">
-            <a id="${id}-action-expand" href="javascript:void(0);" onclick="" class="expand workflows-expand" title="${msg("label.expand")}">&nbsp</a>
+            <a id="${id}-action-expand" href="javascript:void(0);" class="expand workflows-expand" title="${msg("label.expand")}">&nbsp</a>
         </span>
         <div class="right-block-content">
             <span class="yui-button yui-push-button">

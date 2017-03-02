@@ -86,7 +86,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             expandList: function DocumentAttachments_expandList() {
-                Alfresco.util.Ajax.request(
+                Alfresco.util.Ajax.jsonGet(
                     {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/attachments-list",
                         dataObj: {
@@ -113,7 +113,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             expandPreview: function DocumetntAttachemnts_expandPreview () {
-                Alfresco.util.Ajax.request(
+                Alfresco.util.Ajax.jsonGet(
                     {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/attachments/preview",
                         dataObj: {
@@ -141,7 +141,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 	        onAttachmentsUpdate: function DocumentAttachments_onAttachmentsUpdate(layer, args) {
                 var newId = Alfresco.util.generateDomId();
-		        Alfresco.util.Ajax.request(
+		        Alfresco.util.Ajax.jsonGet(
 			        {
 				        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/document-attachments",
 				        dataObj: {

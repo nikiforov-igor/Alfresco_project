@@ -3,7 +3,7 @@
 <script type="text/javascript">
     function hideButton() {
         if(location.hash != "#expanded") {
-            YAHOO.util.Dom.setStyle(this, 'display', 'none');
+            YAHOO.util.Dom.addClass(this, 'hidden');
         }
     }
     YAHOO.util.Event.onAvailable("${id}-action-collapse", hideButton);
