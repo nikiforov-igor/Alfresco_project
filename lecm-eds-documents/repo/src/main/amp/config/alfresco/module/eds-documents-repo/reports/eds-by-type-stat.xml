@@ -42,6 +42,8 @@
                     </item>
                     <item name="cm:Дата регистрации" type="lecm-rpeditor:reportDataColumn">
                         <property name="cm:name"><![CDATA[Дата регистрации]]></property>
+                        <property name="lecm-rpeditor:dataColumnControlParams">
+                            <![CDATA[fromDateDefault=START_YEAR;fillDates=true;toDateDefault=NOW]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:date]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
                             <![CDATA[{lecm-document:doc-date}]]></property>
