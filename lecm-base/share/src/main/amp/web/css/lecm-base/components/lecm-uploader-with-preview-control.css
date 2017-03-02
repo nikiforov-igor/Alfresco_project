@@ -4,3 +4,8 @@
 .dnd-uploader .body .web-preview {
 	height: 100%;
 }
+
+.web-preview > .previewer.PdfJs {
+	/* Should be only here - otherwise break viewerContainer! */
+	height: 100%;
+}

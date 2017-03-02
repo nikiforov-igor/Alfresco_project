@@ -15,6 +15,10 @@
 	            'components/preview/Audio.js',
 	            'components/preview/Flash.js',
 	            'components/preview/Image.js',
+				'extras/components/preview/ResizeSensor.js',
+				'extras/components/preview/ElementQueries.js',
+                'extras/components/preview/l10n.js',
+                'extras/components/preview/viewer.js',
 	            'extras/components/preview/web-preview-extend.js',
 	            'extras/components/preview/PdfJs.js',
 	            'extras/components/preview/Embed.js',
@@ -23,11 +27,13 @@
 	            'extras/components/preview/spin.js'
             ],
             [
+                'extras/components/preview/viewer.css',
                 'css/components/document-preview-control.css'
             ], createControl);
                     }
 		function createControl() {
-			var control = new LogicECM.module.Documents.DocumentPreviewControl("modalWindow").setMessages(${messages});
+                    loadExternalResourceBundle();
+                    var control = new LogicECM.module.Documents.DocumentPreviewControl("${formId}").setMessages(${messages});
 			control.setOptions({
 				itemId: "${nodeRef}",
 				forTask: ${forTask?string},
@@ -35,6 +41,14 @@
                 selectedAttachmentNodeRef: "${selectedAttachmentNodeRef}"
 			});
             control.onReady();
+        }
+
+        function loadExternalResourceBundle() {
+            var resourceRef = document.createElement('link');
+            resourceRef.setAttribute('rel', 'resource');
+            resourceRef.setAttribute('type', 'application/l10n');
+            resourceRef.setAttribute('href', Alfresco.constants.URL_RESCONTEXT + 'extras/components/preview/locale/locale.properties');
+            document.getElementsByTagName("head")[0].appendChild(resourceRef);
         }
 		YAHOO.util.Event.onDOMReady(init);
  	})();
@@ -52,16 +66,18 @@
                     <select id="modalWindow-attachment-select"></select>
                 </div>
                 <div class="container">
-                    <div class="value-div" align="right">
-                        <a href="javascript:void(0)" onClick="redirectToAttachmentPage()">Открыть страницу вложений</a>
+                    <div id="${formId}-actions" class="actions">
                     </div>
+                    <div class="value-div add-actions">
+                        <div onClick="redirectToAttachmentPage()" class="list" title="${msg("attach.preview.openList")}"></div>
                 </div>
             </div>
-
-            <div id="modalWindow-preview-container" class="document-preview body"></div> <#-- не удалять! класс 'body' важен для расчета высоты области просмотра -->
         </div>
-        <div align="center" id="modalWindow-buttons" class="form-buttons">
-            <button type="button" tabindex="104"  id="modalWindow-cancel" name="-">Закрыть</button>
+
+            <div id="${formId}-preview-container" class="document-preview body"></div> <#-- не удалять! класс 'body' важен для расчета высоты области просмотра -->
+        </div>
+        <div align="center" id="${formId}-buttons" class="form-buttons">
+            <button type="button" tabindex="104"  id="${formId}-cancel" name="-">Закрыть</button>
         </div>
     </form>
 

@@ -1723,6 +1723,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 // Finally display form as dialog
                 Alfresco.util.PopupManager.displayForm(config);
+            },
+
+            onUnlockAction: function onUnlockAction_function(file) {
+                if (YAHOO.lang.isFunction(LogicECM.module.UnlockNode.unlock)) {
+                    LogicECM.module.UnlockNode.unlock(file);
+                }
+            },
+
+            onActionLECMEditOnline: function onActionLECMEditOnline_function(file) {
+                if (YAHOO.lang.isFunction(LogicECM.module.EditOnline.edit)) {
+                    LogicECM.module.EditOnline.edit(file);
+                }
             }
         }, true);
 })();
