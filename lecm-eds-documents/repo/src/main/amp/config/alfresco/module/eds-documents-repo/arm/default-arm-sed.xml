@@ -8786,10 +8786,11 @@
                                     <item name="cm:10c4aefb-8df7-4012-8d53-030bc5473acf" type="lecm-arm:field">
                                         <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
-                                        <property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
+                                        <property name="lecm-arm:field-name"><![CDATA[cm:created]]></property>
                                         <property name="lecm-arm:field-title"><![CDATA[Создан]]></property>
                                         <property name="cm:name"><![CDATA[4f3bbcf8-e404-4d09-bc17-589a75ff0e95]]></property>
-                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[{cm:created?dd.MM.yyyy HH:mm}]]></property>
                                         <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                     </item>
                                     <item name="cm:dcdad99b-9f9f-47f7-ada1-8028fb580859" type="lecm-arm:field">
@@ -9840,7 +9841,8 @@
                                             <![CDATA[lecm-document:status-changed-date]]></property>
                                         <property name="lecm-arm:field-title"><![CDATA[Поступил на рег.]]></property>
                                         <property name="cm:name"><![CDATA[598a62b0-1b96-46f5-85de-b70791d8e7d2]]></property>
-                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[{lecm-document:status-changed-date?dd.MM.yyyy HH:mm}]]></property>
                                         <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
                                     </item>
                                     <item name="cm:a0a37be0-b049-41d2-a8cd-4dd3261d0a7d" type="lecm-arm:field">
