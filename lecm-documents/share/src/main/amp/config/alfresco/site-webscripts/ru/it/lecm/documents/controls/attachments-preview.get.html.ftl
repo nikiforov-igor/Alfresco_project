@@ -1,3 +1,4 @@
+<#assign formId=args.htmlid?js_string?html>
 <html>
 
 
