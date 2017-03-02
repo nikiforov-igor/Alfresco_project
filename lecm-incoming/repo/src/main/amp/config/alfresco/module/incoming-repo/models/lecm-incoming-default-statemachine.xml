@@ -4832,7 +4832,130 @@
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>783dff01-9498-4985-a6c9-d8e8d3ace86b</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/7ab1c839-aa77-446f-a2ed-8a01050c9656
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-incoming:auto-transition-to-execute")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/b065459c-079f-4c24-9e3c-a76a86801cf7
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>583cdee0-7bf0-432c-966d-2821a36472b5</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/9f4c8053-c375-4f4f-b06b-2703118641f7
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-eds-aspect:child-change-signal-count") > 0]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/incoming-repo/workflow/scripts/incoming-scripts-lib.js">
+
+(function(){
+  var document = bpm_package.children[0];
+  if (document) {
+	LECMIncomingActions.processExecutionSignals(document);
+  }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>9d4ef05c-007f-4f9e-9b46-a8149263ee25</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/84e20b92-e976-4620-85b3-9b02e7fe7244
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-review-ts:doc-review-state") == "NOT_REQUIRED" OR doc.attr("lecm-review-ts:doc-review-state") == "COMPLETE"]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/incoming-repo/workflow/scripts/incoming-scripts-lib.js">
+
+(function(){
+  var document = bpm_package.children[0];
+  if (document) {
+	LECMIncomingActions.processExecutionSignals(document);
+  }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>ScriptAction</type>

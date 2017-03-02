@@ -79,6 +79,10 @@
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>
+                <property name="lecm-incoming:auto-transition-to-execute">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
                 <property name="lecm-incoming:delivery-method-assoc-ref">
                     <type>d:text</type>
                     <index enabled="true">
