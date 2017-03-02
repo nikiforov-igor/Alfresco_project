@@ -36,155 +36,112 @@ LogicECM.ORD = LogicECM.ORD || {};
                 roles: []
             };
             var allowedStatuses = ["Черновик", "Проект", "Согласован", "На доработке", "Подписан", "На регистрации"];
+
             Alfresco.util.Ajax.jsonGet({
-                url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getCurrentEmployee",
+                url: Alfresco.constants.PROXY_URI + "lecm/ord/items/getCurrentEmployeeInfo",
+                dataObj: {
+                    nodeRef: this.options.itemId
+                },
                 successCallback: {
                     fn: function (response) {
-                        if (response && response.json.nodeRef) {
-                            currentUser.nodeRef = response.json.nodeRef;
-                            Alfresco.util.Ajax.jsonGet({
-                                url: Alfresco.constants.PROXY_URI + "lecm/security/api/currentUserHasDynamicBusinessRole",
-                                dataObj: {
-                                    nodeRef: this.options.itemId,
-                                    role: "BR_INITIATOR"
-                                },
-                                successCallback: {
-                                    fn: function (response) {
-                                        currentUser.roles.push("BR_INITIATOR");
-                                        Alfresco.util.Ajax.jsonGet({
-                                            url: Alfresco.constants.PROXY_URI + "lecm/security/api/currentUserHasDynamicBusinessRole",
-                                            dataObj: {
-                                                nodeRef: this.options.itemId,
-                                                role: "DA_REGISTRAR_DYN"
-                                            },
-                                            successCallback: {
-                                                fn: function (response) {
-                                                    currentUser.roles.push("DA_REGISTRAR_DYN");
-                                                    Alfresco.util.Ajax.jsonGet({
-                                                        url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getCurrentEmployeeRoles",
-                                                        successCallback: {
-                                                            fn: function (response) {
-                                                                if (response && response.json) {
-                                                                    var roles = response.json;
-                                                                    for (var i = 0; i < roles.length; i++) {
-                                                                        if (roles[i].id == "DA_REGISTRARS") {
-                                                                            currentUser.roles.push("DA_REGISTRARS");
-                                                                        }
-                                                                    }
-                                                                    Alfresco.util.Ajax.jsonPost({
-                                                                        url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
-                                                                        dataObj: {
-                                                                            nodeRef: this.options.itemId,
-                                                                            substituteString: "{lecm-ord:controller-assoc-ref},{lecm-statemachine:status}"
-                                                                        },
-                                                                        successCallback: {
-                                                                            fn: function (response) {
-                                                                                if (response && response.json.formatString) {
-                                                                                    var data = response.json.formatString.split(",");
-                                                                                    var controller = data[0];
-                                                                                    var docStatus = data[1];
-                                                                                    if (currentUser.nodeRef == controller) {
-                                                                                        currentUser.isController = true;
-                                                                                    }
-                                                                                    actions.push({
-                                                                                        type: actionType,
-                                                                                        id: "onActionCompletePoint",
-                                                                                        permission: "edit",
-                                                                                        label: this.msg("ord.item.complete.button"),
-                                                                                        evaluator: this.showCompleteActionEvaluator
-                                                                                    });
-                                                                                    actions.push({
-                                                                                        type: actionType,
-                                                                                        id: "onActionExecutePoint",
-                                                                                        permission: "edit",
-                                                                                        label: this.msg("ord.item.execute.button"),
-                                                                                        evaluator: this.showExecuteActionEvaluator
-                                                                                    });
-                                                                                    if (allowedStatuses.includes(docStatus)) {
-                                                                                        if (!this.options.disabled && this.options.mode == "edit") {
-                                                                                            if (this.options.allowEdit === true) {
-                                                                                                actions.push({
-                                                                                                    type: actionType,
-                                                                                                    id: "onActionEdit",
-                                                                                                    permission: "edit",
-                                                                                                    label: this.msg("actions.edit"),
-                                                                                                    evaluator: this.showActionsEvaluator
-                                                                                                });
-                                                                                            }
-                                                                                            if (this.options.allowDelete === true) {
-                                                                                                actions.push({
-                                                                                                    type: actionType,
-                                                                                                    id: "onActionDelete",
-                                                                                                    permission: "delete",
-                                                                                                    label: this.msg("actions.delete-row"),
-                                                                                                    evaluator: this.showActionsEvaluator
-                                                                                                });
-                                                                                            }
-                                                                                        }
-
-                                                                                        if (!this.options.isTableSortable && this.options.showActions && this.options.mode == "edit" && !this.options.disabled) {
-                                                                                            var otherActions = [];
-                                                                                            if (this.options.allowEdit === true) {
-                                                                                                otherActions.push({
-                                                                                                    type: actionType,
-                                                                                                    id: "onMoveTableRowUp",
-                                                                                                    permission: "edit",
-                                                                                                    label: this.msg("actions.tableRowUp"),
-                                                                                                    evaluator: this.showActionsEvaluator
-                                                                                                });
-                                                                                                otherActions.push({
-                                                                                                    type: actionType,
-                                                                                                    id: "onMoveTableRowDown",
-                                                                                                    permission: "edit",
-                                                                                                    label: this.msg("action.tableRowDown"),
-                                                                                                    evaluator: this.showActionsEvaluator
-                                                                                                });
-                                                                                            }
-                                                                                            if (this.options.allowCreate === true) {
-                                                                                                otherActions.push({
-                                                                                                    type: actionType,
-                                                                                                    id: "onAddRow",
-                                                                                                    permission: "edit",
-                                                                                                    label: this.msg("action.addRow"),
-                                                                                                    evaluator: this.showActionsEvaluator
-                                                                                                });
-                                                                                            }
-                                                                                            actions = actions.concat(otherActions);
-                                                                                        }
-                                                                                    } else {
-                                                                                        Dom.setStyle(this.id + "-toolbar", "display", "none");
-                                                                                    }
-                                                                                    this.realCreateDatagrid(actions, currentUser, docStatus);
-                                                                                }
-                                                                            },
-                                                                            scope: this
-                                                                        },
-                                                                        failureMessage: Alfresco.util.message("message.details.failure"),
-                                                                        scope: this
-                                                                    });
-                                                                }
-                                                            },
-                                                            scope: this
-                                                        },
-
-                                                        failureMessage: Alfresco.util.message("message.details.failure"),
-                                                        scope: this
-                                                    });
-
-                                                },
-                                                scope: this
-                                            },
-
-                                            failureMessage: Alfresco.util.message("message.details.failure"),
-                                            scope: this
-                                        });
+                        if(response && response.json.user){
+                            if(response.json.user.roles){
+                                currentUser.roles = response.json.roles;
+                            }
+                            if(response && response.json.user.nodeRef){
+                                currentUser.nodeRef = response.json.user.nodeRef;
+                                Alfresco.util.Ajax.jsonPost({
+                                    url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                                    dataObj: {
+                                        nodeRef: this.options.itemId,
+                                        substituteString: "{lecm-ord:controller-assoc-ref},{lecm-statemachine:status}"
                                     },
-                                    scope: this
-                                },
+                                    successCallback: {
+                                        fn: function (response) {
+                                            if (response && response.json.formatString) {
+                                                var data = response.json.formatString.split(",");
+                                                var controller = data[0];
+                                                var docStatus = data[1];
+                                                if (currentUser.nodeRef == controller) {
+                                                    currentUser.isController = true;
+                                                }
+                                                actions.push({
+                                                    type: actionType,
+                                                    id: "onActionCompletePoint",
+                                                    permission: "edit",
+                                                    label: this.msg("ord.item.complete.button"),
+                                                    evaluator: this.showCompleteActionEvaluator
+                                                });
+                                                actions.push({
+                                                    type: actionType,
+                                                    id: "onActionExecutePoint",
+                                                    permission: "edit",
+                                                    label: this.msg("ord.item.execute.button"),
+                                                    evaluator: this.showExecuteActionEvaluator
+                                                });
+                                                if (allowedStatuses.includes(docStatus)) {
+                                                    if (!this.options.disabled && this.options.mode == "edit") {
+                                                        if (this.options.allowEdit === true) {
+                                                            actions.push({
+                                                                type: actionType,
+                                                                id: "onActionEdit",
+                                                                permission: "edit",
+                                                                label: this.msg("actions.edit"),
+                                                                evaluator: this.showActionsEvaluator
+                                                            });
+                                                        }
+                                                        if (this.options.allowDelete === true) {
+                                                            actions.push({
+                                                                type: actionType,
+                                                                id: "onActionDelete",
+                                                                permission: "delete",
+                                                                label: this.msg("actions.delete-row"),
+                                                                evaluator: this.showActionsEvaluator
+                                                            });
+                                                        }
+                                                    }
 
-                                failureMessage: Alfresco.util.message("message.details.failure"),
-                                scope: this
-                            });
+                                                    if (!this.options.isTableSortable && this.options.showActions && this.options.mode == "edit" && !this.options.disabled) {
+                                                        var otherActions = [];
+                                                        if (this.options.allowEdit === true) {
+                                                            otherActions.push({
+                                                                type: actionType,
+                                                                id: "onMoveTableRowUp",
+                                                                permission: "edit",
+                                                                label: this.msg("actions.tableRowUp"),
+                                                                evaluator: this.showActionsEvaluator
+                                                            });
+                                                            otherActions.push({
+                                                                type: actionType,
+                                                                id: "onMoveTableRowDown",
+                                                                permission: "edit",
+                                                                label: this.msg("action.tableRowDown"),
+                                                                evaluator: this.showActionsEvaluator
+                                                            });
+                                                        }
+                                                        if (this.options.allowCreate === true) {
+                                                            otherActions.push({
+                                                                type: actionType,
+                                                                id: "onAddRow",
+                                                                permission: "edit",
+                                                                label: this.msg("action.addRow"),
+                                                                evaluator: this.showActionsEvaluator
+                                                            });
+                                                        }
+                                                        actions = actions.concat(otherActions);
+                                                    }
+                                                } else {
+                                                    Dom.setStyle(this.id + "-toolbar", "display", "none");
+                                                }
+                                                this.realCreateDatagrid(actions, currentUser, docStatus);
+                                            }
+                                        },
+                                        scope: this
+                                    },
+                                    failureMessage: Alfresco.util.message("message.details.failure"),
+                                    scope: this
+                                });
+                            }
                         }
                     },
                     scope: this
@@ -306,7 +263,6 @@ LogicECM.ORD = LogicECM.ORD || {};
         },
         onActionExecutePoint: function (me, asset, owner, actionsConfig, confirmFunction) {
             var nodeRef = arguments[0].nodeRef;
-            //actionUrl: Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/ord/item/execute?nodeRef=' + nodeRef,
             var executeDialog = new YAHOO.widget.SimpleDialog(this.id + '-execute-point-dialog-panel', {
                 visible: false,
                 draggable: true,

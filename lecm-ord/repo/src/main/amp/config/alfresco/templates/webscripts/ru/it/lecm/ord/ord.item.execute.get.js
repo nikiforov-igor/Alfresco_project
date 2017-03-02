@@ -6,15 +6,14 @@ if (item) {
     var currentUser = orgstructure.getCurrentEmployee();
     var reason = "Поручение автоматически закрыто в связи с исполнением пункта";
     var errandAssoc = item.assocs["lecm-ord-table-structure:errand-assoc"];
-    if (errandAssoc && errandAssoc.length){
+    if (errandAssoc && errandAssoc.length) {
         edsDocument.sendCompletionSignal(errandAssoc[0], reason, currentUser);
     }
     ordStatemachine.changePointStatus(item.nodeRef.toString(), "Исполнен");
-
     var recipients = [];
     var ordDoc = documentTables.getDocumentByTableDataRow(item);
     var controllerAssoc = ordDoc.assocs["lecm-ord:controller-assoc"];
-    if(controllerAssoc && controllerAssoc.length){
+    if (controllerAssoc && controllerAssoc.length) {
         recipients.push[controllerAssoc[0]];
     }
     notifications.sendNotificationFromCurrentUser({
@@ -23,10 +22,10 @@ if (item) {
         templateConfig: {
             mainObject: ordDoc,
             eventExecutor: currentUser,
-            number:number,
-            content:content,
-            title:title,
-            status:"Исполнен"
+            number: number,
+            content: content,
+            title: title,
+            status: "Исполнен"
         },
         dontCheckAccessToObject: true
     });

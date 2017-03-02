@@ -57,10 +57,8 @@ public class ORDSignerAssociationPolicy implements NodeServicePolicies.OnCreateA
                     if (itemSignerAssoc != null && itemSignerAssoc.size() != 0) {
                         NodeRef itemSigner = itemSignerAssoc.get(0).getTargetRef();
                         nodeService.removeAssociation(item, itemSigner, ORDModel.ASSOC_ORD_TABLE_ITEM_AUTHOR);
-                        nodeService.createAssociation(item, signer, ORDModel.ASSOC_ORD_TABLE_ITEM_AUTHOR);
-                    } else {
-                        nodeService.createAssociation(item, signer, ORDModel.ASSOC_ORD_TABLE_ITEM_AUTHOR);
                     }
+                    nodeService.createAssociation(item, signer, ORDModel.ASSOC_ORD_TABLE_ITEM_AUTHOR);
                 }
             }
         }

@@ -98,11 +98,7 @@
         var fieldHtmlId = formId + '_prop_' + args[1].fieldId.replace('\:', '_');
         var value = Dom.get(fieldHtmlId).value == "true";
         if (value) {
-            Util.reInitializeControl(formId, "lecm-ord-table-structure:controller-assoc", {
-                "disabled": false,
-                "mandatory": true
-            });
-
+            Util.enableControl(formId, "lecm-ord-table-structure:controller-assoc");
         } else {
             Util.reInitializeControl(formId, "lecm-ord-table-structure:controller-assoc", {
                 "resetValue": true,
