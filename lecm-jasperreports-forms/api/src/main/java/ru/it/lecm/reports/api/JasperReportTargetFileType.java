@@ -5,18 +5,17 @@ package ru.it.lecm.reports.api;
  */
 // TODO: сделать поддерживаемые mime-типы частью провайдера и контролировать это на уровне ReportManager
 public enum JasperReportTargetFileType {
-	PDF( "application/pdf", ".pdf")
-	, RTF( "application/rtf", ".rtf")
-	, DOC( "application/msword", ".doc")
-    , DOCX( "application/msword", ".docx")
-	, XML( "text/xml", ".xml")
-	, XLS( "application/vnd.ms-excel", ".xls")
-
-	, ODT( "application/vnd.oasis.opendocument.text", ".odt")
-	, OTT( "application/vnd.oasis.opendocument.text-template", ".ott")
-	, ODS( "application/vnd.oasis.opendocument.spreadsheet", ".ods")
-	, OTS( "application/vnd.oasis.opendocument.spreadsheet-template", ".ots")
-	;
+	PDF("application/pdf", ".pdf"),
+	RTF("application/rtf", ".rtf"),
+	DOC("application/msword", ".doc"),
+	DOCX("application/vnd.openxmlformats-officedocument.wordprocessingml.document", ".docx"),
+	XML("text/xml", ".xml"),
+	XLS("application/vnd.ms-excel", ".xls"),
+	XLSX("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ".xlsx"),
+	ODT("application/vnd.oasis.opendocument.text", ".odt"),
+	OTT("application/vnd.oasis.opendocument.text-template", ".ott"),
+	ODS("application/vnd.oasis.opendocument.spreadsheet", ".ods"),
+	OTS("application/vnd.oasis.opendocument.spreadsheet-template", ".ots");
 
 	final private String mimeType, extension;
 
