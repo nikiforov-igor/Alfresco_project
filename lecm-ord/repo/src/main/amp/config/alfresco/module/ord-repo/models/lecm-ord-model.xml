@@ -82,6 +82,10 @@
 				<property name="lecm-ord:real-end-date">
 					<type>d:date</type>
 				</property>
+				<!--Дата перехода в статус на исполнении-->
+				<property name="lecm-ord:transition-to-on-execution-date">
+					<type>d:date</type>
+				</property>
 				<property name="lecm-ord:signers-assoc-ref">
 					<type>d:text</type>
 					<index enabled="true">
