@@ -10,7 +10,7 @@
             </item>
             <item name="cm:Номер ОРД" type="lecm-regnum:template">
                 <property name="cm:name">Номер ОРД</property>
-                <property name="lecm-regnum:template-string">{#formatNumber('00000', doc.counterYearDoctype)}</property>
+                <property name="lecm-regnum:template-string">{#formatNumber('00000', doc.counterYearDoctype)}-{#formatDate('yy', doc.creationDate)}</property>
                 <property name="lecm-regnum:template-comment">Шаблон для номера ОРД</property>
                 <property name="lecm-regnum:template-service-id">ORD_NUMBER</property>
             </item>
