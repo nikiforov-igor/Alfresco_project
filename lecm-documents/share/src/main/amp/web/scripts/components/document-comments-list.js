@@ -585,7 +585,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                 this.setupCommentForm(rowId, comment.nodeRef, true);
 
                                 // make sure the new form is placed above the empty form placeholder in the datatable
-                                this.synchronizeElements(me.widgets.editFormWrapper, formContainer);
+                                this.synchronizeElements(this.widgets.editFormWrapper, formContainer);
 
                                 // Display the form
                                 Dom.removeClass(this.widgets.editFormWrapper, "hidden");
