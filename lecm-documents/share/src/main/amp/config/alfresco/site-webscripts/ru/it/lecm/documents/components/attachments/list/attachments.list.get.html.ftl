@@ -57,7 +57,7 @@
     	</div>
     </div>
 
-	<div id="${el}">
+	<div id="${el}" class="attachments-list-container">
 	    <#if categories??>
 	        <#list categories as category>
 	            <#assign categoryId = el + "-" + category.nodeRef?replace("/", "")?replace(":", "")/>

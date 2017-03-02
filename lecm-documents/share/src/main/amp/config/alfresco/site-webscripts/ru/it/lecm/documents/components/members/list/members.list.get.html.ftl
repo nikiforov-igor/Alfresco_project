@@ -23,9 +23,6 @@
 <div id="${el}" class="members-list">
     <table class="members-title">
         <tr>
-            <td class="members-name">
-            ${msg("label.document.members")}
-            </td>
             <#if hasAddPermission>
                 <td class="members-add">
                     <div class="member-add">

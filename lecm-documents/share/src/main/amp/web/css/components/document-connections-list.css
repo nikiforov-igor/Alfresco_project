@@ -1,9 +1,10 @@
 .connections-list {
+	margin: 0 1em;
 }
 .connections-list .connections-title,
 .connections-list .connections-table {
 	width: 100%;
-	padding: 0 1em .4em;
+	padding: 0 0 .4em;
 }
 
 .connections-list .connections-title .connections-name {

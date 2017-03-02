@@ -6,7 +6,7 @@
     </div>
 </div>
 
-<div id="${id}_myErrandsList-view-mode-button-group" class="yui-buttongroup connections-view-mode-button-group">
+<div id="${id}_myErrandsList-view-mode-button-group" class="yui-buttongroup errands-view-mode-button-group">
     <input id="${id}-view-mode-radiofield-links" type="radio" name="view-mode-radiofield" value="${msg("errands.list")}" checked />
     <input id="${id}-view-mode-radiofield-tree" type="radio" name="view-mode-radiofield" value="${msg("errands.tree")}" />
 	<span class="errands-list-filter">
