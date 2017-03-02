@@ -8,7 +8,7 @@
 			results = results.concat(getPickerChildrenItems('ISNOTNULL:"sys:node-dbid"', null, true, elementParams).results);
 		});
 	} else {
-		status.code = 404;
+		status.code = 422;
 		status.message = 'Insufficient parameter "elementsParams". It must be not empty array.';
 		status.redirect = true;
 	}
