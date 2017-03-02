@@ -49,7 +49,7 @@
 							<control-param name="changeItemsFireAction">contractor.selected</control-param>
 							<control-param name="items">contractor,organisation,person</control-param>
 							<control-param name="showAutocomplete">true</control-param>
-							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
+							<control-param name="autocompleteDataSourceMethodPost">true</control-param>
 							<control-param name="cssClasses">with-ex-search</control-param>
 							<control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
 							<!-- lecm-contractor:contractor-type -->
@@ -243,7 +243,7 @@
 							<control-param name="changeItemsFireAction">contractor.selected</control-param>
 							<control-param name="items">contractor,organisation,person</control-param>
 							<control-param name="showAutocomplete">true</control-param>
-							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
+							<control-param name="autocompleteDataSourceMethodPost">true</control-param>
 							<control-param name="cssClasses">with-ex-search</control-param>
 							<control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
 							<!-- lecm-contractor:contractor-type -->
@@ -360,7 +360,7 @@
 							<control-param name="changeItemsFireAction">contractor.selected</control-param>
 							<control-param name="items">contractor,organisation,person</control-param>
 							<control-param name="showAutocomplete">true</control-param>
-							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
+							<control-param name="autocompleteDataSourceMethodPost">true</control-param>
 							<control-param name="cssClasses">with-ex-search</control-param>
 							<control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
 							<!-- lecm-contractor:contractor-type -->
@@ -476,7 +476,7 @@
 							<control-param name="changeItemsFireAction">contractor.selected</control-param>
 							<control-param name="items">contractor,organisation,person</control-param>
 							<control-param name="showAutocomplete">true</control-param>
-							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
+							<control-param name="autocompleteDataSourceMethodPost">true</control-param>
 							<control-param name="cssClasses">with-ex-search</control-param>
 							<control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
 							<!-- lecm-contractor:contractor-type -->
@@ -653,7 +653,7 @@
 							<control-param name="changeItemsFireAction">contractor.selected</control-param>
 							<control-param name="items">contractor,organisation,person</control-param>
 							<control-param name="showAutocomplete">true</control-param>
-							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
+							<control-param name="autocompleteDataSourceMethodPost">true</control-param>
 							<control-param name="cssClasses">with-ex-search</control-param>
 							<control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
 							<!-- lecm-contractor:contractor-type -->
@@ -809,7 +809,7 @@
 							<control-param name="changeItemsFireAction">contractor.selected</control-param>
 							<control-param name="items">contractor,organisation,person</control-param>
 							<control-param name="showAutocomplete">true</control-param>
-							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
+							<control-param name="autocompleteDataSourceMethodPost">true</control-param>
 							<control-param name="cssClasses">with-ex-search</control-param>
 							<control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
 							<!-- lecm-contractor:contractor-type -->
@@ -983,7 +983,7 @@
 							<control-param name="changeItemsFireAction">contractor.selected</control-param>
 							<control-param name="items">contractor,organisation,person</control-param>
 							<control-param name="showAutocomplete">true</control-param>
-							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
+							<control-param name="autocompleteDataSourceMethodPost">true</control-param>
 							<control-param name="cssClasses">with-ex-search</control-param>
 							<control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
 							<!-- lecm-contractor:contractor-type -->
