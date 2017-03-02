@@ -31,3 +31,15 @@ LogicECM.module.ORD.commonLimitationDateValidation =
         }
         return true;
     };
+
+LogicECM.module.ORD.itemControllerValidation =
+    function (field, args, event, form, silent, message, props) {
+        if (field.form) {
+            var controllerField = field.form["assoc_lecm-ord-table-structure_controller-assoc"];
+            var reportRequired = field.form["prop_lecm-ord-table-structure_report-required"];
+            if (reportRequired.value == "true" && field.name != "prop_lecm-ord-table-structure_report-required") {
+                return controllerField.value.length > 0;
+            }
+        }
+        return true;
+    };

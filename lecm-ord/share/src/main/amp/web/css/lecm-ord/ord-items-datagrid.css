@@ -1,0 +1,7 @@
+.datagrid .action-set .onActionExecutePoint a {
+    background-image: url(../../components/images/complete-16.png);
+}
+
+.datagrid .action-set .onActionCompletePoint a {
+    background-image: url(../../components/images/complete-16.png);
+}

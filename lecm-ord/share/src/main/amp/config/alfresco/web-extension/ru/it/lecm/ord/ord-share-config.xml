@@ -146,6 +146,7 @@
                     <field id="lecm-ord:temp-items-assoc" label-id="label.points">
                         <control template="/ru/it/lecm/base-share/components/controls/association-datagrid-control.ftl">
                             <control-param name="itemType">lecm-ord-table-structure:item</control-param>
+                            <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
                             <control-param name="allowCreate">true</control-param>
                             <control-param name="allowExpand">false</control-param>
                             <control-param name="showActions">true</control-param>
@@ -158,7 +159,7 @@
                             <control-param name="newRowDialogTitle">ord.item.create.form.title</control-param>
                             <control-param name="editRowDialogTitle">ord.item.edit.form.title</control-param>
                             <control-param name="datagridFormId">datagrid-create</control-param>
-                            <control-param name="editFormId">ord-create-view-point</control-param>
+                            <control-param name="editFormId">edit</control-param>
                         </control>
                     </field>
                     <field id="confirmCompletionHandler">
@@ -549,7 +550,6 @@
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
                             <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
-                            <control-param name="expandable">true</control-param>
                             <control-param name="expandDataSource">components/form?formId=table-structure-info</control-param>
                             <control-param name="isTableSortable">false</control-param>
                             <control-param name="refreshAfterCreate">true</control-param>
@@ -558,6 +558,11 @@
                             <control-param name="editFormTitleMsg">ord.item.edit.form.title</control-param>
                             <control-param name="createFormTitleMsg">ord.item.create.form.title</control-param>
                             <control-param name="viewFormTitleMsg">ord.item.view.form.title</control-param>
+                            <control-param name="jsDependencies">scripts/lecm-ord/ord-items-datagrid.js</control-param>
+                            <control-param name="cssDependencies">css/lecm-ord/ord-items-datagrid.css</control-param>
+                            <control-param name="jsObjectName">LogicECM.ORD.PointsTS</control-param>
+                            <control-param name="showActions">true</control-param>
+                            <control-param name="refreshAfterCreate">true</control-param>
                         </control>
                     </field>
 					<field id="lecmApproveAspects:approvalFolderRef" set="approvalTab">
@@ -645,14 +650,50 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="lecm-document:indexTableRow" force="true" />
+                    <show id="lecm-ord-table-structure:title"/>
+                    <show id="lecm-ord-table-structure:item-content"/>
+                    <show id="lecm-ord-table-structure:executor-assoc"/>
+                    <show id="lecm-ord-table-structure:coexecutors-assoc"/>
+                    <show id="lecm-ord-table-structure:limitation-date-text" />
+                    <show id="lecm-ord-table-structure:report-required"/>
+                    <show id="lecm-ord-table-structure:controller-assoc"/>
+                    <show id="lecm-ord-table-structure:subject-assoc"/>
+                    <show id="lecm-ord-table-structure:item-status-assoc"/>
+                    <show id="lecm-ord-table-structure:item-comment"/>
+                    <show id="lecm-ord-table-structure:errand-assoc"/>
+                    <show id="ord-item-view-form-script" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <set id="buttons" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <field id="lecm-ord-table-structure:errand-assoc" read-only="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
+                            <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:present-string}</control-param>
+                            <control-param name="showInaccessible">true</control-param>
+                        </control>
+                    </field>
+                    <field id="ord-item-view-form-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-ord/ord-item-view-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">ordItemViewFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script" set="buttons">
+                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="edit">
+                <edit-form/>
+                <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-ord-table-structure:title"/>
                     <show id="lecm-ord-table-structure:item-content"/>
                     <show id="lecm-ord-table-structure:executor-assoc"/>
                     <show id="lecm-ord-table-structure:coexecutors-assoc"/>
-                    <show id="lecm-ord-table-structure:report-required"/>
-                    <show id="lecm-ord-table-structure:controller-assoc"/>
-                    <show id="lecm-ord-table-structure:subject-assoc"/>
                     <!-- Срок исполнения -->
                     <show id="lecm-base-dummy-aspects:script2" force="true"/>
                     <show id="lecm-ord-table-structure:limitation-date-radio" />
@@ -660,19 +701,34 @@
                     <show id="lecm-ord-table-structure:limitation-date-days" />
                     <show id="lecm-ord-table-structure:limitation-date-type"/>
                     <show id="lecm-ord-table-structure:execution-date" />
+                    <show id="lecm-ord-table-structure:report-required"/>
+                    <show id="lecm-ord-table-structure:controller-assoc"/>
+                    <show id="lecm-ord-table-structure:subject-assoc"/>
                     <show id="lecm-ord-table-structure:item-status-assoc"/>
-                    <show id="lecm-ord-table-structure:errand-assoc"/>
+                    <show id="ord-item-edit-form-script" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="bottom"/>
 
-                    <field id="lecm-document:indexTableRow" mandatory="true"/>
+                    <field id="lecm-document:indexTableRow" mandatory="true" read-only="true"/>
+                    <field id="lecm-ord-table-structure:report-required"  set="bottom">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+                            <control-param name="changeFireAction">ordItemReportRequiredChanged</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.itemControllerValidation" event="change"/>
+                        </constraint-handlers>
+                    </field>
                     <field id="lecm-ord-table-structure:controller-assoc" set="bottom">
                         <control>
                             <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                         </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.itemControllerValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
+                        </constraint-handlers>
                     </field>
+                    <field id="lecm-document:indexTableRow" mandatory="true"/>
                     <field id="lecm-ord-table-structure:subject-assoc" set="bottom"/>
                     <field id="lecm-ord-table-structure:item-status-assoc" set="bottom"/>
                     <field id="lecm-ord-table-structure:limitation-date-radio" set="limitation-date"  mandatory="true">
@@ -681,20 +737,20 @@
                             <control-param name="fireChangeEventName">ordItemChangeLimitationDateRadio</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-ord-table-structure:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change"  message-id="Alfresco.forms.validation.mandatory.message"/>
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-ord-table-structure:limitation-date-type" set="limitation-date">
+                    <field id="lecm-ord-table-structure:limitation-date-type" set="limitation-date" help-id="ord.item.limitation-date.help.title">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
                     <field id="lecm-ord-table-structure:execution-date" set="limitation-date">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change"  message-id="Alfresco.forms.validation.mandatory.message"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script2">
@@ -712,21 +768,23 @@
                             <control-param name="textCode">label.ord.limitless</control-param>
                         </control>
                     </field>
-                    <field id="lecm-ord-table-structure:report-required" read-only="true" />
                     <field id="lecm-ord-table-structure:item-status-assoc" read-only="true" set="bottom"/>
                     <field id="lecm-ord-table-structure:errand-assoc" read-only="true" set="bottom"/>
+                    <field id="ord-item-edit-form-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-ord/ord-item-create-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">ordItemEditFormScriptLoaded</control-param>
+                        </control>
+                    </field>
                 </appearance>
             </form>
             <form id="table-structure-info">
                 <field-visibility>
-                    <show id="lecm-ord-table-structure:item-content"/>
+                    <show id="ord-item-execution-tree" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-ord-table-structure:item-content">
-                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-                            <control-param name="rows">4</control-param>
-                            <control-param name="columns">155</control-param>
-                        </control>
+                    <field id="ord-item-execution-tree">
+                        <control template="/ru/it/lecm/eds/controls/execution-tree-control.ftl"/>
                     </field>
                 </appearance>
             </form>
@@ -751,16 +809,29 @@
                 <show id="lecm-ord-table-structure:limitation-date-days" />
                 <show id="lecm-ord-table-structure:limitation-date-type"/>
                 <show id="lecm-ord-table-structure:execution-date" />
+                <show id="ord-item-create-form-script" force="true"/>
             </field-visibility>
             <appearance>
                 <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                 <set id="bottom"/>
 
                 <field id="lecm-document:indexTableRow" mandatory="true"/>
+                <field id="lecm-ord-table-structure:report-required" set="bottom">
+                    <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+                        <control-param name="changeFireAction">ordItemReportRequiredChanged</control-param>
+                        <control-param name="defaultValue">true</control-param>
+                    </control>
+                    <constraint-handlers>
+                        <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.itemControllerValidation" event="change"/>
+                    </constraint-handlers>
+                </field>
                 <field id="lecm-ord-table-structure:controller-assoc" set="bottom">
                     <control>
                         <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
                     </control>
+                    <constraint-handlers>
+                        <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.itemControllerValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
+                    </constraint-handlers>
                 </field>
                 <field id="lecm-ord-table-structure:subject-assoc" set="bottom"/>
                 <field id="lecm-ord-table-structure:limitation-date-radio" set="limitation-date"  mandatory="true">
@@ -769,20 +840,20 @@
                         <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
                     </control>
                     <constraint-handlers>
-                        <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change" />
+                        <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
                     </constraint-handlers>
                 </field>
                 <field id="lecm-ord-table-structure:limitation-date-days" set="limitation-date" mandatory="true">
                     <constraint-handlers>
-                        <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change" />
+                        <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
                     </constraint-handlers>
                 </field>
-                <field id="lecm-ord-table-structure:limitation-date-type" set="limitation-date">
+                <field id="lecm-ord-table-structure:limitation-date-type" set="limitation-date" help-id="ord.item.limitation-date.help.title">
                     <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                 </field>
                 <field id="lecm-ord-table-structure:execution-date" set="limitation-date">
                     <constraint-handlers>
-                        <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change" />
+                        <constraint type="MANDATORY" validation-handler="LogicECM.module.ORD.commonLimitationDateValidation" event="change" message-id="Alfresco.forms.validation.mandatory.message"/>
                     </constraint-handlers>
                 </field>
                 <field id="lecm-base-dummy-aspects:script2">
@@ -800,15 +871,27 @@
                         <control-param name="textCode">label.ord.limitless</control-param>
                     </control>
                 </field>
+                <field id="ord-item-create-form-script">
+                    <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                        <control-param name="scripts">scripts/lecm-ord/ord-item-create-form-script.js</control-param>
+                        <control-param name="scriptLoadedFireAction">ordItemCreateFormScriptLoaded</control-param>
+                    </control>
+                </field>
             </appearance>
         </form>
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true"/>
+                    <show id="lecm-ord-table-structure:title"/>
                     <show id="lecm-ord-table-structure:executor-assoc"/>
                     <show id="lecm-ord-table-structure:limitation-date-text"/>
+                    <show id="lecm-ord-table-structure:report-required"/>
                     <show id="lecm-ord-table-structure:item-status-assoc"/>
+                    <show id="lecm-ord-table-structure:controller-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-ord-table-structure:report-required" label-id="label.ord.item.on_control"/>
+                </appearance>
             </form>
             <form id="datagrid-create">
                 <field-visibility>

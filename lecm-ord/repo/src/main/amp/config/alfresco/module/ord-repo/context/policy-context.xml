@@ -18,7 +18,9 @@
 		  init-method="init" depends-on="ord.document.models.bootstrap"
 		  p:policyComponent-ref="policyComponent"
 		  p:nodeService-ref="nodeService"
-		  p:dictionaryService-ref="serviceDictionary"/>
+		  p:dictionaryService-ref="serviceDictionary"
+		  p:orgstructureService-ref="serviceOrgstructure"
+          p:documentTableService-ref="documentTableService"/>
 
 	<bean id="ord.ORDControllerPolicy"
 		  class="ru.it.lecm.ord.policies.ORDControllerPolicy"
@@ -32,4 +34,12 @@
 		  init-method="init"
 		  parent="logicEcmAssociationPolicy"
 		  depends-on="eds.models.bootstrap"/>
+	<bean id="ord.ORDSignerAssocPolicy"
+		  class="ru.it.lecm.ord.policies.ORDSignerAssociationPolicy"
+		  init-method="init"
+		  depends-on="ord.document.models.bootstrap"
+		  p:policyComponent-ref="policyComponent"
+		  p:nodeService-ref="nodeService"
+		  p:documentTableService-ref="documentTableService"/>
+
 </beans>

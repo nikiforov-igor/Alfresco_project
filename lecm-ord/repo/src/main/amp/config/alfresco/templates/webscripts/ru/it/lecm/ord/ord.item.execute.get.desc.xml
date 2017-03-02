@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Исполнить пункт орд</shortname>
+    <description>Исполнить пункт орд</description>
+    <url>/lecm/ord/item/execute?nodeRef={nodeRef}</url>
+    <authentication>user</authentication>
+    <transaction>required</transaction>
+    <format default="json"/>
+</webscript>

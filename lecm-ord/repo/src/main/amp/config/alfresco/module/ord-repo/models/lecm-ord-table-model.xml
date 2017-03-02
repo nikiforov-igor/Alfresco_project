@@ -118,6 +118,22 @@
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>
+                <property name="lecm-ord-table-structure:author-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-ord-table-structure:compiler-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
                 <property name="lecm-ord-table-structure:controller-assoc-ref">
                     <type>d:text</type>
                     <index enabled="true">
@@ -252,6 +268,30 @@
                     </source>
                     <target>
                         <class>lecm-doc-dic:subjects</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+                <!-- Автор -->
+                <association name="lecm-ord-table-structure:author-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!-- Составитель -->
+                <association name="lecm-ord-table-structure:compiler-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
