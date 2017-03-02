@@ -82,43 +82,44 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			// Передача параметров отдельных элементов
 			var options = context.options,
 				elementsParams = [];
+			var logic = options.dataSourceLogic;
 			if (options.itemsOptions && options.itemsOptions.length) {
 				for (var i=0; i < options.itemsOptions.length; ++i) {
-					var logic = options.dataSourceLogic;
 					if (logic == 'AND' || (logic == 'OR' && LogicECM.module.AssociationComplexControl.Utils.isKeySelectedOrEmpty(options.itemsOptions[i].itemKey, context))) {
-						var itemObj = {};
-						if (options.itemsOptions[i].options.nameSubstituteString) {
-							itemObj.nameSubstituteString = options.itemsOptions[i].options.nameSubstituteString;
+						var itemObj = {},
+							opts = options.itemsOptions[i].options;
+						if (opts.nameSubstituteString) {
+							itemObj.nameSubstituteString = opts.nameSubstituteString;
 						}
-						if (options.itemsOptions[i].options.titleNameSubstituteString) {
-							itemObj.titleNameSubstituteString = options.itemsOptions[i].options.titleNameSubstituteString;
+						if (opts.titleNameSubstituteString) {
+							itemObj.titleNameSubstituteString = opts.titleNameSubstituteString;
 						}
-						if (options.itemsOptions[i].options.selectedItemsNameSubstituteString) {
-							itemObj.selectedItemsNameSubstituteString = options.itemsOptions[i].options.selectedItemsNameSubstituteString;
+						if (opts.selectedItemsNameSubstituteString) {
+							itemObj.selectedItemsNameSubstituteString = opts.selectedItemsNameSubstituteString;
 						}
-						if (options.itemsOptions[i].options.itemType) {
-							itemObj.selectableType = options.itemsOptions[i].options.itemType;
+						if (opts.itemType) {
+							itemObj.selectableType = opts.itemType;
 						}
-						if (options.itemsOptions[i].options.additionalFilter) {
-							itemObj.additionalFilter = options.itemsOptions[i].options.additionalFilter;
+						if (opts.additionalFilter) {
+							itemObj.additionalFilter = opts.additionalFilter;
 						}
-						if (options.itemsOptions[i].options.rootLocation && forAutocomplete) {
-							itemObj.xpath = options.itemsOptions[i].options.rootLocation;
+						if (opts.rootLocation && forAutocomplete) {
+							itemObj.xpath = opts.rootLocation;
 						}
-						if (options.itemsOptions[i].options.rootLocation) {
-							itemObj.pathRoot = options.itemsOptions[i].options.rootLocation;
+						if (opts.rootLocation) {
+							itemObj.pathRoot = opts.rootLocation;
 						}
-						if (options.itemsOptions[i].options.xPathLocation) {
-							itemObj.xPathLocation = options.itemsOptions[i].options.xPathLocation;
+						if (opts.xPathLocation) {
+							itemObj.xPathLocation = opts.xPathLocation;
 						}
-						if (options.itemsOptions[i].options.xPathLocationRoot) {
-							itemObj.xPathRoot = options.itemsOptions[i].options.xPathLocationRoot;
+						if (opts.xPathLocationRoot) {
+							itemObj.xPathRoot = opts.xPathLocationRoot;
+						}
+						if (opts.useStrictFilterByOrg) {
+							itemObj.onlyInSameOrg = opts.useStrictFilterByOrg;
 						}
 						if (options.itemsOptions[i].itemKey) {
 							itemObj.itemKey = options.itemsOptions[i].itemKey;
-						}
-						if (options.itemsOptions[i].options.useStrictFilterByOrg) {
-							itemObj.onlyInSameOrg = options.itemsOptions[i].options.useStrictFilterByOrg;
 						}
 						elementsParams.push(itemObj);
 					}

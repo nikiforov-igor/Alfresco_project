@@ -14,8 +14,7 @@
 			dataPart = getPickerChildrenItems('ISNOTNULL:"sys:node-dbid"', null, true, obj.elementsParams[i]);
 			data.results = data.results.concat(dataPart.results);
 		}
-	}
-	else {
+	} else {
 		data = getPickerChildrenItems('ISNOTNULL:"sys:node-dbid"');
 	}
 
