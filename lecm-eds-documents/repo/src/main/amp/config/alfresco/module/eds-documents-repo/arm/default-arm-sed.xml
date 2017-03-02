@@ -9939,6 +9939,8 @@
                                     </item>
                                 </items>
                                 <assocs>
+                                    <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Я - регистратор"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/598a62b0-1b96-46f5-85de-b70791d8e7d2"/>
                                     <assoc type="lecm-arm:fields-assoc"
@@ -11080,6 +11082,8 @@
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/02185d88-2721-4e9c-9bca-a66bafcb4500"/>
                                     <assoc type="lecm-arm:filters-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По срокам"/>
+                                    <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Я - регистратор"/>
                                 </assocs>
                             </item>
                             <item name="cm:ff570e8b-542b-4094-9781-bf33293ddd0b" type="lecm-arm:field">
@@ -11255,6 +11259,8 @@
                                     </item>
                                 </items>
                                 <assocs>
+                                    <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Я - регистратор"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Запросы на резервирование номера/7398a4a0-b9c4-4165-93cf-167f373803d7"/>
                                     <assoc type="lecm-arm:fields-assoc"
