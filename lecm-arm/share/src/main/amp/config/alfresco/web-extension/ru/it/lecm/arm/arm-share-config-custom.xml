@@ -459,11 +459,6 @@
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
 							<control-param name="rows">6</control-param>
 							<control-param name="containerStyleClass">hidden1</control-param>
-							<control-param name="defaultValue">
-								<![CDATA[<div class="centered">
-    <img src='{markerIcon}' width='16px' title='{title}'/>
-</div>]]>
-							</control-param>
 						</control>
 					</field>
 				</appearance>
