@@ -6,12 +6,12 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.JRRtfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.alfresco.repo.content.filestore.FileContentReader;
 import org.alfresco.repo.content.filestore.FileContentWriter;
 import org.alfresco.repo.content.transform.ContentTransformer;
-import org.alfresco.repo.content.transform.OpenOfficeContentTransformerWorker;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.IOUtils;
@@ -243,6 +243,9 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
                     break;
                 case XLS:
                     exportReportToStream(new JRXlsExporter(), jPrint, outputStream);
+                    break;
+                case XLSX:
+                    exportReportToStream(new JRXlsxExporter(), jPrint, outputStream);
                     break;
                 default:
                     final String msg = String.format("Unknown report target '%s' -> using PDF by default", target);
