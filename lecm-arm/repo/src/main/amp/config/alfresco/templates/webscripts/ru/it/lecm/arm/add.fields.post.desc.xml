@@ -8,6 +8,6 @@
 	title}
 	</description>
 	<url>/lecm/arm/settings/addFields</url>
-	<format default="json">argument</format>
+	<format default="json"/>
 	<authentication>user</authentication>
 </webscript>

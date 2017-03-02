@@ -2,7 +2,7 @@
     <shortname>workgroup employees</shortname>
     <description>Return workgroup employees</description>
     <url>/lecm/orgstructure/api/getWorkGroupEmployees?nodeRef={nodeRef}</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

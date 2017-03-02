@@ -2,7 +2,7 @@
     <shortname>Валюта</shortname>
     <description>Валюта договора</description>
     <url>/lecm/contracts/getCurrency</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

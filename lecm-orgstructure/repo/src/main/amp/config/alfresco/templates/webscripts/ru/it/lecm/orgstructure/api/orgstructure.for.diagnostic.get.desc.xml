@@ -2,7 +2,7 @@
     <shortname>Users info</shortname>
     <description>Diagnostic info about orgstructure</description>
     <url>/lecm/orgstructure/api/getUsersInfo</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>admin</authentication>
     <transaction>none</transaction>
 </webscript>

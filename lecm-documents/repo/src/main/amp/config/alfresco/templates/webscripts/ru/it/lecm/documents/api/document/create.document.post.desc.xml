@@ -2,6 +2,6 @@
     <shortname>Document Create</shortname>
     <description>Создание документа</description>
     <url>/lecm/document/api/createDocument</url>
-    <format default="json">argument</format>
+    <format default="json"/>
     <authentication>user</authentication>
 </webscript>

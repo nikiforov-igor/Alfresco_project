@@ -20,10 +20,24 @@ public interface DocumentGlobalSettingsService {
 	QName TYPE_SETTINGS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "settings");
 	QName PROP_SETTINGS_LINKS_VIEW_MODE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "links-view-mode");
 	QName PROP_SETTINGS_HIDE_PROPS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "hide-properties-for-recipients");
-	
+	QName PROP_ENABLE_PASSIVE_NOTIFICATIONS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "enable-passive");
+	QName PROP_N_DAYS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "n-days");
+
+	int DEFAULT_N_DAYS = 5;
+
 	NodeRef getSettingsNode();
 	
 	Boolean isHideProperties();
 	
 	String getLinksViewMode();
+
+	/**
+	 * @return Включены или выключены пассивные уведомления
+	 */
+	boolean isEnablePassiveNotifications();
+
+	/**
+	 * @return Количество рабочих дней за которое должно высылаться уведомление
+	 */
+	int getSettingsNDays();
 }

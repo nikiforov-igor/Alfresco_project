@@ -44,6 +44,16 @@
                         <constraint ref="lecm-document-global-settings:links-view-const"/>
                     </constraints>
                 </property>
+                <property name="lecm-document-global-settings:enable-passive">
+                    <type>d:boolean</type>
+                    <mandatory>true</mandatory>
+                    <default>false</default>
+                </property>
+                <property name="lecm-document-global-settings:n-days">
+                    <type>d:int</type>
+                    <mandatory>true</mandatory>
+                    <default>5</default>
+                </property>
 		    </properties>
 	    </type>
     </types>

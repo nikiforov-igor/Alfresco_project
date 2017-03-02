@@ -34,7 +34,6 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
 
     var Dom = YAHOO.util.Dom;
     var Bubbling = YAHOO.Bubbling;
-    var nodeDictionary = null;    //TODO
 
     LogicECM.module.Dictionary.Tree = function (htmlId) {
         LogicECM.module.Dictionary.Tree.superclass.constructor.call(
@@ -214,25 +213,23 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
          * @private
          */
         _loadRootNode:function () {
-            var me = this;
-            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent(this.options.dictionaryName);
-                var callback = {
-                    success:function (oResponse) {
-                        var oResults = eval("(" + oResponse.responseText + ")");
-                        if (oResults != null && oResults.nodeRef != null) {
-                            nodeDictionary = oResults.nodeRef;
-                            me.rootNode = oResults;
+            Alfresco.util.Ajax.jsonGet({
+                url: Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary",
+	            dataObj: {
+		            dicName: this.options.dictionaryName
+	            },
+				successCallback: {
+					scope: this,
+                    fn: function (response) {
+                        var oResults = response.json;
+                        if (oResults && oResults.nodeRef) {
+                            this.rootNode = oResults;
                         }
-
-                        me.draw();
-                    },
-                    failure:function (oResponse) {
-	                    alert(me.msg('message.dictionary.loading.fail'));
-                    },
-                    argument:{
+						this.draw();
                     }
-                };
-                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                },
+                failureMessage: this.msg('message.dictionary.loading.fail')
+            });
         },
         /**
          * Получение значений дерева
@@ -240,52 +237,53 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
          * @param fnLoadComplete
          */
         _loadTree:function loadNodeData(node, fnLoadComplete) {
-
-            var sUrl = Alfresco.constants.PROXY_URI + this.options.dictionaryURL;
-            if (node.data.nodeRef != null) {
-                sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
+            var dataObj = {};
+            if (node.data.nodeRef) {
+	            dataObj.nodeRef = node.data.nodeRef;
             }
-            var callback = {
-                success:function (oResponse) {
-                    var oResults = eval("(" + oResponse.responseText + ")");
-                    if (oResults != null) {
-                        node.children = [];
-	                    if (node.isLeaf) {
-		                    node.isLeaf = oResults.length == 0
-	                    }
-                        for (var nodeIndex in oResults) {
-                            var newNode = {
-                                label:oResults[nodeIndex].title,
-                                nodeRef:oResults[nodeIndex].nodeRef,
-                                isLeaf:oResults[nodeIndex].isLeaf,
-                                type:oResults[nodeIndex].type,
-	                            childType: oResults[nodeIndex].childType,
-                                renderHidden:true
-                            };
-                            new YAHOO.widget.TextNode(newNode, node);
+            Alfresco.util.Ajax.jsonGet({
+                url: Alfresco.constants.PROXY_URI + this.options.dictionaryURL,
+                dataObj: dataObj,
+                successCallback: {
+	                scope: this,
+                    fn: function (response) {
+                        var oResults = response.json;
+                        if (oResults) {
+                            node.children = [];
+                            if (node.isLeaf) {
+                                node.isLeaf = oResults.length == 0
+                            }
+                            for (var nodeIndex in oResults) {
+                                var newNode = {
+                                    label: oResults[nodeIndex].title,
+                                    nodeRef: oResults[nodeIndex].nodeRef,
+                                    isLeaf: oResults[nodeIndex].isLeaf,
+                                    type: oResults[nodeIndex].type,
+                                    childType: oResults[nodeIndex].childType,
+                                    renderHidden: true
+                                };
+                                new YAHOO.widget.TextNode(newNode, node);
+                            }
+                        }
+
+                        if (YAHOO.lang.isFunction(fnLoadComplete)) {
+                            fnLoadComplete.call();
+                        } else {
+                            tree.render();
                         }
                     }
+                },
+                failureCallback: {
+                    fn: function (response) {
+                        YAHOO.log("Failed to process XHR transaction.", "info", "example");
+                        if (YAHOO.lang.isFunction(fnLoadComplete)) {
+                            fnLoadComplete.call();
+                        }
+                    },
+                    scope: this
+                }
+            });
 
-                    if (oResponse.argument.fnLoadComplete != null) {
-                        oResponse.argument.fnLoadComplete();
-                    } else {
-                        oResponse.argument.tree.render();
-                    }
-//                    makeDraggable();
-                },
-                failure:function (oResponse) {
-                    YAHOO.log("Failed to process XHR transaction.", "info", "example");
-                    oResponse.argument.fnLoadComplete();
-                },
-                argument:{
-                    node:node,
-                    fnLoadComplete:fnLoadComplete,
-                    tree:tree,
-                    context:this
-                },
-                timeout:7000
-            };
-            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         },
         /**
          * Выбор ветки/листа в дереве и перерисовка таблицы значений ветки

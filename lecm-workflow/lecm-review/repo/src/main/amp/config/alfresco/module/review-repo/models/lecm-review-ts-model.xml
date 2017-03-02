@@ -31,6 +31,15 @@
 				</list>
 			</parameter>
 		</constraint>
+		<constraint name="lecm-review-ts:doc-review-state-constraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>IN_PROCESS</value>
+					<value>COMPLETE</value>
+					<value>NOT_REQUIRED</value>
+				</list>
+			</parameter>
+		</constraint>
 	</constraints>
 
 	<types>
@@ -144,6 +153,24 @@
 						<stored>false</stored>
 						<tokenised>false</tokenised>
 					</index>
+				</property>
+				<!-- состояние ознакомления -->
+				<property name="lecm-review-ts:doc-review-state">
+					<type>d:text</type>
+					<default>NOT_REQUIRED</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="lecm-review-ts:doc-review-state-constraint"/>
+					</constraints>
+				</property>
+				<!-- json [{"state": "статус", "count": "кол-во"}]-->
+				<property name="lecm-review-ts:doc-review-statistics">
+					<type>d:text</type>
+					<index enabled="false"/>
 				</property>
 			</properties>
 			<associations>

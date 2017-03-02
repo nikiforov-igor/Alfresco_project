@@ -1,11 +1,11 @@
-<#escape x as x?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 {
 	<#if type??>
-	"type":"${type}",
+	"type": "${type}",
 	</#if>
 	<#if node??>
-	"nodeRef":"${node.nodeRef?string}",
+	"nodeRef": "${node.nodeRef?string}",
 	</#if>
-	"redirect":${redirect?string}
+	"redirect": ${redirect?string}
 }
 </#escape>

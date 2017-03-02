@@ -271,8 +271,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 		ActionsClickAdapter: function(item, actionId, actionsConfig, fnPrompt) {
 
 			function execAction() {
-				Alfresco.util.Ajax.jsonRequest({
-					method: "POST",
+				Alfresco.util.Ajax.jsonPost({
 					url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
 					dataObj: {
 						items: [item.nodeRef],
@@ -282,12 +281,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 						scope: this,
 						fn: this._actionResponse
 					},
-					failureCallback: {
-						fn: function () {
-
-						}
-					},
-					scope: this
+					failureMessage: this.msg('message.failure'),
 				});
 			};
 
@@ -356,19 +350,20 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 		},
 
 		deleteYearSection_Prompt: function(execFunction, item) {
-
-			Alfresco.util.Ajax.jsonRequest({
-				method: 'GET',
-				url: Alfresco.constants.PROXY_URI + 'lecm/dictionary/api/getChildrenItems.json?nodeRef=' + item.nodeRef,
+			Alfresco.util.Ajax.jsonGet({
+				url: Alfresco.constants.PROXY_URI + 'lecm/dictionary/api/getChildrenItems.json',
+				dataObj: {
+					nodeRef: item.nodeRef
+				},
 				successCallback: {
 					scope: this,
 					fn: function(response) {
 						if(response.json.length) {
 							Alfresco.util.PopupManager.displayPrompt({
-								title:Alfresco.util.message('lecm.os.lbl.remove.nomen'),
-								text: Alfresco.util.message('lecm.os.msg.not.empty.nomen'),
+								title: this.msg('lecm.os.lbl.remove.nomen'),
+								text: this.msg('lecm.os.msg.not.empty.nomen'),
 								buttons:[{
-									text: 'Ок',
+									text: this.msg('lecm.os.btn.ok'),
 									handler: {
 										obj: {
 											context: this,
@@ -377,7 +372,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 										fn: deleteAnyway
 									}
 								}, {
-									text: 'Отмена',
+									text: this.msg('lecm.os.btn.cancel'),
 									handler: {
 										fn: cancel
 									}

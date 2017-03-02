@@ -2,7 +2,7 @@
     <shortname>Дерево привилегий</shortname>
     <description>Дерево привилегий </description>
     <url>/lecm/documents/aclTree</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

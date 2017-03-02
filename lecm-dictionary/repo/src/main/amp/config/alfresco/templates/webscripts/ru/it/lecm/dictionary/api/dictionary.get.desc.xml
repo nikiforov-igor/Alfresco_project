@@ -2,7 +2,7 @@
 	<shortname>Dictionary</shortname>
 	<description>Dictionary</description>
 	<url>/lecm/dictionary/api/getDictionary</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

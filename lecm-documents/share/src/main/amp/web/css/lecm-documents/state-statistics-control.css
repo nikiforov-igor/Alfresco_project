@@ -1,0 +1,22 @@
+.state-statistics.control .statistics-icon.collapsed {
+    background: transparent url(../../components/images/collapsed.png) no-repeat scroll left center;
+}
+
+.state-statistics.control .statistics-icon.expanded {
+    background: transparent url(../../components/images/expanded.png) no-repeat scroll left center;
+}
+
+.state-statistics.control .state-statistics-value {
+    padding-left: 14px;
+    color: #303030;
+}
+
+.state-statistics.control .value-div .statistics li {
+    font-size: 11px;
+    padding-left: 15px;
+}
+
+.state-statistics.control .statistics-icon a {
+    text-decoration: none;
+    outline: none;
+}

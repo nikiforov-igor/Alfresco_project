@@ -45,25 +45,20 @@ LogicECM.module = LogicECM.module || {};
 
         onReady: function SelectOne_onReady() {
             YAHOO.util.Event.on(this.id, "change", this.onSelectChange, this, true);
-            var url;
-            if (this.options.webscriptType != null && this.options.webscriptType == "server") {
-                url = Alfresco.constants.PROXY_URI;
-            } else {
-                url = Alfresco.constants.URL_SERVICECONTEXT;
-            }
-            url += this.options.webscript;
-            var symbol = url.indexOf("?") > 0 ? "&" : "?";
-            if (this.options.destination != null && this.options.destination != "" && this.options.destination != "{destination}") {
-                url += symbol + "nodeRef=" + this.options.destination + "&type=create";
-            } else if (this.options.currentNodeRef != null) {
-                url += symbol + "nodeRef=" + this.options.currentNodeRef + "&type=edit";
-            }
+            var url = YAHOO.lang.substitute('{context}{webscript}', {
+                context: this.options.webscriptType == "server" ? Alfresco.constants.PROXY_URI : Alfresco.constants.URL_SERVICECONTEXT,
+                webscript: this.options.webscript
+            });
             Alfresco.util.Ajax.jsonGet({
                 url: url,
+	            dataObj: {
+					nodeRef: this.options.destination && this.options.destination != "{destination}" ? this.options.destination : this.options.currentNodeRef,
+					type: this.options.destination && this.options.destination != "{destination}" ? "create" : "edit"
+				},
                 successCallback: {
                     fn: function (response) {
                         var oResults = response.json;
-                        if (oResults != null) {
+                        if (oResults) {
                             var select = document.getElementById(this.id);
                             for (var i = 0; i < oResults.data.length; i++) {
                                 var option = document.createElement("option");

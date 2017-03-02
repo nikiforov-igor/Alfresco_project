@@ -2,7 +2,7 @@
 	<shortname>Document get arm url</shortname>
 	<description>Document get arm url</description>
 	<url>/lecm/document/getArmUrl?nodeRef={nodeRef}</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

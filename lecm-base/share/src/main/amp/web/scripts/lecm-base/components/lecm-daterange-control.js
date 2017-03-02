@@ -64,9 +64,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             currentToDate: null,
 
             options: {
-                toDateDefault: "NOW", //NEXT_MONTH, START_YEAR, LAST_MONTH, NOW
+                /**
+                 * Ограничения по мин/макс значению
+                 */
+                minFromLimit: null,
+                maxFromLimit: null,
+                minToLimit: null,
+                maxToLimit: null,
+                toDateDefault: "NOW", //NEXT_MONTH, START_YEAR, LAST_MONTH, NOW, TOMORROW, EMPTY
                 fromDateDefault: "LAST_MONTH",
-                fillDates: false
+                fillDates: false,
+                mask: "dd.mm.yyyy",
+                placeholder: Alfresco.util.message("lecm.form.control.date-picker.display.date.format")
             },
 
             /**
@@ -76,15 +85,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @method onReady
              */
             onReady: function DateRange_onReady() {
-                var toDate = this._getDateByKey(this.options.toDateDefault);
-                toDate.setHours(12);
-                toDate.setMinutes(0);
-                toDate.setSeconds(0);
-
-                var fromDate = this._getDateByKey(this.options.fromDateDefault);
-                fromDate.setHours(12);
-                fromDate.setMinutes(0);
-                fromDate.setSeconds(0);
+                var toDate = this._getDateByKey("NOW");
+                var fromDate = this._getDateByKey("NOW");
 
                 if (Dom.get(this.valueHtmlId).value) {
                     var fullDate = Dom.get(this.valueHtmlId).value.split("|");
@@ -100,18 +102,25 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	                    Dom.get(this.id + "-date-to").value = toDate.toString(this._msg("form.control.date-picker.entry.date.format"));
                         this.currentToDate = fullDate[1];
                     }
-                    // Write output back (as ISO8601)
-                    Dom.get(this.valueHtmlId).value = fullDate.join("|");
                 } else {
                     if (this.options.fillDates) {
-                        Dom.get(this.id + "-date-from").value = fromDate.toString(this._msg("form.control.date-picker.entry.date.format"));
-                        this.currentFromDate = Alfresco.util.toISO8601(fromDate, {"milliseconds": false});
+                        var fromDateFilled = this._getDateByKey(this.options.fromDateDefault);
+                        var toDateFilled = this._getDateByKey(this.options.toDateDefault);
 
-                        Dom.get(this.id + "-date-to").value = toDate.toString(this._msg("form.control.date-picker.entry.date.format"));
-                        this.currentToDate = Alfresco.util.toISO8601(toDate, {"milliseconds": false});
+                        if (fromDateFilled) {
+                            fromDate = fromDateFilled;
+                            Dom.get(this.id + "-date-from").value = fromDate.toString(this._msg("form.control.date-picker.entry.date.format"));
+                            this.currentFromDate = Alfresco.util.toISO8601(fromDate, {"milliseconds": false});
+                        }
+                        if (toDateFilled) {
+                            toDate = toDateFilled;
+                            Dom.get(this.id + "-date-to").value = toDate.toString(this._msg("form.control.date-picker.entry.date.format"));
+                            this.currentToDate = Alfresco.util.toISO8601(toDate, {"milliseconds": false});
+                        }
                     }
-                    this._updateCurrentValue();
                 }
+
+                this._updateCurrentValue();
 
                 // construct the pickers
                 var page = (fromDate.getMonth() + 1) + "/" + fromDate.getFullYear();
@@ -133,6 +142,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 this.widgets.calendarFrom.cfg.setProperty("pagedate", page);
                 this.widgets.calendarFrom.cfg.setProperty("selected", selected);
+                if (this.options.minFromLimit) {
+                    var minDate = Alfresco.util.fromISO8601(this.options.minFromLimit);
+                    if (minDate) {
+                        this.widgets.calendarFrom.cfg.setProperty("mindate", Alfresco.util.formatDate(minDate, "mm/dd/yyyy"));
+                    }
+                }
+                if (this.options.maxFromLimit) {
+                    var maxDate = Alfresco.util.fromISO8601(this.options.maxFromLimit);
+                    if (maxDate) {
+                        this.widgets.calendarFrom.cfg.setProperty("maxdate", Alfresco.util.formatDate(maxDate, "mm/dd/yyyy"));
+                    }
+                }
 
                 this.widgets.calendarFrom.hideEvent.subscribe(function () {
                     // Focus icon after calendar is closed
@@ -165,6 +186,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 });
                 this.widgets.calendarTo.cfg.setProperty("pagedate", page);
                 this.widgets.calendarTo.cfg.setProperty("selected", selected);
+                if (this.options.minToLimit) {
+                    var minToDate = Alfresco.util.fromISO8601(this.options.minToLimit);
+                    if (minToDate) {
+                        this.widgets.calendarTo.cfg.setProperty("mindate", Alfresco.util.formatDate(minToDate, "mm/dd/yyyy"));
+                    }
+                }
+                if (this.options.maxToLimit) {
+                    var maxToDate = Alfresco.util.fromISO8601(this.options.maxToLimit);
+                    if (maxToDate) {
+                        this.widgets.calendarTo.cfg.setProperty("maxdate", Alfresco.util.formatDate(maxToDate, "mm/dd/yyyy"));
+                    }
+                }
 
                 this.widgets.calendarTo.hideEvent.subscribe(function () {
                     // Focus icon after calendar is closed
@@ -178,6 +211,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     // setup keyboard enter events on the image instead of the link to get focus outline displayed
                     Alfresco.util.useAsButton(iconEl, this._showPicker, null, this);
                     Event.addListener(this.id + "-icon-to", "click", this._showPicker, this, true);
+                }
+
+                if (this.options.mask) {
+                    $("#" + this.id + "-date-from").inputmask(this.options.mask, {
+                        placeholder: this.options.placeholder
+                    });
+                    $("#" + this.id + "-date-to").inputmask(this.options.mask, {
+                        placeholder: this.options.placeholder
+                    });
                 }
 
                 // Hide Calendar if we click anywhere in the document other than the calendar
@@ -230,19 +272,38 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // render the calendar controls
                 this.widgets.calendarFrom.render();
                 this.widgets.calendarTo.render();
+
+                // initial validation
+                this.validate();
             },
 
             _getDateByKey: function (key) {
                 var date = new Date();
-                if (key != null && key != "NOW") {
-                    if (key == "START_YEAR") {
+                date.setHours(12);
+                date.setMinutes(0);
+                date.setSeconds(0);
+
+                switch (key) {
+                    case 'START_YEAR':
                         date.setMonth(0);
                         date.setDate(1);
-                    } else if (key == "NEXT_MONTH") {
+                        break;
+                    case 'NEXT_MONTH' :
                         date.setMonth(date.getMonth() + 1);
-                    } else if (key == "LAST_MONTH"){
+                        break;
+                    case 'LAST_MONTH' :
                         date.setMonth(date.getMonth() - 1);
-                    }
+                        break;
+                    case 'TOMORROW':
+                        date.setDate(date.getDate() + 1);
+                        break;
+                    case 'NOW':
+                        break;
+                    case 'EMPTY':
+                        date = null; /*сброс даты*/
+                        break;
+                    default:
+                        break;
                 }
                 return date;
             },
@@ -463,34 +524,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @private
              */
             _handleFieldChangeFrom: function DateRange__handleFieldChangeFrom(event) {
-                var changedDate = Dom.get(this.id + "-date-from").value;
-                if (changedDate.length > 0) {
-                    // Only set for actual value changes so tab or shift events doesn't remove the "text selection" of the input field
-                    if (event == undefined || (event.keyCode != KeyListener.KEY.TAB && event.keyCode != KeyListener.KEY.SHIFT)) {
-
-                        // convert to format expected by YUI
-                        var parsedDate = Date.parseExact(changedDate, this.msg("lecm.form.control.date-picker.entry.date.format"));
-                        if (parsedDate != null) {
-                            this.widgets.calendarFrom.select((parsedDate.getMonth() + 1) + "/" + parsedDate.getDate() + "/" + parsedDate.getFullYear());
-                            var selectedDates = this.widgets.calendarFrom.getSelectedDates();
-                            if (selectedDates.length > 0) {
-                                Dom.removeClass(this.id + "-date-from", "invalid");
-                                var firstDate = selectedDates[0];
-                                this.widgets.calendarFrom.cfg.setProperty("pagedate", (firstDate.getMonth() + 1) + "/" + firstDate.getFullYear());
-                                this.widgets.calendarFrom.render();
-                            }
-                        }
-                        else {
-                            Dom.addClass(this.id + "-date-from", "invalid");
-                        }
-                    }
-                }
-                else {
-                    // when the date is completely cleared remove the hidden field and remove the invalid class
-                    Dom.removeClass(this.id + "-date-from", "invalid");
-                    this.currentFromDate = "";
-                    this._updateCurrentValue();
-                }
+                this._handleChange(event, "-date-from", this.widgets.calendarFrom, this.options.minFromLimit, this.options.maxFromLimit);
             },
 
             /**
@@ -501,28 +535,39 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @private
              */
             _handleFieldChangeTo: function DateRange__handleFieldChangeTo(event) {
-                var changedDate = Dom.get(this.id + "-date-to").value;
-                if (changedDate.length > 0) {
-                    // convert to format expected by YUI
-                    var parsedDate = Date.parseExact(changedDate, this.msg("lecm.form.control.date-picker.entry.date.format"));
-                    if (parsedDate != null) {
-                        this.widgets.calendarTo.select((parsedDate.getMonth() + 1) + "/" + parsedDate.getDate() + "/" + parsedDate.getFullYear());
-                        var selectedDates = this.widgets.calendarTo.getSelectedDates();
-                        if (selectedDates.length > 0) {
-                            Dom.removeClass(this.id + "-date-to", "invalid");
-                            var firstDate = selectedDates[0];
-                            this.widgets.calendarTo.cfg.setProperty("pagedate", (firstDate.getMonth() + 1) + "/" + firstDate.getFullYear());
-                            this.widgets.calendarTo.render();
+                this._handleChange(event, "-date-to", this.widgets.calendarTo, this.options.minToLimit, this.options.maxToLimit);
+            },
+
+            /**
+             * Обработчик ручного редактирования поля
+             *
+             * @method _handleChange
+             * @param event
+             * @param prefix
+             * @param calendar
+             * @param min
+             * @param max
+             * @private
+             */
+            _handleChange: function(event, prefix, calendar, min, max) {
+                var changedDate = Dom.get(this.id + prefix).value;
+                if (changedDate.length) {
+                    // Only set for actual value changes so tab or shift events doesn't remove the "text selection" of the input field
+                    if (!event || (event.keyCode != KeyListener.KEY.TAB && event.keyCode != KeyListener.KEY.SHIFT)) {
+                        // convert to format expected by YUI
+                        var parsedDate = Date.parseExact(changedDate, this.msg("lecm.form.control.date-picker.entry.date.format"));
+                        if (parsedDate) {
+                            calendar.select((parsedDate.getMonth() + 1) + "/" + parsedDate.getDate() + "/" + parsedDate.getFullYear());
+                            var selectedDates = calendar.getSelectedDates();
+                            if (selectedDates.length) {
+                                var firstDate = selectedDates[0];
+                                calendar.cfg.setProperty("pagedate", (firstDate.getMonth() + 1) + "/" + firstDate.getFullYear());
+                                calendar.render();
+                            }
                         }
                     }
-                    else {
-                        Dom.addClass(this.id + "-date-to", "invalid");
-                    }
-                }
-                else {
-                    // when the date is completely cleared remove the hidden field and remove the invalid class
-                    Dom.removeClass(this.id + "-date-to", "invalid");
-                    this.currentToDate = "";
+                } else {
+                    this.currentFromDate = "";
                     this._updateCurrentValue();
                 }
             },
@@ -533,27 +578,66 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             onChangeDates: function() {
-                if (this.widgets.calendarFrom != null && this.widgets.calendarTo != null) {
+                return this.validate();
+            },
+
+            _checkDateLimits: function (date, min, max) {
+                if (date) {
+                    var minLimitDate = null;
+                    if (min) {
+                        minLimitDate = Alfresco.util.fromISO8601(min);
+                    }
+                    var maxLimitDate = null;
+                    if (max) {
+                        maxLimitDate = Alfresco.util.fromISO8601(max);
+                    }
+                    return (!minLimitDate || minLimitDate <= date) && (!maxLimitDate || date <= maxLimitDate);
+                }
+                return true;
+            },
+
+            validate: function () {
+                var valid = true;
+                if (this.widgets.calendarFrom && this.widgets.calendarTo) {
                     var startPickerId = this.id + "-date-from";
                     var endPickerId = this.id + "-date-to";
                     var startDate = Date.parseExact(Dom.get(startPickerId).value, this.msg("lecm.form.control.date-picker.entry.date.format"));
                     var endDate = Date.parseExact(Dom.get(endPickerId).value, this.msg("lecm.form.control.date-picker.entry.date.format"));
 
-                    if (startDate != null && endDate != null) {
+                    var validFrom = this._checkDateLimits(startDate, this.options.minFromLimit, this.options.maxFromLimit);
+                    var validTo = this._checkDateLimits(endDate, this.options.minToLimit, this.options.maxToLimit);
+                    var validRange = true;
+
+                    if (startDate && endDate) {
                         if (startDate > endDate) {
-                            Dom.addClass(startPickerId, "invalid");
-                            Dom.addClass(endPickerId, "invalid");
-                            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this.widgets.calendarFrom);
-                            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this.widgets.calendarTo);
-                        } else {
-                            Dom.removeClass(startPickerId, "invalid");
-                            Dom.removeClass(endPickerId, "invalid");
-                            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this.widgets.calendarFrom);
-                            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this.widgets.calendarTo);
+                            validRange = false;
                         }
                     }
-                }
-            }
 
+                    if (!validRange) {
+                        Dom.addClass(startPickerId, "invalid");
+                        Dom.addClass(endPickerId, "invalid");
+                        valid = false;
+                    } else {
+                        if (validFrom) {
+                            Dom.removeClass(startPickerId, "invalid");
+                        } else {
+                            Dom.addClass(startPickerId, "invalid");
+                        }
+
+                        if (validTo) {
+                            Dom.removeClass(endPickerId, "invalid");
+                        } else {
+                            Dom.addClass(endPickerId, "invalid");
+                        }
+
+                        valid = validFrom && validTo;
+                    }
+
+                    YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this.widgets.calendarFrom);
+                    YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this.widgets.calendarTo);
+                }
+                return valid;
+            }
         });
 })();

@@ -23,13 +23,16 @@
 			} else {
 				nodeRef = simpleDialog.options.nodeRef;
 			}
-			Alfresco.util.Ajax.request({
-				url: Alfresco.constants.PROXY_URI + 'lecm/deputy/getCompleteDeputiesList?nodeRef=' + nodeRef,
+			Alfresco.util.Ajax.jsonGet({
+				url: Alfresco.constants.PROXY_URI + 'lecm/deputy/getCompleteDeputiesList',
+				dataObj: {
+					nodeRef: nodeRef
+				},
 				successCallback: {
 					scope: this,
 					fn: function (response) {
 						YAHOO.Bubbling.unsubscribe('formValueChanged', onFormValueChanged);
-						var oResults = JSON.parse(response.serverResponse.responseText);
+						var oResults = response.json;
 						if (oResults) {
 							var ignore = oResults.ignoredString.split(",");
 							var filter = '@lecm\\-orgstr\\-aspects\\:linked\\-organization\\-assoc\\-ref:\"' + oResults.organization + '\"';
@@ -46,7 +49,7 @@
 						}
 					}
 				},
-				failureMessage: 'message.failure'
+				failureMessage: Alfresco.util.message('message.failure')
 			});
 		}
 	}

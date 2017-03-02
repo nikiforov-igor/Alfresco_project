@@ -2,7 +2,7 @@
     <shortname>employee boss</shortname>
     <description>Return employee boss or empty if boss is absent</description>
     <url>/lecm/orgstructure/api/getEmployeeBoss?nodeRef={nodeRef}</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

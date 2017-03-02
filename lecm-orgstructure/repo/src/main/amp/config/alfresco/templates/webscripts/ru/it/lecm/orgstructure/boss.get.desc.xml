@@ -2,7 +2,7 @@
     <shortname>Boos</shortname>
     <description>Returns boss position</description>
     <url>/lecm/orgstructure/boss</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

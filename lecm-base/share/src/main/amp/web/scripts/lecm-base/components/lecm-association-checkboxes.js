@@ -146,26 +146,24 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			loadDefaultValues: function () {
-				if (this.options.defaultValuesDataSource != null) {
-					var me = this;
-
-					Alfresco.util.Ajax.request(
-						{
-							url: Alfresco.constants.PROXY_URI + this.options.defaultValuesDataSource,
-							successCallback: {
-								fn: function (response) {
-									var oResults = eval("(" + response.serverResponse.responseText + ")");
-									if (oResults != null) {
-										me.defaultValues = [];
-										for (var i = 0; i < oResults.length; i++) {
-											me.defaultValues.push(oResults[i].nodeRef);
-										}
+				if (this.options.defaultValuesDataSource) {
+					Alfresco.util.Ajax.jsonGet({
+						url: Alfresco.constants.PROXY_URI + this.options.defaultValuesDataSource,
+						successCallback: {
+							fn: function (response) {
+								var oResults = response.json;
+								if (oResults) {
+									this.defaultValues = [];
+									for (var i = 0; i < oResults.length; i++) {
+										this.defaultValues.push(oResults[i].nodeRef);
 									}
-									me.loadData();
 								}
+								this.loadData();
 							},
-							failureMessage: "message.failure"
-						});
+							scope: this
+						},
+						failureMessage: this.msg("message.failure")
+					});
 				} else {
 					this.loadData();
 				}

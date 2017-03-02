@@ -2,7 +2,7 @@
     <shortname>Get document members folder</shortname>
     <description>Document Members Folder Get</description>
     <url>/lecm/document/api/getMembersFolder?nodeRef={nodeRef}</url>
-    <format default="json">extension</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

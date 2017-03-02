@@ -3,25 +3,21 @@
 <script type="text/javascript">
     //    <![CDATA[
     function getBoss() {
-        Alfresco.util.Ajax.request(
-                {
-                    url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getOrganizationBoss",
-                    successCallback: {
-                        fn: function (response) {
-                            if (response.json.boss) {
-                                var bossField = Dom.get("${htmlId}");
-                                if (bossField != null) {
-                                    bossField.innerHTML = response.json.bossShortName;
-                                }
-                            }
-                        }
-                    },
-                    failureMessage:  {
-                        fn: function () {
-                            alert("failure.message");
+        Alfresco.util.Ajax.jsonGet({
+            url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getOrganizationBoss",
+            successCallback: {
+                fn: function (response) {
+                    if (response.json.boss) {
+                        var bossField = Dom.get("${htmlId}");
+                        if (bossField) {
+                            bossField.innerHTML = response.json.bossShortName;
                         }
                     }
-                });
+                },
+                scope: this
+            },
+            failureMessage: "${msg('message.failure')}"
+        });
     }
     YAHOO.util.Event.onDOMReady(getBoss);
     //]]>

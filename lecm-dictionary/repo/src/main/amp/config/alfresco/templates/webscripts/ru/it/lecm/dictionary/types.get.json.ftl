@@ -1,4 +1,4 @@
-<#escape x as jsonUtils.encodeJSONString(x)>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 {
 	"data": [
 		<#if results??>

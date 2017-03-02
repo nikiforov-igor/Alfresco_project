@@ -7,7 +7,7 @@
     assocType
     </description>
     <url>/lecm/base/createAssoc</url>
-    <format default="json">argument</format>
+    <format default="json"/>
     <authentication>user</authentication>
     <transaction allow="readwrite" buffersize="0">required</transaction>
     <lifecycle>internal</lifecycle>

@@ -2,6 +2,6 @@
 	<shortname>Получить список зарегистрированных в системе типов</shortname>
 	<description>Получить список зарегистрированных в системе типов</description>
 	<url>/lecm/base/types</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>none</authentication>
 </webscript>
