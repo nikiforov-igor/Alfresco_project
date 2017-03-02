@@ -216,4 +216,11 @@
         </property>
     </bean>
 
+    <bean id="listOfUsedOrdTypes" parent="listOfUsedTypes">
+        <property name="types">
+            <map>
+                <entry key="lecm-ord-dic:documentType" value="Вид ОРД"/>
+            </map>
+        </property>
+    </bean>
 </beans>
