@@ -1587,7 +1587,7 @@
                     </field>
                     <field id="lecm-errands:report-required" set="right-end">
                         <control>
-                            <control-param name="hideFieldsIfNotSelect">lecm-errands:report-recipient-type</control-param>
+                            <control-param name="changeFireAction">errandReportRequiredChanged</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:report-recipient-type" set="right-end">

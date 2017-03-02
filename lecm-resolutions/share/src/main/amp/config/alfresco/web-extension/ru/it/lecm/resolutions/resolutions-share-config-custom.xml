@@ -169,7 +169,7 @@
                     </field>
                     <field id="lecm-base-dummy-aspects:script6" set="errands">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-errands/errands-change-controller-handler.js</control-param>
+                            <control-param name="scripts">scripts/lecm-errands/errands-report-required-handler.js</control-param>
                         </control>
                     </field>
 
@@ -648,7 +648,7 @@
                     </field>
                     <field id="lecm-base-dummy-aspects:script6" set="errands">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-errands/errands-change-controller-handler.js</control-param>
+                            <control-param name="scripts">scripts/lecm-errands/errands-report-required-handler.js</control-param>
                         </control>
                     </field>
 
