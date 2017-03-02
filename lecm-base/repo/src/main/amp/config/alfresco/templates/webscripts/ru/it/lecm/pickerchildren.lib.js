@@ -400,8 +400,7 @@ function getArg(argName, isPost, itemParams) {
 	} else if (isPost) {
 		// Получение аргумента для POST-запроса
 		return json.has(argName) ? json.get(argName) : null;
-	}
-	else {
+	} else {
 		// Получение аргумента для GET-запроса
 		return args[argName];
 	}
