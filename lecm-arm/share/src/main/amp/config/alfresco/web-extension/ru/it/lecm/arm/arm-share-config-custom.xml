@@ -439,7 +439,34 @@
 					<show id="lecm-arm:field-format-string" force="true"/>
 					<show id="lecm-arm:field-sortable" force="true"/>
 					<show id="lecm-arm:field-by-default" force="true"/>
+					<show id="lecm-arm:field-is-marker" force="true"/>
+					<show id="lecm-arm:field-marker-icon" force="true"/>
+					<show id="lecm-arm:field-marker-html" force="true"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:field-is-marker">
+						<control>
+							<control-param name="hideFieldsIfNotSelect">lecm-arm:field-marker-icon,lecm-arm:field-marker-html</control-param>
+							<control-param name="disabledFieldsIfNotSelect">lecm-arm:field-marker-icon,lecm-arm:field-marker-html</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:field-marker-icon">
+						<control>
+							<control-param name="containerStyleClass">hidden1</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:field-marker-html">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							<control-param name="rows">6</control-param>
+							<control-param name="containerStyleClass">hidden1</control-param>
+							<control-param name="defaultValue">
+								<![CDATA[<div class="centered">
+    <img src='{markerIcon}' width='16px' title='{title}'/>
+</div>]]>
+							</control-param>
+						</control>
+					</field>
+				</appearance>
 			</form>
 		</forms>
 	</config>
@@ -453,7 +480,34 @@
 					<show id="lecm-arm:field-format-string" force="true"/>
 					<show id="lecm-arm:field-sortable" force="true"/>
 					<show id="lecm-arm:field-by-default" force="true"/>
+					<show id="lecm-arm:field-is-marker" force="true"/>
+					<show id="lecm-arm:field-marker-icon" force="true"/>
+					<show id="lecm-arm:field-marker-html" force="true"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:field-is-marker">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+							<control-param name="hideFieldsIfNotSelect">lecm-arm:field-marker-icon,lecm-arm:field-marker-html</control-param>
+							<control-param name="disabledFieldsIfNotSelect">lecm-arm:field-marker-icon,lecm-arm:field-marker-html</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:field-marker-icon">
+						<control>
+							<control-param name="containerStyleClass">hidden1</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:field-marker-html">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							<control-param name="rows">6</control-param>
+							<control-param name="containerStyleClass">hidden1</control-param>
+							<control-param name="defaultValue">
+								<![CDATA[<div class="centered">
+    <img src='{markerIcon}' width='16px' title='{title}'/>
+</div>]]>
+							</control-param>
+						</control>
+					</field>
+				</appearance>
 			</form>
 		</forms>
 	</config>

@@ -13,6 +13,9 @@ public class ArmColumn {
 	private String formatString;
 	private boolean sortable;
 	private boolean byDefault;
+	private boolean isMarker;
+	private String markerIcon;
+	private String markerHTML;
     private NodeRef id;
 
 	public ArmColumn(NodeRef nodeRef) {
@@ -62,6 +65,8 @@ public class ArmColumn {
 		if (field != null ? !field.equals(armColumn.field) : armColumn.field != null) return false;
 		if (formatString != null ? !formatString.equals(armColumn.formatString) : armColumn.formatString != null) return false;
 		if (title != null ? !title.equals(armColumn.title) : armColumn.title != null) return false;
+		if (isMarker != armColumn.isMarker) return false;
+		if (markerIcon != null ? !markerIcon.equals(armColumn.markerIcon) : armColumn.markerIcon != null) return false;
 
 		return true;
 	}
@@ -73,6 +78,8 @@ public class ArmColumn {
 		result = 31 * result + (id != null ? id.hashCode() : 0);
 		result = 31 * result + (formatString != null ? formatString.hashCode() : 0);
 		result = 31 * result + (sortable ? 1 : 0);
+		result = 31 * result + (isMarker ? 1 : 0);
+		result = 31 * result + (markerIcon != null ? markerIcon.hashCode() : 0);
 		return result;
 	}
 
@@ -87,4 +94,28 @@ public class ArmColumn {
     public void setByDefault(boolean byDefault) {
         this.byDefault = byDefault;
     }
+
+	public boolean isMarker() {
+		return isMarker;
+	}
+
+	public void setMarker(boolean marker) {
+		isMarker = marker;
+	}
+
+	public String getMarkerIcon() {
+		return markerIcon;
+	}
+
+	public void setMarkerIcon(String markerIcon) {
+		this.markerIcon = markerIcon;
+	}
+
+	public String getMarkerHTML() {
+		return markerHTML;
+	}
+
+	public void setMarkerHTML(String markerHTML) {
+		this.markerHTML = markerHTML;
+	}
 }
