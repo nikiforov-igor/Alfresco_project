@@ -79,10 +79,10 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
     }
 
     /**
-     * Получаем список участников: исполнителей и контроллеров
+     * Получаем список участников: исполнителей и контролеров
      *
      * @param document подписка на документ
-     * @return список исполнителей и контроллеров
+     * @return список исполнителей и контролеров
      */
     private ArrayList<NodeRef> getEmployeeList(NodeRef document) {
         Set<NodeRef> employee = new HashSet<>();
