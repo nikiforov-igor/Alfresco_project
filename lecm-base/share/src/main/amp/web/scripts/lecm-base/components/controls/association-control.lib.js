@@ -15,12 +15,13 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 		generateRequest: function (context, searchTerm, skipItemsCount, forAutocomplete, exSearchFilter) {
 			/* построение параметров для запроса данных датагрида */
-			var options = context.options;
-			var additionalFilter = options.additionalFilter,
+			var options = context.options,
+				additionalFilter = options.additionalFilter,
 				allowedNodesFilter,
 				ignoreNodesFilter,
 				notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i,
-				singleNotQuery;
+				singleNotQuery,
+				paramsObj;
 
 			if (options.allowedNodes) {
 				allowedNodesFilter = options.allowedNodes.reduce(function (prev, curr) {
@@ -56,7 +57,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}
 			}
 
-			var paramsObj = {
+			paramsObj = {
 				selectableType: options.itemType,
 				searchTerm: searchTerm ? searchTerm : '',
 				size: LogicECM.module.AssociationComplexControl.Utils.getMaxSearchResult(options, forAutocomplete),
@@ -81,13 +82,15 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		getElementsParams: function(context, forAutocomplete) {
 			// Передача параметров отдельных элементов
 			var options = context.options,
-				elementsParams = [];
-			var logic = options.dataSourceLogic;
+				logic = options.dataSourceLogic,
+				elementsParams = [],
+				itemObj,
+				opts;
 			if (options.itemsOptions && options.itemsOptions.length) {
-				for (var i=0; i < options.itemsOptions.length; ++i) {
-					if (logic == 'AND' || (logic == 'OR' && LogicECM.module.AssociationComplexControl.Utils.isKeySelectedOrEmpty(options.itemsOptions[i].itemKey, context))) {
-						var itemObj = {},
-							opts = options.itemsOptions[i].options;
+				options.itemsOptions.forEach(function(itemOptions) {
+					if (logic == 'AND' || (logic == 'OR' && LogicECM.module.AssociationComplexControl.Utils.isKeySelectedOrEmpty(itemOptions.itemKey, context))) {
+						itemObj = {};
+						opts = itemOptions.options;
 						if (opts.nameSubstituteString) {
 							itemObj.nameSubstituteString = opts.nameSubstituteString;
 						}
@@ -118,20 +121,21 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 						if (opts.useStrictFilterByOrg) {
 							itemObj.onlyInSameOrg = opts.useStrictFilterByOrg;
 						}
-						if (options.itemsOptions[i].itemKey) {
-							itemObj.itemKey = options.itemsOptions[i].itemKey;
+						if (itemOptions.itemKey) {
+							itemObj.itemKey = itemOptions.itemKey;
 						}
 						elementsParams.push(itemObj);
 					}
-				}
+				});
 			}
 			return elementsParams;
 		},
 
 		isKeySelectedOrEmpty: function (itemKey, context) {
-			var isSelected = false;
+			var isSelected = false,
+				selected;
 			if (itemKey && context && context.widgets && context.widgets.picker) {
-				var selected = context.widgets.picker.selected;
+				selected = context.widgets.picker.selected;
 				if (selected) {
 					if (!Object.keys(selected).length) {
 						return true;
@@ -164,14 +168,16 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		},
 
 		canItemBeSelected: function (id, options, selected, parentControl, key) {
-			var canSelect = true, i;
+			var canSelect = true, i,
+				curKey,
+				temporarySelectedCount;
 			if (options.endpointMany && parentControl.options.endpointMany) {
 				canSelect = !selected.hasOwnProperty(id);
 				if (canSelect && parentControl.options.dataSourceLogic == 'OR' && key) {
 					// Дополнительная проверка не выбран ли элемент из другого источника
 					for (i = 0; canSelect && (i < parentControl.options.itemsOptions.length); i++) {
-						var curKey = parentControl.options.itemsOptions[i].itemKey;
-						var temporarySelectedCount = Object.keys(parentControl.widgets[curKey].currentState.temporarySelected).length;
+						curKey = parentControl.options.itemsOptions[i].itemKey;
+						temporarySelectedCount = Object.keys(parentControl.widgets[curKey].currentState.temporarySelected).length;
 						if (curKey != key && temporarySelectedCount) {
 							canSelect = false;
 							break;

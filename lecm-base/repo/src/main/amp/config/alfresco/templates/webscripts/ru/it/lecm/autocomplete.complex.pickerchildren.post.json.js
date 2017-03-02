@@ -10,10 +10,10 @@
 			additionalProperties: null
 		};
 	if (obj.elementsParams && obj.elementsParams.length) {
-		for (var i=0; i < obj.elementsParams.length; ++i) {
-			dataPart = getPickerChildrenItems('ISNOTNULL:"sys:node-dbid"', null, true, obj.elementsParams[i]);
+		obj.elementsParams.forEach(function(elementParams) {
+			dataPart = getPickerChildrenItems('ISNOTNULL:"sys:node-dbid"', null, true, elementParams);
 			data.results = data.results.concat(dataPart.results);
-		}
+		});
 	} else {
 		data = getPickerChildrenItems('ISNOTNULL:"sys:node-dbid"');
 	}

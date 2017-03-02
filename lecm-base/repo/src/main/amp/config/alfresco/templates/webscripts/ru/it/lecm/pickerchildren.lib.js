@@ -380,9 +380,9 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 	}
 
 	if (itemParams && itemParams.itemKey) {
-		for (var i = 0; i < results.length; ++i) {
-			results[i].itemKey = itemParams.itemKey;
-		}
+		results.forEach(function(resultItem) {
+			resultItem.itemKey = itemParams.itemKey;
+		});
 	}
 
 	return {

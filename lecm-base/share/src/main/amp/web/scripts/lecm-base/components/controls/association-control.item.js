@@ -189,6 +189,9 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		},
 
 		_loadRootNode: function () {
+			var dataObj = {
+				titleProperty: 'cm:name' //this.options.treeRoteNodeTitleProperty
+			};
 			/* получение информации по основной ноде (по основному пути на который настроен контрол) */
 			function onSuccess (successResponse) {
 				var oResults = successResponse.json;
@@ -212,9 +215,6 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				this.widgets.datatable.showTableMessage(failureResponse.json.message, YAHOO.widget.DataTable.CLASS_ERROR);
 			}
 
-			var dataObj = {
-				titleProperty: 'cm:name' //this.options.treeRoteNodeTitleProperty
-			};
 			if (this.options.rootLocation) {
 				dataObj.xpath = this.options.rootLocation;
 			} else if (this.options.xPathLocation) {
