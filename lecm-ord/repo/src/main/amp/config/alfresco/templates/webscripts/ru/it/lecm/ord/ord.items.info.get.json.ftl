@@ -1,7 +1,8 @@
 <#escape x as jsonUtils.encodeJSONString(x)!''>
 {
     "user": {
-        "nodeRef": "${user.nodeRef}"
+        "nodeRef": "${user.nodeRef}",
+        "isController": ${user.isController?string}
         <#if user.roles??>,
         "roles":
         [
@@ -11,6 +12,10 @@
             </#list>
         ]
         </#if>
+    },
+    "document": {
+        "status": "${document.status}"
     }
+
 }
 </#escape>

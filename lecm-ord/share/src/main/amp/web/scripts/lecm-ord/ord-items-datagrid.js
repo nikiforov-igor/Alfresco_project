@@ -38,7 +38,7 @@ LogicECM.ORD = LogicECM.ORD || {};
             var allowedStatuses = ["Черновик", "Проект", "Согласован", "На доработке", "Подписан", "На регистрации"];
 
             Alfresco.util.Ajax.jsonGet({
-                url: Alfresco.constants.PROXY_URI + "lecm/ord/items/getCurrentEmployeeInfo",
+                url: Alfresco.constants.PROXY_URI + "lecm/ord/items/getInfo",
                 dataObj: {
                     nodeRef: this.options.itemId
                 },
@@ -46,102 +46,82 @@ LogicECM.ORD = LogicECM.ORD || {};
                     fn: function (response) {
                         if(response && response.json.user){
                             if(response.json.user.roles){
-                                currentUser.roles = response.json.roles;
+                                currentUser.roles = response.json.user.roles;
                             }
-                            if(response && response.json.user.nodeRef){
-                                currentUser.nodeRef = response.json.user.nodeRef;
-                                Alfresco.util.Ajax.jsonPost({
-                                    url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
-                                    dataObj: {
-                                        nodeRef: this.options.itemId,
-                                        substituteString: "{lecm-ord:controller-assoc-ref},{lecm-statemachine:status}"
-                                    },
-                                    successCallback: {
-                                        fn: function (response) {
-                                            if (response && response.json.formatString) {
-                                                var data = response.json.formatString.split(",");
-                                                var controller = data[0];
-                                                var docStatus = data[1];
-                                                if (currentUser.nodeRef == controller) {
-                                                    currentUser.isController = true;
-                                                }
-                                                actions.push({
-                                                    type: actionType,
-                                                    id: "onActionCompletePoint",
-                                                    permission: "edit",
-                                                    label: this.msg("ord.item.complete.button"),
-                                                    evaluator: this.showCompleteActionEvaluator
-                                                });
-                                                actions.push({
-                                                    type: actionType,
-                                                    id: "onActionExecutePoint",
-                                                    permission: "edit",
-                                                    label: this.msg("ord.item.execute.button"),
-                                                    evaluator: this.showExecuteActionEvaluator
-                                                });
-                                                if (allowedStatuses.includes(docStatus)) {
-                                                    if (!this.options.disabled && this.options.mode == "edit") {
-                                                        if (this.options.allowEdit === true) {
-                                                            actions.push({
-                                                                type: actionType,
-                                                                id: "onActionEdit",
-                                                                permission: "edit",
-                                                                label: this.msg("actions.edit"),
-                                                                evaluator: this.showActionsEvaluator
-                                                            });
-                                                        }
-                                                        if (this.options.allowDelete === true) {
-                                                            actions.push({
-                                                                type: actionType,
-                                                                id: "onActionDelete",
-                                                                permission: "delete",
-                                                                label: this.msg("actions.delete-row"),
-                                                                evaluator: this.showActionsEvaluator
-                                                            });
-                                                        }
-                                                    }
+                            currentUser.nodeRef = response.json.user.nodeRef;
+                            currentUser.isController = response.json.user.isController;
+                            var docStatus = response.json.document.status;
+                            actions.push({
+                                type: actionType,
+                                id: "onActionCompletePoint",
+                                permission: "edit",
+                                label: this.msg("ord.item.complete.button"),
+                                evaluator: this.showCompleteActionEvaluator
+                            });
+                            actions.push({
+                                type: actionType,
+                                id: "onActionExecutePoint",
+                                permission: "edit",
+                                label: this.msg("ord.item.execute.button"),
+                                evaluator: this.showExecuteActionEvaluator
+                            });
+                            if (allowedStatuses.includes(docStatus) &&
+                                ((docStatus == "На регистрации" && currentUser.roles.includes("DA_REGISTRAR_DYN") && currentUser.roles.includes("DA_REGISTRARS")) ||
+                                (docStatus != "На регистрации" && currentUser.roles.includes("BR_INITIATOR")))) {
+                                if (!this.options.disabled && this.options.mode == "edit") {
+                                    if (this.options.allowEdit === true) {
+                                        actions.push({
+                                            type: actionType,
+                                            id: "onActionEdit",
+                                            permission: "edit",
+                                            label: this.msg("actions.edit"),
+                                            evaluator: this.showActionsEvaluator
+                                        });
+                                    }
+                                    if (this.options.allowDelete === true) {
+                                        actions.push({
+                                            type: actionType,
+                                            id: "onActionDelete",
+                                            permission: "delete",
+                                            label: this.msg("actions.delete-row"),
+                                            evaluator: this.showActionsEvaluator
+                                        });
+                                    }
+                                }
 
-                                                    if (!this.options.isTableSortable && this.options.showActions && this.options.mode == "edit" && !this.options.disabled) {
-                                                        var otherActions = [];
-                                                        if (this.options.allowEdit === true) {
-                                                            otherActions.push({
-                                                                type: actionType,
-                                                                id: "onMoveTableRowUp",
-                                                                permission: "edit",
-                                                                label: this.msg("actions.tableRowUp"),
-                                                                evaluator: this.showActionsEvaluator
-                                                            });
-                                                            otherActions.push({
-                                                                type: actionType,
-                                                                id: "onMoveTableRowDown",
-                                                                permission: "edit",
-                                                                label: this.msg("action.tableRowDown"),
-                                                                evaluator: this.showActionsEvaluator
-                                                            });
-                                                        }
-                                                        if (this.options.allowCreate === true) {
-                                                            otherActions.push({
-                                                                type: actionType,
-                                                                id: "onAddRow",
-                                                                permission: "edit",
-                                                                label: this.msg("action.addRow"),
-                                                                evaluator: this.showActionsEvaluator
-                                                            });
-                                                        }
-                                                        actions = actions.concat(otherActions);
-                                                    }
-                                                } else {
-                                                    Dom.setStyle(this.id + "-toolbar", "display", "none");
-                                                }
-                                                this.realCreateDatagrid(actions, currentUser, docStatus);
-                                            }
-                                        },
-                                        scope: this
-                                    },
-                                    failureMessage: Alfresco.util.message("message.details.failure"),
-                                    scope: this
-                                });
+                                if (!this.options.isTableSortable && this.options.showActions && this.options.mode == "edit" && !this.options.disabled) {
+                                    var otherActions = [];
+                                    if (this.options.allowEdit === true) {
+                                        otherActions.push({
+                                            type: actionType,
+                                            id: "onMoveTableRowUp",
+                                            permission: "edit",
+                                            label: this.msg("actions.tableRowUp"),
+                                            evaluator: this.showActionsEvaluator
+                                        });
+                                        otherActions.push({
+                                            type: actionType,
+                                            id: "onMoveTableRowDown",
+                                            permission: "edit",
+                                            label: this.msg("action.tableRowDown"),
+                                            evaluator: this.showActionsEvaluator
+                                        });
+                                    }
+                                    if (this.options.allowCreate === true) {
+                                        otherActions.push({
+                                            type: actionType,
+                                            id: "onAddRow",
+                                            permission: "edit",
+                                            label: this.msg("action.addRow"),
+                                            evaluator: this.showActionsEvaluator
+                                        });
+                                    }
+                                    actions = actions.concat(otherActions);
+                                }
+                            } else {
+                                Dom.setStyle(this.id + "-toolbar", "display", "none");
                             }
+                            this.realCreateDatagrid(actions, currentUser, docStatus);
                         }
                     },
                     scope: this

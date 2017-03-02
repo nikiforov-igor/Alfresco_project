@@ -1,7 +1,7 @@
 <webscript>
     <shortname>current employee info for ord items table</shortname>
     <description>Return current employee info for ord items table</description>
-    <url>/lecm/ord/items/getCurrentEmployeeInfo?nodeRef={nodeRef}</url>
+    <url>/lecm/ord/items/getInfo?nodeRef={nodeRef}</url>
     <format default="json"/>
     <authentication>user</authentication>
     <transaction allow="readonly">required</transaction>

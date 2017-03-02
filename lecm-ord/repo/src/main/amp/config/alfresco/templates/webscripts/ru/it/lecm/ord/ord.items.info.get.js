@@ -2,6 +2,7 @@
     var node = search.findNode(args['nodeRef']);
     var currentEmployee = orgstructure.getCurrentEmployee();
     model.user = {};
+    model.document = {};
     model.user.nodeRef = currentEmployee.nodeRef.toString();
     model.user.roles = [];
     var isBR_INITIATOR = lecmPermission.hasEmployeeDynamicRole(node, currentEmployee, "BR_INITIATOR");
@@ -16,4 +17,15 @@
     if (isDA_REGISTRARS) {
         model.user.roles.push("DA_REGISTRARS")
     }
-})()
+    var isController = false;
+    var controllerAssoc = node.assocs["lecm-ord:controller-assoc"];
+    if (controllerAssoc && controllerAssoc.length) {
+        var controller = controllerAssoc[0];
+        if (controller.equals(currentEmployee)){
+            isController = true;
+        }
+    }
+    model.user.isController = isController;
+    model.document.status = node.properties["lecm-statemachine:status"];
+
+})();
