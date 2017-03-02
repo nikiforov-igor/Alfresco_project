@@ -2,22 +2,15 @@
 
 (function () {
 	var obj = eval('(' + json.toString() + ')'),
-		data = {
-			parent: null,
-			rootNode: null,
-			results: [],
-			additionalProperties: null
-		};
-	if (obj.elementsParams) {
+		results = [];
+	if (obj.elementsParams && obj.elementsParams.length) {
 		obj.elementsParams.forEach(function(elementParams) {
-			data.results = data.results.concat(getPickerChildrenItems('ISNOTNULL:"sys:node-dbid"', null, true, elementParams).results);
+			results = results.concat(getPickerChildrenItems('ISNOTNULL:"sys:node-dbid"', null, true, elementParams).results);
 		});
 	} else {
-		data = getPickerChildrenItems('ISNOTNULL:"sys:node-dbid"');
+		status.code = 404;
+		status.message = 'Insufficient parameter "elementsParams". It must be not empty array.';
+		status.redirect = true;
 	}
-
-	model.parent = data.parent;
-	model.rootNode = data.rootNode;
-	model.results = data.results;
-	model.additionalProperties = data.additionalProperties;
+	model.results = results;
 })();
