@@ -303,39 +303,52 @@ LogicECM.module = LogicECM.module || {};
                         url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                         dataObj: {
                             nodeRef: nodeRef,
-                            substituteString: "{lecm-eds-aspect:execution-statistics}"
+                            substituteString: "{lecm-eds-aspect:execution-statistics}#{lecm-resolutions:base-document-assoc/lecm-review-ts:doc-review-statistics}"
                         },
                         successCallback: {
                             fn: function (response) {
                                 if (response && response.json.formatString) {
-                                    var executionStatistics = JSON.parse(response.json.formatString);
-                                    if (executionStatistics) {
-                                        var content = "";
-                                        content += "<table class='execution-expanded-content type-resolution'>";
-                                        content += "    <tr>";
-                                        content += "        <td class='label-column'>{errandsStatisticLabel}</td>";
-                                        content += "        <td>{errandsStatisticList}";
-                                        content += "    </tr>";
-                                        content += "    <tr>";
-                                        content += "        <td class='label-column'>{reviewStatisticLabel}</td>";
-                                        content += "        <td>{reviewStatisticList}";
-                                        content += "        </td>";
-                                        content += "    </tr>";
-                                        content += "</table>";
+                                    var data = response.json.formatString.split("#");
+                                    var executionStatistics = data[0];
+                                    var reviewStatistics = data[1];
 
-                                        var executionList = executionStatistics.filter(function (item) {
+                                    var content = "";
+                                    content += "<table class='execution-expanded-content type-resolution'>";
+                                    content += "    <tr>";
+                                    content += "        <td class='label-column'>{errandsStatisticLabel}</td>";
+                                    content += "        <td>{errandsStatisticList}";
+                                    content += "    </tr>";
+                                    content += "    <tr>";
+                                    content += "        <td class='label-column'>{reviewStatisticLabel}</td>";
+                                    content += "        <td>{reviewStatisticList}";
+                                    content += "        </td>";
+                                    content += "    </tr>";
+                                    content += "</table>";
+
+                                    var executionList = [];
+                                    if (executionStatistics && executionStatistics.length) {
+                                        executionList = JSON.parse(executionStatistics).filter(function (item) {
                                             return item.count > 0;
                                         }).map(function(item) {
                                             return item.state + ": " + item.count;
                                         });
+                                    }
 
-                                        container.innerHTML = YAHOO.lang.substitute(content, {
-                                            errandsStatisticLabel: this.msg("msg.resolution.errands.statistic.label"),
-                                            reviewStatisticLabel: this.msg("msg.resolution.review.statistic.label"),
-                                            errandsStatisticList: this.getTableListLayout(executionList),
-                                            reviewStatisticList: this.getTableListLayout(["На ознакомлении: 4", "Ознакомлены: 20"]) //todo заглушка
+                                    var reviewList = [];
+                                    if (reviewStatistics && reviewStatistics.length) {
+                                        reviewList = JSON.parse(reviewStatistics).filter(function (item) {
+                                            return item.count > 0;
+                                        }).map(function(item) {
+                                            return item.state + ": " + item.count;
                                         });
                                     }
+
+                                    container.innerHTML = YAHOO.lang.substitute(content, {
+                                        errandsStatisticLabel: this.msg("msg.resolution.errands.statistic.label"),
+                                        reviewStatisticLabel: this.msg("msg.resolution.review.statistic.label"),
+                                        errandsStatisticList: this.getTableListLayout(executionList),
+                                        reviewStatisticList: this.getTableListLayout(reviewList)
+                                    });
                                 }
                             },
                             scope: this
