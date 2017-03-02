@@ -423,7 +423,6 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
-									
                                 </nodes>
                             </subFolder>
                             <subFolder>
