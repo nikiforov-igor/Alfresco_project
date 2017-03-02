@@ -152,7 +152,7 @@
         <dependency>
             <groupId>ru.it.lecm.workflow.signing</groupId>
             <artifactId>signing-repo-api</artifactId>
-            <version>1.8.6</version>
+            <version>${platform.version}</version>
         </dependency>
     </dependencies>
     <!--
