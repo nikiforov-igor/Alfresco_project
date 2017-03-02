@@ -82,7 +82,7 @@
 				<property name="lecm-ord:real-end-date">
 					<type>d:date</type>
 				</property>
-				<!--todo Дата перехода в статус на исполнении(неоходимо прописать её заполнение в машине состояния)-->
+				<!--Дата перехода в статус на исполнении-->
 				<property name="lecm-ord:transition-to-on-execution-date">
 					<type>d:date</type>
 				</property>
