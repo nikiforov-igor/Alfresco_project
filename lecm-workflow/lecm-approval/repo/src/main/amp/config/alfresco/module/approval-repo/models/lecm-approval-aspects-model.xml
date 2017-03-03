@@ -49,7 +49,6 @@
 					<default>false</default>
 				</property>
 				<property name="lecmApproveAspects:currentTaskStartDate">
-					<title>Дата поступления на согласование</title>
 					<type>d:datetime</type>
 				</property>
 			</properties>
