@@ -9395,7 +9395,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.attr("lecm-ord:controller-assoc-ref")!=null and doc.attr("lecm-document-aspects:reg-data-date")!=nulll and doc.attr("lecm-ord-table-structure:items-assoc-text-content")!="Пункты"]]></value>
+                                                                    <![CDATA[doc.attr("lecm-ord:controller-assoc-ref")!=null and doc.attr("lecm-document-aspects:reg-data-date")!=null and doc.attr("lecm-ord-table-structure:items-assoc-text-content")!="Пункты"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
