@@ -3200,7 +3200,7 @@ if (document) {
         dateString = "Без срока";
         document.properties["lecm-errands:limitation-date"] = limitationDate;
       } else if (limitationDateRadio == "DATE" || limitationDateRadio == "DAYS") {
-        if (limitationDateRadio == "DAYS" && !limitationDate) {
+        if (limitationDateRadio == "DAYS") {
           if (limitationDateDays && limitationDateDaysType) {
             var date = new Date();
             if (limitationDateDaysType == "WORK") {
