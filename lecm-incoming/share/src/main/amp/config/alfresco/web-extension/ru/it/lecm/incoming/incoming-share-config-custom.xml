@@ -57,7 +57,7 @@
                             <control-param name="changeItemsFireAction">contractor.selected</control-param>
                             <control-param name="items">contractor,organisation,person</control-param>
                             <control-param name="showAutocomplete">true</control-param>
-                            <control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
+                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
                             <control-param name="cssClasses">with-ex-search</control-param>
                             <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <!-- lecm-contractor:contractor-type -->
@@ -160,6 +160,8 @@
 
                     <field set="common" id="lecm-incoming:recipient-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
+                            <control-param name="dataSourceLogic">OR</control-param>
 							<control-param name="items">employee,organization</control-param>
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
@@ -263,6 +265,8 @@
                     </field>
                     <field id="lecm-incoming:recipient-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
+                            <control-param name="dataSourceLogic">OR</control-param>
 							<control-param name="items">employee,organization</control-param>
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
@@ -294,7 +298,7 @@
                             <control-param name="changeItemsFireAction">contractor.selected</control-param>
                             <control-param name="items">contractor,organisation,person</control-param>
                             <control-param name="showAutocomplete">true</control-param>
-                            <control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
+                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
                             <control-param name="cssClasses">with-ex-search</control-param>
                             <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <!-- lecm-contractor:contractor-type -->
@@ -479,7 +483,7 @@
                             <control-param name="changeItemsFireAction">contractor.selected</control-param>
                             <control-param name="items">contractor,organisation,person</control-param>
                             <control-param name="showAutocomplete">true</control-param>
-                            <control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
+                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
                             <control-param name="cssClasses">with-ex-search</control-param>
                             <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <!-- lecm-contractor:contractor-type -->
@@ -575,6 +579,8 @@
 
                     <field id="lecm-incoming:recipient-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
+                            <control-param name="dataSourceLogic">OR</control-param>
 							<control-param name="items">employee,organization</control-param>
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
@@ -678,7 +684,7 @@
                             <control-param name="changeItemsFireAction">contractor.selected</control-param>
                             <control-param name="items">contractor,organisation,person</control-param>
                             <control-param name="showAutocomplete">true</control-param>
-                            <control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
+                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
                             <control-param name="cssClasses">with-ex-search</control-param>
                             <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <!-- lecm-contractor:contractor-type -->
@@ -741,6 +747,8 @@
 
                     <field id="lecm-incoming:recipient-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
+                            <control-param name="dataSourceLogic">OR</control-param>
 							<control-param name="items">employee,organization</control-param>
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
@@ -913,6 +921,8 @@
                     <field id="lecm-document:present-string" label="Название"/>
                     <field id="lecm-incoming:recipient-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
+                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
+                            <control-param name="dataSourceLogic">OR</control-param>
 							<control-param name="items">employee,organization</control-param>
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
@@ -944,7 +954,7 @@
                             <control-param name="changeItemsFireAction">contractor.selected</control-param>
                             <control-param name="items">contractor,organisation,person</control-param>
                             <control-param name="showAutocomplete">true</control-param>
-                            <control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
+                            <control-param name="autocompleteDataSourceMethodPost">true</control-param>
                             <control-param name="cssClasses">with-ex-search</control-param>
                             <control-param name="additionalScripts">scripts/contractors/contractors-ex-search-script.js</control-param>
                             <!-- lecm-contractor:contractor-type -->

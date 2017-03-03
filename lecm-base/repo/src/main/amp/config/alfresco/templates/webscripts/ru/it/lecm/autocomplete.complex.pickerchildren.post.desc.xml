@@ -1,0 +1,12 @@
+<webscript>
+	<shortname>Комплексный автокомплит</shortname>
+	<description>Комплексный автокомплит</description>
+	<url>/lecm/autocomplete/complex/picker/{type}/{store_type}/{store_id}/{id}/children</url>
+	<url>/lecm/autocomplete/complex/picker/{type}/children</url>
+	<!-- The following 2 URLs are deprectated as of 4.0, the nodelocator service is now used by the picker -->
+	<url>/lecm/autocomplete/complex/picker/{type}/{store_type}/{store_id}/{id}/siblings</url>
+	<url>/lecm/autocomplete/complex/picker/{type}/{store_type}/{store_id}/{id}/doclib</url>
+	<format default="json"/>
+	<authentication>user</authentication>
+	<transaction allow="readonly">required</transaction>
+</webscript>

@@ -59,12 +59,14 @@ LogicECM.module = LogicECM.module || {};
 			changeItemsFireAction: null,
 			additionalFilter: '',
 			isComplex: null,
-			autocompleteDataSource: 'lecm/forms/picker',
+			autocompleteDataSource: 'lecm/autocomplete/complex/picker',
+			autocompleteDataSourceMethodPost: false,
+			dataSourceLogic: 'AND',
 			maxSearchAutocompleteResults: 10,
 			showAutocomplete: null,
 			pickerButtonTitle: null,
 			pickerButtonLabel: null,
-            multipleSelectMode: false,
+			endpointMany: false,
 			itemsOptions: [],
 			sortSelected: false
 		},
@@ -101,7 +103,7 @@ LogicECM.module = LogicECM.module || {};
 					elementName;
 
 				if (this.options.disabled || this.readonly) {
-					if ('lecm-orgstr:employee' === options.itemType) {
+					if ('lecm-orgstr:employee' === item.type) {
 						elem.innerHTML = BaseUtil.getCroppedItem(BaseUtil.getControlEmployeeView(item.nodeRef, displayName));
 					} else {
 						elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, item));
@@ -109,7 +111,7 @@ LogicECM.module = LogicECM.module || {};
 					elem.firstChild.id = itemId;
 				} else {
 					Event.onAvailable(itemId, onAddListener, {id: itemId, nodeData: item}, this);
-					if ('lecm-orgstr:employee' === options.itemType) {
+					if ('lecm-orgstr:employee' === item.type) {
 						elementName = ACUtils.getEmployeeAbsenceMarkeredHTML(item.nodeRef, displayName, true, options.employeeAbsenceMarker, []);
 						elem.innerHTML = BaseUtil.getCroppedItem(elementName, ACUtils.getRemoveButtonHTML(this.id, item));
 					} else {
@@ -201,7 +203,8 @@ LogicECM.module = LogicECM.module || {};
 				nodeData = args[1].added,
 				count = this._renderSelectedItems([nodeData]);
 				this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
-					added: nodeData
+					added: nodeData,
+					key: nodeData.itemKey
 				});
 
 				Dom.get(this.id).value = Alfresco.util.encodeHTML(Object.keys(this.widgets.picker.selected).join(','));
@@ -343,7 +346,7 @@ LogicECM.module = LogicECM.module || {};
 			Dom.addClass(this.widgets.autocomplete.getInputEl(), 'wait-for-load');
 			searchTerm = searchTerm ? searchTerm : 'cm:name:' + decodedQuery;
 
-			return ACUtils.generateChildrenUrlParams(this.options, searchTerm, 0, true);
+			return ACUtils.generateRequest(this, searchTerm, 0, true);
 		},
 
 		formatResult: function (oResultData, sQuery, sResultMatch) {
@@ -437,6 +440,7 @@ LogicECM.module = LogicECM.module || {};
 
 			if (this.options.showAutocomplete) {
 				this.widgets.datasource = new YAHOO.util.DataSource(Alfresco.constants.PROXY_URI_RELATIVE + this.options.autocompleteDataSource + '/node/children', {
+					connMethodPost: this.options.autocompleteDataSourceMethodPost,
 					responseType: YAHOO.util.DataSource.TYPE_JSON,
 					connXhrMode: 'cancelStaleRequests',
 					responseSchema: {
