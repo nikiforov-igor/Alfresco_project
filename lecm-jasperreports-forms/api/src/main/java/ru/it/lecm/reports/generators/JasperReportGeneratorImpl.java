@@ -3,15 +3,16 @@ package ru.it.lecm.reports.generators;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.HtmlExporter;
 import net.sf.jasperreports.engine.export.JRRtfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.oasis.JROdsExporter;
 import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import org.alfresco.repo.content.filestore.FileContentReader;
-import org.alfresco.repo.content.filestore.FileContentWriter;
-import org.alfresco.repo.content.transform.ContentTransformer;
-import org.alfresco.repo.content.transform.OpenOfficeContentTransformerWorker;
+import net.sf.jasperreports.export.*;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.IOUtils;
@@ -224,25 +225,29 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
                 case XML:
                     JasperExportManager.exportReportToXmlStream(jPrint, outputStream);
                     break;
+                case HTML:
+                    exportReportToStream(new HtmlExporter(), jPrint, new SimpleHtmlExporterOutput(outputStream));
+                    break;
                 case RTF:
-                    exportReportToStream(new JRRtfExporter(), jPrint, outputStream);
+                    exportReportToStream(new JRRtfExporter(), jPrint, new SimpleWriterExporterOutput(outputStream));
                     break;
                 case DOC:
-                    try {
-                        generateWithConversion(outputStream, jPrint, "doc");
-                    } catch (IOException e) {
-                        log.error("Cannot create doc", e);
-                    }
-                    break;
                 case DOCX:
-                    try {
-                        generateWithConversion(outputStream, jPrint, "docx");
-                    } catch (IOException e) {
-                        log.error("Cannot create docx", e);
-                    }
+                    SimpleDocxReportConfiguration config = new SimpleDocxReportConfiguration();
+                    config.setFlexibleRowHeight(true);
+                    exportReportToStream(new JRDocxExporter(), jPrint, outputStream, config);
                     break;
                 case XLS:
                     exportReportToStream(new JRXlsExporter(), jPrint, outputStream);
+                    break;
+                case XLSX:
+                    exportReportToStream(new JRXlsxExporter(), jPrint, outputStream);
+                    break;
+                case ODT:
+                    exportReportToStream(new JROdtExporter(), jPrint, outputStream);
+                    break;
+                case ODS:
+                    exportReportToStream(new JROdsExporter(), jPrint, outputStream);
                     break;
                 default:
                     final String msg = String.format("Unknown report target '%s' -> using PDF by default", target);
@@ -262,35 +267,25 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
         log.info(String.format("Report '%s' as %s generated succefully", report.getName(), target));
     }
 
-    private void generateWithConversion(OutputStream outputStream, JasperPrint jPrint, String outputExtention) throws IOException, JRException {
-        File odt = File.createTempFile("report", ".odt");
-        try (FileOutputStream odtOut = new FileOutputStream(odt)) {
-            exportReportToStream(new JROdtExporter(), jPrint, odtOut);
-            odtOut.flush();
-        }
-        File doc = File.createTempFile("report", "." + outputExtention);
-        String odtMimetype = getServices().getServiceRegistry().getMimetypeService().getMimetype("odt");
-        String docMimetype = getServices().getServiceRegistry().getMimetypeService().getMimetype(outputExtention);
-        ContentTransformer transformer = getServices().getServiceRegistry().getContentService().getTransformer(odtMimetype, docMimetype);
-        FileContentReader reader = new FileContentReader(odt);
-        reader.setMimetype(odtMimetype);
-        FileContentWriter writer =  new FileContentWriter(doc);
-        writer.setMimetype(docMimetype);
-        transformer.transform(reader, writer);
-        odt.delete();
-        try (FileInputStream docIn = new FileInputStream(doc)) {
-            IOUtils.copy(docIn, outputStream);
-        } catch (IOException e) {
-            log.error("Cannot copy streams", e);
-        } finally {
-            doc.delete();
-        }
+    private void exportReportToStream(final JRAbstractExporter exporter, final JasperPrint jPrint, OutputStream outputStream) throws JRException {
+        exportReportToStream(exporter, jPrint, outputStream, null);
     }
 
-    private void exportReportToStream(final JRAbstractExporter exporter, final JasperPrint jPrint, OutputStream outputStream)
-            throws JRException {
-        exporter.setParameter(JRExporterParameter.JASPER_PRINT, jPrint);
-        exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
+    private void exportReportToStream(final JRAbstractExporter exporter, final JasperPrint jPrint, OutputStream outputStream, ReportExportConfiguration config) throws JRException {
+        exportReportToStream(exporter, jPrint, new SimpleOutputStreamExporterOutput(outputStream), config);
+    }
+
+    private void exportReportToStream(final JRAbstractExporter exporter, final JasperPrint jPrint, ExporterOutput output) throws JRException {
+        exportReportToStream(exporter, jPrint, output, null);
+    }
+
+    private void exportReportToStream(final JRAbstractExporter exporter, final JasperPrint jPrint, ExporterOutput output, ReportExportConfiguration config) throws JRException {
+        exporter.setExporterInput(new SimpleExporterInput(jPrint));
+        exporter.setExporterOutput(output);
+
+        if (config != null) {
+            exporter.setConfiguration(config);
+        }
         exporter.exportReport();
     }
 
