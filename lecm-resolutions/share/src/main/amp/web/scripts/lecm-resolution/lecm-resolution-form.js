@@ -35,7 +35,25 @@
                 form["prop_lecm-resolutions_is-draft"].value = false;
             }
         }
-        submitResolutionForm(true, form);
+
+        var errandsCount = Dom.get(args[1].formId + '_prop_lecm-resolutions_errands-json-count');
+        var reviewers = Dom.get(args[1].formId + '_assoc_lecm-resolutions_reviewers-assoc');
+        if ((errandsCount && parseInt(errandsCount.value)) || (reviewers && reviewers.value && reviewers.value.length)) {
+            submitResolutionForm(true, form);
+        } else {
+            var baseDoc = Dom.get(args[1].formId + '_assoc_lecm-resolutions_base-document-assoc');
+            if (baseDoc && baseDoc.value && baseDoc.value.length) {
+                Alfresco.util.PopupManager.displayMessage(
+                    {
+                        text: Alfresco.util.message('title.resolution.errands.reviewers.empty')
+                    });
+            } else {
+                Alfresco.util.PopupManager.displayMessage(
+                    {
+                        text: Alfresco.util.message('title.resolution.errands.empty')
+                    });
+            }
+        }
     }
 
     function submitResolutionForm(checkExecutionDate, form) {
