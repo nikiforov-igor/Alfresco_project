@@ -18,14 +18,20 @@ if (requestContent) {
         reportText = requestContent["prop_lecm-errands-ts_execution-report-text"];
     }
     if (requestContent.hasOwnProperty("assoc_lecm-errands-ts_execution-report-connected-document-assoc")) {
-        connectedDocuments = requestContent["assoc_lecm-errands-ts_execution-report-connected-document-assoc"].split(",").map(function (ref) {
-            return search.findNode(ref);
-        });
+        allConnectedDocuments = requestContent["assoc_lecm-errands-ts_execution-report-connected-document-assoc"];
+        if (allConnectedDocuments && !allConnectedDocuments.equals("")) {
+            connectedDocuments = allConnectedDocuments.split(",").map(function (ref) {
+                return search.findNode(ref);
+            });
+        }
     }
     if (requestContent.hasOwnProperty("assoc_lecm-errands-ts_execution-report-attachment-assoc")) {
-        attachments = requestContent["assoc_lecm-errands-ts_execution-report-attachment-assoc"].split(",").map(function (ref) {
-            return search.findNode(ref);
-        });
+        allAttachments =requestContent["assoc_lecm-errands-ts_execution-report-attachment-assoc"];
+        if (allAttachments && !allAttachments.equals("")) {
+            attachments = allAttachments.split(",").map(function (ref) {
+                return search.findNode(ref);
+            });
+        }
     }
     if (document) {
         if (document.properties["lecm-errands:execution-report-status"] != "PROJECT") {
