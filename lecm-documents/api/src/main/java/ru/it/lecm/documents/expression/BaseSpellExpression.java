@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.expression.BeanFactoryResolver;
-import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -74,7 +73,7 @@ public abstract class BaseSpellExpression {
 
     public String executeAsString(String expression) {
         try {
-            String result = new SpelExpressionParser().parseExpression(expression, new TemplateParserContext()).getValue(evaluationContext, String.class);
+            String result = new SpelExpressionParser().parseExpression(expression).getValue(evaluationContext, String.class);
             return result != null ? result : "";
         } catch (Exception e) {
             logger.error("Expression: " + expression + " has errors", e);

@@ -240,6 +240,9 @@
                         <value>lecm-arm:field-format-string</value>
                         <value>lecm-arm:field-sortable</value>
                         <value>lecm-arm:field-by-default</value>
+                        <value>lecm-arm:field-is-marker</value>
+                        <value>lecm-arm:field-marker-icon</value>
+                        <value>lecm-arm:field-marker-html</value>
                         <value>lecm-arm:order</value>
                     </list>
                 </entry>

@@ -500,6 +500,14 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                             column.setSortable((Boolean) sortableValue);
                         }
                         column.setByDefault(true);
+
+                        /*Маркер*/
+                        column.setMarker(Boolean.TRUE.equals(columnProps.get(PROP_COLUMN_IS_MARKER)));
+                        Object markerIcon = columnProps.get(PROP_COLUMN_MARKER_ICON);
+                        column.setMarkerIcon(markerIcon != null ? (String) markerIcon : "");
+                        Object markerHtml = columnProps.get(PROP_COLUMN_MARKER_HTML);
+                        column.setMarkerHTML(markerHtml != null ? (String) markerHtml : "");
+
                         result.add(column);
                     }
                 }
@@ -549,6 +557,13 @@ public class ArmServiceImpl extends BaseBean implements ArmService, ApplicationC
                         if (byDefaultValue != null) {
                             column.setByDefault((Boolean) byDefaultValue);
                         }
+
+                        column.setMarker(Boolean.TRUE.equals(columnProps.get(PROP_COLUMN_IS_MARKER)));
+                        Object markerIcon = columnProps.get(PROP_COLUMN_MARKER_ICON);
+                        column.setMarkerIcon(markerIcon != null ? (String) markerIcon : "");
+                        Object markerHtml = columnProps.get(PROP_COLUMN_MARKER_HTML);
+                        column.setMarkerHTML(markerHtml != null ? (String) markerHtml : "");
+
                         result.add(column);
                     }
                 }
