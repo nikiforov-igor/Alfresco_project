@@ -88,11 +88,9 @@ public class EWSServiceImpl implements EWSService {
 				EmployeeAvailability employeeAvailability = events.get(i++);
 				if (availability.getErrorCode() == ServiceError.NoError) {
 					Collection<CalendarEvent> calendarEvents = availability.getCalendarEvents();
-					List<EWSEvent> ewsEvents = new ArrayList<>(calendarEvents.size());
 					for (CalendarEvent calendarEvent : calendarEvents) {
-						ewsEvents.add(new EWSEvent(calendarEvent.getStartTime(), calendarEvent.getEndTime()));
+						employeeAvailability.getEvents().add(new EWSEvent(calendarEvent.getStartTime(), calendarEvent.getEndTime()));
 					}
-					employeeAvailability.setEvents(ewsEvents);
 				}
 			}
 		} catch (Exception ex) {
@@ -108,7 +106,9 @@ public class EWSServiceImpl implements EWSService {
 		List<AttendeeInfo> attendees = new ArrayList<>(1);
 		List<EmployeeAvailability> availabilities = new ArrayList<>(1);
 		attendees.add(new AttendeeInfo(email));
-		availabilities.add(new EmployeeAvailability(employeeRef, email));
+		EmployeeAvailability employeeAvailability = new EmployeeAvailability(employeeRef, email);
+		employeeAvailability.setEvents(new ArrayList<EWSEvent>());
+		availabilities.add(employeeAvailability);
 		return getEvents(availabilities, attendees, fromDate, toDate);
 	}
 
@@ -120,7 +120,9 @@ public class EWSServiceImpl implements EWSService {
 			NodeRef personRef = orgstructureService.getPersonForEmployee(employeeRef);
 			String email = (String)nodeService.getProperty(personRef, ContentModel.PROP_EMAIL);
 			attendees.add(new AttendeeInfo(email));
-			availabilities.add(new EmployeeAvailability(employeeRef, email));
+			EmployeeAvailability employeeAvailability = new EmployeeAvailability(employeeRef, email);
+			employeeAvailability.setEvents(new ArrayList<EWSEvent>());
+			availabilities.add(employeeAvailability);
 		}
 		return getEvents(availabilities, attendees, fromDate, toDate);
 	}

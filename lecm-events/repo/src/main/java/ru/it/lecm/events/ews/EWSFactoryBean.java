@@ -85,6 +85,7 @@ public class EWSFactoryBean implements FactoryBean<EWSService> {
 				realService.setDomain(domain);
 				realService.setOrgstructureService(orgstructureService);
 				realService.setNodeService(nodeService);
+				realService.init();
 				ewsService = realService;
 			}
 		}
