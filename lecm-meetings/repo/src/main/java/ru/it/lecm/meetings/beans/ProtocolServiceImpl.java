@@ -143,10 +143,10 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
             if (protocolInitatorAssocs.size() > 0) {
                 errandInitiator = protocolInitatorAssocs.get(0).getTargetRef();
             }
-
+            int childeIndex = nodeService.getSourceAssocs(protocol, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT).size();
             for (ChildAssociationRef pointAssoc : pointAssocs) {
                 NodeRef point = pointAssoc.getChildRef();
-
+                childeIndex++;
                 //свойства поручения
                 Map<String, String> properties = new HashMap<String, String>();
                 //заголовок
@@ -172,6 +172,8 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                 properties.put("lecm-errands:is-important", "true");
                 //Срок исполнения
                 properties.put("lecm-errands:limitation-date-radio", "DATE");
+                //
+                properties.put("lecm-errands:child-index-counter", String.valueOf(childeIndex));
 
                 //ассоциации поручения
                 Map<String, String> associations = new HashMap<String, String>();
