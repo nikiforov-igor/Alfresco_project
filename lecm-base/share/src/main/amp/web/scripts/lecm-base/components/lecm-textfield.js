@@ -57,12 +57,12 @@ LogicECM.module = LogicECM.module || {};
 
             onHideControl: function (layer, args) {
                 if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-                    YAHOO.util.Dom.setStyle(this.controlId + '-cntrl', "display", "none");
+                    YAHOO.util.Dom.addClass(this.controlId + '-cntrl', 'hidden1');
                 }
             },
             onShowControl: function (layer, args) {
                 if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-                    YAHOO.util.Dom.setStyle(this.controlId + '-cntrl', "display", "block");
+                    YAHOO.util.Dom.removeClass(this.controlId + '-cntrl', 'hidden1');
                 }
             },
 
