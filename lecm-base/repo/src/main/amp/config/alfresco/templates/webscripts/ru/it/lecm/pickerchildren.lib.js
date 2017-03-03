@@ -1,16 +1,16 @@
-function getPickerChildrenItems(filter, doNotCheckAccess)
+function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 {
-	var argsFilterType = args['filterType'],
-		argsSelectableType = args['selectableType'],
-		argsSearchTerm = args['searchTerm'],
-		argsAdditionalFilter = args['additionalFilter'],
-		argsSkipCount = args['skipCount'],
-		argsMaxResults = args['size'],
-		argsXPath = args['xpath'],
-		argsRootNode = args['rootNode'],
-		argsNameSubstituteString = args['nameSubstituteString'],
-		argsTitleNameSubstituteString = args['titleNameSubstituteString'],
-		argsSelectedItemsNameSubstituteString = args['selectedItemsNameSubstituteString'] != null ? args['selectedItemsNameSubstituteString'] : argsNameSubstituteString,
+	var argsFilterType = getArg('filterType', isPost, itemParams),
+		argsSelectableType = getArg('selectableType', isPost, itemParams),
+		argsSearchTerm = getArg('searchTerm', isPost, itemParams),
+		argsAdditionalFilter = getArg('additionalFilter', isPost, itemParams),
+		argsSkipCount = getArg('skipCount', isPost, itemParams),
+		argsMaxResults = getArg('size', isPost, itemParams),
+		argsXPath = getArg('xpath', isPost, itemParams),
+		argsRootNode = getArg('rootNode', isPost, itemParams),
+		argsNameSubstituteString = getArg('nameSubstituteString', isPost, itemParams),
+		argsTitleNameSubstituteString = getArg('titleNameSubstituteString', isPost, itemParams),
+		argsSelectedItemsNameSubstituteString = getArg('selectedItemsNameSubstituteString', isPost, itemParams) ? getArg('selectedItemsNameSubstituteString', isPost, itemParams) : argsNameSubstituteString,
 		pathElements = url.service.split("/"),
 		parent = null,
 		rootNode = businessPlatform.getHomeRef(),
@@ -18,19 +18,19 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 		categoryResults = null,
 		resultObj = null,
 		lastPathElement = null,
-		argsXPathLocation = args['xPathLocation'],
-		argsXPathRoot = args['xPathRoot'],
-		showNotSelectable = args['showNotSelectableItems'],
-		showFolders = args['showFolders'],
-		docType = args['docType'],
-        useOnlyInSameOrg = ("true" == args['onlyInSameOrg']),
+		argsXPathLocation = getArg('xPathLocation', isPost, itemParams),
+		argsXPathRoot = getArg('xPathRoot', isPost, itemParams),
+		showNotSelectable = getArg('showNotSelectableItems', isPost, itemParams),
+		showFolders = getArg('showFolders', isPost, itemParams),
+		docType = getArg('docType', isPost, itemParams),
+        useOnlyInSameOrg = ("true" == getArg('onlyInSameOrg', isPost, itemParams)),
 		doNotCheck = (doNotCheckAccess == null || ("" + doNotCheckAccess) == "false") ?
-			("true" == args['doNotCheckAccess']) : doNotCheckAccess,
-		sortProp = args['sortProp'] != null ? args['sortProp'] : "cm:name",
-		additionalProperties = args['additionalProperties'],
-		argsPathRoot = args['pathRoot'],
-		argsPathNameSubstituteString = args['pathNameSubstituteString'],
-		argsUseObjectDescription = ("true" == args['useObjectDescription']);
+			("true" == getArg('doNotCheckAccess', isPost, itemParams)) : doNotCheckAccess,
+		sortProp = getArg('sortProp', isPost, itemParams) ? getArg('sortProp', isPost, itemParams) : "cm:name",
+		additionalProperties = getArg('additionalProperties', isPost, itemParams),
+		argsPathRoot = getArg('pathRoot', isPost, itemParams),
+		argsPathNameSubstituteString = getArg('pathNameSubstituteString', isPost, itemParams),
+		argsUseObjectDescription = ("true" == getArg('useObjectDescription', isPost, itemParams));
 	if (additionalProperties != null) {
 		additionalProperties = additionalProperties.split(',');
 	}
@@ -76,10 +76,13 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 					root = node;
 				}
 			}
-			var nodes = root.childrenByXPath(argsXPathLocation);
-			if (nodes.length > 0)
-			{
-				nodeRef = String(nodes[0].nodeRef);
+			if (argsXPathLocation == '{currentLocation}') {
+				nodeRef = node.nodeRef.toString();
+			} else {
+				var nodes = root.childrenByXPath(argsXPathLocation);
+				if (nodes.length) {
+					nodeRef = String(nodes[0].nodeRef);
+				}
 			}
 		}
 
@@ -167,7 +170,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 					return null;
 				}
 
-				query = getFilterParams(argsSearchTerm, parentXPath);
+				query = getFilterParams('' + argsSearchTerm, parentXPath);
 
                 if (showNotSelectable != "true") { //включим фильтрацию по типам/аспектам
                     var selectableQuery = getItemSelectableQuery(argsSelectableType, showFolders);
@@ -200,7 +203,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 							ascending: false
 						});
 					}
-                                        
+
 					childNodes = search.query(
 						{
 							query: searchQueryProcessor.processQuery(query),
@@ -300,7 +303,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 		}
 		else if (url.templateArgs.type == "category")
 		{
-			var catAspect = (args["aspect"] != null) ? args["aspect"] : "cm:generalclassifiable";
+			var catAspect = getArg('aspect', isPost, itemParams) ? getArg('aspect', isPost, itemParams) : "cm:generalclassifiable";
 
 			// TODO: Better way of finding this
 			var rootCategories = classification.getRootCategories(catAspect);
@@ -376,11 +379,30 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 		return;
 	}
 
+	if (itemParams && itemParams.itemKey) {
+		results.forEach(function(resultItem) {
+			resultItem.itemKey = itemParams.itemKey;
+		});
+	}
+
 	return {
 		parent: parent,
 		rootNode: rootNode,
 		results: results,
 		additionalProperties: additionalProperties
+	}
+}
+
+function getArg(argName, isPost, itemParams) {
+	if (itemParams && itemParams.hasOwnProperty(argName)) {
+		// Получение аргумента из объекта переметров элемента
+		return itemParams[argName];
+	} else if (isPost) {
+		// Получение аргумента для POST-запроса
+		return json.has(argName) ? json.get(argName) : null;
+	} else {
+		// Получение аргумента для GET-запроса
+		return args[argName];
 	}
 }
 

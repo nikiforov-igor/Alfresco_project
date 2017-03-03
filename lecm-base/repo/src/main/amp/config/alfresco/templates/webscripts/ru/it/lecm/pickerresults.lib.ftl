@@ -54,6 +54,7 @@
 				<#if showInaccessible??>
 					"hasAccess" :  ${row.hasAccess?string},
 				</#if>
+				<#if row.itemKey??>"itemKey": "${row.itemKey}",</#if>
         		"hasWritePermission": <#if row.item.hasPermission??>${row.item.hasPermission("Write")?string}<#else>false</#if>
                 }<#if row_has_next>,</#if>
 		</#list>
