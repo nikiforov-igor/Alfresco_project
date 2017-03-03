@@ -843,6 +843,46 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 return null;
             },
 
+            getMarkerFormatter: function (elCell, oRecord, oColumn, oData) {
+                var html = '';
+                if (!oRecord) {
+                    oRecord = this.getRecord(elCell);
+                }
+                if (!oColumn) {
+                    oColumn = this.getColumn(elCell.parentNode.cellIndex);
+                }
+
+                if (oRecord && oColumn) {
+                    if (!oData) {
+                        oData = oRecord.getData("itemData")[oColumn.field];
+                    }
+
+                    if (oData) {
+                        var datalistColumn = this.datagridColumns[oColumn.key];
+                        if (datalistColumn) {
+                            if (('' + oData.value) == 'true') {
+                                var markerHTML;
+                                if (datalistColumn.markerHTML) {
+                                    markerHTML = decodeURIComponent(datalistColumn.markerHTML);
+                                } else {
+                                    if (datalistColumn.markerIcon) {
+                                        markerHTML = "<div class='centered'><img src='{markerIcon}' title='{title}'/></div>";
+                                    } else {
+                                        markerHTML = "<div class='centered'><span class='boolean-true' title='{title}'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>";
+                                    }
+                                }
+                                markerHTML = YAHOO.lang.substitute(markerHTML, {
+                                    markerIcon: Alfresco.constants.URL_RESCONTEXT + datalistColumn.markerIcon,
+                                    title: datalistColumn.label
+                                });
+                                html += markerHTML;
+                            }
+                        }
+                    }
+                }
+                elCell.innerHTML = html;
+            },
+
 	        addFooter: function DataGrid_getCustomAddFooter(){
 		        return null;
 	        },
@@ -1256,24 +1296,34 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     } else {
                         sortable = this.options.overrideSortingWith;
                     }
+                    if (!column.isMarker) {
+                        if (!inArray(column.name, this.options.excludeColumns)) {
+                            var className = "";
+                            if (column.dataType == "lecm-orgstr:employee" || inArray(column.name, this.options.nowrapColumns)) {
+                                className = "nowrap "
+                            }
 
-                    if (!(this.options.excludeColumns.length > 0 && inArray(column.name, this.options.excludeColumns))) {
-                        var className = "";
-                        if (column.dataType == "lecm-orgstr:employee" || (this.options.nowrapColumns.length > 0 && inArray(column.name, this.options.nowrapColumns))) {
-                            className = "nowrap "
+                            columnDefinitions.push({
+                                key: this.dataResponseFields[i],
+                                label: column.label.length ? column.label : this.msg(column.name.replace(":", "_")),
+                                sortable: sortable,
+                                resizeable: column.resizeable || false,
+                                sortOptions: {
+                                    field: column.formsName,
+                                    sortFunction: this.getSortFunction()
+                                },
+                                formatter: this.getCellFormatter(column.dataType),
+                                className: className + ((column.dataType == 'boolean') ? 'centered' : '')
+                            });
                         }
-
+                    } else {
                         columnDefinitions.push({
-                            key:this.dataResponseFields[i],
-                            label:column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
-                            sortable:sortable,
-                            resizeable: column.resizeable === undefined ? false : column.resizeable,
-                            sortOptions:{
-                                field:column.formsName,
-                                sortFunction:this.getSortFunction()
-                            },
-                            formatter:this.getCellFormatter(column.dataType),
-                            className: className + ((column.dataType == 'boolean') ? 'centered' : '')
+                            key: this.dataResponseFields[i],
+                            label: '',
+                            sortable: false,
+                            resizeable: false,
+                            formatter: this.getMarkerFormatter.bind(this),
+                            className: "nowrap marker-value"
                         });
                     }
                 }

@@ -57,6 +57,9 @@ public interface ArmService {
 	QName PROP_COLUMN_FORMAT_STRING = QName.createQName(ARM_NAMESPACE_URI, "field-format-string");
 	QName PROP_COLUMN_SORTABLE = QName.createQName(ARM_NAMESPACE_URI, "field-sortable");
 	QName PROP_COLUMN_BY_DEFAULT = QName.createQName(ARM_NAMESPACE_URI, "field-by-default");
+	QName PROP_COLUMN_IS_MARKER = QName.createQName(ARM_NAMESPACE_URI, "field-is-marker");
+	QName PROP_COLUMN_MARKER_ICON = QName.createQName(ARM_NAMESPACE_URI, "field-marker-icon");
+	QName PROP_COLUMN_MARKER_HTML = QName.createQName(ARM_NAMESPACE_URI, "field-marker-html");
 
 	QName TYPE_QUERY_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "query-child-rule");
 	QName PROP_LIST_QUERY_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "list-query-child-rule");
