@@ -1,3 +1,4 @@
+<#assign controlId = fieldHtmlId + "-cntrl">
 <#assign hideValue = false>
 <#if field.control.params.hideValue??>
     <#assign hideValue = true>
@@ -43,7 +44,7 @@
 </#if>
 
 <#if form.mode == "view">
-    <div class="control textfield viewmode">
+    <div id="${controlId}" class="control textfield viewmode">
         <div class="label-div">
             <#if mandatory && !(field.value?is_number) && field.value == "">
                 <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png"
@@ -67,7 +68,7 @@
         </div>
     </div>
 <#else>
-    <div class="control textfield editmode <#if field.control.params.containerStyleClass??>${field.control.params.containerStyleClass}</#if>">
+    <div id="${controlId}" class="control textfield editmode <#if field.control.params.containerStyleClass??>${field.control.params.containerStyleClass}</#if>">
         <div class="label-div">
             <label for="${fieldHtmlId}">${field.label?html}:
                 <#if mandatory>

@@ -147,16 +147,27 @@ LogicECM.DocumentAttachmentActions = LogicECM.DocumentAttachmentActions || {};
 					{
 						message: this.msg("message.edit-cancel.failure", displayName)
 					},
-					webscript:
-					{
-						method: Alfresco.util.Ajax.POST,
-						name: "cancel-checkout/node/{nodeRef}",
-						params:
-						{
-							nodeRef: record.jsNode.nodeRef.uri
+					webscript: {
+						name: "lecm/unlock?nodeRef={nodeRef}",
+						stem: Alfresco.constants.PROXY_URI,
+						method: Alfresco.util.Ajax.GET,
+						params: {
+							nodeRef: file.nodeRef
 						}
 					}
 				});
+		},
+
+		onUnlockAction: function onUnlockAction_function(file) {
+			if (YAHOO.lang.isFunction(LogicECM.module.UnlockNode.unlock)) {
+				LogicECM.module.UnlockNode.unlock(file);
+			}
+		},
+
+		onActionLECMEditOnline: function onActionLECMEditOnline_function(file) {
+			if (YAHOO.lang.isFunction(LogicECM.module.EditOnline.edit)) {
+				LogicECM.module.EditOnline.edit(file);
+			}
 		},
 
 		onFileCopiedComplete: function(layer, args) {
