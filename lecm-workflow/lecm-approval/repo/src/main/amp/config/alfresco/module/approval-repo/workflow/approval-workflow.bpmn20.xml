@@ -272,7 +272,8 @@
   var currentStage = realExecution.getVariable('currentStage');
   var stageItem = realExecution.getVariableLocal('currentStageItem');
   var employees = stageItem.assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
-  var effectiveEmployee, userName, term, dueDate;
+  var effectiveEmployee, userName, term, dueDate,
+      currentDate = base.getValueConverter().convertValueForJava(new Date());
   /* вычисление userName */
   if (employees && employees.length) {
     /* проверяем активно ли делегирование и настроено ли оно вообще */
@@ -293,12 +294,12 @@
     dueDate = workCalendar.getNextWorkingDateByDays(new Date(), term);
 
     stageItem.properties['lecmWorkflowRoutes:stageItemUserName'] = userName;
-    stageItem.properties['lecmWorkflowRoutes:stageItemStartDate'] = base.getValueConverter().convertValueForJava(new Date());
+    stageItem.properties['lecmWorkflowRoutes:stageItemStartDate'] = currentDate;
     stageItem.properties['lecmWorkflowRoutes:stageItemDueDate'] = dueDate;
     stageItem.save();
     stageItem.removeAssociation(employees[0], 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
     stageItem.createAssociation(effectiveEmployee, 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
-    document.properties['lecmApproveAspects:currentTaskStartDate'] = base.getValueConverter().convertValueForJava(new Date());
+    document.properties['lecmApproveAspects:currentTaskStartDate'] = currentDate;
     document.save();
 
     /* подготовка переменных для таймера */
@@ -492,7 +493,8 @@
   var document = bpm_package.children[0];
   var currentStage = realExecution.getVariable('currentStage');
   var employees = currentStageItem.assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
-  var effectiveEmployee, userName, term, dueDate;
+  var effectiveEmployee, userName, term, dueDate,
+      currentDate = base.getValueConverter().convertValueForJava(new Date());
   /* пометка как активного */
   currentStageItem.properties['lecmApproveAspects:approvalState'] = 'ACTIVE';
   currentStageItem.save();
@@ -515,12 +517,12 @@
     dueDate = workCalendar.getNextWorkingDateByDays(new Date(), term);
 
     currentStageItem.properties['lecmWorkflowRoutes:stageItemUserName'] = userName;
-    currentStageItem.properties['lecmWorkflowRoutes:stageItemStartDate'] = base.getValueConverter().convertValueForJava(new Date());
+    currentStageItem.properties['lecmWorkflowRoutes:stageItemStartDate'] = currentDate;
     currentStageItem.properties['lecmWorkflowRoutes:stageItemDueDate'] = dueDate;
     currentStageItem.save();
     currentStageItem.removeAssociation(employees[0], 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
     currentStageItem.createAssociation(effectiveEmployee, 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
-    document.properties['lecmApproveAspects:currentTaskStartDate'] = base.getValueConverter().convertValueForJava(new Date());
+    document.properties['lecmApproveAspects:currentTaskStartDate'] = currentDate;
     document.save();
 
     /* подготовка переменных для таймера */
