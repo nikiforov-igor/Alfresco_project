@@ -1307,7 +1307,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 key: this.dataResponseFields[i],
                                 label: column.label.length ? column.label : this.msg(column.name.replace(":", "_")),
                                 sortable: sortable,
-                                resizeable: column.resizeable === undefined ? false : column.resizeable,
+                                resizeable: column.resizeable || false,
                                 sortOptions: {
                                     field: column.formsName,
                                     sortFunction: this.getSortFunction()
