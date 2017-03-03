@@ -750,6 +750,70 @@
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>5c203f70-c2a2-48db-b04f-e9973c4a7b53
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/8117188e-c59f-4a92-927a-8c40a6edcbee
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.assocList("lecm-resolutions:base-document-assoc").size() == 0 OR doc.assocList("lecm-resolutions:reviewers-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Добавьте поручение или лист ознакомления]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>a5c12d10-a1dd-4478-a19d-4a6525e727ec
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/e768305b-f9d1-470a-8856-574663a011b1
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.assocList("lecm-resolutions:base-document-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Добавьте поручение]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -880,6 +944,70 @@
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Работа по документу-основанию резолюции завершена. Продолжить работу с резолюцией?]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>b1958625-23bf-42fc-94fa-56ab43280552
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/8c9b2f6c-2abf-4b4c-bc86-c6db9354d018
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.assocList("lecm-resolutions:base-document-assoc").size() == 0 OR doc.assocList("lecm-resolutions:reviewers-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Добавьте поручение или лист ознакомления]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>d6db494c-9bf7-4272-bde4-27174ec14cad
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/bc7fe072-05d1-4f20-8d92-2d0dd00d07c4
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.assocList("lecm-resolutions:base-document-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Добавьте поручение]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
