@@ -1297,15 +1297,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         sortable = this.options.overrideSortingWith;
                     }
                     if (!column.isMarker) {
-                        if (!(this.options.excludeColumns.length > 0 && inArray(column.name, this.options.excludeColumns))) {
+                        if (!inArray(column.name, this.options.excludeColumns)) {
                             var className = "";
-                            if (column.dataType == "lecm-orgstr:employee" || (this.options.nowrapColumns.length > 0 && inArray(column.name, this.options.nowrapColumns))) {
+                            if (column.dataType == "lecm-orgstr:employee" || inArray(column.name, this.options.nowrapColumns)) {
                                 className = "nowrap "
                             }
 
                             columnDefinitions.push({
                                 key: this.dataResponseFields[i],
-                                label: column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
+                                label: column.label.length ? column.label : this.msg(column.name.replace(":", "_")),
                                 sortable: sortable,
                                 resizeable: column.resizeable === undefined ? false : column.resizeable,
                                 sortOptions: {
