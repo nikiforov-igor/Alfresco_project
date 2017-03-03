@@ -1,7 +1,9 @@
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/document-utils.js">
 
 function main() {
     model.hasPermission = hasDocumentViewPermission(page.url.args.nodeRef) && hasDocumentAttachmentViewPermission(page.url.args.nodeRef);
+	model.dependencies = DocumentUtils.getDependencies("LecmDocumentDetails");
 }
 
 function hasDocumentViewPermission(nodeRef) {

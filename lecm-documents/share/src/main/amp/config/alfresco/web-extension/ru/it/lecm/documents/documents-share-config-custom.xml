@@ -1,6 +1,6 @@
 <alfresco-config>
     <!-- Document Library Actions config section -->
-    <config evaluator="string-compare" condition="DocLibActions" replace="true">
+    <config evaluator="string-compare" condition="DocLibActions">
 
         <actionGroupResolver>lecm.resolver.doclib.actionGroup</actionGroupResolver>
         <!--

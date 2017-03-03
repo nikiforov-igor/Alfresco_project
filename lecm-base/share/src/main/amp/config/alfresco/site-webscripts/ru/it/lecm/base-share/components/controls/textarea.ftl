@@ -1,3 +1,4 @@
+<#assign controlId = fieldHtmlId + "-cntrl">
 <#if field.control.params.rows??><#assign rows=field.control.params.rows><#else><#assign rows=2></#if>
 <#if field.control.params.columns??><#assign columns=field.control.params.columns><#else><#assign columns=60></#if>
 
@@ -9,13 +10,15 @@
 	<#elseif form.arguments['readonly_' + field.name]?has_content>
 		<#assign defaultValue=form.arguments['readonly_' + field.name]>
 		<#assign readonly = true>
+    <#elseif field.control.params.defaultValue??>
+        <#assign defaultValue=field.control.params.defaultValue>
     </#if>
 </#if>
 
 <#assign disabled=(field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))/>
 
 <#if form.mode == "view">
-<div class="control textarea viewmode">
+<div id="${controlId}" class="control textarea viewmode">
    <div class="label-div">
        <#if field.mandatory && field.value == "">
        <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}"/><span>
@@ -71,7 +74,7 @@
 })();
 //]]></script>
 
-<div class="control textarea editmode <#if field.control.params.containerStyleClass??>${field.control.params.containerStyleClass}</#if>">
+<div id="${controlId}" class="control textarea editmode <#if field.control.params.containerStyleClass??>${field.control.params.containerStyleClass}</#if>">
     <div class="label-div">
         <label for="${fieldHtmlId}">
             ${field.label?html}:

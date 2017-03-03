@@ -71,16 +71,7 @@
 		<property name="evaluatorsUtil" ref="evaluators.util" />
 		<property name="roleId" value="BR_SIGNING" />
 	</bean>
-	
-	<bean id="evaluator.lecm.signed.docflow.showUnlockButton" parent="evaluator.doclib.action.chainedMatchAll">
-		<property name="evaluators">
-			<list>
-				<ref bean="evaluator.lecm.signed.docflow.canUnlock" />
-				<ref bean="evaluator.lecm.signed-docflow.Locked" />
-			</list>
-		</property>
-	</bean>
-	
+
 	<bean id="evaluator.lecm.signed.docflow.canUnlock" parent="evaluator.doclib.action.chainedMatchOne">
 		<property name="evaluators">
 			<list>

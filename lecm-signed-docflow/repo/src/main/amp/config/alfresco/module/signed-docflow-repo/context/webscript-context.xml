@@ -51,9 +51,6 @@
 		  parent="webscript"
 	      p:zipSignedContentService-ref="zipSignedContentService"/>
 
-	<bean id="webscript.ru.it.lecm.signed.docflow.unlock.unlock.get" class="ru.it.lecm.signed.docflow.webscripts.LockingWebscript"
-		  parent="webscript"
-		  p:lockService-ref="lockService"/>
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.signPermission.signPermission.get" class="ru.it.lecm.signed.docflow.webscripts.SignPermissionWebscript"
 		  parent="webscript"
