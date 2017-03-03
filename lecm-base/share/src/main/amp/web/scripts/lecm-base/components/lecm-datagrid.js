@@ -860,7 +860,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     if (oData) {
                         var datalistColumn = this.datagridColumns[oColumn.key];
                         if (datalistColumn) {
-                            if (oData.value && ('' + oData.value) == 'true') {
+                            if (('' + oData.value) == 'true') {
                                 var markerHTML;
                                 if (datalistColumn.markerHTML) {
                                     markerHTML = decodeURIComponent(datalistColumn.markerHTML);
