@@ -18,7 +18,7 @@
                     }
                 }
                 additionalFilter += ")";
-                
+
                 var eventsCollection = events.getUserEvents(args["startDate"], args["endDate"], additionalFilter, true);
 
                 for (var i = 0; i < eventsCollection.size(); i++) {
@@ -33,6 +33,15 @@
                 break;
             }
         }
+
+		var ewsCollection = ews.getEvents(employees, args["startDate"], args["endDate"]);
+		for (i in ewsCollection) {
+			if (ewsCollection[i].busytime.length) {
+				isBusy = true;
+				break;
+			}
+		}
+
         var result = {
             isBusy: isBusy
         };
