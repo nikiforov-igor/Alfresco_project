@@ -118,4 +118,17 @@ public interface DocumentAttachmentsService {
      */
 	void addAttachment(NodeRef attachmentRef, NodeRef attachmentCategoryRef);
 
+    /**
+     * Разблокировка всех вложений документа и удаление всех ссылок (не ассоциаций) на вложения документа.
+     * @param documentRef документ
+     */
+	void unlockAttachmentsAndClearLinks(NodeRef documentRef);
+
+
+    /**
+     * Добавление слушателя разблокировки вложения
+     * @param unlockListener слушатель
+     */
+	void addAttachmentUnlockListener(AttachmentUnlockListener unlockListener);
+
 }

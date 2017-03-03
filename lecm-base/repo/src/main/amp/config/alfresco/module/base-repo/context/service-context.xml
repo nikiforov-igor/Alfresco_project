@@ -539,4 +539,9 @@
 		<property name="lecmMessageService" ref="lecmMessageService"/>
 	</bean>
 
+
+    <bean id="webscript.ru.it.lecm.unlock.unlock.get" class="ru.it.lecm.base.scripts.LockingWebscript"
+          parent="webscript"
+          p:lockService-ref="lockService"/>
+
 </beans>

@@ -2,32 +2,37 @@ package ru.it.lecm.documents.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.dictionary.constraint.ListOfValuesConstraint;
+import org.alfresco.repo.i18n.MessageService;
+import org.alfresco.repo.node.MLPropertyInterceptor;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.lock.LockService;
+import org.alfresco.service.cmr.lock.UnableToReleaseLockException;
 import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.MLText;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.cmr.version.VersionHistory;
 import org.alfresco.service.cmr.version.VersionService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.PropertyMap;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmMessageService;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.util.*;
-import org.alfresco.repo.i18n.MessageService;
-import org.alfresco.repo.node.MLPropertyInterceptor;
-import org.alfresco.service.cmr.repository.MLText;
-import org.alfresco.util.PropertyMap;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: AIvkin
@@ -35,6 +40,8 @@ import ru.it.lecm.base.beans.WriteTransactionNeededException;
  * Time: 11:59
  */
 public class DocumentAttachmentsServiceImpl extends BaseBean implements DocumentAttachmentsService {
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(DocumentAttachmentsServiceImpl.class);
+
 	private DictionaryService dictionaryService;
 	private VersionService versionService;
 	private LecmPermissionService lecmPermissionService;
@@ -43,6 +50,9 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	private NamespaceService namespaceService;
 	private MessageService messageService;
 	private LecmMessageService lecmMessageService;
+    private LockService lockService;
+
+    private List<AttachmentUnlockListener> unlockListeners = new ArrayList<>();
 
 	public void setDictionaryService(DictionaryService dictionaryService) {
 		this.dictionaryService = dictionaryService;
@@ -75,6 +85,10 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	public void setLecmMessageService(LecmMessageService lecmMessageService) {
 		this.lecmMessageService = lecmMessageService;
 	}
+
+    public void setLockService(LockService lockService) {
+        this.lockService = lockService;
+    }
 
 	@Override
 	public NodeRef getRootFolder(final NodeRef documentRef) {
@@ -342,4 +356,39 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 		QName commentAssocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, assocName);
 		nodeService.moveNode(attachmentRef, attachmentCategoryRef, ContentModel.ASSOC_CONTAINS, commentAssocQName);
 	}
+
+    @Override
+    public void unlockAttachmentsAndClearLinks(final NodeRef documentRef) {
+        AuthenticationUtil.RunAsWork<?> runAsWork = new AuthenticationUtil.RunAsWork<Object>() {
+            @Override
+            public Object doWork() throws Exception {
+                final List<NodeRef> categories = getCategories(documentRef);
+                for (NodeRef category : categories) {
+                    final List<NodeRef> attachmentsByCategory = getAttachmentsByCategory(category);
+                    for (NodeRef attachmentRef : attachmentsByCategory) {
+                        try {
+                            lockService.unlock(attachmentRef);
+                            notifyUnlockListeners(attachmentRef);
+                        } catch (UnableToReleaseLockException e) {
+                            LOGGER.warn("Can not unlock {}. Skipped.", attachmentRef);
+                        }
+                    }
+                }
+                return null;
+            }
+        };
+
+        AuthenticationUtil.runAsSystem(runAsWork);
+    }
+
+    @Override
+    public void addAttachmentUnlockListener(AttachmentUnlockListener unlockListener) {
+        unlockListeners.add(unlockListener);
+    }
+
+    private void notifyUnlockListeners(final NodeRef attachmentRef) {
+        for (AttachmentUnlockListener listener : unlockListeners) {
+            listener.onAttachmentUnlocked(attachmentRef);
+        }
+    }
 }

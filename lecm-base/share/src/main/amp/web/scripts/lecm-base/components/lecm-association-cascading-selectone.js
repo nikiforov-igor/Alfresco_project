@@ -264,7 +264,7 @@ LogicECM.module = LogicECM.module || {};
 	            if (this.options.selectedValueNodeRef != null && this.options.selectedValueNodeRef.length > 0) {
 	                Alfresco.util.Ajax.jsonGet(
 	                    {
-	                        url: Alfresco.constants.PROXY_URI + "lecm/node/" + this.options.selectedValueNodeRef.replace("://", "/"),
+	                        url: Alfresco.constants.PROXY_URI + "slingshot/doclib2/node/" + this.options.selectedValueNodeRef.replace("://", "/"),
 	                        successCallback:
 	                        {
 	                            fn: function (response) {

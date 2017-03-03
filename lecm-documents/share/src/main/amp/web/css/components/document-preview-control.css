@@ -25,3 +25,58 @@
 {
      padding: 0 !important;
 }
+.web-preview > .previewer.PdfJs {
+	/* Should be only here - otherwise break viewerContainer! */
+	height: 100%;
+}
+
+.yui-skin-lecmTheme .control.document-preview .action {
+    width: 22px;
+    height: 22px;
+    margin: 4px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    float: left;
+}
+
+.yui-skin-lecmTheme .control.document-preview .action:hover {
+    width: 22px;
+    height: 22px;
+    margin: 3px;
+    border: 1px solid #ccc;
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    float: left;
+}
+
+.yui-skin-lecmTheme .control.document-preview .warning {
+    width: 22px;
+    height: 22px;
+    margin: 4px;
+    background-image: url(/share/res/components/documentlibrary/images/warning-16.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    float: left;
+}
+
+.yui-skin-lecmTheme .control.document-preview .list {
+    width: 22px;
+    height: 22px;
+    margin: 4px 0 4px 4px;
+    background-image: url(/share/res/images/lecm-documents/expand-16.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    float: right;
+}
+
+.yui-skin-lecmTheme .control.document-preview .actions {
+    float: left;
+    margin-left: 4px;
+}
+
+.yui-skin-lecmTheme .control.document-preview .add-actions {
+    padding: 0;
+}
