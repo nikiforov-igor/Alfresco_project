@@ -10,16 +10,13 @@ public enum JasperReportTargetFileType {
 	DOC("application/msword", ".doc"),
 	DOCX("application/vnd.openxmlformats-officedocument.wordprocessingml.document", ".docx"),
 	XML("text/xml", ".xml"),
+	HTML("text/html", ".html"),
 	XLS("application/vnd.ms-excel", ".xls"),
-	XLSX("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ".xlsx"),
-	ODT("application/vnd.oasis.opendocument.text", ".odt"),
-	OTT("application/vnd.oasis.opendocument.text-template", ".ott"),
-	ODS("application/vnd.oasis.opendocument.spreadsheet", ".ods"),
-	OTS("application/vnd.oasis.opendocument.spreadsheet-template", ".ots");
+	XLSX("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ".xlsx");
 
 	final private String mimeType, extension;
 
-	private JasperReportTargetFileType(String mimeType, String extension) {
+	JasperReportTargetFileType(String mimeType, String extension) {
 		this.mimeType = mimeType;
 		this.extension = extension;
 	}
