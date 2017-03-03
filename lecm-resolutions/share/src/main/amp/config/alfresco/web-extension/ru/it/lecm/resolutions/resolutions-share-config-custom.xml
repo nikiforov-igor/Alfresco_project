@@ -115,7 +115,7 @@
                             <control-param name="fireChangeEventName">changeResolutionLimitationDateRadio</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
+                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
@@ -125,7 +125,7 @@
                     </field>
                     <field id="lecm-resolutions:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
+                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
                     <field id="lecm-resolutions:limitation-date-type" set="limitation-date">
@@ -133,7 +133,7 @@
                     </field>
                     <field id="lecm-resolutions:limitation-date" set="limitation-date"  mandatory="true">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
+                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
 
@@ -594,7 +594,7 @@
                             <control-param name="fireChangeEventName">changeResolutionLimitationDateRadio</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
+                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
@@ -604,7 +604,7 @@
                     </field>
                     <field id="lecm-resolutions:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
+                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
                     <field id="lecm-resolutions:limitation-date-type" set="limitation-date">
@@ -612,7 +612,7 @@
                     </field>
                     <field id="lecm-resolutions:limitation-date" set="limitation-date"  mandatory="true">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
+                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Resolutions.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
 
