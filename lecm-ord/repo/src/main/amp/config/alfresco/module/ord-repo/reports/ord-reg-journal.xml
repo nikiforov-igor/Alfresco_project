@@ -28,12 +28,12 @@
                 <property name="cm:name"><![CDATA[99df4b8d-24df-4465-8737-022652a2489c]]></property>
                 <items>
                     <item name="cm:Период" type="lecm-rpeditor:reportDataColumn">
-                        <property name="lecm-rpeditor:dataColumnControlParams">
-                            <![CDATA[fromDateDefault=START_YEAR;fillDates=true;toDateDefault=NOW]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:date]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
                         <property name="cm:name"><![CDATA[Период]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[10]]></property>
+                        <property name="lecm-rpeditor:dataColumnControlParams">
+                            <![CDATA[fromDateDefault=START_YEAR;fillDates=true;toDateDefault=NOW]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[par_period]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
