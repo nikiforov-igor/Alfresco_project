@@ -298,6 +298,8 @@
     stageItem.save();
     stageItem.removeAssociation(employees[0], 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
     stageItem.createAssociation(effectiveEmployee, 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
+    document.properties['lecmApproveAspects:currentTaskStartDate'] = base.getValueConverter().convertValueForJava(new Date());
+    document.save();
 
     /* подготовка переменных для таймера */
     realExecution.setVariableLocal('localAssignee', base.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
@@ -518,6 +520,8 @@
     currentStageItem.save();
     currentStageItem.removeAssociation(employees[0], 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
     currentStageItem.createAssociation(effectiveEmployee, 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
+    document.properties['lecmApproveAspects:currentTaskStartDate'] = base.getValueConverter().convertValueForJava(new Date());
+    document.save();
 
     /* подготовка переменных для таймера */
     realExecution.setVariableLocal('localAssignee', base.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
