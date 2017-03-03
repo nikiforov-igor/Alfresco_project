@@ -15,6 +15,11 @@
     <#assign endpointMany = (params.endpointMany == "true")>
 </#if>
 
+<#assign autocompleteDataSourceMethodPost = false>
+<#if params.autocompleteDataSourceMethodPost?? && params.autocompleteDataSourceMethodPost == "true">
+	<#assign autocompleteDataSourceMethodPost = true>
+</#if>
+
 <#assign items = endpointType?split(',')>
 <#if params.items?? && params.items?has_content>
 	<#assign items = params.items?split(',')>
@@ -94,10 +99,14 @@
 				<#if params.autocompleteDataSource??>
 				autocompleteDataSource: '${params.autocompleteDataSource}',
 				</#if>
+				<#if params.dataSourceLogic??>
+                dataSourceLogic: '${params.dataSourceLogic}',
+				</#if>
+                autocompleteDataSourceMethodPost: ${autocompleteDataSourceMethodPost?string},
 				<#if params.changeItemsFireAction??>
 				changeItemsFireAction: '${params.changeItemsFireAction}',
 				</#if>
-                multipleSelectMode: ${endpointMany?string},
+                endpointMany: ${endpointMany?string},
                 showAssocViewForm: ${showAssocViewForm?string},
                 sortSelected: ${sortSelected?string},
 				itemsOptions: [
