@@ -170,6 +170,8 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                 properties.put("lecm-errands:content", content);
                 //важность
                 properties.put("lecm-errands:is-important", "true");
+                //Срок исполнения
+                properties.put("lecm-errands:limitation-date-radio", "DATE");
 
                 //ассоциации поручения
                 Map<String, String> associations = new HashMap<String, String>();
