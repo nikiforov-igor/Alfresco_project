@@ -12,7 +12,9 @@ public enum JasperReportTargetFileType {
 	XML("text/xml", ".xml"),
 	HTML("text/html", ".html"),
 	XLS("application/vnd.ms-excel", ".xls"),
-	XLSX("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ".xlsx");
+	XLSX("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ".xlsx"),
+	ODT("application/vnd.oasis.opendocument.text", ".odt"),
+	ODS("application/vnd.oasis.opendocument.spreadsheet", ".ods");
 
 	final private String mimeType, extension;
 
