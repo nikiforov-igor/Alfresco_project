@@ -6,6 +6,7 @@
 <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-final-actions.css" />
 <@script type="text/javascript" src="${url.context}/res/components/document-details/document-actions.js"></@script>
 <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata-form-edit.css" />
+<@script type="text/javascript" src="${url.context}/res/scripts/components/document-actions.js"></@script>
 <#if hasPermission && baseDocRef??>
     <#assign el=args.htmlid/>
 <!-- Markup -->
@@ -34,6 +35,9 @@
         </div>
     </div>
     <script type="text/javascript">//<![CDATA[
+    new LogicECM.DocumentActions("${el}").setOptions({
+        isBaseDocActions: true
+    });
 
     YAHOO.util.Event.onDOMReady(function () {
         <#if isAdmin && documentDetailsJSON??>
@@ -55,53 +59,7 @@
         });
         workflowForm.draw();
         Alfresco.util.createTwister("${el}-heading", "DocumentActions");
-
-        var shortView = LogicECM.services.DocumentViewPreferences.getShowRightPartShort();
-        if (shortView) {
-            Dom.addClass("${el}-wide-view", "hidden");
-        } else {
-            Dom.addClass("${el}-short-view", "hidden");
-        }
-
-        var actionsContainer = Dom.get("${el}-formContainer");
-        var shortContainer = Dom.get("${el}-short-view");
-        var wideContainer = Dom.get("${el}-wide-view");
-        var actionsShown = false;
-
-        YAHOO.Bubbling.on("showRightPartShortChanged", function () {
-            var shortView = LogicECM.services.DocumentViewPreferences.getShowRightPartShort();
-            if (shortView) {
-                Dom.addClass("${el}-wide-view", "hidden");
-                Dom.removeClass("${el}-short-view", "hidden");
-            } else {
-                Dom.addClass("${el}-short-view", "hidden");
-                Dom.removeClass("${el}-wide-view", "hidden");
-            }
-            wideContainer.appendChild(actionsContainer);
-            actionsShown = false;
-        });
-
-        var actionsButton = Dom.get("${el}-actions-button");
-
-        YAHOO.util.Event.addListener(actionsButton, 'click', function () {
-            if (actionsShown) return;
-            shortContainer.appendChild(actionsContainer);
-            actionsShown = true;
-            setTimeout(function () {
-                YAHOO.util.Event.addListener('Share', 'click', onActionButtonClicked);
-            }, 0);
-
-        });
-
-        function onActionButtonClicked(e) {
-            if (actionsContainer != e.target && !actionsContainer.contains(e.target)){
-                wideContainer.appendChild(actionsContainer);
-                actionsShown = false;
-                YAHOO.util.Event.removeListener('Share', 'click', onActionButtonClicked);
-            }
-        }
     });
-    //]]>
-    </script>
+    //]]></script>
 </div>
 </#if>

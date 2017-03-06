@@ -34,7 +34,7 @@ LogicECM.services = LogicECM.services || {};
     LogicECM.DocumentComponentBase = function DocumentConnections_constructor(htmlId) {
         LogicECM.DocumentComponentBase.superclass.constructor.call(this, "LogicECM.DocumentComponentBase", htmlId);
         Event.onDOMReady(this.setListeners, this, true);
-        this.services.docViewPreferences = LogicECM.services.DocumentViewPreferences;
+        this.services.docViewPreferences = LogicECM.services.documentViewPreferences;
         return this;
     };
 
@@ -269,7 +269,7 @@ LogicECM.services = LogicECM.services || {};
             },
 
             isHasPreferences: function () {
-                if (LogicECM.services.DocumentViewPreferences) {
+                if (LogicECM.services.documentViewPreferences) {
                     return true;
                 }
             }

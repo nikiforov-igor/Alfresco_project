@@ -84,7 +84,7 @@
 </div>
 <script type="text/javascript">//<![CDATA[
 LogicECM.services = LogicECM.services || {};
-var shortView = LogicECM.services.DocumentViewPreferences.getShowRightPartShort();
+var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
 if (shortView) {
     Dom.addClass("${id}-wide-view", "hidden");
     Dom.removeClass("${id}-short-view", "hidden");

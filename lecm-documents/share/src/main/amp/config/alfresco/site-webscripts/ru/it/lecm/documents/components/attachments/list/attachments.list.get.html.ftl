@@ -14,40 +14,7 @@
             }
         }
         YAHOO.util.Event.onAvailable("${el}-action-collapse", hideButton);
-        YAHOO.util.Event.onAvailable("${el}-action-show-previewer", function () {
-            hideShowPreviewerButton();
-            YAHOO.util.Event.addListener("${el}-action-show-previewer", 'click', function () {
-                Alfresco.util.Ajax.jsonGet(
-                        {
-                            url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/attachments/preview",
-                            dataObj: {
-                                nodeRef: "${nodeRef}",
-                                htmlid: "${el}" + Alfresco.util.generateDomId()
-								<#if inclBaseDoc>,
-									inclBaseDoc: ${inclBaseDoc?string("true","false")}
-								</#if>,
-                            },
-                            successCallback: {
-                                fn:function(response){
-                                    var html = response.serverResponse.responseText;
-                                    var formEl = Dom.get("custom-region");
-                                    if (formEl != null) {
-                                        formEl.innerHTML = "";
-                                        formEl.innerHTML = html;
-                                    }
-                                    LogicECM.services = LogicECM.services || {};
-									if (LogicECM.services.DocumentViewPreferences) {
-                                        LogicECM.services.DocumentViewPreferences.setIsDocAttachmentsInPreview(true);
-                                    }
-                                },
-                                scope: this
-                            },
-                            failureMessage: "${msg("message.failure")}",
-                            scope: this,
-                            execScripts: true
-                        });
-            });
-        });
+        YAHOO.util.Event.onAvailable("${el}-action-show-previewer", hideShowPreviewerButton);
 	</script>
     <div class="panel-header">
 		<div class="panel-title">${msg("label.title")}</div>
@@ -56,7 +23,18 @@
             <a id="${el}-action-show-previewer" class="show-previewer" title="${msg("btn.show-previewer")}"></a>
     	</div>
     </div>
-
+    <script type="text/javascript">//<![CDATA[
+    (function () {
+        new LogicECM.DocumentAttachmentsList("${el}").setOptions(
+                {
+                    nodeRef: "${nodeRef}",
+                    <#if inclBaseDoc??>
+                        inclBaseDoc: ${inclBaseDoc?string("true","false")},
+                    </#if>
+                }
+        );
+    })();
+    //]]></script>
 	<div id="${el}" class="attachments-list-container">
 	    <#if categories??>
 	        <#list categories as category>
@@ -125,7 +103,7 @@
 						var path = "${category.path}";
 						path = path.substring(path.indexOf("/", 1), path.length);
 
-			            new LogicECM.DocumentAttachmentsList("${categoryId}").setOptions(
+			            new LogicECM.DocumentCategoryAttachmentsList("${categoryId}").setOptions(
 			                    {
 			                        nodeRef: "${category.nodeRef}",
 				                    categoryName: "${category.name}",
@@ -153,4 +131,5 @@
 	    })();
 	    //]]></script>
 	</div>
+
 </#if>

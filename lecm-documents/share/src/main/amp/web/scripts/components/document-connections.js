@@ -50,7 +50,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				Event.addListener(expandButton, 'click', this.onExpand, this, true);
 
                 LogicECM.services = LogicECM.services || {};
-				if (LogicECM.services.DocumentViewPreferences) {
+				if (LogicECM.services.documentViewPreferences) {
 					var lastCustomPanelViewTitle = this.getLastCustomPanelView();
 					if (lastCustomPanelViewTitle == this.getTitle() && this.isSplitPanel()) {
 						this.onExpand();

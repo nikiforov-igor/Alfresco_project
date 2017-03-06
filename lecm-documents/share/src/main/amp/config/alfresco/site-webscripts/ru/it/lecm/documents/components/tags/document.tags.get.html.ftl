@@ -129,8 +129,8 @@ if (${mayEdit}) {
 
 function initTags() {
     LogicECM.services = LogicECM.services || {};
-    if (LogicECM.services.DocumentViewPreferences) {
-        var shortView = LogicECM.services.DocumentViewPreferences.getShowRightPartShort();
+    if (LogicECM.services.documentViewPreferences) {
+        var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
         if (shortView) {
             Dom.addClass("${el}-wide-view", "hidden");
             Dom.removeClass("${el}-short-view", "hidden");
@@ -138,7 +138,7 @@ function initTags() {
         YAHOO.Bubbling.on("showRightPartShortChanged", function () {
             var rightPartWide = Dom.get("${el}-wide-view");
             var rightPartShort = Dom.get("${el}-short-view");
-            var shortView = LogicECM.services.DocumentViewPreferences.getShowRightPartShort();
+            var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
             if(shortView) {
                 Dom.addClass(rightPartWide, "hidden");
                 Dom.removeClass(rightPartShort, "hidden");

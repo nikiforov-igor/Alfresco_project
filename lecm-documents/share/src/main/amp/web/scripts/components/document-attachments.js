@@ -63,7 +63,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	            }
 
 	            LogicECM.services = LogicECM.services || {};
-                if(LogicECM.services.DocumentViewPreferences) {
+                if(LogicECM.services.documentViewPreferences) {
                     var lastCustomPanelViewTitle = this.getLastCustomPanelView();
                     if (lastCustomPanelViewTitle == this.getTitle() && this.isSplitPanel()) {
                         this.onExpand();
@@ -73,8 +73,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 	        onExpand: function DocumentAttachments_onLinkClick() {
                 LogicECM.services = LogicECM.services || {};
-                if (LogicECM.services.DocumentViewPreferences) {
-                    if (LogicECM.services.DocumentViewPreferences.getIsDocAttachmentsInPreview()) {
+                if (LogicECM.services.documentViewPreferences) {
+                    if (LogicECM.services.documentViewPreferences.getIsDocAttachmentsInPreview()) {
                         this.expandPreview();
                     } else {
                         this.expandList();
@@ -100,8 +100,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                 this.expandView(text);
 
                                 LogicECM.services = LogicECM.services || {};
-                                if (LogicECM.services.DocumentViewPreferences) {
-                                    LogicECM.services.DocumentViewPreferences.setIsDocAttachmentsInPreview(false);
+                                if (LogicECM.services.documentViewPreferences) {
+                                    LogicECM.services.documentViewPreferences.setIsDocAttachmentsInPreview(false);
                                 }
                             },
                             scope: this
@@ -127,8 +127,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                 this.expandView(text);
 
                                 LogicECM.services = LogicECM.services || {};
-                                if (LogicECM.services.DocumentViewPreferences) {
-                                    LogicECM.services.DocumentViewPreferences.setIsDocAttachmentsInPreview(true);
+                                if (LogicECM.services.documentViewPreferences) {
+                                    LogicECM.services.documentViewPreferences.setIsDocAttachmentsInPreview(true);
                                 }
                             },
                             scope: this

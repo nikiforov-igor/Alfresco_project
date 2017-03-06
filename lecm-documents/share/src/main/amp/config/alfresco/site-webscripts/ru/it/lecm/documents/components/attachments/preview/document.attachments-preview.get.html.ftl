@@ -1,6 +1,6 @@
 <#assign aDateTime = .now>
 <#assign el=args.htmlid + aDateTime?iso_utc/>
-<div class="document-preview">
+<div id="${el}" class="document-preview">
     <div class="doc-preview-container metadata-form">
         <div class="panel-header preview-toolbar">
             <div class="attachments-actions">
@@ -23,13 +23,16 @@
             </div>
         </div>
         <div id="${el}-preview-container" class="document-preview body"></div>
-
-        <input type="hidden" id="${el}"/>
     </div>
 </div>
 <div class="clear"></div>
 <script type="text/javascript">//<![CDATA[
 (function () {
+    new LogicECM.DocumentAttachmentsPreview("${el}").setOptions({
+        nodeRef: "${nodeRef}",
+        inclBaseDoc: ${inclBaseDoc?string("true", "false")}
+    }).setMessages(${messages});
+
     function init() {
         LogicECM.module.Base.Util.loadResources([
                     'scripts/lecm-documents/lecm-document-preview-control.js',
@@ -52,38 +55,6 @@
                     'css/components/document-preview-control.css',
                     'css/components/document-attachments-preview.css'
                 ], createControl);
-
-        YAHOO.util.Event.addListener("${el}-show-list", 'click', function () {
-            Alfresco.util.Ajax.jsonGet(
-                    {
-                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/attachments-list",
-                        dataObj: {
-                            nodeRef: "${nodeRef}",
-                            htmlid: "${el}" + Alfresco.util.generateDomId()
-                            <#if inclBaseDoc>,
-                                inclBaseDoc: ${inclBaseDoc?string("true", "false")}
-                            </#if>
-                        },
-                        successCallback: {
-                            fn:function(response){
-                                var html = response.serverResponse.responseText;
-                                var formEl = Dom.get("custom-region");
-                                if (formEl != null) {
-                                    formEl.innerHTML = "";
-                                    formEl.innerHTML = html;
-                                }
-                                LogicECM.services = LogicECM.services || {};
-                                if (LogicECM.services.DocumentViewPreferences) {
-                                    LogicECM.services.DocumentViewPreferences.setIsDocAttachmentsInPreview(false);
-                                }
-                            },
-                            scope: this
-                        },
-                        failureMessage: "${msg("message.failure")}",
-                        scope: this,
-                        execScripts: true
-                    });
-        });
     }
 
     function createControl() {
@@ -91,7 +62,7 @@
         control.setOptions({
             resizeable: true,
             itemId: "${nodeRef}",
-            forTask: false,
+            forTask: false
         });
     }
 

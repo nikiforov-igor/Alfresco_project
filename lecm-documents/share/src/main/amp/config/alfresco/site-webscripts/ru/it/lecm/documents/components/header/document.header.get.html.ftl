@@ -134,7 +134,7 @@
             <script type="text/javascript">//<![CDATA[
             (function () {
                 LogicECM.services = LogicECM.services || {};
-                if (LogicECM.services.DocumentViewPreferences) {
+                if (LogicECM.services.documentViewPreferences) {
                     var splitPanel = new LogicECM.module.DocumentPanelSplitView("${id}").setMessages(${messages});
                     splitPanel.setOptions({
                         documentRef: "${nodeRef}"

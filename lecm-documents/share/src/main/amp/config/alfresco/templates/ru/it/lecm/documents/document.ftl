@@ -33,7 +33,7 @@
     <#if documentType??>
     <script type="text/javascript">//<![CDATA[
             LogicECM.services = LogicECM.services || {};
-            LogicECM.services.DocumentViewPreferences = new LogicECM.module.DocumentViewPreferences("${page.url.args.nodeRef}", "${documentType}", "${defaultExpandComponent}");
+            LogicECM.services.documentViewPreferences = new LogicECM.module.DocumentViewPreferences("${page.url.args.nodeRef}", "${documentType}", "${defaultExpandComponent}");
     //]]></script>
     </#if>
 
@@ -55,12 +55,12 @@
             <div id="doc-right-part" class="bordered-panel doc-right-part">
                 <#if documentType??>
                 <script type="text/javascript">//<![CDATA[
-                    var SHOW_RIGHT_PART_SHORT = LogicECM.services.DocumentViewPreferences.getShowRightPartShort();
+                    var SHOW_RIGHT_PART_SHORT = LogicECM.services.documentViewPreferences.getShowRightPartShort();
                     if (SHOW_RIGHT_PART_SHORT) {
                         document.getElementById("doc-right-part").className += "-short";
                     }
                     YAHOO.Bubbling.on("showRightPartShortChanged", function () {
-                        var SHOW_RIGHT_PART_SHORT = LogicECM.services.DocumentViewPreferences.getShowRightPartShort();
+                        var SHOW_RIGHT_PART_SHORT = LogicECM.services.documentViewPreferences.getShowRightPartShort();
                         var rightPart = Dom.get("doc-right-part");
 
                         if (SHOW_RIGHT_PART_SHORT) {

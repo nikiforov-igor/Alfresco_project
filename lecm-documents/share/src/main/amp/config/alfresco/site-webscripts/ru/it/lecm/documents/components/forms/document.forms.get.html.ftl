@@ -69,7 +69,7 @@
 </div>
 <script type="text/javascript">//<![CDATA[
     LogicECM.services = LogicECM.services || {};
-    var shortView = LogicECM.services.DocumentViewPreferences.getShowRightPartShort();
+    var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
     if (shortView) {
         Dom.addClass("${el}-wide-view", "hidden");
     } else {
@@ -78,7 +78,7 @@
     YAHOO.Bubbling.on("showRightPartShortChanged", function () {
         var rightPartWide = Dom.get("${el}-wide-view");
         var rightPartShort = Dom.get("${el}-short-view");
-        var shortView = LogicECM.services.DocumentViewPreferences.getShowRightPartShort();
+        var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
         if(shortView) {
             Dom.addClass(rightPartWide, "hidden");
             Dom.removeClass(rightPartShort, "hidden");

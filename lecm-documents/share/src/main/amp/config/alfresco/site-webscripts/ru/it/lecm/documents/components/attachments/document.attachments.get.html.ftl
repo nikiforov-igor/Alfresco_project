@@ -8,6 +8,8 @@
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-attachments.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-attachments-list.js"></@script>
+	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-attachments-preview.js"></@script>
+	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-category-attachments-list.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-attachments-dashlet-datagrid.js"></@script>
 </@>
 
@@ -111,8 +113,8 @@
 <script type="text/javascript">//<![CDATA[
 (function () {
     LogicECM.services = LogicECM.services || {};
-    if (LogicECM.services.DocumentViewPreferences) {
-        var shortView = LogicECM.services.DocumentViewPreferences.getShowRightPartShort();
+    if (LogicECM.services.documentViewPreferences) {
+        var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
         if (shortView) {
             Dom.addClass("${el}-wide-view", "hidden");
         } else {

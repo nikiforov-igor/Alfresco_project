@@ -77,7 +77,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 Alfresco.util.createTwister(this.id + "-heading", "DocumentMetadata");
 
                 LogicECM.services = LogicECM.services || {};
-                if(LogicECM.services.DocumentViewPreferences) {
+                if(LogicECM.services.documentViewPreferences) {
                     var lastCustomPanelViewTitle = this.getLastCustomPanelView();
                     if (lastCustomPanelViewTitle == this.getTitle() && this.isSplitPanel()) {
                         this.onExpand();

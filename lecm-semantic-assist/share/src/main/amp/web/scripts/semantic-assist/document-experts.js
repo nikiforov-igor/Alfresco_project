@@ -47,11 +47,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 if (expandEl != null) {
                     expandEl.onclick = this.onExpand.bind(this);
                 }
-
-                var lastCustomPanelViewTitle = this.getLastCustomPanelView();
-                if (lastCustomPanelViewTitle == this.getTitle() && this.isSplitPanel()) {
-                    this.onExpand();
-                }
             },
 
             onExpand: function () {

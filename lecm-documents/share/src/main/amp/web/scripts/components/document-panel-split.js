@@ -23,7 +23,7 @@ LogicECM.services = LogicECM.services || {};
         LogicECM.module.DocumentPanelSplitView.superclass.constructor.call(this, "LogicECM.module.DocumentPanelSplitView", fieldHtmlId, []);
 
         this.controlId = fieldHtmlId + "-cntrl";
-        this.services.docViewPreferences = LogicECM.services.DocumentViewPreferences;
+        this.services.docViewPreferences = LogicECM.services.documentViewPreferences;
         YAHOO.Bubbling.on("panelSplitedChanged", this.onPanelSplitedChanged, this);
         return this;
     };
