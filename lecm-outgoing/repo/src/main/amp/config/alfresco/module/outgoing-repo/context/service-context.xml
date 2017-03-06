@@ -141,4 +141,11 @@
 		</property>
 	</bean>
 
+	<bean id="listOfUsedOutgoingTypes" parent="listOfUsedTypes">
+		<property name="types">
+			<map>
+				<entry key="lecm-outgoing-dic:documentType" value="Вид исходящего документа"/>
+			</map>
+		</property>
+	</bean>
 </beans>
