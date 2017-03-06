@@ -789,6 +789,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 			        var advSearch = grid.search;
 
 			        advSearch.options.searchFormId = Alfresco.util.generateDomId();
+			        // Ограничиваем высоту диалога до 90% видимой высоты страницы
+			        advSearch.options.dialogMaxHeightVh = 90;
 			        if (advSearch.currentForm != null && this.currentType != advSearch.currentForm.type) {
 			            advSearch.currentForm = null;
 			        }
