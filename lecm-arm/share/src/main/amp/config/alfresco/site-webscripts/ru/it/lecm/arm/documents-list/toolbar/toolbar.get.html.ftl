@@ -5,6 +5,10 @@
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-arm/arm-documents-toolbar.js"></@script>
 </@>
 
+<@markup id="css">
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-arm/arm-documents-toolbar.css" />
+</@>
+
 <#assign id = args.htmlid>
 <script type="text/javascript">
 (function(){
