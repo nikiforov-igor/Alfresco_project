@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.enumeration.availability.AvailabilityData;
 import microsoft.exchange.webservices.data.core.enumeration.misc.ExchangeVersion;
@@ -91,6 +93,13 @@ public class EWSServiceImpl implements EWSService {
 					for (CalendarEvent calendarEvent : calendarEvents) {
 						employeeAvailability.getEvents().add(new EWSEvent(calendarEvent.getStartTime(), calendarEvent.getEndTime()));
 					}
+				} else {
+					logger.error("EWS Error code: {}", availability.getErrorCode().toString());
+					logger.error(availability.getErrorMessage());
+					Map<String, String> errorDetails = availability.getErrorDetails();
+					for (Entry<String, String> entry : errorDetails.entrySet()) {
+						logger.debug("{} {}", entry.getKey(), entry.getValue());
+					}
 				}
 			}
 		} catch (Exception ex) {
@@ -126,5 +135,4 @@ public class EWSServiceImpl implements EWSService {
 		}
 		return getEvents(availabilities, attendees, fromDate, toDate);
 	}
-
 }

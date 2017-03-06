@@ -543,6 +543,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					dataObj: {
 						items: items,
 						date: Alfresco.util.formatDate(this.selectedDate, "yyyy-mm-dd"),
+						nextDate: Alfresco.util.formatDate(new Date(this.selectedDate).addDays(1), "yyyy-mm-dd"),
 						exclude: this.isNodeRef(this.options.eventNodeRef) ? this.options.eventNodeRef : "",
                         busyTimeMembersFields: this.options.busyTimeMembersFields ? this.options.busyTimeMembersFields : this.options.busyTimeMembersFieldsFromService
 					},
