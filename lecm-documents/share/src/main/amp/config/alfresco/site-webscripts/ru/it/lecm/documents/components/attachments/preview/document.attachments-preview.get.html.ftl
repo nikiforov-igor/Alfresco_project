@@ -1,7 +1,7 @@
 <#assign aDateTime = .now>
 <#assign el=args.htmlid + aDateTime?iso_utc/>
 <div id="${el}" class="document-preview">
-    <div class="doc-preview-container metadata-form">
+    <div class="doc-preview-container">
         <div class="panel-header preview-toolbar">
             <div class="attachments-actions">
                 <div>
