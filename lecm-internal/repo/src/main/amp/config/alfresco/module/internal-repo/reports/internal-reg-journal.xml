@@ -28,10 +28,11 @@
                 <property name="cm:name"><![CDATA[60617236-7c27-4687-ba3a-f847d97bbafc]]></property>
                 <items>
                     <item name="cm:Выводить документы" type="lecm-rpeditor:reportDataColumn">
-                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnControlParams">
+                            <![CDATA[options=*|Все,true|Зарегистрированные,false|Незарегистрированные]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:text]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[1=1|Все,{lecm-document-aspects:reg-data-is-registered:true}|Зарегистрированные,{lecm-document-aspects:reg-data-is-registered:false}|Незарегистрированные]]></property>
+                            <![CDATA[{lecm-document-aspects:reg-data-is-registered}]]></property>
                         <property name="cm:name"><![CDATA[Выводить документы]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[par_registered]]></property>
