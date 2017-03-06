@@ -23,8 +23,8 @@
 	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document:author-assoc"/>
                     <show id="lecm-eds-document:executor-assoc"/>
-                    <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
+                    <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:execution-date"/>
                     <show id="lecm-eds-document:summaryContent"/>
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
@@ -440,8 +440,8 @@
                     <show id="lecm-eds-aspect:execution-state" force="true"/>
 	                <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
 	                <show id="lecm-document-aspects:reg-data-date"/>
-	                <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
+	                <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:execution-date"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-ord:controller-assoc"/>
