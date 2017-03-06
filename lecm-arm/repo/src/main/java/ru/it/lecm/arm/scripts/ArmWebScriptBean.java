@@ -211,19 +211,12 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
             }
 
             if (filterBean != null) {
-                if (Boolean.valueOf(String.valueOf(filter.has(MULTIPLE) ? filter.get(MULTIPLE) : false))) {
-                    Object curValues = filter.has(CUR_VALUE) ? filter.get(CUR_VALUE) : null;
-                    Object curValuesObj = getValueConverter().convertValueForJava(curValues);
-                    if (curValuesObj instanceof List) {
-                        values.addAll((List<String>) curValuesObj);
-                    } else if (curValuesObj != null) {
-                        values.addAll(Arrays.asList((curValuesObj.toString()).split(",")));
-                    }
-                } else {
-                    String currentValueStr = filter.has(CUR_VALUE) ? (String) filter.get(CUR_VALUE) : null;
-                    if (currentValueStr != null) {
-                        values.add(currentValueStr);
-                    }
+                Object curValues = filter.has(CUR_VALUE) ? filter.get(CUR_VALUE) : null;
+                Object curValuesObj = getValueConverter().convertValueForJava(curValues);
+                if (curValuesObj instanceof List) {
+                    values.addAll((List<String>) curValuesObj);
+                } else if (curValuesObj != null) {
+                    values.addAll(Arrays.asList((curValuesObj.toString()).split(",")));
                 }
 
                 String params = filter.has(QUERY) ? (String) filter.get(QUERY) : null;

@@ -10,29 +10,32 @@ function main() {
         //сохраненные фильтры
         var filtersPref = preferenceService.getPreferences(person.properties["cm:userName"], PREF_FILTERS);
         var currentFilters = findValueByDotNotation(eval('(' + jsonUtils.toJSONString(filtersPref) + ')'), PREF_FILTERS, null);
-        if (currentFilters != null) {
-	        currentFilters = eval('(' + currentFilters + ')');
+        if (currentFilters) {
+            currentFilters = eval('(' + currentFilters + ')');
         }
 
+        var hasFilters = currentFilters && currentFilters.length;
         for (var index in filtersJSON) {
             var filter = filtersJSON[index];
-            // подменяем фильтр на сохраненный по коду
-            if (currentFilters != null && currentFilters.length > 0) {
-                var curFilter = findInArray(filter.code, currentFilters);
-                if (curFilter != null) {
-                    filter = curFilter;
-                    filter.curValue = filter.curValue != null ? ("" + filter.curValue).split(",") : [];
-                }
-            }
 
             for (var i in filter.values) {
-                filter.values[i].checked =  (filter.curValue != null && existInArray(filter.values[i].code.replace(/^\s+/, ''), filter.curValue));
+                filter.values[i].checked = false;
+            }
+
+            if (hasFilters) {
+                var curFilter = findInArray(filter.code, currentFilters);
+                if (curFilter) {
+                    var curFilterValuesIndxs = curFilter.value ? curFilter.value.split(",") : [];
+                    for (var i = 0; i < curFilterValuesIndxs.length; i++) {
+                        filter.values[curFilterValuesIndxs[i]].checked = true;
+                    }
+                }
             }
 
             filtersArray.push(filter);
         }
-        model.filters = filtersArray;
     }
+    model.filters = filtersArray;
 }
 
 main();
@@ -61,17 +64,4 @@ function findInArray(filterCode, filtersArray) {
         }
     }
     return null;
-}
-
-function existInArray(value, testArray) {
-    if (value == null) {
-        return false;
-    }
-    for (var i = 0; i < testArray.length; i++) {
-        var testValue = testArray[i];
-        if (value == testValue) {
-            return true;
-        }
-    }
-    return false;
 }
