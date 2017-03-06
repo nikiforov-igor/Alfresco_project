@@ -82,8 +82,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 loopSize:50,
                 unlimited:false, // флаг, что грид не ограничен в вовзвращаемых записях (выключен paging)
                 showExtendSearchBlock: false,  // По умолчанию атрибутивный поиск скрыт
-                searchFormId: "searchBlock-forms",
-                dialogMaxHeightVh: null
+                searchFormId: "searchBlock-forms"
             },
 
             /**
@@ -685,9 +684,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         // создаем кнопки
                         this.widgets.searchButton = Alfresco.util.createYUIButton(this, "searchBlock-search-button", this.onSearchClick, {}, Dom.get("searchBlock-search-button"));
                         this.widgets.clearSearchButton = Alfresco.util.createYUIButton(this, "searchBlock-clearSearch-button", this.onClearSearchClick, {}, Dom.get("searchBlock-clearSearch-button"));
-                        if (this.options.dialogMaxHeightVh) {
-	                        this.setDialogMaxHeight();
-                        }
                     }
 
                     if(!this.currentForm || !this.currentForm.htmlid) { // форма ещё создана или не проинициализирована
@@ -698,30 +694,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             this.searchDialog.show();
                         }
                     }
-                }
-            },
-
-	        setDialogMaxHeight: function ADVSearch_setDialogMaxHeight() {
-                function pixelsToHeightPercent(heightPixels) {
-                    return heightPixels ? (100 * heightPixels) / window.innerHeight : 0;
-                }
-
-                var searchBlockContent = Dom.get('searchBlock-content'),
-                    toolbarId = this.id.replace('documents-grid','toolbar') + '-search-head',
-	                searchContentId = this.id.replace('documents-grid','toolbar') + '-search-content',
-                    toolbarHeader = Dom.get(toolbarId),
-                    searchContent = Dom.get(searchContentId),
-                    headerHeight,
-                    footerHeight,
-                    searchBlockContentHeight,
-                    headerHeightDefault = 30,
-                    footerHeightDefault = 45;
-                if (searchBlockContent) {
-                    headerHeight = toolbarHeader ? toolbarHeader.clientHeight : headerHeightDefault;
-                    footerHeight = searchContent && searchBlockContent ? searchContent.clientHeight - searchBlockContent.clientHeight : footerHeightDefault;
-	                searchBlockContentHeight = this.options.dialogMaxHeightVh - pixelsToHeightPercent(headerHeight) - pixelsToHeightPercent(footerHeight);
-	                searchBlockContent.style.overflow = 'auto';
-	                searchBlockContent.style.maxHeight = searchBlockContentHeight + 'vh';
                 }
             },
 
