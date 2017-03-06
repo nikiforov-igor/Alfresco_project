@@ -33,6 +33,11 @@
     background: #f2f2f2;
 }
 
+.metadata-form .panel-header .lecm-dashlet-actions {
+    margin: initial;
+    padding-right: initial;
+}
+
 .panel-header {
     background-color: #f2f2f2;
     height: 29px;
