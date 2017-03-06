@@ -892,7 +892,8 @@ function checkForApplet() {
 						mode: 'create',
 						submitType: 'json',
 						formId: 'auth-form',
-						showCancelButton: 'true'
+						showCancelButton: 'true',
+						showCaption: 'false'
 					};
 
 				form = new Alfresco.module.SimpleDialog(params.htmlId);
