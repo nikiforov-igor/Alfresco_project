@@ -228,6 +228,7 @@
 					<show id="lecm-document:author-assoc"/>																	<!-- Автор -->
 					<show id="lecm-eds-document:executor-assoc"/>
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
+					<show id="lecm-statemachine:status"/>
 				</field-visibility>
                 <appearance>
                     <field id="lecm-outgoing:recipient-assoc">
