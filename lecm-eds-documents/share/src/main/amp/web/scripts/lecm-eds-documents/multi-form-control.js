@@ -245,7 +245,6 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                     successCallback: {
                         fn: function (response) {
                             var html = response.serverResponse.responseText;
-                            var li = Dom.get(this.id + "_" + num + "_item");
 
                             var itemsHtml = "";
 
