@@ -8,12 +8,7 @@
         AlfrescoUtil.param('container', 'documentLibrary');
         AlfrescoUtil.param('baseDocAssocName', null);
 
-        var document = DocumentUtils.getNodeDetails(model.nodeRef).item.node;
-        var baseDocRef = null;
-
-        if (document != null && model.baseDocAssocName != null) {
-            baseDocRef = document.properties[model.baseDocAssocName + "-ref"];
-        }
+        var baseDocRef = getBaseDocNodeRef(model.nodeRef, model.baseDocAssocName);
 
         if (baseDocRef) {
             model.baseDocRef = baseDocRef;
@@ -45,6 +40,15 @@ function isFinalStatus(nodeRef, defaultValue) {
         return false;
     }
     return eval('(' + result + ')').isFinal;
+}
+
+function getBaseDocNodeRef(nodeRef, baseDocAssocName) {
+    var url = '/lecm/document/api/base?nodeRef=' + nodeRef + "&baseDocAssocName=" +baseDocAssocName;
+    var result = remote.connect("alfresco").get(url);
+    if (result.status == 200) {
+        return eval('(' + result + ')').baseDocNodeRef;
+    }
+    else return null;
 }
 
 main();
