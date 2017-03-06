@@ -5,7 +5,6 @@
                 <type name="association:lecm-ord-dic:documentType" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
                     <control-param name="plane">true</control-param>
-                    <control-param name="additionalFilter">ISNOTNULL:\"sys:node-dbid\"</control-param>
                 </type>
             </default-controls>
         </forms>
