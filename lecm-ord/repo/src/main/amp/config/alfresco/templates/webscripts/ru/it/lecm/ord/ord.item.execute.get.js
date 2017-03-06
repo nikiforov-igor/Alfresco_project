@@ -14,7 +14,7 @@ if (item) {
     var ordDoc = documentTables.getDocumentByTableDataRow(item);
     var controllerAssoc = ordDoc.assocs["lecm-ord:controller-assoc"];
     if (controllerAssoc && controllerAssoc.length) {
-        recipients.push[controllerAssoc[0]];
+        recipients.push(controllerAssoc[0]);
     }
     notifications.sendNotificationFromCurrentUser({
         recipients: recipients,
@@ -22,16 +22,17 @@ if (item) {
         templateConfig: {
             mainObject: ordDoc,
             eventExecutor: currentUser,
-            number: number,
-            content: content,
-            title: title,
-            status: "Исполнен"
+            number: "Пункт номер " + number,
+            numberTitle: title + " " + content,
+            status: "Исполнен",
+            statusTitle: ""
         },
         dontCheckAccessToObject: true
     });
-    var logText = "#initiator исполнил пункт номер #object1 ";
-    logText += documentScript.wrapperLink(ordDoc, "ОРД");
-    businessJournal.log(item.nodeRef.toString(), "EXECUTE_DOCUMENT", logText, [number]);
+    var logText = "#initiator исполнил ";
+    logText += documentScript.wrapperTitle("пункт номер" + number, title + " " + content);
+    logText += " " + documentScript.wrapperDocumentLink(ordDoc, "ОРД");
+    businessJournal.log(ordDoc.nodeRef.toString(), "POINT_EXECUTED", logText, []);
 
     model.success = true;
 }

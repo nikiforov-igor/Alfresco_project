@@ -1,5 +1,4 @@
 <#include "/org/alfresco/components/form/controls/common/utils.inc.ftl" />
-
 <script type="text/javascript">//<![CDATA[
 (function () {
 
@@ -19,6 +18,9 @@
             documentNodeRef: "${form.arguments.itemId}",
             fieldId: "${field.configName}",
             formId: "${args.htmlid}"
+        <#if field.control.params.byDocAssocRef??>,
+            byDocAssocRef: "${field.control.params.byDocAssocRef}"
+        </#if>
         }).setMessages(${messages});
     }
 

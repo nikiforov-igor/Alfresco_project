@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Завершить работу по пункту ОРД</shortname>
+    <description>Завершить работу по пункту ОРД</description>
+    <url>/lecm/ord/item/complete?nodeRef={nodeRef}</url>
+    <authentication>user</authentication>
+    <transaction allow="readwrite">required</transaction>
+    <format default="json">extension</format>
+</webscript>

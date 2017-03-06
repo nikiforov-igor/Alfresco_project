@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/ord/workflow/completeORD/1.0">
+    <process id="completeORD" name="Завершение ОРД">
+        <startEvent id="startCompleteORD" name="Start" activiti:formKey="lecmORDWf:completeORD"></startEvent>
+        <endEvent id="endCompleteORD" name="End"></endEvent>
+        <scriptTask id="completeORDTask" name="Complete ORD" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+                           var document = bpm_package.children[0];
+                           if (document) {
+                                var logText = "#initiator завершил";
+                                logText += " работу по " + documentScript.wrapperDocumentLink(document, "ОРД");
+                                businessJournal.log(document.nodeRef.toString(), "COMPLETE_DOCUMENT", logText, []);
+
+                                var currentUser = orgstructure.getCurrentUser();
+                                var ordControllerAssoc = document.assocs["lecm-ord:controller-assoc"];
+                                if (ordControllerAssoc && ordControllerAssoc.length && !ordControllerAssoc[0].equals(currentUser)) {
+                                     notifications.sendNotificationFromCurrentUser({
+                                        recipients: [ordControllerAssoc[0]],
+                                        templateCode: 'ORD_FORCE_COMPLETE',
+                                        templateConfig: {
+                                            mainObject: document,
+                                            eventExecutor: currentUser,
+                                            member: "Регистратор",
+                                            comment: ""
+                                        },
+                                        dontCheckAccessToObject: true
+                                     });
+                                }
+
+                           }
+                        ]]></activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script>var test=1;</script>
+        </scriptTask>
+        <receiveTask id="completeORDReceiveTask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startCompleteORD" targetRef="completeORDTask"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="completeORDTask" targetRef="completeORDReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="completeORDReceiveTask" targetRef="endCompleteORD"></sequenceFlow>
+    </process>
+</definitions>

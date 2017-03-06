@@ -3,18 +3,23 @@ var viewLinksMode = '' + edsGlobalSettings.getLinksViewMode();
 var isMlSupported = lecmMessages.isMlSupported();
 
 var documentNodeRef = args['documentNodeRef'];
+var startFromRef = args["startFromRef"];
+
 var substituteTitle = isMlSupported ? "{lecm-document:ml-ext-present-string}" : "{lecm-document:ext-present-string}";
 
 var items = [];
 var item = search.findNode(documentNodeRef);
-
-var children = getChildren(item);
-children.sort(function(a, b) {
-    return (a.properties["cm:created"] < b.properties["cm:created"]) ? -1 : (a.properties["cm:created"] > b.properties["cm:created"]) ? 1 : 0;
-});
-children.forEach(function (child) {
-    items.push(evaluateItem(child, substituteTitle));
-});
+if (startFromRef && startFromRef == documentNodeRef) {
+    items.push(evaluateItem(item, substituteTitle))
+} else {
+    var children = getChildren(item);
+    children.sort(function (a, b) {
+        return (a.properties["cm:created"] < b.properties["cm:created"]) ? -1 : (a.properties["cm:created"] > b.properties["cm:created"]) ? 1 : 0;
+    });
+    children.forEach(function (child) {
+        items.push(evaluateItem(child, substituteTitle));
+    });
+}
 
 model.items = items;
 model.documentRef = documentNodeRef;

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/ord/workflow/registerORD/1.0">
+    <process id="registerORD" name="Регистрация ОРД">
+        <startEvent id="startRegisterORD" name="Start" activiti:formKey="lecmORDWf:registerORD"></startEvent>
+        <endEvent id="endRegisterORD" name="End"></endEvent>
+        <scriptTask id="registerORDTask" name="Register ORD" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+                           var emptyServiceTask = "Service task";
+                        ]]></activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script>var test=1;</script>
+        </scriptTask>
+        <receiveTask id="registerORDReceiveTask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startRegisterORD" targetRef="registerORDTask"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="registerORDTask" targetRef="registerORDReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="registerORDReceiveTask" targetRef="endRegisterORD"></sequenceFlow>
+    </process>
+</definitions>

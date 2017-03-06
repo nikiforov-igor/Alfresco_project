@@ -101,7 +101,7 @@
             Util.enableControl(formId, "lecm-ord-table-structure:controller-assoc");
         } else {
             Util.reInitializeControl(formId, "lecm-ord-table-structure:controller-assoc", {
-                "resetValue": true,
+                "selectedValue": null,
                 "disabled": true
             });
         }

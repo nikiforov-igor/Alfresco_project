@@ -3027,7 +3027,7 @@ if (document) {
                     }
                 }
             }
-            regnumbers.registerDocument(document, regNumberCode);
+            regnumbers.setDocumentNumber(regNumberCode, document, "lecm-errands:number");
         }
         var initiator = null;
         var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
@@ -3235,32 +3235,6 @@ if (document) {
     }
     document.save();
   }
-}]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>ScriptActionEntity</type>
-                                                        <name>ed402734-588b-4f94-b32e-419ad9956a03</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/d1da98c1-4caa-41ec-918e-4eba7d37bc8a
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>scriptLabel</name>
-                                                                <value>
-                                                                    <![CDATA[Установка атрибута номера поручения]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[var document = bpm_package.children[0];
-if (document) {
-  document.properties["lecm-errands:number"] = document.properties["lecm-document:regnum"];
-  document.save();
 }]]></value>
                                                             </property>
                                                         </properties>
@@ -3540,7 +3514,7 @@ if (doc) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@errandsService.hasChildNotFinalByExecutor(doc.nodeRef)==false]]></value>
+                                                                                    <![CDATA[@errandsService.hasChildNotFinalByExecutor(doc.getNodeRef())==false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -5572,7 +5546,7 @@ if(doc){
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@errandsService.hasChildNotFinalByExecutor(doc.nodeRef)==false]]></value>
+                                                                                    <![CDATA[@errandsService.hasChildNotFinalByExecutor(doc.getNodeRef())==false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -8030,7 +8004,7 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@errandsService.hasChildNotFinalByExecutor(doc.nodeRef)==false]]></value>
+                                                                                    <![CDATA[@errandsService.hasChildNotFinalByExecutor(doc.getNodeRef())==false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -10215,7 +10189,7 @@ if (document) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@errandsService.hasChildNotFinalByExecutor(doc.nodeRef)==false]]></value>
+                                                                                    <![CDATA[@errandsService.hasChildNotFinalByExecutor(doc.getNodeRef())==false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>

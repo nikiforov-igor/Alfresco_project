@@ -48,16 +48,53 @@ LogicECM.module = LogicECM.module || {};
             options: {
                 documentNodeRef: null,
                 formId: null,
-                fieldId: null
+                fieldId: null,
+                byDocAssocRef: null
             },
 
             folerUrl: Alfresco.constants.PROXY_URI + "/lecm/eds/tree/execution/datasource?documentNodeRef={documentNodeRef}",
             receivedItems: {},
 
             onReady: function () {
+                if (this.options.byDocAssocRef) {
+                    Alfresco.util.Ajax.jsonPost({
+                        url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                        dataObj: {
+                            nodeRef: this.options.documentNodeRef,
+                            substituteString: "{" + this.options.byDocAssocRef + "}"
+                        },
+                        successCallback: {
+                            fn: function (response) {
+                                if (response && response.json.formatString) {
+                                    this.options.documentNodeRef = response.json.formatString;
+                                    this.processControl();
+                                }
+                            },
+                            scope: this
+                        },
+                        failureCallback: {
+                            fn: function () {
+                                Alfresco.util.PopupManager.displayMessage({
+                                    text: response.responseText
+                                });
+                                this.processControl();
+                            },
+                            scope: this
+                        },
+                        scope: this
+                    });
+                } else {
+                    this.processControl();
+                }
+            },
+            processControl: function(){
                 if (this.options.documentNodeRef) {
                     this.receivedItems[this.options.documentNodeRef] = 0;
-                    this.layerByLayer(YAHOO.lang.substitute(this.folerUrl, {
+                    var folerUrl = this.folerUrl;
+                    if (this.options.byDocAssocRef) {
+                        folerUrl += "&startFromRef=" + this.options.documentNodeRef;
+                    }
+                    this.layerByLayer(YAHOO.lang.substitute(folerUrl, {
                         documentNodeRef: this.options.documentNodeRef
                     }), this.id + "-expandable-table");
                 }

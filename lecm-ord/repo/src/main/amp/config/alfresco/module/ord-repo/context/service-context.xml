@@ -223,4 +223,41 @@
             </map>
         </property>
     </bean>
+    <bean id="ordWorkflowBootstrap" parent="workflowDeployer"
+          depends-on="ord.document.models.bootstrap">
+        <property name="workflowDefinitions">
+            <list>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-ord-register-with-dialog.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-ord-complete-ord.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-ord-complete-active-ord.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+            </list>
+        </property>
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-ord-workflow-model.xml</value>
+            </list>
+        </property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/lecm-ord-workflow-model</value>
+            </list>
+        </property>
+        <property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
+    </bean>
+
 </beans>

@@ -1,0 +1,22 @@
+.ord-item-completion-option-set .control .container .value-div:not(:empty) {
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+}
+.ord-item-completion-option-set .control .container .value-div input:nth-of-type(2){
+    margin-left: -13px;
+    margin-top: 10px;
+}
+.ord-item-completion-option-set .control .container .value-div input:nth-of-type(3){
+    margin-top: 40px;
+    float: left;
+}
+.ord-item-completion-option-set .control .container .value-div label:nth-of-type(1){
+    vertical-align: text-top;
+}
+.ord-item-completion-option-set .control .container .value-div label:nth-of-type(2){
+    clear: none;
+    float: right;
+    width: calc(100% - 17px);
+    margin-top: 15px;
+}

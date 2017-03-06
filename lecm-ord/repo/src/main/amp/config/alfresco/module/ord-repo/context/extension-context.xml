@@ -11,16 +11,14 @@
 		  p:nodeService-ref="nodeService"
 		  p:documentService-ref="documentService"
 		  p:orgstructureService-ref="serviceOrgstructure"
-		  p:edsGlobalSettingsService-ref="eds.global-settings.service"
-		  p:documentConnectionService-ref="documentConnectionService"
-		  p:lecmDictionaryService-ref="serviceDictionary"
+		  p:edsGlobalSettingsService-ref="edsGlobalSettingsService"
 		  p:businessJournalService-ref="businessJournalService"
 		  p:documentEventService-ref="documentEventService"
 		  p:dictionaryService-ref="serviceDictionary"
 		  p:namespaceService-ref="namespaceService"
-
+		  p:authenticationService-ref="authenticationService"
 		  p:ordDocumentService-ref="ordDocumentService"
 		  p:ordReportsService-ref="ordReportsService"
-		  p:lecmPermissionService-ref="lecmPermissionServiceBean"/>
+		  p:notificationsService-ref="notificationsService"/>
 
 </beans>

@@ -115,12 +115,15 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
         }
 
         if (nodeService.getProperty(errandDoc, ErrandsService.PROP_ADDITIONAL_DOC_NUMBER) == null) {
-            String regNum = documentService.getDocumentActualNumber(additionalDoc);
-
-            if (regNum == null) {
-                regNum = documentService.getProjectRegNumber(additionalDoc);
+            String regNum = null;
+            if (additionalDoctype.equals(ErrandsService.TYPE_ERRANDS)) {
+                regNum = (String) nodeService.getProperty(additionalDoc, ErrandsService.PROP_ERRANDS_NUMBER);
+            } else {
+                regNum = documentService.getDocumentActualNumber(additionalDoc);
+                if (regNum == null) {
+                    regNum = documentService.getProjectRegNumber(additionalDoc);
+                }
             }
-
             if (regNum != null && !regNum.isEmpty()) {
                 nodeService.setProperty(errandDoc, ErrandsService.PROP_ADDITIONAL_DOC_NUMBER, regNum);
             }
@@ -171,9 +174,14 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
         NodeRef errandDoc = associationRef.getSourceRef();
 
         if (nodeService.getProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER) == null) {
-            String baseRegNum = documentService.getDocumentActualNumber(baseDoc);
-            if (baseRegNum == null) {
-                baseRegNum = documentService.getProjectRegNumber(baseDoc);
+            String baseRegNum = null;
+            if (nodeService.getType(baseDoc).equals(ErrandsService.TYPE_ERRANDS)) {
+                baseRegNum = (String) nodeService.getProperty(baseDoc, ErrandsService.PROP_ERRANDS_NUMBER);
+            } else {
+                baseRegNum = documentService.getDocumentActualNumber(baseDoc);
+                if (baseRegNum == null) {
+                    baseRegNum = documentService.getProjectRegNumber(baseDoc);
+                }
             }
             if (baseRegNum != null && !baseRegNum.isEmpty()) {
                 nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, baseRegNum);
