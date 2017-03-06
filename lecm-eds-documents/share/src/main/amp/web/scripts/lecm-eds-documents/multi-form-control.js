@@ -46,6 +46,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 formId: null,
                 fieldId: null
             },
+            countLoadedForms: 0,
             currentLine: 0,
             rootSubmitElement: null,
             rootFormSubmitFunction: null,
@@ -107,6 +108,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                                 var oResults = response.json;
                                 if (oResults && oResults.length) {
                                     var i;
+                                    this.countLoadedForms = oResults.length;
                                     for (i = 0; i < oResults.length; i++) {
                                         this.onAdd(null, null, oResults[i]);
                                     }
@@ -267,6 +269,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
 
                             Dom.setStyle(formId + "-form-buttons", "visibility", "hidden");
                             Dom.setStyle(formId + "-form-buttons", "display", "none");
+                            this.allFormsLoaded(num);
                         },
                         scope: this
                     },
@@ -277,6 +280,19 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                         scope: this
                     }
                 });
+            },
+
+            allFormsLoaded: function (counter) {
+                if (counter == this.countLoadedForms || counter > this.countLoadedForms) {
+                    var elIndexes = Dom.get(this.id + "_" + counter + "_indexes");
+                    while (elIndexes) {
+                        this.updateFormCount();
+                        break;
+                    }
+                    for (var i = 0; i <= this.currentLine; i++) {
+                        this.calcActionsHeight(i);
+                    }
+                }
             },
 
             onRemove: function remove_function(ev, args) {
