@@ -14,7 +14,7 @@ var LECMIncomingActions = {
                 var allResolutionsFinal = true;
                 var childResolutions = document.sourceAssocs["lecm-resolutions:base-document-assoc"];
                 if (childResolutions) {
-                    allResolutionsFinal = childErrands.every(function (resolution) {
+                    allResolutionsFinal = childResolutions.every(function (resolution) {
                         return statemachine.isFinal(resolution.nodeRef.toString());
                     });
                 }
