@@ -232,9 +232,10 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                     dataObj.formId = this.options.documentFromId;
                 }
                 var ul = Dom.get(this.id + "-multi-form-documents-list");
-                var div = document.createElement('div');
-                div.id = this.id + "_" + num + "_div";
-                ul.appendChild(div);
+                var li = document.createElement('li');
+                li.id = this.id + "_" + num + "_item";
+                Dom.addClass(li, "multi-form-documents-item");
+                ul.appendChild(li);
                 Alfresco.util.Ajax.request({
                     url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
                     dataObj: dataObj,
@@ -242,11 +243,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                     successCallback: {
                         fn: function (response) {
                             var html = response.serverResponse.responseText;
-                            var div = Dom.get(this.id + "_" + num + "_div");
-
-                            var li = document.createElement('li');
-                            li.id = this.id + "_" + num + "_item";
-                            Dom.addClass(li, "multi-form-documents-item");
+                            var li = Dom.get(this.id + "_" + num + "_item");
 
                             var itemsHtml = "";
 
@@ -263,7 +260,6 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                             itemsHtml += "</div>";
 
                             li.innerHTML = itemsHtml;
-                            div.appendChild(li);
 
                             YAHOO.util.Event.onAvailable(this.id + "-line-" + num + "-form", this.calcActionsHeight, num, this);
 
