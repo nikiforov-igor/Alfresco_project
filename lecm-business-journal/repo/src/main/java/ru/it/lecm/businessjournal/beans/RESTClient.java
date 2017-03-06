@@ -38,6 +38,7 @@ public class RESTClient extends AbstractBusinessJournalService implements Busine
 	private ObjectMapper mapper;
 	private Client client;
 	private String serviceAddress;
+	private String serviceProtocol;
 	private String serviceHost;
 	private String servicePort;
 	private String serviceName;
@@ -46,6 +47,10 @@ public class RESTClient extends AbstractBusinessJournalService implements Busine
 
 	public void setGlobalProps(Properties globalProps) {
 		this.globalProps = globalProps;
+	}
+
+	public void setServiceProtocol(String serviceProtocol) {
+		this.serviceProtocol = serviceProtocol;
 	}
 
 	public void setServiceHost(String serviceHost) {
@@ -71,13 +76,14 @@ public class RESTClient extends AbstractBusinessJournalService implements Busine
 		clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 		client = Client.create(clientConfig);
 
-		String serviceAddressTmpl = "http://%s:%s/%s/rest";
-		if(serviceHost == null || servicePort == null) {
+		String serviceAddressTmpl = "%s://%s:%s/%s/rest";
+		if(serviceProtocol == null || serviceHost == null || servicePort == null) {
+			String protocol = (String) globalProps.get("alfresco.protocol");
 			String host = (String) globalProps.get("alfresco.host");
 			String port = (String) globalProps.get("alfresco.port");
-			serviceAddress = String.format(serviceAddressTmpl, host, port, serviceName);
+			serviceAddress = String.format(serviceAddressTmpl, protocol, host, port, serviceName);
 		} else {
-			serviceAddress = String.format(serviceAddressTmpl, serviceHost, servicePort, serviceName);
+			serviceAddress = String.format(serviceAddressTmpl, serviceProtocol, serviceHost, servicePort, serviceName);
 		}
 	}
 

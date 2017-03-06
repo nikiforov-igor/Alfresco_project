@@ -89,6 +89,7 @@
 
 	<bean id="businessJournalService" class="ru.it.lecm.businessjournal.beans.RESTClient" init-method="init" parent="abstaractBusinessJournalService">
 		<property name="globalProps" ref="global-properties"/>
+		<property name="serviceProtocol" value="#{'${businessjournal.protocol}' == '$'+'{businessjournal.protocol}' ? null : '${businessjournal.protocol}'}"/>
 		<property name="serviceHost" value="#{'${businessjournal.host}' == '$'+'{businessjournal.host}' ? null : '${businessjournal.host}'}"/>
 		<property name="servicePort" value="#{T(org.apache.commons.lang.math.NumberUtils).isNumber('${businessjournal.port}') ? T(java.lang.Integer).parseInt('${businessjournal.port}') : null}"/>
 		<property name="serviceName" value="#{'${businessjournal.name}' == '$'+'{businessjournal.name}' ? 'businessjournal' : '${businessjournal.name}'}"/>
