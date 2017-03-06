@@ -262,4 +262,12 @@
             </list>
         </property>
     </bean>
+
+    <bean id="listOfIncomingTypes" parent="listOfUsedTypes">
+        <property name="types">
+            <map>
+                <entry key="lecm-incoming-dic:documentType" value="Вид входящего документа"/>
+            </map>
+        </property>
+    </bean>
 </beans>
