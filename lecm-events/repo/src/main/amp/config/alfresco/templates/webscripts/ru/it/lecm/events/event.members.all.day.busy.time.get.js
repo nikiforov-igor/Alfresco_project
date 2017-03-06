@@ -34,7 +34,12 @@
             }
         }
 
-		var ewsCollection = ews.getEvents(employees, args["startDate"], args["endDate"]);
+		var start = args["startDate"].slice(0, args["startDate"].indexOf("T"));
+		var end = utils.fromISO8601(args["endDate"]);
+		end.setDate(end.getDate() + 1);
+		end = utils.toISO8601(end);
+		end = end.slice(0, end.indexOf("T"));
+		var ewsCollection = ews.getEvents(employees, start + "T00:00:00Z", end +  "T00:00:00Z");
 		for (i in ewsCollection) {
 			if (ewsCollection[i].busytime.length) {
 				isBusy = true;
