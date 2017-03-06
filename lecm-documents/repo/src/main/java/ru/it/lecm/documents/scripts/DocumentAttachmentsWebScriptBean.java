@@ -19,6 +19,7 @@ import java.util.List;
  * Date: 06.03.13
  * Time: 12:08
  */
+@SuppressWarnings("unused")
 public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 
     private DocumentAttachmentsService documentAttachmentsService;
@@ -276,5 +277,14 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 
     public void addAttachment(ScriptNode document, ScriptNode category) {
         documentAttachmentsService.addAttachment(document.getNodeRef(), category.getNodeRef());
+    }
+
+    /**
+     * Разблокировка всех вложений документа и удаление всех ссылок (не ассоциаций) на вложения документа.
+     * @param document документ
+     */
+    public void unlockAttachmentsAndClearLinks(ScriptNode document) {
+        ParameterCheck.mandatory("document", document);
+	    documentAttachmentsService.unlockAttachmentsAndClearLinks(document.getNodeRef());
     }
 }

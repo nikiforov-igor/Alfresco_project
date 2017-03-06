@@ -2,4 +2,5 @@
   <shortname>document-attachment-actions</shortname>
   <description>Document Attachment Actions Component</description>
   <url>/lecm/components/document/attachment/actions</url>
+  <format default="html">argument</format>
 </webscript>

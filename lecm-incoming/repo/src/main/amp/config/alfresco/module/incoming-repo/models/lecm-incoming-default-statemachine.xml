@@ -83,23 +83,6 @@
                     </node>
                     <node>
                         <type>dynamic-role-item</type>
-                        <name>e4338642-6e4a-489d-bad0-933cadfc3c41</name>
-                        <nodeRef>workspace://SpacesStore/758a7b19-fee6-4421-956c-0d0b617a9762</nodeRef>
-                        <properties/>
-                        <aspects>
-                            <business-role/>
-                        </aspects>
-                        <associations/>
-                        <roleAssociations>
-                            <roleAssociation>
-                                <type>role-assoc</type>
-                                <businessRoleName>INCOMING_REVIEWER_DYN</businessRoleName>
-                            </roleAssociation>
-                        </roleAssociations>
-                        <subFolders/>
-                    </node>
-                    <node>
-                        <type>dynamic-role-item</type>
                         <name>7c5e7ad3-6360-4244-9f47-c3681cbbe791</name>
                         <nodeRef>workspace://SpacesStore/e400f999-80f1-4dc4-829e-cd50d56d1794</nodeRef>
                         <properties/>
@@ -111,23 +94,6 @@
                             <roleAssociation>
                                 <type>role-assoc</type>
                                 <businessRoleName>DA_RECIPIENT_DYN</businessRoleName>
-                            </roleAssociation>
-                        </roleAssociations>
-                        <subFolders/>
-                    </node>
-                    <node>
-                        <type>dynamic-role-item</type>
-                        <name>bb1698dc-5eba-45a0-a350-176f24c9e6d1</name>
-                        <nodeRef>workspace://SpacesStore/00d59e5e-5071-4527-aa75-c16705afbb7b</nodeRef>
-                        <properties/>
-                        <aspects>
-                            <business-role/>
-                        </aspects>
-                        <associations/>
-                        <roleAssociations>
-                            <roleAssociation>
-                                <type>role-assoc</type>
-                                <businessRoleName>INCOMING_ALREADY_REVIEWED_DYN</businessRoleName>
                             </roleAssociation>
                         </roleAssociations>
                         <subFolders/>
@@ -154,6 +120,23 @@
                             <roleAssociation>
                                 <type>role-assoc</type>
                                 <businessRoleName>DOCUMENTS_READER</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders/>
+                    </node>
+                    <node>
+                        <type>dynamic-role-item</type>
+                        <name>10796aa7-5b68-481f-a8ce-63be3d91ffab</name>
+                        <nodeRef>workspace://SpacesStore/f4fdf3a3-cc4d-4317-b9fe-665b732c326c</nodeRef>
+                        <properties/>
+                        <aspects>
+                            <business-role/>
+                        </aspects>
+                        <associations/>
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>BR_INITIATOR</businessRoleName>
                             </roleAssociation>
                         </roleAssociations>
                         <subFolders/>
@@ -1145,7 +1128,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Employee]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployeeExtended]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -1214,8 +1197,8 @@
                                     </node>
                                     <node>
                                         <type>dynamic-role</type>
-                                        <name>0bf4fac4-b8b0-4561-8aea-1d9aad74f215</name>
-                                        <nodeRef>workspace://SpacesStore/04903b64-ffdf-4244-a08a-4f27065c5e4c</nodeRef>
+                                        <name>e6af219b-b24e-4b96-bd9d-a9724783d454</name>
+                                        <nodeRef>workspace://SpacesStore/e6af219b-b24e-4b96-bd9d-a9724783d454</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -1230,30 +1213,7 @@
                                         <roleAssociations>
                                             <roleAssociation>
                                                 <type>role-assoc</type>
-                                                <businessRoleName>INCOMING_REVIEWER_DYN</businessRoleName>
-                                            </roleAssociation>
-                                        </roleAssociations>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>dynamic-role</type>
-                                        <name>cf50f5cd-b7ce-4fd0-849c-a456957c6907</name>
-                                        <nodeRef>workspace://SpacesStore/34b95cb7-ed61-4e90-9a9a-fc30a475b51b</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects>
-                                            <business-role/>
-                                            <permissionTypeAspect/>
-                                        </aspects>
-                                        <associations/>
-                                        <roleAssociations>
-                                            <roleAssociation>
-                                                <type>role-assoc</type>
-                                                <businessRoleName>INCOMING_ALREADY_REVIEWED_DYN</businessRoleName>
+                                                <businessRoleName>BR_INITIATOR</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -2150,7 +2110,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -2219,12 +2179,12 @@
                                     </node>
                                     <node>
                                         <type>dynamic-role</type>
-                                        <name>0db470ea-97b5-489e-a7fc-c28428a11ce7</name>
-                                        <nodeRef>workspace://SpacesStore/a6193e86-91dc-4bcd-a776-2058b806439d</nodeRef>
+                                        <name>5fa2011e-4028-4229-aad5-ac7ef2e51bb4</name>
+                                        <nodeRef>workspace://SpacesStore/5fa2011e-4028-4229-aad5-ac7ef2e51bb4</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Employee]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_Initiator]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -2235,30 +2195,7 @@
                                         <roleAssociations>
                                             <roleAssociation>
                                                 <type>role-assoc</type>
-                                                <businessRoleName>INCOMING_REVIEWER_DYN</businessRoleName>
-                                            </roleAssociation>
-                                        </roleAssociations>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>dynamic-role</type>
-                                        <name>05fbd013-0924-4ba0-9814-df84742e6e57</name>
-                                        <nodeRef>workspace://SpacesStore/5ed7d09a-bd03-4c65-bf19-615215be2c30</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects>
-                                            <business-role/>
-                                            <permissionTypeAspect/>
-                                        </aspects>
-                                        <associations/>
-                                        <roleAssociations>
-                                            <roleAssociation>
-                                                <type>role-assoc</type>
-                                                <businessRoleName>INCOMING_ALREADY_REVIEWED_DYN</businessRoleName>
+                                                <businessRoleName>BR_INITIATOR</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -2681,17 +2618,31 @@
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function(){
-    var recipients = stm_document.associations["lecm-incoming:recipient-assoc"];
-    statemachine.grandDynamicRoleForEmployee(stm_document, recipients[0], "DA_RECIPIENT_DYN", task);
-
-    notifications.sendNotificationFromCurrentUser({
-        recipients: recipients,
-        templateCode: 'INCOMING_SEND_TO_RECIPIENT',
-        templateConfig: {
-            mainObject: stm_document
-        },
-        dontCheckAccessToObject: true
+  var recipients = [];
+  var recipientsAssocs = stm_document.associations["lecm-incoming:recipient-assoc"];
+  if (recipientsAssocs) {
+    recipientsAssocs.forEach(function (recipient) {
+      if (recipient.typeShort == "lecm-orgstr:employee") {
+        recipients.push(recipient);
+        statemachine.grandDynamicRoleForEmployee(stm_document, recipient, "DA_RECIPIENT_DYN", task);
+      } else if (recipient.typeShort == "lecm-orgstr:organization-unit") {
+        boss = orgstructure.findUnitBoss(recipient.nodeRef.toString());
+        if (boss) {
+          recipients.push(boss);
+          statemachine.grandDynamicRoleForEmployee(stm_document, boss, "DA_RECIPIENT_DYN", task);
+        }
+      }
     });
+  }
+
+  notifications.sendNotificationFromCurrentUser({
+    recipients: recipients,
+    templateCode: 'INCOMING_SEND_TO_RECIPIENT',
+    templateConfig: {
+      mainObject: stm_document
+    },
+    dontCheckAccessToObject: true
+  });
 })();]]></value>
                                                             </property>
                                                         </properties>
@@ -2930,6 +2881,38 @@
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>2647e11f-2d68-440c-a753-98ee93152ce1
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/2bb3eac0-1466-4774-82b3-18b29706a5da
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие не может быть выполнено: вы не обладаете ролью "Поручения.Инициатор". Обратитесь к администратору Системы]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -3090,7 +3073,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Employee]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployeeExtended]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -3141,7 +3124,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -3159,8 +3142,8 @@
                                     </node>
                                     <node>
                                         <type>dynamic-role</type>
-                                        <name>6ac52327-61be-4195-8dcc-00d34c7fad37</name>
-                                        <nodeRef>workspace://SpacesStore/08557feb-a83a-48c4-b7bd-00cc973d89a2</nodeRef>
+                                        <name>f85b1d60-ebf9-4675-8ac2-30bfabea92f5</name>
+                                        <nodeRef>workspace://SpacesStore/f85b1d60-ebf9-4675-8ac2-30bfabea92f5</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -3175,30 +3158,7 @@
                                         <roleAssociations>
                                             <roleAssociation>
                                                 <type>role-assoc</type>
-                                                <businessRoleName>INCOMING_REVIEWER_DYN</businessRoleName>
-                                            </roleAssociation>
-                                        </roleAssociations>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>dynamic-role</type>
-                                        <name>44d36049-ba3d-41e1-850d-14cfbb0b8a0e</name>
-                                        <nodeRef>workspace://SpacesStore/8ef4abeb-1e5c-436f-a922-eb238c752dbc</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects>
-                                            <business-role/>
-                                            <permissionTypeAspect/>
-                                        </aspects>
-                                        <associations/>
-                                        <roleAssociations>
-                                            <roleAssociation>
-                                                <type>role-assoc</type>
-                                                <businessRoleName>INCOMING_ALREADY_REVIEWED_DYN</businessRoleName>
+                                                <businessRoleName>BR_INITIATOR</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -4338,7 +4298,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployeeExtended]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -4389,7 +4349,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Employee]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -4407,12 +4367,12 @@
                                     </node>
                                     <node>
                                         <type>dynamic-role</type>
-                                        <name>9bc6b988-ae69-48b4-ace8-18af688d7a09</name>
-                                        <nodeRef>workspace://SpacesStore/0abdb371-7656-47f8-8d98-15c4c5eceeb4</nodeRef>
+                                        <name>1203dcf0-42ff-4df5-bae9-40750e0c8044</name>
+                                        <nodeRef>workspace://SpacesStore/1203dcf0-42ff-4df5-bae9-40750e0c8044</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Employee]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -4423,30 +4383,7 @@
                                         <roleAssociations>
                                             <roleAssociation>
                                                 <type>role-assoc</type>
-                                                <businessRoleName>INCOMING_REVIEWER_DYN</businessRoleName>
-                                            </roleAssociation>
-                                        </roleAssociations>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>dynamic-role</type>
-                                        <name>bf564c80-3ba2-4b68-96e2-6342f9d7123b</name>
-                                        <nodeRef>workspace://SpacesStore/3ae3835a-3416-456f-8288-ddd12eb92687</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects>
-                                            <business-role/>
-                                            <permissionTypeAspect/>
-                                        </aspects>
-                                        <associations/>
-                                        <roleAssociations>
-                                            <roleAssociation>
-                                                <type>role-assoc</type>
-                                                <businessRoleName>INCOMING_ALREADY_REVIEWED_DYN</businessRoleName>
+                                                <businessRoleName>BR_INITIATOR</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -4974,7 +4911,51 @@
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>6ba6f3d5-f69d-454b-a69f-ba81906fd19c</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/916b2ff7-4a52-4a89-b973-11cebf141303
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Выдача прав получателям]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+  var recipients = [];
+  var recipientsAssocs = stm_document.associations["lecm-incoming:recipient-assoc"];
+  if (recipientsAssocs) {
+    recipientsAssocs.forEach(function (recipient) {
+      if (recipient.typeShort == "lecm-orgstr:employee") {
+        recipients.push(recipient);
+        statemachine.grandDynamicRoleForEmployee(stm_document, recipient, "DA_RECIPIENT_DYN", task);
+      } else if (recipient.typeShort == "lecm-orgstr:organization-unit") {
+        boss = orgstructure.findUnitBoss(recipient.nodeRef.toString());
+        if (boss) {
+          recipients.push(boss);
+          statemachine.grandDynamicRoleForEmployee(stm_document, boss, "DA_RECIPIENT_DYN", task);
+        }
+      }
+    });
+  }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>TimerAction</type>
@@ -5457,12 +5438,12 @@
                                     </node>
                                     <node>
                                         <type>dynamic-role</type>
-                                        <name>690fc76c-8f4c-419a-ae90-35f2e04ecd0f</name>
-                                        <nodeRef>workspace://SpacesStore/a4db4fc3-198c-4b7d-81c3-9b7dd4a67998</nodeRef>
+                                        <name>54608c99-be6e-41d5-b68e-1b9c2462bd82</name>
+                                        <nodeRef>workspace://SpacesStore/54608c99-be6e-41d5-b68e-1b9c2462bd82</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_Initiator]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -5473,7 +5454,7 @@
                                         <roleAssociations>
                                             <roleAssociation>
                                                 <type>role-assoc</type>
-                                                <businessRoleName>INCOMING_REVIEWER_DYN</businessRoleName>
+                                                <businessRoleName>BR_INITIATOR</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>

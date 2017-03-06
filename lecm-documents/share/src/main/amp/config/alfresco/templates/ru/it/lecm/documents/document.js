@@ -1,3 +1,5 @@
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/document-utils.js">
+
 function main() {
     var url = '/lecm/document/api/getPermissions?nodeRef=' + page.url.args.nodeRef;
     var result = remote.connect("alfresco").get(url);
@@ -17,6 +19,8 @@ function main() {
     } else {
         model.hasStatemachine = false;
     }
+
+    model.dependencies = DocumentUtils.getDependencies("LecmDocumentDetails");
 }
 
 main();
