@@ -475,12 +475,12 @@
 					<set id="review" label="Ознакомление"/>
 
                     <field id="lecm-eds-aspect:execution-state" set="ord-document-form-common-set">
-                        <control template="/ru/it/lecm/eds/controls/execution-state-control.ftl">
+                        <control template="/ru/it/lecm/documents/controls/state-statistics-control.ftl">
                             <control-param name="statisticsField">lecm-eds-aspect:execution-statistics</control-param>
                         </control>
                     </field>
                     <field id="lecm-review-ts:doc-review-state" set="ord-document-form-common-set">
-                        <control template="/ru/it/lecm/eds/controls/execution-state-control.ftl">
+                        <control template="/ru/it/lecm/documents/controls/state-statistics-control.ftl">
                             <control-param name="statisticsField">lecm-review-ts:doc-review-statistics</control-param>
                         </control>
                     </field>

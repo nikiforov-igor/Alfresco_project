@@ -1,6 +1,10 @@
 var ord = search.findNode(args["nodeRef"]);
 if (ord) {
-    var ordHaveController = ord.assocs["lecm-ord:controller-assoc"] && ord.assocs["lecm-ord:controller-assoc"].length;
+    var ordHaveController = true;
+    var ordControllerAssoc = ord.assocs["lecm-ord:controller-assoc"];
+    if (!ordControllerAssoc || !ordControllerAssoc.length) {
+        ordHaveController = false;
+    }
     var ordHaveDueDate = ord.properties["lecm-eds-document:execution-date"] != null;
     var itemsTable = ord.assocs["lecm-ord-table-structure:items-assoc"][0];
     var ordPoints = documentTables.getTableDataRows(itemsTable.nodeRef.toString());

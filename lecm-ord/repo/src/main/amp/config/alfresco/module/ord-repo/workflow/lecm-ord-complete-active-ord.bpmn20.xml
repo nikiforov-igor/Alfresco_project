@@ -48,6 +48,7 @@
                                     if (pointStatus == "На исполнении") {
                                         ordStatemachine.changePointStatus(point.nodeRef.toString(), status);
                                         point.properties["lecm-ord-table-structure:item-comment"] = comment;
+                                        point.save();
                                     }
                                     var itemControllerAssoc = point.assocs["lecm-ord-table-structure:controller-assoc"];
                                     if (itemControllerAssoc && itemControllerAssoc.length) {
@@ -90,6 +91,8 @@
                                 logText += documentScript.wrapperTitle("завершил", actionComment);
                                 logText += " работу по " + documentScript.wrapperDocumentLink(document, "ОРД");
                                 businessJournal.log(document.nodeRef.toString(), "COMPLETE_DOCUMENT", logText, []);
+                                document.properties["lecm-ord:transit-to-work-completed"] = true;
+                                document.save();
                             }
                         ]]></activiti:string>
                     </activiti:field>

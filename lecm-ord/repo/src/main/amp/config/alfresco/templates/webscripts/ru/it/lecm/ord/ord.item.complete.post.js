@@ -48,6 +48,7 @@ if (completionOption == "CANCEL") {
     edsDocument.sendCompletionSignal(errand, reason, currentUser);
     status = "Исполнен Контролером";
     item.properties["lecm-ord-table-structure:item-comment"] = comment;
+    item.save();
 }
 ordStatemachine.changePointStatus(item.nodeRef.toString(), status);
 

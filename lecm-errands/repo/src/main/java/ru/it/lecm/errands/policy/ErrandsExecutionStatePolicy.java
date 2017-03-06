@@ -69,7 +69,7 @@ public class ErrandsExecutionStatePolicy implements NodeServicePolicies.OnUpdate
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         String oldErrandStatus = (String) before.get(StatemachineModel.PROP_STATUS);
         String newErrandStatus = (String) after.get(StatemachineModel.PROP_STATUS);
-        if (!Objects.equals(oldErrandStatus, newErrandStatus) && !newErrandStatus.equals("Новый")) {
+        if (!Objects.equals(oldErrandStatus, newErrandStatus) && !Objects.equals(newErrandStatus,"Новый")) {
             NodeRef baseDoc = errandsService.getBaseDocument(nodeRef);
             if (baseDoc != null && nodeService.hasAspect(baseDoc, EDSDocumentService.ASPECT_EXECUTION_STATE)) {
                 calculateExecutionStatistic(baseDoc);

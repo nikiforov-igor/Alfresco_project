@@ -121,7 +121,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                             } else {
                                 Dom.setStyle(this.id + "-toolbar", "display", "none");
                             }
-                            this.realCreateDatagrid(actions, currentUser, docStatus);
+                            this.realCreateDatagrid(actions, currentUser, docStatus, allowedStatuses);
                         }
                     },
                     scope: this
@@ -131,9 +131,9 @@ LogicECM.ORD = LogicECM.ORD || {};
             });
         },
 
-        realCreateDatagrid: function (actions, currentUser, docStatus) {
+        realCreateDatagrid: function (actions, currentUser, docStatus, allowedStatuses) {
             if (this.tableData != null && this.tableData.rowType != null) {
-                var expandable = docStatus == "На исполнении";
+                var expandable = !allowedStatuses.includes(docStatus);
 
                 var datagrid = new LogicECM.ORD.PointsDatagrid(this.options.containerId).setOptions({
                     usePagination: true,
@@ -199,7 +199,7 @@ LogicECM.ORD = LogicECM.ORD || {};
             var reportRequired = rowData.itemData["prop_lecm-ord-table-structure_report-required"];
             var isReposrtRequired = reportRequired && reportRequired.value;
             var isStatusOk = itemStatus && itemStatus.displayValue == "На исполнении";
-            var isEmployeeOk = executor && ((this.options.currentUser.nodeRef == executor.value || ((this.options.currentUser.isController && this.options.currentUser.nodeRef == executor.value) || (controller && executor.value == controller.value)) && !isReposrtRequired));
+            var isEmployeeOk = !isReposrtRequired && ((this.options.currentUser.nodeRef == executor.value) || ((this.options.currentUser.isController && this.options.currentUser.nodeRef == executor.value) || (controller && executor.value == controller.value)));
             return isStatusOk && isEmployeeOk;
         },
         showActionsEvaluator: function (rowData) {

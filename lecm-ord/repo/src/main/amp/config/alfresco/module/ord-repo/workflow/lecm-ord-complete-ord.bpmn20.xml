@@ -17,7 +17,7 @@
                                 logText += " работу по " + documentScript.wrapperDocumentLink(document, "ОРД");
                                 businessJournal.log(document.nodeRef.toString(), "COMPLETE_DOCUMENT", logText, []);
 
-                                var currentUser = orgstructure.getCurrentUser();
+                                var currentUser = orgstructure.getCurrentEmployee();
                                 var ordControllerAssoc = document.assocs["lecm-ord:controller-assoc"];
                                 if (ordControllerAssoc && ordControllerAssoc.length && !ordControllerAssoc[0].equals(currentUser)) {
                                      notifications.sendNotificationFromCurrentUser({
@@ -32,7 +32,8 @@
                                         dontCheckAccessToObject: true
                                      });
                                 }
-
+                                document.properties["lecm-ord:transit-to-work-completed"] = true;
+                                document.save();
                            }
                         ]]></activiti:string>
                     </activiti:field>

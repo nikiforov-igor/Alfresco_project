@@ -9396,7 +9396,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.attr("lecm-ord:controller-assoc-ref")!=null and doc.attr("lecm-document-aspects:reg-data-is-registered") and doc.tableItemsAttrs("lecm-ord-table-structure:itemsTable","cm:name").size() > 0]]></value>
+                                                                    <![CDATA[doc.attr("lecm-document-aspects:reg-data-is-registered") and doc.tableItemsAttrs("lecm-ord-table-structure:itemsTable","cm:name").size() > 0]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -10677,7 +10677,7 @@ if (doc) {
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:child-change-signal") AND doc.attr("lecm-eds-aspect:child-change-signal-count") !=0]]></value>
+                                                                    <![CDATA[doc.attr("lecm-ord:transit-to-work-completed")==false AND (doc.hasAspect("lecm-eds-aspect:child-change-signal") AND doc.attr("lecm-eds-aspect:child-change-signal-count") !=0 OR doc.attr("lecm-review-ts:doc-review-state") != "IN_PROCESS" OR doc.attr("lecm-eds-aspect:execution-state")!="IN_PROCESS")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -10696,7 +10696,7 @@ if (doc) {
                     if (errandAssoc && errandAssoc.length) {
                         var pointStatusAssoc = point.assocs["lecm-ord-table-structure:item-status-assoc"];
                         if (pointStatusAssoc && pointStatusAssoc.length) {
-                            var pointStatus = pointAssocs[0].properties["cm:name"];
+                            var pointStatus = pointStatusAssoc[0].properties["cm:name"];
                             if (pointStatus == "На исполнении") {
                                 var errand = errandAssoc[0];
                                 var errandStatus = errand.properties["lecm-statemachine:status"];
@@ -10737,7 +10737,15 @@ if (doc) {
   	var reviewState = doc.properties["lecm-review-ts:doc-review-state"];
   	var executionState = doc.properties["lecm-eds-aspect:execution-state"];
   	var confirmCompletion = doc.properties["lecm-ord:confirm-completion"];
-  	if (reviewState != "IN_PROCESS" && executionState != "IN_PROCESS") {
+  	var childErrands = errands.getChildErrands(doc.nodeRef.toString());
+  	var haveActiveErrands = false;
+    if (childErrands && childErrands.length) {
+      haveActiveErrands = childErrands.some(function(childErrand){
+      	return !statemachine.isFinal(childErrand.nodeRef.toString());
+      });
+    }
+  	var activeReviewers = doc.properties["lecm-review-ts:active-reviewers"];
+  	if (reviewState != "IN_PROCESS" && !activeReviewers && executionState != "IN_PROCESS" && !haveActiveErrands) {
       var ntCode = "ORD_COMPLETE";
       if (!confirmCompletion) {
         ntCode = "ORD_AUTO_COMPLETE";
@@ -10745,6 +10753,7 @@ if (doc) {
         logText += " автоматически переведен в статус «Работа завершена» в связи с завершением работы по документу";
       	businessJournal.log(doc.nodeRef.toString(), "COMPLETE_DOCUMENT", logText, []);
         doc.properties["lecm-ord:transit-to-work-completed"] = true;
+        doc.save();
       }
       if (ordControllerAssoc && ordControllerAssoc.length) {
         notifications.sendNotificationFromCurrentUser({
@@ -10757,7 +10766,6 @@ if (doc) {
         });
       }
     }
-  	doc.save();
     edsDocument.resetChildChangeSignal(doc);
 }]]></value>
                                                             </property>
@@ -10787,7 +10795,7 @@ if (doc) {
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.attr("lecm-ord:transit-to-work-completed")==true]]></value>
+                                                                    <![CDATA[doc.attr("lecm-ord:transit-to-work-completed")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -10848,19 +10856,19 @@ if (doc) {
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function(){
     var ord = stm_document;
-    var controllerAssoc = ord.assocs["lecm-ord:controller-assoc"];
-    if (controllerAssoc!=null && controllerAssoc.length > 0) {
-        var controller = controllerAssoc[0];
-        var tableAssocs = ord.assocs["lecm-ord-table-structure:items-assoc"];
-        if (tableAssocs!=null && tableAssocs.length > 0){
-            var table = tableAssocs[0];
-            var  pointAssocs = table.childAssocs["cm:contains"];
-            if (pointAssocs!=null && pointAssocs.length > 0 ){
-                /* формируем поручения */
-                ordStatemachine.formErrands(ord);
-            }
-        }
 
+    var tableAssocs = ord.assocs["lecm-ord-table-structure:items-assoc"];
+    if (tableAssocs!=null && tableAssocs.length > 0){
+      var table = tableAssocs[0];
+      var  pointAssocs = table.childAssocs["cm:contains"];
+      if (pointAssocs!=null && pointAssocs.length > 0 ){
+        /* формируем поручения */
+        ordStatemachine.formErrands(ord);
+      }
+    }
+	var controllerAssoc = ord.assocs["lecm-ord:controller-assoc"];
+    if (controllerAssoc && controllerAssoc.length) {
+        var controller = controllerAssoc[0];
         /* выдадим права контролеру */
         statemachine.grandDynamicRoleForEmployee(ord, controller, "DA_CONTROLLER_DYN", task);
 
@@ -10873,6 +10881,7 @@ if (doc) {
             }
         });
     }
+
 })();]]></value>
                                                             </property>
                                                         </properties>
@@ -11086,43 +11095,51 @@ if (doc) {
                                                             </subFolder>
                                                         </subFolders>
                                                     </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
+                                    </node>
+                                    <node>
+                                        <type>UserWorkflow</type>
+                                        <name>b9cddfc6-463d-4db7-8d43-efff00806965</name>
+                                        <nodeRef>workspace://SpacesStore/591f3fa9-52ff-4960-98a1-38fa4c014e0d</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>actionExecution</name>
+                                                <value><![CDATA[take]]></value>
+                                            </property>
+                                            <property>
+                                                <name>actionId</name>
+                                                <value><![CDATA[UserWorkflow]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
                                                     <node>
-                                                        <type>transitionWorkflow</type>
-                                                        <name>abaa869c-f277-4b3e-8241-922ffe015f45</name>
+                                                        <type>UserWorkflowEntity</type>
+                                                        <name>55977c47-3926-4be6-a0a5-c9c3e5a55135</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/64a48549-c32b-4c7a-ac4b-fcab85e29ff4
+                                                            workspace://SpacesStore/93a4972b-fa1e-4e0b-ad48-1bc7b14fe117
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>workflowId</name>
-                                                                <value><![CDATA[activiti$completeActiveORD]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionLabel</name>
+                                                                <name>workflowLabel</name>
                                                                 <value><![CDATA[Завершить работу]]></value>
                                                             </property>
                                                             <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
+                                                                <name>workflowId</name>
+                                                                <value><![CDATA[activiti$completeORD]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
                                                             <workflowAspect/>
-                                                            <transitionLabelAspect/>
-                                                            <transitionStatusAspect/>
                                                         </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/455d3aa9-199a-4e3d-a7b7-ff6c93ec17e1
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
+                                                        <associations/>
                                                         <roleAssociations/>
                                                         <subFolders>
                                                             <subFolder>
@@ -11130,10 +11147,103 @@ if (doc) {
                                                                 <nodes>
                                                                     <node>
                                                                         <type>conditionAccess</type>
-                                                                        <name>541ad471-ee70-49e2-b4e6-5d87fe1594ac
+                                                                        <name>3f174c40-f319-40f0-9be2-b0a453347327
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/6750f2d6-f2d4-40c8-82eb-8c55b18510cc
+                                                                            workspace://SpacesStore/42d87e55-0011-4ceb-b59f-54d5ca6552f4
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-eds-aspect:execution-state")!="IN_PROCESS"]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[У документа есть поручения в активных статусах]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>55ee502a-ae70-42ca-b865-975d3aefe95d
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/5638d983-971e-436a-a3d0-e61a3769b077
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_CONTROLLER_DYN")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно только контролеру]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
+                                                    <node>
+                                                        <type>UserWorkflowEntity</type>
+                                                        <name>5fdc5338-a025-40fc-8157-d3ca7a7ed91c</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/3de94788-3035-4de9-a1fb-71c621cb665b
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>workflowLabel</name>
+                                                                <value><![CDATA[Завершить работу]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>workflowId</name>
+                                                                <value><![CDATA[activiti$completeActiveORD]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <workflowAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>ea0822dd-5f92-468c-8ac6-fde0cc8ba66c
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/ee8c5dcf-c629-4199-81a0-a7b78867bafc
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -11162,10 +11272,10 @@ if (doc) {
                                                                     </node>
                                                                     <node>
                                                                         <type>conditionAccess</type>
-                                                                        <name>adfb5289-220d-4aa9-8c5f-b5f500a19010
+                                                                        <name>82470cd6-ba37-4948-8327-86af7064ad9d
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/2c1486fd-81cc-4f18-991e-cdb14c9b092f
+                                                                            workspace://SpacesStore/ff706c20-1fef-4f69-9ee6-aa7453d6cf52
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -11196,138 +11306,9 @@ if (doc) {
                                                             </subFolder>
                                                         </subFolders>
                                                     </node>
-                                                    <node>
-                                                        <type>transitionWorkflow</type>
-                                                        <name>d7376d72-c3ab-45a8-bb8d-ad8d357531c5</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/f3f2324a-1497-4a39-ad19-c1caa8203184
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>workflowId</name>
-                                                                <value><![CDATA[activiti$completeORD]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Завершить работу]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <workflowAspect/>
-                                                            <transitionLabelAspect/>
-                                                            <transitionStatusAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/455d3aa9-199a-4e3d-a7b7-ff6c93ec17e1
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders>
-                                                            <subFolder>
-                                                                <name>variables</name>
-                                                                <nodes>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>99cd2fc4-c18c-4697-ba76-ab7ff7d78259
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/ceb025d0-67e9-4996-a991-45008a32157a
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_CONTROLLER_DYN")]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Действие доступно только контролеру]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>6a972303-a7ac-4919-8e89-c7ff8ad71822
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/df284486-f37c-49a0-8caa-028138d734d0
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.attr("lecm-eds-aspect:execution-state")!="IN_PROCESS"]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[У документа есть поручения в активных статусах]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                </nodes>
-                                                            </subFolder>
-                                                        </subFolders>
-                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
-                                    </node>
-                                    <node>
-                                        <type>UserWorkflow</type>
-                                        <name>b9cddfc6-463d-4db7-8d43-efff00806965</name>
-                                        <nodeRef>workspace://SpacesStore/591f3fa9-52ff-4960-98a1-38fa4c014e0d</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>actionExecution</name>
-                                                <value><![CDATA[take]]></value>
-                                            </property>
-                                            <property>
-                                                <name>actionId</name>
-                                                <value><![CDATA[UserWorkflow]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
                                     </node>
                                     <node>
                                         <type>StartWorkflow</type>
