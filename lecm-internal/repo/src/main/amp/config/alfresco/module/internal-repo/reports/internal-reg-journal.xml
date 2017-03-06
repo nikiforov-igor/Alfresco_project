@@ -1,23 +1,22 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items updateMode="RewriteChildren">
-    <item name="cm:Журнал регистрации внутренних документов" type="lecm-rpeditor:reportDescriptor">
-        <property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-internal:document]]></property>
-        <property name="lecm-rpeditor:reportIsDeployed"><![CDATA[true]]></property>
+    <item name="cm:Журнал регистрации Внутренних документов" type="lecm-rpeditor:reportDescriptor">
+        <property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
+        <property name="lecm-rpeditor:reportQuery"><![CDATA[TYPE:"lecm-internal:document"]]></property>
+        <property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
         <property name="cm:name"><![CDATA[Журнал регистрации внутренних документов]]></property>
+        <property name="lecm-rpeditor:runAsSystem"><![CDATA[false]]></property>
+        <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
+        <property name="lecm-rpeditor:reportQuerySort"><![CDATA[lecm-document:doc-date|DESC]]></property>
         <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
-        <property name="lecm-rpeditor:reportQuery">
-            <![CDATA[TYPE:"lecm-internal:document"  AND @lecm\-document\-aspects\:reg\-data\-is\-registered:true]]></property>
+        <property name="lecm-rpeditor:loadColumnsFromSQL"><![CDATA[false]]></property>
+        <property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-internal:document]]></property>
         <property name="lecm-rpeditor:reportCode"><![CDATA[internal-reg-journal]]></property>
         <property name="lecm-rpeditor:reportObjectsMultiplicity"><![CDATA[true]]></property>
-        <property name="lecm-rpeditor:reportQuerySort"><![CDATA[docDate|ASC]]></property>
-        <property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
-        <property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
-        <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
-        <property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
         <items>
             <item name="cm:internal-reg-journal" type="lecm-rpeditor:reportTemplate">
-                <property name="cm:name"><![CDATA[internal-reg-journal]]></property>
                 <property name="lecm-rpeditor:templateCode"><![CDATA[tmpl]]></property>
+                <property name="cm:name"><![CDATA[internal-reg-journal]]></property>
                 <assocs>
                     <assoc type="lecm-rpeditor:reportTemplateType"
                            path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип отчета/Jasper"/>
@@ -25,330 +24,36 @@
                            path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Журнал регистрации внутренних документов/internal-reg-journal_tmpl.jrxml"/>
                 </assocs>
             </item>
-            <item name="cm:internal-reg-journal_tmpl.jrxml" type="cm:content">
-                <property name="cm:name"><![CDATA[internal-reg-journal_tmpl.jrxml]]></property>
-                <property name="cm:content"><![CDATA[PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPGphc3BlclJlcG9ydCB4bWxu
-cz0iaHR0cDovL2phc3BlcnJlcG9ydHMuc291cmNlZm9yZ2UubmV0L2phc3BlcnJlcG9ydHMiIHht
-bG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTpz
-Y2hlbWFMb2NhdGlvbj0iaHR0cDovL2phc3BlcnJlcG9ydHMuc291cmNlZm9yZ2UubmV0L2phc3Bl
-cnJlcG9ydHMgaHR0cDovL2phc3BlcnJlcG9ydHMuc291cmNlZm9yZ2UubmV0L3hzZC9qYXNwZXJy
-ZXBvcnQueHNkIiBuYW1lPSJpbnRlcm5hbC1yZWctam91cm5hbCIgcGFnZVdpZHRoPSI4NDIiIHBh
-Z2VIZWlnaHQ9IjU5NSIgb3JpZW50YXRpb249IkxhbmRzY2FwZSIgd2hlbk5vRGF0YVR5cGU9IkFs
-bFNlY3Rpb25zTm9EZXRhaWwiIGNvbHVtbldpZHRoPSI4MDIiIGxlZnRNYXJnaW49IjIwIiByaWdo
-dE1hcmdpbj0iMjAiIHRvcE1hcmdpbj0iMjAiIGJvdHRvbU1hcmdpbj0iMjAiIHV1aWQ9IjA1YjU4
-NTg3LWNmNjYtNDU2Ny04YjVmLTI2NzYwZWY0MTI2ZCI+Cgk8cHJvcGVydHkgbmFtZT0iaXJlcG9y
-dC56b29tIiB2YWx1ZT0iMS4wIi8+Cgk8cHJvcGVydHkgbmFtZT0iaXJlcG9ydC54IiB2YWx1ZT0i
-MCIvPgoJPHByb3BlcnR5IG5hbWU9ImlyZXBvcnQueSIgdmFsdWU9IjAiLz4KCTxwcm9wZXJ0eSBu
-YW1lPSJkYXRhU291cmNlIiB2YWx1ZT0icnUuaXQubGVjbS5yZXBvcnRzLmdlbmVyYXRvcnMuR2Vu
-ZXJpY0RTUHJvdmlkZXJCYXNlIi8+Cgk8c3R5bGUgbmFtZT0ic3R5bGVPZGQiIG1vZGU9Ik9wYXF1
-ZSIgYmFja2NvbG9yPSIjRkZGRkZGIj4KCQk8Y29uZGl0aW9uYWxTdHlsZT4KCQkJPGNvbmRpdGlv
-bkV4cHJlc3Npb24+PCFbQ0RBVEFbJFZ7UkVQT1JUX0NPVU5UfSUyID09IDBdXT48L2NvbmRpdGlv
-bkV4cHJlc3Npb24+CgkJCTxzdHlsZSBiYWNrY29sb3I9IiNEMkVBRjEiLz4KCQk8L2NvbmRpdGlv
-bmFsU3R5bGU+Cgk8L3N0eWxlPgoJPHBhcmFtZXRlciBuYW1lPSJDTUlTX1hNTENPTkZJRyIgY2xh
-c3M9ImphdmEubGFuZy5TdHJpbmciIGlzRm9yUHJvbXB0aW5nPSJmYWxzZSI+CgkJPGRlZmF1bHRW
-YWx1ZUV4cHJlc3Npb24+PCFbQ0RBVEFbImRzLWludGVybmFsLXJlZy1qb3VybmFsLnhtbCJdXT48
-L2RlZmF1bHRWYWx1ZUV4cHJlc3Npb24+Cgk8L3BhcmFtZXRlcj4KCTxwYXJhbWV0ZXIgbmFtZT0i
-U1VCUkVQT1JUX0RJUiIgY2xhc3M9ImphdmEubGFuZy5TdHJpbmciIGlzRm9yUHJvbXB0aW5nPSJm
-YWxzZSI+CgkJPGRlZmF1bHRWYWx1ZUV4cHJlc3Npb24+PCFbQ0RBVEFbInJlcG9ydGRlZmluaXRp
-b25zL2RlcGxveS9zdWJyZXBvcnRzLyJdXT48L2RlZmF1bHRWYWx1ZUV4cHJlc3Npb24+Cgk8L3Bh
-cmFtZXRlcj4KCTxwYXJhbWV0ZXIgbmFtZT0iUFJFUEFSRURfUVVFUlkiIGNsYXNzPSJqYXZhLmxh
-bmcuU3RyaW5nIiBpc0ZvclByb21wdGluZz0iZmFsc2UiPgoJCTxkZWZhdWx0VmFsdWVFeHByZXNz
-aW9uPjwhW0NEQVRBWyIrVFlQRTpcImxlY20taW50ZXJuYWw6ZG9jdW1lbnRcIiJdXT48L2RlZmF1
-bHRWYWx1ZUV4cHJlc3Npb24+Cgk8L3BhcmFtZXRlcj4KCTxwYXJhbWV0ZXIgbmFtZT0iZGF0ZVJl
-Z19sbyIgY2xhc3M9ImphdmEudXRpbC5EYXRlIiBpc0ZvclByb21wdGluZz0iZmFsc2UiLz4KCTxw
-YXJhbWV0ZXIgbmFtZT0iZGF0ZVJlZ19oaSIgY2xhc3M9ImphdmEudXRpbC5EYXRlIiBpc0ZvclBy
-b21wdGluZz0iZmFsc2UiPgoJCTxkZWZhdWx0VmFsdWVFeHByZXNzaW9uPjwhW0NEQVRBW25ldyBE
-YXRlKCldXT48L2RlZmF1bHRWYWx1ZUV4cHJlc3Npb24+Cgk8L3BhcmFtZXRlcj4KCTxxdWVyeVN0
-cmluZyBsYW5ndWFnZT0iU1FMIj4KCQk8IVtDREFUQVskUCF7UFJFUEFSRURfUVVFUll9XV0+Cgk8
-L3F1ZXJ5U3RyaW5nPgoJPGZpZWxkIG5hbWU9ImRvY0RhdGUiIGNsYXNzPSJqYXZhLnV0aWwuRGF0
-ZSI+CgkJPGZpZWxkRGVzY3JpcHRpb24+PCFbQ0RBVEFb0JTQsNGC0LAg0LTQvtC60YPQvNC10L3R
-gtCwXV0+PC9maWVsZERlc2NyaXB0aW9uPgoJPC9maWVsZD4KCTxmaWVsZCBuYW1lPSJyZWdOdW0i
-IGNsYXNzPSJqYXZhLmxhbmcuU3RyaW5nIj4KCQk8ZmllbGREZXNjcmlwdGlvbj48IVtDREFUQVvQ
-oNC10LPQuNGB0YLRgNCw0YbQuNC+0L3QvdGL0Lkg0L3QvtC80LXRgF1dPjwvZmllbGREZXNjcmlw
-dGlvbj4KCTwvZmllbGQ+Cgk8ZmllbGQgbmFtZT0iZG9jUmVjaXBpZW50cyIgY2xhc3M9ImphdmEu
-bGFuZy5TdHJpbmciPgoJCTxmaWVsZERlc2NyaXB0aW9uPjwhW0NEQVRBW9Cf0L7Qu9GD0YfQsNGC
-0LXQu9C4XV0+PC9maWVsZERlc2NyaXB0aW9uPgoJPC9maWVsZD4KCTxmaWVsZCBuYW1lPSJkb2NU
-aXRsZSIgY2xhc3M9ImphdmEubGFuZy5TdHJpbmciPgoJCTxmaWVsZERlc2NyaXB0aW9uPjwhW0NE
-QVRBW9CX0LDQs9C+0LvQvtCy0L7Qul1dPjwvZmllbGREZXNjcmlwdGlvbj4KCTwvZmllbGQ+Cgk8
-ZmllbGQgbmFtZT0iZG9jQXV0aG9yIiBjbGFzcz0iamF2YS5sYW5nLlN0cmluZyI+CgkJPGZpZWxk
-RGVzY3JpcHRpb24+PCFbQ0RBVEFb0JDQstGC0L7RgF1dPjwvZmllbGREZXNjcmlwdGlvbj4KCTwv
-ZmllbGQ+Cgk8ZmllbGQgbmFtZT0iZG9jU3RhdHVzIiBjbGFzcz0iamF2YS5sYW5nLlN0cmluZyI+
-CgkJPGZpZWxkRGVzY3JpcHRpb24+PCFbQ0RBVEFb0KHRgtCw0YLRg9GBXV0+PC9maWVsZERlc2Ny
-aXB0aW9uPgoJPC9maWVsZD4KCTxmaWVsZCBuYW1lPSJkb2NUaGVtYXRpYyIgY2xhc3M9ImphdmEu
-bGFuZy5TdHJpbmciPgoJCTxmaWVsZERlc2NyaXB0aW9uPjwhW0NEQVRBW9Ci0LXQvNCw0YLQuNC6
-0LBdXT48L2ZpZWxkRGVzY3JpcHRpb24+Cgk8L2ZpZWxkPgoJPHRpdGxlPgoJCTxiYW5kIGhlaWdo
-dD0iNjAiIHNwbGl0VHlwZT0iU3RyZXRjaCI+CgkJCTxzdGF0aWNUZXh0PgoJCQkJPHJlcG9ydEVs
-ZW1lbnQgdXVpZD0iODViZjI4ZjUtN2IxZC00OWE3LWIyZDAtZTMxZjJhNDVkZTBjIiBzdHJldGNo
-VHlwZT0iUmVsYXRpdmVUb0JhbmRIZWlnaHQiIHg9IjAiIHk9IjAiIHdpZHRoPSI4MDIiIGhlaWdo
-dD0iMzAiLz4KCQkJCTx0ZXh0RWxlbWVudCB0ZXh0QWxpZ25tZW50PSJDZW50ZXIiIHZlcnRpY2Fs
-QWxpZ25tZW50PSJNaWRkbGUiPgoJCQkJCTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4i
-IHNpemU9IjE2IiBpc0JvbGQ9InRydWUiIHBkZkVuY29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRk
-ZWQ9InRydWUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dD48IVtDREFUQVvQltGD0YDQ
-vdCw0Lsg0YDQtdCz0LjRgdGC0YDQsNGG0LjQuCDQstC90YPRgtGA0LXQvdC90LjRhSDQtNC+0LrR
-g9C80LXQvdGC0L7Qsl1dPjwvdGV4dD4KCQkJPC9zdGF0aWNUZXh0PgoJCQk8dGV4dEZpZWxkPgoJ
-CQkJPHJlcG9ydEVsZW1lbnQgdXVpZD0iODU1YzhhNGYtYzVkMi00NzcxLWFjNTctZjYzMDEzNzdi
-OTA0IiB4PSIwIiB5PSIzMCIgd2lkdGg9IjgwMiIgaGVpZ2h0PSIzMCIvPgoJCQkJPHRleHRFbGVt
-ZW50PgoJCQkJCTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4iIHNpemU9IjEyIiBpc0Jv
-bGQ9InRydWUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dEZpZWxkRXhwcmVzc2lvbj48
-IVtDREFUQVsi0LfQsCDQv9C10YDQuNC+0LQgIiArCigkUHtkYXRlUmVnX2xvfSAhPSBudWxsID8K
-ICAgICgiYyAiICsgbmV3IFNpbXBsZURhdGVGb3JtYXQoImRkLk1NLnl5eXkiKS5mb3JtYXQoJFB7
-ZGF0ZVJlZ19sb30pKSA6ICIiCikKKyAiINC/0L4gIiArCigkUHtkYXRlUmVnX2hpfSAhPSBudWxs
-ID8KICAgIG5ldyBTaW1wbGVEYXRlRm9ybWF0KCJkZC5NTS55eXl5IikuZm9ybWF0KCRQe2RhdGVS
-ZWdfaGl9KSA6CiAgICBuZXcgU2ltcGxlRGF0ZUZvcm1hdCgiZGQuTU0ueXl5eSIpLmZvcm1hdChu
-ZXcgRGF0ZSgpKQopXV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQk8
-L2JhbmQ+Cgk8L3RpdGxlPgoJPGNvbHVtbkhlYWRlcj4KCQk8YmFuZCBoZWlnaHQ9IjMwIiBzcGxp
-dFR5cGU9IlN0cmV0Y2giPgoJCQk8dGV4dEZpZWxkIGlzQmxhbmtXaGVuTnVsbD0idHJ1ZSI+CgkJ
-CQk8cmVwb3J0RWxlbWVudCB1dWlkPSI0OTlmMTFiNC1hYmI1LTRiOTQtOGZjMS1kNGM4Yzg3YTJm
-ZmQiIG1vZGU9Ik9wYXF1ZSIgeD0iMzAiIHk9IjAiIHdpZHRoPSI5NyIgaGVpZ2h0PSIzMCIgaXNQ
-cmludFdoZW5EZXRhaWxPdmVyZmxvd3M9InRydWUiIGZvcmVjb2xvcj0iI0ZGRkZGRiIgYmFja2Nv
-bG9yPSIjNEJBQ0M2Ii8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVD
-b2xvcj0iIzc4QzBENCIvPgoJCQkJCTx0b3BQZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0i
-Izc4QzBENCIvPgoJCQkJCTxsZWZ0UGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMw
-RDQiLz4KCQkJCQk8Ym90dG9tUGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQi
-Lz4KCQkJCQk8cmlnaHRQZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJ
-CQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNh
-bEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFu
-IiBzaXplPSIxMCIgaXNCb2xkPSJ0cnVlIiBwZGZFbmNvZGluZz0iQ3AxMjUxIiBpc1BkZkVtYmVk
-ZGVkPSJ0cnVlIi8+CgkJCQkJPHBhcmFncmFwaCBsZWZ0SW5kZW50PSI1Ii8+CgkJCQk8L3RleHRF
-bGVtZW50PgoJCQkJPHRleHRGaWVsZEV4cHJlc3Npb24+PCFbQ0RBVEFbItCU0LDRgtCwINC00L7Q
-utGD0LzQtdC90YLQsCJdXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJ
-CQk8dGV4dEZpZWxkIGlzQmxhbmtXaGVuTnVsbD0idHJ1ZSI+CgkJCQk8cmVwb3J0RWxlbWVudCB1
-dWlkPSI1NTBiZDEzOC02M2I3LTRlM2UtOTc4NC1lNzIyZjI4MTIzOTIiIG1vZGU9Ik9wYXF1ZSIg
-eD0iMTI3IiB5PSIwIiB3aWR0aD0iMTAzIiBoZWlnaHQ9IjMwIiBpc1ByaW50V2hlbkRldGFpbE92
-ZXJmbG93cz0idHJ1ZSIgZm9yZWNvbG9yPSIjRkZGRkZGIiBiYWNrY29sb3I9IiM0QkFDQzYiLz4K
-CQkJCTxib3g+CgkJCQkJPHBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjNzhDMEQ0Ii8+
-CgkJCQkJPHRvcFBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjNzhDMEQ0Ii8+CgkJCQkJ
-PGxlZnRQZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTxib3R0
-b21QZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTxyaWdodFBl
-biBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjNzhDMEQ0Ii8+CgkJCQk8L2JveD4KCQkJCTx0
-ZXh0RWxlbWVudCB0ZXh0QWxpZ25tZW50PSJDZW50ZXIiIHZlcnRpY2FsQWxpZ25tZW50PSJNaWRk
-bGUiPgoJCQkJCTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4iIHNpemU9IjEwIiBpc0Jv
-bGQ9InRydWUiIHBkZkVuY29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJ
-CQk8cGFyYWdyYXBoIGxlZnRJbmRlbnQ9IjUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4
-dEZpZWxkRXhwcmVzc2lvbj48IVtDREFUQVsi0KDQtdCz0LjRgdGC0YDQsNGG0LjQvtC90L3Ri9C5
-INC90L7QvNC10YAiXV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJ
-PHRleHRGaWVsZCBpc0JsYW5rV2hlbk51bGw9InRydWUiPgoJCQkJPHJlcG9ydEVsZW1lbnQgdXVp
-ZD0iYzY0MDY0OWMtODA3Yi00MDY3LWFhM2QtMWI1OTQwZWU0YjljIiBtb2RlPSJPcGFxdWUiIHg9
-IjIzMCIgeT0iMCIgd2lkdGg9IjExNCIgaGVpZ2h0PSIzMCIgaXNQcmludFdoZW5EZXRhaWxPdmVy
-Zmxvd3M9InRydWUiIGZvcmVjb2xvcj0iI0ZGRkZGRiIgYmFja2NvbG9yPSIjNEJBQ0M2Ii8+CgkJ
-CQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJ
-CQkJCTx0b3BQZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTxs
-ZWZ0UGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8Ym90dG9t
-UGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8cmlnaHRQZW4g
-bGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4
-dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxl
-Ij4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMCIgaXNCb2xk
-PSJ0cnVlIiBwZGZFbmNvZGluZz0iQ3AxMjUxIiBpc1BkZkVtYmVkZGVkPSJ0cnVlIi8+CgkJCQkJ
-PHBhcmFncmFwaCBsZWZ0SW5kZW50PSI1Ii8+CgkJCQk8L3RleHRFbGVtZW50PgoJCQkJPHRleHRG
-aWVsZEV4cHJlc3Npb24+PCFbQ0RBVEFbItCf0L7Qu9GD0YfQsNGC0LXQu9C4Il1dPjwvdGV4dEZp
-ZWxkRXhwcmVzc2lvbj4KCQkJPC90ZXh0RmllbGQ+CgkJCTx0ZXh0RmllbGQgaXNCbGFua1doZW5O
-dWxsPSJ0cnVlIj4KCQkJCTxyZXBvcnRFbGVtZW50IHV1aWQ9IjBjMTJhMDNjLTc5NTYtNDQzNS1i
-NjBiLTYwMjJlOWM1MTY5ZCIgbW9kZT0iT3BhcXVlIiB4PSIzNDQiIHk9IjAiIHdpZHRoPSIxMjAi
-IGhlaWdodD0iMzAiIGlzUHJpbnRXaGVuRGV0YWlsT3ZlcmZsb3dzPSJ0cnVlIiBmb3JlY29sb3I9
-IiNGRkZGRkYiIGJhY2tjb2xvcj0iIzRCQUNDNiIvPgoJCQkJPGJveD4KCQkJCQk8cGVuIGxpbmVX
-aWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8dG9wUGVuIGxpbmVXaWR0aD0i
-MC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8bGVmdFBlbiBsaW5lV2lkdGg9IjAuNSIg
-bGluZUNvbG9yPSIjNzhDMEQ0Ii8+CgkJCQkJPGJvdHRvbVBlbiBsaW5lV2lkdGg9IjAuNSIgbGlu
-ZUNvbG9yPSIjNzhDMEQ0Ii8+CgkJCQkJPHJpZ2h0UGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29s
-b3I9IiM3OEMwRDQiLz4KCQkJCTwvYm94PgoJCQkJPHRleHRFbGVtZW50IHRleHRBbGlnbm1lbnQ9
-IkNlbnRlciIgdmVydGljYWxBbGlnbm1lbnQ9Ik1pZGRsZSI+CgkJCQkJPGZvbnQgZm9udE5hbWU9
-IlRpbWVzIE5ldyBSb21hbiIgc2l6ZT0iMTAiIGlzQm9sZD0idHJ1ZSIgcGRmRW5jb2Rpbmc9IkNw
-MTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0i
-NSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRB
-WyLQl9Cw0LPQvtC70L7QstC+0LoiXV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRG
-aWVsZD4KCQkJPHRleHRGaWVsZCBpc0JsYW5rV2hlbk51bGw9InRydWUiPgoJCQkJPHJlcG9ydEVs
-ZW1lbnQgdXVpZD0iMTE2MzVjYTctNTE4Mi00NWNmLTg3MDktZGMzYTBhNGRiZWNmIiBtb2RlPSJP
-cGFxdWUiIHg9IjQ2NCIgeT0iMCIgd2lkdGg9IjExMSIgaGVpZ2h0PSIzMCIgaXNQcmludFdoZW5E
-ZXRhaWxPdmVyZmxvd3M9InRydWUiIGZvcmVjb2xvcj0iI0ZGRkZGRiIgYmFja2NvbG9yPSIjNEJB
-Q0M2Ii8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4
-QzBENCIvPgoJCQkJCTx0b3BQZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIv
-PgoJCQkJCTxsZWZ0UGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJ
-CQk8Ym90dG9tUGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8
-cmlnaHRQZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJPC9ib3g+
-CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVu
-dD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIx
-MCIgaXNCb2xkPSJ0cnVlIiBwZGZFbmNvZGluZz0iQ3AxMjUxIiBpc1BkZkVtYmVkZGVkPSJ0cnVl
-Ii8+CgkJCQkJPHBhcmFncmFwaCBsZWZ0SW5kZW50PSI1Ii8+CgkJCQk8L3RleHRFbGVtZW50PgoJ
-CQkJPHRleHRGaWVsZEV4cHJlc3Npb24+PCFbQ0RBVEFbItCQ0LLRgtC+0YAiXV0+PC90ZXh0Rmll
-bGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc0JsYW5rV2hlbk51
-bGw9InRydWUiPgoJCQkJPHJlcG9ydEVsZW1lbnQgdXVpZD0iM2E2Mzk5ZWQtNzM2YS00MTg4LWE2
-OTEtMmFhMWRkZDU5MTE2IiBtb2RlPSJPcGFxdWUiIHg9IjU3NSIgeT0iMCIgd2lkdGg9IjEyMCIg
-aGVpZ2h0PSIzMCIgaXNQcmludFdoZW5EZXRhaWxPdmVyZmxvd3M9InRydWUiIGZvcmVjb2xvcj0i
-I0ZGRkZGRiIgYmFja2NvbG9yPSIjNEJBQ0M2Ii8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdp
-ZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTx0b3BQZW4gbGluZVdpZHRoPSIw
-LjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTxsZWZ0UGVuIGxpbmVXaWR0aD0iMC41IiBs
-aW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8Ym90dG9tUGVuIGxpbmVXaWR0aD0iMC41IiBsaW5l
-Q29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8cmlnaHRQZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xv
-cj0iIzc4QzBENCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0i
-Q2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0i
-VGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMCIgaXNCb2xkPSJ0cnVlIiBwZGZFbmNvZGluZz0iQ3Ax
-MjUxIiBpc1BkZkVtYmVkZGVkPSJ0cnVlIi8+CgkJCQkJPHBhcmFncmFwaCBsZWZ0SW5kZW50PSI1
-Ii8+CgkJCQk8L3RleHRFbGVtZW50PgoJCQkJPHRleHRGaWVsZEV4cHJlc3Npb24+PCFbQ0RBVEFb
-ItCh0YLQsNGC0YPRgSJdXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJ
-CQk8dGV4dEZpZWxkIGlzQmxhbmtXaGVuTnVsbD0idHJ1ZSI+CgkJCQk8cmVwb3J0RWxlbWVudCB1
-dWlkPSIwOTk1MjVmZC0yZjljLTRjZDQtOTNiMC1iYmYzZjI0MTY2YzkiIG1vZGU9Ik9wYXF1ZSIg
-eD0iNjk1IiB5PSIwIiB3aWR0aD0iMTA3IiBoZWlnaHQ9IjMwIiBpc1ByaW50V2hlbkRldGFpbE92
-ZXJmbG93cz0idHJ1ZSIgZm9yZWNvbG9yPSIjRkZGRkZGIiBiYWNrY29sb3I9IiM0QkFDQzYiLz4K
-CQkJCTxib3g+CgkJCQkJPHBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjNzhDMEQ0Ii8+
-CgkJCQkJPHRvcFBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjNzhDMEQ0Ii8+CgkJCQkJ
-PGxlZnRQZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTxib3R0
-b21QZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTxyaWdodFBl
-biBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjNzhDMEQ0Ii8+CgkJCQk8L2JveD4KCQkJCTx0
-ZXh0RWxlbWVudCB0ZXh0QWxpZ25tZW50PSJDZW50ZXIiIHZlcnRpY2FsQWxpZ25tZW50PSJNaWRk
-bGUiPgoJCQkJCTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4iIHNpemU9IjEwIiBpc0Jv
-bGQ9InRydWUiIHBkZkVuY29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJ
-CQk8cGFyYWdyYXBoIGxlZnRJbmRlbnQ9IjUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4
-dEZpZWxkRXhwcmVzc2lvbj48IVtDREFUQVsi0KLQtdC80LDRgtC40LrQsCJdXT48L3RleHRGaWVs
-ZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCQk8dGV4dEZpZWxkIHBhdHRlcm49IiIgaXNC
-bGFua1doZW5OdWxsPSJ0cnVlIj4KCQkJCTxyZXBvcnRFbGVtZW50IHV1aWQ9IjA5ZjU1YTRjLTFl
-NTAtNDFkMS1iYzhhLTNjZTMyYjk3OGMyMiIgbW9kZT0iT3BhcXVlIiB4PSIwIiB5PSIwIiB3aWR0
-aD0iMzAiIGhlaWdodD0iMzAiIGlzUHJpbnRXaGVuRGV0YWlsT3ZlcmZsb3dzPSJ0cnVlIiBmb3Jl
-Y29sb3I9IiNGRkZGRkYiIGJhY2tjb2xvcj0iIzRCQUNDNiIvPgoJCQkJPGJveD4KCQkJCQk8cGVu
-IGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8dG9wUGVuIGxpbmVX
-aWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8bGVmdFBlbiBsaW5lV2lkdGg9
-IjAuNSIgbGluZUNvbG9yPSIjNzhDMEQ0Ii8+CgkJCQkJPGJvdHRvbVBlbiBsaW5lV2lkdGg9IjAu
-NSIgbGluZUNvbG9yPSIjNzhDMEQ0Ii8+CgkJCQkJPHJpZ2h0UGVuIGxpbmVXaWR0aD0iMC41IiBs
-aW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCTwvYm94PgoJCQkJPHRleHRFbGVtZW50IHRleHRBbGln
-bm1lbnQ9IkNlbnRlciIgdmVydGljYWxBbGlnbm1lbnQ9Ik1pZGRsZSI+CgkJCQkJPGZvbnQgZm9u
-dE5hbWU9IkRlamFWdSBTYW5zIE1vbm8iIHNpemU9IjEwIiBpc0JvbGQ9InRydWUiIHBkZkVuY29k
-aW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJCQk8cGFyYWdyYXBoIGxpbmVT
-cGFjaW5nPSJTaW5nbGUiIGxlZnRJbmRlbnQ9IjUiIHNwYWNpbmdCZWZvcmU9IjIiIHNwYWNpbmdB
-ZnRlcj0iMiIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwh
-W0NEQVRBWyLihJYiXV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQk8
-L2JhbmQ+Cgk8L2NvbHVtbkhlYWRlcj4KCTxkZXRhaWw+CgkJPGJhbmQgaGVpZ2h0PSIzMCIgc3Bs
-aXRUeXBlPSJTdHJldGNoIj4KCQkJPHRleHRGaWVsZCBpc1N0cmV0Y2hXaXRoT3ZlcmZsb3c9InRy
-dWUiIHBhdHRlcm49ImRkL01NL3l5eXkiIGlzQmxhbmtXaGVuTnVsbD0idHJ1ZSI+CgkJCQk8cmVw
-b3J0RWxlbWVudCB1dWlkPSIzMzU5OWQ0My0yM2FmLTQwZDYtYWY4OC0xYThkOTkxZmVkMDciIHN0
-eWxlPSJzdHlsZU9kZCIgc3RyZXRjaFR5cGU9IlJlbGF0aXZlVG9UYWxsZXN0T2JqZWN0IiBtb2Rl
-PSJPcGFxdWUiIHg9IjMwIiB5PSIwIiB3aWR0aD0iOTciIGhlaWdodD0iMzAiLz4KCQkJCTxib3g+
-CgkJCQkJPHBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjNzhDMEQ0Ii8+CgkJCQkJPHRv
-cFBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjNzhDMEQ0Ii8+CgkJCQkJPGxlZnRQZW4g
-bGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTxib3R0b21QZW4gbGlu
-ZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTxyaWdodFBlbiBsaW5lV2lk
-dGg9IjAuNSIgbGluZUNvbG9yPSIjNzhDMEQ0Ii8+CgkJCQk8L2JveD4KCQkJCTx0ZXh0RWxlbWVu
-dCB0ZXh0QWxpZ25tZW50PSJDZW50ZXIiIHZlcnRpY2FsQWxpZ25tZW50PSJNaWRkbGUiPgoJCQkJ
-CTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4iIHNpemU9IjExIiBpc0JvbGQ9ImZhbHNl
-IiBwZGZFbmNvZGluZz0iQ3AxMjUxIiBpc1BkZkVtYmVkZGVkPSJ0cnVlIi8+CgkJCQkJPHBhcmFn
-cmFwaCBsZWZ0SW5kZW50PSI1Ii8+CgkJCQk8L3RleHRFbGVtZW50PgoJCQkJPHRleHRGaWVsZEV4
-cHJlc3Npb24+PCFbQ0RBVEFbJEZ7ZG9jRGF0ZX1dXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJ
-CTwvdGV4dEZpZWxkPgoJCQk8dGV4dEZpZWxkIGlzU3RyZXRjaFdpdGhPdmVyZmxvdz0idHJ1ZSIg
-aXNCbGFua1doZW5OdWxsPSJ0cnVlIj4KCQkJCTxyZXBvcnRFbGVtZW50IHV1aWQ9IjczYzgyODUx
-LTI0YzQtNGM1Ny04NWI5LWIzNzQwNzNmMjNmOSIgc3R5bGU9InN0eWxlT2RkIiBzdHJldGNoVHlw
-ZT0iUmVsYXRpdmVUb1RhbGxlc3RPYmplY3QiIG1vZGU9Ik9wYXF1ZSIgeD0iMTI3IiB5PSIwIiB3
-aWR0aD0iMTAzIiBoZWlnaHQ9IjMwIi8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIw
-LjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTx0b3BQZW4gbGluZVdpZHRoPSIwLjUiIGxp
-bmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTxsZWZ0UGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29s
-b3I9IiM3OEMwRDQiLz4KCQkJCQk8Ym90dG9tUGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9
-IiM3OEMwRDQiLz4KCQkJCQk8cmlnaHRQZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4
-QzBENCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVy
-IiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMg
-TmV3IFJvbWFuIiBzaXplPSIxMSIgaXNCb2xkPSJmYWxzZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIg
-aXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJ
-CQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWyRGe3Jl
-Z051bX1dXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCQk8dGV4dEZp
-ZWxkIGlzU3RyZXRjaFdpdGhPdmVyZmxvdz0idHJ1ZSIgaXNCbGFua1doZW5OdWxsPSJ0cnVlIj4K
-CQkJCTxyZXBvcnRFbGVtZW50IHV1aWQ9IjNjNmRjYmZjLWQwYmItNDAwMC04YzVjLTE5MjAwYmYz
-Zjg1NSIgc3R5bGU9InN0eWxlT2RkIiBzdHJldGNoVHlwZT0iUmVsYXRpdmVUb1RhbGxlc3RPYmpl
-Y3QiIG1vZGU9Ik9wYXF1ZSIgeD0iMjMwIiB5PSIwIiB3aWR0aD0iMTE0IiBoZWlnaHQ9IjMwIi8+
-CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIv
-PgoJCQkJCTx0b3BQZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJ
-CTxsZWZ0UGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8Ym90
-dG9tUGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8cmlnaHRQ
-ZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJPC9ib3g+CgkJCQk8
-dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlk
-ZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMSIgaXNC
-b2xkPSJmYWxzZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJ
-CQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0
-ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWyRGe2RvY1JlY2lwaWVudHN9XV0+PC90ZXh0Rmll
-bGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc1N0cmV0Y2hXaXRo
-T3ZlcmZsb3c9InRydWUiIGlzQmxhbmtXaGVuTnVsbD0idHJ1ZSI+CgkJCQk8cmVwb3J0RWxlbWVu
-dCB1dWlkPSI1NTcxMWQxNC03MmQ4LTQ5YzYtYjg1OC0wZDBhOWY2NTJkZjYiIHN0eWxlPSJzdHls
-ZU9kZCIgc3RyZXRjaFR5cGU9IlJlbGF0aXZlVG9UYWxsZXN0T2JqZWN0IiBtb2RlPSJPcGFxdWUi
-IHg9IjM0NCIgeT0iMCIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIzMCIvPgoJCQkJPGJveD4KCQkJCQk8
-cGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8dG9wUGVuIGxp
-bmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8bGVmdFBlbiBsaW5lV2lk
-dGg9IjAuNSIgbGluZUNvbG9yPSIjNzhDMEQ0Ii8+CgkJCQkJPGJvdHRvbVBlbiBsaW5lV2lkdGg9
-IjAuNSIgbGluZUNvbG9yPSIjNzhDMEQ0Ii8+CgkJCQkJPHJpZ2h0UGVuIGxpbmVXaWR0aD0iMC41
-IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCTwvYm94PgoJCQkJPHRleHRFbGVtZW50IHRleHRB
-bGlnbm1lbnQ9IkNlbnRlciIgdmVydGljYWxBbGlnbm1lbnQ9Ik1pZGRsZSI+CgkJCQkJPGZvbnQg
-Zm9udE5hbWU9IlRpbWVzIE5ldyBSb21hbiIgc2l6ZT0iMTEiIGlzQm9sZD0iZmFsc2UiIHBkZkVu
-Y29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJCQk8cGFyYWdyYXBoIGxl
-ZnRJbmRlbnQ9IjUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dEZpZWxkRXhwcmVzc2lv
-bj48IVtDREFUQVskRntkb2NUaXRsZX1dXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4
-dEZpZWxkPgoJCQk8dGV4dEZpZWxkIGlzU3RyZXRjaFdpdGhPdmVyZmxvdz0idHJ1ZSIgaXNCbGFu
-a1doZW5OdWxsPSJ0cnVlIj4KCQkJCTxyZXBvcnRFbGVtZW50IHV1aWQ9IjVjOGY2OTZiLThkNjAt
-NDUzYS1hOWZlLTNjYjVkZjUyNmMwOCIgc3R5bGU9InN0eWxlT2RkIiBzdHJldGNoVHlwZT0iUmVs
-YXRpdmVUb1RhbGxlc3RPYmplY3QiIG1vZGU9Ik9wYXF1ZSIgeD0iNDY0IiB5PSIwIiB3aWR0aD0i
-MTExIiBoZWlnaHQ9IjMwIi8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxp
-bmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTx0b3BQZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xv
-cj0iIzc4QzBENCIvPgoJCQkJCTxsZWZ0UGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3
-OEMwRDQiLz4KCQkJCQk8Ym90dG9tUGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMw
-RDQiLz4KCQkJCQk8cmlnaHRQZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIv
-PgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0
-aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJv
-bWFuIiBzaXplPSIxMSIgaXNCb2xkPSJmYWxzZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZF
-bWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90
-ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWyRGe2RvY0F1dGhv
-cn1dXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCQk8dGV4dEZpZWxk
-IGlzU3RyZXRjaFdpdGhPdmVyZmxvdz0idHJ1ZSIgaXNCbGFua1doZW5OdWxsPSJ0cnVlIj4KCQkJ
-CTxyZXBvcnRFbGVtZW50IHV1aWQ9IjNhODc4ODIxLTYzY2ItNGIyNy04YTY4LWYzNDVlMGJjOWRh
-MCIgc3R5bGU9InN0eWxlT2RkIiBzdHJldGNoVHlwZT0iUmVsYXRpdmVUb1RhbGxlc3RPYmplY3Qi
-IG1vZGU9Ik9wYXF1ZSIgeD0iNTc1IiB5PSIwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjMwIi8+CgkJ
-CQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJ
-CQkJCTx0b3BQZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTxs
-ZWZ0UGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8Ym90dG9t
-UGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8cmlnaHRQZW4g
-bGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4
-dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxl
-Ij4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMSIgaXNCb2xk
-PSJmYWxzZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJ
-CTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0
-RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWyRGe2RvY1N0YXR1c31dXT48L3RleHRGaWVsZEV4cHJl
-c3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCQk8dGV4dEZpZWxkIGlzU3RyZXRjaFdpdGhPdmVyZmxv
-dz0idHJ1ZSIgaXNCbGFua1doZW5OdWxsPSJ0cnVlIj4KCQkJCTxyZXBvcnRFbGVtZW50IHV1aWQ9
-ImQzMDk2ZjcyLTdmZDktNDM0Ny1iMjZhLWVlNmM0NzI0YTU5MiIgc3R5bGU9InN0eWxlT2RkIiBz
-dHJldGNoVHlwZT0iUmVsYXRpdmVUb1RhbGxlc3RPYmplY3QiIG1vZGU9Ik9wYXF1ZSIgeD0iNjk1
-IiB5PSIwIiB3aWR0aD0iMTA3IiBoZWlnaHQ9IjMwIi8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGlu
-ZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTx0b3BQZW4gbGluZVdpZHRo
-PSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTxsZWZ0UGVuIGxpbmVXaWR0aD0iMC41
-IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8Ym90dG9tUGVuIGxpbmVXaWR0aD0iMC41IiBs
-aW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8cmlnaHRQZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVD
-b2xvcj0iIzc4QzBENCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVu
-dD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFt
-ZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMSIgaXNCb2xkPSJmYWxzZSIgcGRmRW5jb2Rpbmc9
-IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVu
-dD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NE
-QVRBWyRGe2RvY1RoZW1hdGljfV1dPjwvdGV4dEZpZWxkRXhwcmVzc2lvbj4KCQkJPC90ZXh0Rmll
-bGQ+CgkJCTx0ZXh0RmllbGQgaXNTdHJldGNoV2l0aE92ZXJmbG93PSJ0cnVlIiBpc0JsYW5rV2hl
-bk51bGw9InRydWUiPgoJCQkJPHJlcG9ydEVsZW1lbnQgdXVpZD0iYWEwZDc1YTUtOWY0OC00MDA3
-LWI3MDItMTZhYTdhODkyNTAxIiBzdHlsZT0ic3R5bGVPZGQiIHN0cmV0Y2hUeXBlPSJSZWxhdGl2
-ZVRvVGFsbGVzdE9iamVjdCIgeD0iMCIgeT0iMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBpc1By
-aW50V2hlbkRldGFpbE92ZXJmbG93cz0idHJ1ZSIvPgoJCQkJPGJveD4KCQkJCQk8cGVuIGxpbmVX
-aWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8dG9wUGVuIGxpbmVXaWR0aD0i
-MC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8bGVmdFBlbiBsaW5lV2lkdGg9IjAuNSIg
-bGluZUNvbG9yPSIjNzhDMEQ0Ii8+CgkJCQkJPGJvdHRvbVBlbiBsaW5lV2lkdGg9IjAuNSIgbGlu
-ZUNvbG9yPSIjNzhDMEQ0Ii8+CgkJCQkJPHJpZ2h0UGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29s
-b3I9IiM3OEMwRDQiLz4KCQkJCTwvYm94PgoJCQkJPHRleHRFbGVtZW50IHRleHRBbGlnbm1lbnQ9
-IkNlbnRlciIgdmVydGljYWxBbGlnbm1lbnQ9Ik1pZGRsZSI+CgkJCQkJPGZvbnQgZm9udE5hbWU9
-IlRpbWVzIE5ldyBSb21hbiIgc2l6ZT0iMTEiIGlzQm9sZD0iZmFsc2UiIHBkZkVuY29kaW5nPSJD
-cDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJCQk8cGFyYWdyYXBoIGxpbmVTcGFjaW5n
-PSJTaW5nbGUiIGxlZnRJbmRlbnQ9IjUiIHNwYWNpbmdCZWZvcmU9IjIiIHNwYWNpbmdBZnRlcj0i
-MiIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRB
-WyRWe1JFUE9SVF9DT1VOVH1dXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxk
-PgoJCTwvYmFuZD4KCTwvZGV0YWlsPgo8L2phc3BlclJlcG9ydD4K
-]]></property>
-                <assocs/>
-            </item>
             <item name="cm:7dd35c8f-82f6-40da-94b3-85665eba0cc2" type="lecm-rpeditor:reportDataSource">
                 <property name="cm:name"><![CDATA[60617236-7c27-4687-ba3a-f847d97bbafc]]></property>
                 <items>
-                    <item name="cm:Дата регистрации" type="lecm-rpeditor:reportDataColumn">
-                        <property name="cm:name"><![CDATA[Дата регистрации]]></property>
+                    <item name="cm:Выводить документы" type="lecm-rpeditor:reportDataColumn">
+                        <property name="lecm-rpeditor:dataColumnControlParams">
+                            <![CDATA[options=*|Все,true|Зарегистрированные,false|Незарегистрированные]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:text]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{lecm-document-aspects:reg-data-is-registered}]]></property>
+                        <property name="cm:name"><![CDATA[Выводить документы]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[par_registered]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                            <assoc type="lecm-rpeditor:columnParameterTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Значение"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Период" type="lecm-rpeditor:reportDataColumn">
+                        <property name="lecm-rpeditor:dataColumnControlParams">
+                            <![CDATA[fromDateDefault=START_YEAR;fillDates=true;toDateDefault=NOW]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:date]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
                             <![CDATA[{lecm-document:doc-date}]]></property>
-                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[dateReg]]></property>
-                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="cm:name"><![CDATA[Период]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[10]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[par_period]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Date"/>
@@ -356,82 +61,225 @@ PgoJCTwvYmFuZD4KCTwvZGV0YWlsPgo8L2phc3BlclJlcG9ydD4K
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Диапазон"/>
                         </assocs>
                     </item>
-                    <item name="cm:Дата документа" type="lecm-rpeditor:reportDataColumn">
-                        <property name="cm:name"><![CDATA[Дата документа]]></property>
+                    <item name="cm:Виды документа" type="lecm-rpeditor:reportDataColumn">
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass">
+                            <![CDATA[lecm-internal-doc-type:dictionary]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{lecm-document:doc-date}]]></property>
-                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[docDate]]></property>
+                            <![CDATA[{lecm-eds-document:document-type-assoc-ref}]]></property>
+                        <property name="cm:name"><![CDATA[Виды документа]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[20]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[par_internalTypes]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                            <assoc type="lecm-rpeditor:columnParameterTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Список"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Выводить отчет в формате" type="lecm-rpeditor:reportDataColumn">
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:text]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[PDF,XLSX]]></property>
+                        <property name="cm:name"><![CDATA[Выводить отчет в формате]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[30]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[targetFormat]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                            <assoc type="lecm-rpeditor:columnParameterTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Значение"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Дата регистрации" type="lecm-rpeditor:reportDataColumn">
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{lecm-document-aspects:reg-data-date}]]></property>
+                        <property name="cm:name"><![CDATA[Дата регистрации]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_regDate]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Date"/>
                         </assocs>
                     </item>
                     <item name="cm:Регистрационный номер" type="lecm-rpeditor:reportDataColumn">
-                        <property name="cm:name"><![CDATA[Регистрационный номер]]></property>
-                        <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{~REGNUM}]]></property>
-                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[regNum]]></property>
-                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
-                        <assocs>
-                            <assoc type="lecm-rpeditor:columnTypeAssoc"
-                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
-                        </assocs>
-                    </item>
-                    <item name="cm:Получатели" type="lecm-rpeditor:reportDataColumn">
-                        <property name="cm:name"><![CDATA[Получатели]]></property>
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{lecm-eds-document:recipients-assoc-text-content}]]></property>
-                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[docRecipients]]></property>
+                            <![CDATA[{lecm-document-aspects:reg-data-number}]]></property>
+                        <property name="cm:name"><![CDATA[Регистрационный номер]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_regNum]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
                         </assocs>
                     </item>
                     <item name="cm:Заголовок" type="lecm-rpeditor:reportDataColumn">
-                        <property name="cm:name"><![CDATA[Заголовок]]></property>
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecm-document:title}]]></property>
-                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[docTitle]]></property>
+                        <property name="cm:name"><![CDATA[Заголовок]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_title]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
                         </assocs>
                     </item>
-                    <item name="cm:Автор" type="lecm-rpeditor:reportDataColumn">
-                        <property name="cm:name"><![CDATA[Автор]]></property>
+                    <item name="cm:Вид документа" type="lecm-rpeditor:reportDataColumn">
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{lecm-document:creator}]]></property>
-                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[docAuthor]]></property>
+                            <![CDATA[{lecm-eds-document:document-type-assoc-text-content}]]></property>
+                        <property name="cm:name"><![CDATA[Вид документа]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_docType]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Исполнитель" type="lecm-rpeditor:reportDataColumn">
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{lecm-eds-document:executor-assoc-text-content}]]></property>
+                        <property name="cm:name"><![CDATA[Исполнитель]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_executor]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Подписант" type="lecm-rpeditor:reportDataColumn">
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{lecmSignAspects:signerEmployeeAssoc-text-content}]]></property>
+                        <property name="cm:name"><![CDATA[Подписант]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_signer]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Получатели" type="lecm-rpeditor:reportDataColumn">
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{lecm-internal:recipients-assoc-text-content}]]></property>
+                        <property name="cm:name"><![CDATA[Получатели]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_recipients]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Номер дела" type="lecm-rpeditor:reportDataColumn">
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{lecm-eds-document:file-register-assoc-text-content}]]></property>
+                        <property name="cm:name"><![CDATA[Номер дела]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_caseNumber]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Дата регистрации проекта" type="lecm-rpeditor:reportDataColumn">
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{lecm-document-aspects:reg-project-data-date}]]></property>
+                        <property name="cm:name"><![CDATA[Дата регистрации проекта]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_projectRegDate]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Date"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Номер проекта" type="lecm-rpeditor:reportDataColumn">
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{lecm-document-aspects:reg-project-data-number}]]></property>
+                        <property name="cm:name"><![CDATA[Номер проекта]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_projectNumber]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Составитель" type="lecm-rpeditor:reportDataColumn">
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{lecm-document:author-assoc-text-content}]]></property>
+                        <property name="cm:name"><![CDATA[Составитель]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_compiler]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
                         </assocs>
                     </item>
                     <item name="cm:Статус" type="lecm-rpeditor:reportDataColumn">
-                        <property name="cm:name"><![CDATA[Статус]]></property>
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
                             <![CDATA[{lecm-statemachine:status}]]></property>
-                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[docStatus]]></property>
+                        <property name="cm:name"><![CDATA[Статус]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_status]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
                         </assocs>
                     </item>
-                    <item name="cm:Тематика" type="lecm-rpeditor:reportDataColumn">
-                        <property name="cm:name"><![CDATA[Тематика]]></property>
-                        <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{lecm-document:subject-assoc/cm:name}]]></property>
-                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[docThematic]]></property>
+                    <item name="cm:ID" type="lecm-rpeditor:reportDataColumn">
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[ID]]></property>
+                        <property name="cm:name"><![CDATA[ID]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[ID]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
                         </assocs>
                     </item>
                 </items>
+            </item>
+            <item name="cm:internal-reg-journal_tmpl.jrxml" type="cm:content">
+                <property name="cm:name">
+                    <![CDATA[internal-reg-journal_tmpl.jrxml]]></property>
+                <property name="cm:content">
+                    <![CDATA[PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPCEtLSBDcmVhdGVkIHdpdGggSmFzcGVyc29mdCBTdHVkaW8gdmVyc2lvbiA2LjMuMS5maW5hbCB1c2luZyBKYXNwZXJSZXBvcnRzIExpYnJhcnkgdmVyc2lvbiA2LjMuMSAgLS0+CjwhLS0gMjAxNy0wMy0wM1QxNzo0MDo0NiAtLT4KPGphc3BlclJlcG9ydCB4bWxucz0iaHR0cDovL2phc3BlcnJlcG9ydHMuc291cmNlZm9yZ2UubmV0L2phc3BlcnJlcG9ydHMiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTpzY2hlbWFMb2NhdGlvbj0iaHR0cDovL2phc3BlcnJlcG9ydHMuc291cmNlZm9yZ2UubmV0L2phc3BlcnJlcG9ydHMgaHR0cDovL2phc3BlcnJlcG9ydHMuc291cmNlZm9yZ2UubmV0L3hzZC9qYXNwZXJyZXBvcnQueHNkIiBuYW1lPSJvcmQtcmVnLWpvdXJuYWwiIHBhZ2VXaWR0aD0iODQyIiBwYWdlSGVpZ2h0PSI1OTUiIG9yaWVudGF0aW9uPSJMYW5kc2NhcGUiIHdoZW5Ob0RhdGFUeXBlPSJBbGxTZWN0aW9uc05vRGV0YWlsIiBjb2x1bW5XaWR0aD0iNzMwIiBsZWZ0TWFyZ2luPSI1NiIgcmlnaHRNYXJnaW49IjU2IiB0b3BNYXJnaW49IjcwIiBib3R0b21NYXJnaW49IjQyIiB1dWlkPSJmNmE4ODViNi05NTVhLTQyN2QtOTFhNy04NGU2ODgzYWUxODgiPgoJPHByb3BlcnR5IG5hbWU9ImlyZXBvcnQuem9vbSIgdmFsdWU9IjEuMCIvPgoJPHByb3BlcnR5IG5hbWU9ImlyZXBvcnQueCIgdmFsdWU9IjAiLz4KCTxwcm9wZXJ0eSBuYW1lPSJpcmVwb3J0LnkiIHZhbHVlPSIwIi8+Cgk8cHJvcGVydHkgbmFtZT0iZGF0YVNvdXJjZSIgdmFsdWU9InJ1Lml0LmxlY20ucmVwb3J0cy5nZW5lcmF0b3JzLkdlbmVyaWNEU1Byb3ZpZGVyQmFzZSIvPgoJPHByb3BlcnR5IG5hbWU9ImNvbS5qYXNwZXJzb2Z0LnN0dWRpby5kYXRhLmRlZmF1bHRkYXRhYWRhcHRlciIgdmFsdWU9Ik9uZSBFbXB0eSBSZWNvcmQiLz4KCTxwcm9wZXJ0eSBuYW1lPSJjb20uamFzcGVyc29mdC5zdHVkaW8udW5pdC4iIHZhbHVlPSJwaXhlbCIvPgoJPHByb3BlcnR5IG5hbWU9ImNvbS5qYXNwZXJzb2Z0LnN0dWRpby51bml0LnBhZ2VIZWlnaHQiIHZhbHVlPSJwaXhlbCIvPgoJPHByb3BlcnR5IG5hbWU9ImNvbS5qYXNwZXJzb2Z0LnN0dWRpby51bml0LnBhZ2VXaWR0aCIgdmFsdWU9InBpeGVsIi8+Cgk8cHJvcGVydHkgbmFtZT0iY29tLmphc3BlcnNvZnQuc3R1ZGlvLnVuaXQudG9wTWFyZ2luIiB2YWx1ZT0iY20iLz4KCTxwcm9wZXJ0eSBuYW1lPSJjb20uamFzcGVyc29mdC5zdHVkaW8udW5pdC5ib3R0b21NYXJnaW4iIHZhbHVlPSJjbSIvPgoJPHByb3BlcnR5IG5hbWU9ImNvbS5qYXNwZXJzb2Z0LnN0dWRpby51bml0LmxlZnRNYXJnaW4iIHZhbHVlPSJjbSIvPgoJPHByb3BlcnR5IG5hbWU9ImNvbS5qYXNwZXJzb2Z0LnN0dWRpby51bml0LnJpZ2h0TWFyZ2luIiB2YWx1ZT0iY20iLz4KCTxwcm9wZXJ0eSBuYW1lPSJjb20uamFzcGVyc29mdC5zdHVkaW8udW5pdC5jb2x1bW5XaWR0aCIgdmFsdWU9InBpeGVsIi8+Cgk8cHJvcGVydHkgbmFtZT0iY29tLmphc3BlcnNvZnQuc3R1ZGlvLnVuaXQuY29sdW1uU3BhY2luZyIgdmFsdWU9InBpeGVsIi8+Cgk8cGFyYW1ldGVyIG5hbWU9InBhcl9pbnRlcm5hbFR5cGVzX3RleHQiIGNsYXNzPSJqYXZhLmxhbmcuU3RyaW5nIiBpc0ZvclByb21wdGluZz0iZmFsc2UiLz4KCTxwYXJhbWV0ZXIgbmFtZT0icGFyX3BlcmlvZF9sbyIgY2xhc3M9ImphdmEudXRpbC5EYXRlIiBpc0ZvclByb21wdGluZz0iZmFsc2UiLz4KCTxwYXJhbWV0ZXIgbmFtZT0icGFyX3BlcmlvZF9oaSIgY2xhc3M9ImphdmEudXRpbC5EYXRlIiBpc0ZvclByb21wdGluZz0iZmFsc2UiLz4KCTxxdWVyeVN0cmluZz4KCQk8IVtDREFUQVtdXT4KCTwvcXVlcnlTdHJpbmc+Cgk8ZmllbGQgbmFtZT0iSUQiIGNsYXNzPSJqYXZhLmxhbmcuU3RyaW5nIj4KCQk8ZmllbGREZXNjcmlwdGlvbj48IVtDREFUQVtJRF1dPjwvZmllbGREZXNjcmlwdGlvbj4KCTwvZmllbGQ+Cgk8ZmllbGQgbmFtZT0iY29sX3JlZ0RhdGUiIGNsYXNzPSJqYXZhLnV0aWwuRGF0ZSI+CgkJPGZpZWxkRGVzY3JpcHRpb24+PCFbQ0RBVEFb0JTQsNGC0LAg0YDQtdCz0LjRgdGC0YDQsNGG0LjQuF1dPjwvZmllbGREZXNjcmlwdGlvbj4KCTwvZmllbGQ+Cgk8ZmllbGQgbmFtZT0iY29sX3JlZ051bSIgY2xhc3M9ImphdmEubGFuZy5TdHJpbmciPgoJCTxmaWVsZERlc2NyaXB0aW9uPjwhW0NEQVRBW9Cg0LXQs9C40YHRgtGA0LDRhtC40L7QvdC90YvQuSDQvdC+0LzQtdGAXV0+PC9maWVsZERlc2NyaXB0aW9uPgoJPC9maWVsZD4KCTxmaWVsZCBuYW1lPSJjb2xfdGl0bGUiIGNsYXNzPSJqYXZhLmxhbmcuU3RyaW5nIj4KCQk8ZmllbGREZXNjcmlwdGlvbj48IVtDREFUQVvQl9Cw0LPQvtC70L7QstC+0LpdXT48L2ZpZWxkRGVzY3JpcHRpb24+Cgk8L2ZpZWxkPgoJPGZpZWxkIG5hbWU9ImNvbF9kb2NUeXBlIiBjbGFzcz0iamF2YS5sYW5nLlN0cmluZyI+CgkJPGZpZWxkRGVzY3JpcHRpb24+PCFbQ0RBVEFb0JLQuNC0INC00L7QutGD0LzQtdC90YLQsF1dPjwvZmllbGREZXNjcmlwdGlvbj4KCTwvZmllbGQ+Cgk8ZmllbGQgbmFtZT0iY29sX2V4ZWN1dG9yIiBjbGFzcz0iamF2YS5sYW5nLlN0cmluZyI+CgkJPGZpZWxkRGVzY3JpcHRpb24+PCFbQ0RBVEFb0JjRgdC/0L7Qu9C90LjRgtC10LvRjF1dPjwvZmllbGREZXNjcmlwdGlvbj4KCTwvZmllbGQ+Cgk8ZmllbGQgbmFtZT0iY29sX3NpZ25lciIgY2xhc3M9ImphdmEubGFuZy5TdHJpbmciPgoJCTxmaWVsZERlc2NyaXB0aW9uPjwhW0NEQVRBW9Cf0L7QtNC/0LjRgdCw0L3Rgl1dPjwvZmllbGREZXNjcmlwdGlvbj4KCTwvZmllbGQ+Cgk8ZmllbGQgbmFtZT0iY29sX3JlY2lwaWVudHMiIGNsYXNzPSJqYXZhLmxhbmcuU3RyaW5nIj4KCQk8ZmllbGREZXNjcmlwdGlvbj48IVtDREFUQVvQn9C+0LvRg9GH0LDRgtC10LvQuF1dPjwvZmllbGREZXNjcmlwdGlvbj4KCTwvZmllbGQ+Cgk8ZmllbGQgbmFtZT0iY29sX2Nhc2VOdW1iZXIiIGNsYXNzPSJqYXZhLmxhbmcuU3RyaW5nIj4KCQk8ZmllbGREZXNjcmlwdGlvbj48IVtDREFUQVvQndC+0LzQtdGAINC00LXQu9CwXV0+PC9maWVsZERlc2NyaXB0aW9uPgoJPC9maWVsZD4KCTxmaWVsZCBuYW1lPSJjb2xfcHJvamVjdFJlZ0RhdGUiIGNsYXNzPSJqYXZhLnV0aWwuRGF0ZSI+CgkJPGZpZWxkRGVzY3JpcHRpb24+PCFbQ0RBVEFb0JTQsNGC0LAg0YDQtdCz0LjRgdGC0YDQsNGG0LjQuCDQv9GA0L7QtdC60YLQsF1dPjwvZmllbGREZXNjcmlwdGlvbj4KCTwvZmllbGQ+Cgk8ZmllbGQgbmFtZT0iY29sX3Byb2plY3ROdW1iZXIiIGNsYXNzPSJqYXZhLmxhbmcuU3RyaW5nIj4KCQk8ZmllbGREZXNjcmlwdGlvbj48IVtDREFUQVvQndC+0LzQtdGAINC/0YDQvtC10LrRgtCwXV0+PC9maWVsZERlc2NyaXB0aW9uPgoJPC9maWVsZD4KCTxmaWVsZCBuYW1lPSJjb2xfY29tcGlsZXIiIGNsYXNzPSJqYXZhLmxhbmcuU3RyaW5nIj4KCQk8ZmllbGREZXNjcmlwdGlvbj48IVtDREFUQVvQodC+0YHRgtCw0LLQuNGC0LXQu9GMXV0+PC9maWVsZERlc2NyaXB0aW9uPgoJPC9maWVsZD4KCTxmaWVsZCBuYW1lPSJjb2xfc3RhdHVzIiBjbGFzcz0iamF2YS5sYW5nLlN0cmluZyI+CgkJPGZpZWxkRGVzY3JpcHRpb24+PCFbQ0RBVEFb0KHRgtCw0YLRg9GBXV0+PC9maWVsZERlc2NyaXB0aW9uPgoJPC9maWVsZD4KCTx0aXRsZT4KCQk8YmFuZCBoZWlnaHQ9IjQwIiBzcGxpdFR5cGU9IlN0cmV0Y2giPgoJCQk8dGV4dEZpZWxkIGlzU3RyZXRjaFdpdGhPdmVyZmxvdz0idHJ1ZSIgaXNCbGFua1doZW5OdWxsPSJ0cnVlIj4KCQkJCTxyZXBvcnRFbGVtZW50IHN0cmV0Y2hUeXBlPSJSZWxhdGl2ZVRvVGFsbGVzdE9iamVjdCIgeD0iMCIgeT0iMCIgd2lkdGg9IjczMCIgaGVpZ2h0PSI0MCIgdXVpZD0iYzMyZDBhZDktYWQ2NS00Y2E3LTg0MmYtYTgxMTFhZTA5MzUxIi8+CgkJCQk8dGV4dEVsZW1lbnQ+CgkJCQkJPGZvbnQgZm9udE5hbWU9IlRpbWVzIE5ldyBSb21hbiIgc2l6ZT0iMTYiIGlzQm9sZD0idHJ1ZSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWyLQltGD0YDQvdCw0Lsg0YDQtdCz0LjRgdGC0YDQsNGG0LjQuCDQktC90YPRgtGA0LXQvdC90LjRhSDQtNC+0LrRg9C80LXQvdGC0L7QsiIgKyAKKCRQe3Bhcl9pbnRlcm5hbFR5cGVzX3RleHR9ICE9IG51bGwgPyAiINCy0LjQtNCwOiAiICsgJFB7cGFyX2ludGVybmFsVHlwZXNfdGV4dH0ucmVwbGFjZUFsbCgiOyIsICIsICIpIDogIiIpICsgCihjaGFyKSAxMyArIAooJFB7cGFyX3BlcmlvZF9sb30gIT0gbnVsbCA/ICLQt9CwINC/0LXRgNC40L7QtCBjICIgKyBuZXcgU2ltcGxlRGF0ZUZvcm1hdCgiZGQuTU0ueXl5eSIpLmZvcm1hdCgkUHtwYXJfcGVyaW9kX2xvfSkgOiAiIgoJKSArIAooJFB7cGFyX3BlcmlvZF9oaX0gIT0gbnVsbCAmJiAkUHtwYXJfcGVyaW9kX2xvfSAhPSBudWxsID8gIiDQv9C+ICIgK25ldyBTaW1wbGVEYXRlRm9ybWF0KCJkZC5NTS55eXl5IikuZm9ybWF0KCRQe3Bhcl9wZXJpb2RfaGl9KSA6ICRQe3Bhcl9wZXJpb2RfaGl9ICE9IG51bGwgJiYgJFB7cGFyX3BlcmlvZF9sb30gPT0gbnVsbCA/IAoJItC30LAg0L/QtdGA0LjQvtC0INC/0L4gIiArIG5ldyBTaW1wbGVEYXRlRm9ybWF0KCJkZC5NTS55eXl5IikuZm9ybWF0KCRQe3Bhcl9wZXJpb2RfaGl9KSA6ICIiCgkpXV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQk8L2JhbmQ+Cgk8L3RpdGxlPgoJPHBhZ2VIZWFkZXI+CgkJPGJhbmQgaGVpZ2h0PSI2MCIgc3BsaXRUeXBlPSJTdHJldGNoIj4KCQkJPHRleHRGaWVsZCBpc0JsYW5rV2hlbk51bGw9InRydWUiPgoJCQkJPHJlcG9ydEVsZW1lbnQgbW9kZT0iT3BhcXVlIiB4PSIzMCIgeT0iMCIgd2lkdGg9IjY1IiBoZWlnaHQ9IjQwIiBpc1ByaW50V2hlbkRldGFpbE92ZXJmbG93cz0idHJ1ZSIgZm9yZWNvbG9yPSIjMDAwMDAwIiBiYWNrY29sb3I9IiNFM0UzRTMiIHV1aWQ9ImZlYTVhYzEwLTM0OTAtNDE0Yi04ZDg4LTA4ZjBkZmUwYWM1MyIvPgoJCQkJPGJveD4KCQkJCQk8cGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiMwMDAwMDAiLz4KCQkJCTwvYm94PgoJCQkJPHRleHRFbGVtZW50IHRleHRBbGlnbm1lbnQ9IkNlbnRlciIgdmVydGljYWxBbGlnbm1lbnQ9Ik1pZGRsZSI+CgkJCQkJPGZvbnQgZm9udE5hbWU9IlRpbWVzIE5ldyBSb21hbiIgc2l6ZT0iMTAiIGlzQm9sZD0idHJ1ZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWyLQlNCw0YLQsCDRgNC10LPQuNGB0YLRgNCw0YbQuNC4Il1dPjwvdGV4dEZpZWxkRXhwcmVzc2lvbj4KCQkJPC90ZXh0RmllbGQ+CgkJCTx0ZXh0RmllbGQgaXNCbGFua1doZW5OdWxsPSJ0cnVlIj4KCQkJCTxyZXBvcnRFbGVtZW50IG1vZGU9Ik9wYXF1ZSIgeD0iOTUiIHk9IjAiIHdpZHRoPSIzNSIgaGVpZ2h0PSI0MCIgaXNQcmludFdoZW5EZXRhaWxPdmVyZmxvd3M9InRydWUiIGZvcmVjb2xvcj0iIzAwMDAwMCIgYmFja2NvbG9yPSIjRTNFM0UzIiB1dWlkPSI1OTMzZDE5OC1kN2JjLTQ3YzgtOWRmMy1jZTJkNjA5NjdmNzciLz4KCQkJCTxib3g+CgkJCQkJPHBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjMDAwMDAwIi8+CgkJCQk8L2JveD4KCQkJCTx0ZXh0RWxlbWVudCB0ZXh0QWxpZ25tZW50PSJDZW50ZXIiIHZlcnRpY2FsQWxpZ25tZW50PSJNaWRkbGUiPgoJCQkJCTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4iIHNpemU9IjEwIiBpc0JvbGQ9InRydWUiIHBkZkVuY29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJCQk8cGFyYWdyYXBoIGxlZnRJbmRlbnQ9IjUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dEZpZWxkRXhwcmVzc2lvbj48IVtDREFUQVsi0KDQtdCzLiDQvdC+0LzQtdGAIl1dPjwvdGV4dEZpZWxkRXhwcmVzc2lvbj4KCQkJPC90ZXh0RmllbGQ+CgkJCTx0ZXh0RmllbGQgaXNCbGFua1doZW5OdWxsPSJ0cnVlIj4KCQkJCTxyZXBvcnRFbGVtZW50IG1vZGU9Ik9wYXF1ZSIgeD0iMTMwIiB5PSIwIiB3aWR0aD0iNjUiIGhlaWdodD0iNDAiIGlzUHJpbnRXaGVuRGV0YWlsT3ZlcmZsb3dzPSJ0cnVlIiBmb3JlY29sb3I9IiMwMDAwMDAiIGJhY2tjb2xvcj0iI0UzRTNFMyIgdXVpZD0iNTM0NjIxZjAtMTRhZi00OThjLTlkNzUtOWMxZWZiZDE2ZTZlIj4KCQkJCQk8cHJvcGVydHkgbmFtZT0iY29tLmphc3BlcnNvZnQuc3R1ZGlvLnVuaXQud2lkdGgiIHZhbHVlPSJwaXhlbCIvPgoJCQkJPC9yZXBvcnRFbGVtZW50PgoJCQkJPGJveD4KCQkJCQk8cGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiMwMDAwMDAiLz4KCQkJCTwvYm94PgoJCQkJPHRleHRFbGVtZW50IHRleHRBbGlnbm1lbnQ9IkNlbnRlciIgdmVydGljYWxBbGlnbm1lbnQ9Ik1pZGRsZSI+CgkJCQkJPGZvbnQgZm9udE5hbWU9IlRpbWVzIE5ldyBSb21hbiIgc2l6ZT0iMTAiIGlzQm9sZD0idHJ1ZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWyLQl9Cw0LPQvtC70L7QstC+0LoiXV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc0JsYW5rV2hlbk51bGw9InRydWUiPgoJCQkJPHJlcG9ydEVsZW1lbnQgbW9kZT0iT3BhcXVlIiB4PSIxOTUiIHk9IjAiIHdpZHRoPSI1NSIgaGVpZ2h0PSI0MCIgaXNQcmludFdoZW5EZXRhaWxPdmVyZmxvd3M9InRydWUiIGZvcmVjb2xvcj0iIzAwMDAwMCIgYmFja2NvbG9yPSIjRTNFM0UzIiB1dWlkPSJjYTQ0YjU2NC0xYjQ4LTRiNGYtYjVlZC1jMmZiZTI4Y2ZhNzAiPgoJCQkJCTxwcm9wZXJ0eSBuYW1lPSJjb20uamFzcGVyc29mdC5zdHVkaW8udW5pdC53aWR0aCIgdmFsdWU9InBpeGVsIi8+CgkJCQk8L3JlcG9ydEVsZW1lbnQ+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzAwMDAwMCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMCIgaXNCb2xkPSJ0cnVlIiBwZGZFbmNvZGluZz0iQ3AxMjUxIiBpc1BkZkVtYmVkZGVkPSJ0cnVlIi8+CgkJCQkJPHBhcmFncmFwaCBsZWZ0SW5kZW50PSI1Ii8+CgkJCQk8L3RleHRFbGVtZW50PgoJCQkJPHRleHRGaWVsZEV4cHJlc3Npb24+PCFbQ0RBVEFbItCS0LjQtCDQtNC+0LrRg9C80LXQvdGC0LAiXV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc0JsYW5rV2hlbk51bGw9InRydWUiPgoJCQkJPHJlcG9ydEVsZW1lbnQgbW9kZT0iT3BhcXVlIiB4PSIyNTAiIHk9IjAiIHdpZHRoPSI3NSIgaGVpZ2h0PSI0MCIgaXNQcmludFdoZW5EZXRhaWxPdmVyZmxvd3M9InRydWUiIGZvcmVjb2xvcj0iIzAwMDAwMCIgYmFja2NvbG9yPSIjRTNFM0UzIiB1dWlkPSIyODNlOTcwYy01ODQwLTQ0MmYtOGI2Zi02MzM3NDNlZTc0MmYiPgoJCQkJCTxwcm9wZXJ0eSBuYW1lPSJjb20uamFzcGVyc29mdC5zdHVkaW8udW5pdC53aWR0aCIgdmFsdWU9InBpeGVsIi8+CgkJCQk8L3JlcG9ydEVsZW1lbnQ+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzAwMDAwMCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMCIgaXNCb2xkPSJ0cnVlIiBwZGZFbmNvZGluZz0iQ3AxMjUxIiBpc1BkZkVtYmVkZGVkPSJ0cnVlIi8+CgkJCQkJPHBhcmFncmFwaCBsZWZ0SW5kZW50PSI1Ii8+CgkJCQk8L3RleHRFbGVtZW50PgoJCQkJPHRleHRGaWVsZEV4cHJlc3Npb24+PCFbQ0RBVEFbItCY0YHQv9C+0LvQvdC40YLQtdC70YwiXV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc0JsYW5rV2hlbk51bGw9InRydWUiPgoJCQkJPHJlcG9ydEVsZW1lbnQgbW9kZT0iT3BhcXVlIiB4PSI0NjAiIHk9IjAiIHdpZHRoPSI0NSIgaGVpZ2h0PSI0MCIgaXNQcmludFdoZW5EZXRhaWxPdmVyZmxvd3M9InRydWUiIGZvcmVjb2xvcj0iIzAwMDAwMCIgYmFja2NvbG9yPSIjRTNFM0UzIiB1dWlkPSJmY2JmMjJkNy1hYjZkLTQ4YjgtYWRhYS04MzQ0MzBjNWI0ODIiPgoJCQkJCTxwcm9wZXJ0eSBuYW1lPSJjb20uamFzcGVyc29mdC5zdHVkaW8udW5pdC53aWR0aCIgdmFsdWU9InBpeGVsIi8+CgkJCQk8L3JlcG9ydEVsZW1lbnQ+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzAwMDAwMCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMCIgaXNCb2xkPSJ0cnVlIiBwZGZFbmNvZGluZz0iQ3AxMjUxIiBpc1BkZkVtYmVkZGVkPSJ0cnVlIi8+CgkJCQkJPHBhcmFncmFwaCBsZWZ0SW5kZW50PSI1Ii8+CgkJCQk8L3RleHRFbGVtZW50PgoJCQkJPHRleHRGaWVsZEV4cHJlc3Npb24+PCFbQ0RBVEFbItCd0L7QvNC10YAg0LTQtdC70LAiXV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc0JsYW5rV2hlbk51bGw9InRydWUiPgoJCQkJPHJlcG9ydEVsZW1lbnQgbW9kZT0iT3BhcXVlIiB4PSIzMjUiIHk9IjAiIHdpZHRoPSI2NSIgaGVpZ2h0PSI0MCIgaXNQcmludFdoZW5EZXRhaWxPdmVyZmxvd3M9InRydWUiIGZvcmVjb2xvcj0iIzAwMDAwMCIgYmFja2NvbG9yPSIjRTNFM0UzIiB1dWlkPSJlZTFhMDhlYi04Yzk0LTQ4MWQtOWU0Zi01NzMzNzJhNmYwZTUiPgoJCQkJCTxwcm9wZXJ0eSBuYW1lPSJjb20uamFzcGVyc29mdC5zdHVkaW8udW5pdC53aWR0aCIgdmFsdWU9InBpeGVsIi8+CgkJCQk8L3JlcG9ydEVsZW1lbnQ+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzAwMDAwMCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMCIgaXNCb2xkPSJ0cnVlIiBwZGZFbmNvZGluZz0iQ3AxMjUxIiBpc1BkZkVtYmVkZGVkPSJ0cnVlIi8+CgkJCQkJPHBhcmFncmFwaCBsZWZ0SW5kZW50PSI1Ii8+CgkJCQk8L3RleHRFbGVtZW50PgoJCQkJPHRleHRGaWVsZEV4cHJlc3Npb24+PCFbQ0RBVEFbItCf0L7QtNC/0LjRgdCw0L3RgiJdXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCQk8dGV4dEZpZWxkIHBhdHRlcm49IiIgaXNCbGFua1doZW5OdWxsPSJ0cnVlIj4KCQkJCTxyZXBvcnRFbGVtZW50IG1vZGU9Ik9wYXF1ZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjQwIiBpc1ByaW50V2hlbkRldGFpbE92ZXJmbG93cz0idHJ1ZSIgZm9yZWNvbG9yPSIjMDAwMDAwIiBiYWNrY29sb3I9IiNFM0UzRTMiIHV1aWQ9ImIxMTliM2ZhLTJlODctNDE5Yi1hYjU2LTZlNWE2NDgyM2I1MiI+CgkJCQkJPHByb3BlcnR5IG5hbWU9ImNvbS5qYXNwZXJzb2Z0LnN0dWRpby51bml0LmhlaWdodCIgdmFsdWU9InBpeGVsIi8+CgkJCQk8L3JlcG9ydEVsZW1lbnQ+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzAwMDAwMCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iRGVqYVZ1IFNhbnMgTW9ubyIgc2l6ZT0iMTAiIGlzQm9sZD0idHJ1ZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGluZVNwYWNpbmc9IlNpbmdsZSIgbGVmdEluZGVudD0iNSIgc3BhY2luZ0JlZm9yZT0iMiIgc3BhY2luZ0FmdGVyPSIyIi8+CgkJCQk8L3RleHRFbGVtZW50PgoJCQkJPHRleHRGaWVsZEV4cHJlc3Npb24+PCFbQ0RBVEFbIuKEliJdXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCQk8dGV4dEZpZWxkIGlzQmxhbmtXaGVuTnVsbD0idHJ1ZSI+CgkJCQk8cmVwb3J0RWxlbWVudCBtb2RlPSJPcGFxdWUiIHg9IjUwNSIgeT0iMCIgd2lkdGg9IjY1IiBoZWlnaHQ9IjQwIiBpc1ByaW50V2hlbkRldGFpbE92ZXJmbG93cz0idHJ1ZSIgZm9yZWNvbG9yPSIjMDAwMDAwIiBiYWNrY29sb3I9IiNFM0UzRTMiIHV1aWQ9IjQ2NWE3ODJmLWRjODgtNDU3Mi04MmU1LWRmNDc2ZWRmZGUwMCI+CgkJCQkJPHByb3BlcnR5IG5hbWU9ImNvbS5qYXNwZXJzb2Z0LnN0dWRpby51bml0LndpZHRoIiB2YWx1ZT0icGl4ZWwiLz4KCQkJCTwvcmVwb3J0RWxlbWVudD4KCQkJCTxib3g+CgkJCQkJPHBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjMDAwMDAwIi8+CgkJCQk8L2JveD4KCQkJCTx0ZXh0RWxlbWVudCB0ZXh0QWxpZ25tZW50PSJDZW50ZXIiIHZlcnRpY2FsQWxpZ25tZW50PSJNaWRkbGUiPgoJCQkJCTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4iIHNpemU9IjEwIiBpc0JvbGQ9InRydWUiIHBkZkVuY29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJCQk8cGFyYWdyYXBoIGxlZnRJbmRlbnQ9IjUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dEZpZWxkRXhwcmVzc2lvbj48IVtDREFUQVsi0JTQsNGC0LAg0YDQtdCz0LjRgdGC0YDQsNGG0LjQuCDQv9GA0L7QtdC60YLQsCJdXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCQk8dGV4dEZpZWxkIGlzQmxhbmtXaGVuTnVsbD0idHJ1ZSI+CgkJCQk8cmVwb3J0RWxlbWVudCBtb2RlPSJPcGFxdWUiIHg9IjU3MCIgeT0iMCIgd2lkdGg9IjQ1IiBoZWlnaHQ9IjQwIiBpc1ByaW50V2hlbkRldGFpbE92ZXJmbG93cz0idHJ1ZSIgZm9yZWNvbG9yPSIjMDAwMDAwIiBiYWNrY29sb3I9IiNFM0UzRTMiIHV1aWQ9ImM2NTkxYmEzLWU1MmEtNDBlOC04M2IzLTVmOGNiNjU1YmE1ZCI+CgkJCQkJPHByb3BlcnR5IG5hbWU9ImNvbS5qYXNwZXJzb2Z0LnN0dWRpby51bml0LndpZHRoIiB2YWx1ZT0icGl4ZWwiLz4KCQkJCTwvcmVwb3J0RWxlbWVudD4KCQkJCTxib3g+CgkJCQkJPHBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjMDAwMDAwIi8+CgkJCQk8L2JveD4KCQkJCTx0ZXh0RWxlbWVudCB0ZXh0QWxpZ25tZW50PSJDZW50ZXIiIHZlcnRpY2FsQWxpZ25tZW50PSJNaWRkbGUiPgoJCQkJCTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4iIHNpemU9IjEwIiBpc0JvbGQ9InRydWUiIHBkZkVuY29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJCQk8cGFyYWdyYXBoIGxlZnRJbmRlbnQ9IjUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dEZpZWxkRXhwcmVzc2lvbj48IVtDREFUQVsi0J3QvtC80LXRgCDQv9GA0L7QtdC60YLQsCJdXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCQk8dGV4dEZpZWxkIGlzQmxhbmtXaGVuTnVsbD0idHJ1ZSI+CgkJCQk8cmVwb3J0RWxlbWVudCBtb2RlPSJPcGFxdWUiIHg9IjYxNSIgeT0iMCIgd2lkdGg9IjcwIiBoZWlnaHQ9IjQwIiBpc1ByaW50V2hlbkRldGFpbE92ZXJmbG93cz0idHJ1ZSIgZm9yZWNvbG9yPSIjMDAwMDAwIiBiYWNrY29sb3I9IiNFM0UzRTMiIHV1aWQ9IjAxMDM1ZTdjLTQyYWYtNGU5OC1iNTcxLTRmM2ZjNDhjZmZkNSI+CgkJCQkJPHByb3BlcnR5IG5hbWU9ImNvbS5qYXNwZXJzb2Z0LnN0dWRpby51bml0LndpZHRoIiB2YWx1ZT0icGl4ZWwiLz4KCQkJCTwvcmVwb3J0RWxlbWVudD4KCQkJCTxib3g+CgkJCQkJPHBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjMDAwMDAwIi8+CgkJCQk8L2JveD4KCQkJCTx0ZXh0RWxlbWVudCB0ZXh0QWxpZ25tZW50PSJDZW50ZXIiIHZlcnRpY2FsQWxpZ25tZW50PSJNaWRkbGUiPgoJCQkJCTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4iIHNpemU9IjEwIiBpc0JvbGQ9InRydWUiIHBkZkVuY29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJCQk8cGFyYWdyYXBoIGxlZnRJbmRlbnQ9IjUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dEZpZWxkRXhwcmVzc2lvbj48IVtDREFUQVsi0KHQvtGB0YLQsNCy0LjRgtC10LvRjCJdXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCQk8dGV4dEZpZWxkIGlzQmxhbmtXaGVuTnVsbD0idHJ1ZSI+CgkJCQk8cmVwb3J0RWxlbWVudCBtb2RlPSJPcGFxdWUiIHg9IjY4NSIgeT0iMCIgd2lkdGg9IjQ1IiBoZWlnaHQ9IjQwIiBpc1ByaW50V2hlbkRldGFpbE92ZXJmbG93cz0idHJ1ZSIgZm9yZWNvbG9yPSIjMDAwMDAwIiBiYWNrY29sb3I9IiNFM0UzRTMiIHV1aWQ9ImU3NjhlYzRjLWFjYTctNDI1ZS04Y2VkLWJjOGZjN2NlYzdhZiIvPgoJCQkJPGJveD4KCQkJCQk8cGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiMwMDAwMDAiLz4KCQkJCTwvYm94PgoJCQkJPHRleHRFbGVtZW50IHRleHRBbGlnbm1lbnQ9IkNlbnRlciIgdmVydGljYWxBbGlnbm1lbnQ9Ik1pZGRsZSI+CgkJCQkJPGZvbnQgZm9udE5hbWU9IlRpbWVzIE5ldyBSb21hbiIgc2l6ZT0iMTAiIGlzQm9sZD0idHJ1ZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWyLQodGC0LDRgtGD0YEiXV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc0JsYW5rV2hlbk51bGw9ImZhbHNlIj4KCQkJCTxyZXBvcnRFbGVtZW50IHN0cmV0Y2hUeXBlPSJSZWxhdGl2ZVRvVGFsbGVzdE9iamVjdCIgeD0iMCIgeT0iNDAiIHdpZHRoPSIzMCIgaGVpZ2h0PSIyMCIgaXNQcmludFdoZW5EZXRhaWxPdmVyZmxvd3M9InRydWUiIGJhY2tjb2xvcj0iI0ZGRkZGRiIgdXVpZD0iMDdlNTI1MzEtNDI1Ny00NzkwLThmMzgtMzMwNjdjZTg3ZDI0Ij4KCQkJCQk8cHJvcGVydHkgbmFtZT0iY29tLmphc3BlcnNvZnQuc3R1ZGlvLnVuaXQuaGVpZ2h0IiB2YWx1ZT0icGl4ZWwiLz4KCQkJCTwvcmVwb3J0RWxlbWVudD4KCQkJCTxib3g+CgkJCQkJPHBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjMDAwMDAwIi8+CgkJCQk8L2JveD4KCQkJCTx0ZXh0RWxlbWVudCB0ZXh0QWxpZ25tZW50PSJDZW50ZXIiIHZlcnRpY2FsQWxpZ25tZW50PSJNaWRkbGUiPgoJCQkJCTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4iIHNpemU9IjExIiBpc0JvbGQ9ImZhbHNlIiBwZGZFbmNvZGluZz0iQ3AxMjUxIiBpc1BkZkVtYmVkZGVkPSJ0cnVlIi8+CgkJCQkJPHBhcmFncmFwaCBsaW5lU3BhY2luZz0iU2luZ2xlIiBsZWZ0SW5kZW50PSI1IiBzcGFjaW5nQmVmb3JlPSIyIiBzcGFjaW5nQWZ0ZXI9IjIiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dEZpZWxkRXhwcmVzc2lvbj48IVtDREFUQVsxXV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBwYXR0ZXJuPSIiIGlzQmxhbmtXaGVuTnVsbD0iZmFsc2UiPgoJCQkJPHJlcG9ydEVsZW1lbnQgc3RyZXRjaFR5cGU9IlJlbGF0aXZlVG9UYWxsZXN0T2JqZWN0IiBtb2RlPSJPcGFxdWUiIHg9IjMwIiB5PSI0MCIgd2lkdGg9IjY1IiBoZWlnaHQ9IjIwIiBiYWNrY29sb3I9IiNGRkZGRkYiIHV1aWQ9IjdmNDVhZTc3LWRlYTItNDg5NC04NmFhLWI0NjExZWRlNGUyOSI+CgkJCQkJPHByb3BlcnR5IG5hbWU9ImNvbS5qYXNwZXJzb2Z0LnN0dWRpby51bml0LndpZHRoIiB2YWx1ZT0icGl4ZWwiLz4KCQkJCTwvcmVwb3J0RWxlbWVudD4KCQkJCTxib3g+CgkJCQkJPHBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjMDAwMDAwIi8+CgkJCQk8L2JveD4KCQkJCTx0ZXh0RWxlbWVudCB0ZXh0QWxpZ25tZW50PSJDZW50ZXIiIHZlcnRpY2FsQWxpZ25tZW50PSJNaWRkbGUiPgoJCQkJCTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4iIHNpemU9IjExIiBpc0JvbGQ9ImZhbHNlIiBwZGZFbmNvZGluZz0iQ3AxMjUxIiBpc1BkZkVtYmVkZGVkPSJ0cnVlIi8+CgkJCQkJPHBhcmFncmFwaCBsZWZ0SW5kZW50PSI1Ii8+CgkJCQk8L3RleHRFbGVtZW50PgoJCQkJPHRleHRGaWVsZEV4cHJlc3Npb24+PCFbQ0RBVEFbMl1dPjwvdGV4dEZpZWxkRXhwcmVzc2lvbj4KCQkJPC90ZXh0RmllbGQ+CgkJCTx0ZXh0RmllbGQgaXNCbGFua1doZW5OdWxsPSJmYWxzZSI+CgkJCQk8cmVwb3J0RWxlbWVudCBzdHJldGNoVHlwZT0iUmVsYXRpdmVUb1RhbGxlc3RPYmplY3QiIG1vZGU9Ik9wYXF1ZSIgeD0iOTUiIHk9IjQwIiB3aWR0aD0iMzUiIGhlaWdodD0iMjAiIGJhY2tjb2xvcj0iI0ZGRkZGRiIgdXVpZD0iOWM3YWJlZmMtM2VkYy00ZWVlLWIzOGYtZmQ4NjNjNTVjNjEyIi8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzAwMDAwMCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMSIgaXNCb2xkPSJmYWxzZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWzNdXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCQk8aHlwZXJsaW5rUmVmZXJlbmNlRXhwcmVzc2lvbj48IVtDREFUQVtydS5pdC5sZWNtLnJlcG9ydHMudXRpbHMuR2V0RG9jdW1lbnRVcmwuZ2V0RG9jdW1lbnRMaW5rKCRGe0lEfSldXT48L2h5cGVybGlua1JlZmVyZW5jZUV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCQk8dGV4dEZpZWxkIGlzQmxhbmtXaGVuTnVsbD0iZmFsc2UiPgoJCQkJPHJlcG9ydEVsZW1lbnQgc3RyZXRjaFR5cGU9IlJlbGF0aXZlVG9UYWxsZXN0T2JqZWN0IiBtb2RlPSJPcGFxdWUiIHg9IjEzMCIgeT0iNDAiIHdpZHRoPSI2NSIgaGVpZ2h0PSIyMCIgYmFja2NvbG9yPSIjRkZGRkZGIiB1dWlkPSIzZWJiYzk0Zi1lMWQ4LTRhMGMtYWMxOS1kMjVhM2NlOTE1YWEiLz4KCQkJCTxib3g+CgkJCQkJPHBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjMDAwMDAwIi8+CgkJCQk8L2JveD4KCQkJCTx0ZXh0RWxlbWVudCB0ZXh0QWxpZ25tZW50PSJDZW50ZXIiIHZlcnRpY2FsQWxpZ25tZW50PSJNaWRkbGUiPgoJCQkJCTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4iIHNpemU9IjExIiBpc0JvbGQ9ImZhbHNlIiBwZGZFbmNvZGluZz0iQ3AxMjUxIiBpc1BkZkVtYmVkZGVkPSJ0cnVlIi8+CgkJCQkJPHBhcmFncmFwaCBsZWZ0SW5kZW50PSI1Ii8+CgkJCQk8L3RleHRFbGVtZW50PgoJCQkJPHRleHRGaWVsZEV4cHJlc3Npb24+PCFbQ0RBVEFbNF1dPjwvdGV4dEZpZWxkRXhwcmVzc2lvbj4KCQkJPC90ZXh0RmllbGQ+CgkJCTx0ZXh0RmllbGQgaXNCbGFua1doZW5OdWxsPSJmYWxzZSI+CgkJCQk8cmVwb3J0RWxlbWVudCBzdHJldGNoVHlwZT0iUmVsYXRpdmVUb1RhbGxlc3RPYmplY3QiIG1vZGU9Ik9wYXF1ZSIgeD0iMTk1IiB5PSI0MCIgd2lkdGg9IjU1IiBoZWlnaHQ9IjIwIiBiYWNrY29sb3I9IiNGRkZGRkYiIHV1aWQ9IjY2M2RlNWQzLWNiMmUtNDViOS04M2NlLWNlODVmN2NmMjFhYyIvPgoJCQkJPGJveD4KCQkJCQk8cGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiMwMDAwMDAiLz4KCQkJCTwvYm94PgoJCQkJPHRleHRFbGVtZW50IHRleHRBbGlnbm1lbnQ9IkNlbnRlciIgdmVydGljYWxBbGlnbm1lbnQ9Ik1pZGRsZSI+CgkJCQkJPGZvbnQgZm9udE5hbWU9IlRpbWVzIE5ldyBSb21hbiIgc2l6ZT0iMTEiIGlzQm9sZD0iZmFsc2UiIHBkZkVuY29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJCQk8cGFyYWdyYXBoIGxlZnRJbmRlbnQ9IjUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dEZpZWxkRXhwcmVzc2lvbj48IVtDREFUQVs1XV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc0JsYW5rV2hlbk51bGw9ImZhbHNlIj4KCQkJCTxyZXBvcnRFbGVtZW50IHN0cmV0Y2hUeXBlPSJSZWxhdGl2ZVRvVGFsbGVzdE9iamVjdCIgbW9kZT0iT3BhcXVlIiB4PSIyNTAiIHk9IjQwIiB3aWR0aD0iNzUiIGhlaWdodD0iMjAiIGJhY2tjb2xvcj0iI0ZGRkZGRiIgdXVpZD0iODljZGQ5NmUtMmU2Mi00OWZiLWFmYWUtNDJkNDdhZTM2OTBlIi8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzAwMDAwMCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMSIgaXNCb2xkPSJmYWxzZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWzZdXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCQk8dGV4dEZpZWxkIGlzQmxhbmtXaGVuTnVsbD0iZmFsc2UiPgoJCQkJPHJlcG9ydEVsZW1lbnQgc3RyZXRjaFR5cGU9IlJlbGF0aXZlVG9UYWxsZXN0T2JqZWN0IiBtb2RlPSJPcGFxdWUiIHg9IjMyNSIgeT0iNDAiIHdpZHRoPSI2NSIgaGVpZ2h0PSIyMCIgYmFja2NvbG9yPSIjRkZGRkZGIiB1dWlkPSJlNjUxZWNjOC00ZTdhLTRhNzctYjZhYi1lZDE1MGQ2NTRmNGQiLz4KCQkJCTxib3g+CgkJCQkJPHBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjMDAwMDAwIi8+CgkJCQk8L2JveD4KCQkJCTx0ZXh0RWxlbWVudCB0ZXh0QWxpZ25tZW50PSJDZW50ZXIiIHZlcnRpY2FsQWxpZ25tZW50PSJNaWRkbGUiPgoJCQkJCTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4iIHNpemU9IjExIiBpc0JvbGQ9ImZhbHNlIiBwZGZFbmNvZGluZz0iQ3AxMjUxIiBpc1BkZkVtYmVkZGVkPSJ0cnVlIi8+CgkJCQkJPHBhcmFncmFwaCBsZWZ0SW5kZW50PSI1Ii8+CgkJCQk8L3RleHRFbGVtZW50PgoJCQkJPHRleHRGaWVsZEV4cHJlc3Npb24+PCFbQ0RBVEFbN11dPjwvdGV4dEZpZWxkRXhwcmVzc2lvbj4KCQkJPC90ZXh0RmllbGQ+CgkJCTx0ZXh0RmllbGQgaXNCbGFua1doZW5OdWxsPSJmYWxzZSI+CgkJCQk8cmVwb3J0RWxlbWVudCBzdHJldGNoVHlwZT0iUmVsYXRpdmVUb1RhbGxlc3RPYmplY3QiIG1vZGU9Ik9wYXF1ZSIgeD0iNDYwIiB5PSI0MCIgd2lkdGg9IjQ1IiBoZWlnaHQ9IjIwIiBiYWNrY29sb3I9IiNGRkZGRkYiIHV1aWQ9Ijc0YTI1Y2MwLTJjN2QtNDI0Yi1iZDg1LTkxZmVlMGNkYmU2YiIvPgoJCQkJPGJveD4KCQkJCQk8cGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiMwMDAwMDAiLz4KCQkJCTwvYm94PgoJCQkJPHRleHRFbGVtZW50IHRleHRBbGlnbm1lbnQ9IkNlbnRlciIgdmVydGljYWxBbGlnbm1lbnQ9Ik1pZGRsZSI+CgkJCQkJPGZvbnQgZm9udE5hbWU9IlRpbWVzIE5ldyBSb21hbiIgc2l6ZT0iMTEiIGlzQm9sZD0iZmFsc2UiIHBkZkVuY29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJCQk8cGFyYWdyYXBoIGxlZnRJbmRlbnQ9IjUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dEZpZWxkRXhwcmVzc2lvbj48IVtDREFUQVs5XV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc0JsYW5rV2hlbk51bGw9ImZhbHNlIj4KCQkJCTxyZXBvcnRFbGVtZW50IHN0cmV0Y2hUeXBlPSJSZWxhdGl2ZVRvVGFsbGVzdE9iamVjdCIgbW9kZT0iT3BhcXVlIiB4PSI1MDUiIHk9IjQwIiB3aWR0aD0iNjUiIGhlaWdodD0iMjAiIGJhY2tjb2xvcj0iI0ZGRkZGRiIgdXVpZD0iNmM1NjY2M2YtNTJhMy00NGRjLWI4OTgtNDQwYTA3YTEzN2JmIi8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzAwMDAwMCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMSIgaXNCb2xkPSJmYWxzZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWzEwXV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc0JsYW5rV2hlbk51bGw9ImZhbHNlIj4KCQkJCTxyZXBvcnRFbGVtZW50IHN0cmV0Y2hUeXBlPSJSZWxhdGl2ZVRvVGFsbGVzdE9iamVjdCIgbW9kZT0iT3BhcXVlIiB4PSI1NzAiIHk9IjQwIiB3aWR0aD0iNDUiIGhlaWdodD0iMjAiIGJhY2tjb2xvcj0iI0ZGRkZGRiIgdXVpZD0iODg0YTU1OGItZjc0ZS00N2I3LWEzOWQtYWQ4M2I1Njg4NDRjIi8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzAwMDAwMCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMSIgaXNCb2xkPSJmYWxzZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWzExXV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc0JsYW5rV2hlbk51bGw9ImZhbHNlIj4KCQkJCTxyZXBvcnRFbGVtZW50IHN0cmV0Y2hUeXBlPSJSZWxhdGl2ZVRvVGFsbGVzdE9iamVjdCIgbW9kZT0iT3BhcXVlIiB4PSI2MTUiIHk9IjQwIiB3aWR0aD0iNzAiIGhlaWdodD0iMjAiIGJhY2tjb2xvcj0iI0ZGRkZGRiIgdXVpZD0iZThkNjFlZWUtZGUxNS00OWNiLWI3ZTQtNTI2NTQ1ZmQxZjBlIi8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzAwMDAwMCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMSIgaXNCb2xkPSJmYWxzZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWzEyXV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc0JsYW5rV2hlbk51bGw9ImZhbHNlIj4KCQkJCTxyZXBvcnRFbGVtZW50IHN0cmV0Y2hUeXBlPSJSZWxhdGl2ZVRvVGFsbGVzdE9iamVjdCIgbW9kZT0iT3BhcXVlIiB4PSI2ODUiIHk9IjQwIiB3aWR0aD0iNDUiIGhlaWdodD0iMjAiIGJhY2tjb2xvcj0iI0ZGRkZGRiIgdXVpZD0iZWE5OGE2OGMtM2U1Mi00MWYxLTk5NjMtZTkzMDM1MWQ5OGM1Ii8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzAwMDAwMCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMSIgaXNCb2xkPSJmYWxzZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWzEzXV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc0JsYW5rV2hlbk51bGw9InRydWUiPgoJCQkJPHJlcG9ydEVsZW1lbnQgbW9kZT0iT3BhcXVlIiB4PSIzOTAiIHk9IjAiIHdpZHRoPSI3MCIgaGVpZ2h0PSI0MCIgaXNQcmludFdoZW5EZXRhaWxPdmVyZmxvd3M9InRydWUiIGZvcmVjb2xvcj0iIzAwMDAwMCIgYmFja2NvbG9yPSIjRTNFM0UzIiB1dWlkPSIxZDhhZmE5Ni0zN2YzLTQ0ODItYmM2Ni0wYjgwNjk2ZDVmZWMiLz4KCQkJCTxib3g+CgkJCQkJPHBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjMDAwMDAwIi8+CgkJCQk8L2JveD4KCQkJCTx0ZXh0RWxlbWVudCB0ZXh0QWxpZ25tZW50PSJDZW50ZXIiIHZlcnRpY2FsQWxpZ25tZW50PSJNaWRkbGUiPgoJCQkJCTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4iIHNpemU9IjEwIiBpc0JvbGQ9InRydWUiIHBkZkVuY29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJCQk8cGFyYWdyYXBoIGxlZnRJbmRlbnQ9IjUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dEZpZWxkRXhwcmVzc2lvbj48IVtDREFUQVsi0J/QvtC70YPRh9Cw0YLQtdC70LgiXV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc0JsYW5rV2hlbk51bGw9ImZhbHNlIj4KCQkJCTxyZXBvcnRFbGVtZW50IHN0cmV0Y2hUeXBlPSJSZWxhdGl2ZVRvVGFsbGVzdE9iamVjdCIgbW9kZT0iT3BhcXVlIiB4PSIzOTAiIHk9IjQwIiB3aWR0aD0iNzAiIGhlaWdodD0iMjAiIGJhY2tjb2xvcj0iI0ZGRkZGRiIgdXVpZD0iZGQ5MjY1MWItOGYzNS00MWM2LWE2ZGEtZmE5MmQ3MWRhMWI5Ii8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzAwMDAwMCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMSIgaXNCb2xkPSJmYWxzZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWzhdXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCTwvYmFuZD4KCTwvcGFnZUhlYWRlcj4KCTxkZXRhaWw+CgkJPGJhbmQgaGVpZ2h0PSIzMCIgc3BsaXRUeXBlPSJTdHJldGNoIj4KCQkJPHRleHRGaWVsZCBpc1N0cmV0Y2hXaXRoT3ZlcmZsb3c9InRydWUiIHBhdHRlcm49ImRkLk1NLnl5eXkiIGlzQmxhbmtXaGVuTnVsbD0idHJ1ZSI+CgkJCQk8cmVwb3J0RWxlbWVudCBzdHJldGNoVHlwZT0iUmVsYXRpdmVUb1RhbGxlc3RPYmplY3QiIG1vZGU9Ik9wYXF1ZSIgeD0iMzAiIHk9IjAiIHdpZHRoPSI2NSIgaGVpZ2h0PSIzMCIgdXVpZD0iNTE5YzczZjUtNjVmYy00ODY4LTljY2UtY2JjYTliYjc1Yjg3Ij4KCQkJCQk8cHJvcGVydHkgbmFtZT0iY29tLmphc3BlcnNvZnQuc3R1ZGlvLnVuaXQud2lkdGgiIHZhbHVlPSJwaXhlbCIvPgoJCQkJPC9yZXBvcnRFbGVtZW50PgoJCQkJPGJveD4KCQkJCQk8cGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiMwMDAwMDAiLz4KCQkJCTwvYm94PgoJCQkJPHRleHRFbGVtZW50IHRleHRBbGlnbm1lbnQ9IkNlbnRlciIgdmVydGljYWxBbGlnbm1lbnQ9Ik1pZGRsZSI+CgkJCQkJPGZvbnQgZm9udE5hbWU9IlRpbWVzIE5ldyBSb21hbiIgc2l6ZT0iMTEiIGlzQm9sZD0iZmFsc2UiIHBkZkVuY29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJCQk8cGFyYWdyYXBoIGxlZnRJbmRlbnQ9IjUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dEZpZWxkRXhwcmVzc2lvbj48IVtDREFUQVskRntjb2xfcmVnRGF0ZX1dXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCQk8dGV4dEZpZWxkIGlzU3RyZXRjaFdpdGhPdmVyZmxvdz0idHJ1ZSIgaXNCbGFua1doZW5OdWxsPSJ0cnVlIiBoeXBlcmxpbmtUeXBlPSJSZWZlcmVuY2UiPgoJCQkJPHJlcG9ydEVsZW1lbnQgc3RyZXRjaFR5cGU9IlJlbGF0aXZlVG9UYWxsZXN0T2JqZWN0IiBtb2RlPSJPcGFxdWUiIHg9Ijk1IiB5PSIwIiB3aWR0aD0iMzUiIGhlaWdodD0iMzAiIHV1aWQ9IjFlMDdhMTE3LTMyMTYtNDMzYy04MzZlLWViMDYyODkwMDRkYiIvPgoJCQkJPGJveD4KCQkJCQk8cGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiMwMDAwMDAiLz4KCQkJCTwvYm94PgoJCQkJPHRleHRFbGVtZW50IHRleHRBbGlnbm1lbnQ9IkNlbnRlciIgdmVydGljYWxBbGlnbm1lbnQ9Ik1pZGRsZSI+CgkJCQkJPGZvbnQgZm9udE5hbWU9IlRpbWVzIE5ldyBSb21hbiIgc2l6ZT0iMTEiIGlzQm9sZD0iZmFsc2UiIHBkZkVuY29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJCQk8cGFyYWdyYXBoIGxlZnRJbmRlbnQ9IjUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dEZpZWxkRXhwcmVzc2lvbj48IVtDREFUQVskRntjb2xfcmVnTnVtfV1dPjwvdGV4dEZpZWxkRXhwcmVzc2lvbj4KCQkJCTxoeXBlcmxpbmtSZWZlcmVuY2VFeHByZXNzaW9uPjwhW0NEQVRBW3J1Lml0LmxlY20ucmVwb3J0cy51dGlscy5HZXREb2N1bWVudFVybC5nZXREb2N1bWVudExpbmsoJEZ7SUR9KV1dPjwvaHlwZXJsaW5rUmVmZXJlbmNlRXhwcmVzc2lvbj4KCQkJPC90ZXh0RmllbGQ+CgkJCTx0ZXh0RmllbGQgaXNTdHJldGNoV2l0aE92ZXJmbG93PSJ0cnVlIiBpc0JsYW5rV2hlbk51bGw9InRydWUiPgoJCQkJPHJlcG9ydEVsZW1lbnQgc3RyZXRjaFR5cGU9IlJlbGF0aXZlVG9UYWxsZXN0T2JqZWN0IiBtb2RlPSJPcGFxdWUiIHg9IjEzMCIgeT0iMCIgd2lkdGg9IjY1IiBoZWlnaHQ9IjMwIiB1dWlkPSIxZmVkMDdiNy1kMDkzLTRiOGUtYTNhOS05Nzg5M2I1M2IzMmUiLz4KCQkJCTxib3g+CgkJCQkJPHBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjMDAwMDAwIi8+CgkJCQk8L2JveD4KCQkJCTx0ZXh0RWxlbWVudCB0ZXh0QWxpZ25tZW50PSJDZW50ZXIiIHZlcnRpY2FsQWxpZ25tZW50PSJNaWRkbGUiPgoJCQkJCTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4iIHNpemU9IjExIiBpc0JvbGQ9ImZhbHNlIiBwZGZFbmNvZGluZz0iQ3AxMjUxIiBpc1BkZkVtYmVkZGVkPSJ0cnVlIi8+CgkJCQkJPHBhcmFncmFwaCBsZWZ0SW5kZW50PSI1Ii8+CgkJCQk8L3RleHRFbGVtZW50PgoJCQkJPHRleHRGaWVsZEV4cHJlc3Npb24+PCFbQ0RBVEFbJEZ7Y29sX3RpdGxlfV1dPjwvdGV4dEZpZWxkRXhwcmVzc2lvbj4KCQkJPC90ZXh0RmllbGQ+CgkJCTx0ZXh0RmllbGQgaXNTdHJldGNoV2l0aE92ZXJmbG93PSJ0cnVlIiBpc0JsYW5rV2hlbk51bGw9InRydWUiPgoJCQkJPHJlcG9ydEVsZW1lbnQgc3RyZXRjaFR5cGU9IlJlbGF0aXZlVG9UYWxsZXN0T2JqZWN0IiBtb2RlPSJPcGFxdWUiIHg9IjE5NSIgeT0iMCIgd2lkdGg9IjU1IiBoZWlnaHQ9IjMwIiB1dWlkPSIxNTZiYmRmOS0yOTg2LTRjNjgtODNiZi0yNTc0ODQyNDdhYjYiLz4KCQkJCTxib3g+CgkJCQkJPHBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjMDAwMDAwIi8+CgkJCQk8L2JveD4KCQkJCTx0ZXh0RWxlbWVudCB0ZXh0QWxpZ25tZW50PSJDZW50ZXIiIHZlcnRpY2FsQWxpZ25tZW50PSJNaWRkbGUiPgoJCQkJCTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4iIHNpemU9IjExIiBpc0JvbGQ9ImZhbHNlIiBwZGZFbmNvZGluZz0iQ3AxMjUxIiBpc1BkZkVtYmVkZGVkPSJ0cnVlIi8+CgkJCQkJPHBhcmFncmFwaCBsZWZ0SW5kZW50PSI1Ii8+CgkJCQk8L3RleHRFbGVtZW50PgoJCQkJPHRleHRGaWVsZEV4cHJlc3Npb24+PCFbQ0RBVEFbJEZ7Y29sX2RvY1R5cGV9XV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc1N0cmV0Y2hXaXRoT3ZlcmZsb3c9InRydWUiIGlzQmxhbmtXaGVuTnVsbD0idHJ1ZSI+CgkJCQk8cmVwb3J0RWxlbWVudCBzdHJldGNoVHlwZT0iUmVsYXRpdmVUb1RhbGxlc3RPYmplY3QiIG1vZGU9Ik9wYXF1ZSIgeD0iMjUwIiB5PSIwIiB3aWR0aD0iNzUiIGhlaWdodD0iMzAiIHV1aWQ9ImJmOTI2OWY2LTNiYjEtNGRjYy05NzkyLTE1ZDU3NDAzYTE3NCIvPgoJCQkJPGJveD4KCQkJCQk8cGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiMwMDAwMDAiLz4KCQkJCTwvYm94PgoJCQkJPHRleHRFbGVtZW50IHRleHRBbGlnbm1lbnQ9IkNlbnRlciIgdmVydGljYWxBbGlnbm1lbnQ9Ik1pZGRsZSI+CgkJCQkJPGZvbnQgZm9udE5hbWU9IlRpbWVzIE5ldyBSb21hbiIgc2l6ZT0iMTEiIGlzQm9sZD0iZmFsc2UiIHBkZkVuY29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJCQk8cGFyYWdyYXBoIGxlZnRJbmRlbnQ9IjUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dEZpZWxkRXhwcmVzc2lvbj48IVtDREFUQVskRntjb2xfZXhlY3V0b3J9XV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc1N0cmV0Y2hXaXRoT3ZlcmZsb3c9InRydWUiIGlzQmxhbmtXaGVuTnVsbD0idHJ1ZSI+CgkJCQk8cmVwb3J0RWxlbWVudCBzdHJldGNoVHlwZT0iUmVsYXRpdmVUb1RhbGxlc3RPYmplY3QiIG1vZGU9Ik9wYXF1ZSIgeD0iNDYwIiB5PSIwIiB3aWR0aD0iNDUiIGhlaWdodD0iMzAiIHV1aWQ9Ijk1YmFkYmYyLTY3MGQtNGM0Ni05MjU2LTY5Y2Y3MDJmMDYzNSIvPgoJCQkJPGJveD4KCQkJCQk8cGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiMwMDAwMDAiLz4KCQkJCTwvYm94PgoJCQkJPHRleHRFbGVtZW50IHRleHRBbGlnbm1lbnQ9IkNlbnRlciIgdmVydGljYWxBbGlnbm1lbnQ9Ik1pZGRsZSI+CgkJCQkJPGZvbnQgZm9udE5hbWU9IlRpbWVzIE5ldyBSb21hbiIgc2l6ZT0iMTEiIGlzQm9sZD0iZmFsc2UiIHBkZkVuY29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJCQk8cGFyYWdyYXBoIGxlZnRJbmRlbnQ9IjUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dEZpZWxkRXhwcmVzc2lvbj48IVtDREFUQVskRntjb2xfY2FzZU51bWJlcn1dXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCQk8dGV4dEZpZWxkIGlzU3RyZXRjaFdpdGhPdmVyZmxvdz0idHJ1ZSIgaXNCbGFua1doZW5OdWxsPSJ0cnVlIj4KCQkJCTxyZXBvcnRFbGVtZW50IHN0cmV0Y2hUeXBlPSJSZWxhdGl2ZVRvVGFsbGVzdE9iamVjdCIgbW9kZT0iT3BhcXVlIiB4PSIzMjUiIHk9IjAiIHdpZHRoPSI2NSIgaGVpZ2h0PSIzMCIgdXVpZD0iOTViYWRiZjItNjcwZC00YzQ2LTkyNTYtNjljZjcwMmYwNjM2Ii8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzAwMDAwMCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMSIgaXNCb2xkPSJmYWxzZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWyRGe2NvbF9zaWduZXJ9XV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc1N0cmV0Y2hXaXRoT3ZlcmZsb3c9InRydWUiIGlzQmxhbmtXaGVuTnVsbD0idHJ1ZSI+CgkJCQk8cmVwb3J0RWxlbWVudCBzdHJldGNoVHlwZT0iUmVsYXRpdmVUb1RhbGxlc3RPYmplY3QiIHg9IjAiIHk9IjAiIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgaXNQcmludFdoZW5EZXRhaWxPdmVyZmxvd3M9InRydWUiIHV1aWQ9ImQ5MDdiODBjLWQ5N2ItNDU2Yi1hZWFmLTQ4M2ZlNzRlMzEzOCIvPgoJCQkJPGJveD4KCQkJCQk8cGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiMwMDAwMDAiLz4KCQkJCTwvYm94PgoJCQkJPHRleHRFbGVtZW50IHRleHRBbGlnbm1lbnQ9IkNlbnRlciIgdmVydGljYWxBbGlnbm1lbnQ9Ik1pZGRsZSI+CgkJCQkJPGZvbnQgZm9udE5hbWU9IlRpbWVzIE5ldyBSb21hbiIgc2l6ZT0iMTEiIGlzQm9sZD0iZmFsc2UiIHBkZkVuY29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJCQk8cGFyYWdyYXBoIGxpbmVTcGFjaW5nPSJTaW5nbGUiIGxlZnRJbmRlbnQ9IjUiIHNwYWNpbmdCZWZvcmU9IjIiIHNwYWNpbmdBZnRlcj0iMiIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWyRWe1JFUE9SVF9DT1VOVH1dXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCQk8dGV4dEZpZWxkIGlzU3RyZXRjaFdpdGhPdmVyZmxvdz0idHJ1ZSIgcGF0dGVybj0iZGQuTU0ueXl5eSIgaXNCbGFua1doZW5OdWxsPSJ0cnVlIj4KCQkJCTxyZXBvcnRFbGVtZW50IHN0cmV0Y2hUeXBlPSJSZWxhdGl2ZVRvVGFsbGVzdE9iamVjdCIgbW9kZT0iT3BhcXVlIiB4PSI1MDUiIHk9IjAiIHdpZHRoPSI2NSIgaGVpZ2h0PSIzMCIgdXVpZD0iNWQyMmI3NTktNDA2MC00NTNjLWEwYzAtMjQ0ZTU0YTIzNmE5Ii8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzAwMDAwMCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMSIgaXNCb2xkPSJmYWxzZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWyRGe2NvbF9wcm9qZWN0UmVnRGF0ZX1dXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCQk8dGV4dEZpZWxkIGlzU3RyZXRjaFdpdGhPdmVyZmxvdz0idHJ1ZSIgaXNCbGFua1doZW5OdWxsPSJ0cnVlIj4KCQkJCTxyZXBvcnRFbGVtZW50IHN0cmV0Y2hUeXBlPSJSZWxhdGl2ZVRvVGFsbGVzdE9iamVjdCIgbW9kZT0iT3BhcXVlIiB4PSI1NzAiIHk9IjAiIHdpZHRoPSI0NSIgaGVpZ2h0PSIzMCIgdXVpZD0iYzRmMDQ1NzYtZWFkYS00YjEwLWFlOTItM2UxNmVhZDgzYWM1Ii8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzAwMDAwMCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMSIgaXNCb2xkPSJmYWxzZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWyRGe2NvbF9wcm9qZWN0TnVtYmVyfV1dPjwvdGV4dEZpZWxkRXhwcmVzc2lvbj4KCQkJPC90ZXh0RmllbGQ+CgkJCTx0ZXh0RmllbGQgaXNTdHJldGNoV2l0aE92ZXJmbG93PSJ0cnVlIiBpc0JsYW5rV2hlbk51bGw9InRydWUiPgoJCQkJPHJlcG9ydEVsZW1lbnQgc3RyZXRjaFR5cGU9IlJlbGF0aXZlVG9UYWxsZXN0T2JqZWN0IiBtb2RlPSJPcGFxdWUiIHg9IjYxNSIgeT0iMCIgd2lkdGg9IjcwIiBoZWlnaHQ9IjMwIiB1dWlkPSI0NjE5ZmQzMi03Zjg5LTQ5MzQtYWU2ZS1mYjcwODQ1MTJhNzEiLz4KCQkJCTxib3g+CgkJCQkJPHBlbiBsaW5lV2lkdGg9IjAuNSIgbGluZUNvbG9yPSIjMDAwMDAwIi8+CgkJCQk8L2JveD4KCQkJCTx0ZXh0RWxlbWVudCB0ZXh0QWxpZ25tZW50PSJDZW50ZXIiIHZlcnRpY2FsQWxpZ25tZW50PSJNaWRkbGUiPgoJCQkJCTxmb250IGZvbnROYW1lPSJUaW1lcyBOZXcgUm9tYW4iIHNpemU9IjExIiBpc0JvbGQ9ImZhbHNlIiBwZGZFbmNvZGluZz0iQ3AxMjUxIiBpc1BkZkVtYmVkZGVkPSJ0cnVlIi8+CgkJCQkJPHBhcmFncmFwaCBsZWZ0SW5kZW50PSI1Ii8+CgkJCQk8L3RleHRFbGVtZW50PgoJCQkJPHRleHRGaWVsZEV4cHJlc3Npb24+PCFbQ0RBVEFbJEZ7Y29sX2NvbXBpbGVyfV1dPjwvdGV4dEZpZWxkRXhwcmVzc2lvbj4KCQkJPC90ZXh0RmllbGQ+CgkJCTx0ZXh0RmllbGQgaXNTdHJldGNoV2l0aE92ZXJmbG93PSJ0cnVlIiBpc0JsYW5rV2hlbk51bGw9InRydWUiPgoJCQkJPHJlcG9ydEVsZW1lbnQgc3RyZXRjaFR5cGU9IlJlbGF0aXZlVG9UYWxsZXN0T2JqZWN0IiBtb2RlPSJPcGFxdWUiIHg9IjY4NSIgeT0iMCIgd2lkdGg9IjQ1IiBoZWlnaHQ9IjMwIiB1dWlkPSI4MjkwMDk3Zi04NTg0LTQ2MzUtYTZhOC01YTQzYzQyMjdmN2UiPgoJCQkJCTxwcm9wZXJ0eSBuYW1lPSJjb20uamFzcGVyc29mdC5zdHVkaW8udW5pdC53aWR0aCIgdmFsdWU9InBpeGVsIi8+CgkJCQk8L3JlcG9ydEVsZW1lbnQ+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzAwMDAwMCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iQ2VudGVyIiB2ZXJ0aWNhbEFsaWdubWVudD0iTWlkZGxlIj4KCQkJCQk8Zm9udCBmb250TmFtZT0iVGltZXMgTmV3IFJvbWFuIiBzaXplPSIxMSIgaXNCb2xkPSJmYWxzZSIgcGRmRW5jb2Rpbmc9IkNwMTI1MSIgaXNQZGZFbWJlZGRlZD0idHJ1ZSIvPgoJCQkJCTxwYXJhZ3JhcGggbGVmdEluZGVudD0iNSIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRBWyRGe2NvbF9zdGF0dXN9XV0+PC90ZXh0RmllbGRFeHByZXNzaW9uPgoJCQk8L3RleHRGaWVsZD4KCQkJPHRleHRGaWVsZCBpc1N0cmV0Y2hXaXRoT3ZlcmZsb3c9InRydWUiIGlzQmxhbmtXaGVuTnVsbD0idHJ1ZSI+CgkJCQk8cmVwb3J0RWxlbWVudCBzdHJldGNoVHlwZT0iUmVsYXRpdmVUb1RhbGxlc3RPYmplY3QiIG1vZGU9Ik9wYXF1ZSIgeD0iMzkwIiB5PSIwIiB3aWR0aD0iNzAiIGhlaWdodD0iMzAiIHV1aWQ9Ijk4OTZhMmQ3LTk0ZTItNGE5OS1hYWYwLWIxZTg0OWFjOTg5NCIvPgoJCQkJPGJveD4KCQkJCQk8cGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiMwMDAwMDAiLz4KCQkJCTwvYm94PgoJCQkJPHRleHRFbGVtZW50IHRleHRBbGlnbm1lbnQ9IkNlbnRlciIgdmVydGljYWxBbGlnbm1lbnQ9Ik1pZGRsZSI+CgkJCQkJPGZvbnQgZm9udE5hbWU9IlRpbWVzIE5ldyBSb21hbiIgc2l6ZT0iMTEiIGlzQm9sZD0iZmFsc2UiIHBkZkVuY29kaW5nPSJDcDEyNTEiIGlzUGRmRW1iZWRkZWQ9InRydWUiLz4KCQkJCQk8cGFyYWdyYXBoIGxlZnRJbmRlbnQ9IjUiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dEZpZWxkRXhwcmVzc2lvbj48IVtDREFUQVskRntjb2xfcmVjaXBpZW50c31dXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxkPgoJCTwvYmFuZD4KCTwvZGV0YWlsPgo8L2phc3BlclJlcG9ydD4K]]></property>
             </item>
         </items>
         <assocs>
