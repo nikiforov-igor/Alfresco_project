@@ -16,6 +16,7 @@ LogicECM.module.Documents.Reports = LogicECM.module.Documents.Reports || {};
                 var newform = newDocument.createElement("form");
                 newform.action = actionUrl;
                 newform.method = "POST";
+                newform.enctype = "multipart/form-data";
                 body.appendChild(newform);
                 var paramsField = newDocument.createElement("input");
                 paramsField.type = "hidden";
