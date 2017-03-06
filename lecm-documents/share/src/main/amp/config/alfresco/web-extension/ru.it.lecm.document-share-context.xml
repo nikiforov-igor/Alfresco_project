@@ -4,7 +4,7 @@
 <beans>
 	<bean id="lecm.resolver.doclib.actionGroup" class="ru.it.lecm.documents.resolvers.ActionsGroupResolver"/>
 
-	<bean id="documents.custom.config" class="org.springframework.extensions.config.ConfigBootstrap" init-method="register">
+	<bean id="documents.custom.config" class="org.springframework.extensions.config.ConfigBootstrap" init-method="register" depends-on="base.custom.config">
 		<property name="configService" ref="web.config" />
 		<property name="configs">
 			<list>

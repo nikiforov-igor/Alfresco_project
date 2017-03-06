@@ -109,36 +109,6 @@
 						</sub-component>
 					</sub-components>
 				</component>
-				<!-- Добавление блока с сообщением "Документ заблокирован" -->
-				<component>
-					<scope>template</scope>
-					<region-id>node-header</region-id>
-					<source-id>document-details</source-id>
-					<sub-components>
-						<sub-component id="blocked-label" index="10">
-							<evaluations>
-								<evaluation id="locked-label">
-									<url>/lecm/signed-docflow/extensions/blocked-label</url>
-								</evaluation>
-							</evaluations>
-						</sub-component>
-					</sub-components>
-				</component>
-				<!-- Добавление блока с сообщением "Документ заблокирован" -->
-				<component>
-					<scope>template</scope>
-					<region-id>document-attachment-header</region-id>
-					<source-id>document-attachment</source-id>
-					<sub-components>
-						<sub-component id="blocked-label" index="10">
-							<evaluations>
-								<evaluation id="locked-label">
-									<url>/lecm/signed-docflow/extensions/blocked-label</url>
-								</evaluation>
-							</evaluations>
-						</sub-component>
-					</sub-components>
-				</component>
 				<!-- Регулирование доступа к настройкам апплета в профиле -->
 				<component>
 					<scope>template</scope>

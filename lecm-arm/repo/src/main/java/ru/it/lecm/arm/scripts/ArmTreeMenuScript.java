@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.extensions.surf.util.URLEncoder;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -265,6 +266,9 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 					columnJSON.put("nameSubstituteString", column.getFormatString());
 					columnJSON.put("dataType", dataType);
 					columnJSON.put("sortable", column.isSortable());
+					columnJSON.put("isMarker", column.isMarker());
+					columnJSON.put("markerIcon", column.getMarkerIcon());
+					columnJSON.put("markerHTML", URLEncoder.encodeUriComponent(column.getMarkerHTML()));
 
 					results.put(columnJSON);
 				}

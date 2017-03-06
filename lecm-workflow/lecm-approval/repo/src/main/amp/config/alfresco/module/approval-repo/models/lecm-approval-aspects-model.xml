@@ -48,6 +48,9 @@
 					<type>d:text</type>
 					<default>false</default>
 				</property>
+				<property name="lecmApproveAspects:currentTaskStartDate">
+					<type>d:datetime</type>
+				</property>
 			</properties>
 		</aspect>
 	</aspects>
