@@ -1,3 +1,6 @@
 .yui-skin-lecmTheme .event-page .form-fields {
     padding-bottom: 1em;
 }
+.yui-skin-lecmTheme .event-page .form-fields .lecm-dashlet-actions {
+    width: 16px;
+}
