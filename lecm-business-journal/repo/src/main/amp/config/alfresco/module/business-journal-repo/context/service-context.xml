@@ -88,7 +88,6 @@
 	</bean>
 
 	<bean id="businessJournalService" class="ru.it.lecm.businessjournal.beans.RESTClient" init-method="init" parent="abstaractBusinessJournalService">
-		<property name="globalProps" ref="global-properties"/>
 		<property name="serviceProtocol" value="${businessjournal.protocol}"/>
 		<property name="serviceHost" value="${businessjournal.host}"/>
 		<property name="servicePort" value="${businessjournal.port}"/>

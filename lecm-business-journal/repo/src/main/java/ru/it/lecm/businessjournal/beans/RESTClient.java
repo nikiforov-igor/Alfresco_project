@@ -43,11 +43,6 @@ public class RESTClient extends AbstractBusinessJournalService implements Busine
 	private String servicePort;
 	private String serviceName;
 	private SimpleDateFormat dateFormat;
-	private Properties globalProps;
-
-	public void setGlobalProps(Properties globalProps) {
-		this.globalProps = globalProps;
-	}
 
 	public void setServiceProtocol(String serviceProtocol) {
 		this.serviceProtocol = serviceProtocol;
