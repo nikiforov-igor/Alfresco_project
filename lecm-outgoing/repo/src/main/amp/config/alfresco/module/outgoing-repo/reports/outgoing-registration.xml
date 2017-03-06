@@ -7,7 +7,7 @@
         <property name="cm:name"><![CDATA[Журнал регистрации исходящих документов]]></property>
         <property name="lecm-rpeditor:runAsSystem"><![CDATA[false]]></property>
         <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
-        <property name="lecm-rpeditor:reportQuerySort"><![CDATA[lecm-document:doc-date|DESC]]></property>
+        <property name="lecm-rpeditor:reportQuerySort"><![CDATA[col_docDate|DESC]]></property>
         <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
         <property name="lecm-rpeditor:loadColumnsFromSQL"><![CDATA[false]]></property>
         <property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-outgoing:document]]></property>
@@ -275,6 +275,20 @@
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Дата документа" type="lecm-rpeditor:reportDataColumn">
+                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{lecm-document:doc-date}]]></property>
+                        <property name="cm:name"><![CDATA[Дата документа]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_docDate]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Date"/>
                         </assocs>
                     </item>
                 </items>
