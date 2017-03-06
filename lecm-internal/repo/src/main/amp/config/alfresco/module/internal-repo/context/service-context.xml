@@ -199,4 +199,11 @@
         </property>
     </bean>
 
+    <bean id="listOfUsedInternalTypes" parent="listOfUsedTypes">
+        <property name="types">
+            <map>
+                <entry key="lecm-internal-doc-type:dictionary" value="Вид внутреннего документа"/>
+            </map>
+        </property>
+    </bean>
 </beans>

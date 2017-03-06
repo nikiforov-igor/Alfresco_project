@@ -183,4 +183,11 @@
             </map>
         </property>
     </bean>
+    <bean id="listOfUsedNDTypes" parent="listOfUsedTypes">
+        <property name="types">
+            <map>
+                <entry key="lecm-nd-dic:documentType" value="Вид НД"/>
+            </map>
+        </property>
+    </bean>
 </beans>

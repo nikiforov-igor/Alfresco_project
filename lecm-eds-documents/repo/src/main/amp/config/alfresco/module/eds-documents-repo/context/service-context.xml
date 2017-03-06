@@ -176,4 +176,12 @@
 		<property name="documentService" ref="documentService"/>
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
+
+	<bean id="listOfUsedDocDicDocumentTypes" parent="listOfUsedTypes">
+		<property name="types">
+			<map>
+				<entry key="lecm-doc-dic-dt:documentType" value="Вид документа"/>
+			</map>
+		</property>
+	</bean>
 </beans>
