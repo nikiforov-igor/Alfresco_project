@@ -46,7 +46,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 formId: null,
                 fieldId: null
             },
-            countLoadedForms: 0,
+            countDefaultForms: 0,
             currentLine: 0,
             rootSubmitElement: null,
             rootFormSubmitFunction: null,
@@ -108,7 +108,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                                 var oResults = response.json;
                                 if (oResults && oResults.length) {
                                     var i;
-                                    this.countLoadedForms = oResults.length;
+                                    this.countDefaultForms = oResults.length;
                                     for (i = 0; i < oResults.length; i++) {
                                         this.onAdd(null, null, oResults[i]);
                                     }
@@ -261,7 +261,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                             var div = document.createElement('div');
                             div.id = formId + "_container";
                             Dom.addClass(div, "multi-form-documents-item-container");
-                            div.innerHTML=html;
+                            div.innerHTML = html;
                             li.appendChild(div);
 
                             YAHOO.util.Event.onAvailable(this.id + "-line-" + num + "-form", this.calcActionsHeight, num, this);
@@ -284,12 +284,8 @@ LogicECM.module.eds = LogicECM.module.eds || {};
             },
 
             allFormsLoaded: function (counter) {
-                if (counter == this.countLoadedForms || counter > this.countLoadedForms) {
-                    var elIndexes = Dom.get(this.id + "_" + counter + "_indexes");
-                    while (elIndexes) {
-                        this.updateFormCount();
-                        break;
-                    }
+                if (counter >= this.countDefaultForms) {
+                    this.resetIndexes();
                 }
             },
 
@@ -340,7 +336,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                     if (args[1].subFieldId && args[1].options) {
                         for (var i in this.forms) {
                             if (this.forms.hasOwnProperty(i)) {
-                                var formId= this.forms[i].formId;
+                                var formId = this.forms[i].formId;
                                 formId = formId.substring(0, formId.length - "-form".length);
 
                                 LogicECM.module.Base.Util.reInitializeControl(formId, args[1].subFieldId, args[1].options);
@@ -350,7 +346,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 }
             },
 
-            updateFormCount: function() {
+            updateFormCount: function () {
                 var countElement = Dom.get(this.id + "-count");
                 if (countElement) {
                     countElement.value = Object.keys(this.forms).length;
@@ -358,7 +354,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 this.resetIndexes();
             },
 
-            resetIndexes: function() {
+            resetIndexes: function () {
                 var index = 0, elIndexes;
                 for (var i = 0; i <= this.currentLine; i++) {
                     elIndexes = Dom.get(this.id + "_" + i + "_indexes");
