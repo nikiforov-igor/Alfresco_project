@@ -89,7 +89,7 @@ function createReviewTSItem(reviewTable, reviewTsItems, initiatingDocument) {
 	return items;
 }
 
-function sendToReview(items) {
+function sendToReview(items, reviewDocument) {
 	var initiator = orgstructure.getCurrentEmployee(),
 		recipients = [],
 		reviewer,
@@ -98,12 +98,16 @@ function sendToReview(items) {
 		startDate = new Date(),
 		dueDate;
 
+	if (!reviewDocument) {
+	    reviewDocument = document;
+    }
+
 	for each (row in items) {
 		reviewer = row.associations['lecm-review-ts:reviewer-assoc'][0];
 		itemInitiator = row.assocs['lecm-review-ts:initiator-assoc'];
 		if (itemInitiator && itemInitiator.length && initiator.nodeRef.equals(itemInitiator[0].nodeRef)) {
 			if (row.properties['lecm-review-ts:review-state'] == 'NOT_STARTED') {
-				documentMembers.addMemberWithoutCheckPermission(document, reviewer, 'LECM_BASIC_PG_Reader', true);
+				documentMembers.addMemberWithoutCheckPermission(reviewDocument, reviewer, 'LECM_BASIC_PG_Reader', true);
 				recipients.push(reviewer);
 				row.properties['lecm-review-ts:review-state'] = 'NOT_REVIEWED';
 				row.properties['lecm-review-ts:review-start-date'] = startDate;
@@ -119,7 +123,7 @@ function sendToReview(items) {
 			recipients: recipients,
 			templateCode: 'REVIEW_NEED',
 			templateConfig: {
-				mainObject: document,
+				mainObject: reviewDocument,
 				eventExecutor: initiator,
 				dueDate: dueDate
 			}
@@ -132,7 +136,7 @@ function sendDocumentToReview(document, reviewers, initiatingDocument) {
 
     if (reviewTable && reviewTable.length) {
         var reviewTsItems = createReviewTSItem(reviewTable[0], reviewers, initiatingDocument);
-        sendToReview(reviewTsItems);
+        sendToReview(reviewTsItems, document);
     }
 }
 
