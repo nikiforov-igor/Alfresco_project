@@ -12,7 +12,7 @@
 				            <td style="width:80px;">&nbsp;</td>
 				            <td class="connection-type-column">${item.assocs["lecm-connect:connection-type-assoc"][0].properties["cm:name"]}</td>
 				            <td class="connection-present-column">
-				                <a href="${url.context}/page/${documentService.getViewUrl(document.nodeRef)}?nodeRef=${document.nodeRef}">
+				                <a href="${documentService.getViewUrl(document.nodeRef)}?nodeRef=${document.nodeRef}">
 				                    ${document.properties["lecm-document:ext-present-string"]!''}
 				                </a>
 					            <p>${document.properties["lecm-document:list-present-string"]!''}</p>
@@ -33,7 +33,7 @@
                             <td style="width:80px;">&nbsp;</td>
 				            <td class="connection-type-column">${item.assocs["lecm-connect:connection-type-assoc"][0].properties["lecm-connect-types:reverse-name"]}</td>
 				            <td class="connection-present-column">
-				                <a href="${url.context}/page/${documentService.getViewUrl(document.nodeRef)}?nodeRef=${document.nodeRef}">
+				                <a href="${documentService.getViewUrl(document.nodeRef)}?nodeRef=${document.nodeRef}">
 				                    ${document.properties["lecm-document:ext-present-string"]!''}
 				                </a>
 					            <p>${document.properties["lecm-document:list-present-string"]!''}</p>
