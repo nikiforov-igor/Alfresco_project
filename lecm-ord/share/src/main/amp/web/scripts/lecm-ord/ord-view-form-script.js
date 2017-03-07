@@ -27,11 +27,11 @@
                                 Event.onContentReady(formId + "_prop_lecm-review-ts_doc-review-state", function () {
                                     var executionStateControl = Dom.get(formId + "_prop_lecm-eds-aspect_execution-state-cntrl");
                                     if (executionStateControl) {
-                                        Dom.setStyle(executionStateControl, "display", "none");
+                                        Dom.removeClass(executionStateControl, "hidden");
                                     }
                                     var reviewStateControl = Dom.get(formId + "_prop_lecm-review-ts_doc-review-state-cntrl");
                                     if (reviewStateControl) {
-                                        Dom.setStyle(reviewStateControl, "display", "none");
+                                        Dom.addClass(reviewStateControl, "hidden");
                                     }
                                 });
                             });

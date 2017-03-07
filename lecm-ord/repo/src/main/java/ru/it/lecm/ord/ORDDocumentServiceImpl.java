@@ -44,7 +44,7 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 
 	@Override
 	public void changePointStatus(NodeRef point, ORDModel.P_STATUSES statusKey){
-		String status = (String) ORDModel.POINT_STATUSES.get(statusKey);
+		String status = ORDModel.POINT_STATUSES.get(statusKey);
 		if (null != status){
 			NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, status);
 			List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
