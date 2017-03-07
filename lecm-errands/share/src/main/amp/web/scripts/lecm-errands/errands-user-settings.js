@@ -37,7 +37,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 								me.canChooseInititator = roles.some(function(role){
 									return "CHOOSING_INITIATOR" == role.id
 								});
-                                this.loadSettings();
+                                me.loadSettings();
 							}
 						}
 					},
