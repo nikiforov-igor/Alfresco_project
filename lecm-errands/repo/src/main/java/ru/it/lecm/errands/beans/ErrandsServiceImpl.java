@@ -411,17 +411,10 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_IS_EXPIRED.toString(), false));
         sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_LIMITATION_DATE.toString(), true));
 
-        for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, paths, status, null, sort)) {
-            if (stateMachineService.isDraft(nodeRef)) {
-                continue;
-            }
-            if (stateMachineService.isFinal(nodeRef)) {
-                continue;
-            }
-            if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET)) ||
-                currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_CO_EXECUTORS, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))) {
-                sortingErrands.add(nodeRef);
-            }
+        for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, paths, status,
+                "(@lecm\\-errands\\:executor\\-assoc\\-ref:\"#current-user\" OR @lecm\\-errands\\:coexecutors\\-assoc\\-ref:\"#current-user\") AND NOT @lecm\\-statemachine\\-aspects\\:is\\-final:true AND NOT @lecm\\-statemachine\\-aspects\\:is\\-draft:true",
+                sort)) {
+            sortingErrands.add(nodeRef);
         }
 
         int endIndex = (skipCount + maxItems) < sortingErrands.size() ? (skipCount + maxItems) : sortingErrands.size();
