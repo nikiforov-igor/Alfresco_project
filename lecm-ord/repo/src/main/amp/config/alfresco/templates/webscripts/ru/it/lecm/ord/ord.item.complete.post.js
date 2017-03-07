@@ -36,22 +36,22 @@ if (itemCoexecutorsAssoc && itemCoexecutorsAssoc.length) {
         recipients.push(coexecutor);
     })
 }
-var status = "";
+var statusCode = "";
 if (completionOption == "CANCEL") {
     reason = "Поручение отменено в связи с отменой работы по пункту Контролером пункта/Контролером ОРД ";
     reason += documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]);
     errands.sendCancelSignal(errand.nodeRef.toString(), reason, currentUser.nodeRef.toString());
-    status = "Отменен Контролером";
+    statusCode = "CANCELED_BY_CONTROLLER_STATUS";
 } else if (completionOption == "EXECUTE") {
     reason = "Поручение исполнено Контролером пункта/Контролером ОРД ";
     reason += documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]);
     edsDocument.sendCompletionSignal(errand, reason, currentUser);
-    status = "Исполнен Контролером";
+    statusCode = "EXECUTED_BY_CONTROLLER_STATUS";
     item.properties["lecm-ord-table-structure:item-comment"] = comment;
     item.save();
 }
-ordStatemachine.changePointStatus(item.nodeRef.toString(), status);
-
+ordStatemachine.changePointStatus(item.nodeRef.toString(), statusCode);
+var status = ordStatemachine.getPointStatusTextByCode(statusCode);
 var content = item.properties["lecm-ord-table-structure:item-content"];
 var title = item.properties["lecm-ord-table-structure:title"];
 
@@ -70,7 +70,8 @@ notifications.sendNotificationFromCurrentUser({
     dontCheckAccessToObject: true
 });
 var logText = "#initiator перевел ";
-logText += documentScript.wrapperTitle("пункт номер" + number, title + " " + content);
+logText += documentScript.wrapperTitle("пункт номер " + number, title + " " + content);
 logText += " " + documentScript.wrapperDocumentLink(ordDoc, "ОРД") + " в статус ";
 logText += documentScript.wrapperTitle(status, comment);
 businessJournal.log(ordDoc.nodeRef.toString(), "POINT_COMPLETED", logText, []);
+model.success = true;

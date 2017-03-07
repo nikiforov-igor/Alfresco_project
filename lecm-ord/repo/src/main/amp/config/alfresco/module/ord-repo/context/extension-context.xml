@@ -19,6 +19,7 @@
 		  p:authenticationService-ref="authenticationService"
 		  p:ordDocumentService-ref="ordDocumentService"
 		  p:ordReportsService-ref="ordReportsService"
-		  p:notificationsService-ref="notificationsService"/>
+		  p:stateMachineService-ref="stateMachineHelper"
+		  p:errandsService-ref="errandsService"/>
 
 </beans>

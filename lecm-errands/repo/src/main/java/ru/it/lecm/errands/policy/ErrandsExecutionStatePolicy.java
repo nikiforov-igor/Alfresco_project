@@ -69,7 +69,7 @@ public class ErrandsExecutionStatePolicy implements NodeServicePolicies.OnUpdate
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         String oldErrandStatus = (String) before.get(StatemachineModel.PROP_STATUS);
         String newErrandStatus = (String) after.get(StatemachineModel.PROP_STATUS);
-        if (!Objects.equals(oldErrandStatus, newErrandStatus) && !Objects.equals(newErrandStatus,"Новый")) {
+        if (!Objects.equals(oldErrandStatus, newErrandStatus)) {
             NodeRef baseDoc = errandsService.getBaseDocument(nodeRef);
             if (baseDoc != null && nodeService.hasAspect(baseDoc, EDSDocumentService.ASPECT_EXECUTION_STATE)) {
                 calculateExecutionStatistic(baseDoc);
@@ -98,13 +98,15 @@ public class ErrandsExecutionStatePolicy implements NodeServicePolicies.OnUpdate
 
             for (NodeRef errand : childErrands) {
                 String errandStatus = (String) nodeService.getProperty(errand, StatemachineModel.PROP_STATUS);
-                if (statuses.contains(errandStatus)) {
-                    errandsCountByStatus.put(errandStatus, errandsCountByStatus.get(errandStatus) + 1);
-                }
-                inProcess = inProcess || (!stateMachineService.isDraft(errand) && !stateMachineService.isFinal(errand));
-                isAnyExecuted = isAnyExecuted || errandStatus.equals(executedStatus);
-                if (!stateMachineService.isFinal(errand)) {
-                    allFinal = false;
+                if (errandStatus != null) {
+                    if (statuses.contains(errandStatus)) {
+                        errandsCountByStatus.put(errandStatus, errandsCountByStatus.get(errandStatus) + 1);
+                    }
+                    inProcess = inProcess || (!stateMachineService.isDraft(errand) && !stateMachineService.isFinal(errand));
+                    isAnyExecuted = isAnyExecuted || errandStatus.equals(executedStatus);
+                    if (!stateMachineService.isFinal(errand)) {
+                        allFinal = false;
+                    }
                 }
             }
             executionState = String.valueOf(EDSDocumentService.EXECUTION_STATE.computeState(allFinal, isAnyExecuted, inProcess));

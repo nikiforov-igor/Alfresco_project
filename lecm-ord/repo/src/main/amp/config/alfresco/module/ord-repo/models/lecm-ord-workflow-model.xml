@@ -16,10 +16,6 @@
     </namespaces>
 
     <types>
-        <!-- Регистрация ОРД -->
-        <type name="lecmORDWf:registerORD">
-            <parent>bpm:startTask</parent>
-        </type>
         <!-- Завершение -->
         <type name="lecmORDWf:completeORD">
             <parent>bpm:startTask</parent>

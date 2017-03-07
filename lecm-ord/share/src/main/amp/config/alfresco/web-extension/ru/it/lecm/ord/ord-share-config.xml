@@ -565,7 +565,7 @@
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
                             <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
-                            <control-param name="expandDataSource">components/form?formId=table-structure-info</control-param>
+                            <control-param name="expandDataSource">components/form?formId=ord-table-structure-info</control-param>
                             <control-param name="isTableSortable">false</control-param>
                             <control-param name="refreshAfterCreate">true</control-param>
                             <control-param name="forceEditable">true</control-param>
@@ -799,18 +799,6 @@
                     </field>
                 </appearance>
             </form>
-            <form id="table-structure-info">
-                <field-visibility>
-                    <show id="ord-item-execution-tree" force="true"/>
-                </field-visibility>
-                <appearance>
-                    <field id="ord-item-execution-tree">
-                        <control template="/ru/it/lecm/eds/controls/execution-tree-control.ftl">
-                            <control-param name="byDocAssocRef">lecm-ord-table-structure:errand-assoc-ref</control-param>
-                        </control>
-                    </field>
-                </appearance>
-            </form>
             <form id="ord-complete-item">
                 <field-visibility>
                     <show id="lecm-ord-table-structure:completion-option"/>
@@ -992,34 +980,6 @@
             </form>
         </forms>
     </config>
-
-    <config evaluator="string-compare" condition="activiti$registerORD">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="packageItems"/>
-                    <show id="lecmORDWf:registerORDMessage"/>
-                    <show id="register-ord-form-script" force="true"/>
-                </field-visibility>
-                <appearance>
-                    <field id="packageItems">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
-                    </field>
-                    <field id="lecmORDWf:registerORDMessage">
-                        <control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
-                            <control-param name="msg">ord.register.dialog.common.message</control-param>
-                        </control>
-                    </field>
-                    <field id="register-ord-form-script">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-ord/register-ord-form-script.js</control-param>
-                            <control-param name="scriptLoadedFireAction">registerORDWFScriptLoaded</control-param>
-                        </control>
-                    </field>
-                </appearance>
-            </form>
-        </forms>
-    </config>
     <config evaluator="string-compare" condition="activiti$completeORD">
         <forms>
             <form>
@@ -1086,7 +1046,6 @@
     <config evaluator="string-compare" condition="Workflow">
         <hidden-workflows>
             <workflow name="activiti$lecm-ord_document"/>
-            <workflow name="activiti$registerORD"/>
             <workflow name="activiti$completeORD"/>
             <workflow name="activiti$completeActiveORD"/>
         </hidden-workflows>

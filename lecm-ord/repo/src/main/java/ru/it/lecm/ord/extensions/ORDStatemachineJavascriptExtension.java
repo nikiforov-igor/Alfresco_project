@@ -29,6 +29,7 @@ import ru.it.lecm.ord.api.ORDDocumentService;
 import ru.it.lecm.ord.api.ORDModel;
 import ru.it.lecm.ord.api.ORDReportsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
 
@@ -55,6 +56,8 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private NamespaceService namespaceService;
 	private AuthenticationService authenticationService;
 	private NotificationsService notificationsService;
+	private ErrandsService errandsService;
+	private StateMachineServiceBean stateMachineService;
 
 
 	private ORDReportsService ordReportsService;
@@ -107,6 +110,13 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		this.notificationsService = notificationsService;
 	}
 
+	public void setErrandsService(ErrandsService errandsService) {
+		this.errandsService = errandsService;
+	}
+
+	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+		this.stateMachineService = stateMachineService;
+	}
 
 	private String getOrdURL(final ScriptNode ordRef) {
 		NodeRef ordDocumentRef = ordRef.getNodeRef();
@@ -269,6 +279,16 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	 */
 	public void formErrands(ScriptNode ordSNode) {
 		NodeRef ord = ordSNode.getNodeRef();
+
+		List<NodeRef> childErrands = errandsService.getChildErrands(ord);
+		Integer currentChildIndex = 0;
+		if (childErrands != null && childErrands.size() != 0) {
+			for(NodeRef child: childErrands){
+				if(!stateMachineService.isDraft(child)){
+					currentChildIndex++;
+				}
+			}
+		}
 		//найдем таблицу с пунктами
 		List<AssociationRef> tableAssocs = nodeService.getTargetAssocs(ord, ORDModel.ASSOC_ORD_TABLE_ITEMS);
 		if (tableAssocs.size() > 0) {
@@ -310,6 +330,10 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_RADIO.toPrefixString(namespaceService), (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_RADIO));
 				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TYPE.toPrefixString(namespaceService), (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_TYPE));
 				properties.put(ErrandsService.PROP_ERRANDS_REPORT_REQUIRED.toPrefixString(namespaceService), nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_REPORT_REQUIRED).toString());
+
+				//индекс
+				Integer errandIndex = currentChildIndex + pointNumber;
+				properties.put(ErrandsService.PROP_ERRANDS_CHILD_INDEX.toPrefixString(namespaceService), errandIndex.toString());
 
 				//ассоциации поручения
 				Map<String, String> associations = new HashMap<String, String>();
@@ -375,8 +399,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				nodeService.createAssociation(point, errand, ORDModel.ASSOC_ORD_TABLE_ERRAND);
 				// переведем пункт в статус "на исполнениии"
 				ordDocumentService.changePointStatus(point,ORDModel.P_STATUSES.PERFORMANCE_STATUS);
-				//подпишем ОРД в качестве наблюдателя за поручением
-				documentEventService.subscribe(errand, ord);
+
 			}
 			//уведомляем контроллера орд
 			List<AssociationRef> ordControllerAssoc = nodeService.getTargetAssocs(ord, ORDModel.ASSOC_ORD_CONTROLLER);
@@ -443,15 +466,17 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	public void changePointStatus(String sPointRef, String status){
 		if (null!=sPointRef && !sPointRef.isEmpty()){
 			NodeRef point = new NodeRef(sPointRef);
-			if (nodeService.exists(point)) {
-				for (Object o : ORDModel.POINT_STATUSES.entrySet()) {
-					Map.Entry<ORDModel.P_STATUSES, String> entry = (Map.Entry<ORDModel.P_STATUSES, String>) o;
-					if (entry.getValue().equals(status)) {
-						ordDocumentService.changePointStatus(point, ORDModel.P_STATUSES.valueOf(entry.getKey().toString()));
-					}
-				}
+			if (nodeService.exists(point)){
+				ordDocumentService.changePointStatus(point,ORDModel.P_STATUSES.valueOf(status));
 			}
 		}
+	}
+
+	public String getPointStatusTextByCode(String statusCode){
+		if (POINT_STATUSES.containsKey(ORDModel.P_STATUSES.valueOf(statusCode))) {
+			return (String) POINT_STATUSES.get(ORDModel.P_STATUSES.valueOf(statusCode));
+		}
+		return "";
 	}
 
 	public Boolean checkPointExecutedStatus(String sPointRef){

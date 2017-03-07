@@ -225,12 +225,12 @@ LogicECM.ORD = LogicECM.ORD || {};
 
     LogicECM.ORD.PointsDatagrid = function (htmlId) {
 
-        Bubbling.on("onActionExecutePoint", function (layer, args) {
+        Bubbling.on("onActionCompletePoint", function (layer, args) {
             this.onActionCompletePoint({
                 nodeRef: args[1].nodeRef
             });
         }, this, true);
-        Bubbling.on("onActionCompleteReport", function (layer, args) {
+        Bubbling.on("onActionExecutePoint", function (layer, args) {
             this.onActionExecutePoint({
                 nodeRef: args[1].nodeRef
             });
@@ -243,6 +243,60 @@ LogicECM.ORD = LogicECM.ORD || {};
 
     YAHOO.lang.augmentObject(LogicECM.ORD.PointsDatagrid.prototype, {
 
+        onExpand: function(record, isExpandAutomatically) {
+            Alfresco.util.Ajax.jsonPost({
+                url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                dataObj: {
+                    nodeRef: record.getData("nodeRef"),
+                    substituteString: "{lecm-ord-table-structure:errand-assoc-ref}"
+                },
+                successCallback: {
+                    fn: function (response) {
+                        if (response && response.json.formatString) {
+                            var nodeRef = response.json.formatString;
+                            this.showExpandForm(record, isExpandAutomatically, nodeRef);
+                        }
+                    },
+                    scope: this
+                },
+                failureMessage: Alfresco.util.message('message.failure'),
+                scope: this
+            });
+        },
+        showExpandForm: function(record, isExpandAutomatically, nodeRef){
+            if (!this.doubleClickLock) {
+                this.doubleClickLock = {};
+            } else if (this.doubleClickLock[record.getId()]) {
+                return;
+            }
+            this.doubleClickLock[record.getId()] = true;
+
+            if (nodeRef) {
+                var dataObj = YAHOO.lang.merge({
+                    htmlid: this.getExpandedFormId(record),
+                    itemKind: "node",
+                    itemId: nodeRef,
+                    mode: "view",
+                    isExpandAutomatically: isExpandAutomatically
+                }, this.options.expandDataObj);
+                Alfresco.util.Ajax.request({
+                    url: this.getExpandUri(),
+                    dataObj: dataObj,
+                    successCallback: {
+                        scope: this,
+                        fn: function(response) {
+                            if (response.serverResponse != null) {
+                                this.addExpandedRow(record, response.serverResponse.responseText);
+                            }
+                            this.doubleClickLock[record.getId()] = false;
+                        }
+                    },
+                    failureMessage: this.msg('message.failure'),
+                    execScripts: true,
+                    scope: this
+                });
+            }
+        },
         onActionCompletePoint: function (me, asset, owner, actionsConfig, confirmFunction) {
             var nodeRef = arguments[0].nodeRef;
             if (nodeRef) {
@@ -261,6 +315,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                         submitType: 'json'
                     },
                     width: '50em',
+                    zIndex: 2000,
                     destroyOnHide: true,
                     doBeforeDialogShow: {
                         fn: function (form, simpleDialog) {

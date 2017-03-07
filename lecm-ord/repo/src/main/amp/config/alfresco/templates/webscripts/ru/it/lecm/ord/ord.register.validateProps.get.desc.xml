@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Validate props on ord register</shortname>
-    <description>Validate props on ord register</description>
-    <url>/lecm/ord/register/validate?nodeRef={nodeRef}</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

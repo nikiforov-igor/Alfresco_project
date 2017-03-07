@@ -572,6 +572,18 @@
                     </field>
                 </appearance>
             </form>
+            <form id="ord-table-structure-info">
+                <field-visibility>
+                    <show id="ord-item-execution-tree" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="ord-item-execution-tree">
+                        <control template="/ru/it/lecm/eds/controls/execution-tree-control.ftl">
+                            <control-param name="showFirstLevel">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 

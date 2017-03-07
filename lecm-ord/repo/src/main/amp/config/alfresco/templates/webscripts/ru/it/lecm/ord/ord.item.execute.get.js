@@ -9,7 +9,7 @@ if (item) {
     if (errandAssoc && errandAssoc.length) {
         edsDocument.sendCompletionSignal(errandAssoc[0], reason, currentUser);
     }
-    ordStatemachine.changePointStatus(item.nodeRef.toString(), "Исполнен");
+    ordStatemachine.changePointStatus(item.nodeRef.toString(), "EXECUTED_STATUS");
     var recipients = [];
     var ordDoc = documentTables.getDocumentByTableDataRow(item);
     var controllerAssoc = ordDoc.assocs["lecm-ord:controller-assoc"];
@@ -30,7 +30,7 @@ if (item) {
         dontCheckAccessToObject: true
     });
     var logText = "#initiator исполнил ";
-    logText += documentScript.wrapperTitle("пункт номер" + number, title + " " + content);
+    logText += documentScript.wrapperTitle("пункт номер " + number, title + " " + content);
     logText += " " + documentScript.wrapperDocumentLink(ordDoc, "ОРД");
     businessJournal.log(ordDoc.nodeRef.toString(), "POINT_EXECUTED", logText, []);
 
