@@ -742,55 +742,91 @@
                 <!-- Путь до узла с поручениями -->
                 <property name="lecm-errands:dashlet-settings-path">
                     <type>d:text</type>
-                    <default></default>
+                    <default>Моя работа/Поручения в работе/На исполнении</default>
                 </property>
 
                 <!-- Путь до узла с неисполненными поручениями -->
                 <property name="lecm-errands:dashlet-settings-unexecuted">
                     <type>d:text</type>
-                    <default></default>
+                    <default>Моя работа/Все созданные мной/Поручения</default>
                 </property>
 
                 <!-- Путь до узла с выжными неисполненными поручениями -->
                 <property name="lecm-errands:dashlet-settings-unexecuted-important">
                     <type>d:text</type>
-                    <default></default>
+                    <default>Моя работа/Все созданные мной/Поручения</default>
                 </property>
 
                 <!-- Путь до узла с ожидающими исполнения поручениями -->
                 <property name="lecm-errands:dashlet-settings-await-execution">
                     <type>d:text</type>
-                    <default></default>
+                    <default>Моя работа/Все созданные мной/Поручения/Ожидают исполнения</default>
                 </property>
 
                 <!-- Путь до узла с важными ожидающими исполнения поручениями -->
                 <property name="lecm-errands:dashlet-settings-await-execution-important">
                     <type>d:text</type>
-                    <default></default>
+                    <default>Моя работа/Все созданные мной/Поручения/Ожидают исполнения</default>
                 </property>
+
+				<!-- Путь до узла с поручениями на исполнении -->
+				<property name="lecm-errands:dashlet-settings-on-execution">
+					<type>d:text</type>
+					<default>Моя работа/Все созданные мной/Поручения/На исполнении</default>
+				</property>
+
+				<!-- Путь до узла с важными поручениями на исполнении -->
+				<property name="lecm-errands:dashlet-settings-on-execution-important">
+					<type>d:text</type>
+					<default>Моя работа/Все созданные мной/Поручения/На исполнении</default>
+				</property>
+
+				<!-- Путь до узла с поручениями на проверке отчета -->
+				<property name="lecm-errands:dashlet-settings-on-check-report">
+					<type>d:text</type>
+					<default>Моя работа/Все созданные мной/Поручения/На проверке отчета</default>
+				</property>
+
+				<!-- Путь до узла с важными поручениями на проверке отчета -->
+				<property name="lecm-errands:dashlet-settings-on-check-report-important">
+					<type>d:text</type>
+					<default>Моя работа/Все созданные мной/Поручения/На проверке отчета</default>
+				</property>
+
+				<!-- Путь до узла с поручениями на доработке -->
+				<property name="lecm-errands:dashlet-settings-on-completion">
+					<type>d:text</type>
+					<default>Моя работа/Все созданные мной/Поручения/На доработке</default>
+				</property>
+
+				<!-- Путь до узла с важными поручениями на доработке -->
+				<property name="lecm-errands:dashlet-settings-on-completion-important">
+					<type>d:text</type>
+					<default>Моя работа/Все созданные мной/Поручения/На доработке</default>
+				</property>
 
                 <!-- Путь до узла с просроченными поручениями -->
                 <property name="lecm-errands:dashlet-settings-expired">
                     <type>d:text</type>
-                    <default></default>
+                    <default>Моя работа/Все созданные мной/Поручения</default>
                 </property>
 
                 <!-- Путь до узла с важными просроченными поручениями -->
                 <property name="lecm-errands:dashlet-settings-expired-important">
                     <type>d:text</type>
-                    <default></default>
+                    <default>Моя работа/Все созданные мной/Поручения</default>
                 </property>
 
                 <!-- Путь до узла с поручениями с прибилжающимся сроком -->
                 <property name="lecm-errands:dashlet-settings-approaching-deadline">
                     <type>d:text</type>
-                    <default></default>
+                    <default>Моя работа/Все созданные мной/Поручения</default>
                 </property>
 
                 <!-- Путь до узла с важными поручениями с прибилжающимся сроком -->
                 <property name="lecm-errands:dashlet-settings-approaching-deadline-important">
                     <type>d:text</type>
-                    <default></default>
+                    <default>Моя работа/Все созданные мной/Поручения</default>
                 </property>
 
             </properties>
