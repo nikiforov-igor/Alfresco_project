@@ -406,9 +406,10 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         List<String> status = stateMachineService.getStatuses("lecm-errands:document", true, false);
 
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-        // сортируем по важности поручения и по сроку исполнения
+        // сортируем поручения по важности, просроченности и по сроку исполнения
         sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_IS_IMPORTANT.toString(), false));
-        sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_LIMITATION_DATE.toString(), false));
+        sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_IS_EXPIRED.toString(), false));
+        sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_LIMITATION_DATE.toString(), true));
 
         for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, paths, status, null, sort)) {
             if (stateMachineService.isDraft(nodeRef)) {
@@ -417,7 +418,8 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
             if (stateMachineService.isFinal(nodeRef)) {
                 continue;
             }
-            if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))) {
+            if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET)) ||
+                currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_CO_EXECUTORS, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))) {
                 sortingErrands.add(nodeRef);
             }
         }
