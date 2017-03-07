@@ -605,7 +605,7 @@
 			            this.tempDisabled = true;
 			            Dom.get(this.id + "-date").disabled = true;
 			            if (Dom.get(this.id + '-icon')) {
-				            Dom.addClass(Dom.get(this.id + '-icon'), 'icon-disabled');
+				            Dom.addClass(this.id + '-icon', 'icon-disabled');
                         }
 		            }
 	            },
@@ -616,7 +616,7 @@
 			            if (!this.options.disabled) {
 				            Dom.get(this.id + "-date").disabled = false;
 				            if (Dom.get(this.id + '-icon')) {
-					            Dom.removeClass(Dom.get(this.id + '-icon', 'icon-disabled'));
+					            Dom.removeClass(this.id + '-icon', 'icon-disabled');
 				            }
 			            }
 		            }
