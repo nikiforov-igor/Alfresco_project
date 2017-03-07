@@ -604,9 +604,7 @@
 			            this.widgets.calendar.hide();
 			            this.tempDisabled = true;
 			            Dom.get(this.id + "-date").disabled = true;
-			            if (Dom.get(this.id + '-icon')) {
-				            Dom.addClass(this.id + '-icon', 'icon-disabled');
-                        }
+                        Dom.addClass(this.id + '-icon', 'icon-disabled');
 		            }
 	            },
 
@@ -615,9 +613,7 @@
 			            this.tempDisabled = false;
 			            if (!this.options.disabled) {
 				            Dom.get(this.id + "-date").disabled = false;
-				            if (Dom.get(this.id + '-icon')) {
-					            Dom.removeClass(this.id + '-icon', 'icon-disabled');
-				            }
+                            Dom.removeClass(this.id + '-icon', 'icon-disabled');
 			            }
 		            }
 	            },
