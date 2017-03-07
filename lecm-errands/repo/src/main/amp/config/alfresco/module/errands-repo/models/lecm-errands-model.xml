@@ -666,6 +666,7 @@
 			<mandatory-aspects>
 				<aspect>lecm-errands-ts:coexecutor-reports-aspect</aspect>
 				<aspect>lecm-errands-ts:execution-reports-aspect</aspect>
+				<aspect>lecm-document-aspects:on-control-aspect</aspect>
 			</mandatory-aspects>
 		</type>
 
