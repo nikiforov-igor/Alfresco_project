@@ -1,47 +1,61 @@
-package ru.it.lecm.events.ews;
+package ru.it.lecm.events.ews.deprecated;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import microsoft.exchange.webservices.data.core.ExchangeService;
-import microsoft.exchange.webservices.data.core.enumeration.availability.AvailabilityData;
-import microsoft.exchange.webservices.data.core.enumeration.misc.ExchangeVersion;
-import microsoft.exchange.webservices.data.core.enumeration.misc.error.ServiceError;
-import microsoft.exchange.webservices.data.core.response.AttendeeAvailability;
-import microsoft.exchange.webservices.data.credential.ExchangeCredentials;
-import microsoft.exchange.webservices.data.credential.WebCredentials;
-import microsoft.exchange.webservices.data.misc.availability.AttendeeInfo;
-import microsoft.exchange.webservices.data.misc.availability.GetUserAvailabilityResults;
-import microsoft.exchange.webservices.data.misc.availability.TimeWindow;
-import microsoft.exchange.webservices.data.property.complex.availability.CalendarEvent;
+import java.util.TimeZone;
+import microsoft.exchange.webservices.data.ExchangeService;
+import microsoft.exchange.webservices.data.AvailabilityData;
+import microsoft.exchange.webservices.data.ExchangeVersion;
+import microsoft.exchange.webservices.data.ServiceError;
+import microsoft.exchange.webservices.data.AttendeeAvailability;
+import microsoft.exchange.webservices.data.ExchangeCredentials;
+import microsoft.exchange.webservices.data.WebCredentials;
+import microsoft.exchange.webservices.data.AttendeeInfo;
+import microsoft.exchange.webservices.data.GetUserAvailabilityResults;
+import microsoft.exchange.webservices.data.TimeWindow;
+import microsoft.exchange.webservices.data.CalendarEvent;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.events.beans.EWSEvent;
 import ru.it.lecm.events.beans.EmployeeAvailability;
+import ru.it.lecm.events.ews.AbstractEWSService;
 
 /**
  *
  * @author vmalygin
  *
- * Основан на использовании ews-java-api:2.0
- * Предназначен для использования на alfresco-5.x
+ * Основан на использовании exchange-ws-api:1.1.5.2
+ * Предназначен для использования на alfresco-4.2.e
+ * При окончательно переходе на alfresco5 должен быть удален
  */
+@Deprecated
 public class EWSServiceImpl extends AbstractEWSService {
 
 	private final static Logger logger = LoggerFactory.getLogger(EWSServiceImpl.class);
 
 	private ExchangeService service;
+	private final DateFormat formatter;
+	private final DateFormat serviceTimezoneFormatter;
+
+	public EWSServiceImpl() {
+		formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		serviceTimezoneFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		serviceTimezoneFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+	}
 
 	@Override
 	public void init() throws URISyntaxException {
-		logger.info("ATTENTION: you are going to use EWSService based on ews-java-api:2.0");
+		logger.info("ATTENTION: you are going to use deprecated, old, obsolete, monstrous EWSService based on exchange-ws-api:1.1.5.2");
 		ExchangeVersion requestedServerVersion = ExchangeVersion.valueOf(exchangeVersion);
 		ExchangeCredentials credentials = new WebCredentials(username, password, domain);
 		service = new ExchangeService(requestedServerVersion);
@@ -58,7 +72,11 @@ public class EWSServiceImpl extends AbstractEWSService {
 				if (availability.getErrorCode() == ServiceError.NoError) {
 					Collection<CalendarEvent> calendarEvents = availability.getCalendarEvents();
 					for (CalendarEvent calendarEvent : calendarEvents) {
-						employeeAvailability.getEvents().add(new EWSEvent(calendarEvent.getStartTime(), calendarEvent.getEndTime()));
+						String startTime = formatter.format(calendarEvent.getStartTime());
+						String endTime = formatter.format(calendarEvent.getEndTime());
+						Date start = serviceTimezoneFormatter.parse(startTime);
+						Date end = serviceTimezoneFormatter.parse(endTime);
+						employeeAvailability.getEvents().add(new EWSEvent(start, end));
 					}
 				} else {
 					logger.error("EWS Error code: {}", availability.getErrorCode().toString());

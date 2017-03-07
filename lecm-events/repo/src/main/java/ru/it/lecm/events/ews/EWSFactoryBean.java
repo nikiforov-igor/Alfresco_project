@@ -17,6 +17,7 @@ public class EWSFactoryBean implements FactoryBean<EWSService> {
 	private final static Logger logger = LoggerFactory.getLogger(EWSFactoryBean.class);
 
 	private boolean enabled;
+	private boolean deprecated;
 	private String exchangeVersion;
 	private String url;
 	private String username;
@@ -28,6 +29,10 @@ public class EWSFactoryBean implements FactoryBean<EWSService> {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public void setDeprecated(boolean deprecated) {
+		this.deprecated = deprecated;
 	}
 
 	public void setExchangeVersion(String exchangeVersion) {
@@ -77,7 +82,7 @@ public class EWSFactoryBean implements FactoryBean<EWSService> {
 		if (ewsService == null) {
 			ewsService = new EWSDummyServiceImpl();
 			if (enabled) {
-				EWSServiceImpl realService = new EWSServiceImpl();
+				AbstractEWSService realService = deprecated ? new ru.it.lecm.events.ews.deprecated.EWSServiceImpl() : new ru.it.lecm.events.ews.EWSServiceImpl();
 				realService.setExchangeVersion(exchangeVersion);
 				realService.setUrl(url);
 				realService.setUsername(username);

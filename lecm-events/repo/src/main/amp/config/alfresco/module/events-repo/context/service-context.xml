@@ -431,6 +431,7 @@
 
 	<bean id="ewsService" class="ru.it.lecm.events.ews.EWSFactoryBean" init-method="init">
 		<property name="enabled" value="#{new Boolean('${lecm.events.ews.enabled}')}"/>
+		<property name="deprecated" value="#{new Boolean('${lecm.events.ws.deprecated}')}"/>
 		<property name="exchangeVersion" value="${lecm.events.ews.version}"/>
 		<property name="url" value="${lecm.events.ews.url}"/>
 		<property name="username" value="${lecm.events.ews.username}"/>

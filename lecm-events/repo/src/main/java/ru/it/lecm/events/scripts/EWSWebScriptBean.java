@@ -31,6 +31,7 @@ public class EWSWebScriptBean extends BaseWebScript {
 			List<EWSEvent> events = availability.getEvents();
 			NativeObject obj = new NativeObject();
 			NativeArray arr = new NativeArray(events.size());
+			int i = 0;
 			for (EWSEvent event : events) {
 				NativeObject busyTime = new NativeObject();
 				busyTime.put("title", busyTime, "");
@@ -38,6 +39,7 @@ public class EWSWebScriptBean extends BaseWebScript {
 				busyTime.put("startDate", busyTime, DateFormatISO8601.format(event.getStart()));
 				busyTime.put("end", busyTime, ISO8601DateFormat.format(event.getEnd()));
 				busyTime.put("endDate", busyTime, DateFormatISO8601.format(event.getEnd()));
+				arr.put(i++, arr, busyTime);
 			}
 			obj.put("employee", obj, availability.getEmployeeRef().toString());
 			obj.put("busytime", obj, arr);
