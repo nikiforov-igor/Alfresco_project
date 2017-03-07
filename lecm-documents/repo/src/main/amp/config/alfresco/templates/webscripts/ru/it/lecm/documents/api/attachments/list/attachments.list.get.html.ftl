@@ -33,7 +33,7 @@
 			<#list category.attachments as attachment>
 				<li class='attachmentDescription'>
 					<span>
-						<a href='${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}'>${attachment.displayName}</a>
+						<a href='${shareContext}/page/document-attachment?nodeRef=${attachment.nodeRef}'>${attachment.displayName}</a>
 					</span>
 					<#-- <span style='float: right; clear: both;'>2 МБ</span> -->
 				</li>
