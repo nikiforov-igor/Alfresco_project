@@ -9580,7 +9580,7 @@ if (doc) {
     var ord = stm_document;
     /*Выставление флага "На контроле"*/
     registratorAssocs = ord.assocs['lecm-ord:controller-assoc'];
-  	if (registratorAssocs && registratorAssocs != ""){
+  	if (registratorAssocs && registratorAssocs.length){
       ord.properties["lecm-document-aspects:is-on-control"] = "true";
   	}
     /*Регистрация*/
