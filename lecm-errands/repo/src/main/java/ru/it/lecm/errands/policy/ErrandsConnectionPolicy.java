@@ -23,6 +23,7 @@ import ru.it.lecm.resolutions.api.ResolutionsService;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -213,47 +214,52 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
 
     public void transferRightToBaseDocument(NodeRef errandDoc) throws WriteTransactionNeededException {
         if (errandsService.isTransferRightToBaseDocument()) {
-            NodeRef baseDoc = errandsService.getBaseDocument(errandDoc);
+            List<NodeRef> additionalDocs = new ArrayList<>();
+            additionalDocs.add(errandsService.getErrandBaseDocument(errandDoc));
+            additionalDocs.add(errandsService.getBaseDocument(errandDoc));
             NodeRef executor = errandsService.getExecutor(errandDoc);
+            NodeRef initiator = errandsService.getInitiator(errandDoc);
+            for (NodeRef additionalDoc : additionalDocs) {
+                if (additionalDoc != null && executor != null && initiator != null) {
+                    if (nodeService.getType(additionalDoc).equals(ErrandsService.TYPE_ERRANDS)) {
+                        List<NodeRef> connectedDocuments = documentConnectionService.getConnectedWithDocument(additionalDoc, true);
+                        for (NodeRef document : connectedDocuments) {
+                            if (!nodeService.getType(document).equals(ErrandsService.TYPE_ERRANDS)) {
+                                documentConnectionService.createConnection(document, errandDoc, DocumentConnectionService.DICTIONARY_VALUE_FOR_INFORMATION, true, true);
 
-            if (baseDoc != null && executor != null) {
-                if (nodeService.getType(baseDoc).equals(ErrandsService.TYPE_ERRANDS)) {
-                    List<NodeRef> connectedDocuments = documentConnectionService.getConnectedWithDocument(baseDoc, true);
-                    for (NodeRef document : connectedDocuments) {
-                        if (!nodeService.getType(document).equals(ErrandsService.TYPE_ERRANDS)) {
-                            documentConnectionService.createConnection(document, errandDoc, DocumentConnectionService.DICTIONARY_VALUE_FOR_INFORMATION, true, true);
+                                documentMembersService.addMemberWithoutCheckPermission(document, executor, new HashMap<QName, Serializable>());
+                                documentMembersService.addMemberWithoutCheckPermission(document, initiator, new HashMap<QName, Serializable>());
 
-                            documentMembersService.addMemberWithoutCheckPermission(document, executor, new HashMap<QName, Serializable>());
+                                List<AssociationRef> coexecutors = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS);
+                                if (coexecutors != null) {
+                                    for (AssociationRef coexecutor : coexecutors) {
+                                        documentMembersService.addMemberWithoutCheckPermission(document, coexecutor.getTargetRef(), new HashMap<QName, Serializable>());
+                                    }
+                                }
 
-							List<AssociationRef> coexecutors = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS);
-							if(coexecutors != null) {
-								for (AssociationRef coexecutor : coexecutors) {
-									documentMembersService.addMemberWithoutCheckPermission(document, coexecutor.getTargetRef(), new HashMap<QName, Serializable>());
-								}
-							}
+                                List<AssociationRef> controlerAssocs = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_CONTROLLER);
+                                if (controlerAssocs != null && !controlerAssocs.isEmpty()) {
+                                    NodeRef controller = controlerAssocs.get(0).getTargetRef();
+                                    documentMembersService.addMemberWithoutCheckPermission(document, controller, new HashMap<QName, Serializable>());
+                                }
+                            }
+                        }
+                    } else {
+                        documentMembersService.addMemberWithoutCheckPermission(additionalDoc, executor, new HashMap<QName, Serializable>());
 
-							List<AssociationRef> controlerAssocs = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_CONTROLLER);
-							if(controlerAssocs != null && !controlerAssocs.isEmpty()) {
-								NodeRef controller = controlerAssocs.get(0).getTargetRef();
-								documentMembersService.addMemberWithoutCheckPermission(document, controller, new HashMap<QName, Serializable>());
-							}
+                        List<AssociationRef> coexecutors = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS);
+                        if (coexecutors != null) {
+                            for (AssociationRef coexecutor : coexecutors) {
+                                documentMembersService.addMemberWithoutCheckPermission(additionalDoc, coexecutor.getTargetRef(), new HashMap<QName, Serializable>());
+                            }
+                        }
+
+                        List<AssociationRef> controlerAssocs = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_CONTROLLER);
+                        if (controlerAssocs != null && !controlerAssocs.isEmpty()) {
+                            NodeRef controller = controlerAssocs.get(0).getTargetRef();
+                            documentMembersService.addMemberWithoutCheckPermission(additionalDoc, controller, new HashMap<QName, Serializable>());
                         }
                     }
-                } else {
-                    documentMembersService.addMemberWithoutCheckPermission(baseDoc, executor, new HashMap<QName, Serializable>());
-
-					List<AssociationRef> coexecutors = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS);
-					if(coexecutors != null) {
-						for (AssociationRef coexecutor : coexecutors) {
-							documentMembersService.addMemberWithoutCheckPermission(baseDoc, coexecutor.getTargetRef(), new HashMap<QName, Serializable>());
-						}
-					}
-
-					List<AssociationRef> controlerAssocs = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_CONTROLLER);
-					if(controlerAssocs != null && !controlerAssocs.isEmpty()) {
-						NodeRef controller = controlerAssocs.get(0).getTargetRef();
-						documentMembersService.addMemberWithoutCheckPermission(baseDoc, controller, new HashMap<QName, Serializable>());
-					}
                 }
             }
         }
