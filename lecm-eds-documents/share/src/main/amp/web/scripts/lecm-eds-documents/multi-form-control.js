@@ -46,6 +46,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 formId: null,
                 fieldId: null
             },
+            countDefaultForms: 0,
             currentLine: 0,
             rootSubmitElement: null,
             rootFormSubmitFunction: null,
@@ -107,6 +108,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                                 var oResults = response.json;
                                 if (oResults && oResults.length) {
                                     var i;
+                                    this.countDefaultForms = oResults.length;
                                     for (i = 0; i < oResults.length; i++) {
                                         this.onAdd(null, null, oResults[i]);
                                     }
@@ -231,7 +233,11 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 } else if (this.options.documentFromId) {
                     dataObj.formId = this.options.documentFromId;
                 }
-
+                var ul = Dom.get(this.id + "-multi-form-documents-list");
+                var li = document.createElement('li');
+                li.id = this.id + "_" + num + "_item";
+                Dom.addClass(li, "multi-form-documents-item");
+                ul.appendChild(li);
                 Alfresco.util.Ajax.request({
                     url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
                     dataObj: dataObj,
@@ -239,11 +245,6 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                     successCallback: {
                         fn: function (response) {
                             var html = response.serverResponse.responseText;
-                            var ul = Dom.get(this.id + "-multi-form-documents-list");
-
-                            var li = document.createElement('li');
-                            li.id = this.id + "_" + num + "_item";
-                            Dom.addClass(li, "multi-form-documents-item");
 
                             var itemsHtml = "";
 
@@ -255,12 +256,13 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                             if (!this.options.disabled && (!args || this.options.availableRemoveDefault)) {
                                 itemsHtml += this.getActionsDivHTML(num);
                             }
-                            itemsHtml += "<div id='" + formId + "_container' class='multi-form-documents-item-container'>";
-                            itemsHtml += html;
-                            itemsHtml += "</div>";
 
                             li.innerHTML = itemsHtml;
-                            ul.appendChild(li);
+                            var div = document.createElement('div');
+                            div.id = formId + "_container";
+                            Dom.addClass(div, "multi-form-documents-item-container");
+                            div.innerHTML = html;
+                            li.appendChild(div);
 
                             YAHOO.util.Event.onAvailable(this.id + "-line-" + num + "-form", this.calcActionsHeight, num, this);
 
@@ -268,6 +270,9 @@ LogicECM.module.eds = LogicECM.module.eds || {};
 
                             Dom.setStyle(formId + "-form-buttons", "visibility", "hidden");
                             Dom.setStyle(formId + "-form-buttons", "display", "none");
+                            if (num >= this.countDefaultForms) {
+                                this.resetIndexes();
+                            }
                         },
                         scope: this
                     },
@@ -327,7 +332,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                     if (args[1].subFieldId && args[1].options) {
                         for (var i in this.forms) {
                             if (this.forms.hasOwnProperty(i)) {
-                                var formId= this.forms[i].formId;
+                                var formId = this.forms[i].formId;
                                 formId = formId.substring(0, formId.length - "-form".length);
 
                                 LogicECM.module.Base.Util.reInitializeControl(formId, args[1].subFieldId, args[1].options);
@@ -337,7 +342,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 }
             },
 
-            updateFormCount: function() {
+            updateFormCount: function () {
                 var countElement = Dom.get(this.id + "-count");
                 if (countElement) {
                     countElement.value = Object.keys(this.forms).length;
@@ -345,7 +350,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 this.resetIndexes();
             },
 
-            resetIndexes: function() {
+            resetIndexes: function () {
                 var index = 0, elIndexes;
                 for (var i = 0; i <= this.currentLine; i++) {
                     elIndexes = Dom.get(this.id + "_" + i + "_indexes");

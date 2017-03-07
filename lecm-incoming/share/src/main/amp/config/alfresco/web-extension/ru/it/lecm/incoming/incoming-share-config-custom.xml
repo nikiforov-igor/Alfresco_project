@@ -7,6 +7,16 @@
             </forms>
     </config> -->
 
+    <config>
+        <forms>
+            <default-controls>
+                <type name="association:lecm-incoming-dic:documentType" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_входящего</control-param>
+                    <control-param name="plane">true</control-param>
+                </type>
+            </default-controls>
+        </forms>
+    </config>
     <config evaluator="node-type" condition="lecm-incoming:document">
         <forms>
             <!-- Форма редатирования-->
