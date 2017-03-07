@@ -118,11 +118,13 @@
      {
 
         function init() {
-            LogicECM.module.Base.Util.loadScripts([
+            LogicECM.module.Base.Util.loadResources([
                 'scripts/lecm-calendar/absence/date-interval-validation.js',
                 'scripts/lecm-base/components/lecm-date-picker.js',
                 'scripts/lecm-calendar/absence/absence-date-picker.js',
                 'components/form/date.js'
+           ],[
+                'css/lecm-base/components/lecm-date-picker.css'
            ], createControl, ["button", "calendar"]);
         }
 
