@@ -37,6 +37,7 @@
 	function init() {
         (function() {
             LogicECM.module.Base.Util.loadCSS([
+            	'css/lecm-base/components/lecm-date-picker.css',
                 'css/lecm-base/components/daterange.css'
             ]);
         })();
