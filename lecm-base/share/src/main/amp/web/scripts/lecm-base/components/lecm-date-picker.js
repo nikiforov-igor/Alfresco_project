@@ -614,6 +614,7 @@
 			            this.widgets.calendar.hide();
 			            this.tempDisabled = true;
 			            Dom.get(this.id + "-date").disabled = true;
+                        Dom.addClass(this.id + '-icon', 'icon-disabled');
 		            }
 	            },
 
@@ -622,6 +623,7 @@
 			            this.tempDisabled = false;
 			            if (!this.options.disabled) {
 				            Dom.get(this.id + "-date").disabled = false;
+                            Dom.removeClass(this.id + '-icon', 'icon-disabled');
 			            }
 		            }
 	            },

@@ -20,6 +20,24 @@
                     <type>d:int</type>
                     <default>0</default>
                 </property>
+                <!-- состояние ознакомления -->
+                <property name="lecm-review-aspects:related-review-state">
+                    <type>d:text</type>
+                    <default>NOT_REQUIRED</default>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                    <constraints>
+                        <constraint ref="lecm-review-ts:doc-review-state-constraint"/>
+                    </constraints>
+                </property>
+                <!-- json [{"state": "статус", "count": "кол-во"}]-->
+                <property name="lecm-review-aspects:related-review-statistics">
+                    <type>d:text</type>
+                    <index enabled="false"/>
+                </property>
             </properties>
             <associations>
                 <association name="lecm-review-aspects:related-review-records-assoc">

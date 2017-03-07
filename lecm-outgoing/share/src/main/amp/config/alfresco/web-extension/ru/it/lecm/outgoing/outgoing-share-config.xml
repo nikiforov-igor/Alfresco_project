@@ -136,6 +136,7 @@
                             <control-param name="showAssocViewForm">true</control-param>
                             <control-param name="updateOnContractorSelect">contractor.selected</control-param>
                             <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
+	                        <control-param name="defaultValueUseOnce">true</control-param>
                             <!-- autocomplete options-->
                             <control-param name="autoCompleteJsName">select-representative-autoComplete</control-param>
                             <control-param name="treeViewJsName">select-representative-treeView</control-param>
@@ -246,6 +247,7 @@
                             <control-param name="showAssocViewForm">true</control-param>
                             <control-param name="updateOnContractorSelect">contractor.selected</control-param>
                             <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
+	                        <control-param name="defaultValueUseOnce">true</control-param>
                             <!-- autocomplete options-->
                             <control-param name="autoCompleteJsName">select-representative-autoComplete</control-param>
                             <control-param name="treeViewJsName">select-representative-treeView</control-param>
@@ -372,6 +374,7 @@
                             <control-param name="showAssocViewForm">true</control-param>
                             <control-param name="updateOnContractorSelect">contractor.selected</control-param>
                             <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
+	                        <control-param name="defaultValueUseOnce">true</control-param>
                             <!-- autocomplete options-->
                             <control-param name="autoCompleteJsName">select-representative-autoComplete</control-param>
                             <control-param name="treeViewJsName">select-representative-treeView</control-param>
@@ -599,6 +602,7 @@
                             <control-param name="showAssocViewForm">true</control-param>
                             <control-param name="updateOnContractorSelect">contractor.selected</control-param>
                             <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
+	                        <control-param name="defaultValueUseOnce">true</control-param>
                             <!-- autocomplete options-->
                             <control-param name="autoCompleteJsName">select-representative-autoComplete</control-param>
                             <control-param name="treeViewJsName">select-representative-treeView</control-param>
@@ -974,6 +978,7 @@
 							<control-param name="showAssocViewForm">true</control-param>
 							<control-param name="updateOnContractorSelect">contractor.selected</control-param>
 							<control-param name="updateOnOrganizationSelect">organization.selected</control-param>
+							<control-param name="defaultValueUseOnce">true</control-param>
 							<!-- autocomplete options-->
 							<control-param name="autoCompleteJsName">select-representative-autoComplete</control-param>
 							<control-param name="treeViewJsName">select-representative-treeView</control-param>
