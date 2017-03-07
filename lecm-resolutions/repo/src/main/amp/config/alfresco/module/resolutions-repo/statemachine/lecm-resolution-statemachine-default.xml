@@ -2067,7 +2067,9 @@ if (document && !regnumbers.isDocumentRegistered(document)) {
     var childIndex = 1;
     var childAssoc = parentDocAssoc[0].sourceAssocs["lecm-resolutions:base-document-assoc"];
     if (childAssoc && childAssoc.length) {
-      childIndex = childAssoc.length;
+      childIndex += childAssoc.filter(function(child){
+        return regnumbers.isDocumentRegistered(child);
+      }).length;
     }
     document.properties["lecm-resolutions:child-index-counter"] = childIndex;
   } else {
