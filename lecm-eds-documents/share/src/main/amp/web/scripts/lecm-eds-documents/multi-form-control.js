@@ -270,7 +270,9 @@ LogicECM.module.eds = LogicECM.module.eds || {};
 
                             Dom.setStyle(formId + "-form-buttons", "visibility", "hidden");
                             Dom.setStyle(formId + "-form-buttons", "display", "none");
-                            this.afterLoadedForm(num);
+                            if (num >= this.countDefaultForms) {
+                                this.resetIndexes();
+                            }
                         },
                         scope: this
                     },
@@ -281,12 +283,6 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                         scope: this
                     }
                 });
-            },
-
-            afterLoadedForm: function (counter) {
-                if (counter >= this.countDefaultForms) {
-                    this.resetIndexes();
-                }
             },
 
             onRemove: function remove_function(ev, args) {
