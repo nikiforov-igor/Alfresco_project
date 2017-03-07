@@ -3444,6 +3444,12 @@
                     <show id="lecm-errands:dashlet-settings-unexecuted-important"/>
                     <show id="lecm-errands:dashlet-settings-await-execution"/>
                     <show id="lecm-errands:dashlet-settings-await-execution-important"/>
+                    <show id="lecm-errands:dashlet-settings-on-execution"/>
+                    <show id="lecm-errands:dashlet-settings-on-execution-important"/>
+                    <show id="lecm-errands:dashlet-settings-on-check-report"/>
+                    <show id="lecm-errands:dashlet-settings-on-check-report-important"/>
+                    <show id="lecm-errands:dashlet-settings-on-completion"/>
+                    <show id="lecm-errands:dashlet-settings-on-completion-important"/>
                     <show id="lecm-errands:dashlet-settings-expired"/>
                     <show id="lecm-errands:dashlet-settings-expired-important"/>
                     <show id="lecm-errands:dashlet-settings-approaching-deadline"/>
