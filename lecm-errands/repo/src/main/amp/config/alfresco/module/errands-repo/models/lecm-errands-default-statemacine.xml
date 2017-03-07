@@ -4913,7 +4913,7 @@ if (doc) {
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.attr("lecm-errands:execute-result") == "executed"]]></value>
+                                                                    <![CDATA[doc.attr("lecm-errands:execute-result") == "executed" AND doc.attr("lecm-statemachine:is-final") != true]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>

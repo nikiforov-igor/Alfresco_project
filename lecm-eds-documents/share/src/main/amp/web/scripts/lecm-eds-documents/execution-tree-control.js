@@ -304,7 +304,7 @@ LogicECM.module = LogicECM.module || {};
                         url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                         dataObj: {
                             nodeRef: nodeRef,
-                            substituteString: "{lecm-eds-aspect:execution-statistics}#{lecm-resolutions:base-document-assoc/lecm-review-ts:doc-review-statistics}"
+                            substituteString: "{lecm-eds-aspect:execution-statistics}#{lecm-review-aspects:related-review-statistics}"
                         },
                         successCallback: {
                             fn: function (response) {

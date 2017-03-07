@@ -10,6 +10,7 @@
 
     var formButtons;
     var baseDocExecutionDate = null;
+    var currentUserIsErrandsInitiator = false;
 
     Bubbling.on('saveDraftResolutionButtonClick', saveDraft);
     Bubbling.on('sendResolutionButtonClick', sendResolutionClick);
@@ -36,23 +37,30 @@
             }
         }
 
-        var errandsCount = Dom.get(args[1].formId + '_prop_lecm-resolutions_errands-json-count');
-        var reviewers = Dom.get(args[1].formId + '_assoc_lecm-resolutions_reviewers-assoc');
-        if ((errandsCount && parseInt(errandsCount.value)) || (reviewers && reviewers.value && reviewers.value.length)) {
-            submitResolutionForm(true, form);
-        } else {
-            var baseDoc = Dom.get(args[1].formId + '_assoc_lecm-resolutions_base-document-assoc');
-            if (baseDoc && baseDoc.value && baseDoc.value.length) {
-                Alfresco.util.PopupManager.displayMessage(
-                    {
-                        text: Alfresco.util.message('title.resolution.errands.reviewers.empty')
-                    });
+        if (currentUserIsErrandsInitiator) {
+            var errandsCount = Dom.get(args[1].formId + '_prop_lecm-resolutions_errands-json-count');
+            var reviewers = Dom.get(args[1].formId + '_assoc_lecm-resolutions_reviewers-assoc');
+            if ((errandsCount && parseInt(errandsCount.value)) || (reviewers && reviewers.value && reviewers.value.length)) {
+                submitResolutionForm(true, form);
             } else {
-                Alfresco.util.PopupManager.displayMessage(
-                    {
-                        text: Alfresco.util.message('title.resolution.errands.empty')
-                    });
+                var baseDoc = Dom.get(args[1].formId + '_assoc_lecm-resolutions_base-document-assoc');
+                if (baseDoc && baseDoc.value && baseDoc.value.length) {
+                    Alfresco.util.PopupManager.displayMessage(
+                        {
+                            text: Alfresco.util.message('title.resolution.errands.reviewers.empty')
+                        });
+                } else {
+                    Alfresco.util.PopupManager.displayMessage(
+                        {
+                            text: Alfresco.util.message('title.resolution.errands.empty')
+                        });
+                }
             }
+        } else {
+            Alfresco.util.PopupManager.displayMessage(
+                {
+                    text: Alfresco.util.message('title.resolution.errands.isNotStarter')
+                });
         }
     }
 
@@ -245,6 +253,20 @@
         var formId = args[1].formId;
         formButtons = Dom.get(formId + "-form-buttons");
         Dom.setStyle(formId + "-form-submit", "display", "none");
+
+        Alfresco.util.Ajax.jsonGet({
+            url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/isCurrentEmployeeHasBusinessRole",
+            dataObj: {
+                roleId: "ERRANDS_INITIATOR"
+            },
+            successCallback: {
+                fn: function (response) {
+                    currentUserIsErrandsInitiator = response.json;
+                }
+            },
+            failureMessage: Alfresco.util.message("message.failure")
+        });
+
 
         var form = Dom.get(formId + "-form");
         if (form && form["assoc_lecm-resolutions_base-document-assoc"] && form["assoc_lecm-resolutions_base-document-assoc"].value) {

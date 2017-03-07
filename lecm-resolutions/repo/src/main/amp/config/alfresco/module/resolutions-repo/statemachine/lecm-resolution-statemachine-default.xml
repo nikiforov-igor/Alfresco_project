@@ -814,6 +814,38 @@
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>44c3f364-bd81-48d6-a7eb-0d1e0c336413
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/4851c0ed-7698-4ed4-8c90-2660c7a55951
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие не может быть выполнено: вы не обладаете ролью "Поручения.Инициатор". Обратитесь к администратору Системы]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -2035,7 +2067,9 @@ if (document && !regnumbers.isDocumentRegistered(document)) {
     var childIndex = 1;
     var childAssoc = parentDocAssoc[0].sourceAssocs["lecm-resolutions:base-document-assoc"];
     if (childAssoc && childAssoc.length) {
-      childIndex = childAssoc.length;
+      childIndex += childAssoc.filter(function(child){
+        return regnumbers.isDocumentRegistered(child);
+      }).length;
     }
     document.properties["lecm-resolutions:child-index-counter"] = childIndex;
   } else {
@@ -2051,8 +2085,6 @@ if (document && !regnumbers.isDocumentRegistered(document)) {
     var errandsList = eval('(' + document.properties["lecm-resolutions:errands-json"] + ')');
     if (errandsList && errandsList.length) {
       var i = 0;
-      lecmPermission.pushAuthentication();
-      lecmPermission.setRunAsUserSystem();
       errandsList.forEach(function(errand) {
         errand["assoc_lecm-errands_additional-document-assoc"] = document.nodeRef.toString();
         errand["assoc_lecm-errands_initiator-assoc"] = document.properties["lecm-resolutions:author-assoc-ref"];
@@ -2061,7 +2093,6 @@ if (document && !regnumbers.isDocumentRegistered(document)) {
         errand["prop_lecm-errands_additional-doc-number"] = document.properties["lecm-resolutions:number"];
         errands.createErrands(errand);
       });
-      lecmPermission.popAuthentication();
     }
   }
 }]]></value>
@@ -3239,6 +3270,38 @@ if (document) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>847832b2-6aca-4041-9130-14a359b49e25
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/04563994-e6bb-49ab-a07a-33c5d8885920
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие не может быть выполнено: вы не обладаете ролью "Поручения.Инициатор". Обратитесь к администратору Системы]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -4376,6 +4439,38 @@ if (document) {
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Работа по документу-основанию резолюции завершена. Продолжить работу с резолюцией?]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>a90e6486-0b52-415d-a417-4792c9a19e6d
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/18f5413b-6f2b-4554-b4b3-b7454bec85a8
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие не может быть выполнено: вы не обладаете ролью "Поручения.Инициатор". Обратитесь к администратору Системы]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>

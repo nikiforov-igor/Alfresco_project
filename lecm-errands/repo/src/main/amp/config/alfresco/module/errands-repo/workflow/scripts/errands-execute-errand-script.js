@@ -72,8 +72,11 @@ var ExecuteErrandScript = {
             }
             var additionalDoc = errands.getAdditionalDocument(document.nodeRef.toString());
             if (additionalDoc) {
+                lecmPermission.pushAuthentication();
+                lecmPermission.setRunAsUserSystem();
                 additionalDoc.properties["lecm-eds-aspect:completion-signal-reason"] = document.properties["lecm-errands:execution-report"];
                 additionalDoc.save();
+                lecmPermission.popAuthentication();
             }
         } else {
             document.properties["lecm-errands:execution-report-status"] = "ONCONTROL";
