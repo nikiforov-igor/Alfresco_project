@@ -15,5 +15,5 @@ if (status.code == status.STATUS_OK && model.persistedObject) {
 		}
 	}
 	reviewTsItems = createReviewTSItem(reviewInfo, reviewTsItems);
-	sendToReview(reviewInfo, reviewTsItems);
+	sendToReview(reviewInfo);
 }
