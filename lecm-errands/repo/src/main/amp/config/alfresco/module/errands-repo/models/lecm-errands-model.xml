@@ -687,7 +687,7 @@
 			    <property name="lecm-errands:settings-transfer-rights">
 				    <type>d:boolean</type>
 				    <mandatory>true</mandatory>
-				    <default>false</default>
+				    <default>true</default>
 			    </property>
 				<!-- Скрывать расширенные атрибуты поручения -->
 				<property name="lecm-errands:settings-hide-additional-attrs">
