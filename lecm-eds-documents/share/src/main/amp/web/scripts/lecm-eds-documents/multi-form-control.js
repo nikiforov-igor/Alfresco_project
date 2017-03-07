@@ -256,11 +256,13 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                             if (!this.options.disabled && (!args || this.options.availableRemoveDefault)) {
                                 itemsHtml += this.getActionsDivHTML(num);
                             }
-                            itemsHtml += "<div id='" + formId + "_container' class='multi-form-documents-item-container'>";
-                            itemsHtml += html;
-                            itemsHtml += "</div>";
 
                             li.innerHTML = itemsHtml;
+                            var div = document.createElement('div');
+                            div.id = formId + "_container";
+                            Dom.addClass(div, "multi-form-documents-item-container");
+                            div.innerHTML=html;
+                            li.appendChild(div);
 
                             YAHOO.util.Event.onAvailable(this.id + "-line-" + num + "-form", this.calcActionsHeight, num, this);
 
@@ -287,9 +289,6 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                     while (elIndexes) {
                         this.updateFormCount();
                         break;
-                    }
-                    for (var i = 0; i <= this.currentLine; i++) {
-                        this.calcActionsHeight(i);
                     }
                 }
             },
