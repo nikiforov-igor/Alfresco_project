@@ -152,17 +152,17 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             },
 
             onFiltersClick: function () {
-                var callBack = function () {
+                function callback() {
                     if (this.filtersDialog) {
                         this.filtersDialog.show();
                     }
                     this.toolbarButtons["defaultActive"].filtersButton.set("disabled", true);
                     Dom.addClass(this.id + "-filters-button-container", "showed");
-                };
+                }
 
                 var filtersDiv = Dom.get(this.id + "-filters-dialog-content");
                 if (filtersDiv) {
-                    this.armFilters.renderFilters(filtersDiv, callBack, this);
+                    this.armFilters.renderFilters(filtersDiv, callback, this);
                 }
             },
 
