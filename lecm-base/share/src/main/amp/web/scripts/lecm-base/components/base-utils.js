@@ -1213,17 +1213,3 @@ LogicECM.module.Base.FormWrapper.prototype = {
     YAHOO.Bubbling.on("afterFormRuntimeInit", setFormElementsTabbingOrder);
 
 })();
-
-// ALFFIVE-144
-// В новой версии изменился forms-runtime.
-// Теперь безусловно вызывается this._toggleSubmitElements(true); сразу после запроса.
-// Что приводит к возможности закликивания формы. 
-
-// Достаточно злой костыль, проксирование _submitInvoked
-(function () {
-	var oldSubmitFunction = Alfresco.forms.Form.prototype._submitInvoked;
-	Alfresco.forms.Form.prototype._submitInvoked = function (event) {
-		oldSubmitFunction.call(this, event);
-		Alfresco.forms.Form.prototype._toggleSubmitElements.call(this, false);
-	}
-})();
