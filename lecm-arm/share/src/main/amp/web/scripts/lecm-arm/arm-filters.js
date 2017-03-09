@@ -187,7 +187,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
             },
 
             _getIndexByCode: function (filterCode, filtersArray) {
-                if (filterCode && filtersArray) {
+                if (filtersArray) {
                     for (var i = 0; i < filtersArray.length; i++) {
                         if (filtersArray[i].code == filterCode) {
                             return i;
