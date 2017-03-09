@@ -15,9 +15,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
         this.availableFilters = [];
         this.currentFilters = [];
         this.filtersFromPref = [];
-        this.dialog = null;
 
-        this.currentNode = null;
         // Preferences service
         this.preferences = new Alfresco.service.Preferences();
 
@@ -44,9 +42,8 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
             availableFilters: [],
             /*текущие фильтры в формате {code: 'CODE', value: 'индекс_значения,индекс_значения3'}*/
             currentFilters: [],
-            /*фильтры, полученные из preference пользователей*/
+            /*фильтры, полученные из preference пользователей или URL*/
             filtersFromPref: [],
-            currentNode: null,
 
             options: {
                 bubblingLabel: "documents-arm"
@@ -54,8 +51,6 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
             attrSearchApplied: false,
             fullTextSearchApplied: false,
-
-            dialog: null,
 
             onReady: function () {
                 YAHOO.util.Dom.addClass(this.id, "hidden");
@@ -100,26 +95,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                 }
             },
 
-            drawDialog: function (id) {
-                // создаем диалог
-                this.dialog = new YAHOO.widget.Panel(id + "-filters-dialog",
-                    {
-                        fixedcenter: false,
-                        close: false,
-                        draggable: false,
-                        zindex: 4,
-                        modal: true,
-                        visible: false
-                    }
-                );
-                this.dialog.render();
-            },
-
-            hideDialog: function () {
-                this.dialog.hide();
-            },
-
-            renderFilters: function (callback, parent) {
+            renderFilters: function (element, callback, parent) {
                 Alfresco.util.Ajax.jsonRequest({
                     method: "POST",
                     url: Alfresco.constants.PROXY_URI + "lecm/arm/draw-filters",
@@ -129,14 +105,9 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                     },
                     successCallback: {
                         fn: function (oResponse) {
-                            var filtersDiv = Dom.get(parent.id + "-filters-dialog-content");
-                            filtersDiv.innerHTML = oResponse.serverResponse.responseText;
-                            if (parent.filtersDialog) {
-                                parent.filtersDialog.show();
-
-                                if (callback && YAHOO.lang.isFunction(callback)) {
-                                    callback.call(parent ? parent : this);
-                                }
+                            element.innerHTML = oResponse.serverResponse.responseText;
+                            if (callback && YAHOO.lang.isFunction(callback)) {
+                                callback.call(parent ? parent : this);
                             }
                         },
                         scope: this
@@ -150,14 +121,13 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
             /*сработает при выборе узла в дереве*/
             onUpdateAvaiableFilters: function (currentNode) {
                 if (currentNode) {
-                    this.currentNode = currentNode;
+                    this.currentFilters = [];
+
                     var filters = currentNode.data.filters;
-                    var hasFilters = filters && filters.length;
-                    if (hasFilters) {
+                    if (filters && filters.length) {
                         this.availableFilters = filters;
 
                         /*Проверим, что сохраненный фильтр присутствует среди фильтров на узле (учитываем, что фильтр мог быть удален из АРМа)*/
-                        this.currentFilters = [];
                         for (var j = 0; j < this.filtersFromPref.length; j++) {
                             var indexInAvailable = this._getIndexByCode(this.filtersFromPref[j].code, this.availableFilters);
                             if (indexInAvailable >= 0) {
@@ -166,7 +136,6 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                         }
                     } else {
                         this.availableFilters = [];
-                        this.currentFilters = [];
                     }
                 }
                 if (!this.deferredListPopulation.fulfil("updateArmFilters")) {
@@ -182,11 +151,12 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
             /*возвращает предзаполненным выбранными данными список availableFilters*/
             getFilledFilters: function () {
                 var filledFilters = this.availableFilters.slice(0);
-                for (var i = 0; i < filledFilters.length; i++) {
-                    var filledFilter = filledFilters[i];
-                    var current = this._getFilterByCode(filledFilter.code, this.currentFilters);
-                    filledFilter.curValue = current ? current.value : [];
-                }
+
+                filledFilters.forEach(function (filter) {
+                    var current = this._getFilterByCode(filter.code, this.currentFilters);
+                    filter.curValue = current ? current.value : [];
+                }, this);
+
                 return filledFilters;
             },
 
@@ -217,8 +187,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
             _getIndexByCode: function (filterCode, filtersArray) {
                 if (filterCode && filtersArray) {
                     for (var i = 0; i < filtersArray.length; i++) {
-                        var filter = filtersArray[i];
-                        if (filter.code == filterCode) {
+                        if (filtersArray[i].code == filterCode) {
                             return i;
                         }
                     }
@@ -245,9 +214,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                     if (currentFiltersConteiner) {
                         var filtersHTML = "";
                         for (var i = 0; i < this.currentFilters.length; i++) {
-                            var curFilter = this.currentFilters[i];
-
-                            var availableFilter = this._getFilterByCode(curFilter.code, this.availableFilters);
+                            var availableFilter = this._getFilterByCode(this.currentFilters[i].code, this.availableFilters);
                             if (availableFilter) {
                                 var valuesIndexes = this.currentFilters[i].value;
                                 var valuesTitle = "";
@@ -262,7 +229,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
                                 filtersHTML += "<span class='arm-filter-item' title='" + valuesTitle + "'>";
                                 filtersHTML += availableFilter.name;
-                                filtersHTML += this.getRemoveFilterButton(curFilter);
+                                filtersHTML += this.getRemoveFilterButton(this.currentFilters[i]);
                                 filtersHTML += "</span>";
                             }
                         }
@@ -294,9 +261,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                 /*состояния поиска*/
                 var appliedFilters = [];
                 for (var i = 0; i < this.currentFilters.length; i++) {
-                    var curFilter = this.currentFilters[i];
-
-                    var availableFilter = this._getFilterByCode(curFilter.code, this.availableFilters);
+                    var availableFilter = this._getFilterByCode(this.currentFilters[i].code, this.availableFilters);
                     if (availableFilter) {
                         var valuesIndexes = this.currentFilters[i].value;
                         var values = [];
@@ -321,26 +286,17 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                 /*user preferences*/
                 if (updatePrefs) {
                     this.filtersFromPref = this.currentFilters.slice(0);
-                    this.preferences.set(this._buildPreferencesKey(), YAHOO.lang.JSON.stringify(this._buildFiltersPrefObj()));
+                    this.preferences.set(this._buildPreferencesKey(), YAHOO.lang.JSON.stringify(this.filtersFromPref));
                 }
-            },
-
-            _buildFiltersPrefObj: function () {
-                var filtersForPref = [];
-                for (var i = 0; i < this.currentFilters.length; i++) {
-                    filtersForPref.push({
-                        code: this.currentFilters[i].code,
-                        value: this.currentFilters[i].value
-                    });
-                }
-                return filtersForPref;
             },
 
             _getValuesIndexes: function (values, valuesList) {
                 var result = [];
                 for (var i = 0; i < values.length; i++) {
                     var index = this._getIndexByCode(values[i], valuesList);
-                    result.push(index);
+                    if (index >= 0) {
+                        result.push(index);
+                    }
                 }
                 return result;
             },
