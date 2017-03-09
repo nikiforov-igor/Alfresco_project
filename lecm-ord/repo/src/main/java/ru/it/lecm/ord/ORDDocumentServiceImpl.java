@@ -1,13 +1,15 @@
 package ru.it.lecm.ord;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.documents.beans.DocumentTableService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.ord.api.ORDDocumentService;
 import ru.it.lecm.ord.api.ORDModel;
 
@@ -19,7 +21,11 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 
 	private DictionaryBean lecmDictionaryService;
 	private DocumentService documentService;
+	private DocumentTableService documentTableService;
 
+	public void setDocumentTableService(DocumentTableService documentTableService) {
+		this.documentTableService = documentTableService;
+	}
 
 	public void setLecmDictionaryService(DictionaryBean lecmDictionaryService) {
 		this.lecmDictionaryService = lecmDictionaryService;
@@ -78,6 +84,59 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public Boolean haveNotPointsWithController(NodeRef document) {
+		Boolean havePointsWithController = false;
+		List<AssociationRef> ordControllerAssoc = nodeService.getTargetAssocs(document, ORDModel.ASSOC_ORD_CONTROLLER);
+		if (ordControllerAssoc != null && ordControllerAssoc.size() != 0) {
+			List<NodeRef> ordPoints = getOrdDocumentPoints(document);
+			for (NodeRef point : ordPoints) {
+				NodeRef pointController = null;
+				List<AssociationRef> pointControllerAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_CONTROLLER);
+				if (pointControllerAssocs != null && pointControllerAssocs.size() > 0) {
+					pointController = pointControllerAssocs.get(0).getTargetRef();
+				}
+				if (pointController != null) {
+					havePointsWithController = true;
+				}
+			}
+		}
+		return !havePointsWithController && ordControllerAssoc != null && ordControllerAssoc.size() != 0;
+	}
+
+	@Override
+	public Boolean haveNotPointsWithDueDate(NodeRef document) {
+		Date executionDate = (Date) nodeService.getProperty(document, EDSDocumentService.PROP_EXECUTION_DATE);
+		Boolean havePointsWithDueDate = false;
+		if (executionDate != null) {
+			List<NodeRef> ordPoints = getOrdDocumentPoints(document);
+			for (NodeRef point : ordPoints) {
+				String pointLimitDateRadio = (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_RADIO);
+				if (!Objects.equals(pointLimitDateRadio, "LIMITLESS")) {
+					havePointsWithDueDate = true;
+				}
+			}
+		}
+		return !havePointsWithDueDate && executionDate != null;
+	}
+
+	@Override
+	public List<NodeRef> getOrdDocumentPoints(NodeRef document) {
+		List<NodeRef> ordPoints = new ArrayList<>();
+		NodeRef table = documentTableService.getTable(document, ORDModel.TYPE_ORD_ITEMS_TABLE);
+		if (table != null) {
+			ordPoints = documentTableService.getTableDataRows(table);
+		}
+		return ordPoints;
+	}
+
+	public Boolean isDocumentHavePointsAndProperties(NodeRef document) {
+		Date executionDate = (Date) nodeService.getProperty(document, EDSDocumentService.PROP_EXECUTION_DATE);
+		List<AssociationRef> ordControllerAssoc = nodeService.getTargetAssocs(document, ORDModel.ASSOC_ORD_CONTROLLER);
+		List<NodeRef> points = getOrdDocumentPoints(document);
+		return points.size() > 0 && (executionDate != null || (ordControllerAssoc != null && ordControllerAssoc.size() != 0));
 	}
 
 	public void setDocumentService(DocumentService documentService) {

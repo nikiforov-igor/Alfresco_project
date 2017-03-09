@@ -3540,7 +3540,7 @@ if (doc) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@errandsService.hasChildNotFinalByExecutor(doc.nodeRef)==false]]></value>
+                                                                                    <![CDATA[@errandsService.hasChildNotFinalByExecutor(doc.getNodeRef())==false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -5572,7 +5572,7 @@ if(doc){
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@errandsService.hasChildNotFinalByExecutor(doc.nodeRef)==false]]></value>
+                                                                                    <![CDATA[@errandsService.hasChildNotFinalByExecutor(doc.getNodeRef())==false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -8030,7 +8030,7 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@errandsService.hasChildNotFinalByExecutor(doc.nodeRef)==false]]></value>
+                                                                                    <![CDATA[@errandsService.hasChildNotFinalByExecutor(doc.getNodeRef())==false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -10215,7 +10215,7 @@ if (document) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@errandsService.hasChildNotFinalByExecutor(doc.nodeRef)==false]]></value>
+                                                                                    <![CDATA[@errandsService.hasChildNotFinalByExecutor(doc.getNodeRef())==false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>

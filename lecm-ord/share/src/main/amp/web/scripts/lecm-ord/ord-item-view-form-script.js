@@ -39,7 +39,7 @@
                                                 actionButtonElement.firstElementChild.firstElementChild.innerHTML = Alfresco.util.message("ord.item.execute.button");
                                                 formButtons.insertBefore(actionButtonElement, formButtons.firstElementChild);
                                                 Event.addListener(actionButtonElement, "click", function () {
-                                                    Bubbling.fire("onActionExecuteReport", {
+                                                    Bubbling.fire("onActionExecutePoint", {
                                                         nodeRef: itemNodeRef
                                                     });
                                                 });
@@ -47,7 +47,7 @@
                                                 actionButtonElement.firstElementChild.firstElementChild.innerHTML = Alfresco.util.message("ord.item.complete.button");
                                                 formButtons.insertBefore(actionButtonElement, formButtons.firstElementChild);
                                                 Event.addListener(actionButtonElement, "click", function () {
-                                                    Bubbling.fire("onActionCompleteReport", {
+                                                    Bubbling.fire("onActionCompletePoint", {
                                                         nodeRef: itemNodeRef
                                                     });
                                                 });

@@ -438,7 +438,8 @@
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-eds-aspect:execution-state" force="true"/>
-	                <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
+                    <show id="lecm-review-ts:doc-review-state" force="true"/>
+                    <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
 	                <show id="lecm-document-aspects:reg-data-date"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
 	                <show id="lecm-document:title"/>
@@ -464,6 +465,7 @@
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
 					<show id="lecm-review-ts:review-table-assoc"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="ord-document-form-common-set" label-id="label.ord.common"/>
@@ -472,11 +474,15 @@
 					<set id="review" label="Ознакомление"/>
 
                     <field id="lecm-eds-aspect:execution-state" set="ord-document-form-common-set">
-                        <control template="/ru/it/lecm/eds/controls/execution-state-control.ftl">
+                        <control template="/ru/it/lecm/documents/controls/state-statistics-control.ftl">
                             <control-param name="statisticsField">lecm-eds-aspect:execution-statistics</control-param>
                         </control>
                     </field>
-
+                    <field id="lecm-review-ts:doc-review-state" set="ord-document-form-common-set">
+                        <control template="/ru/it/lecm/documents/controls/state-statistics-control.ftl">
+                            <control-param name="statisticsField">lecm-review-ts:doc-review-statistics</control-param>
+                        </control>
+                    </field>
 					<field id="lecm-document:regnum" set="ord-document-form-common-set" mandatory="true">
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.Documents.regnumUniqueness.validator"
@@ -559,7 +565,7 @@
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
                             <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
-                            <control-param name="expandDataSource">components/form?formId=table-structure-info</control-param>
+                            <control-param name="expandDataSource">components/form?formId=ord-table-structure-info</control-param>
                             <control-param name="isTableSortable">false</control-param>
                             <control-param name="refreshAfterCreate">true</control-param>
                             <control-param name="forceEditable">true</control-param>
@@ -620,6 +626,12 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">editExecutorEditFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script2" set="ord-document-form-common-set">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-ord/ord-view-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">ordViewFormScriptLoaded</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -787,13 +799,31 @@
                     </field>
                 </appearance>
             </form>
-            <form id="table-structure-info">
+            <form id="ord-complete-item">
                 <field-visibility>
-                    <show id="ord-item-execution-tree" force="true"/>
+                    <show id="lecm-ord-table-structure:completion-option"/>
+                    <show id="lecm-ord-table-structure:item-comment"/>
+                    <show id="ord-item-completion-form-script" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="ord-item-execution-tree">
-                        <control template="/ru/it/lecm/eds/controls/execution-tree-control.ftl"/>
+                    <set id="ord-item-completion-option-set" template="/ru/it/lecm/ord/components/class-set.ftl"/>
+                    <set id="common"/>
+                    <field id="lecm-ord-table-structure:completion-option" mandatory="true" set="ord-item-completion-option-set">
+                        <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
+                            <control-param name="defaultValue">CANCEL</control-param>
+                            <control-param name="fireChangeEventName">changeCompletionOption</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-ord-table-structure:item-comment" mandatory="true" set="common">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
+                    <field id="ord-item-completion-form-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-ord/ord-item-completion-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">ordItemCompletionFormScriptLoaded</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
@@ -950,11 +980,74 @@
             </form>
         </forms>
     </config>
-
+    <config evaluator="string-compare" condition="activiti$completeORD">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmORDWf:completeORDMessage"/>
+                    <show id="complete-ord-form-script" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmORDWf:completeORDMessage">
+                        <control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+                            <control-param name="msg">ord.action.complete.message</control-param>
+                        </control>
+                    </field>
+                    <field id="complete-ord-form-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-ord/complete-ord-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">completeORDWFScriptLoaded</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+    <config evaluator="string-compare" condition="activiti$completeActiveORD">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmORDWf:completionOption"/>
+                    <show id="lecmORDWf:comment"/>
+                    <show id="ord-complete-active-ord-form-script" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <set id="ord-item-completion-option-set" template="/ru/it/lecm/ord/components/class-set.ftl"/>
+                    <set id="common"/>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmORDWf:completionOption" mandatory="true" set="ord-item-completion-option-set">
+                        <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
+                            <control-param name="defaultValue">CANCEL</control-param>
+                            <control-param name="fireChangeEventName">changeCompletionOption</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmORDWf:comment" mandatory="true" set="common">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
+                    <field id="ord-complete-active-ord-form-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-ord/complete-ord-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">completeActiveORDWFScriptLoaded</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
     <config evaluator="string-compare" condition="Workflow">
         <hidden-workflows>
             <workflow name="activiti$lecm-ord_document"/>
+            <workflow name="activiti$completeORD"/>
+            <workflow name="activiti$completeActiveORD"/>
         </hidden-workflows>
     </config>
-
 </alfresco-config>
