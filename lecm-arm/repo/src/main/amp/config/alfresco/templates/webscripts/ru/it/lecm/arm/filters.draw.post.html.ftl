@@ -2,7 +2,7 @@
     <#assign aDateTime = .now>
     <#assign el="avaiableFilters"+ aDateTime?iso_utc/>
 
-<form id="filersForm">
+<form id="filtersForm">
     <div id="${el}" class="filters-list">
         <div id="${el}-filters-list-container" class="filters-table-container">
             <table class="filters-table" cellspacing="0">
