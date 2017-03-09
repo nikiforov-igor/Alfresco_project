@@ -26,9 +26,43 @@ var ExecuteErrandScript = {
             }
             ExecuteErrandScript.executeErrand(doc, false);
         }
-        edsDocument.resetChildChangeSignal(doc);
         doc.save();
     },
+    processReviewErrandChildExecuted: function(document){
+        var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());
+        var childrenResolutions = errands.getChildResolutions(doc.nodeRef.toString());
+        var childErrandExecuted = false;
+        var allChildCompleted = true;
+        var i;
+        for (i = 0; i < childrenErrands.length; i++) {
+            if (!statemachine.isDraft(childrenErrands[i]) && statemachine.isFinal(childrenErrands[i].nodeRef.toString())) {
+                if (childrenErrands[i].properties["lecm-statemachine:status"] == "Исполнено") {
+                    childErrandExecuted = true;
+                }
+            } else {
+                allChildCompleted = false;
+                break;
+            }
+        }
+        var childResolutionCompleted = false;
+        for (i = 0; i < childrenResolutions.length; i++) {
+            if (!statemachine.isDraft(childrenResolutions[i]) && statemachine.isFinal(childrenResolutions[i].nodeRef.toString())) {
+                if (childrenResolutions[i].properties["lecm-statemachine:status"] == "Завершено") {
+                    childResolutionCompleted = true;
+                }
+            } else {
+                allChildCompleted = false;
+                break;
+            }
+        }
+        if (allChildCompleted && (childErrandExecuted || childResolutionCompleted)) {
+            document.properties["lecm-errands:execution-report"] = "Исполнение завершено";
+            document.properties["lecm-errands:execution-report-status"] = "ACCEPT";
+            document.properties["lecm-errands:transit-to-executed"] = true;
+            document.save();
+        }
+    },
+
     executeErrand: function (document, closeChild) {
         var reportRequired = document.properties["lecm-errands:report-required"];
         var currentUser = orgstructure.getCurrentEmployee();
