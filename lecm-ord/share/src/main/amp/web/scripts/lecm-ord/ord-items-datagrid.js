@@ -54,14 +54,14 @@ LogicECM.ORD = LogicECM.ORD || {};
                             actions.push({
                                 type: actionType,
                                 id: "onActionCompletePoint",
-                                permission: "edit",
+                                permission: "create",
                                 label: this.msg("ord.item.complete.button"),
                                 evaluator: this.showCompleteActionEvaluator
                             });
                             actions.push({
                                 type: actionType,
                                 id: "onActionExecutePoint",
-                                permission: "edit",
+                                permission: "create",
                                 label: this.msg("ord.item.execute.button"),
                                 evaluator: this.showExecuteActionEvaluator
                             });
