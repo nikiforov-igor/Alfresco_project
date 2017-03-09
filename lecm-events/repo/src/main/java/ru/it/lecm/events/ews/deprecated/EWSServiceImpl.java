@@ -55,7 +55,7 @@ public class EWSServiceImpl extends AbstractEWSService {
 
 	@Override
 	public void init() throws URISyntaxException {
-		logger.info("ATTENTION: you are going to use deprecated, old, obsolete, monstrous EWSService based on exchange-ws-api:1.1.5.2");
+		logger.warn("ATTENTION: you are going to use deprecated, old, obsolete, monstrous EWSService based on exchange-ws-api:1.1.5.2");
 		ExchangeVersion requestedServerVersion = ExchangeVersion.valueOf(exchangeVersion);
 		ExchangeCredentials credentials = new WebCredentials(username, password, domain);
 		service = new ExchangeService(requestedServerVersion);

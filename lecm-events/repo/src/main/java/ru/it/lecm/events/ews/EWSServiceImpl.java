@@ -41,7 +41,7 @@ public class EWSServiceImpl extends AbstractEWSService {
 
 	@Override
 	public void init() throws URISyntaxException {
-		logger.info("ATTENTION: you are going to use EWSService based on ews-java-api:2.0");
+		logger.warn("ATTENTION: you are going to use EWSService based on ews-java-api:2.0");
 		ExchangeVersion requestedServerVersion = ExchangeVersion.valueOf(exchangeVersion);
 		ExchangeCredentials credentials = new WebCredentials(username, password, domain);
 		service = new ExchangeService(requestedServerVersion);
