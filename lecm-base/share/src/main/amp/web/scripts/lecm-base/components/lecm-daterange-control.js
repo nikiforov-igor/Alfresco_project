@@ -524,7 +524,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @private
              */
             _handleFieldChangeFrom: function DateRange__handleFieldChangeFrom(event) {
-                this._handleChange(event, "-date-from", this.widgets.calendarFrom, this.options.minFromLimit, this.options.maxFromLimit);
+                this._handleChange(event, "-date-from", this.widgets.calendarFrom);
             },
 
             /**
@@ -535,7 +535,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @private
              */
             _handleFieldChangeTo: function DateRange__handleFieldChangeTo(event) {
-                this._handleChange(event, "-date-to", this.widgets.calendarTo, this.options.minToLimit, this.options.maxToLimit);
+                this._handleChange(event, "-date-to", this.widgets.calendarTo);
             },
 
             /**
@@ -545,11 +545,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @param event
              * @param prefix
              * @param calendar
-             * @param min
-             * @param max
              * @private
              */
-            _handleChange: function(event, prefix, calendar, min, max) {
+            _handleChange: function(event, prefix, calendar) {
                 var changedDate = Dom.get(this.id + prefix).value;
                 if (changedDate.length) {
                     // Only set for actual value changes so tab or shift events doesn't remove the "text selection" of the input field
@@ -567,7 +565,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         }
                     }
                 } else {
-                    this.currentFromDate = "";
+                    if (prefix == "-date-from") {
+                        this.currentFromDate = "";
+                    } else {
+                        this.currentToDate = "";
+                    }
                     this._updateCurrentValue();
                 }
             },
