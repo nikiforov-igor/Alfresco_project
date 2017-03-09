@@ -428,4 +428,21 @@
 		  init-method="init"
 		  parent="logicEcmAssociationPolicy"
 		  depends-on="events.dictionaries.LogicEcmModelsBootstrap"/>
+
+	<bean id="ewsService" class="ru.it.lecm.events.ews.EWSFactoryBean" init-method="init">
+		<property name="enabled" value="${lecm.events.ews.enabled}"/>
+		<property name="deprecated" value="${lecm.events.ews.deprecated}"/>
+		<property name="exchangeVersion" value="${lecm.events.ews.version}"/>
+		<property name="url" value="${lecm.events.ews.url}"/>
+		<property name="username" value="${lecm.events.ews.username}"/>
+		<property name="password" value="${lecm.events.ews.password}"/>
+		<property name="domain" value="${lecm.events.ews.domain}"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
+
+	<bean class="ru.it.lecm.events.scripts.EWSWebScriptBean" parent="baseScript">
+		<property name="extensionName" value="ews"/>
+		<property name="ewsService" ref="ewsService"/>
+	</bean>
 </beans>
