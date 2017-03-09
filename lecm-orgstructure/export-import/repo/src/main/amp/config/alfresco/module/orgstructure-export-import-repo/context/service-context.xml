@@ -21,7 +21,6 @@
 		  p:orgstructureService-ref="serviceOrgstructure"
 		  p:dictionaryService-ref="serviceDictionary"
 		  p:personService-ref="personService"
-		  p:behaviourFilter-ref="policyBehaviourFilter"
 		  p:searchService-ref="searchService"
 		  p:namespaceService-ref="namespaceService"
 		  p:contractorsDictionaryName="${lecm.orgstructure.export-import.dictionary.contractors}"
