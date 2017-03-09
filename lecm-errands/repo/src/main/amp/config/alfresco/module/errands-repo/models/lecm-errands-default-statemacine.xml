@@ -186,7 +186,39 @@
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>24bb7ca2-86a5-460d-b223-3ddcd337e4ef</name>
+														<nodeRef>workspace://SpacesStore/620d817e-17ba-48db-9f71-a742a273a162</nodeRef>
+														<properties>
+															<property>
+																<name>scriptLabel</name>
+																<value><![CDATA[Создание переменной процесса]]></value>
+															</property>
+															<property>
+																<name>actionScript</name>
+																<value><![CDATA[/* ALFFIVE-138
+ * Возможна ситуация, когда в одной транзакции
+ * происходит и установка этой переменной
+ * завершение процесса МС.
+ * В такой ситуации процесс МС просто не завершится
+ * т.к переменная останется в БД и процесс не будет удален
+ */
+execution.setVariable("requestCancelResult", "");]]></value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
                                     </node>
                                     <node>
                                         <type>TimerAction</type>
@@ -1732,6 +1764,32 @@ if (!!errand.properties['lecm-errands:is-expired']) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>85bd9a8d-9e7f-4c99-9689-c7b9315702c1</name>
+														<nodeRef>workspace://SpacesStore/23e9228b-c0d2-4475-8dfe-49bfa1dfde3a</nodeRef>
+														<properties>
+															<property>
+																<name>scriptLabel</name>
+																<value><![CDATA[Создание переменной процесса]]></value>
+															</property>
+															<property>
+																<name>actionScript</name>
+																<value><![CDATA[/* ALFFIVE-138
+ * Возможна ситуация, когда в одной транзакции
+ * происходит и установка этой переменной
+ * завершение процесса МС.
+ * В такой ситуации процесс МС просто не завершится
+ * т.к переменная останется в БД и процесс не будет удален
+ */
+execution.setVariable("requestCancelResult", "");]]></value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
 												</nodes>
                                             </subFolder>
                                         </subFolders>
