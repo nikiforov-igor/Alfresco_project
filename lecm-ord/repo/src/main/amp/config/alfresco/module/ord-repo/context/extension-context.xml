@@ -20,6 +20,7 @@
 		  p:ordDocumentService-ref="ordDocumentService"
 		  p:ordReportsService-ref="ordReportsService"
 		  p:stateMachineService-ref="stateMachineHelper"
-		  p:errandsService-ref="errandsService"/>
+		  p:errandsService-ref="errandsService"
+		  p:notificationsService-ref="notificationsService"/>
 
 </beans>

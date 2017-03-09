@@ -8935,7 +8935,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!@ordDocumentService.haveNotPointsWithController(doc.getNodeRef()) and @ordDocumentService.haveNotPointsWithDueDate(doc.getNodeRef())]]></value>
+                                                                                    <![CDATA[!@ordDocumentService.haveNotPointsWithController(doc.getNodeRef())]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -9108,7 +9108,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!@ordDocumentService.haveNotPointsWithDueDate(doc.getNodeRef()) and @ordDocumentService.haveNotPointsWithController(doc.getNodeRef())]]></value>
+                                                                                    <![CDATA[!@ordDocumentService.haveNotPointsWithDueDate(doc.getNodeRef())]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
