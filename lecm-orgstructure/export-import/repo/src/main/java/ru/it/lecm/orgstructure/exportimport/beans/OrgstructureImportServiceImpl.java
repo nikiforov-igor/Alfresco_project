@@ -13,7 +13,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.SearchService;
@@ -60,7 +59,6 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 	private DictionaryBean dictionaryService;
 	private PersonService personService;
 	private MutableAuthenticationService authenticationService;
-	private BehaviourFilter behaviourFilter;
 	private SearchService searchService;
 	private NamespaceService namespaceService;
 
@@ -95,10 +93,6 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		this.personService = personService;
 	}
 
-	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
-		this.behaviourFilter = behaviourFilter;
-	}
-
 	public void setSearchService(SearchService searchService) {
 		this.searchService = searchService;
 	}
@@ -115,7 +109,6 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
 		PropertyCheck.mandatory(this, "personService", personService);
 		PropertyCheck.mandatory(this, "authService", authService);
-		PropertyCheck.mandatory(this, "behaviourFilter", behaviourFilter);
 		PropertyCheck.mandatory(this, "searchService", searchService);
 		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
 
