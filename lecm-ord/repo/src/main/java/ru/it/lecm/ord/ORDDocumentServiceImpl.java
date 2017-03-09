@@ -139,6 +139,18 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 		return points.size() > 0 && (executionDate != null || (ordControllerAssoc != null && ordControllerAssoc.size() != 0));
 	}
 
+	public Boolean haveNotPointsWithDueDateAndController(NodeRef document) {
+		return haveNotPointsWithDueDate(document) && haveNotPointsWithController(document);
+	}
+
+	public Boolean haveNotPointsWithControllerAndHaveDueDate(NodeRef document) {
+		return haveNotPointsWithController(document) && !haveNotPointsWithDueDate(document);
+	}
+
+	public Boolean haveNotPointsWithDueDateAndHaveController(NodeRef document) {
+		return haveNotPointsWithDueDate(document) && !haveNotPointsWithController(document);
+	}
+
 	public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
 	}

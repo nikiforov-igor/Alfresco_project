@@ -8762,12 +8762,76 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!@ordDocumentService.haveNotPointsWithController(doc.getNodeRef()) and !@ordDocumentService.haveNotPointsWithDueDate(doc.getNodeRef())]]></value>
+                                                                                    <![CDATA[!@ordDocumentService.haveNotPointsWithDueDateAndController(doc.getNodeRef())]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Для ОРД заданы Контролер и срок исполнения, ни для одного из пунктов Контролер и срок исполнения не заданы. Продолжить регистрацию?]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>68b639a4-a20e-4cc6-911a-70f460fa33de
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/0ead2cb3-50ba-48ee-a0c0-5fe1e74d33de
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!@ordDocumentService.haveNotPointsWithControllerAndHaveDueDate(doc.getNodeRef())]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Для ОРД задан Контролер, ни для одного из пунктов Контролер не задан. Продолжить регистрацию? ]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>0f7be50f-6856-42af-a088-8bafc73b486a
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/5093a1ca-0184-46f0-932f-e9d557084e7d
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!@ordDocumentService.haveNotPointsWithDueDateAndHaveController(doc.getNodeRef())]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Для ОРД задан срок исполнения, ни для одного из пунктов срок исполнения не задан. Продолжить регистрацию?]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
