@@ -35,21 +35,24 @@
                                         var report_required = data[3] == "true";
                                         if (itemStatus == "На исполнении") {
                                             var actionButtonElement = Selector.query("." + formId + "-form-panel.buttons.hidden1 > span", formContainer, true);
+                                            var closeViewFormButton = formButtons.firstElementChild;
                                             if (currentUser == executor && !report_required) {
                                                 actionButtonElement.firstElementChild.firstElementChild.innerHTML = Alfresco.util.message("ord.item.execute.button");
-                                                formButtons.insertBefore(actionButtonElement, formButtons.firstElementChild);
+                                                formButtons.insertBefore(actionButtonElement, closeViewFormButton);
                                                 Event.addListener(actionButtonElement, "click", function () {
                                                     Bubbling.fire("onActionExecutePoint", {
                                                         nodeRef: itemNodeRef
                                                     });
+                                                    closeViewFormButton.click();
                                                 });
                                             } else if (currentUser == controller && controller != executor) {
                                                 actionButtonElement.firstElementChild.firstElementChild.innerHTML = Alfresco.util.message("ord.item.complete.button");
-                                                formButtons.insertBefore(actionButtonElement, formButtons.firstElementChild);
+                                                formButtons.insertBefore(actionButtonElement, closeViewFormButton);
                                                 Event.addListener(actionButtonElement, "click", function () {
                                                     Bubbling.fire("onActionCompletePoint", {
                                                         nodeRef: itemNodeRef
                                                     });
+                                                    closeViewFormButton.click();
                                                 });
 
                                             }
