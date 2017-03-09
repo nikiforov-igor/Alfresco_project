@@ -36,7 +36,6 @@
             }
         }
 		var ewsCollection = ews.getEvents(employees, args["date"] + "T00:00:00Z", args["nextDate"] + "T00:00:00Z");
-		Array.prototype.push.apply(result, ewsCollection);
-        model.result = jsonUtils.toJSONString(result);
+        model.result = jsonUtils.toJSONString(result.concat(ewsCollection));
     }
 }());
