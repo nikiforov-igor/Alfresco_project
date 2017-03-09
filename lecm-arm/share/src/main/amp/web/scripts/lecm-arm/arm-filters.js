@@ -62,6 +62,9 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                 if (filtersFromArgs) {
                     var filters = filtersFromArgs.split(";");
                     for (var i = 0; i < filters.length; i++) {
+                        if (filters[i].indexOf("[") && filters[i].indexOf("]")) {
+                            filters[i] = filters[i].replace("[", "|").replace("]", "|");
+                        }
                         var filtersObj = filters[i].split("|");
                         this.filtersFromPref.push({
                             code: filtersObj[0],
@@ -203,16 +206,10 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
             /*перерисовка примененных фильтров*/
             updateCurrentFormView: function () {
                 var filtersExist = this.currentFilters.length || this.fullTextSearchApplied || this.attrSearchApplied;
-                if (filtersExist) {
-                    YAHOO.util.Dom.removeClass(this.id, "hidden");
-                } else {
-                    YAHOO.util.Dom.addClass(this.id, "hidden");
-                }
-
+                var filtersHTML = "";
                 if (filtersExist) {
                     var currentFiltersConteiner = Dom.get(this.id + "-current-filters");
                     if (currentFiltersConteiner) {
-                        var filtersHTML = "";
                         for (var i = 0; i < this.currentFilters.length; i++) {
                             var availableFilter = this._getFilterByCode(this.currentFilters[i].code, this.availableFilters);
                             if (availableFilter) {
@@ -225,12 +222,14 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                                         valuesTitle += (vTitle + ", ");
                                     }
                                 }
-                                valuesTitle = valuesTitle.substring(0, valuesTitle.length - 2);
+                                if (valuesTitle) {
+                                    valuesTitle = valuesTitle.substring(0, valuesTitle.length - 2);
 
-                                filtersHTML += "<span class='arm-filter-item' title='" + valuesTitle + "'>";
-                                filtersHTML += availableFilter.name;
-                                filtersHTML += this.getRemoveFilterButton(this.currentFilters[i]);
-                                filtersHTML += "</span>";
+                                    filtersHTML += "<span class='arm-filter-item' title='" + valuesTitle + "'>";
+                                    filtersHTML += availableFilter.name;
+                                    filtersHTML += this.getRemoveFilterButton(this.currentFilters[i]);
+                                    filtersHTML += "</span>";
+                                }
                             }
                         }
 
@@ -250,6 +249,11 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
                         currentFiltersConteiner.innerHTML = filtersHTML;
                     }
+                }
+                if (filtersExist && filtersHTML.length) {
+                    YAHOO.util.Dom.removeClass(this.id, "hidden");
+                } else {
+                    YAHOO.util.Dom.addClass(this.id, "hidden");
                 }
             },
 
@@ -271,11 +275,13 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                                 values.push(availableFilter.values[valueIndex].code);
                             }
                         }
-                        appliedFilters.push({
-                            'curValue': values,
-                            'class': availableFilter.class,
-                            'query': availableFilter.query
-                        });
+                        if (values.length) {
+                            appliedFilters.push({
+                                'curValue': values,
+                                'class': availableFilter.class,
+                                'query': availableFilter.query
+                            });
+                        }
                     }
                 }
                 YAHOO.Bubbling.fire("activeFiltersChanged", {
