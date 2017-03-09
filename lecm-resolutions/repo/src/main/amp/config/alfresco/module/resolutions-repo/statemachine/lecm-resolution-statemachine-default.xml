@@ -228,7 +228,7 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-resolutions_control</name>
+                                        <name>lecm-document-aspects_is-on-control</name>
                                         <nodeRef>workspace://SpacesStore/849ca198-d892-4fcd-bbed-296119d739eb</nodeRef>
                                         <properties>
                                             <property>
@@ -455,21 +455,6 @@
                                         <type>documentField</type>
                                         <name>lecm-review-aspects_related-review-records-assoc</name>
                                         <nodeRef>workspace://SpacesStore/4600a1f2-7c81-4168-b820-46ce7d0784d9</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-document-aspects_is-on-control</name>
-                                        <nodeRef>workspace://SpacesStore/1537322d-baa5-448f-9a0f-5e97eb8a83e5</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1342,7 +1327,7 @@
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-resolutions_control</name>
+                                        <name>lecm-document-aspects_is-on-control</name>
                                         <nodeRef>workspace://SpacesStore/8c4d9c9f-c43e-4cfb-a7f4-c4f39297f554</nodeRef>
                                         <properties>
                                             <property>
@@ -1573,21 +1558,6 @@
                                             <property>
                                                 <name>editableField</name>
                                                 <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-document-aspects_is-on-control</name>
-                                        <nodeRef>workspace://SpacesStore/6ba1b24f-06e7-45cc-92a8-2cbe211282ee</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2650,7 +2620,7 @@ if (document) {
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-resolutions_control</name>
+                                        <name>lecm-document-aspects_is-on-control</name>
                                         <nodeRef>workspace://SpacesStore/ff2935be-0662-4532-8dbe-4e36a72332e4</nodeRef>
                                         <properties>
                                             <property>
@@ -2881,21 +2851,6 @@ if (document) {
                                             <property>
                                                 <name>editableField</name>
                                                 <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-document-aspects_is-on-control</name>
-                                        <nodeRef>workspace://SpacesStore/5ae8531e-b1eb-4bdb-8433-d9cc20c5432a</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -3768,7 +3723,7 @@ if (document) {
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-resolutions_control</name>
+                                        <name>lecm-document-aspects_is-on-control</name>
                                         <nodeRef>workspace://SpacesStore/c3c7357a-3fed-41f9-9542-dc67439731cb</nodeRef>
                                         <properties>
                                             <property>
@@ -3999,21 +3954,6 @@ if (document) {
                                             <property>
                                                 <name>editableField</name>
                                                 <value><![CDATA[true]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-document-aspects_is-on-control</name>
-                                        <nodeRef>workspace://SpacesStore/7451ce05-31d3-42ff-99c5-11fce2d256d5</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -4730,7 +4670,7 @@ if (document) {
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-resolutions_control</name>
+                                        <name>lecm-document-aspects_is-on-control</name>
                                         <nodeRef>workspace://SpacesStore/3bc55d56-6e9e-48ae-a5e9-63f1770d8a14</nodeRef>
                                         <properties>
                                             <property>
@@ -4968,21 +4908,6 @@ if (document) {
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-document-aspects_is-on-control</name>
-                                        <nodeRef>workspace://SpacesStore/9520f949-8a0c-45a6-a551-676ea8e92864</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -5025,7 +4950,7 @@ if (document) {
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-resolutions_control</name>
+                                        <name>lecm-document-aspects_is-on-control</name>
                                         <nodeRef>workspace://SpacesStore/87c8b785-0c72-4d71-a33b-69144c5f83c2</nodeRef>
                                         <properties>
                                             <property>
@@ -5252,21 +5177,6 @@ if (document) {
                                         <type>documentField</type>
                                         <name>lecm-review-aspects_related-review-records-assoc</name>
                                         <nodeRef>workspace://SpacesStore/9895bd53-708d-4334-b922-35bfae2704fb</nodeRef>
-                                        <properties>
-                                            <property>
-                                                <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
-                                            </property>
-                                        </properties>
-                                        <aspects/>
-                                        <associations/>
-                                        <roleAssociations/>
-                                        <subFolders/>
-                                    </node>
-                                    <node>
-                                        <type>documentField</type>
-                                        <name>lecm-document-aspects_is-on-control</name>
-                                        <nodeRef>workspace://SpacesStore/498c6db2-c508-489e-95ac-604f85cdf532</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
