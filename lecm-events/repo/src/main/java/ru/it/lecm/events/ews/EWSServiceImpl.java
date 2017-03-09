@@ -63,9 +63,11 @@ public class EWSServiceImpl extends AbstractEWSService {
 				} else {
 					logger.error("EWS Error code: {}", availability.getErrorCode().toString());
 					logger.error(availability.getErrorMessage());
-					Map<String, String> errorDetails = availability.getErrorDetails();
-					for (Entry<String, String> entry : errorDetails.entrySet()) {
-						logger.debug("{} {}", entry.getKey(), entry.getValue());
+					if (logger.isDebugEnabled()) {
+						Map<String, String> errorDetails = availability.getErrorDetails();
+						for (Entry<String, String> entry : errorDetails.entrySet()) {
+							logger.debug("{} {}", entry.getKey(), entry.getValue());
+						}
 					}
 				}
 			}
