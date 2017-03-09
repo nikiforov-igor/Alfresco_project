@@ -3,13 +3,13 @@ var viewLinksMode = '' + edsGlobalSettings.getLinksViewMode();
 var isMlSupported = lecmMessages.isMlSupported();
 
 var documentNodeRef = args['documentNodeRef'];
-var showFirstLevel = args["showFirstLevel"];
+var showFirstLevel = args["showFirstLevel"] == "true";
 
 var substituteTitle = isMlSupported ? "{lecm-document:ml-ext-present-string}" : "{lecm-document:ext-present-string}";
 
 var items = [];
 var item = search.findNode(documentNodeRef);
-if (showFirstLevel && showFirstLevel == "true") {
+if (showFirstLevel) {
     items.push(evaluateItem(item, substituteTitle))
 } else {
     var children = getChildren(item);

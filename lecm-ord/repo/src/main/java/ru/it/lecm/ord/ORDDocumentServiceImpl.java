@@ -90,18 +90,19 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 	public Boolean haveNotPointsWithController(NodeRef document) {
 		Boolean havePointsWithController = false;
 		List<AssociationRef> ordControllerAssoc = nodeService.getTargetAssocs(document, ORDModel.ASSOC_ORD_CONTROLLER);
-		List<NodeRef> ordPoints = getOrdDocumentPoints(document);
-		for (NodeRef point : ordPoints) {
-			NodeRef pointController = null;
-			List<AssociationRef> pointControllerAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_CONTROLLER);
-			if (pointControllerAssocs != null && pointControllerAssocs.size() > 0) {
-				pointController = pointControllerAssocs.get(0).getTargetRef();
-			}
-			if (pointController != null) {
-				havePointsWithController = true;
+		if (ordControllerAssoc != null && ordControllerAssoc.size() != 0) {
+			List<NodeRef> ordPoints = getOrdDocumentPoints(document);
+			for (NodeRef point : ordPoints) {
+				NodeRef pointController = null;
+				List<AssociationRef> pointControllerAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_CONTROLLER);
+				if (pointControllerAssocs != null && pointControllerAssocs.size() > 0) {
+					pointController = pointControllerAssocs.get(0).getTargetRef();
+				}
+				if (pointController != null) {
+					havePointsWithController = true;
+				}
 			}
 		}
-
 		return !havePointsWithController && ordControllerAssoc != null && ordControllerAssoc.size() != 0;
 	}
 
@@ -109,11 +110,13 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 	public Boolean haveNotPointsWithDueDate(NodeRef document) {
 		Date executionDate = (Date) nodeService.getProperty(document, EDSDocumentService.PROP_EXECUTION_DATE);
 		Boolean havePointsWithDueDate = false;
-		List<NodeRef> ordPoints = getOrdDocumentPoints(document);
-		for (NodeRef point : ordPoints) {
-			String pointLimitDateRadio = (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_RADIO);
-			if (!Objects.equals(pointLimitDateRadio, "LIMITLESS")) {
-				havePointsWithDueDate = true;
+		if (executionDate != null) {
+			List<NodeRef> ordPoints = getOrdDocumentPoints(document);
+			for (NodeRef point : ordPoints) {
+				String pointLimitDateRadio = (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_RADIO);
+				if (!Objects.equals(pointLimitDateRadio, "LIMITLESS")) {
+					havePointsWithDueDate = true;
+				}
 			}
 		}
 		return !havePointsWithDueDate && executionDate != null;

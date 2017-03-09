@@ -197,9 +197,9 @@ LogicECM.ORD = LogicECM.ORD || {};
             var controller = rowData.itemData["assoc_lecm-ord-table-structure_controller-assoc"];
             var executor = rowData.itemData["assoc_lecm-ord-table-structure_executor-assoc"];
             var reportRequired = rowData.itemData["prop_lecm-ord-table-structure_report-required"];
-            var isReposrtRequired = reportRequired && reportRequired.value;
+            var isReportRequired = reportRequired && reportRequired.value;
             var isStatusOk = itemStatus && itemStatus.displayValue == "На исполнении";
-            var isEmployeeOk = !isReposrtRequired && ((this.options.currentUser.nodeRef == executor.value) || ((this.options.currentUser.isController && this.options.currentUser.nodeRef == executor.value) || (controller && executor.value == controller.value)));
+            var isEmployeeOk = !isReportRequired && ((this.options.currentUser.nodeRef == executor.value) || ((this.options.currentUser.isController && this.options.currentUser.nodeRef == executor.value) || (controller && executor.value == controller.value)));
             return isStatusOk && isEmployeeOk;
         },
         showActionsEvaluator: function (rowData) {
