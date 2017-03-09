@@ -35,6 +35,7 @@
                 })
             }
         }
-        model.result = jsonUtils.toJSONString(result);
+		var ewsCollection = ews.getEvents(employees, args["date"] + "T00:00:00Z", args["nextDate"] + "T00:00:00Z");
+        model.result = jsonUtils.toJSONString(result.concat(ewsCollection));
     }
 }());
