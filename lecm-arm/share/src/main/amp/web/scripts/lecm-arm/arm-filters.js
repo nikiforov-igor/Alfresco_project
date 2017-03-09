@@ -73,9 +73,9 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                     }
                     this.deferredListPopulation.fulfil("onReady");
                 } else {
-                    this.preferences.request(this._buildPreferencesKey(),
-                        {
+                    this.preferences.request(this._buildPreferencesKey(), {
                             successCallback: {
+                                scope: this,
                                 fn: function (p_oResponse) {
                                     var filtersPref = Alfresco.util.findValueByDotNotation(p_oResponse.json, this._buildPreferencesKey());
                                     if (filtersPref) {
@@ -84,15 +84,14 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                                         this.filtersFromPref = [];
                                     }
                                     this.deferredListPopulation.fulfil("onReady");
-                                },
-                                scope: this
+                                }
                             },
                             failureCallback: {
+                                scope: this,
                                 fn: function () {
                                     this.filtersFromPref = [];
                                     this.deferredListPopulation.fulfil("onReady");
-                                },
-                                scope: this
+                                }
                             }
                         });
                 }
@@ -107,13 +106,13 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                         filters: YAHOO.lang.JSON.stringify(this.getFilledFilters())
                     },
                     successCallback: {
+                        scope: this,
                         fn: function (oResponse) {
                             element.innerHTML = oResponse.serverResponse.responseText;
                             if (callback && YAHOO.lang.isFunction(callback)) {
                                 callback.call(parent ? parent : this);
                             }
-                        },
-                        scope: this
+                        }
                     },
                     failureMessage: this.msg("message.failure"),
                     scope: this,
