@@ -125,7 +125,7 @@
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                 </property>
-                <!-- Контроль-->
+                <!-- Контроль. Deprecated (используется lecm-document-aspects:is-on-control)-->
                 <property name="lecm-resolutions:control">
                     <type>d:boolean</type>
                     <default>false</default>

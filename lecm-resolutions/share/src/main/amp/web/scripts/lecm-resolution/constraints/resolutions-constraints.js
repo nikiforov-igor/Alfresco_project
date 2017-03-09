@@ -35,7 +35,7 @@ LogicECM.module.Resolutions.limitationDateValidation =
 LogicECM.module.Resolutions.controllerValidation =
     function (field) {
         if (field.form) {
-            var control = field.form["prop_lecm-resolutions_control"];
+            var control = field.form["prop_lecm-document-aspects_is-on-control"];
 
             return (control && control.value == "false") || (field.value && field.value.length);
         }
