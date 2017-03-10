@@ -44,7 +44,11 @@
 		var oldSubmitFunction = Alfresco.forms.Form.prototype._submitInvoked;
 		Alfresco.forms.Form.prototype._submitInvoked = function (event) {
 			oldSubmitFunction.call(this, event);
-			Alfresco.forms.Form.prototype._toggleSubmitElements.call(this, false);
+
+			// На всякий случай проверим валидна ли форма перед отключением кнопок
+			if (this._runValidations(event, null, Alfresco.forms.Form.NOTIFICATION_LEVEL_CONTAINER)) {
+				this._toggleSubmitElements(false);
+			}
 		}
 	})();
 	</@>
