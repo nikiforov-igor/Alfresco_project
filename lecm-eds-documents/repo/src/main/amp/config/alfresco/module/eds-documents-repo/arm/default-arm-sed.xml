@@ -1890,7 +1890,7 @@
                                         <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[7]]></property>
                                         <property name="lecm-arm:field-name">
-                                            <![CDATA[lecm-errands:limitation-date-text]]></property>
+                                            <![CDATA[lecm-errands:limitation-date]]></property>
                                         <property name="lecm-arm:field-title"><![CDATA[Исполнить к]]></property>
                                         <property name="cm:name">
                                             <![CDATA[aa73150f-39e9-4799-9d8e-35db5928a4c7]]></property>
