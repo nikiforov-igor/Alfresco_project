@@ -18,7 +18,8 @@
                 <property name="cm:name"><![CDATA[2d3da911-7972-4752-9bb7-a38ecceae641]]></property>
                 <items>
                     <item name="cm:Период регистрации" type="lecm-rpeditor:reportDataColumn">
-                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnControlParams">
+                            <![CDATA[fromDateDefault=START_YEAR;fillDates=true;toDateDefault=NOW]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:date]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
                         <property name="cm:name"><![CDATA[Период регистрации]]></property>
@@ -64,8 +65,10 @@
                         </assocs>
                     </item>
                     <item name="cm:Срок исполнения истекает в период" type="lecm-rpeditor:reportDataColumn">
-                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnControlParams">
+                            <![CDATA[fromDateDefault=NOW;fillDates=true;minFromLimitCurrentDate=true;toDateDefault=EMPTY]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:date]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
                         <property name="cm:name"><![CDATA[Срок исполнения истекает в период]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[30]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[lost_execute_per]]></property>
