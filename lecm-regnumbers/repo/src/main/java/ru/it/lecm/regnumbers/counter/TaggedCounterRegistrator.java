@@ -3,13 +3,15 @@ package ru.it.lecm.regnumbers.counter;
 import org.alfresco.util.PropertyCheck;
 
 import java.util.List;
+import org.alfresco.service.cmr.repository.NodeRef;
+import ru.it.lecm.base.beans.BaseBean;
 
 /**
  * Бин используется для задания тегированных счетчиков в сторонних сервисах.
  *
  * @author vlevin
  */
-public class TaggedCounterRegistrator {
+public class TaggedCounterRegistrator extends BaseBean {
 
 	private CounterFactory counterFactory;
 	private String documentType;
@@ -27,8 +29,14 @@ public class TaggedCounterRegistrator {
 		this.tags = tags;
 	}
 
-	public void init() {
+	@Override
+	protected void initServiceImpl() {
 		PropertyCheck.mandatory(this, "counterFactory", counterFactory);
-//		counterFactory.initTaggedCounters(documentType, tags);
+		counterFactory.initTaggedCounters(documentType, tags);
+	}
+	
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
 	}
 }

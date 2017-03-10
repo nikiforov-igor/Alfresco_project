@@ -62,7 +62,7 @@
 		</property>
 	</bean>
 
-	<bean id="regNumbersTaggedCounterRegistrator" class="ru.it.lecm.regnumbers.counter.TaggedCounterRegistrator" init-method="init" abstract="true">
+	<bean id="regNumbersTaggedCounterRegistrator" class="ru.it.lecm.regnumbers.counter.TaggedCounterRegistrator" parent="baseBean" abstract="true">
 		<property name="counterFactory" ref="regNumbersCounterFactory"/>
 	</bean>
 
