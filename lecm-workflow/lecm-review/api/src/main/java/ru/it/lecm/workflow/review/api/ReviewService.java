@@ -65,6 +65,9 @@ public interface ReviewService extends InitializingBean {
     QName PROP_REVIEW_STATE = QName.createQName(REVIEW_TS_NAMESPACE, "doc-review-state");
     QName PROP_REVIEW_STATISTICS = QName.createQName(REVIEW_TS_NAMESPACE, "doc-review-statistics");
 
+    QName PROP_RELATED_REVIEW_STATE = QName.createQName(REVIEW_ASPECTS_NAMESPACE, "related-review-state");
+    QName PROP_RELATED_REVIEW_STATISTICS = QName.createQName(REVIEW_ASPECTS_NAMESPACE, "related-review-statistics");
+
     enum REVIEW_STATE {
         IN_PROCESS,
         COMPLETE,

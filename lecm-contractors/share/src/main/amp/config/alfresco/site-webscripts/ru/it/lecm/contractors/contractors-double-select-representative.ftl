@@ -49,6 +49,9 @@
                 <#if params.representativesDefaultValueDS?? && params.representativesDefaultValueDS != "">
                     representativesDefaultValueDS: "${params.representativesDefaultValueDS}",
                 </#if>
+                <#if params.defaultValueUseOnce??>
+                    defaultValueUseOnce: ${params.defaultValueUseOnce?string},
+                </#if>
                     employeesType: "${params.employeesType!"lecm-orgstr:employee"}",
                     representativesType: "${params.representativesType!"lecm-representative:representative-type"}",
 					fieldHtmlId: "${fieldHtmlId}"

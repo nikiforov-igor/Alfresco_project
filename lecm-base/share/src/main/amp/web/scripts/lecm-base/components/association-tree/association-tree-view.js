@@ -175,6 +175,8 @@ LogicECM.module = LogicECM.module || {};
 
 	        defaultValueDataSource: null,
 
+			defaultValueUseOnce: false,
+
             ignoreNodes: null,
 
 			childrenDataSource: "lecm/forms/picker",
@@ -418,6 +420,9 @@ LogicECM.module = LogicECM.module || {};
 
             if (arrItems == "" && this.defaultValue != null) {
 		        arrItems += this.defaultValue;
+		        if (this.options.defaultValueUseOnce) {
+			        this.defaultValue = null;
+		        }
 	        }
 
             var onSuccess = function AssociationTreeViewer__loadSelectedItems_onSuccess(response)

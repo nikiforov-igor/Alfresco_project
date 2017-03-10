@@ -57,10 +57,6 @@
             <id>alfresco-public</id>
             <url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
         </pluginRepository>
-        <pluginRepository>
-            <id>maven-rep</id>
-            <url>https://maven-repository.com/artifact/</url>
-        </pluginRepository>
     </pluginRepositories>
     <properties>
         <!--
