@@ -4992,7 +4992,7 @@
                                                 <property name="lecm-arm:is-select-by-activeTasks">
                                                     <![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'Отправлен' OR @lecm\-statemachine\:status:'Не отправлен']]></property>
+                                                    <![CDATA[=@lecm\-statemachine\:status:'Отправлен' OR =@lecm\-statemachine\:status:'Отправка не требуется']]></property>
                                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                                 <property name="cm:name"><![CDATA[Работа завершена]]></property>
