@@ -185,6 +185,7 @@
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/reports/ord-content.xml</value>
+                <value>alfresco/module/${artifactId}/reports/execute-ord.xml</value>
                 <value>alfresco/module/${artifactId}/reports/ord-reg-journal.xml</value>
             </list>
         </property>

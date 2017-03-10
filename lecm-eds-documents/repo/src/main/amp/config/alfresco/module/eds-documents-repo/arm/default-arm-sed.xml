@@ -11010,34 +11010,9 @@
                                 <property name="lecm-arm:order"><![CDATA[30]]></property>
                                 <property name="cm:name"><![CDATA[Отчеты по исполнительской дисциплине]]></property>
                                 <property name="lecm-arm:reportCodes">
-                                    <![CDATA[exec-discipline-by-creator,exec-discipline-by-executor,exec-prod-by-executor,exec-prod-by-orgunit,errands-expiring-to-date,unexecuted-errands-expired,errands-executed-out-of-time]]></property>
+                                    <![CDATA[exec-discipline-by-creator,exec-discipline-by-executor,exec-prod-by-executor,exec-prod-by-orgunit,errands-expiring-to-date,unexecuted-errands-expired,errands-executed-out-of-time,execute-ord]></property>
                                 <property name="lecm-arm:types">
                                     <![CDATA[lecm-ord:document,lecm-errands:document,lecm-nd:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document]]></property>
-                            </item>
-                            <item name="cm:Входящие" type="lecm-arm:reports-node">
-                                <property name="lecm-arm:order"><![CDATA[10]]></property>
-                                <property name="cm:name"><![CDATA[Входящие]]></property>
-                                <property name="lecm-arm:types"><![CDATA[lecm-incoming:document]]></property>
-                            </item>
-                            <item name="cm:Исходящие" type="lecm-arm:reports-node">
-                                <property name="lecm-arm:order"><![CDATA[20]]></property>
-                                <property name="cm:name"><![CDATA[Исходящие]]></property>
-                                <property name="lecm-arm:types"><![CDATA[lecm-outgoing:document]]></property>
-                            </item>
-                            <item name="cm:Внутренние" type="lecm-arm:reports-node">
-                                <property name="lecm-arm:order"><![CDATA[30]]></property>
-                                <property name="cm:name"><![CDATA[Внутренние]]></property>
-                                <property name="lecm-arm:types"><![CDATA[lecm-internal:document]]></property>
-                            </item>
-                            <item name="cm:ОРД" type="lecm-arm:reports-node">
-                                <property name="lecm-arm:order"><![CDATA[40]]></property>
-                                <property name="cm:name"><![CDATA[ОРД]]></property>
-                                <property name="lecm-arm:types"><![CDATA[lecm-ord:document]]></property>
-                            </item>
-                            <item name="cm:НД" type="lecm-arm:reports-node">
-                                <property name="lecm-arm:order"><![CDATA[50]]></property>
-                                <property name="cm:name"><![CDATA[НД]]></property>
-                                <property name="lecm-arm:types"><![CDATA[lecm-nd:document]]></property>
                             </item>
                             <item name="cm:Договоры" type="lecm-arm:reports-node">
                                 <property name="lecm-arm:order"><![CDATA[0]]></property>

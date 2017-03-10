@@ -27,3 +27,6 @@
 .execution-expanded-content ul li {
     margin-bottom: 5px;
 }
+.graph-tree .yui-dt-expandablerow-trigger {
+    background-color: transparent;
+}
