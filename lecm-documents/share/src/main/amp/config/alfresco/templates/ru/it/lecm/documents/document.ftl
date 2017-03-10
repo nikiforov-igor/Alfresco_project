@@ -8,6 +8,7 @@
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/graph-tree.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-ajax-content.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-save-last.js"></@script>
+    <@script type="text/javascript" src="${url.context}/res/scripts/components/document-component-base.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/components/document-view-preferences.js"></@script>
 
     <#-- Скрипт для валидатора. Было решено вставить сюда, чтобы хотя бы не тащить вообще на все страницы -->
@@ -33,7 +34,8 @@
     <#if documentType??>
     <script type="text/javascript">//<![CDATA[
             LogicECM.services = LogicECM.services || {};
-            LogicECM.services.documentViewPreferences = new LogicECM.module.DocumentViewPreferences("${page.url.args.nodeRef}", "${documentType}", "${defaultExpandComponent}");
+            LogicECM.services.documentViewPreferences = new LogicECM.module.DocumentViewPreferences(
+                    "${page.url.args.nodeRef}", "${documentType}", "${defaultExpandComponent}");
     //]]></script>
     </#if>
 
@@ -74,19 +76,7 @@
                     });
                 //]]></script>
                 </#if>
-                <@region id="document-actions" scope="template"/>
-                <@region id="base-doc-actions" scope="template"/>
-                <@region id="document-metadata" scope="template"/>
-                <@region id="document-attachments" scope="template"/>
-                <@region id="document-workflows" scope="template"/>
-                <@region id="document-connections" scope="template"/>
-                <@region id="document-members" scope="template"/>
-                <@region id="document-tags" scope="template"/>
-                <@region id="document-history" scope="template"/>
-                <@region id="document-forms" scope="template"/>
-                <@region id="comments" scope="template"/>
-				<#-- Участие в ЮЗД -->
-				<@region id="document-signed-docflow" scope="template"/>
+				<@region id="doc-right-part" scope="template"/>
             </div>
             <div id="main-content" class="main-content">
                 <div id="custom-region" class="hidden1"></div>

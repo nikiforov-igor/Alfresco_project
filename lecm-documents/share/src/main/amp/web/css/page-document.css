@@ -21,6 +21,14 @@
     padding-top: 20px;
 }
 
+#doc-right-part .form-container .form-fields {
+    padding: 0;
+}
+
+#doc-right-part .metadata-panel .form-container .form-fields {
+    padding: 1em;
+}
+
 .doc-page .yui-gc {
     width: 100%;
 }
@@ -445,6 +453,9 @@ div.metadata-form div.lecm-dashlet-actions + div {
     width: 16px;
     margin-right: -16px;
     margin-top: 2px;
+}
+.workflow-task-list-body {
+    margin-left: 30px;
 }
 .workflow-task-list-left-column {
     float:left;

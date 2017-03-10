@@ -60,6 +60,30 @@
            </sub-components>
        </component>
 
+       <!-- Правая область -->
+       <component>
+           <region-id>doc-right-part</region-id>
+           <sub-components>
+               <sub-component id="default">
+                   <evaluations>
+                       <evaluation>
+                           <url>/lecm/components/form</url>
+                           <properties>
+                               <itemKind>node</itemKind>
+                               <itemId>{nodeRef}</itemId>
+                               <mode>view</mode>
+                               <submitType>json</submitType>
+                               <formUI>false</formUI>
+                               <formId>doc-right-parts</formId>
+                               <showCancelButton>false</showCancelButton>
+                               <showSubmitButton>false</showSubmitButton>
+                           </properties>
+                       </evaluation>
+                   </evaluations>
+               </sub-component>
+           </sub-components>
+       </component>
+
        <!-- Основные сведения -->
        <component>
            <region-id>metadata</region-id>

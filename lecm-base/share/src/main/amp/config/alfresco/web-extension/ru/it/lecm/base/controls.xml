@@ -252,6 +252,46 @@
 					<param id="first" localName="Первая колонка" mandatory="false" visible="true">/lecm/components/dashlets/document-main;/lecm/components/dashlets/document-members</param>
 					<param id="second" localName="Вторая колонка" mandatory="false" visible="true">/lecm/components/dashlets/document-attachments;/lecm/components/dashlets/errands-by-doc</param>
 				</control>
+				<control id="document-actions-control" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Действия">
+					<param id="uri" localName="Адрес веб-скрипта" mandatory="true" visible="true">/lecm/components/dashlets/document-actions</param>
+				</control>
+				<control id="base-document-actions-control" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Действия документа-основания">
+					<param id="uri" localName="Адрес веб-скрипта" mandatory="true" visible="true">/lecm/components/dashlets/base-doc-actions</param>
+					<param id="baseDocAssocName" localName="Название ассоциации документа-основания" mandatory="false" visible="true"/>
+				</control>
+				<control id="metadata-control" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Основные сведения">
+					<param id="uri" localName="Адрес веб-скрипта" mandatory="true" visible="true">/lecm/components/document/document-meta</param>
+				</control>
+				<control id="attachments-control" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Вложения">
+					<param id="uri" localName="Адрес веб-скрипта" mandatory="true" visible="true">/lecm/components/document/document-attachments</param>
+					<param id="baseDocAssocName" localName="Название ассоциации документа-основания" mandatory="false" visible="true"/>
+				</control>
+				<control id="workflows-control" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Бизнес-процессы">
+					<param id="uri" localName="Адрес веб-скрипта" mandatory="true" visible="true">/lecm/components/document/document-workflows</param>
+				</control>
+				<control id="connections-control" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Связи">
+					<param id="uri" localName="Адрес веб-скрипта" mandatory="true" visible="true">/lecm/components/document/connections</param>
+					<param id="excludeType" localName="Исключенный тип документа" mandatory="false" visible="true"/>
+				</control>
+				<control id="members-control" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Участники">
+					<param id="uri" localName="Адрес веб-скрипта" mandatory="true" visible="true">/lecm/components/document/document-members</param>
+				</control>
+				<control id="tags-control" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Метки">
+					<param id="uri" localName="Адрес веб-скрипта" mandatory="true" visible="true">/lecm/components/document/document-tags</param>
+				</control>
+				<control id="history-control" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="История">
+					<param id="uri" localName="Адрес веб-скрипта" mandatory="true" visible="true">/lecm/components/document/document-history</param>
+				</control>
+				<control id="forms-control" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Печатные формы">
+					<param id="uri" localName="Адрес веб-скрипта" mandatory="true" visible="true">/lecm/components/document/forms</param>
+				</control>
+				<control id="document-signed-docflow" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Участвует в ЮЗД">
+					<param id="uri" localName="Адрес веб-скрипта" mandatory="true" visible="true">/lecm/components/document/document-signed-docflow</param>
+				</control>
+				<control id="comments-control" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Комментарии">
+					<param id="uri" localName="Адрес веб-скрипта" mandatory="true" visible="true">/lecm/components/document/comments</param>
+                    <param id="activityType" mandatory="false" visible="false">document</param>
+				</control>
 			</field-type>
 		</field-types>
 
@@ -265,9 +305,10 @@
 			<form-type id="workflowForm" formId="workflow-form" evaluatorType="model-type" localName="Форма создания из машины состояний" />
 			<form-type id="statemachineEditableFieldsForm" formId="statemachine-editable-fields" evaluatorType="model-type" localName="Настройка машины состояний" />
 			<form-type id="documentDashletForm" formId="document-dashlet" evaluatorType="node-type" localName="Дашлет" />
-			<form-type id="documentForm" formId="document" evaluatorType="node-type" localName="Правая область" />
+			<form-type id="documentForm" formId="document" evaluatorType="node-type" localName="Основные сведения правой области" />
 			<form-type id="mainPageDashletsForm" formId="main-page-dashlets" evaluatorType="node-type" localName="Главная страница" />
 			<form-type id="documentTemplateFieldsForm" formId="document-template-fields" evaluatorType="model-type" localName="Форма создания шаблона документа" />
+			<form-type id="docRightPartsForm" formId="doc-right-parts" evaluatorType="node-type" localName="Правая область"/>
 			<form-layout localName="В одну колонку" template=""/>
 			<form-layout localName="В две колонки" template="/ru/it/lecm/controls/2-column-edit-form.ftl" />
 			<form-layout localName="С вкладками" template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />

@@ -113,13 +113,13 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
 
                             detail = "<div class=\"workflow-task-item\">";
                         detail +=   "<div class=\"workflow-task-list-picture " + isImportant + "\" title=\"" + isImportantTitle + "\">&nbsp;</div>";
-                        detail +=   "<div style=\"margin-left: 30px;\">";
+                        detail +=   "<div class=\"workflow-task-list-body\">";
                         detail +=       "<div>";
-                        detail +=           "<div class=\"workflow-task-title\" style=\"font-size: 16px;\">";
+                        detail +=           "<div class=\"workflow-task-title\">";
                         detail +=           "<a href=\""+window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT+"document?nodeRef="+ errand.nodeRef +"\">" + errand.title + ":</a>";
                         detail +=           "</div>";
                         detail +=       "</div>";
-                        detail +=       "<div style=\"clear: both;\"></div>";
+                        detail +=       "<div class=\"clear\"></div>";
                         detail +=       "<div class=\"workflow-task-description\">" + errand.description + "</div>";
                         detail +=       "<div>";
                         detail +=           "<div class=\"workflow-task-list-left-column\">";
@@ -144,7 +144,7 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
 
                         detail +=       "</div>";
                         detail +=   "</div>";
-                        detail +=   "<div style=\"clear: both;\"></div>";
+                        detail +=   "<div class=\"clear\"></div>";
                             detail += "</div>";
                             container.innerHTML += detail;
                         }

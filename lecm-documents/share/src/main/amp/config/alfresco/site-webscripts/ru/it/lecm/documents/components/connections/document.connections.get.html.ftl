@@ -1,13 +1,3 @@
-<@markup id="css" >
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-connections-list.css" />
-    <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-connections.css" />
-</@>
-<@markup id="js">
-	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-connections-list.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-connections.js"></@script>
-</@>
-
-
 <@markup id="html">
 	<!-- Parameters and libs -->
     <#assign aDateTime = .now>
@@ -61,27 +51,9 @@
                         </li>
                     </#if>
                 </div>
-
-                <script type="text/javascript">//<![CDATA[
-                (function(){
-                    function init() {
-                        Alfresco.util.createTwister("${el}-heading", "DocumentConnections");
-
-                        if (documentConnectionsComponent == null) {
-                            documentConnectionsComponent = new LogicECM.DocumentConnections("${el}").setOptions({
-                                nodeRef: "${nodeRef}",
-                                title: "${msg('heading')}",
-								excludeType: "${excludeType!""}"
-                            }).setMessages(${messages});
-                        }
-                    }
-
-                    YAHOO.util.Event.onContentReady("${el}", init, true);
-                })();
-                //]]></script>
             </div>
 
-            <div id="${el}-short-view" class="document-components-panel short-view">
+            <div id="${el}-short-view" class="document-components-panel short-view hidden">
                 <span class="alfresco-twister-actions">
                     <a href="javascript:void(0);" class="expand connections-expand" title="${msg("label.expand")}">&nbsp</a>
                 </span>
@@ -94,21 +66,40 @@
                 </div>
             </div>
             <script type="text/javascript">//<![CDATA[
-                (function () {
+                (function(){
                     function init() {
-                        LogicECM.services = LogicECM.services || {};
-                        if (LogicECM.services.documentViewPreferences) {
-                            var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
-                            if (shortView) {
-                                Dom.addClass("${el}-wide-view", "hidden");
-                            } else {
-                                Dom.addClass("${el}-short-view", "hidden");
-                            }
-                        } else {
-                            Dom.addClass("${el}-short-view", "hidden");
+                        LogicECM.module.Base.Util.loadResources([
+                                'scripts/lecm-base/components/lecm-datagrid.js',
+                                'scripts/components/document-connections.js',
+                                'scripts/components/document-connections-list.js'
+                            ], [
+                                'css/components/document-connections-list.css',
+                                'css/components/document-connections.css'
+                            ], create);
+                    }
+
+                    function create() {
+                        Alfresco.util.createTwister("${el}-heading", "DocumentConnections");
+
+                        if (documentConnectionsComponent == null) {
+                            documentConnectionsComponent = new LogicECM.DocumentConnections("${el}").setOptions({
+                                nodeRef: "${nodeRef}",
+                                title: "${msg('heading')}",
+								excludeType: "${excludeType!""}"
+                            }).setMessages(${messages});
                         }
                     }
+
                     YAHOO.util.Event.onContentReady("${el}", init, true);
+
+                    LogicECM.services = LogicECM.services || {};
+                    if (LogicECM.services.documentViewPreferences) {
+                        var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
+                        if (shortView) {
+                            Dom.addClass("${el}-wide-view", "hidden");
+                            Dom.removeClass("${el}-short-view", "hidden");
+                        }
+                    }
                 })();
             //]]></script>
         </div>

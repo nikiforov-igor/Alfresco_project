@@ -1,13 +1,5 @@
 <#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
 
-<@script type="text/javascript" src="${url.context}/res/scripts/statemachine/form.js"></@script>
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata-form-edit.css" />
-<!-- Document Details Actions -->
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-final-actions.css" />
-<@script type="text/javascript" src="${url.context}/res/components/document-details/document-actions.js"></@script>
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata-form-edit.css" />
-<@script type="text/javascript" src="${url.context}/res/scripts/components/document-actions.js"></@script>
-
 <#if hasPermission >
     <#assign el=args.htmlid/>
 
@@ -31,7 +23,7 @@
             </div>
         </div>
     </div>
-    <div id="${el}-short-view" class="widget-panel-grey widget-bordered-panel short-view">
+    <div id="${el}-short-view" class="widget-panel-grey widget-bordered-panel short-view hidden">
         <span class="alfresco-twister-actions show-right-part-wide">
             <a href="javascript:void(0);"
                title="${msg("label.show-right-part-wide")}">&nbsp</a>
@@ -45,29 +37,46 @@
         </div>
     </div>
     <script type="text/javascript">//<![CDATA[
-    new LogicECM.DocumentActions("${el}");
+    (function () {
 
-    YAHOO.util.Event.onDOMReady(function () {
-        <#if isAdmin && documentDetailsJSON??>
-            new Alfresco.DocumentActions("final-actions").setOptions(
-                    {
-                        nodeRef: "${nodeRef?js_string}",
-                    siteId: <#if site??>"${site?js_string}"<#else>null</#if>,
-                        containerId: "${container?js_string}",
-                        rootNode: "${rootNode}",
-                        replicationUrlMapping: {},
-                        documentDetails: ${documentDetailsJSON},
-                        repositoryBrowsing: ${(rootNode??)?string}
-                    }).setMessages(
-            ${messages}
-            );
-        </#if>
-        var workflowForm = new LogicECM.module.StartWorkflow("${el}").setOptions({
-            nodeRef: "${nodeRef}"
-        });
-        workflowForm.draw();
-        Alfresco.util.createTwister("${el}-heading", "DocumentActions");
-    });
+        function init() {
+            LogicECM.module.Base.Util.loadResources([
+                        'scripts/statemachine/form.js',
+                        'components/document-details/document-actions.js',
+                        'scripts/components/document-actions.js'
+                    ],
+                    [
+                        'css/components/document-metadata-form-edit.css',
+                        'css/components/document-final-actions.css',
+                        'css/components/document-metadata-form-edit.css'
+                    ], createControl);
+        }
+
+        function createControl() {
+            new LogicECM.DocumentActions("${el}");
+            <#if isAdmin && documentDetailsJSON??>
+                new Alfresco.DocumentActions("final-actions").setOptions(
+                        {
+                            nodeRef: "${nodeRef?js_string}",
+                        siteId: <#if site??>"${site?js_string}"<#else>null</#if>,
+                            containerId: "${container?js_string}",
+                            rootNode: "${rootNode}",
+                            replicationUrlMapping: {},
+                            documentDetails: ${documentDetailsJSON},
+                            repositoryBrowsing: ${(rootNode??)?string}
+                        }).setMessages(
+                ${messages}
+                );
+            </#if>
+            var workflowForm = new LogicECM.module.StartWorkflow("${el}").setOptions({
+                nodeRef: "${nodeRef}"
+            });
+            workflowForm.draw();
+            Alfresco.util.createTwister("${el}-heading", "DocumentActions");
+        }
+
+        YAHOO.util.Event.onDOMReady(init);
+    })();
     //]]>
     </script>
 </div>

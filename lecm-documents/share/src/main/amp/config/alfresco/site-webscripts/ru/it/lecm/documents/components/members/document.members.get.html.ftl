@@ -1,11 +1,3 @@
-<@markup id="js">
-    <@script type="text/javascript" src="${url.context}/res/scripts/components/document-members.js"></@script>
-</@>
-<@markup id="css">
-    <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-members-list.css" />
-    <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-members.css" />
-</@>
-
 <@markup id="html">
     <#if members??>
         <#assign aDateTime = .now>
@@ -59,24 +51,8 @@
                 </#if>
             </div>
 
-            <script type="text/javascript">//<![CDATA[
-            (function () {
-                function init() {
-                    if (documentMembersComponent == null) {
-                        documentMembersComponent = new LogicECM.DocumentMembers("${el}").setOptions(
-                                {
-                                    nodeRef: "${nodeRef}",
-                                    title: "${msg('heading')}"
-                                }).setMessages(${messages});
-                    }
-                }
-
-                YAHOO.util.Event.onContentReady("${el}", init, true);
-            })();
-            //]]>
-            </script>
         </div>
-        <div id="${el}-short-view" class="document-components-panel short-view">
+        <div id="${el}-short-view" class="document-components-panel short-view hidden">
         <span class="alfresco-twister-actions">
             <a href="javascript:void(0);" class="expand members-expand" title="${msg("label.expand")}">&nbsp</a>
         </span>
@@ -89,13 +65,37 @@
             </div>
         </div>
     <script type="text/javascript">//<![CDATA[
-    LogicECM.services = LogicECM.services || {};
-    var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
-    if (shortView) {
-        Dom.addClass("${el}-wide-view", "hidden");
-    } else {
-        Dom.addClass("${el}-short-view", "hidden");
-    }
+    (function () {
+        function init() {
+            LogicECM.module.Base.Util.loadResources([
+                    'scripts/components/document-members.js'
+                ], [
+                   'css/components/document-members-list.css',
+                    'css/components/document-members.css'
+                ], create);
+        }
+
+        function create() {
+            if (documentMembersComponent == null) {
+                documentMembersComponent = new LogicECM.DocumentMembers("${el}").setOptions(
+                        {
+                            nodeRef: "${nodeRef}",
+                            title: "${msg('heading')}"
+                        }).setMessages(${messages});
+            }
+        }
+
+        YAHOO.util.Event.onContentReady("${el}", init, true);
+
+        LogicECM.services = LogicECM.services || {};
+        if (LogicECM.services.documentViewPreferences) {
+            var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
+            if (shortView) {
+                Dom.addClass("${el}-wide-view", "hidden");
+                Dom.removeClass("${el}-short-view", "hidden");
+            }
+        }
+    })();
     //]]></script>
     </div>
     </#if>

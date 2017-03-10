@@ -40,8 +40,7 @@ LogicECM.DocumentActions = LogicECM.DocumentActions || {};
                 var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
                 if (shortView) {
                     Dom.addClass(this.id + "-wide-view", "hidden");
-                } else {
-                    Dom.addClass(this.id + "-short-view", "hidden");
+                    Dom.removeClass(this.id + "-short-view", "hidden");
                 }
 
                 var showRightPartShort = Dom.getElementsByClassName('show-right-part-short');

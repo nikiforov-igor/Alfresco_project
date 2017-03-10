@@ -1,18 +1,3 @@
-<@markup id="css" >
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-attachments.css" />
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-attachments-list.css" />
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-attachments-list-actions.css" />
-</@>
-<@markup id="js">
-	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/advsearch.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-attachments.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-attachments-list.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-attachments-preview.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-category-attachments-list.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-attachments-dashlet-datagrid.js"></@script>
-</@>
-
 <@markup id="html">
 	<!-- Parameters and libs -->
 	<#assign el=args.htmlid/>
@@ -72,32 +57,9 @@
 				</div>
 		    </#if>
 	    </div>
-	    <script type="text/javascript">//<![CDATA[
-
-		if (typeof LogicECM == "undefined" || !LogicECM) {
-		    LogicECM = {};
-		}
-    	if (typeof LogicECM.DocumentAttachmentsComponent == "undefined" || !LogicECM.DocumentAttachmentsComponent) {
-		    LogicECM.DocumentAttachmentsComponent = {};
-		}
-
-	    (function () {
-	        function init() {
-	            LogicECM.DocumentAttachmentsComponent = new LogicECM.DocumentAttachments("${el}").setOptions({
-					nodeRef: "${nodeRef}",
-					baseDocAssocName: "${baseDocAssocName!""}",
-					title: "${msg('heading')}",
-					showAfterReady: ${(view?? && view == "attachments")?string}
-				}).setMessages(${messages});
-	        }
-
-	        YAHOO.util.Event.onDOMReady(init);
-	    })();
-	    //]]>
-	    </script>
 	</div>
 
-    <div id="${el}-short-view" class="document-components-panel short-view">
+    <div id="${el}-short-view" class="document-components-panel short-view hidden">
         <span class="alfresco-twister-actions">
             <a href="javascript:void(0);" class="expand attachments-expand" title="${msg("label.expand")}">&nbsp</a>
         </span>
@@ -112,17 +74,47 @@
 </div>
 <script type="text/javascript">//<![CDATA[
 (function () {
+    function init() {
+        LogicECM.module.Base.Util.loadResources([
+            'scripts/lecm-base/components/advsearch.js',
+            'scripts/lecm-base/components/lecm-datagrid.js',
+            'scripts/components/document-attachments.js',
+            'scripts/components/document-attachments-list.js',
+            'scripts/components/document-attachments-preview.js',
+            'scripts/components/document-category-attachments-list.js'
+        ], [
+            'css/components/document-attachments.css',
+            'css/components/document-attachments-list.css',
+            'css/components/document-attachments-list-actions.css'
+        ], createControl);
+    }
+
+    function createControl() {
+        if (typeof LogicECM == "undefined" || !LogicECM) {
+            LogicECM = {};
+        }
+        if (typeof LogicECM.DocumentAttachmentsComponent == "undefined" || !LogicECM.DocumentAttachmentsComponent) {
+            LogicECM.DocumentAttachmentsComponent = {};
+        }
+
+        LogicECM.DocumentAttachmentsComponent = new LogicECM.DocumentAttachments("${el}").setOptions({
+            nodeRef: "${nodeRef}",
+            baseDocAssocName: "${baseDocAssocName!""}",
+            title: "${msg('heading')}",
+            showAfterReady: ${(view?? && view == "attachments")?string}
+        }).setMessages(${messages});
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
+
     LogicECM.services = LogicECM.services || {};
     if (LogicECM.services.documentViewPreferences) {
         var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
         if (shortView) {
             Dom.addClass("${el}-wide-view", "hidden");
-        } else {
-			Dom.addClass("${el}-short-view", "hidden");
-		}
-    } else {
-        Dom.addClass("${el}-short-view", "hidden");
-	}
+            Dom.removeClass("${el}-short-view", "hidden");
+        }
+    }
 }) ();
 //]]></script>
 	</#if>

@@ -1,27 +1,4 @@
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/lecm-document-errands.js"></@script>
 <#assign id=args.htmlid/>
-
-<script type="text/javascript">
-    //<![CDATA[
-    (function () {
-        function init() {
-            new LogicECM.module.Document.Ajax.Content("${id}-results").setOptions(
-                    {
-                        contentURL: Alfresco.constants.URL_PAGECONTEXT + "lecm/components/document/document-errands/content",
-                        requestParams: {
-                            nodeRef: "${args.nodeRef}",
-                            state: "all",
-                            errandsLimit: 5,
-                            containerHtmlId: "${id}"
-                        },
-                        containerId: "${id}-results"
-                    }).setMessages(${messages});
-        }
-
-        YAHOO.util.Event.onContentReady("${id}-results", init);
-    })();
-    //]]>
-</script>
 
 <div class="widget-bordered-panel errands-panel">
     <div id="${id}-wide-view">
@@ -53,12 +30,35 @@
     </div>
 </div>
 <script type="text/javascript">//<![CDATA[
-LogicECM.services = LogicECM.services || {};
-if (LogicECM.services.documentViewPreferences) {
-    var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
-    if (shortView) {
-        Dom.addClass("${id}-wide-view", "hidden");
-        Dom.removeClass("${id}-short-view", "hidden");
+(function () {
+    function init() {
+        LogicECM.module.Base.Util.loadResources(['scripts/lecm-errands/lecm-document-errands.js'],
+                [], create);
     }
-}
+
+    function create() {
+        new LogicECM.module.Document.Ajax.Content("${id}-results").setOptions(
+        {
+            contentURL: Alfresco.constants.URL_PAGECONTEXT + "lecm/components/document/document-errands/content",
+            requestParams: {
+                nodeRef: "${args.nodeRef}",
+                state: "all",
+                errandsLimit: 5,
+                containerHtmlId: "${id}"
+            },
+            containerId: "${id}-results"
+        }).setMessages(${messages});
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
+
+    LogicECM.services = LogicECM.services || {};
+    if (LogicECM.services.documentViewPreferences) {
+        var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
+        if (shortView) {
+            Dom.addClass("${id}-wide-view", "hidden");
+            Dom.removeClass("${id}-short-view", "hidden");
+        }
+    }
+})();
 //]]></script>

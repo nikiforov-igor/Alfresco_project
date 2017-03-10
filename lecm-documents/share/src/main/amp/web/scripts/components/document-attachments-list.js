@@ -50,7 +50,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onReady: function DocumentAttachmentsList_onReady() {
                 var showInPreviewButton = Dom.get(this.id + "-action-show-previewer");
-                Event.addListener(showInPreviewButton, 'click', this.onShowAsListPressed, this, true);
+                Event.addListener(showInPreviewButton, 'click', this.onShowInPreviewPressed, this, true);
             },
 
             onShowInPreviewPressed: function DocumentAttachmentsList_onShowInPreviewPressed() {

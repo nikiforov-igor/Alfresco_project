@@ -1,29 +1,6 @@
-<@script type="text/javascript" src="${url.context}/res/scripts/components/document-workflows.js"></@script>
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-workflows.css" />
-
 <#assign id=args.htmlid/>
 
 <#if hasPermission>
-    <script type="text/javascript">
-        //<![CDATA[
-        (function () {
-            function init() {
-                new LogicECM.module.Document.Ajax.Content("${id}-results").setOptions(
-                    {
-                        contentURL: Alfresco.constants.URL_PAGECONTEXT + "lecm/components/document/document-workflows/content",
-                        requestParams: {
-                            nodeRef: "${nodeRef}",
-                            containerHtmlId: "${id}"
-                        },
-                        containerId: "${id}-results"
-                    }).setMessages(${messages});
-            }
-
-            YAHOO.util.Event.onContentReady("${id}-results", init);
-        })();
-        //]]>
-    </script>
-
 <div class="widget-bordered-panel workflows-panel">
     <div id="${id}-wide-view" class="document-metadata-header document-components-panel">
         <h2 id="${id}-heading" class="dark">
@@ -46,27 +23,6 @@
                     <div class="clear"></div>
                 </span>
         </div>
-
-        <script type="text/javascript">
-            var documentWorkflowsComponent = null;
-        </script>
-        <script type="text/javascript">//<![CDATA[
-        (function () {
-            Alfresco.util.createTwister("${id}-heading", "DocumentWorkflows");
-
-            function init() {
-                documentWorkflowsComponent = new LogicECM.DocumentWorkflows("${id}").setOptions(
-                        {
-                            nodeRef: "${nodeRef}",
-                            title: "${msg('heading')}"
-                        }).setMessages(${messages});
-            }
-
-            YAHOO.util.Event.onDOMReady(init);
-        })();
-        //]]>
-        </script>
-
     </div>
 
     <div id="${id}-short-view" class="document-components-panel short-view hidden">
@@ -83,11 +39,44 @@
     </div>
 </div>
 <script type="text/javascript">//<![CDATA[
-LogicECM.services = LogicECM.services || {};
-var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
-if (shortView) {
-    Dom.addClass("${id}-wide-view", "hidden");
-    Dom.removeClass("${id}-short-view", "hidden");
-}
+(function () {
+    function init() {
+        LogicECM.module.Base.Util.loadResources([
+                'scripts/components/document-workflows.js'
+            ], [
+                'css/components/document-workflows.css'
+        ], create);
+    }
+
+    function create() {
+        Alfresco.util.createTwister("${id}-heading", "DocumentWorkflows");
+
+        new LogicECM.DocumentWorkflows("${id}").setOptions({
+                    nodeRef: "${nodeRef}",
+                    title: "${msg('heading')}"
+                }).setMessages(${messages});
+
+        new LogicECM.module.Document.Ajax.Content("${id}-results").setOptions(
+                {
+                    contentURL: Alfresco.constants.URL_PAGECONTEXT + "lecm/components/document/document-workflows/content",
+                    requestParams: {
+                        nodeRef: "${nodeRef}",
+                        containerHtmlId: "${id}"
+                    },
+                    containerId: "${id}-results"
+                }).setMessages(${messages});
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
+
+    LogicECM.services = LogicECM.services || {};
+    if (LogicECM.services.documentViewPreferences) {
+        var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
+        if (shortView) {
+            Dom.addClass("${id}-wide-view", "hidden");
+            Dom.removeClass("${id}-short-view", "hidden");
+        }
+    }
+})();
 //]]></script>
 </#if>
