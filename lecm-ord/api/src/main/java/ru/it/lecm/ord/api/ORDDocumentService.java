@@ -19,4 +19,7 @@ public interface ORDDocumentService {
 	public Boolean haveNotPointsWithDueDate(NodeRef document);
 	public List<NodeRef> getOrdDocumentPoints(NodeRef document);
 	Boolean isDocumentHavePointsAndProperties(NodeRef document);
+	Boolean haveNotPointsWithDueDateAndController(NodeRef document);
+	Boolean haveNotPointsWithControllerAndHaveDueDate(NodeRef document);
+	Boolean haveNotPointsWithDueDateAndHaveController(NodeRef document);
 }
