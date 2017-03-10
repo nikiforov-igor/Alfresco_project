@@ -180,12 +180,12 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                     initialSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
                     initialSource.responseSchema = {isImportant: "isImportant", baseDocString: "baseDocString", linkString: "linkString"};
 
-                    this.dataTable = new YAHOO.widget.DataTable(this.id + "-errands", columnDefs, initialSource, {});
+                    this.dataTable = new YAHOO.widget.DataTable(this.id + "-errands", columnDefs, initialSource,
+                        {
+                            MSG_EMPTY: this.msg("label.not-record")
+                        });
                     this.dataTable.getTheadEl().hidden = true;
                     this.dataTable.getTableEl().className += "my-errands";
-                    if (response.json.data.length == 0) {
-                        this.errandsList.innerHTML = this.errandsList.innerHTML.replace("No records found.", this.msg("label.not-record"));
-                    }
 
                 } else {
                     this.dataTable.addRows(response.json.data);
