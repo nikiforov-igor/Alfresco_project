@@ -4,7 +4,7 @@
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <#assign aDateTime = .now>
-<#assign containerId = fieldHtmlId + "-container-" + (aDateTime?iso_utc)?replace(":", "_")>
+<#assign containerId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
 <#assign objectId = field.name?replace("-", "_")>
 
 <#-- Datagrid Config Start-->

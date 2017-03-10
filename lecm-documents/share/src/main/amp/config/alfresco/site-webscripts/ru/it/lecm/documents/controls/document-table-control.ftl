@@ -11,7 +11,7 @@
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign toolbarId = fieldHtmlId + "-toolbar">
 <#assign aDateTime = .now>
-<#assign containerId = fieldHtmlId + "-container-" + (aDateTime?iso_utc)?replace(":", "_")>
+<#assign containerId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
 <#assign bubblingId = containerId/>
 
 <#assign expandable="false"/>

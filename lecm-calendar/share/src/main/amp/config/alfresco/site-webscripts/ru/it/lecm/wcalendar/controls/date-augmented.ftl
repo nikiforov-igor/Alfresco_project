@@ -22,9 +22,10 @@
    <#assign errorMessage=messageText>
 </#if>
 
-<#assign hideDateFormat=true>
-<#if field.control.params.hideDateFormat??>
-	<#assign hideDateFormat=field.control.params.hideDateFormat == "true">
+<#if field.control.params.hideDateFormat?? && field.control.params.hideDateFormat == "true">
+	<#assign hideDateFormat=true>
+<#else>
+	<#assign hideDateFormat=false>
 </#if>
 
 <#if field.control.params.showTime?? && field.control.params.showTime == "true">

@@ -32,14 +32,14 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 				var headerLabel;
 				var selectedYear = dataGrid.options.currentYear;
 				var pickerDateString;
-				var maxDateString = selectedYear + "-12-31";
-				var minDateString = selectedYear + "-01-01";
+				var maxDateString = "12/31/" + selectedYear;
+				var minDateString = "01/01/" + selectedYear;
 				var date = new Date();
 
 				if (date.getFullYear() != selectedYear) {
 					pickerDateString = minDateString;
 				} else {
-					pickerDateString = Alfresco.util.formatDate(date, "yyyy-mm-dd");
+					pickerDateString = Alfresco.util.formatDate(date, "mm/dd/yyyy");
 				}
 
 				if (wantedBubblingLabel.toString() == LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL.toString()) {
@@ -74,7 +74,7 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 					submitType: "json", //The "enctype" to use for the form submission, valid values are "multipart", "json" and "urlencoded", the default is "multipart".
 					maxDate: maxDateString,
 					minDate: minDateString,
-					pickerDate: pickerDateString
+					pickerDate:pickerDateString
 				});
 
 				var specialDayFormID = "specialDayForm";
