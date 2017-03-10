@@ -14,6 +14,10 @@
                 <property name="cm:name">Исполнение документа</property>
                 <property name="lecm-busjournal:eventCategory-code">EXECUTE_DOCUMENT</property>
             </item>
+            <item name="cm:Завершение работы по документу" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Завершение работы по документу</property>
+                <property name="lecm-busjournal:eventCategory-code">COMPLETE_DOCUMENT</property>
+            </item>
             <item name="cm:Отправка документа" type="lecm-busjournal:eventCategory">
                 <property name="cm:name">Отправка документа</property>
                 <property name="lecm-busjournal:eventCategory-code">SEND_DOCUMENT</property>

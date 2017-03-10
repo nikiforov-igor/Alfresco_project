@@ -108,6 +108,11 @@
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
+				<!--Флаг для перехода на статус "Работа завершена"-->
+				<property name="lecm-ord:transit-to-work-completed">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
 				<property name="lecm-ord:items-assoc-controller-assoc-ref">
 					<type>d:text</type>
 					<index enabled="true">

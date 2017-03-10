@@ -6,7 +6,7 @@
         <property name="lecm-dic:type"><![CDATA[lecm-notification-template:template]]></property>
         <property name="lecm-dic:plane"><![CDATA[true]]></property>
         <property name="lecm-dic:description"><![CDATA[Шаблоны уведомлений]]></property>
-        <items>
+        <items updateMode="CreateOrUpdate">
             <item name="cm:ORD_GEN_ORDERS" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ORD_GEN_ORDERS]]></property>
                 <property name="lecm-notification-template:template">
@@ -68,10 +68,58 @@
             </item>
             <item name="cm:ORD_ITEM_CHANGE_STATUS" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#wrapTitle(Пункт номер #number, #title #content)} {#mainObject.wrapAsLink(ОРД))} переведен в статус {#status} .]]></property>
+                    <![CDATA[{#wrapTitle(#number, #numberTitle)} {#mainObject.wrapAsLink("ОРД")} переведен в статус {#wrapTitle(#status, #statusTitle)}.]]></property>
                 <property name="cm:name"><![CDATA[ORD_ITEM_CHANGE_STATUS]]></property>
                 <property name="lecm-notification-template:description">
-                    <![CDATA[ОРД. Направить на регистрацию]]></property>
+                    <![CDATA[ОРД. Смена статуса пункта ОРД]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:ORD_ITEM_CREATE_ERRAND" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template">
+                    <![CDATA[По пунктам  {#mainObject.wrapAsLink("ОРД")} были созданы поручения.]]></property>
+                <property name="cm:name"><![CDATA[ORD_ITEM_CREATE_ERRAND]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[ОРД. Создание поручения по пункту ОРД]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:ORD_COMPLETE" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Исполнение {#mainObject.wrapAsLink("ОРД")} завершено. Примите решение по завершению работы по документу]]></property>
+                <property name="cm:name"><![CDATA[ORD_COMPLETE]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[ОРД. Завершение исполнения]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:ORD_AUTO_COMPLETE" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#mainObject.wrapAsLink("ОРД")} автоматически переведен в статус «Работа завершена» в связи с завершением работы по документу]]></property>
+                <property name="cm:name"><![CDATA[ORD_AUTO_COMPLETE]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[ОРД.Автоматическое завершение работы]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:ORD_FORCE_COMPLETE" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#member} {#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("завершил", #comment)} работу по {#mainObject.wrapAsLink("ОРД")}]]></property>
+                <property name="cm:name"><![CDATA[ORD_FORCE_COMPLETE]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[ОРД. Завершение исполнения участником]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"

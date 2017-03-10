@@ -2,6 +2,7 @@
 <!-- Data List Toolbar -->
 <@markup id="js">
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-toolbar.js"></@script>
+	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-arm/arm-filters.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-arm/arm-documents-toolbar.js"></@script>
 </@>
 
@@ -40,7 +41,7 @@
 	</span>
     </div>
     <div id="${id}-filters-dialog" class="yui-panel filters-dialog">
-        <div id="${id}-filters-dialog" class="bd">
+        <div id="${id}-filters-dialog-body" class="bd">
             <div id="${id}-filters-dialog-content" class="filters-dialog-content"></div>
             <div class="bdft">
 			<span id="${id}-filters-apply-button" class="yui-button yui-push-button filters-icon">
@@ -103,3 +104,16 @@
 </div>
 
 </@comp.baseToolbar>
+
+<#assign filtersIdBar = id + "-filters-bar"/>
+<div id="${filtersIdBar}" class="arm-filters-bar">
+<@comp.baseToolbar filtersIdBar true false false>
+    <div>
+        <span class="arm-filters-label">
+	        ${msg("arm.filters.current")} (<a href="javascript:void(0);" id="${filtersIdBar}-delete-all-link">${msg("arm.delete.all-filters")}</a>):
+        </span>
+        <span id="${filtersIdBar}-current-filters"></span>
+    </div>
+</@comp.baseToolbar>
+</div>
+
