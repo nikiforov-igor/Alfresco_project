@@ -33,7 +33,10 @@
                         "issued_errands_all": "${msg("label.info.allErrands")?js_string}",
                         "issued_errands_expired": "${msg("label.info.expiredErrands")?js_string}",
                         "issued_errands_deadline": "${msg("label.info.comingSoonErrands")?js_string}",
-                        "issued_errands_execution": "${msg("label.info.onExecutionErrands")?js_string}"
+                        "issued_errands_execution": "${msg("label.info.waitExecutionErrands")?js_string}",
+                        "issued_errands_on_execution": "${msg("label.info.onExecutionErrands")?js_string}",
+                        "issued_errands_on_check_report": "${msg("label.info.onCheckReportErrands")?js_string}",
+                        "issued_errands_on_completion": "${msg("label.info.onCompletion")?js_string}"
                     },
 
                     container: null,
