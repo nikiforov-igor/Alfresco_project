@@ -1008,9 +1008,9 @@ if (document) {
 	var dateString = "";
 	if (limitationDateRadio) {
 		if (limitationDateRadio == "DATE" && limitationDate) {
-			var day = utils.pad(newLimitationDate.getDate(), 2);
-			var month = utils.pad(newLimitationDate.getMonth() + 1, 2);
-			var year = utils.pad(newLimitationDate.getFullYear(), 4);
+			var day = utils.pad(limitationDate.getDate(), 2);
+			var month = utils.pad(limitationDate.getMonth() + 1, 2);
+			var year = utils.pad(limitationDate.getFullYear(), 4);
 			dateString = day + "." + month + "." + year;
 		} else if (limitationDateRadio == "DAYS") {
 			if (limitationDateDays && limitationDateDaysType) {
