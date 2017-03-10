@@ -754,7 +754,7 @@
                 <!-- Путь до узла с выжными неисполненными поручениями -->
                 <property name="lecm-errands:dashlet-settings-unexecuted-important">
                     <type>d:text</type>
-                    <default>Моя работа/Все созданные мной/Поручения&amp;filters=BY_IMPORTANCE[1]</default>
+                    <default>Моя работа/Все созданные мной/Поручения&amp;filters=BY_IMPORTANCE[0]</default>
                 </property>
 
                 <!-- Путь до узла с ожидающими исполнения поручениями -->
@@ -766,7 +766,7 @@
                 <!-- Путь до узла с важными ожидающими исполнения поручениями -->
                 <property name="lecm-errands:dashlet-settings-await-execution-important">
                     <type>d:text</type>
-                    <default>Моя работа/Все созданные мной/Поручения/Ожидают исполнения&amp;filters=BY_IMPORTANCE[1]</default>
+                    <default>Моя работа/Все созданные мной/Поручения/Ожидают исполнения&amp;filters=BY_IMPORTANCE[0]</default>
                 </property>
 
 				<!-- Путь до узла с поручениями на исполнении -->
@@ -778,7 +778,7 @@
 				<!-- Путь до узла с важными поручениями на исполнении -->
 				<property name="lecm-errands:dashlet-settings-on-execution-important">
 					<type>d:text</type>
-					<default>Моя работа/Все созданные мной/Поручения/На исполнении&amp;filters=BY_IMPORTANCE[1]</default>
+					<default>Моя работа/Все созданные мной/Поручения/На исполнении&amp;filters=BY_IMPORTANCE[0]</default>
 				</property>
 
 				<!-- Путь до узла с поручениями на проверке отчета -->
@@ -790,7 +790,7 @@
 				<!-- Путь до узла с важными поручениями на проверке отчета -->
 				<property name="lecm-errands:dashlet-settings-on-check-report-important">
 					<type>d:text</type>
-					<default>Моя работа/Все созданные мной/Поручения/На проверке отчета&amp;filters=BY_IMPORTANCE[1]</default>
+					<default>Моя работа/Все созданные мной/Поручения/На проверке отчета&amp;filters=BY_IMPORTANCE[0]</default>
 				</property>
 
 				<!-- Путь до узла с поручениями на доработке -->
