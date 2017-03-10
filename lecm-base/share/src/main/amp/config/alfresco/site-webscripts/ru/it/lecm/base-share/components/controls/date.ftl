@@ -166,7 +166,8 @@
                 }
                 LogicECM.module.Base.Util.loadResources(resources, [
                     'css/lecm-calendar/jquery-ui-1.10.3.custom.css',
-                    'css/lecm-calendar/jquery-ui-timepicker-addon.css'
+                    'css/lecm-calendar/jquery-ui-timepicker-addon.css',
+                    'css/lecm-base/components/lecm-date-picker.css'
                 ], createDatePicker, ["button", "calendar"]);
             }
 

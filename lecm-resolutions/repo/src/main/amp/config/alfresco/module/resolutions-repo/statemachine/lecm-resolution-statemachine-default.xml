@@ -228,7 +228,7 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-resolutions_control</name>
+                                        <name>lecm-document-aspects_is-on-control</name>
                                         <nodeRef>workspace://SpacesStore/849ca198-d892-4fcd-bbed-296119d739eb</nodeRef>
                                         <properties>
                                             <property>
@@ -1327,7 +1327,7 @@
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-resolutions_control</name>
+                                        <name>lecm-document-aspects_is-on-control</name>
                                         <nodeRef>workspace://SpacesStore/8c4d9c9f-c43e-4cfb-a7f4-c4f39297f554</nodeRef>
                                         <properties>
                                             <property>
@@ -2067,7 +2067,9 @@ if (document && !regnumbers.isDocumentRegistered(document)) {
     var childIndex = 1;
     var childAssoc = parentDocAssoc[0].sourceAssocs["lecm-resolutions:base-document-assoc"];
     if (childAssoc && childAssoc.length) {
-      childIndex = childAssoc.length;
+      childIndex += childAssoc.filter(function(child){
+        return regnumbers.isDocumentRegistered(child);
+      }).length;
     }
     document.properties["lecm-resolutions:child-index-counter"] = childIndex;
   } else {
@@ -2618,7 +2620,7 @@ if (document) {
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-resolutions_control</name>
+                                        <name>lecm-document-aspects_is-on-control</name>
                                         <nodeRef>workspace://SpacesStore/ff2935be-0662-4532-8dbe-4e36a72332e4</nodeRef>
                                         <properties>
                                             <property>
@@ -3721,7 +3723,7 @@ if (document) {
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-resolutions_control</name>
+                                        <name>lecm-document-aspects_is-on-control</name>
                                         <nodeRef>workspace://SpacesStore/c3c7357a-3fed-41f9-9542-dc67439731cb</nodeRef>
                                         <properties>
                                             <property>
@@ -4668,7 +4670,7 @@ if (document) {
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-resolutions_control</name>
+                                        <name>lecm-document-aspects_is-on-control</name>
                                         <nodeRef>workspace://SpacesStore/3bc55d56-6e9e-48ae-a5e9-63f1770d8a14</nodeRef>
                                         <properties>
                                             <property>
@@ -4948,7 +4950,7 @@ if (document) {
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-resolutions_control</name>
+                                        <name>lecm-document-aspects_is-on-control</name>
                                         <nodeRef>workspace://SpacesStore/87c8b785-0c72-4d71-a33b-69144c5f83c2</nodeRef>
                                         <properties>
                                             <property>

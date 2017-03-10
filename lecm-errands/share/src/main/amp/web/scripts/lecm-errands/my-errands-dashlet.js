@@ -217,8 +217,13 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                         + "document?nodeRef="+ data.nodeRef + "'>"+data.number +": \""+ data.title + "\"</a> ";
                     desc += "<div class='info'>" + this.msg("label.from") + " <a href='" + window.location.protocol + "//" + window.location.host +
                         Alfresco.constants.URL_PAGECONTEXT + "view-metadata?nodeRef="+ data.initiator + "'>"
-                        + data.initiator_name + ",</a> " + this.msg("label.up.to") + " "
-                        + YAHOO.util.Date.format(new Date(data.date), {format: "%d %b %Y"}, this.msg("locale")) + "</div> ";
+                        + data.initiator_name + ",</a> ";
+                    if (data.date) {
+                        desc += this.msg("label.up.to") + " " + YAHOO.util.Date.format(new Date(data.date), {format: "%d %b %Y"}, this.msg("locale"));
+                    } else {
+                        desc += "без срока";
+                    }
+                    desc += "</div> ";
                     if (data.isExpired == "true") {
                         desc  += "<div class='expired'>" + this.msg("label.is-expired") + "</div>";
                     }

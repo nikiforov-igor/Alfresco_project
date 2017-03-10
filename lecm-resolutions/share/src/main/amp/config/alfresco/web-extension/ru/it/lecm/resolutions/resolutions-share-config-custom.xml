@@ -20,7 +20,7 @@
                 <field-visibility>
                     <show id="lecm-base-dummy-aspects:script9" force="true"/>
 
-                    <show id="lecm-resolutions:control"/>
+                    <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
@@ -94,7 +94,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
 
-                    <field id="lecm-resolutions:control" set="start-right-start">
+                    <field id="lecm-document-aspects:is-on-control" label-id="label.resolution.control" set="start-right-start">
                         <control>
                             <control-param name="fireMandatoryByChange">true</control-param>
                         </control>
@@ -250,7 +250,7 @@
             <form id="document-template-fields">
                 <field-visibility>
                     <show id="lecm-resolutions:number"/>
-                    <show id="lecm-resolutions:control"/>
+                    <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
@@ -258,6 +258,7 @@
                     <show id="lecm-resolutions:reviewers-assoc"/>
                 </field-visibility>
                 <appearance>
+                    <field id="lecm-document-aspects:is-on-control" label-id="label.resolution.control"/>
                     <field id="lecm-resolutions:controller-assoc">
                         <control>
                             <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
@@ -269,7 +270,7 @@
             <!-- Форма с набором полей, редактируемых в машине состояний -->
             <form id="statemachine-editable-fields">
                 <field-visibility>
-                    <show id="lecm-resolutions:control"/>
+                    <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
@@ -288,6 +289,9 @@
                     <show id="lecm-resolutions:base-document-assoc"/>
                     <show id="lecm-review-aspects:related-review-records-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:is-on-control" label-id="label.resolution.control"/>
+                </appearance>
             </form>
 
             <!-- Форма атрибутивного поиска -->
@@ -297,7 +301,7 @@
                     <show id="lecm-resolutions:transition-to-execution-date"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-document:author-assoc"/>
-                    <show id="lecm-resolutions:control"/>
+                    <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-resolutions:controller-assoc"/>
                     <show id="lecm-resolutions:limitation-date"/>
                     <show id="lecm-resolutions:limitation-date-radio"/>
@@ -329,7 +333,7 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-resolutions:control">
+                    <field id="lecm-document-aspects:is-on-control" label-id="label.resolution.control">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
                             <control-param name="options">true|Да,false|Нет</control-param>
                         </control>
@@ -357,24 +361,30 @@
             <form id="searchQueryGrid">
                 <field-visibility>
                     <show id="lecm-resolutions:number"/>
-                    <show id="lecm-resolutions:control"/>
+                    <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
                     <show id="lecm-resolutions:limitation-date"/>
                     <show id="lecm-resolutions:reviewers-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:is-on-control" label-id="label.resolution.control"/>
+                </appearance>
             </form>
             <form id="search-editor-fields">
                 <field-visibility>
                     <show id="lecm-resolutions:number"/>
-                    <show id="lecm-resolutions:control"/>
+                    <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
                     <show id="lecm-resolutions:limitation-date"/>
                     <show id="lecm-resolutions:reviewers-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:is-on-control" label-id="label.resolution.control"/>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -386,7 +396,7 @@
                     <show id="lecm-resolutions:base-document-assoc"/>
                     <show id="lecm-resolutions:base-assoc"/>
 
-                    <show id="lecm-resolutions:control"/>
+                    <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-document:author-assoc"/>
@@ -427,6 +437,7 @@
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                         </control>
                     </field>
+                    <field id="lecm-document-aspects:is-on-control" label-id="label.resolution.control"/>
                     <field id="lecm-document:author-assoc" label-id="label.resolution.creator"/>
 
                     <field id="lecm-resolutions:limitation-date-radio" set="limitation-date">
@@ -511,7 +522,7 @@
                 <field-visibility>
                     <show id="lecm-resolutions:base-document-assoc"/>
 
-                    <show id="lecm-resolutions:control"/>
+                    <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
@@ -574,7 +585,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
 
-                    <field id="lecm-resolutions:control" set="start-right-start">
+                    <field id="lecm-document-aspects:is-on-control" set="start-right-start" label-id="label.resolution.control">
                         <control>
                             <control-param name="fireMandatoryByChange">true</control-param>
                         </control>
@@ -716,12 +727,15 @@
             <form id="document">
                 <field-visibility>
                     <show id="lecm-resolutions:number"/>
-                    <show id="lecm-resolutions:control"/>
+                    <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
                     <show id="lecm-statemachine:status"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:is-on-control" label-id="label.resolution.control"/>
+                </appearance>
             </form>
             <!-- Форма просмотра на главной странице-->
             <form id="main-page-dashlets">

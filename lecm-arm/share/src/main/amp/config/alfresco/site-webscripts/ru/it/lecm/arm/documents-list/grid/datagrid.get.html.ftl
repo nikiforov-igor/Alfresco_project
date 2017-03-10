@@ -12,28 +12,6 @@
 
 <#assign id = args.htmlid>
 
-<#assign filtersId = "arm-filters-toolbar-" + id/>
-
-<div id="${filtersId}" class="arm-filters-bar">
-<@comp.baseToolbar filtersId true false false>
-    <div>
-        <span class="arm-filters-label">
-	        ${msg("arm.filters.current")} (<a href="javascript:void(0);" id="${filtersId}-delete-all-link">${msg("arm.delete.all-filters")}</a>):
-        </span>
-	    <span id="${filtersId}-current-filters"></span>
-    </div>
-</@comp.baseToolbar>
-</div>
-
-<script type="text/javascript">//<![CDATA[
-function initFilters() {
-    new LogicECM.module.ARM.Filters("${filtersId}").setMessages(${messages}).setOptions({
-        bubblingLabel: "documents-arm"
-    });
-}
-YAHOO.util.Event.onContentReady("${filtersId}", initFilters);
-//]]></script>
-
 <div class="yui-t1" id="arm-grid">
 	<div id="yui-main-2">
 		<div class="yui-b" id="alf-content">

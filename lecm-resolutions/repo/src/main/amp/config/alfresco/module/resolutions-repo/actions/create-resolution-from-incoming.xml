@@ -28,7 +28,7 @@
                 // Контроль
                 value = document.properties["lecm-document-aspects:is-on-control"];
                 if (value) {
-                    params += "&prop_lecm-resolutions_control=" + value;
+                    params += "&prop_lecm-document-aspects_is-on-control=" + value;
                 }
                 // Тематика
                 value = document.properties["lecm-document:subject-assoc-ref"];

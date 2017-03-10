@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="lecmORDWf:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Logic ECM ORD workflow model</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+
+    <imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
+        <import uri="http://www.it.ru/logicECM/statemachine/aspects/1.0" prefix="lecm-statemachine-aspects"/>
+    </imports>
+
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/ord/workflow/1.0" prefix="lecmORDWf"/>
+    </namespaces>
+
+    <types>
+        <!-- Завершение -->
+        <type name="lecmORDWf:completeORD">
+            <parent>bpm:startTask</parent>
+        </type>
+        <!-- Завершение (активные поручения) -->
+        <type name="lecmORDWf:completeActiveORD">
+            <parent>bpm:startTask</parent>
+            <properties>
+                <property name="lecmORDWf:completionOption">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <constraints>
+                        <constraint name="lecmORDWf:completionOptionConst" type="LIST">
+                            <parameter name="allowedValues">
+                                <list>
+                                    <value>EXECUTE</value>
+                                    <value>CANCEL</value>
+                                </list>
+                            </parameter>
+                        </constraint>
+                    </constraints>
+                </property>
+                <property name="lecmORDWf:comment">
+                    <type>d:text</type>
+                </property>
+            </properties>
+            <mandatory-aspects>
+                <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+            </mandatory-aspects>
+        </type>
+    </types>
+</model>
