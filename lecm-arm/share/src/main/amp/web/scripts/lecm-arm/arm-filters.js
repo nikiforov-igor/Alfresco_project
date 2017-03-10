@@ -277,8 +277,8 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                         if (values.length) {
                             appliedFilters.push({
                                 'curValue': values,
-                                'class': availableFilter.class,
-                                'query': availableFilter.query
+                                'class': availableFilter["class"],
+                                'query': availableFilter["query"]
                             });
                         }
                     }
