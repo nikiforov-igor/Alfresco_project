@@ -28,5 +28,5 @@
     margin-bottom: 5px;
 }
 .graph-tree .yui-dt-expandablerow-trigger {
-    background-color: rgba(0, 0, 0, 0);
+    background-color: transparent;
 }
