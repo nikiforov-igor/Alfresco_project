@@ -19,6 +19,7 @@
 
 		  p:ordDocumentService-ref="ordDocumentService"
 		  p:ordReportsService-ref="ordReportsService"
-		  p:lecmPermissionService-ref="lecmPermissionServiceBean"/>
+		  p:lecmPermissionService-ref="lecmPermissionServiceBean"
+          p:regNumbersService-ref="regNumbersService"/>
 
 </beans>
