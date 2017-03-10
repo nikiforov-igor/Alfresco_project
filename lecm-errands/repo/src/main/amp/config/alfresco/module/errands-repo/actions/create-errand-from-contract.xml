@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items updateMode="CreateOrUpdate">
+    <item name="cm:Создание поручения из Договора" type="lecm-group-actions:script-action">
+        <property name="lecm-group-actions:expression">
+            <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></property>
+        <property name="cm:name"><![CDATA[Создание поручения из Договора]]></property>
+        <property name="lecm-group-actions:statuses"><![CDATA[Зарегистрирован;Действует]]></property>
+        <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
+        <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
+        <property name="lecm-group-actions:script"><![CDATA[if (document) {
+  var params = 'documentType=lecm-errands:document';
+  params += '&formId=workflow-form';
+  // Основание
+  params += "&parentDoc=" + document.nodeRef.toString();
+  // Тематика
+  value = document.properties["lecm-document:subject-assoc-ref"];
+  if (value) {
+    params += "&assoc_lecm-document_subject-assoc=" + value;
+  }
+
+  var encodeParams = Packages.org.apache.commons.codec.binary.Base64.encodeBase64String(new java.lang.String(params).getBytes());
+  model.redirect = 'document-create?documentType=lecm-errands:document&p1=' + encodeURIComponent(encodeParams) + '&p2=' + encodeURIComponent(hashCode(params));
+}
+
+function hashCode(str) {
+  var hash = 0, i, chr, len;
+  if (str.length == 0) return hash;
+  for (i = 0, len = str.length; i < len; i++) {
+    chr   = str.charCodeAt(i);
+    hash  = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+}]]></property>
+        <property name="lecm-group-actions:order"><![CDATA[0]]></property>
+        <property name="cm:title"><![CDATA[Создать поручение]]></property>
+        <property name="lecm-group-actions:type"><![CDATA[[lecm-contract:document]]]></property>
+        <property name="lecm-group-actions:availableForReader"><![CDATA[false]]></property>
+    </item>
+</items>
