@@ -183,6 +183,9 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                     this.dataTable = new YAHOO.widget.DataTable(this.id + "-errands", columnDefs, initialSource, {});
                     this.dataTable.getTheadEl().hidden = true;
                     this.dataTable.getTableEl().className += "my-errands";
+                    if (response.json.data.length == 0) {
+                        this.errandsList.innerHTML = this.errandsList.innerHTML.replace("No records found.", this.msg("label.not-record"));
+                    }
 
                 } else {
                     this.dataTable.addRows(response.json.data);
