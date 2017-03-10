@@ -156,5 +156,5 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 		if (this.options.currentValue) {
 			this._handleFieldChange();
 		}
-	};
+    };
 })();
