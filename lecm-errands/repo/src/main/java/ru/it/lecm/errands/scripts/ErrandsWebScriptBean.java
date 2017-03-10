@@ -45,6 +45,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     final static protected Logger logger = LoggerFactory.getLogger(ErrandsWebScriptBean.class);
 
     public static final String EXECUTION_KEY = "Ожидает исполнения";
+    public static final String ON_EXECUTION_KEY = "На исполнении";
+    public static final String ON_REPORT_CHECK_KEY = "На проверке отчета";
+    public static final String ON_COMPLETION_KEY = "На доработке";
     public static final int DEADLINE_DAY_COUNT = 5;
     private ErrandsService errandsService;
 
@@ -107,10 +110,16 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     public static enum IssuedByMeEnum {
         ISSUED_ERRANDS_ALL,
         ISSUED_ERRANDS_EXECUTION,
+        ISSUED_ERRANDS_ON_EXECUTION,
+        ISSUED_ERRANDS_ON_CHECK_REPORT,
+        ISSUED_ERRANDS_ON_COMPLETION,
         ISSUED_ERRANDS_EXPIRED,
         ISSUED_ERRANDS_DEADLINE,
         ISSUED_ERRANDS_ALL_IMPORTANT,
         ISSUED_ERRANDS_EXECUTION_IMPORTANT,
+        ISSUED_ERRANDS_ON_EXECUTION_IMPORTANT,
+        ISSUED_ERRANDS_ON_CHECK_REPORT_IMPORTANT,
+        ISSUED_ERRANDS_ON_COMPLETION_IMPORTANT,
         ISSUED_ERRANDS_EXPIRED_IMPORTANT,
         ISSUED_ERRANDS_DEADLINE_IMPORTANT
     }
@@ -350,7 +359,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
         Map<String, String> filters = DocumentStatusesFilterBean.getFilterForType(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService));
 
-        List<String> paths = Arrays.asList(documentService.getDraftPath(), documentService.getDocumentsFolderPath());
+        List<String> paths = Arrays.asList(documentService.getDocumentsFolderPath());
 
         List<String> statuses = new ArrayList<String>();
 
@@ -389,20 +398,36 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                         issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_EXPIRED + ":true ";
                         break;
                     }
-                    // на исполнении
+                    // на ожидании исполнения
                     case ISSUED_ERRANDS_EXECUTION_IMPORTANT: {
                         issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
                     }
                     case ISSUED_ERRANDS_EXECUTION: {
-                        statuses = new ArrayList<String>();
-                        String filtersStr = filters.get(EXECUTION_KEY);
-                        String[] statusesArray = filtersStr.split(",");
-                        for (String st:statusesArray){
-                            if (st != null && !st.isEmpty()){
-                                statuses.add(st.trim());
-                            }
-                        }
-
+                        statuses = getErrandsStatuses(filters, EXECUTION_KEY);
+                        break;
+                    }
+                    // на исполнении
+                    case ISSUED_ERRANDS_ON_EXECUTION_IMPORTANT: {
+                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
+                    }
+                    case ISSUED_ERRANDS_ON_EXECUTION: {
+                        statuses = getErrandsStatuses(filters, ON_EXECUTION_KEY);
+                        break;
+                    }
+                    //на проверке отчета (на контроле)
+                    case ISSUED_ERRANDS_ON_CHECK_REPORT_IMPORTANT: {
+                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
+                    }
+                    case ISSUED_ERRANDS_ON_CHECK_REPORT: {
+                        statuses = getErrandsStatuses(filters, ON_REPORT_CHECK_KEY);
+                        break;
+                    }
+                    // на доработке
+                    case ISSUED_ERRANDS_ON_COMPLETION_IMPORTANT: {
+                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
+                    }
+                    case ISSUED_ERRANDS_ON_COMPLETION: {
+                        statuses = getErrandsStatuses(filters, ON_COMPLETION_KEY);
                         break;
                     }
                     //с приближающимся сроком
@@ -443,6 +468,18 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
         List<NodeRef> refs = documentService.getDocumentsByFilter(types, paths, statuses, issuedFilterQuery, sort);
         return createScriptable(refs);
+    }
+
+    private List<String> getErrandsStatuses (Map<String, String> filters, String key) {
+        List<String> statuses = new ArrayList<String>();
+        String filtersStr = filters.get(key);
+        String[] statusesArray = filtersStr.split(",");
+        for (String st:statusesArray){
+            if (st != null && !st.isEmpty()){
+                statuses.add(st.trim());
+            }
+        }
+        return statuses;
     }
 
     /**
