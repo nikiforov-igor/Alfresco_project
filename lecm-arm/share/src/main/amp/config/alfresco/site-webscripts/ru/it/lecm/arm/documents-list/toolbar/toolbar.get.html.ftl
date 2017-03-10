@@ -7,13 +7,12 @@
 </@>
 
 <#assign id = args.htmlid>
-<script type="text/javascript">
+<script type="text/javascript">//<![CDATA[
 (function(){
         new LogicECM.module.ARM.DocumentsToolbar("${id}").setMessages(${messages}).setOptions({
             bubblingLabel: "${bubblingLabel!'documents-arm'}"
         });
 })();
-//<![CDATA[
 //]]></script>
 
 <#assign showSearch=true/>

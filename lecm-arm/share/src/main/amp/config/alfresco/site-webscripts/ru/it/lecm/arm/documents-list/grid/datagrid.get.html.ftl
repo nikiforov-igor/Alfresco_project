@@ -16,7 +16,7 @@
 	<div id="yui-main-2">
 		<div class="yui-b" id="alf-content">
         <@grid.datagrid id=id showViewForm=true>
-            <script type="text/javascript">
+            <script type="text/javascript">//<![CDATA[
                 (function () {
                     new LogicECM.module.ARM.DataGrid('${id}').setOptions({
                         usePagination: true,
@@ -52,7 +52,6 @@
                         }
                     }).setMessages(${messages});
                 })();
-                //<![CDATA[
                 //]]></script>
         </@grid.datagrid>
 		</div>
