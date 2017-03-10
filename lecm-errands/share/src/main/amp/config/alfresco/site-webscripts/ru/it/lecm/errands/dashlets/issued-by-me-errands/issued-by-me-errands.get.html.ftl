@@ -36,7 +36,7 @@
                         "issued_errands_execution": "${msg("label.info.waitExecutionErrands")?js_string}",
                         "issued_errands_on_execution": "${msg("label.info.onExecutionErrands")?js_string}",
                         "issued_errands_on_check_report": "${msg("label.info.onCheckReportErrands")?js_string}",
-                        "issued_errands_on_completion": "${msg("label.info.onCompletion")?js_string}"
+                        "issued_errands_on_completion": "${msg("label.info.onCompletionErrands")?js_string}"
                     },
 
                     container: null,
