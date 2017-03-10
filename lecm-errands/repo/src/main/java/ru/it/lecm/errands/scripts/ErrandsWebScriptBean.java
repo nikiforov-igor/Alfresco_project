@@ -474,8 +474,8 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         List<String> statuses = new ArrayList<String>();
         String filtersStr = filters.get(key);
         String[] statusesArray = filtersStr.split(",");
-        for (String st:statusesArray){
-            if (st != null && !st.isEmpty()){
+        for (String st:statusesArray) {
+            if (st != null && !st.isEmpty()) {
                 statuses.add(st.trim());
             }
         }
