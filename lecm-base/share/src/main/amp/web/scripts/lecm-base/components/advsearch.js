@@ -518,9 +518,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var parameters = this.prepareSearchParams(this.currentSearchArgs);
                 parameters.columns = this.dataColumns;
                 if (!isAll) {
-                	var currentSelectedItems = [];
-                	for(var key in this.dataGrid.selectedItems) currentSelectedItems.push(key);
-                    parameters.params.searchNodes = currentSelectedItems.join(",");
+                    parameters.params.searchNodes = this.dataGrid.getAllSelectedItems().join(",");
                 }
                 var form = document.createElement("form");
                 form.enctype = "multipart/form-data";

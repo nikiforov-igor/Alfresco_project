@@ -473,7 +473,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             onExportClick: function onExportClick_Function (p_sType, p_aArgs, p_oItem) {
                 var value = p_oItem.value;
-                if (value === "checked" && this.modules.dataGrid.getSelectedItems().length == 0 ) {
+                if (value === "checked" && this.modules.dataGrid.getAllSelectedItems().length == 0 ) {
                     Alfresco.util.PopupManager.displayPrompt(
                         {
                             title: Alfresco.util.message('lecm.arm.ttl.unload.items'),
