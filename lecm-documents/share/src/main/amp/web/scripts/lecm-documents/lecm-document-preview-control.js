@@ -838,7 +838,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                         var effectiveContainerHeight = contentBoxHeight - attachActionsHeight;
                         var effectivePreviewHeight = contentBoxHeight - attachActionsHeight - previewerControlsHeight;
 
-                        Dom.setStyle(previewerDiv, 'min-height', effectiveContainerHeight + "px");
+                        Dom.setStyle(previewerDiv, 'height', effectiveContainerHeight + "px");
                         Dom.setStyle(previewerDocument, 'height', 'auto');
                         Dom.setStyle(previewerDocument, 'max-height', effectivePreviewHeight + "px");
                     }

@@ -44,6 +44,10 @@
                     'components/preview/Audio.js',
                     'components/preview/Flash.js',
                     'components/preview/Image.js',
+                    'extras/components/preview/ResizeSensor.js',
+                    'extras/components/preview/ElementQueries.js',
+                    'extras/components/preview/l10n.js',
+                    'extras/components/preview/viewer.js',
                     'extras/components/preview/web-preview-extend.js',
                     'extras/components/preview/PdfJs.js',
                     'extras/components/preview/Embed.js',
@@ -53,7 +57,8 @@
                 ],
                 [
                     'css/components/document-preview-control.css',
-                    'css/components/document-attachments-preview.css'
+                    'css/components/document-attachments-preview.css',
+                    'extras/components/preview/viewer.css'
                 ], createControl);
     }
 
