@@ -300,7 +300,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                 for (String param : nameParams) {
                     if (param.startsWith("@")) {
                         String expression = param.substring(1);
-                        result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, documentService.execStringExpression(node, expression));
+                        result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, documentService.execStringExpression(node, expression, false));
                     } else {
                         result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, getSubstitudeField(node, param, dFormat, timeZoneOffset).toString());
                     }
@@ -390,7 +390,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                     for (String param : nameParams) {
                         if (param.startsWith("@")) {
                             String expression = param.substring(1);
-                            result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, documentService.execStringExpression(node, expression));
+                            result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, documentService.execStringExpression(node, expression, false));
                         } else {
                             Object transValue;
                             boolean isAssocField = param.endsWith(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL);
