@@ -10,7 +10,7 @@
 <#recover>
 </#attempt>
 
-<div class="widget-bordered-panel">
+<div class="widget-bordered-panel signed-docflow-panel">
 	<div id="${el}-wide-view" class="document-metadata-header document-components-panel">
 
 		<h2 id="${el}-heading" class="dark">
@@ -40,7 +40,11 @@
 <script type="text/javascript">//<![CDATA[
 (function () {
 	function init() {
-        LogicECM.module.Base.Util.loadResources(['scripts/components/document-signed-docflow.js'], [], create);
+        LogicECM.module.Base.Util.loadResources([
+        		'scripts/components/document-signed-docflow.js'
+            ], [
+             	'css/components/document-signed-docflow.css'
+            ], create);
     }
 
 	function create() {

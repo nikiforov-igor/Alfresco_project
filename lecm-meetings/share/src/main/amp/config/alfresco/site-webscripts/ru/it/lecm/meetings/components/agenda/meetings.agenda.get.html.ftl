@@ -2,7 +2,7 @@
 <#assign el=args.htmlid/>
 <#if agendaInfo?? >
 <!-- Markup -->
-<div class="widget-bordered-panel comments-panel">
+<div class="widget-bordered-panel meeting-agenda-panel">
     <div id="${el}-wide-view" class="document-metadata-header document-components-panel">
         <h2 id="${el}-heading" class="dark">
         ${msg("heading")}
@@ -56,9 +56,7 @@
             'scripts/lecm-base/components/lecm-datagrid.js',
             'scripts/lecm-meetings/components/meetings-agenda-info.js'
         ], [
-            'css/components/document-attachments.css',
-            'css/components/document-attachments-list.css',
-            'css/components/document-attachments-list-actions.css'
+            'css/lecm-meetings/meeting-agenda.css'
         ], create);
     }
 
