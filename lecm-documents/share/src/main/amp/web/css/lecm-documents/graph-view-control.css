@@ -80,8 +80,12 @@ div.connections-list div#expandable_table table thead {
 }
 
 .connections-view-mode-button-group {
-	padding-left: 15px;
 	padding-bottom: 10px;
+}
+
+.errands-view-mode-button-group {
+	padding-bottom: 10px;
+	margin: 0 1em;
 }
 
 .graph-tree-empty-cell {

@@ -11,17 +11,12 @@
 </@>
 
 <#assign id = args.htmlid>
-<script type="text/javascript">
+<script type="text/javascript">//<![CDATA[
 (function(){
-    function init() {
         new LogicECM.module.ARM.DocumentsToolbar("${id}").setMessages(${messages}).setOptions({
             bubblingLabel: "${bubblingLabel!'documents-arm'}"
         });
-    }
-
-    YAHOO.util.Event.onDOMReady(init);
 })();
-//<![CDATA[
 //]]></script>
 
 <#assign showSearch=true/>

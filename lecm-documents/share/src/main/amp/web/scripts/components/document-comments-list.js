@@ -44,6 +44,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
         YAHOO.Bubbling.on("editorInitialized", this.onEditorInitialized, this);
         YAHOO.Bubbling.on("commentNode", this.onCommentNode, this);
+        YAHOO.Bubbling.on("commentsUpdated", this.onCommentsUpdated, this);
 
         this.busy = false;
         this.hashChecked = false;
@@ -342,7 +343,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                 this.restoreEditForm();
                                 Dom.addClass(formContainer, "hidden");
                                 this._releaseBusy();
-                                this.widgets.alfrescoDataTable.reloadDataTable();
+                                YAHOO.Bubbling.fire("commentsUpdated");
                                 submitButton.set("disabled", false);
                                 cancelButton.set("disabled", false);
                             },
@@ -690,7 +691,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // ajax request success handler
                 var success = function CommentsList_deleteComment_success(response, object)
                 {
-                    this.widgets.alfrescoDataTable.reloadDataTable();
+                    YAHOO.Bubbling.fire("commentsUpdated");
                     // remove busy message
                     this._releaseBusy();
                     this._setBusy(this.msg("message.delete.success"),"message");
@@ -743,6 +744,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     });
             },
 
+            onCommentsUpdated: function () {
+                this.widgets.alfrescoDataTable.reloadDataTable();
+            },
 
             /**
              * Displays the provided busyMessage but only in case

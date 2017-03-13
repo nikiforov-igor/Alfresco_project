@@ -2,7 +2,6 @@
 <!-- Signed docflow section start -->
 <!-- Parameters and libs -->
 <#include "/org/alfresco/components/component.head.inc">
-<@script type="text/javascript" src="${url.context}/res/scripts/components/document-signed-docflow.js"></@script>
 <#assign el=args.htmlid/>
 
 <#attempt>
@@ -11,8 +10,8 @@
 <#recover>
 </#attempt>
 
-<div class="widget-bordered-panel">
-	<div class="document-metadata-header document-components-panel">
+<div class="widget-bordered-panel signed-docflow-panel">
+	<div id="${el}-wide-view" class="document-metadata-header document-components-panel">
 
 		<h2 id="${el}-heading" class="dark">
 			${msg("heading")}
@@ -27,11 +26,28 @@
 			<div id="${el}-viewSignatures" class="widget-button-grey text-cropped" href="javascript:void(0);">${msg("label.view")}</div>
 		</div>
 	</div>
+    <div id="${el}-short-view" class="document-components-panel short-view hidden">
+        <div id="${el}-formContainer" class="right-block-content">
+            <span class="yui-button yui-push-button">
+               <span class="first-child">
+                  <button type="button" title="${msg('heading')}"></button>
+               </span>
+            </span>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">//<![CDATA[
 (function () {
 	function init() {
+        LogicECM.module.Base.Util.loadResources([
+        		'scripts/components/document-signed-docflow.js'
+            ], [
+             	'css/components/document-signed-docflow.css'
+            ], create);
+    }
+
+	function create() {
 		var isFunction = YAHOO.lang.isFunction;
 		if (isFunction(LogicECM.DocumentSignedDocflow)) {
 			var signingComponent = new LogicECM.DocumentSignedDocflow("${el}").setOptions({
@@ -45,6 +61,15 @@
 		}
 	}
 	YAHOO.util.Event.onDOMReady(init);
+
+    LogicECM.services = LogicECM.services || {};
+    if (LogicECM.services.documentViewPreferences) {
+        var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
+        if (shortView) {
+            Dom.addClass("${el}-wide-view", "hidden");
+            Dom.removeClass("${el}-short-view", "hidden");
+        }
+    }
 })();
 //]]>
 </script>

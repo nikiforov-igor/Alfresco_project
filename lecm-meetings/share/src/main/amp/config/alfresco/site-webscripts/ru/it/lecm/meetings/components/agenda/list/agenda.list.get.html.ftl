@@ -17,10 +17,12 @@
         }
         YAHOO.util.Event.onAvailable("${id}-action-collapse", hideButton);
 </script>
-<div class="metadata-form">
+<div class="panel-header">
+    <div class="panel-title">${msg("heading")}</div>
 		<div class="lecm-dashlet-actions">
         	<a id="${id}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
     	</div>
+    </div>
 </div>
 <script type="text/javascript">
     //<![CDATA[

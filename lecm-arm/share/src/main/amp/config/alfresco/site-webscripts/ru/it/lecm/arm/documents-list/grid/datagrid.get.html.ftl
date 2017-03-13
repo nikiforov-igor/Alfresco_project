@@ -15,9 +15,9 @@
 <div class="yui-t1" id="arm-grid">
 	<div id="yui-main-2">
 		<div class="yui-b" id="alf-content">
-		<@grid.datagrid id=id showViewForm=true>
-			<script type="text/javascript">//<![CDATA[
-                YAHOO.util.Event.onContentReady ('${id}', function () {
+        <@grid.datagrid id=id showViewForm=true>
+            <script type="text/javascript">//<![CDATA[
+                (function () {
                     new LogicECM.module.ARM.DataGrid('${id}').setOptions({
                         usePagination: true,
                         pageSize: 20,
@@ -25,7 +25,7 @@
                         searchShowInactive: true,
                         actions: [
                             {
-                            type: "datagrid-action-link-documents-arm",
+                                type: "datagrid-action-link-documents-arm",
                                 id: "onActionViewDocument",
                                 permission: "",
                                 label: "${msg("actions.edit")}"
@@ -44,16 +44,16 @@
                             itemType: "lecm-document:base",
                             datagridFormId: "datagrid-arm",
                             nodeRef: null,
-                            actionsConfig:{
-                                fullDelete:true,
+                            actionsConfig: {
+                                fullDelete: true,
                                 trash: false
                             },
-                            sort:"cm:modified|false"
+                            sort: "cm:modified|false"
                         }
                     }).setMessages(${messages});
-                });
-			//]]></script>
-		</@grid.datagrid>
+                })();
+                //]]></script>
+        </@grid.datagrid>
 		</div>
 	</div>
 </div>

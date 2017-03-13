@@ -85,3 +85,6 @@ form.insitu-edit .inlineTagEditAutoCompleteWrapper input {
     margin: 0;
 }
 
+.tags-panel .short-view span.first-child {
+    background: url('../../images/lecm-documents/components/tags-16.png') no-repeat 5px 5px;
+}
