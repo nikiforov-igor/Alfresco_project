@@ -196,7 +196,7 @@
 			successCallback: {
 				fn: function (oResponse) {
 					if (oResponse.json && oResponse.json.nodeRef) {
-                        drawForm(oResults.nodeRef);
+                        drawForm(oResponse.json.nodeRef);
                         // скрываем кнопку создать
                         Dom.removeClass("${id}-editPersonalData", 'hidden');
 					} else {
