@@ -23,6 +23,10 @@ function main() {
 		{
 			id: "document-view-content",
 			onlyForOwn: false
+		},
+		{
+			id: "document-unlock",
+			onlyForOwn: false
 		}
 	];
 
@@ -49,6 +53,14 @@ function main() {
 		});
 		allActions.push({
 			id: "document-view-content",
+			onlyForOwn: false
+		});
+		allActions.push({
+			id: "document-unlock",
+			onlyForOwn: false
+		});
+		allActions.push({
+			id: "lecm-online-editing",
 			onlyForOwn: false
 		});
 		allActions.push({

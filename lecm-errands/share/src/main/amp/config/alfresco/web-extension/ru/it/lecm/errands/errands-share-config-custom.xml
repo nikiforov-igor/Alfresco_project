@@ -787,7 +787,7 @@
                     <show id="lecm-errands:executor-assoc"/>
                     <!-- Срок завершения поручения -->
                     <show id="lecm-errands:end-date"/>
-                    <!-- Контроллер -->
+                    <!-- Контролер -->
                     <show id="lecm-errands:controller-assoc"/>
                     <!-- Дата начала -->
                     <show id="lecm-errands:start-date"/>

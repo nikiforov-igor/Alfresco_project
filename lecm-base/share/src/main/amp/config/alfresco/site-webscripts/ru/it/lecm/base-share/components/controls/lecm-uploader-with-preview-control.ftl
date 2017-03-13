@@ -36,6 +36,10 @@
                 'components/preview/Audio.js',
 		        'components/preview/Flash.js',
                 'components/preview/Image.js',
+				'extras/components/preview/ResizeSensor.js',
+				'extras/components/preview/ElementQueries.js',
+				'extras/components/preview/l10n.js',
+                'extras/components/preview/viewer.js',
 		        'extras/components/preview/web-preview-extend.js',
 		        'extras/components/preview/PdfJs.js',
 		        'extras/components/preview/Embed.js',
@@ -43,11 +47,13 @@
 		        'extras/components/preview/pdfjs/pdf.js',
 		        'extras/components/preview/spin.js'
 		    ], [
+                'extras/components/preview/viewer.css',
 	            'css/lecm-base/components/lecm-uploader-with-preview-control.css'
             ], createUploader);
 	    }
 		
 		function createUploader() {
+            loadExternalResourceBundle();
 			var control = new LogicECM.control.UploaderWithPreviw("${controlId}").setMessages(${messages});
 			control.setOptions(
 					{
@@ -59,6 +65,14 @@
 						currentValue: "${field.value!""}"
 					});
 		}
+
+        function loadExternalResourceBundle() {
+            var resourceRef = document.createElement('link');
+            resourceRef.setAttribute('rel', 'resource');
+            resourceRef.setAttribute('type', 'application/l10n');
+            resourceRef.setAttribute('href', Alfresco.constants.URL_RESCONTEXT + 'extras/components/preview/locale/locale.properties');
+            document.getElementsByTagName("head")[0].appendChild(resourceRef);
+        }
 
                 YAHOO.util.Event.onDOMReady(init);
 	})();

@@ -67,7 +67,8 @@ LogicECM.module = LogicECM.module || {};
             treeViewJsName: "select-representative-treeView",
             fieldHtmlId: "",
             showAssocViewForm: false,
-            markers: null
+            markers: null,
+	        defaultValueUseOnce: false
         },
 
         onReady: function SelectRepresentativeForContractor_onReady() {
@@ -115,6 +116,7 @@ LogicECM.module = LogicECM.module || {};
                             {
                                 contractor: selectedContractor
                             }),
+	                    defaultValueUseOnce: scope.options.defaultValueUseOnce,
                         nameSubstituteString: scope.options.representativesSubstitute,
                         selectedValue: null,
                         initialized: false,
@@ -146,6 +148,7 @@ LogicECM.module = LogicECM.module || {};
                         defaultValueDataSource: scope.options.employeesDefaultValueDS != null ? YAHOO.lang.substitute(scope.options.employeesDefaultValueDS, {
                             organization: selectedContractor
                         }) : null,
+	                    defaultValueUseOnce: scope.options.defaultValueUseOnce,
                         nameSubstituteString: scope.options.employeesNameSubstitute,
                         initialized: false,
                         lazyLoading: false,

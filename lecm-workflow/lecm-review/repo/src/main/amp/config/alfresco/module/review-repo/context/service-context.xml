@@ -92,14 +92,14 @@
 			parent="logicEcmAssociationPolicy" init-method="init"
 	/>
 
-	<bean id="reviewItemChangePolicy" class="ru.it.lecm.workflow.review.policy.ItemChangedPolicy"
+	<bean id="reviewItemChangePolicy" class="ru.it.lecm.workflow.review.policy.ItemChangedPolicy" parent="baseBean"
 		  depends-on="review.model.bootstrap" init-method="init"
-		  p:authenticationService-ref="authenticationService"
-		  p:nodeService-ref="nodeService"
 		  p:orgstructureService-ref="serviceOrgstructure"
 		  p:reviewService-ref="reviewService"
 		  p:tableService-ref="documentTableService"
 		  p:policyComponent-ref="policyComponent"
+		  p:dictionaryService-ref="dictionaryService"
+		  p:statusesWithOrder="${lecm.review.statistics.statuses.order}"
 	/>
 
 	<util:list id="review.admin.arm.dictionaries">

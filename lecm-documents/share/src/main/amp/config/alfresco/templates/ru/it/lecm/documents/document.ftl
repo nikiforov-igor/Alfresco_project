@@ -28,6 +28,20 @@
     <link rel="stylesheet" type="text/css" href="${url.context}/res/css/dashlet-components.css" />
     <link rel="stylesheet" type="text/css" href="${url.context}/res/css/page-document.css" />
 
+    <#if dependencies??>
+        <#if dependencies.css??>
+            <#list dependencies.css as cssFile>
+                <@link rel="stylesheet" type="text/css" href="${url.context}/res/${cssFile}" group="documentlibrary"/>
+            </#list>
+        </#if>
+        <#if dependencies.js??>
+            <#list dependencies.js as jsFile>
+                <@script type="text/javascript" src="${url.context}/res/${jsFile}" group="documentlibrary"/>
+            </#list>
+        </#if>
+    </#if>
+
+
     <@templateHtmlEditorAssets />
 	</@>
 

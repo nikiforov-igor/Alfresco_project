@@ -28,6 +28,9 @@ import ru.it.lecm.ord.api.ORDDocumentService;
 import ru.it.lecm.ord.api.ORDModel;
 import ru.it.lecm.ord.api.ORDReportsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.regnumbers.RegNumbersService;
+import ru.it.lecm.regnumbers.template.TemplateParseException;
+import ru.it.lecm.regnumbers.template.TemplateRunException;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
@@ -52,6 +55,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private DocumentEventService documentEventService;
 	private LecmPermissionService lecmPermissionService;
 	private ORDDocumentService ordDocumentService;
+	private RegNumbersService regNumbersService;
 
 	private ORDReportsService ordReportsService;
 
@@ -98,6 +102,10 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	public void setOrdDocumentService(ORDDocumentService ordDocumentService) {
 		this.ordDocumentService = ordDocumentService;
 	}
+
+    public void setRegNumbersService(RegNumbersService regNumbersService) {
+        this.regNumbersService = regNumbersService;
+    }
 
 	private String getOrdURL(final ScriptNode ordRef) {
 		NodeRef ordDocumentRef = ordRef.getNodeRef();
@@ -317,6 +325,11 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				}
 
 				NodeRef errand = documentService.createDocument("lecm-errands:document", properties, associations);
+                try {
+                    regNumbersService.setDocumentNumber("ERRAND_NUMBER", errand, "lecm-errands:number");
+                } catch (TemplateParseException | TemplateRunException e) {
+                    logger.warn("Error set errand number", e);
+                }
 
 				// выдадим права контролеру
 				if (null != errandInitiator){

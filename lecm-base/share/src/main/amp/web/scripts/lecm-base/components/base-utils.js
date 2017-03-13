@@ -839,7 +839,7 @@ LogicECM.module.Base.Util = {
 		var attachmentsModalForm = new Alfresco.module.SimpleDialog("modalWindow");
 
 		attachmentsModalForm.setOptions({
-			width: '50em',
+			width: '55em',
 			templateUrl: Alfresco.constants.URL_SERVICECONTEXT + '/lecm/components/document/attachments-preview',
 			templateRequestParams: {
 				nodeRef : documentRef,

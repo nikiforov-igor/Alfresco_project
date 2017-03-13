@@ -2,9 +2,7 @@
 <webscript>
     <shortname>ARM: Разметка с фильтрами</shortname>
     <description>
-    Разметка с фильтрами, принимает json:
-    armCode,
-    filters
+        Разметка с фильтрами, принимает json: filters
     </description>
     <url>/lecm/arm/draw-filters</url>
     <authentication>user</authentication>

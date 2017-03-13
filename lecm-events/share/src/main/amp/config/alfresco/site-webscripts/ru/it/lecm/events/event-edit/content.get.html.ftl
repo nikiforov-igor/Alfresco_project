@@ -18,6 +18,10 @@
 	<@script type="text/javascript" src="${url.context}/res/components/preview/Flash.js" group="document-edit"/>
 	<@script type="text/javascript" src="${url.context}/res/components/preview/Image.js" group="document-edit"/>
 	<@script type="text/javascript" src="${url.context}/res/extras/components/preview/web-preview-extend.js" group="document-edit"/>
+	<@script type="text/javascript" src="${page.url.context}/res/extras/components/preview/ResizeSensor.js"></@script>
+   	<@script type="text/javascript" src="${page.url.context}/res/extras/components/preview/ElementQueries.js"></@script>
+	<@script type="text/javascript" src="${url.context}/res/extras/components/preview/l10n.js"></@script>
+	<@script type="text/javascript" src="${url.context}/res/extras/components/preview/viewer.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/extras/components/preview/PdfJs.js" group="document-edit"/>
 	<@script type="text/javascript" src="${url.context}/res/extras/components/preview/Embed.js" group="document-edit"/>
 	<@script type="text/javascript" src="${url.context}/res/extras/components/preview/pdfjs/compatibility.js" group="document-edit"/>
@@ -26,6 +30,8 @@
 </@>
 
 <@markup id="css">
+	<link rel="resource" type="application/l10n" href="${url.context}/res/extras/components/preview/locale/locale.properties"/>
+	<link rel="stylesheet" type="text/css" href="${url.context}/res/extras/components/preview/viewer.css" />
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata.css" group="document-create"/>
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-events/event-create-set.css" group="document-create"/>
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/components/lecm-dnd-uploader-control-with-preview.css" group="document-create"/>

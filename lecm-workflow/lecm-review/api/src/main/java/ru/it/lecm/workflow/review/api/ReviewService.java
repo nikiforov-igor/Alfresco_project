@@ -1,8 +1,10 @@
 package ru.it.lecm.workflow.review.api;
 
+import org.alfresco.service.cmr.i18n.MessageLookup;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 import java.util.List;
@@ -11,9 +13,25 @@ import java.util.List;
  * Created by dkuchurkin on 11.04.2016.
  */
 public interface ReviewService extends InitializingBean {
+    /**
+     * @deprecated  использовать {@link REVIEW_ITEM_STATE.NOT_REVIEWED}
+     */
+    @Deprecated
     String CONSTRAINT_REVIEW_TS_STATE_IN_PROCESS = "NOT_REVIEWED";
+    /**
+     * @deprecated  использовать {@link REVIEW_ITEM_STATE.REVIEWED}
+     */
+    @Deprecated
     String CONSTRAINT_REVIEW_TS_STATE_REVIEWED = "REVIEWED";
+    /**
+     * @deprecated  использовать {@link REVIEW_ITEM_STATE.NOT_STARTED}
+     */
+    @Deprecated
     String CONSTRAINT_REVIEW_TS_STATE_NOT_STARTED = "NOT_STARTED";
+    /**
+     * @deprecated  использовать {@link REVIEW_ITEM_STATE.CANCELLED}
+     */
+    @Deprecated
     String CONSTRAINT_REVIEW_TS_STATE_CANCELLED = "CANCELLED";
     String REVIEW_TS_NAMESPACE = "http://www.it.ru/logicECM/model/review-ts/1.0";
     String REVIEW_LIST_NAMESPACE = "http://www.it.ru/logicECM/model/review-list/1.0";
@@ -43,6 +61,31 @@ public interface ReviewService extends InitializingBean {
 
     QName PROP_RELATED_REVIEW_RECORDS_CHANGE_COUNT = QName.createQName(REVIEW_ASPECTS_NAMESPACE, "related-review-records-change-count");
 	QName ASSOC_RELATED_REVIEW_RECORDS = QName.createQName(REVIEW_ASPECTS_NAMESPACE, "related-review-records-assoc");
+
+    QName PROP_REVIEW_STATE = QName.createQName(REVIEW_TS_NAMESPACE, "doc-review-state");
+    QName PROP_REVIEW_STATISTICS = QName.createQName(REVIEW_TS_NAMESPACE, "doc-review-statistics");
+
+    QName PROP_RELATED_REVIEW_STATE = QName.createQName(REVIEW_ASPECTS_NAMESPACE, "related-review-state");
+    QName PROP_RELATED_REVIEW_STATISTICS = QName.createQName(REVIEW_ASPECTS_NAMESPACE, "related-review-statistics");
+
+    enum REVIEW_STATE {
+        IN_PROCESS,
+        COMPLETE,
+        NOT_REQUIRED
+    }
+
+    enum REVIEW_ITEM_STATE {
+        NOT_STARTED,
+        NOT_REVIEWED,
+        REVIEWED,
+        CANCELLED;
+
+        public String getLabel(MessageLookup messageLookup) {
+            String key = "listconstraint.lecm-review-ts_review-state-constraint." + this.name();
+            String message = messageLookup.getMessage(key, I18NUtil.getLocale());
+            return message == null ? this.name() : message;
+        }
+    }
 
     String CONSTRAINT_REVIEW_GLOBAL_SETTINGS_SELECT_BY_ORGANISATION = "ORGANISATION";
     String CONSTRAINT_REVIEW_GLOBAL_SETTINGS_SELECT_BY_UNIT= "UNIT";

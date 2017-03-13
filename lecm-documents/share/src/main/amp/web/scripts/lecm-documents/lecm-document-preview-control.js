@@ -231,6 +231,68 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                             execScripts: true
                         });
                 }
+                var actionsEl = Dom.get(this.id + "-actions");
+                if (actionsEl) {
+                    actionsEl.innerHTML = '';
+                    Alfresco.util.Ajax.request(
+                        {
+                            url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/attachment/actions",
+                            dataObj: {
+                                nodeRef: this.attachmentsSelect.value,
+                                format: "json"
+                            },
+                            successCallback: {
+                                fn: function (response) {
+                                    var container = Dom.get(this.id + "-actions");
+                                    if (response.json.item.actions) {
+                                        var item = response.json.item;
+                                        var node = item.node;
+                                        if (node.isLocked) {
+                                            var warning = document.createElement("div");
+                                            warning.className = "warning";
+                                            if (node.properties["cm:lockOwner"] && node.properties["cm:lockOwner"].userName == Alfresco.constants.USERNAME) {
+                                                warning.title = this.msg("details.banner.lock-owner");
+                                            } else {
+                                                warning.title = this.msg("details.banner.locked", node.properties["cm:lockOwner"].displayName);
+                                            }
+                                            container.appendChild(warning);
+                                        }
+                                        var urlContext = Alfresco.constants.URL_RESCONTEXT + "components/documentlibrary/actions/";
+                                        for (var key in item.actions) {
+                                            var action = item.actions[key];
+                                            if (action.id == "document-unlock") {
+                                                var div = document.createElement("div");
+                                                div.className = "action";
+                                                div.style.backgroundImage = "url('" + urlContext + action.icon + "-16.png')";
+                                                div.title = this.msg(action.label);
+                                                container.appendChild(div);
+                                                Event.on(div, "click", function () {
+                                                    if (YAHOO.lang.isFunction(LogicECM.module.UnlockNode.unlock)) {
+                                                        LogicECM.module.UnlockNode.unlock(item, this.reloadAttachmentPreview.bind(this));
+                                                    }
+                                                }, this, true);
+                                            } else if (action.id == "lecm-online-editing") {
+                                                var div = document.createElement("div");
+                                                div.className = "action";
+                                                div.style.backgroundImage = "url('" + urlContext + action.icon + "-16.png')";
+                                                div.title = this.msg(action.label);
+                                                container.appendChild(div);
+                                                Event.on(div, "click", function () {
+                                                    if (YAHOO.lang.isFunction(LogicECM.module.EditOnline.edit)) {
+                                                        LogicECM.module.EditOnline.edit(item);
+                                                    }
+                                                }, this, true);
+                                            }
+                                        }
+                                    }
+                                },
+                                scope: this
+                            },
+                            failureMessage: this.msg("message.failure"),
+                            scope: this,
+                            execScripts: true
+                        });
+                }
             },
 
             _processAttachments: function (data) {

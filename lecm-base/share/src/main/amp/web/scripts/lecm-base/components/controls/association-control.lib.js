@@ -13,13 +13,15 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 	LogicECM.module.AssociationComplexControl.Utils = {
 
-		generateChildrenUrlParams: function (options, searchTerm, skipItemsCount, forAutocomplete, exSearchFilter) {
+		generateRequest: function (context, searchTerm, skipItemsCount, forAutocomplete, exSearchFilter) {
 			/* построение параметров для запроса данных датагрида */
-			var additionalFilter = options.additionalFilter,
+			var options = context.options,
+				additionalFilter = options.additionalFilter,
 				allowedNodesFilter,
 				ignoreNodesFilter,
 				notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i,
-				singleNotQuery;
+				singleNotQuery,
+				paramsObj;
 
 			if (options.allowedNodes) {
 				allowedNodesFilter = options.allowedNodes.reduce(function (prev, curr) {
@@ -54,7 +56,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					additionalFilter = exSearchFilter;
 				}
 			}
-			return Alfresco.util.toQueryString({
+
+			paramsObj = {
 				selectableType: options.itemType,
 				searchTerm: searchTerm ? searchTerm : '',
 				size: LogicECM.module.AssociationComplexControl.Utils.getMaxSearchResult(options, forAutocomplete),
@@ -69,8 +72,81 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				useObjectDescription: (!!options.useObjectDescription).toString(),
 				rootNodeRef: options.rootNodeRef,
 				xpath: forAutocomplete ? options.rootLocation : undefined,
-				skipCount: forAutocomplete ? undefined : skipItemsCount.toString()
-			});
+				skipCount: forAutocomplete ? undefined : skipItemsCount.toString(),
+				elementsParams: LogicECM.module.AssociationComplexControl.Utils.getElementsParams(context, forAutocomplete)
+			};
+
+			return options.autocompleteDataSourceMethodPost ? YAHOO.lang.JSON.stringify(paramsObj) : Alfresco.util.toQueryString(paramsObj);
+		},
+
+		getElementsParams: function(context, forAutocomplete) {
+			// Передача параметров отдельных элементов
+			var options = context.options,
+				logic = options.dataSourceLogic,
+				elementsParams = [],
+				itemObj,
+				opts;
+			if (options.itemsOptions && options.itemsOptions.length) {
+				options.itemsOptions.forEach(function(itemOptions) {
+					if (logic == 'AND' || (logic == 'OR' && LogicECM.module.AssociationComplexControl.Utils.isKeySelectedOrEmpty(itemOptions.itemKey, context))) {
+						itemObj = {};
+						opts = itemOptions.options;
+						if (opts.nameSubstituteString) {
+							itemObj.nameSubstituteString = opts.nameSubstituteString;
+						}
+						if (opts.titleNameSubstituteString) {
+							itemObj.titleNameSubstituteString = opts.titleNameSubstituteString;
+						}
+						if (opts.selectedItemsNameSubstituteString) {
+							itemObj.selectedItemsNameSubstituteString = opts.selectedItemsNameSubstituteString;
+						}
+						if (opts.itemType) {
+							itemObj.selectableType = opts.itemType;
+						}
+						if (opts.additionalFilter) {
+							itemObj.additionalFilter = opts.additionalFilter;
+						}
+						if (opts.rootLocation && forAutocomplete) {
+							itemObj.xpath = opts.rootLocation;
+						}
+						if (opts.rootLocation) {
+							itemObj.pathRoot = opts.rootLocation;
+						}
+						if (opts.xPathLocation) {
+							itemObj.xPathLocation = opts.xPathLocation;
+						}
+						if (opts.xPathLocationRoot) {
+							itemObj.xPathRoot = opts.xPathLocationRoot;
+						}
+						if (opts.useStrictFilterByOrg) {
+							itemObj.onlyInSameOrg = opts.useStrictFilterByOrg;
+						}
+						if (itemOptions.itemKey) {
+							itemObj.itemKey = itemOptions.itemKey;
+						}
+						elementsParams.push(itemObj);
+					}
+				});
+			}
+			return elementsParams;
+		},
+
+		isKeySelectedOrEmpty: function (itemKey, context) {
+			var isSelected = false,
+				selected;
+			if (itemKey && context && context.widgets && context.widgets.picker) {
+				selected = context.widgets.picker.selected;
+				if (selected) {
+					if (!Object.keys(selected).length) {
+						return true;
+					} else {
+						isSelected = Object.keys(selected).some(function (element, index, array) {
+							return (selected[element] && selected[element].key == itemKey);
+						});
+					}
+				}
+			}
+			return isSelected;
 		},
 
 		getMaxSearchResult: function (options, forAutocomplete) {
@@ -91,10 +167,23 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			return options.selectedItemsNameSubstituteString ? options.selectedItemsNameSubstituteString : options.nameSubstituteString;
 		},
 
-		canItemBeSelected: function (id, options, selected, parentControl) {
-			var canSelect = true, i;
-			if (options.endpointMany && parentControl.options.multipleSelectMode) {
+		canItemBeSelected: function (id, options, selected, parentControl, key) {
+			var canSelect = true, i,
+				curKey,
+				temporarySelectedCount;
+			if (options.endpointMany && parentControl.options.endpointMany) {
 				canSelect = !selected.hasOwnProperty(id);
+				if (canSelect && parentControl.options.dataSourceLogic == 'OR' && key) {
+					// Дополнительная проверка не выбран ли элемент из другого источника
+					for (i = 0; canSelect && (i < parentControl.options.itemsOptions.length); i++) {
+						curKey = parentControl.options.itemsOptions[i].itemKey;
+						temporarySelectedCount = Object.keys(parentControl.widgets[curKey].currentState.temporarySelected).length;
+						if (curKey != key && temporarySelectedCount) {
+							canSelect = false;
+							break;
+						}
+					}
+				}
 			} else {
                 if (!parentControl.options.isComplex) {
                     canSelect = Object.keys(selected).length === 0;

@@ -79,7 +79,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			sortProp: 'cm:name',
 			nameSubstituteString: 'cm:name',
 			additionalFilter: '',
-			multipleSelectMode: false,
+			endpointMany: false,
 			useObjectDescription: false,
 			checkType: true,
 			pickerItemsScript: 'lecm/forms/picker/items',
@@ -132,7 +132,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					if (createLink) {
 						var tr = this.getTrEl(record);
 						if (tr) {
-							tr.hidden =  !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, this.owner.options, this.owner.currentState.temporarySelected, this.owner.parentControl);
+							tr.hidden =  !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, this.owner.options, this.owner.currentState.temporarySelected, this.owner.parentControl, this.owner.key);
 						}
 						YAHOO.util.Event.on(createLink, 'click', this.owner._fnCreateNewItemHandler, this.owner, true);
 					}
@@ -168,7 +168,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 			if (record.getData('selectable')) {
 				nodeRef = record.getData('nodeRef');
-				hidden = ACUtils.canItemBeSelected(nodeRef, this.owner.options, this.owner.currentState.temporarySelected, this.owner.parentControl) ? '' : ' hidden ';
+				hidden = ACUtils.canItemBeSelected(nodeRef, this.owner.options, this.owner.currentState.temporarySelected, this.owner.parentControl, this.owner.key) ? '' : ' hidden ';
 
 				elCell.innerHTML = '<a href="javascript:void(0);"' + hidden + 'title="' + this.owner.msg('form.control.object-picker.add-item') + '" tabindex="0"><i class="icon-plus"></i></a>';
 
@@ -182,7 +182,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			var nodeRef, hidden;
 			if (record.getData('selectable') && record.getData("hasWritePermission")) {
 				nodeRef = record.getData('nodeRef');
-				hidden = ACUtils.canItemBeSelected(nodeRef, this.owner.options, this.owner.currentState.temporarySelected, this.owner.parentControl) ? '' : ' hidden ';
+				hidden = ACUtils.canItemBeSelected(nodeRef, this.owner.options, this.owner.currentState.temporarySelected, this.owner.parentControl, this.owner.key) ? '' : ' hidden ';
 
 				elCell.innerHTML = '<a href="javascript:void(0);"' + hidden + 'title="' + this.owner.msg('actions.edit') + '" tabindex="0"><i class="icon-edit"></i></a>';
 			}
@@ -212,12 +212,22 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				this.widgets.datatable.showTableMessage(failureResponse.json.message, YAHOO.widget.DataTable.CLASS_ERROR);
 			}
 
+			var dataObj = {
+				titleProperty: 'cm:name' //this.options.treeRoteNodeTitleProperty
+			};
+
+			if (this.options.rootLocation) {
+				dataObj.xpath = this.options.rootLocation;
+			} else if (this.options.xPathLocation) {
+				dataObj.xPathLocation = this.options.xPathLocation;
+				if (this.options.xPathLocationRoot) {
+					dataObj.xPathRoot = this.options.xPathLocationRoot;
+				}
+			}
+
 			Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/forms/node/search',
-				dataObj: {
-					titleProperty: 'cm:name', //this.options.treeRoteNodeTitleProperty
-					xpath: this.options.rootLocation
-				},
+				dataObj: dataObj,
 				successCallback: {
 					scope: this,
 					fn: onSuccess
@@ -437,7 +447,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			this.currentState.skipItemsCount = initializeTable ? 0 : this.currentState.skipItemsCount;
 			this.currentState.searchTerm = searchTerm;
 			this.currentState.exSearchFilter = exSearchFilter;
-			params = ACUtils.generateChildrenUrlParams(this.options, this.currentState.searchTerm, this.currentState.skipItemsCount, false, this.currentState.exSearchFilter);
+			params = ACUtils.generateRequest(this, this.currentState.searchTerm, this.currentState.skipItemsCount, false, this.currentState.exSearchFilter);
 			this.widgets.datatable.load({
 				request: this.currentState.nodeData.nodeRef.replace('://', '/') + '/children' + params,
 				callback: {
@@ -628,12 +638,12 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 							if (IDENT_CREATE_NEW !== record.getData('type')) {
 								tdEls.forEach(function (tdEl) {
 									if (tdEl.firstChild.firstChild) {
-										tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.temporarySelected, this.parentControl);
+										tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.temporarySelected, this.parentControl, this.key);
 									}
 								}, this);
 							} else {
 								if (tdEls[0].parentElement)	{
-									tdEls[0].parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, options, this.currentState.temporarySelected, this.parentControl);
+									tdEls[0].parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, options, this.currentState.temporarySelected, this.parentControl, this.key);
 								}
 							}
 						}, this);
@@ -681,12 +691,12 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				if (IDENT_CREATE_NEW !== record.getData('type')) {
 					tdEls.forEach(function (tdEl) {
 						if (tdEl.firstChild.firstChild) {
-							tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), this.options, this.currentState.temporarySelected, this.parentControl);
+							tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), this.options, this.currentState.temporarySelected, this.parentControl, this.key);
 						}
 					}, this);
 				} else {
 					if (tdEls[0].parentElement)	{
-						tdEls[0].parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, this.options, this.currentState.temporarySelected, this.parentControl);
+						tdEls[0].parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, this.options, this.currentState.temporarySelected, this.parentControl, this.key);
 					}
 				}
 			}, this);

@@ -1104,6 +1104,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="items">employee,representative</control-param>
 							<control-param name="showAutocomplete">false</control-param>
+							<control-param name="dataSourceLogic">OR</control-param>
 							<control-param name="sortSelected">true</control-param>
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
@@ -1214,6 +1215,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="items">employee,representative</control-param>
 							<control-param name="showAutocomplete">false</control-param>
+							<control-param name="dataSourceLogic">OR</control-param>
 							<control-param name="sortSelected">true</control-param>
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
@@ -1311,6 +1313,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="items">employee,representative</control-param>
 							<control-param name="showAutocomplete">false</control-param>
+							<control-param name="dataSourceLogic">OR</control-param>
 							<control-param name="sortSelected">true</control-param>
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
