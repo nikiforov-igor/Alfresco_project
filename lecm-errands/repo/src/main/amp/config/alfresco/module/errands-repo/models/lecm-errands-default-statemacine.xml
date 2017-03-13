@@ -3057,7 +3057,27 @@ if (document) {
             if (!parentDoc) {
                 regNumberCode = "ERRAND_FREE_NUMBER";
             } else {
-                regNumberCode = "ERRAND_ON_BASIS_NUMBER";
+            	regNumberCode = "ERRAND_ON_BASIS_NUMBER";
+                var parentDocTypeShort = parentDoc.typeShort;
+                if (parentDocTypeShort == "lecm-errands:document"){
+					regNumberCode = "ERRAND_ON_BASIS_NUMBER";
+                } else if (parentDocTypeShort == "lecm-incoming:document"){
+					regNumberCode = "ERRAND_ON_INCOMING_BASIS_NUMBER";
+                } else if (parentDocTypeShort == "lecm-outgoing:document"){
+					regNumberCode = "ERRAND_ON_OUTGOING_BASIS_NUMBER";
+                } else if (parentDocTypeShort == "lecm-internal:document"){
+					regNumberCode = "ERRAND_ON_INTERNAL_BASIS_NUMBER";
+                } else if (parentDocTypeShort == "lecm-ord:document"){
+					regNumberCode = "ERRAND_ON_ORD_BASIS_NUMBER";
+                } else if (parentDocTypeShort == "lecm-nd:document"){
+					regNumberCode = "ERRAND_ON_ND_BASIS_NUMBER";
+                } else if (parentDocTypeShort == "lecm-protocol:document"){
+					regNumberCode = "ERRAND_ON_PROTOCOL_BASIS_NUMBER";
+                } else if (parentDocTypeShort == "lecm-contract:document"){
+					regNumberCode = "ERRAND_ON_CONTRACT_BASIS_NUMBER";
+                } else if (parentDocTypeShort == "lecm-additional-document:additionalDocument"){
+					regNumberCode = "ERRAND_ON_CONTRACT_DOCUMENT_BASIS_NUMBER";
+                }
                 if (document.properties["lecm-errands:child-index-counter"] == 0) {
                     var childAssoc = parentDoc.sourceAssocs["lecm-errands:additional-document-assoc"];
                     if (childAssoc && childAssoc.length) {
