@@ -33,6 +33,23 @@
 				}
 			};
 		}
+		
+		// ALFFIVE-144
+		// В новой версии изменился forms-runtime.
+		// Теперь безусловно вызывается this._toggleSubmitElements(true); сразу после запроса.
+		// Что приводит к возможности закликивания формы. 
+
+		// Достаточно злой костыль, проксирование _submitInvoked
+
+		var oldSubmitFunction = Alfresco.forms.Form.prototype._submitInvoked;
+		Alfresco.forms.Form.prototype._submitInvoked = function (event) {
+			oldSubmitFunction.call(this, event);
+
+			// На всякий случай проверим валидна ли форма перед отключением кнопок
+			if (this._runValidations(event, null, Alfresco.forms.Form.NOTIFICATION_LEVEL_CONTAINER)) {
+				this._toggleSubmitElements(false);
+			}
+		}
 	})();
 	</@>
 

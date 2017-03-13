@@ -151,8 +151,10 @@
                     <map>
                         <entry key="Все" value="!Отменено, !Удалено, !Исполнено, !Не исполнено"/>
                         <entry key="Ожидает исполнения" value="Ожидает исполнения"/>
-                        <entry key="Исполняется" value="Исполняется"/>
+                        <entry key="На исполнении" value="На исполнении"/>
                         <entry key="На утверждении" value="На утверждении инициатором, На утверждении контролером"/>
+                        <entry key="На проверке отчета" value="На контроле"/>
+                        <entry key="На доработке" value="На доработке"/>
                     </map>
                 </entry>
             </map>
@@ -690,6 +692,11 @@
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/actions/ga-create-errands.xml</value>
+                <value>alfresco/module/${artifactId}/actions/create-errand-from-contract.xml</value>
+                <value>alfresco/module/${artifactId}/actions/create-errand-from-contract-document.xml</value>
+                <value>alfresco/module/${artifactId}/actions/create-errand-from-incoming.xml</value>
+                <value>alfresco/module/${artifactId}/actions/create-errand-from-internal.xml</value>
+                <value>alfresco/module/${artifactId}/actions/create-errand-from-protocol.xml</value>
             </list>
         </property>
     </bean>

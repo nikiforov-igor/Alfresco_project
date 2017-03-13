@@ -221,6 +221,7 @@
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/reports/incoming-reg-journal.xml</value>
+                <value>alfresco/module/${artifactId}/reports/execute-incoming.xml</value>
             </list>
         </property>
         <property name="xmlImportListener" ref="incoming.reportsDeployer"/>

@@ -7,7 +7,7 @@
 	<bean id="eds.global-settings.script" parent="baseScript"
 		  class="ru.it.lecm.eds.scripts.EDSGlobalSettingsWebScriptBean"
 		  p:extensionName="edsGlobalSettings"
-		  p:edsGlobalSettingsService-ref="eds.global-settings.service"
+		  p:edsGlobalSettingsService-ref="edsGlobalSettingsService"
 		  p:orgstructureService-ref="serviceOrgstructure"
         />
 

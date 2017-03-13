@@ -7,6 +7,7 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang.StringUtils;
@@ -18,24 +19,24 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
-import ru.it.lecm.documents.beans.DocumentConnectionService;
-import ru.it.lecm.documents.beans.DocumentEventService;
-import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.documents.beans.DocumentTableService;
+import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.notifications.beans.Notification;
+import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.ord.api.ORDDocumentService;
 import ru.it.lecm.ord.api.ORDModel;
 import ru.it.lecm.ord.api.ORDReportsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static ru.it.lecm.ord.api.ORDModel.POINT_STATUSES;
 
 /**
  *
@@ -48,14 +49,16 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private DocumentService documentService;
 	private OrgstructureBean orgstructureService;
 	private EDSGlobalSettingsService edsGlobalSettingsService;
-	private DocumentConnectionService documentConnectionService;
-	private DictionaryBean lecmDictionaryService;
 	private BusinessJournalService businessJournalService;
 	private DocumentEventService documentEventService;
-	private LecmPermissionService lecmPermissionService;
 	private ORDDocumentService ordDocumentService;
 	private DictionaryBean dictionaryService;
 	private NamespaceService namespaceService;
+	private AuthenticationService authenticationService;
+	private NotificationsService notificationsService;
+	private ErrandsService errandsService;
+	private StateMachineServiceBean stateMachineService;
+
 
 	private ORDReportsService ordReportsService;
 
@@ -83,14 +86,6 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		this.edsGlobalSettingsService = edsGlobalSettingsService;
 	}
 
-	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
-		this.documentConnectionService = documentConnectionService;
-	}
-
-	public void setLecmDictionaryService(DictionaryBean lecmDictionaryService) {
-		this.lecmDictionaryService = lecmDictionaryService;
-	}
-
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;
 	}
@@ -99,16 +94,28 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		this.documentEventService = documentEventService;
 	}
 
-	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
-		this.lecmPermissionService = lecmPermissionService;
-	}
-
 	public void setOrdReportsService(ORDReportsService ordReportsService) {
 		this.ordReportsService = ordReportsService;
 	}
 
 	public void setOrdDocumentService(ORDDocumentService ordDocumentService) {
 		this.ordDocumentService = ordDocumentService;
+	}
+
+	public void setAuthenticationService(AuthenticationService authenticationService) {
+		this.authenticationService = authenticationService;
+	}
+
+	public void setNotificationsService(NotificationsService notificationsService) {
+		this.notificationsService = notificationsService;
+	}
+
+	public void setErrandsService(ErrandsService errandsService) {
+		this.errandsService = errandsService;
+	}
+
+	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+		this.stateMachineService = stateMachineService;
 	}
 
 	private String getOrdURL(final ScriptNode ordRef) {
@@ -272,6 +279,16 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	 */
 	public void formErrands(ScriptNode ordSNode) {
 		NodeRef ord = ordSNode.getNodeRef();
+
+		List<NodeRef> childErrands = errandsService.getChildErrands(ord);
+		Integer currentChildIndex = 0;
+		if (childErrands != null && childErrands.size() != 0) {
+			for(NodeRef child: childErrands){
+				if(!stateMachineService.isDraft(child)){
+					currentChildIndex++;
+				}
+			}
+		}
 		//найдем таблицу с пунктами
 		List<AssociationRef> tableAssocs = nodeService.getTargetAssocs(ord, ORDModel.ASSOC_ORD_TABLE_ITEMS);
 		if (tableAssocs.size() > 0) {
@@ -314,34 +331,37 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				properties.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE_TYPE.toPrefixString(namespaceService), (String) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_DATE_TYPE));
 				properties.put(ErrandsService.PROP_ERRANDS_REPORT_REQUIRED.toPrefixString(namespaceService), nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_REPORT_REQUIRED).toString());
 
+				//индекс
+				Integer errandIndex = currentChildIndex + pointNumber;
+				properties.put(ErrandsService.PROP_ERRANDS_CHILD_INDEX.toPrefixString(namespaceService), errandIndex.toString());
+
 				//ассоциации поручения
 				Map<String, String> associations = new HashMap<String, String>();
-				//инициатор поручения
-				NodeRef errandInitiator = null;
-				List<AssociationRef> controllerAssocs = nodeService.getTargetAssocs(ord, ORDModel.ASSOC_ORD_CONTROLLER);
-				if (controllerAssocs.size() > 0) {
-					NodeRef controller = controllerAssocs.get(0).getTargetRef();
-					errandInitiator = controller;
-					associations.put(ErrandsService.ASSOC_ERRANDS_INITIATOR.toPrefixString(namespaceService), controller.toString());
-				}
 				//Тип поручения
                 NodeRef type = dictionaryService.getRecordByParamValue(ErrandsService.ERRANDS_TYPE_DICTIONARY_NAME, ContentModel.PROP_NAME, ErrandsService.ERRAND_TYPE_ON_POINT_ORD);
 				associations.put(ErrandsService.ASSOC_ERRANDS_TYPE.toPrefixString(namespaceService), type.toString());
+
+				// автор поручения
+				List<AssociationRef> authorAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_ITEM_AUTHOR);
+				if (authorAssocs != null && authorAssocs.size() > 0) {
+					NodeRef author = authorAssocs.get(0).getTargetRef();
+					associations.put(ErrandsService.ASSOC_ERRANDS_INITIATOR.toPrefixString(namespaceService), author.toString());
+				}
 				//исполнитель
 				List<AssociationRef> pointExecutorAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_EXECUTOR);
-				if (pointExecutorAssocs.size() > 0) {
+				if (pointExecutorAssocs != null && pointExecutorAssocs.size() > 0) {
 					NodeRef executor = pointExecutorAssocs.get(0).getTargetRef();
 					associations.put(ErrandsService.ASSOC_ERRANDS_EXECUTOR.toPrefixString(namespaceService), executor.toString());
 				}
 				//контролер
 				List<AssociationRef> pointControllerAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_CONTROLLER);
-				if (pointControllerAssocs.size() > 0) {
+				if (pointControllerAssocs !=null && pointControllerAssocs.size() > 0) {
 					NodeRef Controller = pointControllerAssocs.get(0).getTargetRef();
 					associations.put(ErrandsService.ASSOC_ERRANDS_CONTROLLER.toPrefixString(namespaceService), Controller.toString());
 				}
 				//соисполнители
 				List<AssociationRef> pointCoExecutorsAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_COEXECUTORS);
-				if (pointCoExecutorsAssocs.size() > 0) {
+				if (pointCoExecutorsAssocs != null && pointCoExecutorsAssocs.size() > 0) {
                     ArrayList<NodeRef> coexecutorsList = new ArrayList<>();
 					for (AssociationRef coexecutors : pointCoExecutorsAssocs) {
 						coexecutorsList.add(coexecutors.getTargetRef());
@@ -350,17 +370,12 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				}
 				//тематика поручения
 				List<AssociationRef> subjectAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_SUBJECT);
-				if (subjectAssocs.size() > 0) {
+				if (subjectAssocs != null && subjectAssocs.size() > 0) {
 					NodeRef subject = subjectAssocs.get(0).getTargetRef();
 					associations.put(DocumentService.ASSOC_SUBJECT.toPrefixString(namespaceService), subject.toString());
 				}
 
 				NodeRef errand = documentService.createDocument(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService), properties, associations);
-
-				// выдадим права контролеру
-				if (null != errandInitiator){
-					lecmPermissionService.grantDynamicRole("BR_INITIATOR", errand, errandInitiator.getId(), "LECM_BASIC_PG_Initiator");
-				}
 
 				// срок поручения
 				Date limitationDate = (Date) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE);
@@ -370,22 +385,32 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				//дата начала
 				NodeRef singFolder = nodeService.getChildByName(ord, ContentModel.ASSOC_CONTAINS, "Подписание");
 				if (null != singFolder) {
-					List<ChildAssociationRef> signListAssocs = nodeService.getChildAssocs(singFolder);
-					if (signListAssocs.size() > 0) {
-						NodeRef signList = signListAssocs.get(0).getChildRef();
-						Date signCompleteDate = (Date) nodeService.getProperty(signList, WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_COMPLETE_DATE);
-						nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_START_DATE, signCompleteDate);
-					}
-				}
+                    List<ChildAssociationRef> signListAssocs = nodeService.getChildAssocs(singFolder);
+                    if (signListAssocs.size() > 0) {
+                        NodeRef signList = signListAssocs.get(0).getChildRef();
+                        Date signCompleteDate = (Date) nodeService.getProperty(signList, WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_COMPLETE_DATE);
+                        nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_START_DATE, signCompleteDate);
+                    }
+                }
 
-				//создадим ассоциацию между между Протоколом и созданным поручением, системная связь создастся автоматически
+				//создадим ассоциацию между между ОРД и созданным поручением, системная связь создастся автоматически
 				nodeService.createAssociation(errand, ord, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
 				// создадим ассоциацию пункта с поручением
 				nodeService.createAssociation(point, errand, ORDModel.ASSOC_ORD_TABLE_ERRAND);
 				// переведем пункт в статус "на исполнениии"
 				ordDocumentService.changePointStatus(point,ORDModel.P_STATUSES.PERFORMANCE_STATUS);
-				//подпишем ОРД в качестве наблюдателя за поручением
-				documentEventService.subscribe(errand, ord);
+
+			}
+			//уведомляем контроллера орд
+			List<AssociationRef> ordControllerAssoc = nodeService.getTargetAssocs(ord, ORDModel.ASSOC_ORD_CONTROLLER);
+			if (ordControllerAssoc != null && ordControllerAssoc.size() != 0) {
+				String ntAuthor = authenticationService.getCurrentUserName();
+				NodeRef ntInitiator = orgstructureService.getCurrentEmployee();
+				List<NodeRef> recipients = Collections.singletonList(ordControllerAssoc.get(0).getTargetRef());
+				Map<String, Object> templateConfig = new HashMap<>();
+				templateConfig.put("mainObject", ord);
+				templateConfig.put("eventExecutor", ntInitiator);
+				notificationsService.sendNotification(ntAuthor, ntInitiator, recipients, "ORD_ITEM_CREATE_ERRAND", templateConfig, true);
 			}
 		}
 	}
@@ -445,6 +470,13 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				ordDocumentService.changePointStatus(point,ORDModel.P_STATUSES.valueOf(status));
 			}
 		}
+	}
+
+	public String getPointStatusTextByCode(String statusCode){
+		if (POINT_STATUSES.containsKey(ORDModel.P_STATUSES.valueOf(statusCode))) {
+			return (String) POINT_STATUSES.get(ORDModel.P_STATUSES.valueOf(statusCode));
+		}
+		return "";
 	}
 
 	public Boolean checkPointExecutedStatus(String sPointRef){

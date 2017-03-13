@@ -98,13 +98,15 @@ public class ErrandsExecutionStatePolicy implements NodeServicePolicies.OnUpdate
 
             for (NodeRef errand : childErrands) {
                 String errandStatus = (String) nodeService.getProperty(errand, StatemachineModel.PROP_STATUS);
-                if (statuses.contains(errandStatus)) {
-                    errandsCountByStatus.put(errandStatus, errandsCountByStatus.get(errandStatus) + 1);
-                }
-                inProcess = inProcess || (!stateMachineService.isDraft(errand) && !stateMachineService.isFinal(errand));
-                isAnyExecuted = isAnyExecuted || errandStatus.equals(executedStatus);
-                if (!stateMachineService.isFinal(errand)) {
-                    allFinal = false;
+                if (errandStatus != null) {
+                    if (statuses.contains(errandStatus)) {
+                        errandsCountByStatus.put(errandStatus, errandsCountByStatus.get(errandStatus) + 1);
+                    }
+                    inProcess = inProcess || (!stateMachineService.isDraft(errand) && !stateMachineService.isFinal(errand));
+                    isAnyExecuted = isAnyExecuted || errandStatus.equals(executedStatus);
+                    if (!stateMachineService.isFinal(errand)) {
+                        allFinal = false;
+                    }
                 }
             }
             executionState = String.valueOf(EDSDocumentService.EXECUTION_STATE.computeState(allFinal, isAnyExecuted, inProcess));
