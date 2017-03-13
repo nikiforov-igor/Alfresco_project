@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>document-attachments-preview</shortname>
+    <description>
+        Shows document attachments in previewer.
+    </description>
+    <url>/lecm/components/document/attachments/preview?inclBaseDoc={inclBaseDoc}</url>
+</webscript>

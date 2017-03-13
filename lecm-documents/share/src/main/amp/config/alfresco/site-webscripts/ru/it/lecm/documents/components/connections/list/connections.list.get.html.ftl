@@ -6,13 +6,14 @@
 	<script type="text/javascript">
 		function hideButton() {
             if(location.hash != "#expanded") {
-                YAHOO.util.Dom.setStyle(this, 'display', 'none');
+                YAHOO.util.Dom.addClass(this, 'hidden');
             }
         }
         YAHOO.util.Event.onAvailable("${el}-action-collapse", hideButton);
 	</script>
 
-	<div class="metadata-form">
+	<div class="panel-header">
+		<div class="panel-title">${msg("label.title")}</div>
 		<div class="lecm-dashlet-actions">
         	<a id="${el}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
     	</div>

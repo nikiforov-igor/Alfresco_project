@@ -1,10 +1,3 @@
-<@markup id="js">
-    <@script type="text/javascript" src="${url.context}/res/scripts/components/document-members.js"></@script>
-</@>
-<@markup id="css">
-    <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-members-list.css" />
-</@>
-
 <@markup id="html">
     <#if members??>
         <#assign aDateTime = .now>
@@ -16,13 +9,13 @@
         var documentMembersComponent = null;
     </script>
 
-    <div id="${el}" class="widget-bordered-panel">
-        <div class="document-components-panel">
+    <div id="${el}" class="widget-bordered-panel members-panel">
+        <div id="${el}-wide-view" class="document-components-panel">
             <h2 id="${el}-heading" class="dark">
             ${msg("heading")}
                 <span class="alfresco-twister-actions">
-	            <a id="${el}-action-expand" href="javascript:void(0);" onclick="documentMembersComponent.onExpand()"
-                   class="expand"
+	            <a id="${el}-action-expand" href="javascript:void(0);"
+                   class="expand members-expand"
                    title="${msg("label.expand")}">&nbsp</a>
 	         </span>
             </h2>
@@ -58,23 +51,52 @@
                 </#if>
             </div>
 
-            <script type="text/javascript">//<![CDATA[
-            (function () {
-                function init() {
-                    if (documentMembersComponent == null) {
-                        documentMembersComponent = new LogicECM.DocumentMembers("${el}").setOptions(
-                                {
-                                    nodeRef: "${nodeRef}",
-                                    title: "${msg('heading')}"
-                                }).setMessages(${messages});
-                    }
-                }
-
-                YAHOO.util.Event.onContentReady("${el}", init, true);
-            })();
-            //]]>
-            </script>
         </div>
+        <div id="${el}-short-view" class="document-components-panel short-view hidden">
+        <span class="alfresco-twister-actions">
+            <a href="javascript:void(0);" class="expand members-expand" title="${msg("label.expand")}">&nbsp</a>
+        </span>
+            <div id="${el}-formContainer" class="right-block-content">
+            <span class="yui-button yui-push-button">
+               <span class="first-child">
+                  <button type="button" title="${msg('heading')}"></button>
+               </span>
+            </span>
+            </div>
+        </div>
+    <script type="text/javascript">//<![CDATA[
+    (function () {
+        function init() {
+            LogicECM.module.Base.Util.loadResources([
+                    'scripts/components/document-members.js'
+                ], [
+                   'css/components/document-members-list.css',
+                    'css/components/document-members.css'
+                ], create);
+        }
+
+        function create() {
+            if (documentMembersComponent == null) {
+                documentMembersComponent = new LogicECM.DocumentMembers("${el}").setOptions(
+                        {
+                            nodeRef: "${nodeRef}",
+                            title: "${msg('heading')}"
+                        }).setMessages(${messages});
+            }
+        }
+
+        YAHOO.util.Event.onContentReady("${el}", init, true);
+
+        LogicECM.services = LogicECM.services || {};
+        if (LogicECM.services.documentViewPreferences) {
+            var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
+            if (shortView) {
+                Dom.addClass("${el}-wide-view", "hidden");
+                Dom.removeClass("${el}-short-view", "hidden");
+            }
+        }
+    })();
+    //]]></script>
     </div>
     </#if>
 </@>
