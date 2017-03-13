@@ -39,11 +39,15 @@
 					<show id="lecmSignAspects:signingDate" for-mode="view"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
+                    <show id="lecm-review-ts:review-table-assoc"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label="Атрибуты" /> <!-- tab1 -->
                     <set id="approvalTab" appearance="" label="Согласование"/>
                     <set id="answers" appearance="" label="Ответы" />
+
+                    <set id="execution-tab" label-id="tab.label.execution"/>
+                    <set id="review" parent="execution-tab" appearance="title" label-id="label.review"/>
 
                     <field id="lecm-document:regnum" set="common"/>
                     <field id="lecm-document-aspects:reg-data-date" set="common"/>
@@ -162,6 +166,20 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-eds-documents/edit-executor-script.js</control-param>
                             <control-param name="scriptLoadedFireAction">editExecutorEditFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                    <field set="review" id="lecm-review-ts:review-table-assoc">
+                        <control template="/ru/it/lecm/workflow/review/controls/review-list-datagrid-control.ftl">
+                            <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
+                            <control-param name="datagridFormId">datagrid</control-param>
+                            <control-param name="isTableSortable">false</control-param>
+                            <control-param name="refreshAfterCreate">true</control-param>
+                            <control-param name="editable">true</control-param>
+                            <control-param name="forceEditable">true</control-param>
+                            <control-param name="showCreateBtn">false</control-param>
+                            <control-param name="allowCreate">false</control-param>
+                            <control-param name="allowEdit">false</control-param>
+                            <control-param name="allowDelete">false</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -728,6 +746,7 @@
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-eds-document:executor-assoc"/>
+                    <show id="lecm-review-ts:review-table-assoc"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecmApproveAspects:approvalFolderRef" label="Согласование"/>
