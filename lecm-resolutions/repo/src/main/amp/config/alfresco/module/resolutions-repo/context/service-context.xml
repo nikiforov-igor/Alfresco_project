@@ -163,6 +163,7 @@
         <property name="nodeService" ref="nodeService"/>
         <property name="stateMachineService" ref="stateMachineHelper"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+        <property name="documentMembersService" ref="documentMembersService"/>
     </bean>
 
     <bean id="resolutionBaseDocumentPolicy" class="ru.it.lecm.resolutions.policy.ResolutionBaseDocumentPolicy"

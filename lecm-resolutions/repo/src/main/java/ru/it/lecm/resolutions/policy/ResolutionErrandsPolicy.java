@@ -6,12 +6,17 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+import ru.it.lecm.documents.beans.DocumentMembersService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.resolutions.api.ResolutionsService;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,6 +30,7 @@ public class ResolutionErrandsPolicy {
     private NodeService nodeService;
     private StateMachineServiceBean stateMachineService;
     private LecmPermissionService lecmPermissionService;
+    private DocumentMembersService documentMembersService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -44,6 +50,10 @@ public class ResolutionErrandsPolicy {
 
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
         this.lecmPermissionService = lecmPermissionService;
+    }
+
+    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+        this.documentMembersService = documentMembersService;
     }
 
     final public void init() {
@@ -78,6 +88,14 @@ public class ResolutionErrandsPolicy {
             if (coexecutors != null) {
                 for (AssociationRef assoc: coexecutors) {
                     stateMachineService.grandDynamicRoleForEmployee(document, assoc.getTargetRef(), "RESOLUTION_CHILD_ERRANDS_CO_EXECUTOR");
+                }
+            }
+
+            //Добавление создателя резолюции в участники дочернего поручения
+            List<AssociationRef> resolutionCreatorsAssoc = nodeService.getTargetAssocs(document, DocumentService.ASSOC_AUTHOR);
+            if (resolutionCreatorsAssoc != null) {
+                for (AssociationRef resolutionCreator: resolutionCreatorsAssoc) {
+                    documentMembersService.addMemberWithoutCheckPermission(errand, resolutionCreator.getTargetRef(), new HashMap<QName, Serializable>());
                 }
             }
         }
