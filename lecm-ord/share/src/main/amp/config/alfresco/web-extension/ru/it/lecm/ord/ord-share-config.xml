@@ -824,6 +824,11 @@
                     <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="bottom"/>
 
+                    <field id="lecm-ord-table-structure:item-content">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-document:indexTableRow" mandatory="true" read-only="true"/>
                     <field id="lecm-ord-table-structure:report-required"  set="bottom">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
@@ -946,6 +951,11 @@
                 <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                 <set id="bottom"/>
 
+                <field id="lecm-ord-table-structure:item-content">
+                    <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                        <control-param name="rows">4</control-param>
+                    </control>
+                </field>
                 <field id="lecm-document:indexTableRow" mandatory="true"/>
                 <field id="lecm-ord-table-structure:report-required" set="bottom">
                     <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
