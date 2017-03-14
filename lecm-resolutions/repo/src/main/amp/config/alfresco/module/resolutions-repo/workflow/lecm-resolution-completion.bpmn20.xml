@@ -27,9 +27,9 @@
 
 			                    var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
 			                    if (childErrands) {
+			                        var currentUser = orgstructure.getCurrentEmployee();
 			                        childErrands.forEach(function (errand) {
-                                        errand.properties["lecm-errands:cancellation-signal"] = true;
-                                        errand.save();
+			                            errands.sendCancelSignal(errand.nodeRef.toString(), completionReason, currentUser.nodeRef.toString());
                                     });
 			                    }
 
