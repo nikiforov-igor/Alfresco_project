@@ -183,4 +183,26 @@
             </list>
         </property>
     </bean>
+    <bean id="FilterByResolutionsCloserProcessor" class="ru.it.lecm.resolutions.processors.FilterByResolutionsCloserProcessor" parent="searchQueryBaseProccesor">
+        <property name="id" value="FILTER_BY_RESOLUTIONS_CLOSER"/>
+    </bean>
+    <bean id="resolutions.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
+          reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
+          dataSourcePolicy,reportDescriptorPolicy">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/reports/state_execute_resolutions.xml</value>
+            </list>
+        </property>
+        <property name="xmlImportListener" ref="resolutions.reportsDeployer"/>
+    </bean>
+    <bean id="resolutions.reportsDeployer" parent="reportsDeployer">
+        <property name="reportsForDeploy">
+            <list>
+                <value>state_execute_resolutions</value>
+            </list>
+        </property>
+    </bean>
 </beans>
