@@ -82,10 +82,20 @@
 				</property>
 				<property name="lecm-ord:real-end-date">
 					<type>d:date</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
 				</property>
 				<!--Дата перехода в статус на исполнении-->
 				<property name="lecm-ord:transition-to-on-execution-date">
 					<type>d:date</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
 				</property>
 				<property name="lecm-ord:signers-assoc-ref">
 					<type>d:text</type>

@@ -14,6 +14,54 @@
                 <property name="lecm-regnum:template-comment">Шаблон для номера поручения, созданного на основании сущности</property>
                 <property name="lecm-regnum:template-service-id">ERRAND_ON_BASIS_NUMBER</property>
             </item>
+            <item name="cm:Номер поручения на основании Входящего" type="lecm-regnum:template">
+                <property name="cm:name">Номер поручения на основании Входящего</property>
+                <property name="lecm-regnum:template-string">ВХ-{doc.attribute('lecm-errands:additional-doc-number').substring(0, doc.attribute('lecm-errands:additional-doc-number').length() - 3)}-{doc.attribute("lecm-errands:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для номера поручения, созданного на основании Входящего</property>
+                <property name="lecm-regnum:template-service-id">ERRAND_ON_INCOMING_BASIS_NUMBER</property>
+            </item>
+            <item name="cm:Номер поручения на основании Внутреннего" type="lecm-regnum:template">
+                <property name="cm:name">Номер поручения на основании Внутреннего</property>
+                <property name="lecm-regnum:template-string">ВН-{doc.attribute('lecm-errands:additional-doc-number').substring(0, doc.attribute('lecm-errands:additional-doc-number').length() - 3)}-{doc.attribute("lecm-errands:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для номера поручения, созданного на основании Внутреннего</property>
+                <property name="lecm-regnum:template-service-id">ERRAND_ON_INTERNAL_BASIS_NUMBER</property>
+            </item>
+            <item name="cm:Номер поручения на основании Исходящего" type="lecm-regnum:template">
+                <property name="cm:name">Номер поручения на основании Исходящего</property>
+                <property name="lecm-regnum:template-string">ИСХ-{doc.attribute('lecm-errands:additional-doc-number').substring(0, doc.attribute('lecm-errands:additional-doc-number').length() - 3)}-{doc.attribute("lecm-errands:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для номера поручения, созданного на основании Исходящего</property>
+                <property name="lecm-regnum:template-service-id">ERRAND_ON_OUTGOING_BASIS_NUMBER</property>
+            </item>
+            <item name="cm:Номер поручения на основании НД" type="lecm-regnum:template">
+                <property name="cm:name">Номер поручения на основании НД</property>
+                <property name="lecm-regnum:template-string">НД-{doc.attribute('lecm-errands:additional-doc-number').substring(0, doc.attribute('lecm-errands:additional-doc-number').length() - 3)}-{doc.attribute("lecm-errands:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для номера поручения, созданного на основании НД</property>
+                <property name="lecm-regnum:template-service-id">ERRAND_ON_ND_BASIS_NUMBER</property>
+            </item>
+            <item name="cm:Номер поручения на основании ОРД" type="lecm-regnum:template">
+                <property name="cm:name">Номер поручения на основании ОРД</property>
+                <property name="lecm-regnum:template-string">РД-{doc.attribute('lecm-errands:additional-doc-number').substring(0, doc.attribute('lecm-errands:additional-doc-number').length() - 3)}-{doc.attribute("lecm-errands:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для номера поручения, созданного на основании ОРД</property>
+                <property name="lecm-regnum:template-service-id">ERRAND_ON_ORD_BASIS_NUMBER</property>
+            </item>
+            <item name="cm:Номер поручения на основании Протокола" type="lecm-regnum:template">
+                <property name="cm:name">Номер поручения на основании Протокола</property>
+                <property name="lecm-regnum:template-string">П-{doc.attribute('lecm-errands:additional-doc-number').substring(0, doc.attribute('lecm-errands:additional-doc-number').length() - 3)}-{doc.attribute("lecm-errands:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для номера поручения, созданного на основании Протокола</property>
+                <property name="lecm-regnum:template-service-id">ERRAND_ON_PROTOCOL_BASIS_NUMBER</property>
+            </item>
+            <item name="cm:Номер поручения на основании Договора" type="lecm-regnum:template">
+                <property name="cm:name">Номер поручения на основании Договора</property>
+                <property name="lecm-regnum:template-string">Д-{doc.attribute('lecm-errands:additional-doc-number').substring(0, doc.attribute('lecm-errands:additional-doc-number').length() - 3)}-{doc.attribute("lecm-errands:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для номера поручения, созданного на основании Договора</property>
+                <property name="lecm-regnum:template-service-id">ERRAND_ON_CONTRACT_BASIS_NUMBER</property>
+            </item>
+            <item name="cm:Номер поручения на основании Документа к договору" type="lecm-regnum:template">
+                <property name="cm:name">Номер поручения на основании Документа к договору</property>
+                <property name="lecm-regnum:template-string">ДД-{doc.attribute('lecm-errands:additional-doc-number').substring(0, doc.attribute('lecm-errands:additional-doc-number').length() - 3)}-{doc.attribute("lecm-errands:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для номера поручения, созданного на основании Документа к договору</property>
+                <property name="lecm-regnum:template-service-id">ERRAND_ON_CONTRACT_DOCUMENT_BASIS_NUMBER</property>
+            </item>
         </items>
     </item>
 </items>

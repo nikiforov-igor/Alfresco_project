@@ -53,19 +53,40 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             onReady: function DocumentAttachments_onReady() {
                 var id = this.newId ? this.newId : this.id;
 
-                //Делегируем все нажатия на элементы с классом attachments-expand
-                YAHOO.util.Event.delegate('Share', 'click', this.onExpand, '.attachments-expand', this, true);
+                var expandButton = Dom.getElementsByClassName('attachments-expand');
+                Event.addListener(expandButton, 'click', this.onExpand, this, true);
 
                 Alfresco.util.createTwister(id  + "-heading", "DocumentAttachments");
 
 	            if (this.options.showAfterReady) {
 		            this.onExpand();
 	            }
+
+	            LogicECM.services = LogicECM.services || {};
+                if(LogicECM.services.documentViewPreferences) {
+                    var lastCustomPanelViewTitle = this.getLastCustomPanelView();
+                    if (lastCustomPanelViewTitle == this.getTitle() && this.isSplitPanel()) {
+                        this.onExpand();
+                    }
+                }
             },
 
 	        onExpand: function DocumentAttachments_onLinkClick() {
-                // Load the form
-                Alfresco.util.Ajax.request(
+                LogicECM.services = LogicECM.services || {};
+                if (LogicECM.services.documentViewPreferences) {
+                    if (LogicECM.services.documentViewPreferences.getIsDocAttachmentsInPreview()) {
+                        this.expandPreview();
+                    } else {
+                        this.expandList();
+                    }
+                } else {
+                    this.expandList();
+                }
+
+            },
+
+            expandList: function DocumentAttachments_expandList() {
+                Alfresco.util.Ajax.jsonGet(
                     {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/attachments-list",
                         dataObj: {
@@ -77,6 +98,38 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             fn:function(response){
                                 var text = response.serverResponse.responseText;
                                 this.expandView(text);
+
+                                LogicECM.services = LogicECM.services || {};
+                                if (LogicECM.services.documentViewPreferences) {
+                                    LogicECM.services.documentViewPreferences.setIsDocAttachmentsInPreview(false);
+                                }
+                            },
+                            scope: this
+                        },
+                        failureMessage: this.msg("message.failure"),
+                        scope: this,
+                        execScripts: true
+                    });
+            },
+
+            expandPreview: function DocumetntAttachemnts_expandPreview () {
+                Alfresco.util.Ajax.jsonGet(
+                    {
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/attachments/preview",
+                        dataObj: {
+                            nodeRef: this.options.nodeRef,
+                            htmlid: this.id + Alfresco.util.generateDomId(),
+                            inclBaseDoc: !!this.options.baseDocAssocName
+                        },
+                        successCallback: {
+                            fn:function(response){
+                                var text = response.serverResponse.responseText;
+                                this.expandView(text);
+
+                                LogicECM.services = LogicECM.services || {};
+                                if (LogicECM.services.documentViewPreferences) {
+                                    LogicECM.services.documentViewPreferences.setIsDocAttachmentsInPreview(true);
+                                }
                             },
                             scope: this
                         },
@@ -88,7 +141,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 	        onAttachmentsUpdate: function DocumentAttachments_onAttachmentsUpdate(layer, args) {
                 var newId = Alfresco.util.generateDomId();
-		        Alfresco.util.Ajax.request(
+		        Alfresco.util.Ajax.jsonGet(
 			        {
 				        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/document-attachments",
 				        dataObj: {

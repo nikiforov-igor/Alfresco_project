@@ -7,6 +7,7 @@
 		<property name="configs">
 			<list>
 				<value>classpath:alfresco/web-extension/ru/it/lecm/errands/errands-share-config-custom.xml</value>
+				<value>classpath:alfresco/web-extension/ru/it/lecm/errands/controls.xml</value>
 			</list>
 		</property>
 	</bean>

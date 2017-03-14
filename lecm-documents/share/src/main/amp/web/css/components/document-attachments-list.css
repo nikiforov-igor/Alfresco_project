@@ -1,16 +1,19 @@
+.attachments-list-container {
+	margin: 0 1em;
+}
+
 .attachment-list {
 	clear: both;
-	margin-left: 10px;
 }
 
 .attachment-list .category-title {
 	width: 100%;
-    padding: 0 .4em .4em;
+    padding: 0 0 .4em 0;
 }
 
 .attachment-list .category-title .category-name {
 	text-align: left;
-	font: 20px Arial;
+	font: 16px Arial;
 	font-weight: bold;
 	text-decoration: none;
 	color: #666;
@@ -200,7 +203,7 @@ body .attachment-list tr.yui-dt-highlighted
 
 .attachment-list .documents h3.filename
 {
-	font-size: 139%;
+	font-size: 16px;
 	font-weight: normal;
 	padding-bottom: 0.2em;
 	padding-left: 20px;
@@ -597,4 +600,13 @@ body .attachment-list tr.yui-dt-highlighted
 {
 	padding-bottom:2em;
 	width: 12em;
+}
+
+/* show previewer button */
+.lecm-dashlet-actions .show-previewer
+{
+	background: url("../../images/lecm-documents/show-preview-16.png") no-repeat no-repeat;
+	padding-right: 16px;
+	font-size: 16px;
+	margin-left: 10px;
 }

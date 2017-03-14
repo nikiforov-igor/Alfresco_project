@@ -1,12 +1,3 @@
-<@markup id="css" >
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-connections-list.css" />
-</@>
-<@markup id="js">
-	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-connections-list.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-connections.js"></@script>
-</@>
-
-
 <@markup id="html">
 	<!-- Parameters and libs -->
     <#assign aDateTime = .now>
@@ -17,13 +8,13 @@
 		//TODO:Переписать
 		var documentConnectionsComponent = null;
 	</script>
-        <div id="${el}" class="widget-bordered-panel">
-            <div class="document-metadata-header document-components-panel">
+        <div id="${el}" class="widget-bordered-panel connections-panel">
+            <div id="${el}-wide-view" class="document-metadata-header document-components-panel">
                 <h2 id="${el}-heading" class="dark">
                 ${msg("heading")}
                     <span class="alfresco-twister-actions">
-	            <a id="${el}-action-expand" href="javascript:void(0);" onclick="" class="expand" title="${msg("label.expand")}">&nbsp</a>
-	        </span>
+                        <a id="${el}-action-expand" href="javascript:void(0);" class="expand connections-expand" title="${msg("label.expand")}">&nbsp</a>
+                    </span>
                 </h2>
 
                 <div id="${el}-formContainer">
@@ -60,10 +51,34 @@
                         </li>
                     </#if>
                 </div>
+            </div>
 
-                <script type="text/javascript">//<![CDATA[
+            <div id="${el}-short-view" class="document-components-panel short-view hidden">
+                <span class="alfresco-twister-actions">
+                    <a href="javascript:void(0);" class="expand connections-expand" title="${msg("label.expand")}">&nbsp</a>
+                </span>
+                <div id="${el}-formContainer" class="right-block-content">
+                    <span class="yui-button yui-push-button">
+                       <span class="first-child">
+                          <button type="button" title="${msg('heading')}"></button>
+                       </span>
+                    </span>
+                </div>
+            </div>
+            <script type="text/javascript">//<![CDATA[
                 (function(){
                     function init() {
+                        LogicECM.module.Base.Util.loadResources([
+                                'scripts/lecm-base/components/lecm-datagrid.js',
+                                'scripts/components/document-connections.js',
+                                'scripts/components/document-connections-list.js'
+                            ], [
+                                'css/components/document-connections-list.css',
+                                'css/components/document-connections.css'
+                            ], create);
+                    }
+
+                    function create() {
                         Alfresco.util.createTwister("${el}-heading", "DocumentConnections");
 
                         if (documentConnectionsComponent == null) {
@@ -76,9 +91,18 @@
                     }
 
                     YAHOO.util.Event.onContentReady("${el}", init, true);
+
+                    LogicECM.services = LogicECM.services || {};
+                    if (LogicECM.services.documentViewPreferences) {
+                        var shortView = LogicECM.services.documentViewPreferences.getShowRightPartShort();
+                        if (shortView) {
+                            Dom.addClass("${el}-wide-view", "hidden");
+                            Dom.removeClass("${el}-short-view", "hidden");
+                        }
+                    }
                 })();
-                //]]></script>
-            </div>
+            //]]></script>
         </div>
+
 	</#if>
 </@>

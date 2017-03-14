@@ -10735,7 +10735,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                     </node>
                     <node>
                         <type>endEvent</type>
-                        <name>Не отправлен</name>
+                        <name>Отправка не требуется</name>
                         <nodeRef>workspace://SpacesStore/1a4d56f2-98a6-4c44-9fb0-8659e295f28a</nodeRef>
                         <properties/>
                         <aspects/>

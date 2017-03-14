@@ -331,51 +331,75 @@
                     <show id="lecm-statemachine:status" force="true"/>                                                  <!-- Статус -->
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа" >
+                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="endpointMany">true</control-param>
                         </control>
+                    </field>
+                    <field id="lecm-document:doc-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl">
+                            <control-param name="forceEditable">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-eds-document:executor-assoc">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document:author-assoc" mandatory="false" label-id="label.eds.assoc.compiler">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecmSignAspects:signerEmployeeAssoc">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-ord:controller-assoc">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document:title" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-ord:confirm-completion" label-id="ord.confirm.completion.lable">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
+                            <control-param name="options">true|Да,false|Нет</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-ord:transition-to-on-execution-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                    </field>
+                    <field id="lecm-eds-document:execution-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                    </field>
+                    <field id="lecm-ord:real-end-date" >
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                    </field>
+                    <field id="lecm-eds-aspect:execution-state" label-id="ord.execution.lable">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl"/>
+                    </field>
+                    <field id="lecm-review-ts:doc-review-state" label-id="ord.review.lable">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl"/>
                     </field>
                     <field id="lecm-statemachine:status"  mandatory="false">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory"
-                                        event="keyup"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
                         </constraint-handlers>
                         <control template="/ru/it/lecm/documents/controls/select-status-control.ftl">
                             <control-param name="docType">lecm-ord:document</control-param>
                             <control-param name="withEmpty">true</control-param>
                             <control-param name="valuesDelimiter">,</control-param>
                         </control>
-                    </field>
-                    <field id="lecm-document:doc-date" >
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
-                    </field>
-                    <field id="lecm-ord:confirm-completion">
-                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
-                            <control-param name="options">true|Да,false|Нет</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-ord:transition-to-on-execution-date" >
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
-                    </field>
-                    <field id="lecm-ord:real-end-date" >
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
-                    </field>
-                    <field id="lecm-document:author-assoc" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory"
-                                        event="keyup"/>
-                        </constraint-handlers>
-                    </field>
-                    <field id="lecm-document:title" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory"
-                                        event="keyup"/>
-                        </constraint-handlers>
-                    </field>
-                    <field id="lecm-eds-document:execution-date" >
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
                 </appearance>
             </form>
@@ -663,7 +687,75 @@
                     </field>
                 </appearance>
             </form>
-
+            <form id="doc-right-parts">
+                <field-visibility>
+                    <show id="fake:document-actions"/>
+                    <show id="fake:document-metadata"/>
+                    <show id="fake:document-attachments"/>
+                    <show id="fake:document-workflows"/>
+                    <show id="fake:document-connections"/>
+                    <show id="fake:document-members"/>
+                    <show id="fake:document-tags"/>
+                    <show id="fake:document-history"/>
+                    <show id="fake:document-forms"/>
+                    <show id="fake:comments"/>
+                </field-visibility>
+                <appearance>
+                    <field id="fake:document-actions">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/dashlets/document-actions</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-metadata">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-meta</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-attachments">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-attachments</control-param>
+                            <!--<control-param name="baseDocAssocName"></control-param>-->
+                        </control>
+                    </field>
+                    <field id="fake:document-workflows">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-workflows</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-connections">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/connections</control-param>
+                            <!--<control-param name="excludeType"></control-param>-->
+                        </control>
+                    </field>
+                    <field id="fake:document-members">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-members</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-tags">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-tags</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-history">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-history</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-forms">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/forms</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:comments">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/comments</control-param>
+                            <control-param name="activityType">document</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 

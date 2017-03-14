@@ -47,7 +47,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 if (expandEl != null) {
                     expandEl.onclick = this.onExpand.bind(this);
                 }
-
             },
 
             onExpand: function () {

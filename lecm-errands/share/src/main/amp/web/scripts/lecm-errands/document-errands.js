@@ -43,6 +43,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
             onReady: function DocumentTasks_onReady() {
                 YAHOO.util.Event.delegate('Share', 'click', this.onExpand, '.errands-expand', this, true);
+                var lastCustomPanelViewTitle = this.getLastCustomPanelView();
+                if (lastCustomPanelViewTitle == this.getTitle() && this.isSplitPanel()) {
+                    this.onExpand();
+                }
             },
 
             onExpand: function (anchor) {
