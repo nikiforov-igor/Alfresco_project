@@ -32,8 +32,18 @@ var LECMIncomingActions = {
                             return resolution.properties["lecm-statemachine:status"] == "Завершено";
                         });
                     }
+                    var allReviewReviewed = true;
+                    var reviewTable = document.associations['lecm-review-ts:review-table-assoc'];
+                    if (reviewTable && reviewTable.length) {
+                        var reviewRecords = documentTables.getTableDataRows(reviewTable[0].nodeRef.toString());
+                        if (reviewRecords) {
+                            allReviewReviewed = reviewRecords.every(function (record) {
+                                return record.properties["lecm-review-ts:review-state"] == "REVIEWED";
+                            });
+                        }
+                    }
 
-                    if (reviewState == "COMPLETE" && allExecutedErrands && allExecutedResolutions) {
+                    if (allReviewReviewed && allExecutedErrands && allExecutedResolutions) {
                         lecmPermission.pushAuthentication();
                         lecmPermission.setRunAsUserSystem();
                         document.properties["lecm-incoming:auto-transition-to-execute"] = true;
