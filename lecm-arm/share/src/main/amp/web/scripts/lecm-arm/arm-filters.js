@@ -187,7 +187,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
             },
 
             _checkMultiplicity: function (filter, value) {
-                return filter.multiple || !filter.multiple && value.length == 1;
+                return filter.multiple || value.length == 1;
             },
 
             _getIndexByCode: function (filterCode, filtersArray) {
