@@ -2398,6 +2398,7 @@ div.currentValueDisplay,
 
 .yui-skin-lecmDarkTheme.alfresco-share .alfresco-header-Header .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
     padding: 1px 5px 5px;
+	max-width: none;
 }
 .yui-skin-lecmDarkTheme.alfresco-share .alfresco-header-Header .alf-search-box .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
     padding: 3px 2px 0;
