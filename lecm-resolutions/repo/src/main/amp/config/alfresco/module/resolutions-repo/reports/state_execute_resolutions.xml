@@ -8,7 +8,7 @@
         <property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
         <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
         <property name="lecm-rpeditor:reportQuerySort">
-            <![CDATA[base_doc_execute_date|ASC,base_doc_noderef|DESC,execute_dateASC]]></property>
+            <![CDATA[base_doc_noderef|DESC,base_doc_execute_date|ASC,execute_date|ASC]]></property>
         <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
         <property name="lecm-rpeditor:loadColumnsFromSQL"><![CDATA[false]]></property>
         <property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-resolutions:document]]></property>
@@ -217,7 +217,7 @@
                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{{lecm-resolutions:base-document-assoc/lecm-eds-document:execution-date}]]></property>
+                            <![CDATA[{lecm-resolutions:base-document-assoc/lecm-eds-document:execution-date}]]></property>
                         <property name="cm:name"><![CDATA[Дата исполнения документа основания]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[base_doc_execute_date]]></property>
@@ -311,7 +311,7 @@
                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[lecm-orgstr:employee]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{{FILTER_BY_RESOLUTIONS_CLOSER({signers:[#value]})}}]]></property>
+                            <![CDATA[{{FILTER_BY_RESOLUTIONS_CLOSER({closers:[#value]})}}]]></property>
                         <property name="cm:name"><![CDATA[Завершающий]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[40]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[closer_emploe]]></property>
