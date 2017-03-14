@@ -2416,6 +2416,7 @@ div.currentValueDisplay,
 
 .yui-skin-lecmTheme.alfresco-share .alfresco-header-Header .alfresco-menus-AlfMenuBarPopup__text-wrapper {
 	padding-bottom: 3px;
+	max-width: none;
 }
 
 .alfresco-share .logo {
