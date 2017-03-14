@@ -90,8 +90,8 @@
                 },
                 successCallback: {
                     fn: function (response) {
-                        if (response && response.nodeRef) {
-                            draw(response.nodeRef);
+                        if (response && response.json.nodeRef) {
+                            draw(response.json.nodeRef);
                         }
                     },
                     scope: this
