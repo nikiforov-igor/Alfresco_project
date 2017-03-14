@@ -34,10 +34,21 @@
     <#assign multiply=false/>
 </#if>
 
+<#assign endpointMany = multiply>
+<#if field.control.params.endpointMany??>
+    <#assign endpointMany = (field.control.params.endpointMany == "true")>
+</#if>
+
 <#if field.control.params.docType??>
     <#assign docType=field.control.params.docType/>
 <#else>
     <#assign docType=''/>
+</#if>
+
+<#if field.control.params.nameSuffix??>
+    <#assign nameSuffix=field.control.params.nameSuffix>
+<#else>
+    <#assign nameSuffix="">
 </#if>
 
 <#assign controlId = fieldHtmlId + "-cntrl">
@@ -93,11 +104,10 @@
             <@formLib.renderFieldHelp field=field />
         </div>
         <div class="value-div">
-            <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
-            <input id="${controlId}" type="hidden" name="${field.name}" value="${fieldValue?string}"/>
+            <input id="${fieldHtmlId}" type="hidden" name="${field.name}${nameSuffix}" value="${fieldValue?string}"/>
 
-            <select id="${fieldHtmlId}" name="-" <#if multiply>multiple="multiple" </#if> tabindex="0"
-                    onchange="javascript:Alfresco.util.updateMultiSelectListValue('${fieldHtmlId}', '${controlId}-added', <#if field.mandatory>true<#else>false</#if>);"
+            <select id="${controlId}" name="-" <#if endpointMany>multiple="multiple" </#if> tabindex="0"
+                    onchange="javascript:Alfresco.util.updateMultiSelectListValue('${controlId}', '${fieldHtmlId}', <#if field.mandatory>true<#else>false</#if>);"
                     <#if field.description??>title="${field.description}"</#if>
                     <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
                     <#if field.control.params.style??>style="${field.control.params.style}"</#if>
@@ -127,6 +137,9 @@
             mandatory: ${field.mandatory?string},
         <#if form.arguments??>
             currentNodeRef: "${form.arguments.itemId}",
+        </#if>
+        <#if field.control.params.valuesDelimiter??>
+            valuesDelimiter: "${field.control.params.valuesDelimiter}",
         </#if>
             destination: "${args.destination!""}"
         }).setMessages(${messages});
