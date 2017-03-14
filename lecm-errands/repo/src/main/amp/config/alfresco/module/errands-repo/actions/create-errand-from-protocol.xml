@@ -2,7 +2,7 @@
 <items updateMode="CreateOrUpdate">
     <item name="cm:Создание поручения из Протокола" type="lecm-group-actions:script-action">
         <property name="lecm-group-actions:expression">
-            <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></property>
+            <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR") AND doc.attr("lecm-document-aspects:reg-data-date")!=null]]></property>
         <property name="cm:name"><![CDATA[Создание поручения из Протокола]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[Зарегистрирован;На исполнении]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
