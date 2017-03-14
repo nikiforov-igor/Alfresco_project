@@ -1,18 +1,6 @@
-<@markup id="css" >
-   <@link rel="stylesheet" type="text/css" href="${url.context}/res/jquery/fullcalendar/fullcalendar.css" group="calendar"/>
-   <@link rel="stylesheet" type="text/css" href="${url.context}/res/jquery/fullcalendar/fullcalendar.css" group="calendar"/>
-   <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-events/viewmore.css" group="calendar"/>
-   <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-events/formbubble.css" group="calendar"/>
-</@>
-
 <@markup id="js">
    <#-- JavaScript Dependencies -->
    <@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js" group="calendar"/>
-   <@script type="text/javascript" src="${url.context}/res/jquery/jquery-1.6.2.js" group="calendar"/>
-   <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/third-party/jquery-ui-1.10.3.custom.js" group="calendar"/>
-   <@script type="text/javascript" src="${url.context}/res/jquery/fullcalendar/fullcalendar.js" group="calendar"/>
-   <@script type="text/javascript" src="${url.context}/res/scripts/lecm-events/jquery.formbubble.js" group="calendar"/>
-   <@script type="text/javascript" src="${url.context}/res/scripts/lecm-events/fullcalendar.viewmore.js" group="calendar"/>
    <@script type="text/javascript" src="${url.context}/res/scripts/lecm-events/lecm-calendar-view.js" group="calendar"/>
    <@script type="text/javascript" src="${url.context}/res/scripts/lecm-events/lecm-calendar-view-fullCalendar.js" group="calendar"/>
 </@>
