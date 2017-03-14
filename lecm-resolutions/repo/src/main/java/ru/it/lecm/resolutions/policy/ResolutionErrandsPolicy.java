@@ -95,7 +95,7 @@ public class ResolutionErrandsPolicy {
             List<AssociationRef> resolutionCreatorsAssoc = nodeService.getTargetAssocs(document, DocumentService.ASSOC_AUTHOR);
             if (resolutionCreatorsAssoc != null) {
                 for (AssociationRef resolutionCreator: resolutionCreatorsAssoc) {
-                    documentMembersService.addMemberWithoutCheckPermission(errand, resolutionCreator.getTargetRef(), new HashMap<QName, Serializable>());
+                    documentMembersService.addMemberWithoutCheckPermission(errand, resolutionCreator.getTargetRef(), new HashMap<QName, Serializable>(), true);
                 }
             }
         }
