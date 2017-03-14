@@ -11560,6 +11560,7 @@ if (doc) {
                                                                 <value><![CDATA[var doc = bpm_package.children[0];
 if (doc) {
   doc.properties["lecm-ord:transition-to-on-execution-date"] = new Date();
+  doc.save();
 }]]></value>
                                                             </property>
                                                         </properties>
