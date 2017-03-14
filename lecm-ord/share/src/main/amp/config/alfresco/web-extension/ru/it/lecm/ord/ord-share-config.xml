@@ -348,10 +348,11 @@
                             <control-param name="valuesDelimiter">,</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:doc-date" set="ord-document-search-common-set" >
+                    <field id="lecm-document:doc-date" set="ord-document-search-common-set">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl">
                             <control-param name="forceEditable">true</control-param>
                         </control>
+                    </field>
                     <field id="lecm-document:doc-date" >
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
