@@ -1,5 +1,6 @@
 .history-grid {
     margin-left: 0.5%;
+    padding: 0 1em;
 }
 .yui-panel .history-grid {
     margin: 0 5px;
@@ -21,4 +22,8 @@
 }
 .datagrid .grid.yui-dt .yui-dt-data .yui-dt-rec.yui-dt-first.yui-dt-even .yui-dt-first .yui-dt-liner {
     white-space: nowrap;
+}
+
+.history-panel .short-view span.first-child {
+    background: url('../../images/lecm-documents/components/history-16.png') no-repeat 5px 5px;
 }

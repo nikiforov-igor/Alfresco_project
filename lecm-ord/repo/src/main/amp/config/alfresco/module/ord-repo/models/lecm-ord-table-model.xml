@@ -88,6 +88,7 @@
                 <property name="lecm-ord-table-structure:limitation-date-radio">
                     <type>d:text</type>
                     <mandatory>false</mandatory>
+                    <default>DATE</default>
                     <constraints>
                         <constraint ref="lecm-ord-table-structure:limitation-date-radio-const"/>
                     </constraints>

@@ -8,6 +8,7 @@
 			<list>
 				<value>classpath:alfresco/web-extension/ru/it/lecm/meetings/meetings-share-config-custom.xml</value>
 				<value>classpath:alfresco/web-extension/ru/it/lecm/meetings/protocol-share-config-custom.xml</value>
+				<value>classpath:alfresco/web-extension/ru/it/lecm/meetings/controls.xml</value>
 			</list>
 		</property>
 	</bean>

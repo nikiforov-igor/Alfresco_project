@@ -584,6 +584,88 @@
                     </field>
                 </appearance>
             </form>
+            <form id="doc-right-parts">
+                <field-visibility>
+                    <show id="fake:document-actions"/>
+                    <show id="fake:base-doc-actions"/>
+                    <show id="fake:document-metadata"/>
+                    <show id="fake:document-attachments"/>
+                    <show id="fake:document-errands"/>
+                    <show id="fake:document-workflows"/>
+                    <show id="fake:document-connections"/>
+                    <show id="fake:document-members"/>
+                    <show id="fake:document-tags"/>
+                    <show id="fake:document-history"/>
+                    <show id="fake:document-forms"/>
+                    <show id="fake:comments"/>
+                </field-visibility>
+                <appearance>
+                    <field id="fake:document-actions">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/dashlets/document-actions</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:base-doc-actions">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">lecm/components/dashlets/base-doc-actions</control-param>
+                            <control-param name="baseDocAssocName">lecm-errands:additional-document-assoc</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-metadata">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-meta</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-attachments">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-attachments</control-param>
+                            <control-param name="baseDocAssocName">lecm-errands:additional-document-assoc</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-errands">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-errands</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-workflows">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-workflows</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-connections">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/connections</control-param>
+                            <control-param name="excludeType">lecm-errands:document</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-members">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-members</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-tags">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-tags</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-history">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-history</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-forms">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/forms</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:comments">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/comments</control-param>
+                            <control-param name="activityType">document</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 
@@ -2544,7 +2626,7 @@
                         <control template="/ru/it/lecm/documents/controls/workflow/format-packageItems-document.ftl">
                             <control-param name="substituteString">
                                 <![CDATA[
-					                <a href='/{~SHARE_CONTEXT}/view-metadata?nodeRef={lecm-errands:executor-assoc/nodeRef}'>
+					                <a href='/{~SHARE_CONTEXT}/page/view-metadata?nodeRef={lecm-errands:executor-assoc/nodeRef}'>
 					                    {lecm-errands:executor-assoc/lecm-orgstr:employee-short-name} {lecm-errands:executor-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}
 					                </a>
 				                ]]>

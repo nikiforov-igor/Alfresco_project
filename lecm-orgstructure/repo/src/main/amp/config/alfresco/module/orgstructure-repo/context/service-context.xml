@@ -192,7 +192,7 @@
     </bean>
 
     <bean id="brOrgstructureEngineerInitiazer" class="ru.it.lecm.orgstructure.beans.BROrgstructureEngineerInitializerBean"
-          parent="businessRolesInitiazer" depends-on="serviceOrgstructure">
+          parent="businessRolesInitiazer" depends-on="serviceOrgstructure, orgstucturePersonEmployeeRelationsPolicy">
         <property name="businessRoles">
             <list>
                 <value>#{ORGANIZATION_ENGINEER}</value>

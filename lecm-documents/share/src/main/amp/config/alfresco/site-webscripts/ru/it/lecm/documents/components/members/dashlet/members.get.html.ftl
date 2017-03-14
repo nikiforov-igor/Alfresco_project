@@ -33,7 +33,7 @@
 			if (!semanticEl){
 				var dashletAction = YAHOO.util.Dom.get("${id}-action-experts-doc");
 				if (dashletAction){
-					YAHOO.util.Dom.setStyle(dashletAction, 'display', 'none');
+					YAHOO.util.Dom.addClass(dashletAction, 'hidden');
 				}
 			}
 		}

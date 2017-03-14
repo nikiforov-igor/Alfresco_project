@@ -5,6 +5,7 @@
 function main() {
     AlfrescoUtil.param("nodeRef");
 	var inclBaseDoc = ('' + AlfrescoUtil.param("inclBaseDoc", "false")) == "true";
+    model.inclBaseDoc = inclBaseDoc;
 
 	model.hasViewListPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
 	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);

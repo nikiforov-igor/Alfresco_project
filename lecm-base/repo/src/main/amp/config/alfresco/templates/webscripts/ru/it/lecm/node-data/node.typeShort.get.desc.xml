@@ -1,0 +1,11 @@
+<webscript>
+    <shortname>Short Type of Node</shortname>
+    <description>
+        Returns node.typeShort
+    </description>
+    <url>/lecm/node/typeShort?nodeRef={nodeRef}</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+    <lifecycle>internal</lifecycle>
+</webscript>
