@@ -176,6 +176,7 @@
         <property name="type" value="lecm-resolutions:document"/>
         <property name="assocBaseDocumentType" value="lecm-resolutions:base-document-assoc"/>
     </bean>
+    
     <bean id="resolutions.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
         <property name="configs">
             <list>
