@@ -5568,7 +5568,7 @@
                                                 <property name="lecm-arm:is-select-by-activeTasks">
                                                     <![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'Исполнен' OR @lecm\-statemachine\:status:'Отменён']]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'Работа завершена']]></property>
                                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                                 <property name="lecm-arm:is-aggregation-node">
                                                     <![CDATA[false]]></property>
