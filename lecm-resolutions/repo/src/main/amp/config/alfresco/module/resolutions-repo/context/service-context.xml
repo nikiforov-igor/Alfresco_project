@@ -176,7 +176,7 @@
         <property name="type" value="lecm-resolutions:document"/>
         <property name="assocBaseDocumentType" value="lecm-resolutions:base-document-assoc"/>
     </bean>
-
+    
     <bean id="resolutions.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
         <property name="configs">
             <list>
@@ -195,6 +195,7 @@
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/reports/state_execute_resolutions.xml</value>
+                <value>alfresco/module/${artifactId}/reports/execute-resolution.xml</value>
             </list>
         </property>
         <property name="xmlImportListener" ref="resolutions.reportsDeployer"/>
@@ -203,6 +204,7 @@
         <property name="reportsForDeploy">
             <list>
                 <value>state_execute_resolutions</value>
+                <value>execute-resolution</value>
             </list>
         </property>
     </bean>
