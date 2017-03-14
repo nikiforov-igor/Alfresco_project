@@ -131,8 +131,8 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
                         /*Проверим, что сохраненный фильтр присутствует среди фильтров на узле (учитываем, что фильтр мог быть удален из АРМа)*/
                         for (var j = 0; j < this.filtersFromPref.length; j++) {
-                            var indexInAvailable = this._getIndexByCode(this.filtersFromPref[j].code, this.availableFilters);
-                            if (indexInAvailable >= 0) {
+                            var availableFilter = this._getFilterByCode(this.filtersFromPref[j].code, this.availableFilters);
+                            if (availableFilter && this._checkMultiplicity(availableFilter, this.filtersFromPref[j].value)) {
                                 this.currentFilters.push(this.filtersFromPref[j]);
                             }
                         }
@@ -184,6 +184,10 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                 }
 
                 this.updateCurrentFiltersForm(true)
+            },
+
+            _checkMultiplicity: function (filter, value) {
+                return filter.multiple || value.length == 1;
             },
 
             _getIndexByCode: function (filterCode, filtersArray) {
