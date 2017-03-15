@@ -5,6 +5,13 @@
     * Alfresco Slingshot aliases
     */
    // Uses jQuery and FullCalendar functions for FullCalendar functions and YUI ones for Alfresco data
+   
+   // Восстановим версию jQuery, имеющую все плагины
+   if(!$.fullCalendar) {
+		$.noConflict();
+		$ = $ || jQuery; // Возможен вариант, когда предыдущей версии нету, восстановим что есть
+	}
+   
    var fc = $.fullCalendar,
        parseISO8601 = fc.parseISO8601,
        $html = Alfresco.util.encodeHTML,

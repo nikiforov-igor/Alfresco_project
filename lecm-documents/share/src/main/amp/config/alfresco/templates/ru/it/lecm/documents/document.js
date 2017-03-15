@@ -20,6 +20,20 @@ function main() {
         model.hasStatemachine = false;
     }
 
+    url = '/lecm/node/typeShort?nodeRef=' + page.url.args.nodeRef;
+    result = remote.connect("alfresco").get(url);
+    if (result.status == 200) {
+        var obj = eval('(' + result +')');
+        model.documentType = obj.typeShort;
+    }
+
+    url = '/lecm/document/default-expand-view?docType=' + model.documentType;
+    result = remote.connect("alfresco").get(url);
+    if (result.status == 200) {
+        var obj = eval('(' + result +')');
+        model.defaultExpandComponent = obj.defaultExpandView;
+    }
+
     model.dependencies = DocumentUtils.getDependencies("LecmDocumentDetails");
 }
 

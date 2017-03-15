@@ -2,7 +2,7 @@
 
 <#assign aDateTime = .now>
 <#assign controlId = fieldHtmlId + "-cntrl">
-<#assign containerId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
+<#assign containerId = fieldHtmlId + "-container-" + (aDateTime?iso_utc)?replace(":", "_")>
 <#assign objectId = field.name?replace("-", "_")>
 
 <#assign allowCreate = true/>

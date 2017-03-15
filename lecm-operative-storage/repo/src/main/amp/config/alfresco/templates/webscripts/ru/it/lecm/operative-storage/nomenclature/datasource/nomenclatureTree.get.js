@@ -30,10 +30,11 @@ if (parentNode != null) {
 			language: "fts-alfresco"
 		});
 
-	function getCountOpenCases(qnamePath) {
+	function getCountOpenCases(qnamePath, isRecursive) {
+		var qnamePathResult = isRecursive ? qnamePath + '/' : qnamePath;
 		return searchCounter.query({
 			language: 'fts-alfresco',
-			query: 'PATH:"/' + qnamePath + '//*" AND (+TYPE:"lecm-os:nomenclature-case") AND (@lecm\\-os:nomenclature\\-case\\-status:"OPEN")'
+			query: 'PATH:"/' + qnamePathResult + '/*" AND (+TYPE:"lecm-os:nomenclature-case") AND (@lecm\\-os:nomenclature\\-case\\-status:"OPEN")'
 		});
 	}
 
@@ -49,14 +50,14 @@ if (parentNode != null) {
 						language: "fts-alfresco"
 					});
 				for each(var unitSection in unitSections) {
-					if (getCountOpenCases(unitSection.getQnamePath()) > 0) {
+					if (getCountOpenCases(unitSection.getQnamePath(), false) > 0) {
 						isLeaf = true;
 						break;
 					}
 				}
 			}
 
-			if (getCountOpenCases(item.getQnamePath()) > 0) {
+			if (getCountOpenCases(item.getQnamePath(), true) > 0) {
 				branch.push({
 					label: (nodeSubstituteString != null && nodeSubstituteString.length > 0) ? substitude.formatNodeTitle(item, nodeSubstituteString) : substitude.getObjectDescription(item),
 					title: substitude.formatNodeTitle(item, nodeTitleSubstituteString),

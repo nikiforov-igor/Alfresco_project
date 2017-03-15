@@ -1,5 +1,4 @@
 <#import "/org/alfresco/components/form/form.lib.ftl" as formLib />
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-create-form.css" />
 
 <#assign formId=args.htmlid?js_string?html + "-form"/>
 <#assign formUI><#if args.formUI??>${args.formUI}<#else>true</#if></#assign>
@@ -14,7 +13,7 @@
         <#if item.kind == "set">
             <#assign setCount=setCount+1/>
             <#if setCount % 2 == 0>
-                <div class="${formId}-panel hidden1">
+                <div class="${formId}-panel hidden">
                     <@formLib.renderSet set=item/>
                 </div>
             <#else>
@@ -24,7 +23,7 @@
             <@formLib.renderField field=form.fields[item.id] />
         </#if>
     </#list>
-    <div class="form-buttons ${formId}-panel hidden1">
+    <div class="form-buttons ${formId}-panel hidden">
         <span id="${formId}-save-draft" class="yui-button yui-push-button">
             <span class="first-child">
                 <button type="button">${msg("label.save-draft")}</button>
@@ -61,8 +60,7 @@
                 expandButton.parentNode.removeChild(expandButton);
                 Dom.insertBefore(saveDraftButton, okButton);
                 Bubbling.fire("addSubmitElement", saveDraftYUIButton);
-
-                Dom.addClass("${formId}", 'hidden-disable');
+                Dom.removeClass(Selector.query(".${formId}-panel"), 'hidden');
             };
             var saveDraft = function() {
                 var hidden = Dom.getElementBy(function(el) {

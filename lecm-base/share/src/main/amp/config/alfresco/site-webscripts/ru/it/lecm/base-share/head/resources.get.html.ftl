@@ -13,6 +13,13 @@
 <@markup id="resources">
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/font-awesome.css" group="lecm-head-resources"/>
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/base-styles.css" group="lecm-head-resources"/>
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-calendar/jquery-ui-1.10.3.custom.css" group="lecm-head-resources"/>
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-calendar/jquery-ui-timepicker-addon.css" group="lecm-head-resources"/>
+
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/jquery/fullcalendar/fullcalendar.css" group="lecm-head-resources"/>
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/jquery/fullcalendar/fullcalendar.css" group="lecm-head-resources"/>
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-events/viewmore.css" group="lecm-head-resources"/>
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-events/formbubble.css" group="lecm-head-resources"/>
 
 	<#--
 	 сделаем метод Bubbling.unsubscribe более безопасным
@@ -56,6 +63,13 @@
 	<@script type="text/javascript" src="${url.context}/res/jquery/jquery-1.6.2.js" group="lecm-head-resources"/>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/third-party/jquery.inputmask.js" group="lecm-head-resources"/>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/third-party/jquery.inputmask.date.extensions.js" group="lecm-head-resources"/>
+	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/third-party/jquery-ui-1.10.3.custom.js" group="lecm-head-resources"/>
+	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/third-party/jquery-ui-timepicker-addon.js" group="lecm-head-resources"/>
+	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/third-party/jquery-ui-sliderAccess.js" group="lecm-head-resources"/>
+	<@script type="text/javascript" src="${url.context}/res/jquery/fullcalendar/fullcalendar.js" group="lecm-head-resources"/>
+	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-events/jquery.formbubble.js" group="lecm-head-resources"/>
+	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-events/fullcalendar.viewmore.js" group="lecm-head-resources"/>
+
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base64.js" group="lecm-head-resources"/>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js" group="lecm-head-resources"/>
 	<#-- Исправление баги alfresco: при некоторых условиях во время добавления тега страница перезагружается -->

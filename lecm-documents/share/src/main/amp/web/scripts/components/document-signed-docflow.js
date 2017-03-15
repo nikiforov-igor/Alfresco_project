@@ -32,7 +32,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	 * @constructor
 	 */
 	LogicECM.DocumentSignedDocflow = function DocumentSignedDocflow_constructor(htmlId) {
-		LogicECM.DocumentMembers.superclass.constructor.call(this, htmlId);
+		LogicECM.DocumentSignedDocflow.superclass.constructor.call(this, htmlId);
 
 		return this;
 	};

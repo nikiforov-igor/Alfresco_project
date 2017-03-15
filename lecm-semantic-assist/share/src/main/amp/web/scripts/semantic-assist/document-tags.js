@@ -49,12 +49,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @method onReady
              */
             onReady: function DocumentTags_onReady() {
-                var id = this.newId ? this.newId : this.id;
 
-				var expandEl = Dom.get(id + "-action-cloud");
-	            if (expandEl != null) {
-					expandEl.onclick = this.onExpand.bind(this);
-	            }
 
 				var semanticPanelEl = Dom.get("cloud-term-ref");
 				if (semanticPanelEl != null) {

@@ -27,3 +27,7 @@
 .yui-panel-container.yui-dialog .control .label-div {
 	text-align: right;
 }
+
+.metadata-panel .short-view span.first-child {
+	background: url('../../images/lecm-documents/components/metadata-16.png') no-repeat 5px 5px;
+}

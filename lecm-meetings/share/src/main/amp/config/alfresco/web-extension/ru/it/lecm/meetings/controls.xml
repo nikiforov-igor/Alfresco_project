@@ -1,0 +1,11 @@
+<alfresco-config>
+    <config>
+        <field-types>
+            <field-type id="fake" localName="Фиктивное поле">
+                <control id="meeting-agenda" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Повестка">
+                    <param id="uri" localName="Адрес веб-скрипта">/lecm/components/meetings/meeting-agenda</param>
+                </control>
+            </field-type>
+        </field-types>
+    </config>
+</alfresco-config>
