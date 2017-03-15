@@ -1103,7 +1103,8 @@
 					<field id="lecm-meetings-ts:coreporter-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="items">employee,representative</control-param>
-							<control-param name="showAutocomplete">false</control-param>
+							<control-param name="showAutocomplete">true</control-param>
+							<control-param name="autocompleteDataSourceMethodPost">true</control-param>
 							<control-param name="dataSourceLogic">OR</control-param>
 							<control-param name="sortSelected">true</control-param>
 							<!-- lecm-orgstr:employee -->
@@ -1214,7 +1215,8 @@
 					<field id="lecm-meetings-ts:coreporter-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="items">employee,representative</control-param>
-							<control-param name="showAutocomplete">false</control-param>
+							<control-param name="showAutocomplete">true</control-param>
+							<control-param name="autocompleteDataSourceMethodPost">true</control-param>
 							<control-param name="dataSourceLogic">OR</control-param>
 							<control-param name="sortSelected">true</control-param>
 							<!-- lecm-orgstr:employee -->
@@ -1312,7 +1314,8 @@
 					<field id="lecm-meetings-ts:coreporter-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="items">employee,representative</control-param>
-							<control-param name="showAutocomplete">false</control-param>
+							<control-param name="showAutocomplete">true</control-param>
+							<control-param name="autocompleteDataSourceMethodPost">true</control-param>
 							<control-param name="dataSourceLogic">OR</control-param>
 							<control-param name="sortSelected">true</control-param>
 							<!-- lecm-orgstr:employee -->

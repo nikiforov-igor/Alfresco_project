@@ -233,23 +233,28 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
 
                 // Hide Calendar if we click anywhere in the document other than the calendar
-                Event.on(document, "click", function(e) {
-                    var inputFrom = Dom.get(this.id + "-date-from");
-                    var inputTo = Dom.get(this.id + "-date-to");
-                    var iconFrom = Dom.get(this.id + "-icon-from");
-                    var iconTo = Dom.get(this.id + "-icon-to");
-                    var dialogFrom = this.widgets.calendarFrom.oDomContainer;
-                    var dialogTo = this.widgets.calendarTo.oDomContainer;
+                Event.on(document, "click", function (e) {
                     var el = Event.getTarget(e);
-
-                    if (el && el != dialogFrom && !Dom.isAncestor(dialogFrom, el) && el != inputFrom && el != iconFrom) {
-                        if (Dom.getStyle(dialogFrom, "display") != "none") {
-                            this.widgets.calendarFrom.hide();
+                    if (el) {
+                        if (this.widgets.calendarFrom) {
+                            var dialogFrom = this.widgets.calendarFrom.oDomContainer;
+                            var inputFrom = Dom.get(this.id + "-date-from");
+                            var iconFrom = Dom.get(this.id + "-icon-from");
+                            if (el != dialogFrom && !Dom.isAncestor(dialogFrom, el) && el != inputFrom && el != iconFrom) {
+                                if (Dom.getStyle(dialogFrom, "display") != "none") {
+                                    this.widgets.calendarFrom.hide();
+                                }
+                            }
                         }
-                    }
-                    if (el && el != dialogTo && !Dom.isAncestor(dialogTo, el) && el != inputTo && el != iconTo) {
-                        if (Dom.getStyle(dialogTo, "display") != "none") {
-                            this.widgets.calendarTo.hide();
+                        if (this.widgets.calendarTo) {
+                            var dialogTo = this.widgets.calendarTo.oDomContainer;
+                            var inputTo = Dom.get(this.id + "-date-to");
+                            var iconTo = Dom.get(this.id + "-icon-to");
+                            if (el != dialogTo && !Dom.isAncestor(dialogTo, el) && el != inputTo && el != iconTo) {
+                                if (Dom.getStyle(dialogTo, "display") != "none") {
+                                    this.widgets.calendarTo.hide();
+                                }
+                            }
                         }
                     }
                 }, this, true);
@@ -259,7 +264,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this.widgets.calendarFrom.selectEvent.subscribe(this.onChangeDates, this, true);
                 Event.addListener(this.id + "-date-from", "keyup", this._handleFieldChangeFrom, this, true);
                 Event.addListener(this.id + "-icon-from", "click", this._showPickerFrom, this, true);
-                Event.on(this.id + "-date-from", "change", this.onChangeDates, this, true);
                 YAHOO.Bubbling.fire("registerValidationHandler",
                     {
                         fieldId: this.id + "-date-from",
@@ -271,13 +275,17 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this.widgets.calendarTo.selectEvent.subscribe(this.onChangeDates, this, true);
                 Event.addListener(this.id + "-date-to", "keyup", this._handleFieldChangeTo, this, true);
                 Event.addListener(this.id + "-icon-to", "click", this._showPickerTo, this, true);
-                Event.on(this.id + "-date-to", "change", this.onChangeDates, this, true);
                 YAHOO.Bubbling.fire("registerValidationHandler",
                     {
                         fieldId: this.id + "-date-to",
                         handler: Alfresco.forms.validation.validDateTime,
                         when: "keyup"
                     });
+
+                /*При навешивании маски ввода, Event.addListener(...,"change",...) глушится
+                где-то в недрах jQuery. Поэтому событие onChange навешиваем через jQuery*/
+                $("#" + this.id + "-date-from").change(this.onChangeDates.bind(this));
+                $("#" + this.id + "-date-to").change(this.onChangeDates.bind(this));
 
                 // render the calendar controls
                 this.widgets.calendarFrom.render();
