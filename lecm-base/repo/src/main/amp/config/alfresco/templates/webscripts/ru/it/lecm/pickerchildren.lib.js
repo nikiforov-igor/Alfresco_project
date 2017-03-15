@@ -23,14 +23,14 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 		showNotSelectable = getArg('showNotSelectableItems', isPost, itemParams),
 		showFolders = getArg('showFolders', isPost, itemParams),
 		docType = getArg('docType', isPost, itemParams),
-        useOnlyInSameOrg = ("true" == "" + getArg('onlyInSameOrg', isPost, itemParams)),
+        useOnlyInSameOrg = ("true" == getArg('onlyInSameOrg', isPost, itemParams)),
 		doNotCheck = (doNotCheckAccess == null || ("" + doNotCheckAccess) == "false") ?
-			("true" == "" + getArg('doNotCheckAccess', isPost, itemParams)) : doNotCheckAccess,
+			("true" == getArg('doNotCheckAccess', isPost, itemParams)) : doNotCheckAccess,
 		sortProp = getArg('sortProp', isPost, itemParams) ? getArg('sortProp', isPost, itemParams) : "cm:name",
 		additionalProperties = getArg('additionalProperties', isPost, itemParams),
 		argsPathRoot = getArg('pathRoot', isPost, itemParams),
 		argsPathNameSubstituteString = getArg('pathNameSubstituteString', isPost, itemParams),
-		argsUseObjectDescription = ("true" == "" + getArg('useObjectDescription', isPost, itemParams));
+		argsUseObjectDescription = ("true" == getArg('useObjectDescription', isPost, itemParams));
 	if (additionalProperties != null) {
 		additionalProperties = additionalProperties.split(',');
 	}
@@ -399,7 +399,7 @@ function getArg(argName, isPost, itemParams) {
 		return itemParams[argName];
 	} else if (isPost) {
 		// Получение аргумента для POST-запроса
-		return json.has(argName) ? json.get(argName) : null;
+		return json.has(argName) ? '' + json.get(argName) : null;
 	} else {
 		// Получение аргумента для GET-запроса
 		return args[argName];
