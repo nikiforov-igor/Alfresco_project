@@ -381,17 +381,14 @@ LogicECM.ORD = LogicECM.ORD || {};
                         if (response && response.json.formatString) {
                             var data = response.json.formatString.split(",");
                             var args = {};
-                            var executeDate = data[0];
-                            var subject = data[1];
-                            var controller = data[2];
-                            if (executeDate) {
-                                args["prop_lecm-ord-table-structure_execution-date"] = executeDate;
+                            if (data[0]) {
+                                args["prop_lecm-ord-table-structure_execution-date"] = data[0];
                             }
-                            if (subject) {
-                                args["assoc_lecm-ord-table-structure_subject-assoc"] = subject;
+                            if (data[1]) {
+                                args["assoc_lecm-ord-table-structure_subject-assoc"] =  data[1];
                             }
-                            if (controller) {
-                                args["assoc_lecm-ord-table-structure_controller-assoc"] = controller;
+                            if (data[2]) {
+                                args["assoc_lecm-ord-table-structure_controller-assoc"] = data[2];
                             }
                             var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                                 var addMsg = meta.addMessage;

@@ -47,24 +47,14 @@ LogicECM.ORD = LogicECM.ORD || {};
             var executeDateField = Dom.get(this.formId + "_prop_lecm-eds-document_execution-date");
             var subjectField = Dom.get(this.formId + "_assoc_lecm-document_subject-assoc");
             var controllerField = Dom.get(this.formId + "_assoc_lecm-ord_controller-assoc");
-            if (executeDateField) {
-                var executeDate = executeDateField.value;
-                if (executeDate) {
-                    args["prop_lecm-ord-table-structure_execution-date"] = new Date(executeDate)
-                }
+            if (executeDateField && executeDateField.value) {
+                args["prop_lecm-ord-table-structure_execution-date"] = new Date(executeDateField.value)
             }
-
-            if (subjectField) {
-                var subject = subjectField.value;
-                if (subject) {
-                    args["assoc_lecm-ord-table-structure_subject-assoc"] = subject;
-                }
+            if (subjectField && subjectField.value) {
+                args["assoc_lecm-ord-table-structure_subject-assoc"] = subjectField.value;
             }
-            if (controllerField) {
-                var controller = controllerField.value;
-                if (controller) {
-                    args["assoc_lecm-ord-table-structure_controller-assoc"] = controller;
-                }
+            if (controllerField && controllerField.value) {
+                args["assoc_lecm-ord-table-structure_controller-assoc"] = controllerField.value;
             }
             var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                 var addMsg = meta.addMessage;
