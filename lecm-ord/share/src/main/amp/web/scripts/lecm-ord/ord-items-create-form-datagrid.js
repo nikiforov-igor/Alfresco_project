@@ -35,6 +35,7 @@ LogicECM.ORD = LogicECM.ORD || {};
     };
 
     YAHOO.lang.extend(LogicECM.ORD.PointsCreateFormDatagrid, LogicECM.module.Base.AssociationDataGrid);
+
     YAHOO.lang.augmentObject(LogicECM.ORD.PointsCreateFormDatagrid.prototype, {
 
         showCreateDialog: function (meta, callback, successMessage) {

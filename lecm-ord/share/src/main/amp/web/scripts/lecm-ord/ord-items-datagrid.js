@@ -240,6 +240,7 @@ LogicECM.ORD = LogicECM.ORD || {};
     };
 
     YAHOO.lang.extend(LogicECM.ORD.PointsDatagrid, LogicECM.module.DocumentTableDataGrid);
+
     YAHOO.lang.augmentObject(LogicECM.ORD.PointsDatagrid.prototype, {
 
         onExpand: function (record, isExpandAutomatically) {
@@ -350,7 +351,6 @@ LogicECM.ORD = LogicECM.ORD || {};
             if (this.editDialogOpening) return;
             this.editDialogOpening = true;
             var me = this;
-            var args = {};
             // Intercept before dialog show
             Alfresco.util.Ajax.jsonPost({
                 url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
