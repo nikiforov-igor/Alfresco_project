@@ -11504,7 +11504,7 @@ if (doc) {
                                 if (errandStatus == "Исполнено" || errandStatus == "Отменено") {
                                     var pointStatusCode = "";
                                   	if (errandStatus == "Исполнено") {
-                                        pointStatusCode = "PERFORMANCE_STATUS";
+                                        pointStatusCode = "EXECUTED_STATUS";
                                     } else if (errandStatus == "Отменено") {
                                         pointStatusCode = "CANCELED_STATUS";
                                     }
@@ -11555,8 +11555,11 @@ if (doc) {
         var logText = documentScript.wrapperLink(doc, "ОРД");
         logText += " автоматически переведен в статус «Работа завершена» в связи с завершением работы по документу";
       	businessJournal.log(doc.nodeRef.toString(), "COMPLETE_DOCUMENT", logText, []);
+        lecmPermission.pushAuthentication();
+        lecmPermission.setRunAsUserSystem();
         doc.properties["lecm-ord:transit-to-work-completed"] = true;
         doc.save();
+        lecmPermission.popAuthentication();
       }
       if (ordControllerAssoc && ordControllerAssoc.length) {
         notifications.sendNotificationFromCurrentUser({
