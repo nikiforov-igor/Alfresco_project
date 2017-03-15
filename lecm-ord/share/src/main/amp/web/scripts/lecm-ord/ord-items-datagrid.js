@@ -240,7 +240,6 @@ LogicECM.ORD = LogicECM.ORD || {};
     };
 
     YAHOO.lang.extend(LogicECM.ORD.PointsDatagrid, LogicECM.module.DocumentTableDataGrid);
-    YAHOO.lang.extend(LogicECM.ORD.PointsDatagrid, LogicECM.module.Base.DataGrid);
     YAHOO.lang.augmentObject(LogicECM.ORD.PointsDatagrid.prototype, {
 
         onExpand: function (record, isExpandAutomatically) {
@@ -351,20 +350,20 @@ LogicECM.ORD = LogicECM.ORD || {};
             if (this.editDialogOpening) return;
             this.editDialogOpening = true;
             var me = this;
-            var args;
             // Intercept before dialog show
             Alfresco.util.Ajax.jsonPost({
                 url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                 dataObj: {
                     nodeRef: this.tableDataNodeRef,
-                    substituteString: "{..lecm-ord-table-structure:items-assoc/lecm-eds-document:execution-date}"
+                    substituteString: "{..lecm-ord-table-structure:items-assoc/lecm-eds-document:execution-date},{..lecm-ord-table-structure:items-assoc/lecm-document:subject-assoc-ref},{..lecm-ord-table-structure:items-assoc/lecm-ord:controller-assoc-ref}"
                 },
                 successCallback: {
                     fn: function (response) {
                         if (response && response.json.formatString) {
                             var data = response.json.formatString.split(",");
-                            var executeDate = data[0];
-                            args = {"prop_lecm-ord-table-structure_execution-date":new Date(executeDate)};
+                            var executeDate = new Date(data[0]);
+                            var subject = data[1];
+                            var controller = data[2]
                             var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                                 var addMsg = meta.addMessage;
                                 var contId = p_dialog.id + "-form-container";
@@ -383,7 +382,11 @@ LogicECM.ORD = LogicECM.ORD || {};
                                 itemId: meta.itemType,
                                 destination: meta.nodeRef,
                                 mode: "create",
-                                args: JSON.stringify(args),
+                                args: JSON.stringify({
+                                    "prop_lecm-ord-table-structure_execution-date": executeDate,
+                                    "assoc_lecm-ord-table-structure_subject-assoc": subject,
+                                    "assoc_lecm-ord-table-structure_controller-assoc": controller
+                                }),
                                 formId: meta.createFormId != null ? meta.createFormId : "",
                                 submitType: "json",
                                 showCancelButton: true,
