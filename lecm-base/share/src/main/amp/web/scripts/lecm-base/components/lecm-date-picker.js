@@ -595,6 +595,7 @@
 						fn.call(input, "readonly", "");
 						if (args[1].readonly) {
 							this.widgets.calendar.hide();
+							Dom.addClass(this.id + '-icon', 'icon-readonly');
 						}
 					}
 				},
