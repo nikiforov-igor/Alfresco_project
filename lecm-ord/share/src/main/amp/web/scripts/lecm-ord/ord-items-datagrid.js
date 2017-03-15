@@ -570,7 +570,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                                         } else {
                                             columnContent += $links($html(data.displayValue));
                                         }
-                                        columnContent = LogicECM.module.Base.Util.getCroppedItem(columnContent);
+                                        columnContent = '<div class="cropped-item" title="' + columnContent + '"><div class="ci-value-div"><span>' + columnContent + '</span></div></div>';
                                         break;
 
                                     case "boolean":
