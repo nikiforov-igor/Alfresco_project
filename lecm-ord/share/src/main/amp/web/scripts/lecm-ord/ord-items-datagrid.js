@@ -362,9 +362,19 @@ LogicECM.ORD = LogicECM.ORD || {};
                     fn: function (response) {
                         if (response && response.json.formatString) {
                             var data = response.json.formatString.split(",");
+                            var args = {};
                             var executeDate = data[0];
                             var subject = data[1];
-                            var controller = data[2]
+                            var controller = data[2];
+                            if (executeDate) {
+                                args["prop_lecm-ord-table-structure_execution-date"] = executeDate;
+                            }
+                            if (subject) {
+                                args["assoc_lecm-ord-table-structure_subject-assoc"] = subject;
+                            }
+                            if (controller) {
+                                args["assoc_lecm-ord-table-structure_controller-assoc"] = controller;
+                            }
                             var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                                 var addMsg = meta.addMessage;
                                 var contId = p_dialog.id + "-form-container";
@@ -383,11 +393,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                                 itemId: meta.itemType,
                                 destination: meta.nodeRef,
                                 mode: "create",
-                                args: JSON.stringify({
-                                    "prop_lecm-ord-table-structure_execution-date": executeDate?new Date(executeDate):"",
-                                    "assoc_lecm-ord-table-structure_subject-assoc": subject?subject:"",
-                                    "assoc_lecm-ord-table-structure_controller-assoc": controller?controller:""
-                                }),
+                                args: JSON.stringify(args),
                                 formId: meta.createFormId != null ? meta.createFormId : "",
                                 submitType: "json",
                                 showCancelButton: true,

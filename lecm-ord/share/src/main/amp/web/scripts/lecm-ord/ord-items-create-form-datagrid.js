@@ -42,6 +42,7 @@ LogicECM.ORD = LogicECM.ORD || {};
             if (this.editDialogOpening) return;
             this.editDialogOpening = true;
             var me = this;
+            var args = {};
             this.formId = this.id.substring(0, this.id.indexOf("_assoc"));
             var executeDateField = Dom.get(this.formId + "_prop_lecm-eds-document_execution-date");
             var subjectField = Dom.get(this.formId + "_assoc_lecm-document_subject-assoc");
@@ -50,11 +51,20 @@ LogicECM.ORD = LogicECM.ORD || {};
                 var executeDate = executeDateField.value;
             }
             var executeDate = executeDate ? new Date(executeDate) : null;
+            if (executeDate) {
+                args["prop_lecm-ord-table-structure_execution-date"] = executeDate;
+            }
             if (subjectField) {
                 var subject = subjectField.value;
+                if (subject) {
+                    args["assoc_lecm-ord-table-structure_subject-assoc"] = subject;
+                }
             }
             if (controllerField) {
                 var controller = controllerField.value;
+                if (controller) {
+                    args["assoc_lecm-ord-table-structure_controller-assoc"] = controller;
+                }
             }
             var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                 var addMsg = meta.addMessage;
@@ -72,11 +82,7 @@ LogicECM.ORD = LogicECM.ORD || {};
             var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
             var templateRequestParams = {
                 itemKind: "type",
-                args: JSON.stringify({
-                    "prop_lecm-ord-table-structure_execution-date": executeDate?executeDate:"",
-                    "assoc_lecm-ord-table-structure_subject-assoc": subject?subject:"",
-                    "assoc_lecm-ord-table-structure_controller-assoc": controller?controller:""
-                }),
+                args: JSON.stringify(args),
                 itemId: meta.itemType,
                 destination: meta.nodeRef,
                 mode: "create",
