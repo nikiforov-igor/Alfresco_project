@@ -6,7 +6,7 @@
         <property name="lecm-group-actions:statuses"><![CDATA[Направлен;Зарегистрирован;На исполнении]]></property>
         <property name="lecm-group-actions:type"><![CDATA[[lecm-incoming:document]]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
-        <property name="lecm-group-actions:expression"><![CDATA[user.currentUser().hasBusinessRole('RESOLUTION_CREATORS') OR user.currentUser().hasBusinessRole('RVZ')]]></property>
+        <property name="lecm-group-actions:expression"><![CDATA[doc.attr("lecm-document-aspects:reg-data-is-registered") AND (user.currentUser().hasBusinessRole('RESOLUTION_CREATORS') OR user.currentUser().hasBusinessRole('RVZ'))]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
         <property name="lecm-group-actions:script"><![CDATA[

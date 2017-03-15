@@ -7,9 +7,9 @@
         <property name="lecm-group-actions:type"><![CDATA[[lecm-errands:document]]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="lecm-group-actions:expression"><![CDATA[
-        (user.currentUser().hasBusinessRole('RESOLUTION_CREATORS')
-            OR user.currentUser().hasBusinessRole('RVZ'))
-            AND  ("Входящий документ" == doc.assocAttr("lecm-errands:base-assoc","lecm-document:doc-type")
+        doc.attr("lecm-document-aspects:reg-data-is-registered")
+            AND (user.currentUser().hasBusinessRole('RESOLUTION_CREATORS') OR user.currentUser().hasBusinessRole('RVZ'))
+            AND ("Входящий документ" == doc.assocAttr("lecm-errands:base-assoc","lecm-document:doc-type")
                 OR "Внутренний документ" == doc.assocAttr("lecm-errands:base-assoc","lecm-document:doc-type"))]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
