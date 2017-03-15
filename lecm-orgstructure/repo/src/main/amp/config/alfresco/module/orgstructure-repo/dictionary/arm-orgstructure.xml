@@ -11,7 +11,7 @@
                 <property name="cm:name"><![CDATA[Справочник организации]]></property>
                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                <property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
+                <property name="lecm-arm:types"><![CDATA[]]></property>
                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                 <property name="lecm-arm:search-query"><![CDATA[]]></property>
                 <items>
