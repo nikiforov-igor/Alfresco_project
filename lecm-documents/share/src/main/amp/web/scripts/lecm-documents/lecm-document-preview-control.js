@@ -36,6 +36,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                 itemId: "",
                 forTask: true,
                 selectedAttachmentNodeRef: "",
+                inclBaseDoc: false,
                 baseDocAssocName: null,
                 resizeable: false
             },
@@ -179,23 +180,67 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                             baseDocAssocName: this.options.baseDocAssocName
                         },
                         successCallback: {
-                            fn: function (response) {
-                                var result = response.json;
-                                if (result != null) {
-                                    if (this.attachmentsSelect) {
-                                        this.attachmentsList = {};
-                                        this.attachmentsSelect.innerHTML = "";
-
-                                        this.loadCategories(result.items);
-                                        this._processAttachments(result.items);
-                                    }
-                                    this.reloadAttachmentPreview();
-                                }
-                            },
+                            fn: this.onAttachmentsLoaded,
                             scope: this
                         }
                     });
                 }
+            },
+
+            onAttachmentsLoaded: function (response) {
+                var result = response.json;
+                if (result != null) {
+                    if (this.options.inclBaseDoc) {
+                        this.loadBaseDocAttachments(result.items);
+                    }
+                    else {
+                        this.afterAllAttachmentsLoaded(result.items);
+                    }
+                }
+            },
+
+            loadBaseDocAttachments: function (categories) {
+                Alfresco.util.Ajax.jsonGet({
+                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/document/data/doclistAttachments/documents/node/base-document-attachments/" + this.options.itemId.replace(":/", ""),
+                    successCallback: {
+                        fn: function (response) {
+                            var result = response.json;
+                            if (result != null) {
+
+                                var attachments = [];
+                                result.items.forEach(function (attachment) {
+                                    attachments.push({
+                                        locked: attachment.node.isLocked,
+                                        name: attachment.fileName,
+                                        nodeRef: attachment.nodeRef
+                                    });
+                                });
+
+                                categories.push({
+                                    attachments: attachments,
+                                    category: {
+                                        isReadOnly: true,
+                                        name: this.msg("label.category.baseDocAttachments"),
+                                        nodeRef: ""
+                                    }
+                                });
+                            }
+                            this.afterAllAttachmentsLoaded(categories);
+                        },
+                        scope: this
+                    }
+                });
+            },
+
+            afterAllAttachmentsLoaded: function (items) {
+                if (this.attachmentsSelect) {
+                    this.attachmentsList = {};
+                    this.attachmentsSelect.innerHTML = "";
+
+                    this.loadCategories(items);
+                    this._processAttachments(items);
+                }
+                this.reloadAttachmentPreview();
             },
 
             reloadAttachmentPreview: function () {
@@ -339,7 +384,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 
                 var me = this;
 
-                if(this.widgets.addAttachmentMenuButton) {
+                if (this.widgets.addAttachmentMenuButton) {
                     this.widgets.addAttachmentMenuButton.destroy();
                 }
 
@@ -354,7 +399,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                         addAttachmentActions.push({
                             value: item.category.nodeRef,
                             text: item.category.name,
-                            disabled: ((me.MODE !== me.MODE_EDIT && item.category.name === "Прочее") || (me.MODE === me.MODE_EDIT && item.category.isReadOnly)),
+                            disabled: (me.MODE === me.MODE_EDIT && item.category.isReadOnly),
                             onclick: {
                                 fn: me.attachmentActionAdd,
                                 scope: me,
@@ -379,7 +424,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                 }
             },
 
-            attachmentActionAdd: function(arg1, arg2, arg3) {
+            attachmentActionAdd: function (arg1, arg2, arg3) {
                 var silent = false;
                 if (arguments.length == 2) {
                     var name = arg2.name;
@@ -764,7 +809,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                         onFileUploadComplete: {
                             fn: function (obj) {
                                 setTimeout(function () {
-                                   if (obj.successful != null && obj.successful.length > 0) {
+                                    if (obj.successful != null && obj.successful.length > 0) {
                                         // TODO: Костыль, надо бы переписать логику
                                         me.selectedAttachment = {};
                                         me.selectedAttachment.nodeRef = obj.successful[0].nodeRef;

@@ -65,6 +65,7 @@
     function createControl() {
         var control = new LogicECM.module.Documents.DocumentPreviewControl("${el}").setMessages(${messages});
         control.setOptions({
+            inclBaseDoc:${inclBaseDoc?string("true", "false")},
             resizeable: true,
             itemId: "${nodeRef}",
             forTask: false

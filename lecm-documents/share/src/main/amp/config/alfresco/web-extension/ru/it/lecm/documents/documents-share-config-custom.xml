@@ -465,6 +465,13 @@
                 <action index="100" id="document-delete" icon="folder-delete" label="actions.link.delete" />
             </actionGroup>
 
+            <actionGroup id="document-attachment-preview">
+                <action index="100" id="document-upload-new-version" />
+                <action index="110" id="document-download"/>
+                <action index="120" id="document-delete"/>
+                <action index="130" id="document-view-content"/>
+                <action index="140" id="document-edit-properties"/>
+            </actionGroup>
         </actionGroups>
     </config>
 
