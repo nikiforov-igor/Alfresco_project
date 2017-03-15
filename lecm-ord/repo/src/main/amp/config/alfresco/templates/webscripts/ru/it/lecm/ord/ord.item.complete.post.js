@@ -38,18 +38,19 @@ if (itemCoexecutorsAssoc && itemCoexecutorsAssoc.length) {
 }
 var statusCode = "";
 if (completionOption == "CANCEL") {
-    reason = "Поручение отменено в связи с отменой работы по пункту Контролером пункта/Контролером ОРД ";
-    reason += documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]);
+    reason = "Поручение отменено в связи с отменой работы по пункту Контролером пункта/Контролером ОРД " + currentUser.properties["lecm-orgstr:employee-short-name"];
     errands.sendCancelSignal(errand.nodeRef.toString(), reason, currentUser.nodeRef.toString());
     statusCode = "CANCELED_BY_CONTROLLER_STATUS";
 } else if (completionOption == "EXECUTE") {
-    reason = "Поручение исполнено Контролером пункта/Контролером ОРД ";
-    reason += documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]);
+    reason = "Поручение исполнено Контролером пункта/Контролером ОРД " + currentUser.properties["lecm-orgstr:employee-short-name"];
     edsDocument.sendCompletionSignal(errand, reason, currentUser);
     statusCode = "EXECUTED_BY_CONTROLLER_STATUS";
-    item.properties["lecm-ord-table-structure:item-comment"] = comment;
-    item.save();
 }
+lecmPermission.pushAuthentication();
+lecmPermission.setRunAsUserSystem();
+item.properties["lecm-ord-table-structure:item-comment"] = comment;
+item.save();
+lecmPermission.popAuthentication();
 ordStatemachine.changePointStatus(item.nodeRef.toString(), statusCode);
 var status = ordStatemachine.getPointStatusTextByCode(statusCode);
 var content = item.properties["lecm-ord-table-structure:item-content"];

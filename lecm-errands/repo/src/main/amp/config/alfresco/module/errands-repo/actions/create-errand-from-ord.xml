@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items updateMode="CreateOrUpdate">
-    <item name="cm:Создание поручения из Внутреннего" type="lecm-group-actions:script-action">
+    <item name="cm:Создание поручения из ОРД" type="lecm-group-actions:script-action">
         <property name="lecm-group-actions:expression">
-            <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR") AND doc.attr("lecm-document-aspects:reg-data-date")!=null]]></property>
-        <property name="cm:name"><![CDATA[Создание поручения из Внутреннего]]></property>
-        <property name="lecm-group-actions:statuses"><![CDATA[Направлен]]></property>
+            <![CDATA[(((@edsGlobalSettingsService.isRegistrationCenralized() AND user.currentUser().hasBusinessRole("DA_REGISTRARS")) OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), 'DA_REGISTRAR_DYN')) OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_CONTROLLER_DYN") OR (doc.attr("lecm-statemachine:status") == "На исполнении" AND @reviewService.needReviewByCurrentUser(doc.getNodeRef()))) AND doc.attr("lecm-document-aspects:reg-data-date")!=null]]></property>
+        <property name="cm:name"><![CDATA[Создание поручения из ОРД]]></property>
+        <property name="lecm-group-actions:statuses"><![CDATA[Зарегистрирован;На исполнении]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
         <property name="lecm-group-actions:script"><![CDATA[if (document) {
@@ -34,7 +34,7 @@ function hashCode(str) {
 }]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="cm:title"><![CDATA[Создать поручение]]></property>
-        <property name="lecm-group-actions:type"><![CDATA[[lecm-internal:document]]]></property>
-        <property name="lecm-group-actions:availableForReader"><![CDATA[false]]></property>
+        <property name="lecm-group-actions:type"><![CDATA[[lecm-ord:document]]]></property>
+        <property name="lecm-group-actions:availableForReader"><![CDATA[true]]></property>
     </item>
 </items>

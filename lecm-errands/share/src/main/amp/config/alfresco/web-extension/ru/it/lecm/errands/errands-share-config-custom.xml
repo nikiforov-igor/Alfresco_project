@@ -32,10 +32,12 @@
             <form>
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
                 <field-visibility>
-                    <!-- Важное -->
-                    <show id="lecm-errands:is-important"/>
                     <!-- Статус -->
                     <show id="lecm-statemachine:status" force="true"/>
+                    <!-- Важное -->
+                    <show id="lecm-errands:is-important"/>
+                    <!-- ПРОСРОЧЕНО -->
+                    <show id="lecm-errands:is-expired"/>
                     <!-- Документ-основание -->
                     <show id="lecm-errands:base-assoc"/>
                     <!-- Основание -->
@@ -99,11 +101,14 @@
                     <set id="lineReports" parent="reports"/>
                     <set id="coexecutors-reports" parent="reports" appearance="title" label-id="title.errands.coexecutors-reports"/>
 
+                    <field id="lecm-statemachine:status" set="statuses">
+                        <control template="/ru/it/lecm/base-share/components/controls/status.ftl" />
+                    </field>
                     <field id="lecm-errands:is-important" set="statuses">
                         <control template="/ru/it/lecm/base-share/components/controls/important.ftl" />
                     </field>
-                    <field id="lecm-statemachine:status" set="statuses">
-                        <control template="/ru/it/lecm/base-share/components/controls/status.ftl" />
+                    <field id="lecm-errands:is-expired" set="statuses">
+                        <control template="/ru/it/lecm/errands/controls/expired.ftl"/>
                     </field>
                     <field id="lecm-errands:base-assoc" set="commonField">
                         <control>
