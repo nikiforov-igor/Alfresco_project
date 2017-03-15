@@ -38,13 +38,11 @@ if (itemCoexecutorsAssoc && itemCoexecutorsAssoc.length) {
 }
 var statusCode = "";
 if (completionOption == "CANCEL") {
-    reason = "Поручение отменено в связи с отменой работы по пункту Контролером пункта/Контролером ОРД ";
-    reason += documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]);
+    reason = "Поручение отменено в связи с отменой работы по пункту Контролером пункта/Контролером ОРД " + currentUser.properties["lecm-orgstr:employee-short-name"];
     errands.sendCancelSignal(errand.nodeRef.toString(), reason, currentUser.nodeRef.toString());
     statusCode = "CANCELED_BY_CONTROLLER_STATUS";
 } else if (completionOption == "EXECUTE") {
-    reason = "Поручение исполнено Контролером пункта/Контролером ОРД ";
-    reason += documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]);
+    reason = "Поручение исполнено Контролером пункта/Контролером ОРД " + currentUser.properties["lecm-orgstr:employee-short-name"];
     edsDocument.sendCompletionSignal(errand, reason, currentUser);
     statusCode = "EXECUTED_BY_CONTROLLER_STATUS";
 }
