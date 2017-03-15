@@ -44,8 +44,8 @@ LogicECM.ORD = LogicECM.ORD || {};
                 },
                 successCallback: {
                     fn: function (response) {
-                        if(response && response.json.user){
-                            if(response.json.user.roles){
+                        if (response && response.json.user) {
+                            if (response.json.user.roles) {
                                 currentUser.roles = response.json.user.roles;
                             }
                             currentUser.nodeRef = response.json.user.nodeRef;
@@ -240,10 +240,10 @@ LogicECM.ORD = LogicECM.ORD || {};
     };
 
     YAHOO.lang.extend(LogicECM.ORD.PointsDatagrid, LogicECM.module.DocumentTableDataGrid);
-
+    YAHOO.lang.extend(LogicECM.ORD.PointsDatagrid, LogicECM.module.Base.DataGrid);
     YAHOO.lang.augmentObject(LogicECM.ORD.PointsDatagrid.prototype, {
 
-        onExpand: function(record, isExpandAutomatically) {
+        onExpand: function (record, isExpandAutomatically) {
             Alfresco.util.Ajax.jsonPost({
                 url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                 dataObj: {
@@ -263,7 +263,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                 scope: this
             });
         },
-        showExpandForm: function(record, isExpandAutomatically, nodeRef){
+        showExpandForm: function (record, isExpandAutomatically, nodeRef) {
             if (!this.doubleClickLock) {
                 this.doubleClickLock = {};
             } else if (this.doubleClickLock[record.getId()]) {
@@ -284,7 +284,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                     dataObj: dataObj,
                     successCallback: {
                         scope: this,
-                        fn: function(response) {
+                        fn: function (response) {
                             if (response.serverResponse != null) {
                                 this.addExpandedRow(record, response.serverResponse.responseText);
                             }
@@ -346,6 +346,103 @@ LogicECM.ORD = LogicECM.ORD || {};
                 });
                 completePointDialog.show();
             }
+        },
+        showCreateDialog: function (meta, callback, successMessage) {
+            if (this.editDialogOpening) return;
+            this.editDialogOpening = true;
+            var me = this;
+            var args;
+            // Intercept before dialog show
+            Alfresco.util.Ajax.jsonPost({
+                url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                dataObj: {
+                    nodeRef: this.tableDataNodeRef,
+                    substituteString: "{..lecm-ord-table-structure:items-assoc/lecm-eds-document:execution-date}"
+                },
+                successCallback: {
+                    fn: function (response) {
+                        if (response && response.json.formatString) {
+                            var data = response.json.formatString.split(",");
+                            var executeDate = data[0];
+                            args = {"prop_lecm-ord-table-structure_execution-date":new Date(executeDate)};
+                            var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
+                                var addMsg = meta.addMessage;
+                                var contId = p_dialog.id + "-form-container";
+                                Alfresco.util.populateHTML(
+                                    [contId + "_h", addMsg ? addMsg : this.msg(this.options.createFormTitleMsg)]
+                                );
+                                if (meta.itemType && meta.itemType != "") {
+                                    Dom.addClass(contId, meta.itemType.replace(":", "_") + "_edit");
+                                }
+                                me.editDialogOpening = false;
+                                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                            };
+                            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+                            var templateRequestParams = {
+                                itemKind: "type",
+                                itemId: meta.itemType,
+                                destination: meta.nodeRef,
+                                mode: "create",
+                                args: JSON.stringify(args),
+                                formId: meta.createFormId != null ? meta.createFormId : "",
+                                submitType: "json",
+                                showCancelButton: true,
+                                showCaption: false
+                            };
+
+                            // Using Forms Service, so always create new instance
+                            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
+                            createDetails.setOptions(
+                                {
+                                    width: "50em",
+                                    templateUrl: templateUrl,
+                                    templateRequestParams: templateRequestParams,
+                                    actionUrl: null,
+                                    destroyOnHide: true,
+                                    doBeforeDialogShow: {
+                                        fn: doBeforeDialogShow,
+                                        scope: this
+                                    },
+                                    onSuccess: {
+                                        fn: function DataGrid_onActionCreate_success(response) {
+                                            if (callback) {// вызов дополнительного события
+                                                callback.call(this, response.json.persistedObject);
+                                            } else { // вызов события по умолчанию
+                                                YAHOO.Bubbling.fire("nodeCreated",
+                                                    {
+                                                        nodeRef: response.json.persistedObject,
+                                                        bubblingLabel: this.options.bubblingLabel
+                                                    });
+                                                YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
+                                                    {
+                                                        nodeRef: response.json.persistedObject,
+                                                        bubblingLabel: this.options.bubblingLabel
+                                                    });
+                                                Alfresco.util.PopupManager.displayMessage(
+                                                    {
+                                                        text: this.msg(successMessage ? successMessage : "message.save.success")
+                                                    });
+                                            }
+                                            this.editDialogOpening = false;
+                                        },
+                                        scope: this
+                                    },
+                                    onFailure: {
+                                        fn: function DataGrid_onActionCreate_failure(response) {
+                                            LogicECM.module.Base.Util.displayErrorMessageWithDetails(me.msg("logicecm.base.error"), me.msg("message.save.failure"), response.json.message);
+                                            me.editDialogOpening = false;
+                                            this.widgets.cancelButton.set("disabled", false);
+                                        },
+                                        scope: createDetails
+                                    }
+                                }).show();
+                        }
+                    },
+                    scope: this
+                },
+                failureMessage: Alfresco.util.message("message.details.failure"),
+                scope: this
+            });
         },
         onActionExecutePoint: function (me, asset, owner, actionsConfig, confirmFunction) {
             var scope = this;
