@@ -5,3 +5,7 @@
 .datagrid .action-set .onActionCompletePoint a {
     background-image: url(../../components/images/complete-16.png);
 }
+
+.yui-panel-container.yui-simple-dialog p.ord-item-execute-action-body-text {
+    text-align: center;
+}

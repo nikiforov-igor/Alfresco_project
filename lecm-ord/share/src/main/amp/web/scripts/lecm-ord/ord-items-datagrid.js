@@ -410,7 +410,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                 ]
             });
             executeDialog.setHeader(Alfresco.util.message("ord.item.execute.form.title"));
-            executeDialog.setBody("</br><p> " + Alfresco.util.message("ord.item.execute.form.message") + " </p></br>");
+            executeDialog.setBody("</br><p class='ord-item-execute-action-body-text'>" + Alfresco.util.message("ord.item.execute.form.message") + " </p></br>");
             executeDialog.render(document.body);
             executeDialog.show();
         },
