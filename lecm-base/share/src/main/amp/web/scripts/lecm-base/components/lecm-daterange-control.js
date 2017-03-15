@@ -254,7 +254,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this.widgets.calendarFrom.selectEvent.subscribe(this.onChangeDates, this, true);
                 Event.addListener(this.id + "-date-from", "keyup", this._handleFieldChangeFrom, this, true);
                 Event.addListener(this.id + "-icon-from", "click", this._showPickerFrom, this, true);
-                Event.on(this.id + "-date-from", "change", this.onChangeDates, this, true);
                 YAHOO.Bubbling.fire("registerValidationHandler",
                     {
                         fieldId: this.id + "-date-from",
@@ -266,13 +265,17 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this.widgets.calendarTo.selectEvent.subscribe(this.onChangeDates, this, true);
                 Event.addListener(this.id + "-date-to", "keyup", this._handleFieldChangeTo, this, true);
                 Event.addListener(this.id + "-icon-to", "click", this._showPickerTo, this, true);
-                Event.on(this.id + "-date-to", "change", this.onChangeDates, this, true);
                 YAHOO.Bubbling.fire("registerValidationHandler",
                     {
                         fieldId: this.id + "-date-to",
                         handler: Alfresco.forms.validation.validDateTime,
                         when: "keyup"
                     });
+
+                /*При навешивании маски ввода, Event.addListener(...,"change",...) глушится
+                где-то в недрах jQuery. Поэтому событие onChange навешиваем через jQuery*/
+                $("#" + this.id + "-date-from").change(this.onChangeDates.bind(this));
+                $("#" + this.id + "-date-to").change(this.onChangeDates.bind(this));
 
                 // render the calendar controls
                 this.widgets.calendarFrom.render();
