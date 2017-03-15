@@ -2062,6 +2062,14 @@ if (document && !regnumbers.isDocumentRegistered(document)) {
   var parentDocAssoc = document.assocs["lecm-resolutions:base-assoc"];
   if (parentDocAssoc && parentDocAssoc.length) {
     regNumberCode = "RESOLUTION_ON_BASIS_NUMBER";
+
+    var parentDocTypeShort = parentDocAssoc[0].typeShort;
+    if (parentDocTypeShort == "lecm-incoming:document") {
+      regNumberCode = "RESOLUTION_ON_INCOMING_BASIS_NUMBER";
+    } else if (parentDocTypeShort == "lecm-internal:document") {
+      regNumberCode = "RESOLUTION_ON_INTERNAL_BASIS_NUMBER";
+    }
+
     var childIndex = 1;
     var childAssoc = parentDocAssoc[0].sourceAssocs["lecm-resolutions:base-assoc"];
     if (childAssoc && childAssoc.length) {
