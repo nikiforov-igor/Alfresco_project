@@ -2059,11 +2059,11 @@ if (document && !regnumbers.isDocumentRegistered(document)) {
   }
 
   var regNumberCode;
-  var parentDocAssoc = document.assocs["lecm-resolutions:base-document-assoc"];
+  var parentDocAssoc = document.assocs["lecm-resolutions:base-assoc"];
   if (parentDocAssoc && parentDocAssoc.length) {
     regNumberCode = "RESOLUTION_ON_BASIS_NUMBER";
     var childIndex = 1;
-    var childAssoc = parentDocAssoc[0].sourceAssocs["lecm-resolutions:base-document-assoc"];
+    var childAssoc = parentDocAssoc[0].sourceAssocs["lecm-resolutions:base-assoc"];
     if (childAssoc && childAssoc.length) {
       childIndex += childAssoc.filter(function(child){
         return regnumbers.isDocumentRegistered(child);
