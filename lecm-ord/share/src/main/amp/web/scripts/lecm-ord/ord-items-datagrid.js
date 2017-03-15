@@ -350,6 +350,7 @@ LogicECM.ORD = LogicECM.ORD || {};
             if (this.editDialogOpening) return;
             this.editDialogOpening = true;
             var me = this;
+            var args = {};
             // Intercept before dialog show
             Alfresco.util.Ajax.jsonPost({
                 url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
@@ -361,7 +362,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                     fn: function (response) {
                         if (response && response.json.formatString) {
                             var data = response.json.formatString.split(",");
-                            var executeDate = new Date(data[0]);
+                            var executeDate = data[0];
                             var subject = data[1];
                             var controller = data[2]
                             var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
@@ -383,9 +384,9 @@ LogicECM.ORD = LogicECM.ORD || {};
                                 destination: meta.nodeRef,
                                 mode: "create",
                                 args: JSON.stringify({
-                                    "prop_lecm-ord-table-structure_execution-date": executeDate,
-                                    "assoc_lecm-ord-table-structure_subject-assoc": subject,
-                                    "assoc_lecm-ord-table-structure_controller-assoc": controller
+                                    "prop_lecm-ord-table-structure_execution-date": executeDate?new Date(executeDate):"",
+                                    "assoc_lecm-ord-table-structure_subject-assoc": subject?subject:"",
+                                    "assoc_lecm-ord-table-structure_controller-assoc": controller?controller:""
                                 }),
                                 formId: meta.createFormId != null ? meta.createFormId : "",
                                 submitType: "json",

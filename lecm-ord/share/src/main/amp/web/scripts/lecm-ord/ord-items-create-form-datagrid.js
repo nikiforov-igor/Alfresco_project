@@ -42,9 +42,19 @@ LogicECM.ORD = LogicECM.ORD || {};
             this.editDialogOpening = true;
             var me = this;
             this.formId = this.id.substring(0, this.id.indexOf("_assoc"));
-            var executeDate = new Date(Dom.get(this.formId + "_prop_lecm-eds-document_execution-date").value);
-            var subject = Dom.get(this.formId + "_assoc_lecm-document_subject-assoc").value;
-            var controller = Dom.get(this.formId + "_assoc_lecm-ord_controller-assoc").value;
+            var executeDateField = Dom.get(this.formId + "_prop_lecm-eds-document_execution-date");
+            var subjectField = Dom.get(this.formId + "_assoc_lecm-document_subject-assoc");
+            var controllerField = Dom.get(this.formId + "_assoc_lecm-ord_controller-assoc");
+            if (executeDateField) {
+                var executeDate = executeDateField.value;
+            }
+            var executeDate = executeDate ? new Date(executeDate) : null;
+            if (subjectField) {
+                var subject = subjectField.value;
+            }
+            if (controllerField) {
+                var controller = controllerField.value;
+            }
             var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                 var addMsg = meta.addMessage;
                 var contId = p_dialog.id + "-form-container";
@@ -62,9 +72,9 @@ LogicECM.ORD = LogicECM.ORD || {};
             var templateRequestParams = {
                 itemKind: "type",
                 args: JSON.stringify({
-                    "prop_lecm-ord-table-structure_execution-date": executeDate,
-                    "assoc_lecm-ord-table-structure_subject-assoc": subject,
-                    "assoc_lecm-ord-table-structure_controller-assoc": controller
+                    "prop_lecm-ord-table-structure_execution-date": executeDate?executeDate:"",
+                    "assoc_lecm-ord-table-structure_subject-assoc": subject?subject:"",
+                    "assoc_lecm-ord-table-structure_controller-assoc": controller?controller:""
                 }),
                 itemId: meta.itemType,
                 destination: meta.nodeRef,
