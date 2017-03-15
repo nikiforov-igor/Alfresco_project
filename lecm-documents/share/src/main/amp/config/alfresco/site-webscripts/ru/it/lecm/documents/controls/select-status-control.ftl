@@ -100,9 +100,7 @@
         </label>
     </div>
     <div class="container">
-        <div class="buttons-div">
-            <@formLib.renderFieldHelp field=field />
-        </div>
+        <div class="buttons-div"><@formLib.renderFieldHelp field=field /></div>
         <div class="value-div">
             <input id="${fieldHtmlId}" type="hidden" name="${field.name}${nameSuffix}" value="${fieldValue?string}"/>
 
