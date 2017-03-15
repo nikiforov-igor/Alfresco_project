@@ -11405,8 +11405,11 @@ if (doc) {
         var logText = documentScript.wrapperLink(doc, "ОРД");
         logText += " автоматически переведен в статус «Работа завершена» в связи с завершением работы по документу";
       	businessJournal.log(doc.nodeRef.toString(), "COMPLETE_DOCUMENT", logText, []);
+      	lecmPermission.pushAuthentication();
+        lecmPermission.setRunAsUserSystem();
         doc.properties["lecm-ord:transit-to-work-completed"] = true;
         doc.save();
+        lecmPermission.popAuthentication();
       }
       if (ordControllerAssoc && ordControllerAssoc.length) {
         notifications.sendNotificationFromCurrentUser({

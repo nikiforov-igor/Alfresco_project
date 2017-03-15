@@ -47,9 +47,12 @@ if (completionOption == "CANCEL") {
     reason += documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]);
     edsDocument.sendCompletionSignal(errand, reason, currentUser);
     statusCode = "EXECUTED_BY_CONTROLLER_STATUS";
-    item.properties["lecm-ord-table-structure:item-comment"] = comment;
-    item.save();
 }
+lecmPermission.pushAuthentication();
+lecmPermission.setRunAsUserSystem();
+item.properties["lecm-ord-table-structure:item-comment"] = comment;
+item.save();
+lecmPermission.popAuthentication();
 ordStatemachine.changePointStatus(item.nodeRef.toString(), statusCode);
 var status = ordStatemachine.getPointStatusTextByCode(statusCode);
 var content = item.properties["lecm-ord-table-structure:item-content"];
