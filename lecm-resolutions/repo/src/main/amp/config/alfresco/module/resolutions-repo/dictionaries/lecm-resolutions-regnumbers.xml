@@ -10,7 +10,7 @@
             </item>
             <item name="cm:Номер резолюции на основании сущности" type="lecm-regnum:template">
                 <property name="cm:name">Номер резолюции на основании сущности</property>
-                <property name="lecm-regnum:template-string">{doc.associatedAttribute('lecm-resolutions:base-document-assoc', 'lecm-document-aspects:reg-data-number').substring(0, doc.associatedAttribute('lecm-resolutions:base-document-assoc', 'lecm-document-aspects:reg-data-number').length() - 3)}-{doc.attribute("lecm-resolutions:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-string">{doc.associatedAttribute('lecm-resolutions:base-assoc', 'lecm-document-aspects:reg-data-number').substring(0, doc.associatedAttribute('lecm-resolutions:base-assoc', 'lecm-document-aspects:reg-data-number').length() - 3)}-{doc.attribute("lecm-resolutions:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
                 <property name="lecm-regnum:template-comment">Шаблон для номера резолюции, созданного на основании сущности</property>
                 <property name="lecm-regnum:template-service-id">RESOLUTION_ON_BASIS_NUMBER</property>
             </item>
