@@ -48,6 +48,9 @@ if (completionOption == "CANCEL") {
     edsDocument.sendCompletionSignal(errand, reason, currentUser);
     statusCode = "EXECUTED_BY_CONTROLLER_STATUS";
 }
+item.properties["lecm-ord-table-structure:item-comment"] = comment;
+item.save();
+}
 lecmPermission.pushAuthentication();
 lecmPermission.setRunAsUserSystem();
 item.properties["lecm-ord-table-structure:item-comment"] = comment;
