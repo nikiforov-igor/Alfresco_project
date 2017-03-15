@@ -264,38 +264,56 @@ LogicECM.ORD = LogicECM.ORD || {};
             });
         },
         showExpandForm: function(record, isExpandAutomatically, nodeRef){
-            if (!this.doubleClickLock) {
-                this.doubleClickLock = {};
-            } else if (this.doubleClickLock[record.getId()]) {
-                return;
-            }
-            this.doubleClickLock[record.getId()] = true;
-
-            if (nodeRef) {
-                var dataObj = YAHOO.lang.merge({
-                    htmlid: this.getExpandedFormId(record),
-                    itemKind: "node",
-                    itemId: nodeRef,
-                    mode: "view",
-                    isExpandAutomatically: isExpandAutomatically
-                }, this.options.expandDataObj);
-                Alfresco.util.Ajax.request({
-                    url: this.getExpandUri(),
-                    dataObj: dataObj,
-                    successCallback: {
-                        scope: this,
-                        fn: function(response) {
-                            if (response.serverResponse != null) {
-                                this.addExpandedRow(record, response.serverResponse.responseText);
+            Alfresco.util.Ajax.jsonGet({
+                url: Alfresco.constants.PROXY_URI + "lecm/security/api/getPermission",
+                dataObj: {
+                    nodeRef: nodeRef,
+                    permission: "Read"
+                },
+                successCallback: {
+                    fn: function (response) {
+                        if (response.json) {
+                            if (!this.doubleClickLock) {
+                                this.doubleClickLock = {};
+                            } else if (this.doubleClickLock[record.getId()]) {
+                                return;
                             }
-                            this.doubleClickLock[record.getId()] = false;
+                            this.doubleClickLock[record.getId()] = true;
+
+                            if (nodeRef) {
+                                var dataObj = YAHOO.lang.merge({
+                                    htmlid: this.getExpandedFormId(record),
+                                    itemKind: "node",
+                                    itemId: nodeRef,
+                                    mode: "view",
+                                    isExpandAutomatically: isExpandAutomatically
+                                }, this.options.expandDataObj);
+                                Alfresco.util.Ajax.request({
+                                    url: this.getExpandUri(),
+                                    dataObj: dataObj,
+                                    successCallback: {
+                                        scope: this,
+                                        fn: function(response) {
+                                            if (response.serverResponse != null) {
+                                                this.addExpandedRow(record, response.serverResponse.responseText);
+                                            }
+                                            this.doubleClickLock[record.getId()] = false;
+                                        }
+                                    },
+                                    failureMessage: this.msg('message.failure'),
+                                    execScripts: true,
+                                    scope: this
+                                });
+                            }
+                        } else {
+                            this.addExpandedRow(record, Alfresco.util.message("ord.item.execution.tree.empty"));
                         }
                     },
-                    failureMessage: this.msg('message.failure'),
-                    execScripts: true,
                     scope: this
-                });
-            }
+                },
+                failureMessage: Alfresco.util.message('message.failure'),
+                scope: this
+            });
         },
         onActionCompletePoint: function (me, asset, owner, actionsConfig, confirmFunction) {
             var nodeRef = arguments[0].nodeRef;
