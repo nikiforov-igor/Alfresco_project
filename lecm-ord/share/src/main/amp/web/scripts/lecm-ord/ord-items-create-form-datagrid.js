@@ -49,11 +49,11 @@ LogicECM.ORD = LogicECM.ORD || {};
             var controllerField = Dom.get(this.formId + "_assoc_lecm-ord_controller-assoc");
             if (executeDateField) {
                 var executeDate = executeDateField.value;
+                if (executeDate) {
+                    args["prop_lecm-ord-table-structure_execution-date"] = new Date(executeDate)
+                }
             }
-            var executeDate = executeDate ? new Date(executeDate) : null;
-            if (executeDate) {
-                args["prop_lecm-ord-table-structure_execution-date"] = executeDate;
-            }
+
             if (subjectField) {
                 var subject = subjectField.value;
                 if (subject) {
