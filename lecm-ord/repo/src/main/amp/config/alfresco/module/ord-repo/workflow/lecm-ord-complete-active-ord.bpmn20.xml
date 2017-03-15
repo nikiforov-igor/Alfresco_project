@@ -22,8 +22,7 @@
                                 var ordPoints = documentTables.getTableDataRows(itemsTable.nodeRef.toString());
                                 var statusCode = "", comment = "";
                                 if (completionOption == "CANCEL") {
-                                    reason = "Поручение отменено в связи с завершением работы по документу Контролером ОРД ";
-                                    reason += documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]);
+                                    reason = "Поручение отменено в связи с завершением работы по документу Контролером ОРД " + currentUser.properties["lecm-orgstr:employee-short-name"];
                                     childErrands.forEach(function (childErrand) {
                                         if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
                                             errands.sendCancelSignal(childErrand.nodeRef.toString(), reason, currentUser.nodeRef.toString());
@@ -32,8 +31,7 @@
                                     statusCode = "CANCELED_BY_CONTROLLER_STATUS";
                                     comment = "Работа по пункту отменена в связи с завершением работы по документу";
                                 } else if (completionOption == "EXECUTE") {
-                                    reason = "Поручение исполнено в связи с завершением работы по документу Контролером ОРД ";
-                                    reason += documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]);
+                                    reason = "Поручение исполнено в связи с завершением работы по документу Контролером ОРД " + currentUser.properties["lecm-orgstr:employee-short-name"];
                                     childErrands.forEach(function (childErrand) {
                                         if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
                                             edsDocument.sendCompletionSignal(childErrand, reason, currentUser);
