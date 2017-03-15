@@ -263,7 +263,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                 scope: this
             });
         },
-        showExpandForm: function(record, isExpandAutomatically, nodeRef){
+        showExpandForm: function (record, isExpandAutomatically, nodeRef) {
             Alfresco.util.Ajax.jsonGet({
                 url: Alfresco.constants.PROXY_URI + "lecm/security/api/getPermission",
                 dataObj: {
@@ -293,7 +293,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                                     dataObj: dataObj,
                                     successCallback: {
                                         scope: this,
-                                        fn: function(response) {
+                                        fn: function (response) {
                                             if (response.serverResponse != null) {
                                                 this.addExpandedRow(record, response.serverResponse.responseText);
                                             }
