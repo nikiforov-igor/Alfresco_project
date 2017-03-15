@@ -10,3 +10,26 @@
 .yui-skin-lecmTheme .main-content div.form-fields div.tab-common .set:first-child .set:first-child .important-control {
     color: red;
 }
+
+.yui-skin-lecmTheme .main-content div.form-fields div.tab-common .set:first-child .set:first-child .status-control {
+    width: auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    float: right;
+}
+
+.yui-skin-lecmTheme .main-content div.form-fields div.tab-common .set:first-child .set:first-child .important-control {
+    width: auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    float: right;
+}
+
+.yui-skin-lecmTheme .main-content div.form-fields div.tab-common .set:first-child .set:first-child .expired-control {
+    width: auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    float: right;
+    color: #ab8838;
+}
+
