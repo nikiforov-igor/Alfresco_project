@@ -265,13 +265,14 @@ LogicECM.ORD = LogicECM.ORD || {};
         },
         showExpandForm: function(record, isExpandAutomatically, nodeRef){
             Alfresco.util.Ajax.jsonGet({
-                url: Alfresco.constants.PROXY_URI + "lecm/eds/isCurrentEmployeeHasAccess",
+                url: Alfresco.constants.PROXY_URI + "lecm/security/api/getPermission",
                 dataObj: {
-                    nodeRef: nodeRef
+                    nodeRef: nodeRef,
+                    permission: "Read"
                 },
                 successCallback: {
                     fn: function (response) {
-                        if (response.json.hasAccess) {
+                        if (response.json) {
                             if (!this.doubleClickLock) {
                                 this.doubleClickLock = {};
                             } else if (this.doubleClickLock[record.getId()]) {
