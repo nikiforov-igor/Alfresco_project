@@ -23,10 +23,7 @@ import ru.it.lecm.resolutions.api.ResolutionsService;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: mshafeev
@@ -214,8 +211,12 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
 
     public void transferRightToBaseDocument(NodeRef errandDoc) throws WriteTransactionNeededException {
         if (errandsService.isTransferRightToBaseDocument()) {
-            transferRight(errandDoc, errandsService.getErrandBaseDocument(errandDoc));
-            transferRight(errandDoc, errandsService.getBaseDocument(errandDoc));
+            NodeRef baseDoc = errandsService.getErrandBaseDocument(errandDoc);
+            NodeRef additionalDoc = errandsService.getBaseDocument(errandDoc);
+            transferRight(errandDoc, additionalDoc);
+            if (!Objects.equals(additionalDoc, baseDoc)) {
+                transferRight(errandDoc, baseDoc);
+            }
         }
     }
 
@@ -227,8 +228,16 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
                 List<NodeRef> connectedDocuments = documentConnectionService.getConnectedWithDocument(baseDoc, true);
                 for (NodeRef document : connectedDocuments) {
                     if (!nodeService.getType(document).equals(ErrandsService.TYPE_ERRANDS)) {
-                        documentConnectionService.createConnection(document, errandDoc, DocumentConnectionService.DICTIONARY_VALUE_FOR_INFORMATION, true, true);
-
+                        List<NodeRef> connectedWithConnectedDocument = documentConnectionService.getConnectedDocuments(document, DocumentConnectionService.DICTIONARY_VALUE_FOR_INFORMATION, ErrandsService.TYPE_ERRANDS, true);
+                        Boolean alreadyConnected = false;
+                        for (NodeRef connectedDocument : connectedWithConnectedDocument) {
+                            if (Objects.equals(connectedDocument, errandDoc)) {
+                                alreadyConnected = true;
+                            }
+                        }
+                        if (!alreadyConnected) {
+                            documentConnectionService.createConnection(document, errandDoc, DocumentConnectionService.DICTIONARY_VALUE_FOR_INFORMATION, true, true);
+                        }
                         documentMembersService.addMemberWithoutCheckPermission(document, executor, new HashMap<QName, Serializable>());
                         documentMembersService.addMemberWithoutCheckPermission(document, initiator, new HashMap<QName, Serializable>());
 
