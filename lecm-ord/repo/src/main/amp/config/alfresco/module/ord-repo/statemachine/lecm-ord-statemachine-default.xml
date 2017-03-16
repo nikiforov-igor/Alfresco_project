@@ -11416,7 +11416,7 @@ if (doc) {
       var ntCode = "ORD_COMPLETE";
       if (!confirmCompletion) {
         ntCode = "ORD_AUTO_COMPLETE";
-        var logText = documentScript.wrapperLink(doc, "ОРД");
+        var logText = "ОРД:#mainobject";
         logText += " автоматически переведен в статус «Работа завершена» в связи с завершением работы по документу";
       	businessJournal.log(doc.nodeRef.toString(), "COMPLETE_DOCUMENT", logText, []);
         lecmPermission.pushAuthentication();
