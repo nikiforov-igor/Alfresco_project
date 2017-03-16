@@ -10,7 +10,9 @@ import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -144,6 +146,7 @@ public class ExpressionDocument extends ExpressionNode {
         }
 
         if (!properties.isEmpty() && !hasEmptyProperty) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             for (String prop: props) {
                 QName propQName = QName.createQName(prop, serviceRegistry.getNamespaceService());
                 properties.add(propQName);
@@ -152,8 +155,14 @@ public class ExpressionDocument extends ExpressionNode {
                     if (filters.length() > 0) {
                         filters.append(" AND ");
                     }
+
+                    String value = propValue.toString();
+                    if (propValue instanceof Date) {
+                        value = dateFormat.format(propValue);
+                    }
+
                     filters.append("@").append(prop.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-"))
-                            .append(":\"").append(propValue).append("\"");
+                            .append(":\"").append(value).append("\"");
                 }
             }
 
