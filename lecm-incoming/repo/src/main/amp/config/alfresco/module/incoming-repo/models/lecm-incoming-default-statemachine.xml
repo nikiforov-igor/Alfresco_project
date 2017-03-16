@@ -810,12 +810,12 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.hasDuplicates(true, "lecm-incoming:outgoing-number", "lecm-incoming:sender-assoc-ref")]]></value>
+                                                                                    <![CDATA[!doc.hasDuplicates(true, "lecm-incoming:outgoing-number", "lecm-incoming:outgoing-date", "lecm-incoming:sender-assoc-ref")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Документ уже зарегистрирован в системе]]></value>
+                                                                                    <![CDATA[Документ с такими корреспондентом, исходящим номером и исходящей датой в системе уже зарегистрирован]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -1869,12 +1869,12 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.hasDuplicates(true, "lecm-incoming:outgoing-number", "lecm-incoming:sender-assoc-ref")]]></value>
+                                                                                    <![CDATA[!doc.hasDuplicates(true, "lecm-incoming:outgoing-number", "lecm-incoming:outgoing-date", "lecm-incoming:sender-assoc-ref")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Документ уже зарегистрирован в системе]]></value>
+                                                                                    <![CDATA[Документ с такими корреспондентом, исходящим номером и исходящей датой в системе уже зарегистрирован]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -6099,12 +6099,12 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.hasDuplicates(true, "lecm-incoming:outgoing-number", "lecm-incoming:sender-assoc-ref")]]></value>
+                                                                                    <![CDATA[!doc.hasDuplicates(true, "lecm-incoming:outgoing-number", "lecm-incoming:outgoing-date", "lecm-incoming:sender-assoc-ref")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Документ уже зарегистрирован в системе]]></value>
+                                                                                    <![CDATA[Документ с такими корреспондентом, исходящим номером и исходящей датой в системе уже зарегистрирован]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
