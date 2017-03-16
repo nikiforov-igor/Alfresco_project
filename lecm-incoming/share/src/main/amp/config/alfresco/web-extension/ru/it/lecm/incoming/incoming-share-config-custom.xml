@@ -972,7 +972,8 @@
                         <control template="/ru/it/lecm/documents/controls/select-status-control.ftl">
                             <control-param name="docType">lecm-incoming:document</control-param>
                             <control-param name="withEmpty">true</control-param>
-                            <control-param name="valuesDelimiter">,</control-param>
+                            <control-param name="endpointMany">true</control-param>
+                            <control-param name="nameSuffix">-multiText</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:regnum"/>
