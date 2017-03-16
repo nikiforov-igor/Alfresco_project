@@ -14,7 +14,7 @@
                            var document = bpm_package.children[0];
                            if (document) {
                                 var logText = "#initiator завершил";
-                                logText += " работу по " + documentScript.wrapperDocumentLink(document, "ОРД");
+                                logText += " работу по ОРД:#mainobject";
                                 businessJournal.log(document.nodeRef.toString(), "COMPLETE_DOCUMENT", logText, []);
 
                                 var currentUser = orgstructure.getCurrentEmployee();

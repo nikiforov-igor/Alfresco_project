@@ -68,7 +68,7 @@
             </item>
             <item name="cm:ORD_ITEM_CHANGE_STATUS" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#wrapTitle(#number, #numberTitle)} {#mainObject.wrapAsLink("ОРД")} переведен в статус {#wrapTitle(#status, #statusTitle)}.]]></property>
+                    <![CDATA[{#wrapTitle(#number, #numberTitle)} {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:ext-present-string}"))} переведен в статус {#wrapTitle(#status, #statusTitle)}.]]></property>
                 <property name="cm:name"><![CDATA[ORD_ITEM_CHANGE_STATUS]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[ОРД. Смена статуса пункта ОРД]]></property>
@@ -80,7 +80,7 @@
             </item>
             <item name="cm:ORD_ITEM_CREATE_ERRAND" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[По пунктам  {#mainObject.wrapAsLink("ОРД")} были созданы поручения.]]></property>
+                    <![CDATA[По пунктам  {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:ext-present-string}"))} были созданы поручения.]]></property>
                 <property name="cm:name"><![CDATA[ORD_ITEM_CREATE_ERRAND]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[ОРД. Создание поручения по пункту ОРД]]></property>
@@ -92,7 +92,7 @@
             </item>
             <item name="cm:ORD_COMPLETE" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Исполнение {#mainObject.wrapAsLink("ОРД")} завершено. Примите решение по завершению работы по документу]]></property>
+                    <![CDATA[Исполнение {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:ext-present-string}"))} завершено. Примите решение по завершению работы по документу]]></property>
                 <property name="cm:name"><![CDATA[ORD_COMPLETE]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[ОРД. Завершение исполнения]]></property>
@@ -104,7 +104,7 @@
             </item>
             <item name="cm:ORD_AUTO_COMPLETE" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#mainObject.wrapAsLink("ОРД")} автоматически переведен в статус «Работа завершена» в связи с завершением работы по документу]]></property>
+                    <![CDATA[{#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:ext-present-string}"))} автоматически переведен в статус «Работа завершена» в связи с завершением работы по документу]]></property>
                 <property name="cm:name"><![CDATA[ORD_AUTO_COMPLETE]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[ОРД.Автоматическое завершение работы]]></property>
@@ -116,7 +116,7 @@
             </item>
             <item name="cm:ORD_FORCE_COMPLETE" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#member} {#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("завершил", #comment)} работу по {#mainObject.wrapAsLink("ОРД")}]]></property>
+                    <![CDATA[{#member} {#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} {#wrapTitle("завершил", #comment)} работу по {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:ext-present-string}"))}]]></property>
                 <property name="cm:name"><![CDATA[ORD_FORCE_COMPLETE]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[ОРД. Завершение исполнения участником]]></property>

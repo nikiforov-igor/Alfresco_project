@@ -72,7 +72,7 @@ notifications.sendNotificationFromCurrentUser({
 });
 var logText = "#initiator перевел ";
 logText += documentScript.wrapperTitle("пункт номер " + number, title + " " + content);
-logText += " " + documentScript.wrapperDocumentLink(ordDoc, "ОРД") + " в статус ";
+logText += " ОРД:#mainobject в статус ";
 logText += documentScript.wrapperTitle(status, comment);
 businessJournal.log(ordDoc.nodeRef.toString(), "POINT_COMPLETED", logText, []);
 model.success = true;

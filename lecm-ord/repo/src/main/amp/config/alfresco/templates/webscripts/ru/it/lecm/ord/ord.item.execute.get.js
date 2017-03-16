@@ -31,7 +31,7 @@ if (item) {
     });
     var logText = "#initiator исполнил ";
     logText += documentScript.wrapperTitle("пункт номер " + number, title + " " + content);
-    logText += " " + documentScript.wrapperDocumentLink(ordDoc, "ОРД");
+    logText += " ОРД:#mainobject";
     businessJournal.log(ordDoc.nodeRef.toString(), "POINT_EXECUTED", logText, []);
 
     model.success = true;

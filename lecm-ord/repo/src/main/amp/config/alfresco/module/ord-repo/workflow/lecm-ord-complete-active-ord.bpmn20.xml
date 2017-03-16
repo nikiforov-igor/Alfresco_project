@@ -87,7 +87,7 @@
                                 });
                                 var logText = "#initiator ";
                                 logText += documentScript.wrapperTitle("завершил", actionComment);
-                                logText += " работу по " + documentScript.wrapperDocumentLink(document, "ОРД");
+                                logText += " работу по ОРД:#mainobject";
                                 businessJournal.log(document.nodeRef.toString(), "COMPLETE_DOCUMENT", logText, []);
                                 document.properties["lecm-ord:transit-to-work-completed"] = true;
                                 document.save();
