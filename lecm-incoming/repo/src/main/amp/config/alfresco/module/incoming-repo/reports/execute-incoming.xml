@@ -117,7 +117,7 @@
                     </item>
                     <item name="cm:Срок исполнения истекает в период" type="lecm-rpeditor:reportDataColumn">
                         <property name="lecm-rpeditor:dataColumnControlParams">
-                            <![CDATA[fromDateDefault=NOW;fillDates=true;minFromLimitCurrentDate=true;toDateDefault=EMPTY]]></property>
+                            <![CDATA[fromDateDefault=EMPTY;fillDates=true;minFromLimitCurrentDate=true;toDateDefault=EMPTY]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:date]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
                         <property name="cm:name"><![CDATA[Срок исполнения истекает в период]]></property>
