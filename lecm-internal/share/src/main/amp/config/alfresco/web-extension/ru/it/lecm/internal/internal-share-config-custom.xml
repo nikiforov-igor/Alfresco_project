@@ -868,4 +868,10 @@
             <workflow name="activiti$lecmInternalDirect"/>
         </hidden-workflows>
     </config>
+
+    <config evaluator="string-compare" condition="LECMStatemachineWorkflow">
+        <hidden-workflows>
+            <workflow name="activiti$lecm-internal_document"/>
+        </hidden-workflows>
+    </config>
 </alfresco-config>

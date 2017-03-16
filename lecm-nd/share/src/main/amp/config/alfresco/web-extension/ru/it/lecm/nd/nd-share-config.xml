@@ -482,4 +482,9 @@
         </hidden-workflows>
     </config>
 
+    <config evaluator="string-compare" condition="LECMStatemachineWorkflow">
+        <hidden-workflows>
+            <workflow name="activiti$lecm-nd_document"/>
+        </hidden-workflows>
+    </config>
 </alfresco-config>
