@@ -10986,7 +10986,7 @@
                                 <property name="lecm-arm:order"><![CDATA[30]]></property>
                                 <property name="cm:name"><![CDATA[Отчеты по исполнительской дисциплине]]></property>
                                 <property name="lecm-arm:reportCodes">
-                                    <![CDATA[exec-discipline-by-creator,exec-discipline-by-executor,exec-prod-by-executor,exec-prod-by-orgunit,errands-expiring-to-date,unexecuted-errands-expired,errands-executed-out-of-time,execute-ord,incoming_execute,execution-of-internal-documents,state_execute_resolutions,execute-resolution]]></property>
+                                    <![CDATA[exec-discipline-by-creator,exec-discipline-by-executor,exec-prod-by-executor,exec-prod-by-orgunit,errands-expiring-to-date,unexecuted-errands-expired,errands-executed-out-of-time,execute-ord,incoming_execute,execution-of-internal-documents,state_execute_resolutions,execute-resolution,reference_on_resolutions_calling_for_completion]]></property>
                                 <property name="lecm-arm:types">
                                     <![CDATA[lecm-ord:document,lecm-errands:document,lecm-nd:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-resolutions:document]]></property>
                             </item>
