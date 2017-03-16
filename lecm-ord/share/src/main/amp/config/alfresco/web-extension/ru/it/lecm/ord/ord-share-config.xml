@@ -389,10 +389,18 @@
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
                     <field id="lecm-eds-aspect:execution-state" label-id="ord.execution.lable">
-                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl"/>
+                        <control template="/ru/it/lecm/eds/controls/selectmany.ftl">
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="nameSuffix">-multiText</control-param>
+                            <control-param name="useDefaultValue">false</control-param>
+                        </control>
                     </field>
                     <field id="lecm-review-ts:doc-review-state" label-id="ord.review.lable">
-                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl"/>
+                        <control template="/ru/it/lecm/eds/controls/selectmany.ftl">
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="nameSuffix">-multiText</control-param>
+                            <control-param name="useDefaultValue">false</control-param>
+                        </control>
                     </field>
                     <field id="lecm-statemachine:status"  mandatory="false">
                         <constraint-handlers>
@@ -402,6 +410,8 @@
                             <control-param name="docType">lecm-ord:document</control-param>
                             <control-param name="withEmpty">true</control-param>
                             <control-param name="valuesDelimiter">,</control-param>
+                            <control-param name="endpointMany">true</control-param>
+                            <control-param name="nameSuffix">-multiText</control-param>
                         </control>
                     </field>
                 </appearance>
