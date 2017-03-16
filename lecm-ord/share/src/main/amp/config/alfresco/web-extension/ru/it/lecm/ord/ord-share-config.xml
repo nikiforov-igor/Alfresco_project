@@ -170,6 +170,8 @@
                             <control-param name="editRowDialogTitle">ord.item.edit.form.title</control-param>
                             <control-param name="datagridFormId">datagrid-create</control-param>
                             <control-param name="editFormId">edit</control-param>
+                            <control-param name="jsDependencies">scripts/lecm-ord/ord-items-create-form-datagrid.js</control-param>
+                            <control-param name="jsObjectName">LogicECM.ORD.PointsCreateFormDatagrid</control-param>
                         </control>
                     </field>
                     <field id="confirmCompletionHandler">

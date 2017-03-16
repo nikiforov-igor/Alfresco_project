@@ -24,41 +24,6 @@
         var documentFormId = formId.substring(0, formId.indexOf("_assoc_"));
         var formMode = form.options.templateRequestParams.mode;
         var tableRef = formMode == "create" ? form.options.templateRequestParams.destination : form.options.templateRequestParams.itemId;
-        Alfresco.util.Ajax.jsonPost({
-            url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
-            dataObj: {
-                nodeRef: tableRef,
-                substituteString: "{..lecm-ord-table-structure:items-assoc/lecm-ord:controller-assoc-ref},{..lecm-ord-table-structure:items-assoc/lecm-document:subject-assoc-ref}"
-            },
-            successCallback: {
-                fn: function (response) {
-                    if (response && response.json.formatString) {
-                        var data = response.json.formatString.split(",");
-                        var controller = data[0];
-                        var subject = data[1];
-                        if (!controller) {
-                            controller = Dom.get(documentFormId + "_assoc_lecm-ord_controller-assoc").value;
-                        }
-                        if (controller) {
-                            Util.reInitializeControl(formId, "lecm-ord-table-structure:controller-assoc", {
-                                "selectedValue": controller
-                            });
-                        }
-                        if (!subject) {
-                            subject = Dom.get(documentFormId + "_assoc_lecm-document_subject-assoc").value;
-                        }
-                        if (subject) {
-                            Util.reInitializeControl(formId, "lecm-ord-table-structure:subject-assoc", {
-                                "selectedValue": subject
-                            });
-                        }
-                    }
-                },
-                scope: this
-            },
-            failureMessage: Alfresco.util.message("message.details.failure"),
-            scope: this
-        });
         if (layer == "ordItemCreateFormScriptLoaded") {
             var itemNumberField = Dom.get(formId + "_prop_lecm-document_indexTableRow");
             if (!itemNumberField.value) {
