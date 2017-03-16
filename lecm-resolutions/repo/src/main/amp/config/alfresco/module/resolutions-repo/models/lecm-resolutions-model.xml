@@ -113,6 +113,12 @@
                     <type>d:int</type>
                     <mandatory>false</mandatory>
                     <default>1</default>
+                    <constraints>
+                        <constraint type="REGEX">
+                            <parameter name="expression"><value>^[0-9]+$</value></parameter>
+                            <parameter name="requiresMatch"><value>true</value></parameter>
+                        </constraint>
+                    </constraints>
                 </property>
                 <property name="lecm-resolutions:limitation-date-type">
                     <type>d:text</type>
