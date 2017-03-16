@@ -394,16 +394,17 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 }
 
 function getArg(argName, isPost, itemParams) {
+	var argValue;
 	if (itemParams && itemParams.hasOwnProperty(argName)) {
 		// Получение аргумента из объекта переметров элемента
-		return itemParams[argName];
-	} else if (isPost) {
-		// Получение аргумента для POST-запроса
-		return json.has(argName) ? '' + json.get(argName) : null;
+		argValue = itemParams[argName];
+	} else if (isPost && json.has(argName)) {
+		argValue = json.get(argName);
 	} else {
 		// Получение аргумента для GET-запроса
-		return args[argName];
+		argValue = args[argName];
 	}
+	return argValue ? '' + argValue : null;
 }
 
 function getItemSelectableQuery(selectableType, showFolders) {

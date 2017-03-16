@@ -1,0 +1,1 @@
+model.result = modelsList.getAttrs(args["nodeRef"], args["doctype"]);

@@ -1,8 +1,15 @@
+<label><b>${field.label?html}<b/></label>
 <#include "/ru/it/lecm/controls/datatable.ftl">
 <@inlineScript group='model-editor'>
 (function () {
 	function initAssociationsDatatable(obj) {
 		var columnDefinitions = [{
+				key: 'copy',
+				label: '',
+				formatter: LogicECM.module.ModelEditor.DatatableControl.prototype.formatActions,
+				width: 15,
+				maxAutoWidth: 15
+			}, {
 				className: 'viewmode-label',
 				key: '_name',
 				label: '${msg("lecm.meditor.lbl.name")}',
@@ -21,7 +28,7 @@
 				key: 'class',
 				label: '${msg("lecm.meditor.lbl.type")}',
 				dropdownOptions: obj.associations,
-				formatter: 'dropdown',
+				formatter: LogicECM.module.ModelEditor.DatatableControl.prototype.formatDropdown,
 				width: 291,
 				maxAutoWidth: 291
 			}, {
@@ -95,12 +102,15 @@
 					key : 'many'
 				}]
 			},
+			ns = obj.model.prop_type_ns
 			data = obj.model.associationsArray;
 
 		new LogicECM.module.ModelEditor.DatatableControl('LogicECM.module.ModelEditor.AssociationsDatatable', '${fieldHtmlId}', {
 			columnDefinitions: columnDefinitions,
 			dialogElements: dialogElements,
 			responseSchema: responseSchema,
+			mode: '${form.mode}',
+			ns: ns,
 			data: data
 		}, ${messages});
 	}

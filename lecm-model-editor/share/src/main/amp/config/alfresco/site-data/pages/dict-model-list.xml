@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+    <title>Конструктор справочников</title>
+    <description>Dictionary model list</description>
+    <template-instance>dict-model-list</template-instance>
+    <authentication>user</authentication>
+</page>

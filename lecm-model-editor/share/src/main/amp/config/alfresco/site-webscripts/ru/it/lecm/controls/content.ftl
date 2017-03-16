@@ -11,7 +11,8 @@
 (function () {
 	new LogicECM.module.ModelEditor.ContentControl('${fieldHtmlId}', {
 		itemKind: '${form.arguments.itemKind}',
-		itemId: '${form.arguments.itemId}'
+		itemId: '${form.arguments.itemId}',
+		doctype: '${context.properties.doctype}'
 	}, ${messages});
 })();
 </@>

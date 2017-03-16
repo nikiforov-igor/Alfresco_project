@@ -1,3 +1,4 @@
+<label><b>${field.label?html}</b></label>
 <#include "/ru/it/lecm/controls/datatable.ftl">
 <@inlineScript group='model-editor'>
 (function () {
@@ -15,7 +16,8 @@
 				{ label: '${msg("lecm.meditor.lbl.boolean")}',  value: 'd:boolean'  },
 				{ label: '${msg("lecm.meditor.lbl.qname")}',    value: 'd:qname'    },
 				{ label: '${msg("lecm.meditor.lbl.noderef")}',  value: 'd:noderef'  },
-				{ label: '${msg("lecm.meditor.lbl.category")}', value: 'd:category' }
+				{ label: '${msg("lecm.meditor.lbl.category")}', value: 'd:category' },
+				{ label: '${msg("lecm.meditor.lbl.mltext")}',   value: 'd:mltext'}
 			],
 			dTokenised = ['',
 				{ label: '${msg("lecm.meditor.lbl.yes")}',  value: 'true'  },
@@ -23,6 +25,12 @@
 				{ label: '${msg("lecm.meditor.lbl.both")}', value: 'both'  }
 			],
 			columnDefinitions = [{
+				key: 'copy',
+				label: '',
+				formatter: LogicECM.module.ModelEditor.DatatableControl.prototype.formatActions,
+				width: 15,
+				maxAutoWidth: 15
+			}, {
 				className: 'viewmode-label',
 				key: '_name',
 				label: '${msg("lecm.meditor.lbl.name")}',
@@ -48,7 +56,7 @@
 				key: 'type',
 				label: '${msg("lecm.meditor.lbl.type")}',
 				dropdownOptions: dTypes,
-				formatter: 'dropdown',
+				formatter: LogicECM.module.ModelEditor.DatatableControl.prototype.formatDropdown,
 				width: 100,
 				maxAutoWidth: 100
 			}, {
@@ -70,7 +78,7 @@
 				key: 'tokenised',
 				label: '${msg("lecm.meditor.lbl.tokenised")}',
 				dropdownOptions: dTokenised,
-				formatter: 'dropdown',
+				formatter: LogicECM.module.ModelEditor.DatatableControl.prototype.formatDropdown,
 				width: 100,
 				maxAutoWidth: 100
 			}, {
@@ -154,12 +162,15 @@
 					{ key: 'validator' }
 				]
 			},
+			ns = obj.model.prop_type_ns,
 			data = obj.model.attributesArray;
 
 		new LogicECM.module.ModelEditor.DatatableControl('LogicECM.module.ModelEditor.AttributesDatatable', '${fieldHtmlId}', {
 			columnDefinitions: columnDefinitions,
 			dialogElements: dialogElements,
 			responseSchema: responseSchema,
+			mode: '${form.mode}',
+			ns: ns,
 			data: data
 		}, ${messages});
 	}
