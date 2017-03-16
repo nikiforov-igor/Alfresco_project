@@ -16,7 +16,9 @@
     margin-top: 8px;
     margin-bottom: 20px;
 }
-
+.errands-limitation-date-set .errands-limitation-date-set-radio .buttons-div {
+    padding: 0;
+}
 .errands-limitation-date-set .errands-limitation-date-set-days {
     float: left;
     overflow: hidden;
