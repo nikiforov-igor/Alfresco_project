@@ -93,8 +93,8 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 				this.loadObjectDescription();
 				this.loadCurrentEmployee();
 
-				this.subscribeButton = Alfresco.util.createYUIButton(this, "cntrl-subscribe-button", this.onSubscribe, {});
-				this.unsubscribeButton = Alfresco.util.createYUIButton(this, "cntrl-unsubscribe-button", this.onUnsubscribe, {});
+				this.subscribeButton = Alfresco.util.createYUIButton(this, "cntrl-subscribe-button", this.onSubscribe);
+				this.unsubscribeButton = Alfresco.util.createYUIButton(this, "cntrl-unsubscribe-button", this.onUnsubscribe);
 
 				this.updateFormButtons();
 			},
