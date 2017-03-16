@@ -68,6 +68,16 @@
         Bubbling.on("showControl", this.onShowControl, this);
 	    Bubbling.on("handleFieldChange", this.onHandleFieldChange, this);
 	    Bubbling.on("showDatePicker", this.hidePickerWhenAnotherIsOpening, this);
+		
+        // ALFFIVE-139
+        // Изначально загружается версия 1.6.2 с плагином inputmask
+        // Однако, потом отрабатывает dojo и перекрывает версию на 1.11		
+        // noConflict вернёт версию 1.6.2 со всеми плагинами
+
+        if(!$.inputmask) {
+            $.noConflict();
+            $ = $ || jQuery; // Возможен вариант, когда предыдущей версии нету, восстановим что есть
+        }        
 
         return this;
     };
@@ -122,7 +132,9 @@
                     maxLimit: null,
 	                fieldId: null,
 	                formId: false,
-                    changeFireAction: null
+                    changeFireAction: null,
+                    mask: "dd.mm.yyyy",
+                    placeholder: Alfresco.util.message("lecm.form.control.date-picker.display.date.format")
                 },
 
                 /**
@@ -280,6 +292,12 @@
 
                         // render the calendar control
                         me.widgets.calendar.render();
+                    }
+
+                    if (this.options.mask) {
+                        $("#" + me.id + "-date").inputmask(this.options.mask, {
+                            placeholder:this.options.placeholder
+                        });
                     }
 
                     Event.addListener(me.id + "-date", "keyup", me._inputKeyup, me, true);
@@ -587,6 +605,7 @@
 						fn.call(input, "readonly", "");
 						if (args[1].readonly) {
 							this.widgets.calendar.hide();
+							Dom.addClass(this.id + '-icon', 'icon-readonly');
 						}
 					}
 				},
@@ -596,6 +615,7 @@
 			            this.widgets.calendar.hide();
 			            this.tempDisabled = true;
 			            Dom.get(this.id + "-date").disabled = true;
+                        Dom.addClass(this.id + '-icon', 'icon-disabled');
 		            }
 	            },
 
@@ -604,6 +624,7 @@
 			            this.tempDisabled = false;
 			            if (!this.options.disabled) {
 				            Dom.get(this.id + "-date").disabled = false;
+                            Dom.removeClass(this.id + '-icon', 'icon-disabled');
 			            }
 		            }
 	            },

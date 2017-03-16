@@ -102,6 +102,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         Bubbling.on("datagridRefresh", this.onDataGridRefresh, this);
         Bubbling.on("archiveCheckBoxClicked", this.onArchiveCheckBoxClicked, this);
         Bubbling.on("reCreateDatagrid", this.onReCreateDatagrid, this);
+        Bubbling.on("expandAllGridRows", this.onExpanAllGridRows, this);
 
         /* Deferred list population until DOM ready */
         this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "onGridTypeChanged"],
@@ -330,7 +331,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 /**
                  * Имя атрибута для открытия документа
                  */
-                attributeForOpen: null
+                attributeForOpen: null,
+
+                // Нужно ли раскрывать все строки грида автоматически
+                isExpandAutomatically: false
             },
 
             showActionsCount: 3,
@@ -463,7 +467,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
             errorMessageDialog: null,
 
-	        doubleClickLock: false,
+	        doubleClickLock: null,
 
             onArchiveCheckBoxClicked: function (layer, args) {
                 var cbShowArchive = YAHOO.util.Dom.get(this.id + "-cbShowArchive");
@@ -532,17 +536,22 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 					Dom.removeClass(row, "expanded");
 					this.onCollapse(record);
 				} else {
-					Dom.addClass(row, "expanded");
-					Dom.get("expand-" + record.getId()).innerHTML = "-";
-					var rowId = this.getExpandedRecordId(record);
-					if (Dom.get(rowId) != null) {
-						Dom.setStyle(rowId, "display", "table-row");
-					} else {
-						this.prepareExpandedRow(record);
-						this.onExpand(record);
-					}
+                    this.expandRowByRecord(record, false);
 				}
 			},
+
+            expandRowByRecord: function(record, isExpandAutomatically) {
+                var row = this.widgets.dataTable.getRow(record);
+                Dom.addClass(row, "expanded");
+                Dom.get("expand-" + record.getId()).innerHTML = "-";
+                var rowId = this.getExpandedRecordId(record);
+                if (Dom.get(rowId) != null) {
+                    Dom.setStyle(rowId, "display", "table-row");
+                } else {
+                    this.prepareExpandedRow(record);
+                    this.onExpand(record, isExpandAutomatically);
+                }
+            },
 
 	        onCollapse: function (record) {
 		        //Можно переопределять для полного удаления схлопываемой строки
@@ -567,32 +576,36 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
             },
 
-			onExpand: function(record) {
-				if (this.doubleClickLock) return;
-				this.doubleClickLock = true;
+			onExpand: function(record, isExpandAutomatically) {
+                if (!this.doubleClickLock) {
+                    this.doubleClickLock = {};
+                } else if (this.doubleClickLock[record.getId()]) {
+                    return;
+                }
+				this.doubleClickLock[record.getId()] = true;
 
-				var nodeRef = record.getData("nodeRef");
+                var nodeRef = record.getData("nodeRef");
 				if (nodeRef) {
-					var me = this;
 					var dataObj = YAHOO.lang.merge({
 						htmlid: this.getExpandedFormId(record),
 						itemKind: "node",
 						itemId: nodeRef,
-						mode: "view"
+						mode: "view",
+                        isExpandAutomatically: isExpandAutomatically
 					}, this.options.expandDataObj);
 					Alfresco.util.Ajax.request({
-						url: Alfresco.constants.URL_SERVICECONTEXT + this.options.expandDataSource,
+						url: this.getExpandUri(),
 						dataObj: dataObj,
 						successCallback: {
 							scope: this,
 							fn: function(response) {
 								if (response.serverResponse != null) {
-									me.addExpandedRow(record, response.serverResponse.responseText);
+									this.addExpandedRow(record, response.serverResponse.responseText);
 								}
-								me.doubleClickLock = false;
+								this.doubleClickLock[record.getId()] = false;
 							}
 						},
-						failureMessage: "message.failure",
+						failureMessage: this.msg('message.failure'),
 						execScripts: true,
 						scope: this
 					});
@@ -828,6 +841,46 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              */
             getCustomCellFormatter: function DataGrid_customRenderCellDataType(grid,elCell,oRecord,oColumn,oData){
                 return null;
+            },
+
+            getMarkerFormatter: function (elCell, oRecord, oColumn, oData) {
+                var html = '';
+                if (!oRecord) {
+                    oRecord = this.getRecord(elCell);
+                }
+                if (!oColumn) {
+                    oColumn = this.getColumn(elCell.parentNode.cellIndex);
+                }
+
+                if (oRecord && oColumn) {
+                    if (!oData) {
+                        oData = oRecord.getData("itemData")[oColumn.field];
+                    }
+
+                    if (oData) {
+                        var datalistColumn = this.datagridColumns[oColumn.key];
+                        if (datalistColumn) {
+                            if (('' + oData.value) == 'true') {
+                                var markerHTML;
+                                if (datalistColumn.markerHTML) {
+                                    markerHTML = decodeURIComponent(datalistColumn.markerHTML);
+                                } else {
+                                    if (datalistColumn.markerIcon) {
+                                        markerHTML = "<div class='centered'><img src='{markerIcon}' title='{title}'/></div>";
+                                    } else {
+                                        markerHTML = "<div class='centered'><span class='boolean-true' title='{title}'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>";
+                                    }
+                                }
+                                markerHTML = YAHOO.lang.substitute(markerHTML, {
+                                    markerIcon: Alfresco.constants.URL_RESCONTEXT + datalistColumn.markerIcon,
+                                    title: datalistColumn.label
+                                });
+                                html += markerHTML;
+                            }
+                        }
+                    }
+                }
+                elCell.innerHTML = html;
             },
 
 	        addFooter: function DataGrid_getCustomAddFooter(){
@@ -1102,14 +1155,25 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             template: this.msg("lecm.pagination.template"),
                             pageReportTemplate: this.msg("pagination.template.page-report"),
                             previousPageLinkLabel: this.msg("lecm.pagination.previousPageLinkLabel"),
+                            previousPageLinkTitle: this.msg("lecm.pagination.previousPageLinkTitle"),
                             nextPageLinkLabel: this.msg("lecm.pagination.nextPageLinkLabel"),
+                            nextPageLinkTitle: this.msg("lecm.pagination.nextPageLinkTitle"),
                             firstPageLinkLabel: this.msg("lecm.pagination.firstPageLinkLabel"),
                             lastPageLinkLabel: this.msg("lecm.pagination.lastPageLinkLabel"),
                             lastPageLinkTitle: this.msg("lecm.pagination.lastPageLinkLabel.title"),
-                            firstPageLinkTitle: this.msg("lecm.pagination.firstPageLinkLabel.title")
+                            firstPageLinkTitle: this.msg("lecm.pagination.firstPageLinkLabel.title"),
+                            jumpToPageDropdownTitle: this.msg("lecm.pagination.jumpToPageDropdown.title")
                         });
 
                     this.widgets.paginator.subscribe("changeRequest" + this.id, handlePagination, this);
+
+                    /*Подменим хардкор из YUI Paginator*/
+                    this.widgets.paginator.setAttributeConfig('pageTitleBuilder', {
+                        value: function (page, paginator) {
+                            return Alfresco.util.message('lecm.pagination.page', 'Page') + ' ' + page;
+                        },
+                        validator: YAHOO.lang.isFunction
+                    });
 
                     // Display the bottom paginator bar
                     Dom.setStyle(this.id + "-datagridBarBottom", "display", "none");
@@ -1232,24 +1296,34 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     } else {
                         sortable = this.options.overrideSortingWith;
                     }
+                    if (!column.isMarker) {
+                        if (!inArray(column.name, this.options.excludeColumns)) {
+                            var className = "";
+                            if (column.dataType == "lecm-orgstr:employee" || inArray(column.name, this.options.nowrapColumns)) {
+                                className = "nowrap "
+                            }
 
-                    if (!(this.options.excludeColumns.length > 0 && inArray(column.name, this.options.excludeColumns))) {
-                        var className = "";
-                        if (column.dataType == "lecm-orgstr:employee" || (this.options.nowrapColumns.length > 0 && inArray(column.name, this.options.nowrapColumns))) {
-                            className = "nowrap "
+                            columnDefinitions.push({
+                                key: this.dataResponseFields[i],
+                                label: column.label.length ? column.label : this.msg(column.name.replace(":", "_")),
+                                sortable: sortable,
+                                resizeable: column.resizeable || false,
+                                sortOptions: {
+                                    field: column.formsName,
+                                    sortFunction: this.getSortFunction()
+                                },
+                                formatter: this.getCellFormatter(column.dataType),
+                                className: className + ((column.dataType == 'boolean') ? 'centered' : '')
+                            });
                         }
-
+                    } else {
                         columnDefinitions.push({
-                            key:this.dataResponseFields[i],
-                            label:column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
-                            sortable:sortable,
-                            resizeable: column.resizeable === undefined ? false : column.resizeable,
-                            sortOptions:{
-                                field:column.formsName,
-                                sortFunction:this.getSortFunction()
-                            },
-                            formatter:this.getCellFormatter(column.dataType),
-                            className: className + ((column.dataType == 'boolean') ? 'centered' : '')
+                            key: this.dataResponseFields[i],
+                            label: '',
+                            sortable: false,
+                            resizeable: false,
+                            formatter: this.getMarkerFormatter.bind(this),
+                            className: "nowrap marker-value"
                         });
                     }
                 }
@@ -1573,6 +1647,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
                 this.afterDataGridUpdate = [];
                 this.fixHeader();
+
+                if (this.options.isExpandAutomatically) {
+                    // Раскрыть все строки текущего datagrid-а
+                    YAHOO.Bubbling.fire('expandAllGridRows', {
+                        id: this.id
+                    });
+                }
             },
             /**
              * DataTable set-up and event registration
@@ -2076,6 +2157,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 return items;
             },
 
+            getAllSelectedItems: function () {
+                var items = [];
+                for (var item in this.selectedItems) {
+                    if (this.selectedItems.hasOwnProperty(item) && this.selectedItems[item]) {
+                        items.push(item);
+                    }
+                }
+                return items;
+            },
             /**
              * Public function to select items by specified groups
              *
@@ -3050,63 +3140,61 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
             },
 
-	        onExportCsv: function DataGrid__onExportCsv(fileName)
-	        {
-		        var selectedItems = this.getSelectedItems();
+            onExportCsv: function DataGrid__onExportCsv(fileName) {
+                var form = document.createElement("form");
+                form.enctype = "multipart/form-data";
+                form.action = Alfresco.constants.PROXY_URI + "lecm/base/action/export-csv";
+                form.method = "POST";
 
-		        var form = document.createElement("form");
-		        form.enctype = "multipart/form-data";
-		        form.action = Alfresco.constants.PROXY_URI + "lecm/base/action/export-csv";
-		        form.method = "POST";
+                var inputFileName = document.createElement("input");
+                inputFileName.type = "hidden";
+                inputFileName.name = "fileName";
+                inputFileName.value = encodeURIComponent(fileName);
+                form.appendChild(inputFileName);
 
-		        var inputFileName = document.createElement("input");
-		        inputFileName.type = "hidden";
-		        inputFileName.name = "fileName";
-		        inputFileName.value = encodeURIComponent(fileName);
-		        form.appendChild(inputFileName);
+                var inputTimeZone = document.createElement("input");
+                inputTimeZone.type = "hidden";
+                inputTimeZone.name = "timeZoneOffset";
+                inputTimeZone.value = new Date().getTimezoneOffset();
+                form.appendChild(inputTimeZone);
 
-		        var inputTimeZone = document.createElement("input");
-		        inputTimeZone.type = "hidden";
-		        inputTimeZone.name = "timeZoneOffset";
-		        inputTimeZone.value = new Date().getTimezoneOffset();
-		        form.appendChild(inputTimeZone);
+                var allSelected = this.getAllSelectedItems();
+                allSelected.forEach(function (item) {
+                    var inputNodeRef = document.createElement("input");
+                    inputNodeRef.type = "hidden";
+                    inputNodeRef.name = "nodeRef";
+                    inputNodeRef.value = item;
+                    form.appendChild(inputNodeRef);
+                });
 
-		        for (var i = 0; i < selectedItems.length;i++) {
-			        var inputNodeRef = document.createElement("input");
-			        inputNodeRef.type = "hidden";
-			        inputNodeRef.name = "nodeRef";
-			        inputNodeRef.value = selectedItems[i].nodeRef;
-			        form.appendChild(inputNodeRef);
-		        }
+                for (i = 0; i < this.datagridColumns.length; i++) {
+                    var column = this.datagridColumns[i];
+                    var label = column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_"));
+                    var property = column.name;
+                    if (column.nameSubstituteString != null) {
+                        property = column.nameSubstituteString
+                    } else if (column.type == "association") {
+                        property = "{" + property + "/cm:name}";
+                    } else {
+                        property = "{" + property + "}";
+                    }
+                    var inputField = document.createElement("input");
+                    inputField.type = "hidden";
+                    inputField.name = "field";
+                    inputField.value = property;
+                    form.appendChild(inputField);
 
-		        for (i = 0; i < this.datagridColumns.length; i++) {
-			        var column = this.datagridColumns[i];
-			        var label = column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_"));
-			        var property = column.name;
-			        if (column.nameSubstituteString != null) {
-				        property = column.nameSubstituteString
-			        } else if (column.type == "association") {
-				        property = "{" + property + "/cm:name}";
-			        } else {
-				        property = "{" + property + "}";
-			        }
-			        var inputField = document.createElement("input");
-			        inputField.type = "hidden";
-			        inputField.name = "field";
-			        inputField.value = property;
-			        form.appendChild(inputField);
+                    var inputFieldLabel = document.createElement("input");
+                    inputFieldLabel.type = "hidden";
+                    inputFieldLabel.name = "fieldLabel";
+                    inputFieldLabel.value = label;
+                    form.appendChild(inputFieldLabel);
+                }
 
-			        var inputFieldLabel = document.createElement("input");
-			        inputFieldLabel.type = "hidden";
-			        inputFieldLabel.name = "fieldLabel";
-			        inputFieldLabel.value = label;
-			        form.appendChild(inputFieldLabel);
-		        }
+                document.body.appendChild(form);
 
-		        document.body.appendChild(form);
-
-		        form.submit();
-	        },
+                form.submit();
+            },
 
             onReCreateDatagrid: function DataGrid_onChangeDatagrid(layer, args) {
                 var obj = args[1];
@@ -3116,6 +3204,27 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     this.datagridMeta.recreate = true;
                     this.populateDataGrid();
                 }
+            },
+
+            onExpanAllGridRows: function DataGrid_onExpanAllGridRows(layer, args) {
+                var obj = args[1];
+                if (obj && obj.id != this.id) return;
+                var dTable = this.widgets.dataTable;
+                if (dTable) {
+                    var records = dTable.getRecordSet().getRecords();
+                    for (var i = 0; i < records.length; ++i) {
+                        var row = this.widgets.dataTable.getRow(records[i]);
+                        if (!Dom.hasClass(row, "expanded")) {
+                            this.expandRowByRecord(records[i], true);
+                        }
+                    }
+                }
+            },
+
+            getExpandUri: function DataGrid_getExpandUri() {
+                var context = this.options.expandDataSource.context || Alfresco.constants.URL_SERVICECONTEXT;
+                var uri = this.options.expandDataSource.uri || this.options.expandDataSource.toString();
+                return (context + uri);
             },
 
 	        destroyDatatable: function () {
@@ -3382,4 +3491,64 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
     /* Dummy instance to load optional YUI components early */
     var dummyInstance = new LogicECM.module.Base.Actions();
+})();
+
+/**
+ * Модуль для кастомизации Paginator. Подключается непосредственно в датагрид
+ */
+(function () {
+    var Paginator = YAHOO.widget.Paginator,
+        l = YAHOO.lang,
+        setId = YAHOO.util.Dom.generateId;
+
+    /**
+     * ui Component to generate the jump-to-page dropdown
+     *
+     * @namespace YAHOO.widget.Paginator.ui
+     * @class LecmJumpToPageDropdown
+     * @for YAHOO.widget.Paginator
+     *
+     * @constructor
+     * @param p {Pagintor} Paginator instance to attach to
+     */
+    Paginator.ui.LecmJumpToPageDropdown = function (p) {
+        Paginator.ui.LecmJumpToPageDropdown.superclass.constructor.call(this, p);
+    };
+
+    /**
+     * Decorates Paginator instances with new attributes. Called during
+     * Paginator instantiation.
+     * @method init
+     * @param p {Paginator} Paginator instance to decorate
+     * @static
+     */
+    Paginator.ui.LecmJumpToPageDropdown.init = function (p) {
+        Paginator.ui.JumpToPageDropdown.init.call(this, p);
+        /**
+         * Заголовок
+         * @attribute jumpToPageDropdownTitle
+         * @default 'Jump To Page'
+         */
+        p.setAttributeConfig('jumpToPageDropdownTitle', {
+            value: 'Jump To Page',
+            validator: l.isString
+        });
+    };
+
+    YAHOO.extend(Paginator.ui.LecmJumpToPageDropdown, Paginator.ui.JumpToPageDropdown);
+
+    YAHOO.lang.augmentObject(Paginator.ui.LecmJumpToPageDropdown.prototype, {
+        render: function (id_base) {
+            this.select = document.createElement('select');
+            setId(this.select, id_base + '-jtp');
+            this.select.className = this.paginator.get('jumpToPageDropdownClass');
+            this.select.title = this.paginator.get('jumpToPageDropdownTitle');
+
+            YAHOO.util.Event.on(this.select, 'change', this.onChange, this, true);
+
+            this.rebuild();
+
+            return this.select;
+        }
+    }, true);
 })();

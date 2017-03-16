@@ -19,41 +19,31 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	YAHOO.extend(LogicECM.module.ARM.DocumentsReports, Alfresco.component.Base,
 		{
 			onUpdateArmReports: function(layer, args) {
-				var types = args[1].types;
-				var reportCodes = args[1].reportCodes;
-                if (types == null) {
-                    types = "";
-                }
-                if (reportCodes == null) {
-                    reportCodes = "";
-                }
-//				if (types !== null) {
-					var container = Dom.get(this.id + "-data");
-
-					if (container != null) {
-						container.innerHTML = "";
-						var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/registeredReports?forCollection=true&docType=" + types + "&reportCodes=" + reportCodes;
-						var callback = {
-							success: function (oResponse) {
+				var types = args[1].types ? args[1].types : "";
+				var reportCodes = args[1].reportCodes ? args[1].reportCodes : "";
+				var container = Dom.get(this.id + "-data");
+				if (container) {
+					container.innerHTML = "";
+					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/registeredReports?forCollection=true&docType=" + types + "&reportCodes=" + reportCodes;
+					Alfresco.util.Ajax.jsonGet({
+					url: sUrl,
+					successCallback: {
+						fn: function (response) {
                                 container.innerHTML = "";
-                                var oResults = eval("(" + oResponse.responseText + ")");
-                                if (oResults != null && oResults.list != null) {
-	                                var resultLength = oResults.list.length;
-
+                                if (response.json && response.json.list) {
+	                                var resultLength = response.json.list.length;
 	                                Dom.setStyle(this.id + "-data", "display", resultLength > 0 ? "" : "none");
 	                                Dom.setStyle(this.id + "-empty", "display", resultLength == 0 ? "" : "none");
-
-									for (var i = 0; i < oResults.list.length; i++) {
-										container.appendChild(this.getReportTr(oResults.list[i], i, oResults.list.length));
+									for (var i = 0; i < response.json.list.length; i++) {
+										container.appendChild(this.getReportTr(response.json.list[i], i, response.json.list.length));
 									}
 								}
 							},
-							failureMessage:"message.failure",
 							scope: this
-						};
-						YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-					}
-//				}
+						},
+						failureMessage: this.msg("message.failure")
+					});
+				}
 			},
 
 			getReportTr: function(report, index, allCount) {

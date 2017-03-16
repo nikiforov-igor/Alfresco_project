@@ -31,19 +31,17 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                  * html элемент в котрый помещаем результат
                  */
                 onReady: function () {
-                    var me = this;
+                    Dom.addClass(this.id + "-meErrands-parent", "hidden1");
+                    Dom.addClass(this.id + "-issuedByMeErrands-parent", "hidden1");
+                    Dom.addClass(this.id + "-controlledMeErrands-parent", "hidden1");
+                    Dom.addClass(this.id + "-otherErrands-parent", "hidden1");
 
-                    Dom.addClass(me.id + "-meErrands-parent", "hidden1");
-                    Dom.addClass(me.id + "-issuedByMeErrands-parent", "hidden1");
-                    Dom.addClass(me.id + "-controlledMeErrands-parent", "hidden1");
-                    Dom.addClass(me.id + "-otherErrands-parent", "hidden1");
+                    Dom.addClass(this.id + "-meErrands-label", "hidden1");
+                    Dom.addClass(this.id + "-issuedByMeErrands-label", "hidden1");
+                    Dom.addClass(this.id + "-controlledMeErrands-label", "hidden1");
+                    Dom.addClass(this.id + "-otherErrands-label", "hidden1");
 
-                    Dom.addClass(me.id + "-meErrands-label", "hidden1");
-                    Dom.addClass(me.id + "-issuedByMeErrands-label", "hidden1");
-                    Dom.addClass(me.id + "-controlledMeErrands-label", "hidden1");
-                    Dom.addClass(me.id + "-otherErrands-label", "hidden1");
-
-                    Alfresco.util.Ajax.request({
+                    Alfresco.util.Ajax.jsonGet({
                         url: Alfresco.constants.PROXY_URI + "/lecm/errands/api/documentErrandsFilteredList",
                         dataObj: {
                             nodeRef: this.options.nodeRef,
@@ -51,7 +49,6 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         },
                         successCallback: {
                             fn: function (response) {
-
                                 var k = 0;
                                 if (response.json.meErrands.length > 0) {
                                     k++;
@@ -66,21 +63,20 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                                     k++;
                                 }
                                 if (k > 1) {
-                                    Dom.removeClass(me.id + "-meErrands-label", "hidden1");
-                                    Dom.removeClass(me.id + "-issuedByMeErrands-label", "hidden1");
-                                    Dom.removeClass(me.id + "-controlledMeErrands-label", "hidden1");
-                                    Dom.removeClass(me.id + "-otherErrands-label", "hidden1");
+                                    Dom.removeClass(this.id + "-meErrands-label", "hidden1");
+                                    Dom.removeClass(this.id + "-issuedByMeErrands-label", "hidden1");
+                                    Dom.removeClass(this.id + "-controlledMeErrands-label", "hidden1");
+                                    Dom.removeClass(this.id + "-otherErrands-label", "hidden1");
                                 }
 
-                                me.showErrands(response.json.meErrands, Dom.get(me.id + "-meErrands"));
-                                me.showErrands(response.json.issuedMeErrands, Dom.get(me.id + "-issuedByMeErrands"));
-                                me.showErrands(response.json.controlledMeErrands, Dom.get(me.id + "-controlledMeErrands"));
-                                me.showErrands(response.json.otherErrands, Dom.get(me.id + "-otherErrands"));
+                                this.showErrands(response.json.meErrands, Dom.get(this.id + "-meErrands"));
+                                this.showErrands(response.json.issuedMeErrands, Dom.get(this.id + "-issuedByMeErrands"));
+                                this.showErrands(response.json.controlledMeErrands, Dom.get(this.id + "-controlledMeErrands"));
+                                this.showErrands(response.json.otherErrands, Dom.get(this.id + "-otherErrands"));
                             },
                             scope: this
                         },
                         failureMessage: this.msg("message.failure"),
-                        scope: this,
                         execScripts: true
                     });
                 },
@@ -117,20 +113,22 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
 
                             detail = "<div class=\"workflow-task-item\">";
                         detail +=   "<div class=\"workflow-task-list-picture " + isImportant + "\" title=\"" + isImportantTitle + "\">&nbsp;</div>";
-                        detail +=   "<div style=\"float: left;\">";
+                        detail +=   "<div class=\"workflow-task-list-body\">";
                         detail +=       "<div>";
-                        detail +=           "<div class=\"workflow-task-title workflow-task-list-left-column\" style=\"font-size: 16px;\">";
+                        detail +=           "<div class=\"workflow-task-title\">";
                         detail +=           "<a href=\""+window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT+"document?nodeRef="+ errand.nodeRef +"\">" + errand.title + ":</a>";
                         detail +=           "</div>";
-                        detail +=           "<span class=\"workflow-task-status "+ statusClass +"\">" + status + "</span>";
                         detail +=       "</div>";
-                        detail +=       "<div style=\"clear: both;\"></div>";
+                        detail +=       "<div class=\"clear\"></div>";
                         detail +=       "<div class=\"workflow-task-description\">" + errand.description + "</div>";
                         detail +=       "<div>";
                         detail +=           "<div class=\"workflow-task-list-left-column\">";
                         detail +=               "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.duedate") + ": </span>" + errand.dueDate;
                         detail +=           "</div>";
-                        detail +=           "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.status") + ": </span>" + errand.statusMessage+"<br/>";
+                        detail +=           "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.status") + ": </span>" + errand.statusMessage;
+
+                        detail +=           "<span class=\"workflow-task-status "+ statusClass +"\">" + status + "</span>"+"<br/>";
+
                             url = YAHOO.lang.substitute(Alfresco.constants.URL_PAGECONTEXT + template,
                                     {
                                         nodeRef: errand.executor
@@ -146,7 +144,7 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
 
                         detail +=       "</div>";
                         detail +=   "</div>";
-                        detail +=   "<div style=\"clear: both;\"></div>";
+                        detail +=   "<div class=\"clear\"></div>";
                             detail += "</div>";
                             container.innerHTML += detail;
                         }

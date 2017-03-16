@@ -1,7 +1,7 @@
-<#escape x as x?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 <#if rootFolder??>
-    {
-	    "nodeRef": "${rootFolder.nodeRef}"
-    }
+{
+    "nodeRef": "${rootFolder.nodeRef}"
+}
 </#if>
 </#escape>

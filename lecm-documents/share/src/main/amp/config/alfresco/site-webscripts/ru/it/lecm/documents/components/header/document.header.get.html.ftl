@@ -8,6 +8,7 @@
 <@script type="text/javascript" src="${url.context}/res/scripts/components/document-admin-tools-right.js"></@script>
 </#if>
 
+<@script type="text/javascript" src="${url.context}/res/scripts/components/document-panel-split.js"></@script>
 <@script type="text/javascript" src="${url.context}/res/scripts/components/document-favorite.js"></@script>
 <@script type="text/javascript" src="${url.context}/res/scripts/components/document-copy.js"></@script>
 
@@ -120,6 +121,32 @@
                     </span>
                 </div>
             </#if>
+            <div id="${controlId}-split-panel-container">
+                <div class="line-separator"></div>
+                <div class="split-panel" id="${controlId}-split-panel">
+                    <span id="${controlId}-split-panel-button" class="yui-button yui-push-button">
+                       <span class="first-child">
+                          <button type="button"></button>
+                       </span>
+                    </span>
+                </div>
+            </div>
+            <script type="text/javascript">//<![CDATA[
+            (function () {
+                LogicECM.services = LogicECM.services || {};
+                if (LogicECM.services.documentViewPreferences) {
+                    var splitPanel = new LogicECM.module.DocumentPanelSplitView("${id}").setMessages(${messages});
+                    splitPanel.setOptions({
+                        documentRef: "${nodeRef}"
+                    });
+                } else {
+                    var splitPanelContainer = "${controlId}-split-panel-container";
+                    YAHOO.util.Event.onAvailable(splitPanelContainer, function() {
+                        Dom.addClass(splitPanelContainer, "hidden");
+                    });
+                }
+            })();
+            //]]></script>
         </div>
 
         <div class="clear"></div>

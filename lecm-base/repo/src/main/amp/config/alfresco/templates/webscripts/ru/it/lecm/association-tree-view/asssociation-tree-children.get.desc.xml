@@ -2,7 +2,7 @@
 	<shortname>Dictionary</shortname>
 	<description>Dictionary</description>
 	<url>/lecm/components/association-tree/{store_type}/{store_id}/{id}/items</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>user</authentication>
     <transaction allow="readonly">required</transaction>
 </webscript>

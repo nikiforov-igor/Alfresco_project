@@ -1,4 +1,44 @@
 <alfresco-config>
+
+	<config evaluator="string-compare" condition="DocLibCustom">
+		<dependencies>
+			<!-- JS для регистрации action'а "Разблокировать документ -->
+			<js src="/scripts/lecm-base/document-unlock.js" />
+		</dependencies>
+	</config>
+
+	<config evaluator="string-compare" condition="LecmDocumentDetails">
+		<dependencies>
+			<js src="/scripts/lecm-base/document-unlock.js" />
+		</dependencies>
+	</config>
+
+	<!-- Добавление action'a "Разблокировать документа" -->
+	<config evaluator="string-compare" condition="DocLibActions" replace="true">
+		<actions>
+			<action id="document-unlock" type="javascript" label="actions.document.unlock" icon="document-unlock">
+				<param name="function">onUnlockAction</param>
+				<permissions>
+					<permission allow="true">Write</permission>
+				</permissions>
+				<evaluator>evaluator.doclib.action.isLocked</evaluator>
+				<evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+			</action>
+		</actions>
+
+		<!--
+           Action Group definitions
+        -->
+		<actionGroups>
+			<actionGroup id="document-browse">
+				<action index="101" id="document-unlock" />
+			</actionGroup>
+			<actionGroup id="document-details">
+				<action index="101" id="document-unlock" />
+			</actionGroup>
+		</actionGroups>
+	</config>
+
 	<config evaluator="string-compare" condition="CSRFPolicy" replace="true">
 		<filter>
 			<rule>

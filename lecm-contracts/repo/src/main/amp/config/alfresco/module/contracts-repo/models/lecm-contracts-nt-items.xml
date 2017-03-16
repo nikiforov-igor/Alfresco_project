@@ -9,10 +9,10 @@
         <items>
             <item name="cm:CONTRACT_REGISTER" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Поступил новый договор на регистрации, номер проекта: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document-aspects:reg-project-data-number"))}]]></property>
+                    <![CDATA[Поступил новый договор на регистрацию, номер проекта: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document-aspects:reg-project-data-number"))}]]></property>
                 <property name="cm:name"><![CDATA[CONTRACT_REGISTER]]></property>
                 <property name="lecm-notification-template:description">
-                    <![CDATA[Договор. Поступил на регистрации]]></property>
+                    <![CDATA[Договор. Поступил на регистрацию]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"

@@ -139,7 +139,7 @@ public class UserActionsServiceImpl implements UserActionsService {
         for (NodeRef chiefNodeRef : chiefNodeRefList) {
             String chiefLogin = orgstructureService.getEmployeeLogin(chiefNodeRef);
             String chiefShortName = (String) nodeService.getProperty(chiefNodeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-            List<WorkflowTask> chiefTasks = stateMachineService.getAssignedAndPooledTasks(chiefLogin);
+            List<WorkflowTask> chiefTasks = stateMachineService.getAssignedAndPooledTasks(chiefLogin, true);
             for (WorkflowTask activeTask : activeTasks) {
                 for (WorkflowTask chiefTask : chiefTasks) {
                     if (activeTask.getId().equals(chiefTask.getId())) {

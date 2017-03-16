@@ -13,6 +13,7 @@ import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
 import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.documents.beans.DocumentGlobalSettingsService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -34,15 +35,20 @@ public class SharedFolderNotificationAction extends ActionExecuterAbstractBase {
     private OrgstructureBean orgstructureService;
     private AuthorityService authorityService;
     private DictionaryService dictionaryService;
+    private DocumentGlobalSettingsService documentGlobalSettings;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
 
+    public void setDocumentGlobalSettings(DocumentGlobalSettingsService documentGlobalSettings) {
+        this.documentGlobalSettings = documentGlobalSettings;
+    }
+
     @Override
     protected void executeImpl(Action action, final NodeRef nodeRef) {
         //Если оповещения отключены ничего не делаем
-        if (!notificationService.isEnablePassiveNotifications()) return;
+        if (!documentGlobalSettings.isEnablePassiveNotifications()) return;
 
         QName type = nodeService.getType(nodeRef);
         final boolean isContent = isContent(nodeRef);

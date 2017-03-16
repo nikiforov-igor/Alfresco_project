@@ -22,13 +22,13 @@ LogicECM.module.Document = LogicECM.module.Document|| {};
             mandatory: false,
             currentNodeRef: null,
             destination: null,
-            updateOnAction: null
+            updateOnAction: null,
+            valuesDelimiter: ","
         },
 
-        currentValues:[],
-
         draw: function SelectMany_onReady() {
-            YAHOO.util.Event.on(this.id, "change", this.onSelectChange, this, true);
+            YAHOO.util.Event.on(this.options.controlId, "change", this.onSelectChange, this, true);
+
             var url = Alfresco.constants.PROXY_URI + "lecm/statemachine/getStatuses?docType={docType}&active=true&final=true";
             url = YAHOO.lang.substitute(url, {
                 docType: this.options.docType ? this.options.docType : ""
@@ -36,10 +36,19 @@ LogicECM.module.Document = LogicECM.module.Document|| {};
             Alfresco.util.Ajax.jsonGet({
                 url: url,
                 successCallback: {
+                    scope: this,
                     fn: function (response) {
                         var oResults = response.json;
-                        if (oResults != null) {
-                            var select = document.getElementById(this.id);
+                        if (oResults) {
+                            oResults.sort(function(a,b) {
+                                if (a.id < b.id){
+                                    return -1;
+                                } else if (a.id > b.id) {
+                                    return 1;
+                                }
+                                return 0;
+                            });
+                            var select = document.getElementById(this.options.controlId);
                             for (var i = 0; i < oResults.length; i++) {
                                 var option = document.createElement("option");
                                 option.value = oResults[i].id;
@@ -50,19 +59,17 @@ LogicECM.module.Document = LogicECM.module.Document|| {};
                                 select.appendChild(option);
                             }
                             if (oResults.length == 0) {
-                                if (Dom.get(this.id).hasAttribute("multiple")) {
-                                    Dom.get(this.id).removeAttribute("multiple");
+                                if (Dom.get(this.options.controlId).hasAttribute("multiple")) {
+                                    Dom.get(this.options.controlId).removeAttribute("multiple");
                                 }
                             }
                         }
-                        this.currentValues = [];
-                    },
-                    scope: this
+                    }
                 }
             });
 
-            if (this.options.updateOnAction && this.options.updateOnAction.length > 0) {
-                var select = document.getElementById(this.id);
+            if (this.options.updateOnAction && this.options.updateOnAction.length) {
+                var select = document.getElementById(this.options.controlId);
                 if (select) {
                     select.setAttribute("disabled", "true");
                 }
@@ -71,9 +78,8 @@ LogicECM.module.Document = LogicECM.module.Document|| {};
         },
 
         onSelectChange: function () {
-            var select = document.getElementById(this.id);
-
-            if (select !== null) {
+            var select = document.getElementById(this.options.controlId);
+            if (select) {
                 var values = [];
                 for (var j = 0, jj = select.options.length; j < jj; j++) {
                     if (select.options[j].selected) {
@@ -81,8 +87,7 @@ LogicECM.module.Document = LogicECM.module.Document|| {};
                     }
                 }
 
-                /*document.getElementById(this.options.controlId + "-removed").value = this.options.selectedValue;*/
-                document.getElementById(this.options.controlId + "-added").value = values.join(",");
+                document.getElementById(this.id).value = values.join(this.options.valuesDelimiter);
                 if (this.options.mandatory) {
                     YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
                 }

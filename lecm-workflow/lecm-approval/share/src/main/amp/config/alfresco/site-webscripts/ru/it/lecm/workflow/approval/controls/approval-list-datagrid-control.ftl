@@ -34,10 +34,16 @@
 			<button type="button">${msg("label.button.clear.approval.data")}</button>
 		</span>
 	</span>
+	<span id="${controlId}-expand-all-button" class="yui-button yui-push-button hidden">
+		<span class="first-child">
+			<button type="button">${msg("label.button.expand.all.stages")}</button>
+		</span>
+	</span>
 	</#if>
 
 	<div id="${controlId}-approval-container" class="approvalContainer hidden">
 		<div class="approvalControlsContainer">
+            <a id="${controlId}-expandAllStages" class="expandAllStages" href="javascript:void(0);" title="${msg('label.button.expand.all.stages')}"></a>
 			<#if editable><a id="${controlId}-editIteration" class="editIteration" href="javascript:void(0);" title="${msg('title.edit')}"></a></#if>
 			<a id="${controlId}-printApprovalReport" class="printApprovalReport" href="javascript:void(0);" title="${msg('title.print')}"></a>
 		</div>

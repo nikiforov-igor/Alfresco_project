@@ -1,3 +1,5 @@
+/* global YAHOO, Alfresco */
+
 /**
  * LogicECM root namespace.
  *
@@ -725,7 +727,7 @@ LogicECM.module.Base.Util = {
             xhttp = new XMLHttpRequest();
         }
         xhttp.open("GET", url, false);
-        try {xhttp.responseType = "msxml-document"} catch(err) {} // Helping IE11
+        try {xhttp.responseType = "msxml-document";} catch(err) {} // Helping IE11
         xhttp.send("");
         return xhttp.responseXML;
     },
@@ -837,7 +839,7 @@ LogicECM.module.Base.Util = {
 		var attachmentsModalForm = new Alfresco.module.SimpleDialog("modalWindow");
 
 		attachmentsModalForm.setOptions({
-			width: '50em',
+			width: '55em',
 			templateUrl: Alfresco.constants.URL_SERVICECONTEXT + '/lecm/components/document/attachments-preview',
 			templateRequestParams: {
 				nodeRef : documentRef,
@@ -881,7 +883,7 @@ LogicECM.module.Base.Util = {
 			itemKind: obj.itemKind ? obj.itemKind : "node",
 			itemId: obj.itemId,
 			mode: "view",
-			htmlid: obj.htmlid ? obj.htmlid : obj.itemId.replace("workspace://SpacesStore/", "").replace("-", ""),
+			htmlid: obj.htmlid ? obj.htmlid : obj.itemId.replace("workspace://SpacesStore/", "").replace("-", "")
 		};
 		if(obj.formId){
 			requestObj.formId = obj.formId;
@@ -937,35 +939,26 @@ LogicECM.module.Base.Util = {
 
 	showEmployeeViewByLink: function (employeeLinkNodeRef, title) {
 		Alfresco.util.Ajax.jsonGet({
-				url: Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeeByLink?nodeRef=" + employeeLinkNodeRef,
-				successCallback:
-				{
-					fn: function (oResponse) {
-						if (oResponse.json.nodeRef) {
-							LogicECM.module.Base.Util.viewAttributes({
-								itemId: oResponse.json.nodeRef,
-								title: title
-							});
-						} else {
-							Alfresco.util.PopupManager.displayMessage(
-								{
-									text: Alfresco.util.message("message.details.failure")
-								});
-						}
-					},
-					scope: this
-				},
-				failureCallback:
-				{
-					fn: function (oResponse) {
-						Alfresco.util.PopupManager.displayMessage(
-							{
-								text: Alfresco.util.message("message.details.failure")
-							});
-					},
-					scope: this
+			url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getEmployeeByLink",
+			dataObj: {
+				nodeRef: employeeLinkNodeRef
+			},
+			successCallback: {
+				fn: function (oResponse) {
+					if (oResponse.json && oResponse.json.nodeRef) {
+						LogicECM.module.Base.Util.viewAttributes({
+							itemId: oResponse.json.nodeRef,
+							title: title
+						});
+					} else {
+						Alfresco.util.PopupManager.displayMessage({
+							text: Alfresco.util.message("message.details.failure")
+						});
+					}
 				}
-			});
+			},
+			failureMessage: Alfresco.util.message("message.details.failure")
+		});
 	},
 
 	displayErrorMessageWithDetails: function (msgHeader, msgTitle, msgDetails) {
@@ -996,7 +989,7 @@ LogicECM.module.Base.Util = {
 		errorMessageDialog.show();
 
 		YAHOO.util.Event.on(errorMessageDialog.id + "-error-message-show-details-link", "click", function(){
-			Dom.setStyle(errorMessageDialog.id + "-error-message-show-details", "display", "block");
+			YAHOO.util.Dom.setStyle(errorMessageDialog.id + "-error-message-show-details", "display", "block");
 		}, null, this);
 
 		errorMessageDialog.hideEvent.subscribe(function (event, args, params) {

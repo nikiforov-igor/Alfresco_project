@@ -521,6 +521,7 @@
         <property name="nodeService" ref="nodeService"/>
         <property name="namespaceService" ref="namespaceService"/>
         <property name="notificationsService" ref="notificationsService"/>
+        <property name="documentGlobalSettings" ref="documents.global-settings.service"/>
         <property name="documentService" ref="documentService"/>
         <property name="documentTableService" ref="documentTableService"/>
         <property name="documentMembersService" ref="documentMembersService"/>
@@ -538,7 +539,7 @@
         <property name="triggerGroup" value="lecm-contracts-stage-end-notifications"/>
         <property name="actionName" value="contractStageEndDateNotificationExecutor"/>
         <property name="documentService" ref="documentService"/>
-        <property name="notificationsService" ref="notificationsService"/>
+        <property name="documentGlobalSettings" ref="documents.global-settings.service"/>
     </bean>
 
     <bean id="additionalDocCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">

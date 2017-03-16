@@ -84,7 +84,7 @@ LogicECM.module = LogicECM.module || {};
 
 		tempDisabled: false,
 
-		readsonly: false,
+		readonly: false,
 
         itemsLoading: false,
 
@@ -173,6 +173,8 @@ LogicECM.module = LogicECM.module || {};
 
 	        defaultValueDataSource: null,
 
+			defaultValueUseOnce: false,
+
             ignoreNodes: null,
 
 			childrenDataSource: "lecm/forms/picker",
@@ -229,7 +231,7 @@ LogicECM.module = LogicECM.module || {};
 			}
 
             // Create button if control is enabled
-            if(!this.options.disabled && !this.readsonly)
+            if(!this.options.disabled && !this.readonly)
             {
 	            if (this.widgets.pickerButton == null) {
 		            var buttonOptions = {
@@ -305,27 +307,24 @@ LogicECM.module = LogicECM.module || {};
 		},
 
         loadDefaultValue: function AssociationAutoComplete__loadDefaultValue() {
-		        if (this.options.defaultValue != null) {
-                     this.defaultValue = this.options.defaultValue;
-                     this.updateViewForm();
-                } else if (this.options.defaultValueDataSource != null) {
-			        var me = this;
-
-			        Alfresco.util.Ajax.request(
-				        {
-					        url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
-					        successCallback: {
-						        fn: function (response) {
-							        var oResults = eval("(" + response.serverResponse.responseText + ")");
-							        if (oResults != null && oResults.nodeRef != null ) {
-								        me.defaultValue = oResults.nodeRef;
-							        }
-							        me.updateViewForm();
-						        }
-					        },
-					        failureMessage: "message.failure"
-				        });
-		        }
+	        if (this.options.defaultValue) {
+                 this.defaultValue = this.options.defaultValue;
+                 this.updateViewForm();
+            } else if (this.options.defaultValueDataSource) {
+		        Alfresco.util.Ajax.jsonGet({
+			        url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
+			        successCallback: {
+				        fn: function (response) {
+						    if (response.json && response.json.nodeRef) {
+							     this.defaultValue = response.json.nodeRef;
+						    }
+						    this.updateViewForm();
+				        },
+						scope: this
+			        },
+			        failureMessage: this.msg("message.failure")
+		        });
+	        }
 	    },
 
         showCreateNewItemWindow: function AssociationTreeViewer_showCreateNewItemWindow() {
@@ -419,6 +418,9 @@ LogicECM.module = LogicECM.module || {};
 
             if (arrItems == "" && this.defaultValue != null) {
 		        arrItems += this.defaultValue;
+		        if (this.options.defaultValueUseOnce) {
+			        this.defaultValue = null;
+		        }
 	        }
 
             var onSuccess = function AssociationTreeViewer__loadSelectedItems_onSuccess(response)
@@ -1098,63 +1100,60 @@ LogicECM.module = LogicECM.module || {};
 
         _loadNode:function AssociationTreeViewer__loadNode(node, fnLoadComplete) {
             var sUrl = this._generateItemsUrlPath(node.data.nodeRef) + this._generateItemsUrlParams();
-
-            var callback = {
-                success:function (oResponse) {
-                    var oResults = eval("(" + oResponse.responseText + ")");
-                    if (oResults != null) {
-                        node.children = [];
-                        for (var nodeIndex in oResults) {
-                            var nodeRef = oResults[nodeIndex].nodeRef;
-                            var ignore = false;
-							if (this.argument.context.options.ignoreNodesInTreeView) {
-								var ignoreNodes = this.argument.context.options.ignoreNodes;
-								if (ignoreNodes != null) {
-									for (var i = 0; i < ignoreNodes.length; i++) {
-										if (ignoreNodes[i] == nodeRef) {
-											ignore = true;
+            Alfresco.util.Ajax.jsonGet({
+                url: sUrl,
+                successCallback: {
+					fn: function (response) {
+                        var oResults = response.json;
+                        if (oResults) {
+                            node.children = [];
+                            for (var nodeIndex in oResults) {
+                                var nodeRef = oResults[nodeIndex].nodeRef;
+                                var ignore = false;
+								if (this.options.ignoreNodesInTreeView) {
+									var ignoreNodes = this.options.ignoreNodes;
+									if (ignoreNodes != null) {
+										for (var i = 0; i < ignoreNodes.length; i++) {
+											if (ignoreNodes[i] == nodeRef) {
+												ignore = true;
+											}
 										}
 									}
 								}
-							}
 
-                            if (!ignore) {
-                                var newNode = {
-                                    label:oResults[nodeIndex].label,
-                                    title:oResults[nodeIndex].title,
-                                    nodeRef:oResults[nodeIndex].nodeRef,
-                                    isLeaf:oResults[nodeIndex].isLeaf,
-                                    type:oResults[nodeIndex].type,
-                                    isContainer: oResults[nodeIndex].isContainer,
-	                                hasPermAddChildren: oResults[nodeIndex].hasPermAddChildren,
-                                    renderHidden:true
-                                };
+                                if (!ignore) {
+                                    var newNode = {
+                                        label:oResults[nodeIndex].label,
+                                        title:oResults[nodeIndex].title,
+                                        nodeRef:oResults[nodeIndex].nodeRef,
+                                        isLeaf:oResults[nodeIndex].isLeaf,
+                                        type:oResults[nodeIndex].type,
+                                        isContainer: oResults[nodeIndex].isContainer,
+		                                hasPermAddChildren: oResults[nodeIndex].hasPermAddChildren,
+                                        renderHidden:true
+                                    };
 
-                                new YAHOO.widget.TextNode(newNode, node);
+                                    new YAHOO.widget.TextNode(newNode, node);
+                                }
                             }
                         }
-                    }
 
-                    if (oResponse.argument.fnLoadComplete != null) {
-                        oResponse.argument.fnLoadComplete();
-                    } else {
-                        oResponse.argument.tree.draw();
-                    }
+                        if (YAHOO.lang.isFunction(fnLoadComplete)) {
+                            fnLoadComplete.call();
+                        } else {
+                            this.tree.draw();
+                        }
+                    },
+                    scope: this
                 },
-                failure:function (oResponse) {
-                    var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-                    this.widgets.dataTable.set("MSG_ERROR", response.message);
-                    this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
-                },
-                argument:{
-                    node:node,
-                    fnLoadComplete:fnLoadComplete,
-                    tree:this.tree,
-                    context: this
-                },
-                timeout: 60000
-            };
-            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                failureCallback: {
+                    fn: function (response) {
+                        this.widgets.dataTable.set("MSG_ERROR", response.json.message);
+                        this.widgets.dataTable.showTableMessage(response.json.message, YAHOO.widget.DataTable.CLASS_ERROR);
+                    },
+                    scope: this
+                }
+            });
         },
 
         _generateItemsUrlPath: function AssociationTreeViewer__generateItemsUrlPath(nodeRef)

@@ -1,0 +1,11 @@
+<alfresco-config>
+    <config>
+        <field-types>
+            <field-type id="fake" localName="Фиктивное поле">
+                <control id="document-errands" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Поручения">
+                    <param id="uri" localName="Адрес веб-скрипта">/lecm/components/document/document-errands</param>
+                </control>
+            </field-type>
+        </field-types>
+    </config>
+</alfresco-config>

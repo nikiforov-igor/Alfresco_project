@@ -3,26 +3,21 @@
 <script type="text/javascript">
     //    <![CDATA[
     function getCurrency() {
-        Alfresco.util.Ajax.request(
-                {
-                    url: Alfresco.constants.PROXY_URI + "lecm/contracts/getCurrency",
-                    dataObj: {
-                        nodeRef: "${form.arguments.itemId}"
-                    },
-                    successCallback: {
-                        fn: function (response) {
-                            if (response.json.currency) {
-                                var id = Dom.get("${htmlId}");
-                                id.innerHTML = "${field.value} " + response.json.currency;
-                            }
-                        }
-                    },
-                    failureMessage:  {
-                        fn: function () {
-                            alert("failure.message");
-                        }
+        Alfresco.util.Ajax.jsonGet({
+            url: Alfresco.constants.PROXY_URI + "lecm/contracts/getCurrency",
+            dataObj: {
+                nodeRef: "${form.arguments.itemId}"
+            },
+            successCallback: {
+                fn: function (response) {
+                    if (response.json.currency) {
+                        var id = Dom.get("${htmlId}");
+                        id.innerHTML = "${field.value} " + response.json.currency;
                     }
-                });
+                }
+            },
+            failureMessage: "${msg("failure.message")}"
+        });
     }
     YAHOO.util.Event.onDOMReady(getCurrency);
     //]]>

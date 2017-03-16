@@ -6,15 +6,17 @@
 		reviewTsItems = reviewTable.getChildAssocsByType('lecm-review-ts:review-table-item'),
 		currentEmployee = orgstructure.getCurrentEmployee(),
 		recipients = [],
-		i, item, initiators, initiator, state;
+		i, item, initiators, initiator, state, initiatingDocuments;
 
 	for (i in reviewTsItems) {
 		item = reviewTsItems[i];
 		state = '' + item.properties['lecm-review-ts:review-state'];
 		initiators = item.assocs['lecm-review-ts:initiator-assoc'];
+        initiatingDocuments = item.sourceAssocs['lecm-review-aspects:related-review-records-assoc'];
 		if (initiators && initiators.length) {
 			initiator = initiators[0];
-			if (initiator.equals(currentEmployee) && 'NOT_REVIEWED' == state) {
+			if (initiator.equals(currentEmployee) && 'NOT_REVIEWED' == state
+                    && (!initiatingDocuments || !initiatingDocuments.length)) {
 				recipients.push(item.assocs['lecm-review-ts:reviewer-assoc'][0]);
 				item.properties['lecm-review-ts:review-state'] = 'CANCELLED';
 				item.properties['lecm-review-ts:review-finish-date'] = new Date();

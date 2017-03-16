@@ -9,10 +9,9 @@
     <#assign disabled=false>
 </#if>
 
-<#if field.control.params.hideDateFormat?? && field.control.params.hideDateFormat == "true">
-	<#assign hideDateFormat=true>
-<#else>
-	<#assign hideDateFormat=false>
+<#assign hideDateFormat=true>
+<#if field.control.params.hideDateFormat??>
+    <#assign hideDateFormat=field.control.params.hideDateFormat == "true">
 </#if>
 
 <#assign readonly = false>
@@ -160,14 +159,9 @@
                 var resources = [
                     'scripts/lecm-base/components/lecm-date-picker.js'
                 ]
-                if ($.timepicker === undefined) {
-                    resources.push('scripts/lecm-base/third-party/jquery-ui-1.10.3.custom.js');
-                    resources.push('scripts/lecm-base/third-party/jquery-ui-timepicker-addon.js');
-                    resources.push('scripts/lecm-base/third-party/jquery-ui-sliderAccess.js');
-                }
+
                 LogicECM.module.Base.Util.loadResources(resources, [
-                    'css/lecm-calendar/jquery-ui-1.10.3.custom.css',
-                    'css/lecm-calendar/jquery-ui-timepicker-addon.css'
+                    'css/lecm-base/components/lecm-date-picker.css'
                 ], createDatePicker, ["button", "calendar"]);
             }
 

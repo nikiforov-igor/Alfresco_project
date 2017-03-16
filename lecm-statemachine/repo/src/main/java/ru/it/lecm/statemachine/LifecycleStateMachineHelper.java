@@ -2350,6 +2350,35 @@ public class LifecycleStateMachineHelper extends BaseBean implements StateMachin
 
         return result;
 	}
+	
+	/**
+	 * ALFFIVE-166
+	 * В новой версии изменился WorkflowPermissionInterceptor, который не даст получить задачи
+	 * если не проходит ряд условий (например, если пользователь не исполнитель задачи).
+	 * В случаях, когда необходимо получить задачи другого пользователя можно использовать этот метод
+	 */
+	public List<WorkflowTask> getAssignedAndPooledTasks(final String assignee, boolean runAsAssignee) {
+		List<WorkflowTask> result = null;
+		
+		try {
+			AuthenticationUtil.RunAsWork<List<WorkflowTask>> runnable = new AuthenticationUtil.RunAsWork<List<WorkflowTask>>() {
+				@Override
+				public List<WorkflowTask> doWork() throws Exception {
+					return getAssignedAndPooledTasks(assignee);
+				}
+			};
+
+			if (runAsAssignee) {
+				result = AuthenticationUtil.runAs(runnable, assignee);
+			} else {
+				result = runnable.doWork();
+			}
+		} catch (Exception ex) {
+			logger.error("Cannot get tasks for assignee {}", assignee, ex);			
+		}
+
+		return result;
+	}
 
     /*
      * Останавливает процесс по его Id

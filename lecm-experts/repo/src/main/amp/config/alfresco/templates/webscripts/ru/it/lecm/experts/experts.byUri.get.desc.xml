@@ -4,5 +4,5 @@
     <url>/lecm/experts/get/byUri</url>
     <authentication>user</authentication>
     <transaction allow="readonly">required</transaction>
-    <format default="json">extension</format>
+    <format default="json"/>
 </webscript>

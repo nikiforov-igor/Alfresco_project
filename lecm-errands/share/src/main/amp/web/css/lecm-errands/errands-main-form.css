@@ -1,6 +1,5 @@
 .errands-main-form {
-    width: 93%;
-    margin: 20px 0 0 3.99%;
+    margin-top: 20px;
 }
 .yui-skin-lecmTheme div.metadata-form.errands-main-form .form-fields {
     width: auto;
@@ -137,6 +136,7 @@
 .yui-skin-lecmTheme div.metadata-form.errands-main-form div.form-fields,
 .yui-skin-lecmTheme div.metadata-form.errands-main-form div.form-fields > div.set {
 	min-width: 0;
+    padding: 1em 1em 5px 1em;
 }
 
 .execution-report-container {

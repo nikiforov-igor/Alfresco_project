@@ -1,9 +1,9 @@
-<#escape x as x?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 {
-    title: "${title!""}",
-    dashletTitle: "${dashletTitle!""}",
-    baseQuery : "${baseQuery!""}",
-    isExist: ${isExist?string},
+    "title": "${title!""}",
+    "dashletTitle": "${dashletTitle!""}",
+    "baseQuery": "${baseQuery!""}",
+    "isExist": ${isExist?string},
     "filters":
     [
     <#if filters??>

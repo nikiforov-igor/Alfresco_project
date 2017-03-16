@@ -22,10 +22,9 @@
    <#assign errorMessage=messageText>
 </#if>
 
-<#if field.control.params.hideDateFormat?? && field.control.params.hideDateFormat == "true">
-	<#assign hideDateFormat=true>
-<#else>
-	<#assign hideDateFormat=false>
+<#assign hideDateFormat=true>
+<#if field.control.params.hideDateFormat??>
+	<#assign hideDateFormat=field.control.params.hideDateFormat == "true">
 </#if>
 
 <#if field.control.params.showTime?? && field.control.params.showTime == "true">
@@ -118,11 +117,13 @@
      {
 
         function init() {
-            LogicECM.module.Base.Util.loadScripts([
+            LogicECM.module.Base.Util.loadResources([
                 'scripts/lecm-calendar/absence/date-interval-validation.js',
                 'scripts/lecm-base/components/lecm-date-picker.js',
                 'scripts/lecm-calendar/absence/absence-date-picker.js',
                 'components/form/date.js'
+           ],[
+                'css/lecm-base/components/lecm-date-picker.css'
            ], createControl, ["button", "calendar"]);
         }
 
@@ -134,6 +135,9 @@
 		      minLimit: "${minLimit}",
 			  maxLimit: "${maxLimit}",
               showTime: ${showTime?string},
+			   <#if field.control.params.dateDefault??>
+				   dateDefault: "${field.control.params.dateDefault?string}",
+			   </#if>
               mandatory: ${field.mandatory?string},
               validateHandler: <#if validateHandler??>${validateHandler}<#else>null</#if>,
               message: <#if errorMessage??>${errorMessage}<#else>"${msg('lecm.absence.msg.wrong.value')}"</#if>

@@ -94,9 +94,6 @@
 				<property name="lecm-dic:valueContainsType">
 					<default>lecm-arm:node</default>
 				</property>
-				<property name="lecm-arm:types">
-					<mandatory>true</mandatory>
-				</property>
 			</overrides>
             <mandatory-aspects>
                 <aspect>lecm-arm:ordered</aspect>
@@ -362,6 +359,24 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+				<!--Является маркером-->
+				<property name="lecm-arm:field-is-marker">
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+					<index enabled="false"/>
+				</property>
+				<!--Иконка маркера-->
+				<property name="lecm-arm:field-marker-icon">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="false"/>
+				</property>
+				<!--Разметка маркера -->
+				<property name="lecm-arm:field-marker-html">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="false"/>
+				</property>
 			</properties>
         	<mandatory-aspects>
                 <aspect>lecm-arm:ordered</aspect>

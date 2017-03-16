@@ -192,7 +192,7 @@
     </bean>
 
     <bean id="brOrgstructureEngineerInitiazer" class="ru.it.lecm.orgstructure.beans.BROrgstructureEngineerInitializerBean"
-          parent="businessRolesInitiazer" depends-on="serviceOrgstructure">
+          parent="businessRolesInitiazer" depends-on="serviceOrgstructure, orgstucturePersonEmployeeRelationsPolicy">
         <property name="businessRoles">
             <list>
                 <value>#{ORGANIZATION_ENGINEER}</value>
@@ -276,6 +276,7 @@
         <property name="authorityService" ref="authorityService"/>
         <property name="dictionaryService" ref="dictionaryService" />
         <property name="publicAction" value="false" />
+        <property name="documentGlobalSettings" ref="documents.global-settings.service"/>
     </bean>
 
     <bean id="orgstructure.exportEmployees.model" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">

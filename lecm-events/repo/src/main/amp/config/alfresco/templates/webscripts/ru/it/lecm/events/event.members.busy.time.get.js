@@ -8,7 +8,6 @@
                 var additionalFilter = "AND (";
                 for (var i=0; i < additionalFilterFields.length; ++i) {
                     var formatedField = additionalFilterFields[i].replace(/:/g, "\\:").replace(/-/g, "\\-");
-                    formatedField += "\\-ref";
                     additionalFilter += ("@" + formatedField + ": \"*" + employee + "*\"");
                     if (i < additionalFilterFields.length - 1) {
                         additionalFilter += " OR ";
@@ -36,6 +35,7 @@
                 })
             }
         }
-        model.result = jsonUtils.toJSONString(result);
+		var ewsCollection = ews.getEvents(employees, args["date"] + "T00:00:00Z", args["nextDate"] + "T00:00:00Z");
+        model.result = jsonUtils.toJSONString(result.concat(ewsCollection));
     }
 }());

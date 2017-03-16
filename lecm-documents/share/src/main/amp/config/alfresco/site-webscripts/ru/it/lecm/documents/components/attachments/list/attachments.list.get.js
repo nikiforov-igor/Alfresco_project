@@ -5,6 +5,7 @@
 function main() {
     AlfrescoUtil.param("nodeRef");
 	var inclBaseDoc = ('' + AlfrescoUtil.param("inclBaseDoc", "false")) == "true";
+    model.inclBaseDoc = inclBaseDoc;
 
 	model.hasViewListPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
 	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
@@ -21,6 +22,10 @@ function main() {
 		},
 		{
 			id: "document-view-content",
+			onlyForOwn: false
+		},
+		{
+			id: "document-unlock",
 			onlyForOwn: false
 		}
 	];
@@ -48,6 +53,14 @@ function main() {
 		});
 		allActions.push({
 			id: "document-view-content",
+			onlyForOwn: false
+		});
+		allActions.push({
+			id: "document-unlock",
+			onlyForOwn: false
+		});
+		allActions.push({
+			id: "lecm-online-editing",
 			onlyForOwn: false
 		});
 		allActions.push({

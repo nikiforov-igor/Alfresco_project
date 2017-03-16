@@ -2,7 +2,7 @@
 <webscript>
 	<shortname>ФМС. Номенклатура дел. Получить корневой каталог номенклатуры</shortname>
 	<url>/lecm/os/nomenclature/getNomenclatureFolder</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>user</authentication>
 	<transaction allow="readonly">required</transaction>
 </webscript>

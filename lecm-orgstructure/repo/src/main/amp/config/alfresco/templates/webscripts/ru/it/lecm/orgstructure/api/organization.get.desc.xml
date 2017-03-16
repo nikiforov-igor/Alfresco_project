@@ -2,7 +2,7 @@
 	<shortname>Organization</shortname>
 	<description>Organization</description>
 	<url>/lecm/orgstructure/api/getOrganization</url>
-	<format default="json">extension</format>
+	<format default="json"/>
 	<authentication>user</authentication>
     <transaction allow="readonly">required</transaction>
 </webscript>

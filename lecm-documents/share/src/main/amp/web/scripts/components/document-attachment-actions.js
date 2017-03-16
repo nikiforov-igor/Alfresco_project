@@ -147,29 +147,47 @@ LogicECM.DocumentAttachmentActions = LogicECM.DocumentAttachmentActions || {};
 					{
 						message: this.msg("message.edit-cancel.failure", displayName)
 					},
-					webscript:
-					{
-						method: Alfresco.util.Ajax.POST,
-						name: "cancel-checkout/node/{nodeRef}",
-						params:
-						{
-							nodeRef: record.jsNode.nodeRef.uri
+					webscript: {
+						name: "lecm/unlock?nodeRef={nodeRef}",
+						stem: Alfresco.constants.PROXY_URI,
+						method: Alfresco.util.Ajax.GET,
+						params: {
+							nodeRef: file.nodeRef
 						}
 					}
 				});
 		},
 
+		onUnlockAction: function onUnlockAction_function(file) {
+			if (YAHOO.lang.isFunction(LogicECM.module.UnlockNode.unlock)) {
+				LogicECM.module.UnlockNode.unlock(file);
+			}
+		},
+
+		onActionLECMEditOnline: function onActionLECMEditOnline_function(file) {
+			if (YAHOO.lang.isFunction(LogicECM.module.EditOnline.edit)) {
+				LogicECM.module.EditOnline.edit(file);
+			}
+		},
+
 		onFileCopiedComplete: function(layer, args) {
-			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/attachments/api/logCopy?originalNodeRef=" + encodeURIComponent(this.options.nodeRef) + "&copiedNodeRef=" + encodeURIComponent(args[1].nodeRef);
-			var callback = {
-				success:function (oResponse) {},
-				failure:function (oResponse) {
-					YAHOO.log("Failed to process XHR transaction.", "info", "example");
+			Alfresco.util.Ajax.jsonGet({
+				url: Alfresco.constants.PROXY_URI + "/lecm/document/attachments/api/logCopy",
+				dataObj: {
+					originalNodeRef: this.options.nodeRef,
+					copiedNodeRef: args[1].nodeRef
 				},
-				argument:{
+				successCallback: {
+					scope: this,
+					fn: function (response) {}
+				},
+				failureCallback: {
+					scope: this,
+					fn: function (response) {
+						YAHOO.log("Failed to process XHR transaction.", "info", "example");
+					}
 				}
-			};
-			YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+			});
 		}
 	}, true);
 })();

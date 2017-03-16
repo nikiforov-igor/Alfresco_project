@@ -1,4 +1,4 @@
-<#escape x as x?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 { "data": [
 		<#if results??>
 			<#list results as type>

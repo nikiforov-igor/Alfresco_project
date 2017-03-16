@@ -115,7 +115,7 @@
             <item name="cm:ERRANDS_CONTROLLER_DISMISS" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CONTROLLER_DISMISS]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} отменил(а) назначение вас контроллером по поручению {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))}.]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} отменил(а) назначение вас контролером по поручению {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Назначение контролера отменено]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -127,9 +127,9 @@
             <item name="cm:ERRANDS_CONTROLLER_ASSIGN" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CONTROLLER_ASSIGN]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} назначил(а) вас контроллером по поручению {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))}.]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} назначил(а) вас контролером по поручению {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))}.]]></property>
                 <property name="lecm-notification-template:description">
-                    <![CDATA[Поручение. Назначение контроллера]]></property>
+                    <![CDATA[Поручение. Назначение контролера]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"
@@ -163,7 +163,7 @@
             <item name="cm:ERRANDS_CONFIRM_EXEC" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_CONFIRM_EXEC]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} подтвердил выполнения поручения {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))}.]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} подтвердил выполнение поручения {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-errands:title} № {lecm-errands:number}"))}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Подтвердить исполнение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>

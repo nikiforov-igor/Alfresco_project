@@ -11,6 +11,9 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.ConcurrencyFailureException;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
@@ -27,6 +30,7 @@ import java.util.*;
  * @author vkuprin
  */
 public class ReviewServiceImpl extends BaseBean implements ReviewService {
+    private final static Logger logger = LoggerFactory.getLogger(ReviewServiceImpl.class);
 
 	public static final String REVIEW_FOLDER = "REVIEW_FOLDER";
 	private final static String REVIEW_GLOBAL_SETTINGS_NAME = "Глобальные настройки ознакомления";
@@ -101,7 +105,7 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 				NodeRef itemEmployee = findNodeByAssociationRef(reviewListRow.getChildRef(), ASSOC_REVIEW_TS_REVIEWER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 				if (currentEmployee.equals(itemEmployee)) {
 					String state = (String) nodeService.getProperty(reviewListRow.getChildRef(), PROP_REVIEW_TS_STATE);
-					result = result || CONSTRAINT_REVIEW_TS_STATE_IN_PROCESS.equals(state);
+					result = result || REVIEW_ITEM_STATE.NOT_REVIEWED.name().equals(state);
 				}
 			}
 		}
@@ -131,16 +135,16 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 	@Override
 	public List<NodeRef> getExcludeUsersList(NodeRef document) {
 		HashSet<String> statuses = new HashSet<>();
-		statuses.add(CONSTRAINT_REVIEW_TS_STATE_NOT_STARTED);
-		statuses.add(CONSTRAINT_REVIEW_TS_STATE_IN_PROCESS);
-		statuses.add(CONSTRAINT_REVIEW_TS_STATE_REVIEWED);
+		statuses.add(REVIEW_ITEM_STATE.NOT_STARTED.name());
+		statuses.add(REVIEW_ITEM_STATE.NOT_REVIEWED.name());
+		statuses.add(REVIEW_ITEM_STATE.REVIEWED.name());
 		return getReviewersWithStatuses(document, statuses);
 	}
 
 	@Override
 	public List<NodeRef> getActiveReviewersForDocument(NodeRef document) {
 		HashSet<String> statuses = new HashSet<>();
-		statuses.add(CONSTRAINT_REVIEW_TS_STATE_IN_PROCESS);
+		statuses.add(REVIEW_ITEM_STATE.NOT_REVIEWED.name());
 		return getReviewersWithStatuses(document, statuses);
 	}
 
@@ -156,14 +160,14 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 			for (final ChildAssociationRef reviewListRow : reviewList) {
 				NodeRef itemEmployee = findNodeByAssociationRef(reviewListRow.getChildRef(), ASSOC_REVIEW_TS_REVIEWER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 				if (currentEmployee.equals(itemEmployee)) {
-					if (CONSTRAINT_REVIEW_TS_STATE_IN_PROCESS.equals(nodeService.getProperty(reviewListRow.getChildRef(), PROP_REVIEW_TS_STATE))) {
+					if (REVIEW_ITEM_STATE.NOT_REVIEWED.name().equals(nodeService.getProperty(reviewListRow.getChildRef(), PROP_REVIEW_TS_STATE))) {
 						reviewInfo = findNodeByAssociationRef(reviewListRow.getChildRef(), ASSOC_REVIEW_INFO, TYPE_REVIEW_INFO, ASSOCIATION_TYPE.TARGET);
 						AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
 
 							@Override
 							public Void doWork() throws Exception {
 								Map<QName, Serializable> properties = nodeService.getProperties(reviewListRow.getChildRef());
-								properties.put(PROP_REVIEW_TS_STATE, CONSTRAINT_REVIEW_TS_STATE_REVIEWED);
+								properties.put(PROP_REVIEW_TS_STATE, REVIEW_ITEM_STATE.REVIEWED.name());
 								properties.put(PROP_REVIEW_TS_REVIEW_FINISH_DATE, new Date());
 								nodeService.setProperties(reviewListRow.getChildRef(), properties);
 								return null;
@@ -177,7 +181,7 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 				int reviewed = 0;
 				for (NodeRef item : items) {
 					Serializable state = nodeService.getProperty(item, PROP_REVIEW_TS_STATE);
-					if (CONSTRAINT_REVIEW_TS_STATE_REVIEWED.equals(state)) {
+					if (REVIEW_ITEM_STATE.REVIEWED.name().equals(state)) {
 						reviewed++;
 					}
 				}
@@ -187,7 +191,7 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 
 						@Override
 						public Void doWork() throws Exception {
-							nodeService.setProperty(reviewInfoRef, PROP_REVIEW_INFO_REVIEW_STATE, CONSTRAINT_REVIEW_TS_STATE_REVIEWED);
+							nodeService.setProperty(reviewInfoRef, PROP_REVIEW_INFO_REVIEW_STATE, REVIEW_ITEM_STATE.REVIEWED.name());
 							return null;
 						}
 					});
@@ -239,7 +243,7 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 			NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
 			NodeRef itemInitiator = findNodeByAssociationRef(nodeRef, ASSOC_REVIEW_TS_INITIATOR, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 			String status = nodeService.getProperty(nodeRef, PROP_REVIEW_TS_STATE).toString();
-			result = currentEmployee.equals(itemInitiator) && (CONSTRAINT_REVIEW_TS_STATE_NOT_STARTED.equals(status));
+			result = currentEmployee.equals(itemInitiator) && (REVIEW_ITEM_STATE.NOT_STARTED.name().equals(status));
 		}
 		return result;
 	}
@@ -326,7 +330,7 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 		for (NodeRef row : rows) {
 			String state = (String)nodeService.getProperty(row, PROP_REVIEW_TS_STATE);
 			NodeRef reviewer = findNodeByAssociationRef(row, ASSOC_REVIEW_TS_REVIEWER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-			if ((CONSTRAINT_REVIEW_TS_STATE_REVIEWED.equals(state) || CONSTRAINT_REVIEW_TS_STATE_IN_PROCESS.equals(state)) && currentEmployee.equals(reviewer) && isBoss) {
+			if ((REVIEW_ITEM_STATE.REVIEWED.name().equals(state) || REVIEW_ITEM_STATE.NOT_REVIEWED.name().equals(state)) && currentEmployee.equals(reviewer) && isBoss) {
 				reviewAllowed = true;
 				break;
 			}
@@ -404,4 +408,18 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 
 		return resultSet.getNodeRefs();
 	}
+
+    @Override
+    public void addRelatedReviewChangeCount(NodeRef document) {
+        doIncrementProperty(document, PROP_RELATED_REVIEW_RECORDS_CHANGE_COUNT);
+    }
+
+    @Override
+    public void resetRelatedReviewChangeCount(NodeRef document) {
+        try {
+            nodeService.setProperty(document, PROP_RELATED_REVIEW_RECORDS_CHANGE_COUNT, 0);
+        } catch (ConcurrencyFailureException ex) {
+            logger.warn("Send signal at the same time", ex);
+        }
+    }
 }

@@ -120,6 +120,11 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			YAHOO.util.Event.on(this.editIterationButton, 'click', this.editIteration, this, true);
 		}
 
+		this.expandAllStagesButton = YAHOO.util.Dom.get(containerId + '-expandAllStages');
+		if (this.expandAllStagesButton) {
+			YAHOO.util.Event.on(this.expandAllStagesButton, 'click', this.onExpandAllStages, this, true);
+		}
+
 		this.approvalStateSettings.NOT_EXITS.hideElements = [
 			this.clearButton,
 			this.approvalContainer
@@ -247,6 +252,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 
 		printReportButton: null,
 		editIterationButton : null,
+		expandAllStagesButton: null,
 
 		getApprovalData: function (callback, callbackArgsArr) {
 			Alfresco.util.Ajax.request({
@@ -662,6 +668,12 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					}]
 			});
 		},
+
+        onExpandAllStages: function () {
+            YAHOO.Bubbling.fire('expandAllGridRows', {
+            	id: this.id
+			});
+        },
 
 		fillCurrentApprovalState: function () {
 			var approvalMsgTemplate = '{msg} ({additionalMsg})';

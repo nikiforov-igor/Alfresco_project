@@ -328,6 +328,7 @@
         <property name="namespaceService" ref="namespaceService"/>
         <property name="messageService" ref="messageService"/>
 		<property name="lecmMessageService" ref="lecmMessageService"/>
+        <property name="lockService" ref="lockService"/>
     </bean>
 
     <bean id="documentAttachmentsScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentAttachmentsWebScriptBean"
@@ -663,6 +664,7 @@
 	       init-method="init" depends-on="documents.LogicEcmModelsBootstrap">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="documentConnectionService" ref="documentConnectionService"/>
+        <property name="nodeService" ref="nodeService"/>
 	</bean>
 
     <bean id="baseNodeExpression" class="ru.it.lecm.documents.expression.ExpressionNode">
@@ -743,7 +745,7 @@
         <property name="id" value="ACTIVE_TASKS_ONLY"/>
         <property name="stateMachineService" ref="stateMachineHelper"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
-	    <property name="notificationsService" ref="notificationsService"/>
+        <property name="documentGlobalSettings" ref="documents.global-settings.service"/>
     </bean>
 
     <bean id="activeProcessFinishedTasksProcessor" class="ru.it.lecm.documents.processors.ActiveProcFinishTasksProcessor" parent="searchQueryBaseProccesor">

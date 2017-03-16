@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
+import java.io.Serializable;
+
 /**
  *
  * @author apalm
@@ -38,7 +40,7 @@ public class DocumentGlobalSettingsServiceImpl extends BaseBean implements Docum
     @Override
     public NodeRef getSettingsNode() {
         if (null == this.settingsNode) {
-            this.settingsNode = this.settingsNode = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, DOCUMENT_GLOBAL_SETTINGS_NODE_NAME);
+            this.settingsNode = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, DOCUMENT_GLOBAL_SETTINGS_NODE_NAME);
         }
         return this.settingsNode;
     }
@@ -58,11 +60,31 @@ public class DocumentGlobalSettingsServiceImpl extends BaseBean implements Docum
     
     @Override
     public String getLinksViewMode() {
-        String mode = null;
+        Serializable modeValue = null;
         NodeRef settings = getSettingsNode();
         if (nodeService.exists(settings)) {
-            mode = nodeService.getProperty(settings, PROP_SETTINGS_LINKS_VIEW_MODE).toString();
+            modeValue = nodeService.getProperty(settings, PROP_SETTINGS_LINKS_VIEW_MODE);
         }
-        return mode != null ? mode : "VIEW_ALL";
+        return (null != modeValue) ? (String) modeValue : DEFAULT_VIEW_MODE;
+    }
+
+    @Override
+    public boolean isEnablePassiveNotifications() {
+        NodeRef globalSettingsNode = getSettingsNode();
+        if (nodeService.exists(globalSettingsNode)) {
+            return Boolean.TRUE.equals(nodeService.getProperty(globalSettingsNode, PROP_ENABLE_PASSIVE_NOTIFICATIONS));
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int getSettingsNDays() {
+        Serializable nDays = null;
+        NodeRef globalSettingsNode = getSettingsNode();
+        if (nodeService.exists(globalSettingsNode)) {
+            nDays = nodeService.getProperty(globalSettingsNode, PROP_N_DAYS);
+        }
+        return (null != nDays) ? (Integer) nDays : DEFAULT_N_DAYS;
     }
 }

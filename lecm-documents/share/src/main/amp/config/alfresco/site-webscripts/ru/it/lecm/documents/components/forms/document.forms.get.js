@@ -17,7 +17,7 @@ function getReports(type) {
 function main() {
     model.nodeRef = args["nodeRef"];
 
-    var url = '/api/metadata?nodeRef=' + page.url.args.nodeRef;
+    var url = '/api/metadata?nodeRef=' + model.nodeRef;
     var result = remote.connect("alfresco").get(url);
     if (result.status == 200) {
         var metadata = eval('(' + result + ')');

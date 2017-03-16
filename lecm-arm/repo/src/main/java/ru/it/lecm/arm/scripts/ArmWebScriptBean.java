@@ -12,6 +12,7 @@ import org.alfresco.util.ParameterCheck;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mozilla.javascript.NativeArray;
 import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
@@ -210,25 +211,12 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
             }
 
             if (filterBean != null) {
-                if (Boolean.valueOf(String.valueOf(filter.has(MULTIPLE) ? filter.get(MULTIPLE) : false))) {
-                    Object curValues = filter.has(CUR_VALUE) ? filter.get(CUR_VALUE) : null;
-                    if (curValues != null) {
-                        if (curValues instanceof JSONArray) {
-                            JSONArray currentValueArray = (JSONArray) filter.get(CUR_VALUE);
-                            for (int j = 0; j < currentValueArray.length(); j++) {
-                                String v = (String) currentValueArray.get(j);
-                                values.add(v);
-                            }
-                        } else {
-                            values.addAll(Arrays.asList(((String) curValues).split(",")));
-                        }
-
-                    }
-                } else {
-                    String currentValueStr = filter.has(CUR_VALUE) ? (String) filter.get(CUR_VALUE) : null;
-                    if (currentValueStr != null) {
-                        values.add(currentValueStr);
-                    }
+                Object curValues = filter.has(CUR_VALUE) ? filter.get(CUR_VALUE) : null;
+                Object curValuesObj = getValueConverter().convertValueForJava(curValues);
+                if (curValuesObj instanceof List) {
+                    values.addAll((List<String>) curValuesObj);
+                } else if (curValuesObj != null) {
+                    values.addAll(Arrays.asList((curValuesObj.toString()).split(",")));
                 }
 
                 String params = filter.has(QUERY) ? (String) filter.get(QUERY) : null;

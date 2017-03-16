@@ -7,13 +7,14 @@
 <script type="text/javascript">
     function hideButton() {
         if(location.hash != "#expanded") {
-            YAHOO.util.Dom.setStyle(this, 'display', 'none');
+            YAHOO.util.Dom.addClass(this, 'hidden');
         }
     }
     YAHOO.util.Event.onAvailable("${el}-action-collapse", hideButton);
 </script>
 
-<div class="metadata-form">
+<div class="panel-header">
+    <div class="panel-title">${msg("label.title")}</div>
         <div class="lecm-dashlet-actions">
             <a id="${el}-action-collapse" class="collapse" title="${msg('msg.collapse')}"></a>
         </div>
@@ -22,9 +23,6 @@
 <div id="${el}" class="members-list">
     <table class="members-title">
         <tr>
-            <td class="members-name">
-            ${msg("label.document.members")}
-            </td>
             <#if hasAddPermission>
                 <td class="members-add">
                     <div class="member-add">
@@ -83,22 +81,21 @@
         }
 
         function init() {
-            Alfresco.util.Ajax.request(
-                    {
-                        url: Alfresco.constants.PROXY_URI + "lecm/document/api/getMembersFolder",
-                        dataObj: {
-                            nodeRef: "${docRef}"
-                        },
-                        successCallback: {
-                            fn: function (oResponse) {
-                                var oResults = eval("(" + oResponse.serverResponse.responseText + ")");
-                                if (oResults && oResults.nodeRef) {
-                                    draw(oResults.nodeRef);
-                                }
-                            }
-                        },
-                        failureMessage: "message.failure"
-                    });
+            Alfresco.util.Ajax.jsonGet({
+                url: Alfresco.constants.PROXY_URI + "lecm/document/api/getMembersFolder",
+                dataObj: {
+                    nodeRef: "${docRef}"
+                },
+                successCallback: {
+                    fn: function (response) {
+                        if (response && response.json.nodeRef) {
+                            draw(response.json.nodeRef);
+                        }
+                    },
+                    scope: this
+                },
+                failureMessage: "${msg('message.failure')}"
+            });
         }
 
         function draw(folderRef) {

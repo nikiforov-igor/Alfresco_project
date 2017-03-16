@@ -237,7 +237,9 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         ChildAssociationRef associationRef = nodeService.createNode(draftRef, assocTypeQName, assocQName, nodeTypeQName, properties);
 
         for (Map.Entry<String, String> assoc : association.entrySet()) {
-            nodeService.createAssociation(associationRef.getChildRef(), new NodeRef(assoc.getValue()), QName.createQName(assoc.getKey(), namespaceService));
+            for (String value: assoc.getValue().split(",")) {
+                nodeService.createAssociation(associationRef.getChildRef(), new NodeRef(value), QName.createQName(assoc.getKey(), namespaceService));
+            }
         }
 
         return associationRef.getChildRef();
@@ -907,9 +909,14 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
 
 	@Override
 	public String execStringExpression(NodeRef document, String expression) {
-		Expression evaluator = new Expression(document, serviceRegistry, applicationContext);
-		return evaluator.executeAsString(expression);
+		return execStringExpression(document, expression, true);
 	}
+
+    @Override
+    public String execStringExpression(NodeRef document, String expression, boolean withContext) {
+        Expression evaluator = new Expression(document, serviceRegistry, applicationContext);
+        return evaluator.executeAsString(expression, withContext);
+    }
 
     @Override
     public void finalizeToUnit(NodeRef document, Boolean sharedFolder, NodeRef primaryUnit, List<NodeRef> additionalUnits) {

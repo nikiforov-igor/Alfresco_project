@@ -290,18 +290,20 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                 if (node == null || formatString == null) {
                     return "";
                 }
-                if (isExpressionSyntax(formatString)) {
-                    return executeExpression(node, formatString).toString();
-                }
-
+                String replacedFormatString = formatString.replaceAll("&#044;", ",");
                 String dFormat = dateFormat;
                 if (dFormat == null) {
                     dFormat = getDateFormat();
                 }
-                String result = formatString;
-                List<String> nameParams = splitSubstitudeFieldsString(formatString, OPEN_SUBSTITUDE_SYMBOL, CLOSE_SUBSTITUDE_SYMBOL);
+                String result = replacedFormatString;
+                List<String> nameParams = splitSubstitudeFieldsString(replacedFormatString, OPEN_SUBSTITUDE_SYMBOL, CLOSE_SUBSTITUDE_SYMBOL);
                 for (String param : nameParams) {
-                    result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, getSubstitudeField(node, param, dFormat, timeZoneOffset).toString());
+                    if (param.startsWith("@")) {
+                        String expression = param.substring(1);
+                        result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, documentService.execStringExpression(node, expression, false));
+                    } else {
+                        result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, getSubstitudeField(node, param, dFormat, timeZoneOffset).toString());
+                    }
                 }
                 return result;
             }
@@ -361,38 +363,44 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                 if (node == null || formatString == null) {
                     return null;
                 }
-
-                if (isExpressionSyntax(formatString)) {
-                    return executeExpression(node, formatString);
+                String replacedFormatString = formatString.replaceAll("&#044;", ",");
+                if (isExpressionSyntax(replacedFormatString)) {
+                    return executeExpression(node, replacedFormatString);
                 }
 
                 String dFormat = dateFormat;
                 if (dFormat == null) {
                     dFormat = getDateFormat();
                 }
-                String result = formatString;
+                String result = replacedFormatString;
 
-                List<String> nameParams = splitSubstitudeFieldsString(formatString, OPEN_SUBSTITUDE_SYMBOL, CLOSE_SUBSTITUDE_SYMBOL);
+                List<String> nameParams = splitSubstitudeFieldsString(replacedFormatString, OPEN_SUBSTITUDE_SYMBOL, CLOSE_SUBSTITUDE_SYMBOL);
                 //проверка на сложную строку (не одно поле) - определяем, что будет на выходе
                 Boolean objectExpected = nameParams.size() == 1 && result.replace(OPEN_SUBSTITUDE_SYMBOL + nameParams.get(0) + CLOSE_SUBSTITUDE_SYMBOL, "").isEmpty();
 
                 if (objectExpected) { //возвращаем объект
-                    boolean isAssocField = nameParams.get(0).endsWith(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL);
+                    String expression = nameParams.get(0);
+                    boolean isAssocField = expression.endsWith(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL);
                     if (isAssocField) {// список нод по ассоциации
-                        return getAssocsByFormatString(node, nameParams.get(0));
+                        return getAssocsByFormatString(node, expression);
                     } else {
-                        return getSubstitudeField(node, nameParams.get(0), dFormat, timeZoneOffset, true);
+                        return getSubstitudeField(node, expression, dFormat, timeZoneOffset, true);
                     }
                 } else { //возвращаем строку
                     for (String param : nameParams) {
-                        Object transValue;
-                        boolean isAssocField = param.endsWith(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL);
-                        if (isAssocField) { // у нас ассоциация - соберем все значения вместе
-                            transValue = formatAssocString(node, param);
+                        if (param.startsWith("@")) {
+                            String expression = param.substring(1);
+                            result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, documentService.execStringExpression(node, expression, false));
                         } else {
-                            transValue = getSubstitudeField(node, param, dFormat, timeZoneOffset).toString();
+                            Object transValue;
+                            boolean isAssocField = param.endsWith(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL);
+                            if (isAssocField) { // у нас ассоциация - соберем все значения вместе
+                                transValue = formatAssocString(node, param);
+                            } else {
+                                transValue = getSubstitudeField(node, param, dFormat, timeZoneOffset).toString();
+                            }
+                            result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, transValue.toString());
                         }
-                        result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, transValue.toString());
                     }
                 }
                 return result;

@@ -73,8 +73,16 @@ public abstract class BaseSpellExpression {
     }
 
     public String executeAsString(String expression) {
+        return executeAsString(expression, true);
+    }
+
+    public String executeAsString(String expression, boolean withContext) {
         try {
-            String result = new SpelExpressionParser().parseExpression(expression, new TemplateParserContext()).getValue(evaluationContext, String.class);
+            org.springframework.expression.Expression spelExpression =
+                    withContext ? new SpelExpressionParser().parseExpression(expression, new TemplateParserContext()) :
+                            new SpelExpressionParser().parseExpression(expression);
+
+            String result = spelExpression.getValue(evaluationContext, String.class);
             return result != null ? result : "";
         } catch (Exception e) {
             logger.error("Expression: " + expression + " has errors", e);

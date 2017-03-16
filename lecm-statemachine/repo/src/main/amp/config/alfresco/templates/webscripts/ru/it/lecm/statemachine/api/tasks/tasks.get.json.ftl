@@ -1,4 +1,4 @@
-<#escape x as x?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 {
     "showSubordinateTasks": "${data.showSubordinateTasks}",
     "myTasksTotalCount": ${data.myTasksTotalCount},
@@ -18,12 +18,12 @@
 			"workflowTaskPriority": "${task.workflowTaskPriority}",
 			"priorityMessage": "${task.priorityMessage}",
             "dueDate": <#if task.dueDate?exists>
-                "${task.dueDate?date}"
+                "${task.dueDate?date?string}"
             <#else>
                 ""
             </#if>,
             "startDate": <#if task.startDate?exists>
-                "${task.startDate?date}"
+                "${task.startDate?date?string}"
             <#else>
                 ""
             </#if>
@@ -34,7 +34,7 @@
         "myLatestTask" : {
             "id": "${data.myLatestTask.id}",
             "startDate": <#if data.myLatestTask.startDate?exists>
-                "${data.myLatestTask.startDate?date}"
+                "${data.myLatestTask.startDate?date?string}"
             <#else>
                 ""
             </#if>
@@ -55,12 +55,12 @@
             "workflowTaskPriority": "${task.workflowTaskPriority}",
             "priorityMessage": "${task.priorityMessage}",
             "dueDate": <#if task.dueDate?exists>
-                "${task.dueDate?date}"
+                "${task.dueDate?date?string}"
             <#else>
                 ""
             </#if>,
             "startDate": <#if task.startDate?exists>
-                "${task.startDate?date}"
+                "${task.startDate?date?string}"
             <#else>
                 ""
             </#if>

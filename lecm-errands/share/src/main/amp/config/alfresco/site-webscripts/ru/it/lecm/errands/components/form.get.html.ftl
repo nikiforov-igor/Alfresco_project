@@ -1,5 +1,4 @@
 <@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/lecm-errands-dashlet.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/lecm-document-errands.js"></@script>
 <@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/errands-links.js"></@script>
 
 <!-- Document Metadata Header -->
@@ -36,8 +35,6 @@
     (function () {
         var Dom = YAHOO.util.Dom,
             Event = YAHOO.util.Event;
-
-		LogicECM.module.Documents.ERRANDS_SETTINGS = LogicECM.module.Documents.ERRANDS_SETTINGS || <#if errandsSettings?? >${errandsSettings?string}<#else>{}</#if>;
 
 		var viewHistory = new LogicECM.module.Document.ViewHistory("save-view-history").setOptions({
 			nodeRef: "${nodeRef}"
@@ -159,17 +156,15 @@
                             return;
                         }
 
-					    Alfresco.util.Ajax.jsonRequest(
-                            {
-                                method: "POST",
-                                url: Alfresco.constants.PROXY_URI + "lecm/errands/api/setExecutionReport",
-                                dataObj: {
-                                    nodeRef: "${nodeRef}",
-                                    executionReport: setExecutionReport.editor.getContent()
-                                },
-                                successMessage: "${msg("message.setExecutionReport.success")}",
-                                failureMessage: "${msg("message.setExecutionReport.failure")}"
-                            });
+					    Alfresco.util.Ajax.jsonPost({
+                            url: Alfresco.constants.PROXY_URI + "lecm/errands/api/setExecutionReport",
+                            dataObj: {
+                                nodeRef: "${nodeRef}",
+                                executionReport: setExecutionReport.editor.getContent()
+                            },
+                            successMessage: "${msg("message.setExecutionReport.success")}",
+                            failureMessage: "${msg("message.setExecutionReport.failure")}"
+                        });
 				    });
 
 				    Alfresco.util.createYUIButton(YAHOO.util.Dom.get(htmlId), "exec-report-reset", function() {
