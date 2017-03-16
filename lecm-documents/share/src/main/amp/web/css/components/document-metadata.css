@@ -23,6 +23,9 @@
 	width: 600px;
 	float: left;
 }
+.container .document-metadata.without-preview {
+	width: 1000px;
+}
 .document-metadata .control .label-div,
 .yui-panel-container.yui-dialog .control .label-div {
 	text-align: right;
