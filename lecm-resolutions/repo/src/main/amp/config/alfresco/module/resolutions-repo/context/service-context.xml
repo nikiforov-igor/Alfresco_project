@@ -196,6 +196,7 @@
             <list>
                 <value>alfresco/module/${artifactId}/reports/state_execute_resolutions.xml</value>
                 <value>alfresco/module/${artifactId}/reports/execute-resolution.xml</value>
+                <value>alfresco/module/${artifactId}/reports/reference_on_resolutions_calling_for_completion.xml</value>
             </list>
         </property>
         <property name="xmlImportListener" ref="resolutions.reportsDeployer"/>
@@ -205,6 +206,7 @@
             <list>
                 <value>state_execute_resolutions</value>
                 <value>execute-resolution</value>
+                <value>reference_on_resolutions_calling_for_completion</value>
             </list>
         </property>
     </bean>
