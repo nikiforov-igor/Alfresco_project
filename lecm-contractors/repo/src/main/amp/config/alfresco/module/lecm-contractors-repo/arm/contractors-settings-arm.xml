@@ -9,7 +9,7 @@
 						<property name="lecm-arm:order"><![CDATA[15]]></property>
 						<property name="lecm-arm:search-type"><![CDATA[]]></property>
 						<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-						<property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
+						<property name="lecm-arm:types"><![CDATA[]]></property>
 						<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 						<property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
 						<property name="lecm-arm:search-query"><![CDATA[]]></property>

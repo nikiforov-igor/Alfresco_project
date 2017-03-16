@@ -142,8 +142,9 @@
 
 							var answerObject = search.findNode(task.getVariableLocal("answer"));
 							var curator = search.findNode(task.getVariableLocal("initiatorEmployee"));
+							var author = document.assocs["lecm-document:author-assoc"][0]
 							var curators = [];
-							curators.push(curator);
+							curators.push(author);
 							var currentUser = orgstructure.getCurrentEmployee();
 							var newDocumentRef = task.getVariable("lecmWorkflowDocument_createdNodeRef");
 							if (newDocumentRef != null && newDocumentRef != "") {
