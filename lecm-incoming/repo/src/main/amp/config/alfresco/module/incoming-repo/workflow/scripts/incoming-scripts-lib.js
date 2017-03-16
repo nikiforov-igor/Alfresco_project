@@ -21,30 +21,22 @@ var LECMIncomingActions = {
 
                 if (allResolutionsFinal) {
                     var hasErrands = childErrands && childErrands.length;
-                    var allExecutedErrands = true;
-                    if (hasErrands) {
-                        allExecutedErrands = childErrands.every(function (errand) {
+                    var allExecutedErrands = hasErrands && childErrands.every(function (errand) {
                             return errand.properties["lecm-statemachine:status"] == "Исполнено";
                         });
-                    }
                     var hasResolutions = childResolutions && childResolutions.length;
-                    var allExecutedResolutions = true;
-                    if (hasResolutions) {
-                        allExecutedResolutions = childResolutions.every(function (resolution) {
+                    var allExecutedResolutions = hasResolutions && childResolutions.every(function (resolution) {
                             return resolution.properties["lecm-statemachine:status"] == "Завершено";
                         });
-                    }
                     var hasReview = false;
                     var allReviewReviewed = true;
                     var reviewTable = document.associations['lecm-review-ts:review-table-assoc'];
                     if (reviewTable && reviewTable.length) {
                         var reviewRecords = documentTables.getTableDataRows(reviewTable[0].nodeRef.toString());
-                        hasReview = reviewRecords && reviewRecords.length > 0;
-                        if (hasReview) {
-                            allReviewReviewed = reviewRecords.every(function (record) {
-                                return record.properties["lecm-review-ts:review-state"] == "REVIEWED";
-                            });
-                        }
+                        hasReview = reviewRecords && reviewRecords.length;
+                        allReviewReviewed = hasReview && reviewRecords.every(function (record) {
+                            return record.properties["lecm-review-ts:review-state"] == "REVIEWED";
+                        });
                     }
 
                     if (allReviewReviewed && allExecutedErrands && allExecutedResolutions
