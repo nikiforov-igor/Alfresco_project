@@ -444,7 +444,7 @@ public class DocumentPolicy extends BaseBean
 	        }
             setPropertyAsSystem(nodeRef, ContentModel.PROP_NAME, FileNameValidator.getValidFileName(presentStringValue + " " + nodeRef.getId()));
 
-            setPropertyAsSystem(nodeRef, ContentModel.PROP_TITLE, FileNameValidator.getValidFileName(presentStringValue));
+            setPropertyAsSystem(nodeRef, ContentModel.PROP_TITLE, presentStringValue);
 
             setPropertyAsSystem(nodeRef, DocumentService.PROP_EXT_PRESENT_STRING, typeDef.getTitle() + ": " + presentStringValue);
         }
