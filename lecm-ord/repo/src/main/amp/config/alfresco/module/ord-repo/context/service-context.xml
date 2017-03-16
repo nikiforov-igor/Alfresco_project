@@ -197,6 +197,7 @@
             <list>
                 <value>ord-content</value>
                 <value>ord-reg-journal</value>
+                <value>execute-ord</value>
             </list>
         </property>
     </bean>

@@ -231,6 +231,7 @@
         <property name="reportsForDeploy">
             <list>
                 <value>incoming-reg-journal</value>
+                <value>incoming_execute</value>
             </list>
         </property>
     </bean>
