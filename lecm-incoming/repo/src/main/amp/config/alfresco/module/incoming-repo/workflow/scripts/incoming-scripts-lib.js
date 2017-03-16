@@ -20,30 +20,37 @@ var LECMIncomingActions = {
                 }
 
                 if (allResolutionsFinal) {
+                    var hasErrands = false;
                     var allExecutedErrands = true;
                     if (childErrands) {
+                        hasErrands = childErrands.length > 0;
                         allExecutedErrands = childErrands.every(function (errand) {
                             return errand.properties["lecm-statemachine:status"] == "Исполнено";
                         });
                     }
+                    var hasResolutions = false;
                     var allExecutedResolutions = true;
                     if (childResolutions) {
+                        hasResolutions = childResolutions.length > 0;
                         allExecutedResolutions = childResolutions.every(function (resolution) {
                             return resolution.properties["lecm-statemachine:status"] == "Завершено";
                         });
                     }
+                    var hasReview = false;
                     var allReviewReviewed = true;
                     var reviewTable = document.associations['lecm-review-ts:review-table-assoc'];
                     if (reviewTable && reviewTable.length) {
                         var reviewRecords = documentTables.getTableDataRows(reviewTable[0].nodeRef.toString());
                         if (reviewRecords) {
+                            hasReview = reviewRecords.length > 0;
                             allReviewReviewed = reviewRecords.every(function (record) {
                                 return record.properties["lecm-review-ts:review-state"] == "REVIEWED";
                             });
                         }
                     }
 
-                    if (allReviewReviewed && allExecutedErrands && allExecutedResolutions) {
+                    if (allReviewReviewed && allExecutedErrands && allExecutedResolutions
+                        && (hasErrands || hasResolutions || hasReview)) {
                         lecmPermission.pushAuthentication();
                         lecmPermission.setRunAsUserSystem();
                         document.properties["lecm-incoming:auto-transition-to-execute"] = true;
