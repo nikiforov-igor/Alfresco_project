@@ -341,7 +341,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 		var msg = e.message;
 
 		if (logger.isWarnLoggingEnabled()) {
-			logger.log(msg);
+			logger.warn(msg);
 		}
 
 		status.setCode(500, msg);
@@ -540,7 +540,7 @@ function resolveNode(reference) {
 		}
 	} catch (e) {
 		if (logger.isWarnLoggingEnabled()) {
-			logger.log(e.message);
+			logger.warn(e.message);
 		}
 		return null;
 	}
