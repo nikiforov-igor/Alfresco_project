@@ -169,6 +169,7 @@
         <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
         <property name="dictionaries">
             <list>
+                <value>alfresco/module/${artifactId}/reports/execution-of-internal-documents.xml</value>
                 <value>alfresco/module/${artifactId}/reports/internal-reg-journal.xml</value>
             </list>
         </property>
@@ -178,6 +179,7 @@
     <bean id="internal.reportsDeployer" parent="reportsDeployer">
         <property name="reportsForDeploy">
             <list>
+                <value>execution-of-internal-documents</value>
                 <value>internal-reg-journal</value>
             </list>
         </property>

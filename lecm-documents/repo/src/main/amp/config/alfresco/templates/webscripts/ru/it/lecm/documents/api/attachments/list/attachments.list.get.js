@@ -21,6 +21,7 @@
 	var i, j, category, attachments, attachment;
 	var isMlSupported = lecmMessages.isMlSupported();
 	model.categories = [];
+	model.shareContext = base.getShareContext();
 	if (categories) {
 		for (i in categories) {
 			category = categories[i];

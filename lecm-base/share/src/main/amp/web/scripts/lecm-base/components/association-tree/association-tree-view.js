@@ -54,8 +54,6 @@ LogicECM.module = LogicECM.module || {};
 
 	YAHOO.extend(LogicECM.module.AssociationTreeViewer, Alfresco.component.Base,
 	{
-        readonly: false,
-
         tree: null,
 
         eventGroup: null,
@@ -86,7 +84,7 @@ LogicECM.module = LogicECM.module || {};
 
 		tempDisabled: false,
 
-		readsonly: false,
+		readonly: false,
 
         itemsLoading: false,
 
@@ -175,6 +173,8 @@ LogicECM.module = LogicECM.module || {};
 
 	        defaultValueDataSource: null,
 
+			defaultValueUseOnce: false,
+
             ignoreNodes: null,
 
 			childrenDataSource: "lecm/forms/picker",
@@ -231,7 +231,7 @@ LogicECM.module = LogicECM.module || {};
 			}
 
             // Create button if control is enabled
-            if(!this.options.disabled && !this.readsonly)
+            if(!this.options.disabled && !this.readonly)
             {
 	            if (this.widgets.pickerButton == null) {
 		            var buttonOptions = {
@@ -418,6 +418,9 @@ LogicECM.module = LogicECM.module || {};
 
             if (arrItems == "" && this.defaultValue != null) {
 		        arrItems += this.defaultValue;
+		        if (this.options.defaultValueUseOnce) {
+			        this.defaultValue = null;
+		        }
 	        }
 
             var onSuccess = function AssociationTreeViewer__loadSelectedItems_onSuccess(response)

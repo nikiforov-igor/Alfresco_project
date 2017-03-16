@@ -12,10 +12,10 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
     LogicECM.module.ARM.Filters = function (htmlId) {
         LogicECM.module.ARM.Filters.superclass.constructor.call(this, "LogicECM.module.ARM.Filters", htmlId);
 
-        this.avaiableFilters = [];
+        this.availableFilters = [];
         this.currentFilters = [];
-        this.currentQuery = null;
-        this.currentNode = null;
+        this.filtersFromPref = [];
+
         // Preferences service
         this.preferences = new Alfresco.service.Preferences();
 
@@ -24,9 +24,6 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                 fn: this.updateCurrentFiltersForm,
                 scope: this
             });
-
-        YAHOO.Bubbling.on("updateArmFilters", this.onUpdateAvaiableFilters, this);
-        YAHOO.Bubbling.on("updateCurrentFilters", this.onUpdateCurrentFilters, this);
 
         YAHOO.Bubbling.on("showSearchByAttributesLabel", this.onShowSearchByAttributes, this);
         YAHOO.Bubbling.on("hideSearchByAttributesLabel", this.onHideSearchByAttributes, this);
@@ -41,78 +38,106 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
         {
             PREFERENCE_KEY: "ru.it.lecm.arm.",
 
-            avaiableFilters: [],
+            /*фильтры, полученные из настроек АРМа - содержат полную информацию о фильтре*/
+            availableFilters: [],
+            /*текущие фильтры в формате {code: 'CODE', value: 'индекс_значения,индекс_значения3'}*/
             currentFilters: [],
+            /*фильтры, полученные из preference пользователей или URL*/
             filtersFromPref: [],
 
-            currentQuery: null,
-
-            currentNode: null,
-
-            options: {},
-
-            currentSelectedItems: null,
+            options: {
+                bubblingLabel: "documents-arm"
+            },
 
             attrSearchApplied: false,
             fullTextSearchApplied: false,
 
             onReady: function () {
+                YAHOO.util.Dom.addClass(this.id, "hidden");
                 YAHOO.util.Dom.setStyle(this.id + "-body", "visibility", "inherit");
-                YAHOO.util.Dom.setStyle(this.id, "display", "none");
 
                 YAHOO.util.Event.on(this.id + "-delete-all-link", 'click', this.deleteAllFilters, null, this);
 
-                var filters = this;
-                this.preferences.request(this._buildPreferencesKey(),
-                    {
-                        successCallback: {
-                            fn: function (p_oResponse) {
-                                var filtersPref = Alfresco.util.findValueByDotNotation(p_oResponse.json, filters._buildPreferencesKey());
-                                if (filtersPref != null && filtersPref != "") {
-                                    filters.filtersFromPref = YAHOO.lang.JSON.parse(filtersPref);
-                                } else {
-                                    filters.filtersFromPref = [];
-                                }
-                                filters.currentFilters = filters.filtersFromPref.slice(0);
-                                filters.deferredListPopulation.fulfil("onReady");
-                            },
-                            scope: this
-                        },
-                        failureCallback: {
-                            fn: function () {
-                                filters.filtersFromPref = [];
-                                filters.currentFilters = filters.filtersFromPref.slice(0);
-                                filters.deferredListPopulation.fulfil("onReady");
-                            },
-                            scope: this
+                var filtersFromArgs = Alfresco.util.getQueryStringParameter("filters");
+                if (filtersFromArgs) {
+                    var filters = filtersFromArgs.split(";");
+                    for (var i = 0; i < filters.length; i++) {
+                        if (filters[i].indexOf("[") && filters[i].indexOf("]")) {
+                            filters[i] = filters[i].replace("[", "|").replace("]", "|");
                         }
-                    });
+                        var filtersObj = filters[i].split("|");
+                        this.filtersFromPref.push({
+                            code: filtersObj[0],
+                            value: filtersObj[1] ? filtersObj[1].split(",") : []
+                        });
+                    }
+                    this.deferredListPopulation.fulfil("onReady");
+                } else {
+                    this.preferences.request(this._buildPreferencesKey(), {
+                            successCallback: {
+                                scope: this,
+                                fn: function (p_oResponse) {
+                                    var filtersPref = Alfresco.util.findValueByDotNotation(p_oResponse.json, this._buildPreferencesKey());
+                                    if (filtersPref) {
+                                        this.filtersFromPref = YAHOO.lang.JSON.parse(filtersPref);
+                                    } else {
+                                        this.filtersFromPref = [];
+                                    }
+                                    this.deferredListPopulation.fulfil("onReady");
+                                }
+                            },
+                            failureCallback: {
+                                scope: this,
+                                fn: function () {
+                                    this.filtersFromPref = [];
+                                    this.deferredListPopulation.fulfil("onReady");
+                                }
+                            }
+                        });
+                }
             },
 
-            onUpdateAvaiableFilters: function (layer, args) {
-                //сработает при выборе узла в дереве
-                var currentNode = args[1].currentNode;
-                if (currentNode != null) {
-                    this.currentNode = currentNode;
-                    var filters = currentNode.data.filters;
-                    var hasFilters = filters != null && filters.length > 0;
-                    if (hasFilters) {
-                        this.avaiableFilters = [];
-                        for (var i = 0; i < filters.length; i++) {
-                            var filter = filters[i];
-                            this.avaiableFilters.push(filter);
+            renderFilters: function (element, callback, parent) {
+                Alfresco.util.Ajax.jsonRequest({
+                    method: "POST",
+                    url: Alfresco.constants.PROXY_URI + "lecm/arm/draw-filters",
+                    dataObj: {
+                        htmlId: Alfresco.util.generateDomId(),
+                        filters: YAHOO.lang.JSON.stringify(this.getFilledFilters())
+                    },
+                    successCallback: {
+                        scope: this,
+                        fn: function (oResponse) {
+                            element.innerHTML = oResponse.serverResponse.responseText;
+                            if (callback && YAHOO.lang.isFunction(callback)) {
+                                callback.call(parent ? parent : this);
+                            }
                         }
+                    },
+                    failureMessage: this.msg("message.failure"),
+                    scope: this,
+                    execScripts: true
+                });
+            },
 
-                        this.currentFilters = this.filtersFromPref.slice(0);
+            /*сработает при выборе узла в дереве*/
+            onUpdateAvaiableFilters: function (currentNode) {
+                if (currentNode) {
+                    this.currentFilters = [];
+
+                    var filters = currentNode.data.filters;
+                    if (filters && filters.length) {
+                        this.availableFilters = filters;
+
+                        /*Проверим, что сохраненный фильтр присутствует среди фильтров на узле (учитываем, что фильтр мог быть удален из АРМа)*/
                         for (var j = 0; j < this.filtersFromPref.length; j++) {
-                            var indexInAvaiables = this._filterInArray(this.filtersFromPref[j].code, this.avaiableFilters);
-                            if (indexInAvaiables < 0) {
-                                this.currentFilters.splice(this.currentFilters.indexOf(this.filtersFromPref[j]), 1);
+                            var availableFilter = this._getFilterByCode(this.filtersFromPref[j].code, this.availableFilters);
+                            if (availableFilter && this._checkMultiplicity(availableFilter, this.filtersFromPref[j].value)) {
+                                this.currentFilters.push(this.filtersFromPref[j]);
                             }
                         }
                     } else {
-                        this.avaiableFilters = [];
-                        this.currentFilters = [];
+                        this.availableFilters = [];
                     }
                 }
                 if (!this.deferredListPopulation.fulfil("updateArmFilters")) {
@@ -120,72 +145,95 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                 }
             },
 
-            onUpdateCurrentFilters: function (layer, args) {
-                var filters = args[1].filtersData;
-                if (filters != null) {
-                    //обновим сброшенные - оставим те пришли(будут обновлены)
-                    var newCurrentFilters = [];
-                    for (var i = 0; i < this.currentFilters.length; i++) {
-                        var filterCode = this.currentFilters[i].code;
-                        if (filters[filterCode] != null) {
-                            newCurrentFilters.push(this.currentFilters[i]);
-                        }
-                    }
-                    this.currentFilters = newCurrentFilters;
+            /*возвращает список availableFilters*/
+            getAvailableFilters: function () {
+                return this.availableFilters;
+            },
 
-                    //обновим/добавим пришедшие
+            /*возвращает предзаполненным выбранными данными список availableFilters*/
+            getFilledFilters: function () {
+                var filledFilters = this.availableFilters.slice(0);
+
+                filledFilters.forEach(function (filter) {
+                    var current = this._getFilterByCode(filter.code, this.currentFilters);
+                    filter.curValue = current ? current.value : [];
+                }, this);
+
+                return filledFilters;
+            },
+
+            /*сработает при применении фильтров в тулбаре
+            * filters - {code1:[values1], code2:[values2]}
+            * */
+            onUpdateCurrentFilters: function (filters) {
+                if (filters) {
+                    //актуализируем список фильтров и их значений
+                    var newCurrentFilters = [];
+
                     for (var key in filters) {
-                        var filterValue = filters[key];
-                        var indexInCurrent = this._filterInArray(key, this.currentFilters);
-                        if (indexInCurrent < 0) { // еще нет в текущих - добавим
-                            var index = this._filterInArray(key, this.avaiableFilters);
-                            var currentFilter = this.avaiableFilters[index];
-                            currentFilter.curValue = filterValue;
-                            this.currentFilters.push(currentFilter);
-                        } else { // есть в текущих - обновим значение фильтра
-                            this.currentFilters[indexInCurrent].curValue = filterValue;
+                        var availableFilter = this._getFilterByCode(key, this.availableFilters);
+                        if (availableFilter) {
+                            newCurrentFilters.push ({
+                                code: availableFilter.code,
+                                value: this._getValuesIndexes(filters[key], availableFilter.values)
+                            });
                         }
                     }
+
+                    this.currentFilters = newCurrentFilters;
                 }
 
                 this.updateCurrentFiltersForm(true)
             },
 
-            _filterInArray: function (filterCode, filtersArray) {
-                for (var i = 0; i < filtersArray.length; i++) {
-                    var filter = filtersArray[i];
-                    if (filter.code == filterCode) {
-                        return i;
+            _checkMultiplicity: function (filter, value) {
+                return filter.multiple || value.length == 1;
+            },
+
+            _getIndexByCode: function (filterCode, filtersArray) {
+                if (filtersArray) {
+                    for (var i = 0; i < filtersArray.length; i++) {
+                        if (filtersArray[i].code == filterCode) {
+                            return i;
+                        }
                     }
                 }
                 return -1;
             },
 
-            updateCurrentFormView: function () {
-                var filtersExist = this.currentFilters.length > 0 || this.fullTextSearchApplied || this.attrSearchApplied;
-                Dom.setStyle(this.id, "display", filtersExist ? "" : "none");
+            _getFilterByCode: function (filterCode, filtersArray) {
+                var index = this._getIndexByCode(filterCode, filtersArray);
+                return index >= 0 ? filtersArray[index] : null;
+            },
 
+            /*перерисовка примененных фильтров*/
+            updateCurrentFormView: function () {
+                var filtersExist = this.currentFilters.length || this.fullTextSearchApplied || this.attrSearchApplied;
+                var filtersHTML = "";
                 if (filtersExist) {
                     var currentFiltersConteiner = Dom.get(this.id + "-current-filters");
-                    if (currentFiltersConteiner != null) {
-                        var filtersHTML = "";
+                    if (currentFiltersConteiner) {
                         for (var i = 0; i < this.currentFilters.length; i++) {
-                            var curFilter = this.currentFilters[i];
-                            var valuesTitle = "";
-                            if (YAHOO.lang.isArray(curFilter.curValue)) {
-                                for (var j = 0; j < curFilter.curValue.length; j++) {
-                                    var vTitle = this._findFilterValueTitle(curFilter.curValue[j], curFilter.values);
-                                    valuesTitle += (vTitle + ", ");
+                            var availableFilter = this._getFilterByCode(this.currentFilters[i].code, this.availableFilters);
+                            if (availableFilter) {
+                                var valuesIndexes = this.currentFilters[i].value;
+                                var valuesTitle = "";
+                                for (var j = 0; j < valuesIndexes.length; j++) {
+                                    var valueIndex = valuesIndexes[j];
+                                    if (availableFilter.values[valueIndex]) {
+                                        var vTitle =  availableFilter.values[valueIndex].name;
+                                        valuesTitle += (vTitle + ", ");
+                                    }
                                 }
-                                valuesTitle = valuesTitle.substring(0, valuesTitle.length - 2);
-                            } else {
-                                valuesTitle = this._findFilterValueTitle(curFilter.curValue, curFilter.values);
-                            }
+                                if (valuesTitle) {
+                                    valuesTitle = valuesTitle.substring(0, valuesTitle.length - 2);
 
-                            filtersHTML += "<span class='arm-filter-item' title='" + valuesTitle + "'>";
-                            filtersHTML += curFilter.name;
-                            filtersHTML += this.getRemoveFilterButton(curFilter);
-                            filtersHTML += "</span>";
+                                    filtersHTML += "<span class='arm-filter-item' title='" + valuesTitle + "'>";
+                                    filtersHTML += availableFilter.name;
+                                    filtersHTML += this.getRemoveFilterButton(this.currentFilters[i]);
+                                    filtersHTML += "</span>";
+                                }
+                            }
                         }
 
                         if (this.attrSearchApplied) {
@@ -205,31 +253,61 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                         currentFiltersConteiner.innerHTML = filtersHTML;
                     }
                 }
+                if (filtersExist && filtersHTML.length) {
+                    YAHOO.util.Dom.removeClass(this.id, "hidden");
+                } else {
+                    YAHOO.util.Dom.addClass(this.id, "hidden");
+                }
             },
 
+            /*Обновление состояния фильтров*/
             updateCurrentFiltersForm: function (updatePrefs) {
-                var context = this;
-
+                /*формы*/
                 this.updateCurrentFormView();
 
+                /*состояния поиска*/
+                var appliedFilters = [];
+                for (var i = 0; i < this.currentFilters.length; i++) {
+                    var availableFilter = this._getFilterByCode(this.currentFilters[i].code, this.availableFilters);
+                    if (availableFilter) {
+                        var valuesIndexes = this.currentFilters[i].value;
+                        var values = [];
+                        for (var j = 0; j < valuesIndexes.length; j++) {
+                            var valueIndex = valuesIndexes[j];
+                            if (availableFilter.values[valueIndex]){
+                                values.push(availableFilter.values[valueIndex].code);
+                            }
+                        }
+                        if (values.length) {
+                            appliedFilters.push({
+                                'curValue': values,
+                                'class': availableFilter["class"],
+                                'query': availableFilter["query"]
+                            });
+                        }
+                    }
+                }
                 YAHOO.Bubbling.fire("activeFiltersChanged", {
-                    bubblingLabel: context.options.bubblingLabel,
-                    filters: this.currentFilters ? this.currentFilters : []
+                    bubblingLabel: this.options.bubblingLabel,
+                    filters: appliedFilters
                 });
 
+                /*user preferences*/
                 if (updatePrefs) {
-                    this.preferences.set(this._buildPreferencesKey(), YAHOO.lang.JSON.stringify(this.currentFilters ? this.currentFilters : []));
                     this.filtersFromPref = this.currentFilters.slice(0);
+                    this.preferences.set(this._buildPreferencesKey(), YAHOO.lang.JSON.stringify(this.filtersFromPref));
                 }
             },
 
-            _findFilterValueTitle: function (code, valuesList) {
-                for (var i = 0; i < valuesList.length; i++) {
-                    if (valuesList[i].code == code) {
-                        return valuesList[i].name;
+            _getValuesIndexes: function (values, valuesList) {
+                var result = [];
+                for (var i = 0; i < values.length; i++) {
+                    var index = this._getIndexByCode(values[i], valuesList);
+                    if (index >= 0) {
+                        result.push(index);
                     }
                 }
-                return null;
+                return result;
             },
 
             getRemoveFilterButton: function (filter) {
@@ -308,8 +386,6 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                     bubblingLabel: this.options.bubblingLabel
                 });
             },
-
-
 
             _buildPreferencesKey: function () {
                 return this.PREFERENCE_KEY +  LogicECM.module.ARM.SETTINGS.ARM_CODE + ".current-filters";

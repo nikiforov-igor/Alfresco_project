@@ -15,6 +15,15 @@ function addToList(list, key) {
     } else if (key === "issued_errands_execution") {
         path = dashletSettings.properties["lecm-errands:dashlet-settings-await-execution"];
         importantPath = dashletSettings.properties["lecm-errands:dashlet-settings-await-execution-important"];
+    } else if (key === "issued_errands_on_execution") {
+        path = dashletSettings.properties["lecm-errands:dashlet-settings-on-execution"];
+        importantPath = dashletSettings.properties["lecm-errands:dashlet-settings-on-execution-important"];
+    } else if (key === "issued_errands_on_check_report") {
+        path = dashletSettings.properties["lecm-errands:dashlet-settings-on-check-report"];
+        importantPath = dashletSettings.properties["lecm-errands:dashlet-settings-on-check-report-important"];
+    } else if (key === "issued_errands_on_completion") {
+        path = dashletSettings.properties["lecm-errands:dashlet-settings-on-completion"];
+        importantPath = dashletSettings.properties["lecm-errands:dashlet-settings-on-completion-important"];
     } else if (key === "issued_errands_expired") {
         path = dashletSettings.properties["lecm-errands:dashlet-settings-expired"];
         importantPath = dashletSettings.properties["lecm-errands:dashlet-settings-expired-important"];
@@ -48,6 +57,9 @@ function main() {
 
     addToList(list, "issued_errands_all");
     addToList(list, "issued_errands_execution");
+    addToList(list, "issued_errands_on_execution");
+    addToList(list, "issued_errands_on_check_report");
+    addToList(list, "issued_errands_on_completion");
     addToList(list, "issued_errands_expired");
     addToList(list, "issued_errands_deadline");
 

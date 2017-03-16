@@ -88,7 +88,7 @@
 				<#if params.changeItemsFireAction??>
 				changeItemsFireAction: '${params.changeItemsFireAction}',
 				</#if>
-				multipleSelectMode: ${endpointMany?string},
+                endpointMany: ${endpointMany?string},
 				showAssocViewForm: ${showAssocViewForm?string},
 				itemsOptions: [
 					<#list items as i>

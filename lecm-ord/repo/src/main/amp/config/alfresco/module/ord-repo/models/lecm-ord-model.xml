@@ -82,10 +82,20 @@
 				</property>
 				<property name="lecm-ord:real-end-date">
 					<type>d:date</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
 				</property>
 				<!--Дата перехода в статус на исполнении-->
 				<property name="lecm-ord:transition-to-on-execution-date">
 					<type>d:date</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
 				</property>
 				<property name="lecm-ord:signers-assoc-ref">
 					<type>d:text</type>
@@ -105,6 +115,11 @@
 				</property>
 				<!--Флаг для перехода на статус "На исполнении"-->
 				<property name="lecm-ord:transit-to-on-execution">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<!--Флаг для перехода на статус "Работа завершена"-->
+				<property name="lecm-ord:transit-to-work-completed">
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>

@@ -1,5 +1,0 @@
-<webscript>
-  <shortname>Document comments component</shortname>
-  <description>Displays comments for a node</description>
-  <url>/lecm/components/comments/list</url>
-</webscript>

@@ -600,6 +600,14 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 		return null;
 	}
 
+	public NodeRef getErrandBaseDocument(NodeRef errand) {
+        return findNodeByAssociationRef(errand, ASSOC_BASE_DOCUMENT, null, BaseBean.ASSOCIATION_TYPE.TARGET);
+	}
+
+	public NodeRef getInitiator(NodeRef errand) {
+        return findNodeByAssociationRef(errand, ASSOC_ERRANDS_INITIATOR, null, BaseBean.ASSOCIATION_TYPE.TARGET);
+	}
+
     @Override
     public boolean hasChildNotFinalByExecutor(NodeRef errand) {
         if (nodeService.exists(errand)) {

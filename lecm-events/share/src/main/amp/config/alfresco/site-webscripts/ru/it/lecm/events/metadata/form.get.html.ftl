@@ -56,9 +56,12 @@
 
 <div class="metadata-form" id="${id}_metadata">
     <#if hasStatemachine && (mayAdd!false)>
-    <div class="lecm-dashlet-actions">
-        <a id="${id}-action-edit" href="${url.context}/page/event-edit?nodeRef=${nodeRef}" class="edit metadata-edit" title="${msg("dashlet.edit.tooltip")}"></a>
-        <a id="${id}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
+    <div class="panel-header">
+        <div class="panel-title">${msg("heading")}</div>
+        <div class="lecm-dashlet-actions">
+            <a id="${id}-action-edit" href="${url.context}/page/event-edit?nodeRef=${nodeRef}" class="edit metadata-edit" title="${msg("dashlet.edit.tooltip")}"></a>
+            <a id="${id}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
+        </div>
     </div>
     </#if>
     <div id="${id}_container"></div>

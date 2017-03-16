@@ -2881,38 +2881,6 @@
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>2647e11f-2d68-440c-a753-98ee93152ce1
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/2bb3eac0-1466-4774-82b3-18b29706a5da
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Действие не может быть выполнено: вы не обладаете ролью "Поручения.Инициатор". Обратитесь к администратору Системы]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -4131,6 +4099,38 @@
                                                                             <property>
                                                                                 <name>inputFromType</name>
                                                                                 <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>2647e11f-2d68-440c-a753-98ee93152ce1
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/2bb3eac0-1466-4774-82b3-18b29706a5da
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие не может быть выполнено: вы не обладаете ролью "Поручения.Инициатор". Обратитесь к администратору Системы]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>

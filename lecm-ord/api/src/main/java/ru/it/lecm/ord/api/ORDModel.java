@@ -50,6 +50,8 @@ public final class ORDModel {
 	public static final String ORD_POINT_EXECUTED_STATUS = "Исполнен";
 	public static final String ORD_POINT_NOT_EXECUTED_STATUS = "Не исполнен";
 	public static final String ORD_POINT_EXPIRED_STATUS = "Просрочен";
+	public static final String ORD_POINT_EXECUTED_BY_CONTROLLER_STATUS = "Исполнен Контролером";
+	public static final String ORD_POINT_CANCELED_BY_CONTROLLER_STATUS = "Отменен Контролером";
 
 	public static enum ORD_STATUSES { CANCELED_FAKE_STATUS, DELETED_STATUS };
 	public static final EnumMap<ORD_STATUSES,String> STATUSES = new EnumMap<ORD_STATUSES,String>(ORD_STATUSES.class){{
@@ -57,13 +59,16 @@ public final class ORDModel {
 		put(ORD_STATUSES.DELETED_STATUS, "Удален");
 	}};
 
-	public static enum P_STATUSES {WAIT_PERFORMANCE_STATUS, PERFORMANCE_STATUS, EXECUTED_STATUS, NOT_EXECUTED_STATUS, EXPIRED_STATUS };
+	public static enum P_STATUSES {WAIT_PERFORMANCE_STATUS, PERFORMANCE_STATUS, EXECUTED_STATUS, NOT_EXECUTED_STATUS, EXPIRED_STATUS, CANCELED_STATUS, EXECUTED_BY_CONTROLLER_STATUS, CANCELED_BY_CONTROLLER_STATUS};
 	public static final EnumMap<P_STATUSES,String> POINT_STATUSES = new EnumMap<P_STATUSES,String>(P_STATUSES.class){{
 		put(P_STATUSES.WAIT_PERFORMANCE_STATUS, "Ожидает исполнения");
 		put(P_STATUSES.PERFORMANCE_STATUS, "На исполнении");
 		put(P_STATUSES.EXECUTED_STATUS, "Исполнен");
 		put(P_STATUSES.NOT_EXECUTED_STATUS, "Не исполнен");
 		put(P_STATUSES.EXPIRED_STATUS, "Просрочен");
+		put(P_STATUSES.CANCELED_STATUS, "Отменен");
+		put(P_STATUSES.EXECUTED_BY_CONTROLLER_STATUS,"Исполнен Контролером");
+		put(P_STATUSES.CANCELED_BY_CONTROLLER_STATUS,"Отменен Контролером");
 	}};
 
 	public static enum ATTACHMENT_CATEGORIES { DOCUMENT, APPLICATIONS, AGREEMENTS, ORIGINAL, OTHERS };

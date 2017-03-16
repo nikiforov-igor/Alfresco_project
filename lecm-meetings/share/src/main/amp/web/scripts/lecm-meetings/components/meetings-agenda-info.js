@@ -53,11 +53,16 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             onReady: function MeetingAgenda_onReady() {
                 var id = this.newId ? this.newId : this.id;
 
-                //Делегируем все нажатия на элементы с классом attachments-expand
-                YAHOO.util.Event.delegate('Share', 'click', this.onExpand, '.agenda-expand', this, true);
+				var expandButton = Dom.getElementsByClassName('agenda-expand');
+				Event.addListener(expandButton, 'click', this.onExpand, this, true);
 
                 Alfresco.util.createTwister(id  + "-heading", "MeetingAgenda");
-	            
+
+				var lastCustomPanelViewTitle = this.getLastCustomPanelView();
+				if (lastCustomPanelViewTitle == this.getTitle() && this.isSplitPanel()) {
+					this.onExpand();
+				}
+
 				if (this.options.showAfterReady) {
 		            this.onExpand();
 	            }

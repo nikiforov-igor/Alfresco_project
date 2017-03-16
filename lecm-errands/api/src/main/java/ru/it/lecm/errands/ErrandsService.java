@@ -328,6 +328,9 @@ public interface ErrandsService {
 
     NodeRef getBaseDocument(NodeRef errand);
 
+    NodeRef getErrandBaseDocument(NodeRef errand);
+
+    NodeRef getInitiator(NodeRef errand);
     /**
      * Проверяет наличие незавершенных дочерних поручений исполнителя
      * @param errand NodeRef поручения

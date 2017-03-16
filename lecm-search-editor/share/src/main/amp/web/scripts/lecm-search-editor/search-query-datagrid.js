@@ -423,7 +423,7 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                 itemType: this.datagridMeta.itemType,
                 sort: this.datagridMeta.sort,
                 offset: offset,
-                filter: this.currentFilters,
+                additionalFilters: this.currentFilters,
                 useOnlyInSameOrg: this.datagridMeta.useOnlyInSameOrg,
                 useFilterByOrg: this.datagridMeta.useFilterByOrg
             });

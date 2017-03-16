@@ -48,7 +48,7 @@
 	<bean id="reservationWorkflowService" parent="lecmWorkflowService"
 		  class="ru.it.lecm.workflow.reservation.ReservationWorkflowServiceImpl"
 		  depends-on="reservation.model.bootstrap"
-		  p:edsGlobalSettingsService-ref="eds.global-settings.service"
+		  p:edsGlobalSettingsService-ref="edsGlobalSettingsService"
 		  p:regNumbersService-ref="regNumbersService"
 		  p:businessJournalService-ref="businessJournalService"/>
 
@@ -85,7 +85,7 @@
 	<bean id="reservationWorkflowService2" parent="lecmWorkflowService"
 		  class="ru.it.lecm.workflow.reservation.deprecated.ReservationWorkflowServiceImpl2"
 		  depends-on="reservation.model.bootstrap"
-		  p:edsGlobalSettingsService-ref="eds.global-settings.service"
+		  p:edsGlobalSettingsService-ref="edsGlobalSettingsService"
 		  p:regNumbersService-ref="regNumbersService"
 		  p:businessJournalService-ref="businessJournalService"
 		  p:notificationsService-ref="notificationsService" />

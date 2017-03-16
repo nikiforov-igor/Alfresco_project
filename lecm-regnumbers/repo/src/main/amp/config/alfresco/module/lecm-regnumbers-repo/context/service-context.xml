@@ -62,8 +62,9 @@
 		</property>
 	</bean>
 
-	<bean id="regNumbersTaggedCounterRegistrator" class="ru.it.lecm.regnumbers.counter.TaggedCounterRegistrator" init-method="init" abstract="true">
+	<bean id="regNumbersTaggedCounterRegistrator" class="ru.it.lecm.regnumbers.counter.TaggedCounterRegistrator" abstract="true">
 		<property name="counterFactory" ref="regNumbersCounterFactory"/>
+		<property name="lecmServicesRegistry" ref="lecmServicesRegistry"/>
 	</bean>
 
 	<bean id="regNumbersJavascriptExtension" class="ru.it.lecm.regnumbers.extension.RegNumbersJavascriptExtension" parent="baseJavaScriptExtension">

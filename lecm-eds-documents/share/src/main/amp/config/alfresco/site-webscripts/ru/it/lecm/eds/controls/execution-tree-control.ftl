@@ -1,4 +1,8 @@
 <#include "/org/alfresco/components/form/controls/common/utils.inc.ftl" />
+<#assign showFirstLevel = false/>
+<#if field.control.params.showFirstLevel?? && field.control.params.showFirstLevel == "true">
+    <#assign showFirstLevel = true/>
+</#if>
 
 <script type="text/javascript">//<![CDATA[
 (function () {
@@ -18,7 +22,9 @@
         new LogicECM.module.ExecutionTreeControl("${fieldHtmlId}").setOptions({
             documentNodeRef: "${form.arguments.itemId}",
             fieldId: "${field.configName}",
-            formId: "${args.htmlid}"
+            formId: "${args.htmlid}",
+            showFirstLevel: ${showFirstLevel?string}
+
         }).setMessages(${messages});
     }
 

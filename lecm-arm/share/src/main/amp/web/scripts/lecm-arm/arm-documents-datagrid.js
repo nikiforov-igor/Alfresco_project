@@ -155,7 +155,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 itemType: this.datagridMeta.itemType,
                 sort: this.datagridMeta.sort,
                 offset: offset,
-                filter: this.currentFilters,
+                additionalFilters: this.currentFilters,
                 useOnlyInSameOrg: this.datagridMeta.useOnlyInSameOrg,
                 useFilterByOrg: this.datagridMeta.useFilterByOrg
             });
@@ -420,16 +420,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 }
                 elCell.innerHTML = html;
             };
-        },
-
-        getAllSelectedItems: function DataGrid_getSelectedItems() {
-            var items = [];
-            for (var item in this.selectedItems) {
-                if (this.selectedItems.hasOwnProperty(item) && this.selectedItems[item]) {
-                    items.push(item);
-                }
-            }
-            return items;
         },
 
         _buildPreferencesKey: function () {

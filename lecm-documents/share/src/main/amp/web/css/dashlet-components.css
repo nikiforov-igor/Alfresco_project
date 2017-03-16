@@ -69,16 +69,22 @@
 }
 
 .metadata-form .lecm-dashlet-actions .edit,
-.metadata-form .lecm-dashlet-actions .collapse {
+.metadata-form .lecm-dashlet-actions .collapse,
+.panel-header .lecm-dashlet-actions .collapse,
+.panel-header .lecm-dashlet-actions .edit {
     background-repeat: no-repeat;
     padding-right: 16px;
     font-size: 16px;
 }
-.metadata-form .lecm-dashlet-actions .edit {
+.metadata-form .lecm-dashlet-actions .edit,
+.panel-header .lecm-dashlet-actions .edit
+{
     background-image: url("../components/profile/images/edit.png");
 }
 
-.metadata-form .lecm-dashlet-actions .collapse {
+.metadata-form .lecm-dashlet-actions .collapse,
+.panel-header .lecm-dashlet-actions .collapse
+{
     background-image: url("../components/documentlibrary/actions/document-cloud-unsync-16.png");
     margin-left: 10px;
 }
@@ -162,6 +168,12 @@
     font-weight: bold;
     text-align: right;
     margin-right: 10px;
+}
+
+.workflow-task-item .workflow-task-status {
+    float: right;
+    margin-right: 0;
+    line-height: 18px;
 }
 
 .workflow-task-main-text {

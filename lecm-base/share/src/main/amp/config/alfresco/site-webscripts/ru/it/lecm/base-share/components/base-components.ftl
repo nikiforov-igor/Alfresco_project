@@ -168,7 +168,7 @@ nested - дополнительная верстка,
 
 <input type='hidden' id='${fieldHtmlId}-added' name='${field.name}_added' value='${addedValue?html}'>
 <input type='hidden' id='${fieldHtmlId}-removed' name='${field.name}_removed'>
-<input type='hidden' id='${fieldHtmlId}' name='-' value='${fieldValue?html}'>
+<input type='hidden' id='${fieldHtmlId}' name='${field.name}' value='${fieldValue?html}'>
 <#if showAutocomplete>
 <input type='text' id='${fieldHtmlId}-autocomplete'>
 </#if>

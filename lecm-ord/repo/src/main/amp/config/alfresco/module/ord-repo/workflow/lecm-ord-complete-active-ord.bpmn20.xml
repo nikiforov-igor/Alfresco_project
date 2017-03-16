@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/ord/workflow/completeActiveORD/1.0">
+    <process id="completeActiveORD" name="Завершение активного ОРД">
+        <startEvent id="startCompleteActiveORD" name="Start" activiti:formKey="lecmORDWf:completeActiveORD"></startEvent>
+        <endEvent id="endCompleteActiveORD" name="End"></endEvent>
+        <scriptTask id="completeActiveORDTask" name="Complete Active ORD" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+                            var document = bpm_package.children[0];
+                            var currentUser =  orgstructure.getCurrentEmployee();
+                            var recipients = [];
+                            if (document) {
+                                var completionOption = execution.getVariable("lecmORDWf_completionOption");
+                                var actionComment = execution.getVariable("lecmORDWf_comment");
+                                var childErrands = errands.getChildErrands(document.nodeRef.toString());
+                                var itemsTable = document.assocs["lecm-ord-table-structure:items-assoc"][0];
+                                var ordPoints = documentTables.getTableDataRows(itemsTable.nodeRef.toString());
+                                var statusCode = "", comment = "";
+                                if (completionOption == "CANCEL") {
+                                    reason = "Поручение отменено в связи с завершением работы по документу Контролером ОРД " + currentUser.properties["lecm-orgstr:employee-short-name"];
+                                    childErrands.forEach(function (childErrand) {
+                                        if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
+                                            errands.sendCancelSignal(childErrand.nodeRef.toString(), reason, currentUser.nodeRef.toString());
+                                        }
+                                     });
+                                    statusCode = "CANCELED_BY_CONTROLLER_STATUS";
+                                    comment = "Работа по пункту отменена в связи с завершением работы по документу";
+                                } else if (completionOption == "EXECUTE") {
+                                    reason = "Поручение исполнено в связи с завершением работы по документу Контролером ОРД " + currentUser.properties["lecm-orgstr:employee-short-name"];
+                                    childErrands.forEach(function (childErrand) {
+                                        if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
+                                            edsDocument.sendCompletionSignal(childErrand, reason, currentUser);
+                                        }
+                                    });
+                                    statusCode = "EXECUTED_BY_CONTROLLER_STATUS";
+                                    comment = "Пункт исполнен в связи с завершением работы по документу";
+                                }
+                                ordPoints.forEach(function(point){
+                                    var pointStatusAssoc = point.assocs["lecm-ord-table-structure:item-status-assoc"][0];
+                                    var pointStatus = pointStatusAssoc.properties["cm:name"];
+                                    if (pointStatus == "На исполнении") {
+                                        ordStatemachine.changePointStatus(point.nodeRef.toString(), statusCode);
+                                        point.properties["lecm-ord-table-structure:item-comment"] = comment;
+                                        point.save();
+                                    }
+                                    var itemControllerAssoc = point.assocs["lecm-ord-table-structure:controller-assoc"];
+                                    if (itemControllerAssoc && itemControllerAssoc.length) {
+                                        recipients.push(itemControllerAssoc[0]);
+                                    }
+                                    var itemExecutorAssoc = point.assocs["lecm-ord-table-structure:executor-assoc"];
+                                    if (itemExecutorAssoc && itemExecutorAssoc.length) {
+                                        recipients.push(itemExecutorAssoc[0]);
+                                    }
+                                    var itemCoexecutorsAssoc = point.assocs["lecm-ord-table-structure:coexecutors-assoc"];
+                                    if (itemCoexecutorsAssoc && itemCoexecutorsAssoc.length) {
+                                        itemCoexecutorsAssoc.forEach(function(coexecutor) {
+                                            recipients.push(coexecutor);
+                                        })
+                                    }
+                                });
+                                var reviewTableAssoc = document.assocs['lecm-review-ts:review-table-assoc'];
+                                if (reviewTableAssoc) {
+                                    var reviewTsItems = reviewTableAssoc[0].getChildAssocsByType('lecm-review-ts:review-table-item');
+                                    reviewTsItems.forEach(function (item) {
+                                        if (item.properties['lecm-review-ts:review-state'] == "NOT_REVIEWED" || item.properties['lecm-review-ts:review-state'] == "NOT_STARTED") {
+                                            item.properties['lecm-review-ts:review-state'] = "CANCELLED";
+                                            item.properties['lecm-review-ts:review-finish-date'] = new Date();
+                                            item.save();
+                                        }
+                                    });
+                                }
+                                notifications.sendNotificationFromCurrentUser({
+                                    recipients: recipients,
+                                    templateCode: 'ORD_FORCE_COMPLETE',
+                                    templateConfig: {
+                                        mainObject: document,
+                                        eventExecutor: currentUser,
+                                        member: "Контролер",
+                                        comment: actionComment
+                                    },
+                                    dontCheckAccessToObject: true
+                                });
+                                var logText = "#initiator ";
+                                logText += documentScript.wrapperTitle("завершил", actionComment);
+                                logText += " работу по " + documentScript.wrapperDocumentLink(document, "ОРД");
+                                businessJournal.log(document.nodeRef.toString(), "COMPLETE_DOCUMENT", logText, []);
+                                document.properties["lecm-ord:transit-to-work-completed"] = true;
+                                document.save();
+                            }
+                        ]]></activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script>var test=1;</script>
+        </scriptTask>
+        <receiveTask id="completeActiveORDReceiveTask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startCompleteActiveORD" targetRef="completeActiveORDTask"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="completeActiveORDTask" targetRef="completeActiveORDReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="completeActiveORDReceiveTask" targetRef="endCompleteActiveORD"></sequenceFlow>
+    </process>
+</definitions>

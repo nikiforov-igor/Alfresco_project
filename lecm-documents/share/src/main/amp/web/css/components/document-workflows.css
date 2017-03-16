@@ -1,0 +1,19 @@
+.right-workflow {
+    margin-top: 12px;
+}
+
+.right-workflows-container {
+    margin-right: 25px;
+    margin-left: 15px;
+    margin-bottom: 5px;
+}
+
+.list-workflow-description {
+    padding-left: 3px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.workflows-panel .short-view span.first-child {
+    background: url('../../images/lecm-documents/components/workflows-16.png') no-repeat 5px 5px;
+}
