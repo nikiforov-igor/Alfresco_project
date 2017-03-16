@@ -340,7 +340,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 	} catch (e) {
 		var msg = e.message;
 
-		if (logger.isLoggingEnabled()) {
+		if (logger.isWarnLoggingEnabled()) {
 			logger.log(msg);
 		}
 
@@ -539,6 +539,9 @@ function resolveNode(reference) {
 			node = orgstructure.getUnitByOrganization(orgstructure.getEmployeeOrganization(orgstructure.getCurrentEmployee()));
 		}
 	} catch (e) {
+		if (logger.isWarnLoggingEnabled()) {
+			logger.log(e.message);
+		}
 		return null;
 	}
 	return node;
