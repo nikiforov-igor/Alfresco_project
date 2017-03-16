@@ -31,6 +31,15 @@
 
 	LogicECM.module.WCalendar.Absence.CheckboxChanged = function Absence_CheckboxChanged(skipFiring) {
 	    Alfresco.util.YUILoaderHelper.require(["event-simulate"], function(){
+	    	function focusRecharge(element) {
+                var activeElement;
+	    		if (element && typeof element.focus === 'function') {
+                    activeElement = document.activeElement;
+                    element.focus();
+                    activeElement.focus();
+				}
+			}
+
 	    	var myID = "${fieldHtmlId}";
 
 			var unlimitedCheckbox = YAHOO.util.Dom.get(myID);
@@ -55,6 +64,7 @@
 				YAHOO.util.UserAction.keyup(endInputHidden);
 			} else {
 				endInputDate.removeAttribute("readonly");
+                focusRecharge(endInputDate);
 				endInputDate.value = "";
 				endInputHidden.removeAttribute("value");
 				endInputIcon.style.display = "inline-block";
