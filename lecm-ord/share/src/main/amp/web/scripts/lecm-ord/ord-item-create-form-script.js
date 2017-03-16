@@ -65,10 +65,12 @@
         if (value) {
             Util.enableControl(formId, "lecm-ord-table-structure:controller-assoc");
         } else {
-            var controllerControl = Dom.get(formId + "_assoc_lecm-ord-table-structure_controller-assoc-cntrl");
-            Selector.query(".value-div a.remove-item", controllerControl, true).click();
-            Dom.get(formId + "_assoc_lecm-ord-table-structure_controller-assoc").value = "";
-            Util.disableControl(formId, "lecm-ord-table-structure:controller-assoc");
+            var controllerField = Dom.get(formId + "_assoc_lecm-ord-table-structure_controller-assoc");
+            if (controllerField && controllerField.value) {
+                var controllerControl = Dom.get(formId + "_assoc_lecm-ord-table-structure_controller-assoc-cntrl");
+                Selector.query(".value-div a.remove-item", controllerControl, true).click();
+            }
+            Util.readonlyControl(formId, "lecm-ord-table-structure:controller-assoc", true);
         }
     }
 })();
