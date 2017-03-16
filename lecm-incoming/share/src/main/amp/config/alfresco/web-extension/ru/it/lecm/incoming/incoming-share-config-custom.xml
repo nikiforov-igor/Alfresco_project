@@ -972,7 +972,8 @@
                         <control template="/ru/it/lecm/documents/controls/select-status-control.ftl">
                             <control-param name="docType">lecm-incoming:document</control-param>
                             <control-param name="withEmpty">true</control-param>
-                            <control-param name="valuesDelimiter">,</control-param>
+                            <control-param name="endpointMany">true</control-param>
+                            <control-param name="nameSuffix">-multiText</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:regnum"/>
@@ -1007,7 +1008,11 @@
                     <field id="lecm-eds-document:execution-date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
-                    <field id="lecm-document:subject-assoc"/>
+                    <field id="lecm-document:subject-assoc">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
+                    </field>
                 </appearance>
             </form>
             <!-- Форма с набором полей, редактируемых в машине состояний-->
