@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<title>Контролы</title>
+	<description>Dictionary controls list</description>
+	<template-instance>dict-controls-list</template-instance>
+	<authentication>user</authentication>
+</page>

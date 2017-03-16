@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+   <title>Создать модель справочника</title>
+   <description>Create Dictionary Model</description>
+   <template-instance>dict-model-create</template-instance>
+   <authentication>user</authentication>
+</page>

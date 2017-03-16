@@ -94,13 +94,13 @@
             <artifactId>lecm-security-api</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>ru.it.lecm.dictionary</groupId>
             <artifactId>dictionary-repo-api</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
-        </dependency> -->
+        </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--

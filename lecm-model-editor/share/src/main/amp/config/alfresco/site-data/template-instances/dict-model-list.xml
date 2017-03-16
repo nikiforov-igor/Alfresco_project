@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+	<template-type>ru/it/lecm/dictmodel/dict-model-list</template-type>
+	<components>
+		<!--Datagrid -->
+		<component>
+			<region-id>datagrid</region-id>
+			<url>/lecm/dictionarymodel/data-lists/datagrid</url>
+		</component>
+		<component>
+			<region-id>forbidden</region-id>
+			<url>/lecm/base/forbidden</url>
+		</component>
+	</components>
+</template-instance>

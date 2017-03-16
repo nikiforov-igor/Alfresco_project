@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+	<template-type>ru/it/lecm/dictmodel/dict-model-create</template-type>
+	<components>
+		<!-- Create Content Form Manager -->
+		<component>
+			<region-id>create-content-mgr</region-id>
+			<url>/lecm/dictionarymodel/form-mgr/dict-model-create-mgr</url>
+		</component>
+
+		<!-- Create Content Form -->
+		<component>
+			<region-id>create-content</region-id>
+			<url>/components/form?mimeType={mimeType}&amp;destination={destination}&amp;formId={formId}&amp;redirect={redirect}</url>
+			<properties>
+				<itemKind>type</itemKind>
+				<itemId>{itemId}</itemId>
+				<mode>create</mode>
+				<submitType>json</submitType>
+				<showCaption>true</showCaption>
+				<showCancelButton>true</showCancelButton>
+				<editInline>true</editInline>
+				<googleEditable>true</googleEditable>
+			</properties>
+		</component>
+		<component>
+			<region-id>forbidden</region-id>
+			<url>/lecm/base/forbidden</url>
+		</component>
+
+	</components>
+</template-instance>
