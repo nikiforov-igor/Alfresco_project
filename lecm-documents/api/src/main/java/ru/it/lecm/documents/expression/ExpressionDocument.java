@@ -146,6 +146,7 @@ public class ExpressionDocument extends ExpressionNode {
         }
 
         if (!properties.isEmpty() && !hasEmptyProperty) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             for (String prop: props) {
                 QName propQName = QName.createQName(prop, serviceRegistry.getNamespaceService());
                 properties.add(propQName);
@@ -157,7 +158,7 @@ public class ExpressionDocument extends ExpressionNode {
 
                     String value = propValue.toString();
                     if (propValue instanceof Date) {
-                        value = new SimpleDateFormat("yyyy-MM-dd").format(propValue);
+                        value = dateFormat.format(propValue);
                     }
 
                     filters.append("@").append(prop.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-"))
