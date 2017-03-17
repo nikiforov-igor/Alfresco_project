@@ -33,7 +33,6 @@ LogicECM.module = LogicECM.module || {};
 		var module = LogicECM.module.StartWorkflow.superclass.constructor.call(this, 'LogicECM.module.StartWorkflow', htmlId, ['button']);
 		YAHOO.Bubbling.on('objectFinderReady', module.onObjectFinderReady, module);
 		YAHOO.Bubbling.on('stampControlReady', module.onStampControlReady, module);
-		YAHOO.Bubbling.on('hiddenAssociationFormReady', module.onHiddenAssociationFormReady, module);
 		YAHOO.Bubbling.on('formContentReady', module.onStartWorkflowFormContentReady, module);
 		YAHOO.Bubbling.on('redrawDocumentActions', module.draw, module);
 		return module;
@@ -136,14 +135,6 @@ LogicECM.module = LogicECM.module || {};
 		onStampControlReady: function StartWorkflow_onStampControlReady(layer, args) {
 			var stampControl = args[1].eventGroup;
 			stampControl.options.itemId = this.options.nodeRef;
-		},
-		onHiddenAssociationFormReady: function StartWorkflow_onObjectFinderReady(layer, args) {
-			if (args[1].fieldName == 'assoc_packageItems') {
-				Dom.get(args[1].fieldId + '-added').value = this.options.nodeRef;
-				YAHOO.Bubbling.fire('afterSetItems', {
-					items: this.options.nodeRef
-				});
-			}
 		},
 		show: function showWorkflowForm(action) {
 			if (this.doubleClickLock) {
