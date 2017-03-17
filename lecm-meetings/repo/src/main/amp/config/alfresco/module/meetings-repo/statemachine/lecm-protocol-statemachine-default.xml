@@ -6201,7 +6201,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
         auto = !!protocol.properties['lecm-protocol:errands-autocreation'],
         tableAssocs = protocol.assocs['lecm-protocol-ts:points-assoc'],
         msg = 'Просрочено исполнение пункта #mainobject протокола #object1',
-        autoCreateErrand = (orgstructure.isCurrentEmployeeHasBusinessRole("ERRANDS_INITIATOR") && auto),
+        autoCreateErrand = (statemachine.isStarter("lecm-errands:document") && auto),
         tableData, protocolPoints, i, point, isExpired, pointExecutors;
 
     if (tableAssocs && tableAssocs.length) {
