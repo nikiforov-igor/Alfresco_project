@@ -93,8 +93,8 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 				this.loadObjectDescription();
 				this.loadCurrentEmployee();
 
-				this.subscribeButton = Alfresco.util.createYUIButton(this, this.controlId + "-subscribe-button", this.onSubscribe.bind(this), {}, Dom.get(this.controlId + "-subscribe-button"));
-				this.unsubscribeButton = Alfresco.util.createYUIButton(this, this.controlId + "-unsubscribe-button", this.onUnsubscribe.bind(this), {}, Dom.get(this.controlId + "-unsubscribe-button"));
+				this.subscribeButton = Alfresco.util.createYUIButton(this, "cntrl-subscribe-button", this.onSubscribe);
+				this.unsubscribeButton = Alfresco.util.createYUIButton(this, "cntrl-unsubscribe-button", this.onUnsubscribe);
 
 				this.updateFormButtons();
 			},
@@ -309,52 +309,52 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 			},
 
 			onUnsubscribe: function(e, p_obj) {
-				var fnActionUnsibscribeConfirm = function DataGridActions__onActionDelete_confirm(items) {
-					Alfresco.util.Ajax.jsonGet({
-						url: Alfresco.constants.PROXY_URI + "/lecm/subscriptions/api/unsubscribeObject",
-						dataObj: {
-							nodeRef: this.currentEmployeeSubscriptionRef
-						},
-						successCallback: {
-							scope: this,
-							fn: function (response) {
-								var oResults = response.json;
-								if (oResults && oResults.success) {
-									this.currentEmployeeSubscriptionRef = null;
-									Alfresco.util.PopupManager.displayMessage({
-										text: this.msg("message.unsibscribe.success")
-									});
-								} else {
-									Alfresco.util.PopupManager.displayMessage({
-										text: this.msg("message.unsibscribe.failure")
-									});
-								}
-								this.updateFormButtons();
-							}
-						},
-						failureMessage: this.msg("message.unsibscribe.failure")
-					});
-				};
-
 				Alfresco.util.PopupManager.displayPrompt({
 					title: this.msg("message.confirm.unsubscribe.title"),
 					text: this.msg("message.confirm.unsubscribe.description"),
-					buttons:[
-						{
-							text: this.msg("button.unsubscribe"),
-							handler:function () {
+					buttons:[{
+						text: this.msg("button.unsubscribe"),
+						handler: {
+							obj: this,
+							fn: function (event, obj) {
 								this.destroy();
-								fnActionUnsibscribeConfirm.call();
+								obj.onUnsubscribeConfirm();
 							}
-						},
-						{
-							text: this.msg("button.cancel"),
-							handler:function () {
-								this.destroy();
-							},
-							isDefault:true
 						}
-					]
+					}, {
+						text: this.msg("button.cancel"),
+						handler:function () {
+							this.destroy();
+						},
+						isDefault:true
+					}]
+				});
+			},
+
+			onUnsubscribeConfirm: function () {
+				Alfresco.util.Ajax.jsonGet({
+					url: Alfresco.constants.PROXY_URI + "/lecm/subscriptions/api/unsubscribeObject",
+					dataObj: {
+						nodeRef: this.currentEmployeeSubscriptionRef
+					},
+					successCallback: {
+						scope: this,
+						fn: function (response) {
+							var oResults = response.json;
+							if (oResults && oResults.success) {
+								this.currentEmployeeSubscriptionRef = null;
+								Alfresco.util.PopupManager.displayMessage({
+									text: this.msg("message.unsibscribe.success")
+								});
+							} else {
+								Alfresco.util.PopupManager.displayMessage({
+									text: this.msg("message.unsibscribe.failure")
+								});
+							}
+							this.updateFormButtons();
+						}
+					},
+					failureMessage: this.msg("message.unsibscribe.failure")
 				});
 			}
 		});

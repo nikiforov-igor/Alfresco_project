@@ -341,7 +341,6 @@
             <form id="doc-right-parts">
                 <field-visibility>
                     <show id="fake:document-actions"/>
-                    <show id="fake:base-doc-actions"/>
                     <show id="fake:document-metadata"/>
                     <show id="fake:document-attachments"/>
                     <show id="fake:document-workflows"/>
@@ -357,11 +356,6 @@
                     <field id="fake:document-actions">
                         <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
                             <control-param name="uri">/lecm/components/dashlets/document-actions</control-param>
-                        </control>
-                    </field>
-                    <field id="fake:base-doc-actions">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">lecm/components/dashlets/base-doc-actions</control-param>
                         </control>
                     </field>
                     <field id="fake:document-metadata">
@@ -2221,21 +2215,17 @@
 			<workflow name="activiti$contractsTermination"/>
 			<workflow name="activiti$approvalForce"/>
 			<workflow name="activiti$approvalTermination"/>
-			<workflow name="activiti$default_statemachine"/>
-			<workflow name="activiti$lecm-contract-fake_document"/>
 			<workflow name="activiti$lecm-additional-document_additionalDocument"/>
 			<workflow name="activiti$lecm-contract_document"/>
             <workflow name="activiti$contractsSignContractor"/>
             <workflow name="activiti$addDocSignContractor"/>
-		<workflow name="activiti$contractExecuted"/>
+		    <workflow name="activiti$contractExecuted"/>
             <workflow name="activiti$contractAdditionalDocumentCancel"/>
 		</hidden-workflows>
 	</config>
 
 	<config evaluator="string-compare" condition="LECMStatemachineWorkflow">
 		<hidden-workflows>
-			<workflow name="activiti$default_statemachine"/>
-			<workflow name="activiti$lecm-contract-fake_document"/>
 			<workflow name="activiti$lecm-additional-document_additionalDocument"/>
 			<workflow name="activiti$lecm-contract_document"/>
 		</hidden-workflows>

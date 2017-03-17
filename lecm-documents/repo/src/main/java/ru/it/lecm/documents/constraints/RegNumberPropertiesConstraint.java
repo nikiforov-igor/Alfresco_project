@@ -1,5 +1,8 @@
 package ru.it.lecm.documents.constraints;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.alfresco.repo.dictionary.constraint.AbstractConstraint;
 
 /**
@@ -36,5 +39,15 @@ public class RegNumberPropertiesConstraint extends AbstractConstraint {
 
     public String getRegNumbersProperties() {
         return regNumbersProperties;
+    }
+    
+    @Override
+    public Map<String, Object> getParameters()
+    {
+        Map<String, Object> params = new HashMap<String, Object>(1);
+        
+        params.put("regNumbersProperties", this.regNumbersProperties);
+        
+        return params;
     }
 }

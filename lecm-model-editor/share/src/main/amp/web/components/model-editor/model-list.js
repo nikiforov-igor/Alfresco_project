@@ -81,7 +81,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 			this.widgets.simpleView = Alfresco.util.createYUIButton(this, "button", function () {
 				var destination = this.widgets.dataTable.destination;
-				var url = Alfresco.constants.URL_PAGECONTEXT + "doc-model-create?formId=create-model&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list&destination=" + destination + "&itemId=cm:dictionaryModel&mimeType=text/xml";
+				var url = Alfresco.constants.URL_PAGECONTEXT + "doc-model-create?doctype=&formId=create-model&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list&destination=" + destination + "&itemId=cm:dictionaryModel&mimeType=text/xml";
 				window.location = url;
 			}, {label: Alfresco.util.message('lecm.meditor.lbl.create')});
 
@@ -131,7 +131,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			var scope = this;
 
 			return function (el, oRecord, oColumn, oData, oDataTable) {
-				if (oRecord.getData("nodeRef") != null && !oRecord.getData("isRestorable")) {
+				if (oRecord.getData("nodeRef") != null && !oRecord.getData("isRestorable") && oRecord.getData("isDocumentModel") != null) {
 					el.innerHTML = "";
 
 					var deleteLink = document.createElement("a");
@@ -147,7 +147,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			var scope = this;
 
 			return function (el, oRecord, oColumn, oData, oDataTable) {
-				if (oRecord.getData("nodeRef") != null && oRecord.getData("isDocumentModel")) {
+				if (oRecord.getData("nodeRef") != null && oRecord.getData("isDocument")) {
 					el.innerHTML = "";
 
 					var editModelLink = document.createElement("a");
@@ -155,7 +155,17 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 					Dom.addClass(editModelLink, "edit-model");
 					editModelLink.innerHTML = "&nbsp;";
 
-					editModelLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-model-edit?formId=edit-model&nodeRef=" + oRecord.getData("nodeRef") + "&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list";
+					editModelLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-model-edit?formId=edit-model&nodeRef=" + oRecord.getData("nodeRef") + "&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list&doctype=" + oRecord.getData("typeName");
+					el.appendChild(editModelLink);
+				} else if(oRecord.getData("isDocument")) {
+					el.innerHTML = "";
+
+					var editModelLink = document.createElement("a");
+					editModelLink.title = scope.msg("title.model.edit");
+					Dom.addClass(editModelLink, "edit-model");
+					editModelLink.innerHTML = "&nbsp;";
+
+					editModelLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-model-view?itemId=cm:dictionaryModel&formId=view-model&nodeRef=" + oRecord.getData("nodeRef") + "&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list&doctype=" + oRecord.getData("typeName");
 					el.appendChild(editModelLink);
 				}
 			};
@@ -328,7 +338,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 								typeName: types[i].typeName,
 								isActiveModel: oRecord.getData("isActive"),
 								isDocument: types[i].isDocument,
-								parentModelName: oRecord.getData("modelName")
+								parentModelName: oRecord.getData("modelName"),
+								nodeRef: oRecord.getData("nodeRef")
 							});
 
 						}

@@ -160,7 +160,7 @@
 			changeItemsFireAction: "refreshAutocompleteItemList_${fieldHtmlId}",
 			plane: true,
 			setCurrentValue: false,
-			currentValue: "${fieldValue!''}",
+			currentValue: "${(fieldValue!'')?js_string}",
 			itemType:"${field.control.params.itemType!field.endpointType}",
 			additionalFilter: "${field.control.params.additionalFilter!''}",
             clearFormsOnStart: false,
