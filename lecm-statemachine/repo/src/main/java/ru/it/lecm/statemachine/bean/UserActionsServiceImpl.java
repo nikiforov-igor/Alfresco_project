@@ -199,6 +199,7 @@ public class UserActionsServiceImpl implements UserActionsService {
                                 }
 
                                 Map<String, String> variables = stateMachineService.getInputVariablesMap(statemachineId, state.getVariables().getInput());
+                                variables.put("assoc_packageItems", documentRef.toString());
 
                                 Long count = counts.get(state.getActionId());
                                 if (count == null) {
@@ -251,6 +252,7 @@ public class UserActionsServiceImpl implements UserActionsService {
                                 }
 
                                 Map<String, String> variables = stateMachineService.getInputVariablesMap(statemachineId, entity.getVariables().getInput());
+                                variables.put("assoc_packageItems", documentRef.toString());
 
                                 if (!hideAction) {
                                     Long count = counts.get(entity.getId());
