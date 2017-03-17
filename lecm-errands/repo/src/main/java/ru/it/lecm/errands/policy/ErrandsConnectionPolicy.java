@@ -229,13 +229,7 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
                 for (NodeRef document : connectedDocuments) {
                     if (!nodeService.getType(document).equals(ErrandsService.TYPE_ERRANDS)) {
                         List<NodeRef> connectedWithConnectedDocument = documentConnectionService.getConnectedDocuments(document, DocumentConnectionService.DICTIONARY_VALUE_FOR_INFORMATION, ErrandsService.TYPE_ERRANDS, true);
-                        Boolean alreadyConnected = false;
-                        for (NodeRef connectedDocument : connectedWithConnectedDocument) {
-                            if (Objects.equals(connectedDocument, errandDoc)) {
-                                alreadyConnected = true;
-                            }
-                        }
-                        if (!alreadyConnected) {
+                        if (!connectedWithConnectedDocument.contains(errandDoc)) {
                             documentConnectionService.createConnection(document, errandDoc, DocumentConnectionService.DICTIONARY_VALUE_FOR_INFORMATION, true, true);
                         }
                         documentMembersService.addMemberWithoutCheckPermission(document, executor, new HashMap<QName, Serializable>());
