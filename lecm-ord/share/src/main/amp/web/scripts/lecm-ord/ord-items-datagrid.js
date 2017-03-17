@@ -382,7 +382,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                             var data = response.json.formatString.split(",");
                             var args = {};
                             if (data[0]) {
-                                args["prop_lecm-ord-table-structure_execution-date"] = data[0];
+                                args["prop_lecm-ord-table-structure_execution-date"] = new Date(data[0]);
                             }
                             if (data[1]) {
                                 args["assoc_lecm-ord-table-structure_subject-assoc"] =  data[1];
