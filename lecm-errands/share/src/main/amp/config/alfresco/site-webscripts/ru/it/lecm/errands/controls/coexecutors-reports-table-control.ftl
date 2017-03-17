@@ -53,7 +53,7 @@
 					viewFormTitleMsg: "${params.viewFormTitleMsg}",
 				</#if>
 					expandable: true,
-					expandDataSource: "components/form?formId=table-structure-expand",
+					expandDataSource: "lecm/components/form?formId=table-structure-expand",
 					documentNodeRef: "${form.arguments.itemId}",
 					showActions: ${showActions?string}
 				});

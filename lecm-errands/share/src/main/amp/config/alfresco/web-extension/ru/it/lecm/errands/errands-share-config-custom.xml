@@ -211,7 +211,7 @@
                         <control template="/ru/it/lecm/errands/controls/execution-reports-table-control.ftl">
                             <control-param name="isTableSortable">true</control-param>
                             <control-param name="sort">lecm-errands-ts:execution-report-create-date|false</control-param>
-                            <control-param name="expandDataSource">components/form?formId=table-structure-expand</control-param>
+                            <control-param name="expandDataSource">lecm/components/form?formId=table-structure-expand</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script4" set="reports">
@@ -431,7 +431,7 @@
                         <control template="/ru/it/lecm/errands/controls/execution-reports-table-control.ftl">
                             <control-param name="isTableSortable">true</control-param>
                             <control-param name="sort">lecm-errands-ts:execution-report-create-date|false</control-param>
-                            <control-param name="expandDataSource">components/form?formId=table-structure-expand</control-param>
+                            <control-param name="expandDataSource">lecm/components/form?formId=table-structure-expand</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script8" set="lineReports">
