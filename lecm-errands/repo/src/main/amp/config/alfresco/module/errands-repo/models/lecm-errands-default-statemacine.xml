@@ -2842,20 +2842,20 @@ if(doc){
   var childrenResolutions = errands.getChildResolutions(doc.nodeRef.toString());
   var hasOnExecution = false;
   var docExecutor = doc.properties["lecm-errands:executor-assoc-ref"];
-  if(childrenResolutions && childrenResolutions.length){
-      for(var i =0; i<childrenResolutions.length; i++){
-        var childAuthor = null;
-        if(childrenResolutions[i].typeShort == "lecm-resolutions:document"){
-          childAuthor = childrenResolutions[i].properties["lecm-resolutions:author-assoc-ref"];
-        }
-        if(docExecutor && childAuthor && docExecutor == childAuthor){
-          if (!statemachine.isFinal(childrenResolutions[i].nodeRef.toString())) {
-            if(childrenResolutions[i].properties["lecm-statemachine:status"] == "На исполнении"){
-              hasOnExecution = true;
-              break;
-            }
+  if (childrenResolutions && childrenResolutions.length) {
+      for (var i = 0; i < childrenResolutions.length; i++) {
+          var childAuthor = null;
+          if (childrenResolutions[i].typeShort == "lecm-resolutions:document") {
+              childAuthor = childrenResolutions[i].properties["lecm-resolutions:author-assoc-ref"];
           }
-        }
+          if (docExecutor && childAuthor && docExecutor == childAuthor) {
+              if (!statemachine.isFinal(childrenResolutions[i].nodeRef.toString())) {
+                  if (childrenResolutions[i].properties["lecm-statemachine:status"] == "На исполнении") {
+                      hasOnExecution = true;
+                      break;
+                  }
+              }
+          }
       }
   }
   doc.properties["lecm-errands:transit-to-on-execution"] = hasOnExecution;
