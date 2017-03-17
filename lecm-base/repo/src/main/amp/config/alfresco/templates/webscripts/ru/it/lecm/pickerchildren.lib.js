@@ -157,9 +157,8 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 					return null;
 				}
 
-				if (argsSearchTerm) {
-					query = getFilterParams(argsSearchTerm, parentXPath);
-				}
+				/*оставил для совместимости (если вдруг где-то существует переопределенный скрипт) передачу пустой строки при отсутствии параметра*/
+				query = getFilterParams(argsSearchTerm ? argsSearchTerm : "", parentXPath);
 
                 if (showNotSelectable != "true") { //включим фильтрацию по типам/аспектам
                     var selectableQuery = getItemSelectableQuery(argsSelectableType, showFolders);
