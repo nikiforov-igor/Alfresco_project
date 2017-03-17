@@ -23,16 +23,17 @@
                             url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                             dataObj: {
                                 nodeRef: itemNodeRef,
-                                substituteString: "{lecm-ord-table-structure:item-status-assoc-text-content},{lecm-ord-table-structure:controller-assoc-ref},{lecm-ord-table-structure:executor-assoc-ref},{lecm-ord-table-structure:report-required}"
+                                substituteString: "{lecm-ord-table-structure:item-status-assoc-text-content},{lecm-ord-table-structure:controller-assoc-ref},{lecm-ord-table-structure:executor-assoc-ref},{lecm-ord-table-structure:report-required},{../..lecm-ord-table-structure:items-assoc/lecm-ord:controller-assoc-ref}"
                             },
                             successCallback: {
                                 fn: function (response) {
                                     if (response && response.json.formatString) {
                                         var data = response.json.formatString.split(",");
                                         var itemStatus = data[0];
-                                        var controller = data[1];
+                                        var itemController = data[1];
                                         var executor = data[2];
                                         var report_required = data[3] == "true";
+                                        var ordController = data[4];
                                         if (itemStatus == "На исполнении") {
                                             var actionButtonElement = Selector.query("." + formId + "-form-panel.buttons.hidden1 > span", formContainer, true);
                                             var closeViewFormButton = formButtons.firstElementChild;
@@ -45,7 +46,7 @@
                                                     });
                                                     closeViewFormButton.click();
                                                 });
-                                            } else if (currentUser == controller && controller != executor) {
+                                            } else if ((currentUser == itemController && itemController != executor) || (currentUser == ordController && ordController != executor)) {
                                                 actionButtonElement.firstElementChild.firstElementChild.innerHTML = Alfresco.util.message("ord.item.complete.button");
                                                 formButtons.insertBefore(actionButtonElement, closeViewFormButton);
                                                 Event.addListener(actionButtonElement, "click", function () {
