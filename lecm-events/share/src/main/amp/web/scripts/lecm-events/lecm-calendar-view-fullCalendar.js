@@ -332,7 +332,7 @@
           saveLastView: function saveLastView(view) {
              var date = new Date();
              date.setDate(date.getDate() + 30);
-             LogicECM.module.Base.Util.setCookie(this.PREFERENCE_KEY  + LogicECM.currentUser, view, {expires: date});
+             LogicECM.module.Base.Util.setCookie(this.PREFERENCE_KEY  + encodeURIComponent(LogicECM.currentUser), view, {expires: date});
           },
 
           updateNonWorkingDays: function() {
