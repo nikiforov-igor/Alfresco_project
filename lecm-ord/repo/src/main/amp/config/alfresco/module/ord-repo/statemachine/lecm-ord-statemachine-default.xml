@@ -11385,7 +11385,7 @@ if (doc) {
                                             templateConfig: {
                                                 mainObject: doc,
                                                 eventExecutor: currentUser,
-                                                number: number,
+                                                number: "Пункт номер " + number,
                                                 numberTitle: title + " " + content,
                                                 status: pointStatus,
                                                 statusTitle: ""
