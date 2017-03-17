@@ -2142,21 +2142,17 @@
 			<workflow name="activiti$contractsTermination"/>
 			<workflow name="activiti$approvalForce"/>
 			<workflow name="activiti$approvalTermination"/>
-			<workflow name="activiti$default_statemachine"/>
-			<workflow name="activiti$lecm-contract-fake_document"/>
 			<workflow name="activiti$lecm-additional-document_additionalDocument"/>
 			<workflow name="activiti$lecm-contract_document"/>
             <workflow name="activiti$contractsSignContractor"/>
             <workflow name="activiti$addDocSignContractor"/>
-		<workflow name="activiti$contractExecuted"/>
+		    <workflow name="activiti$contractExecuted"/>
             <workflow name="activiti$contractAdditionalDocumentCancel"/>
 		</hidden-workflows>
 	</config>
 
 	<config evaluator="string-compare" condition="LECMStatemachineWorkflow">
 		<hidden-workflows>
-			<workflow name="activiti$default_statemachine"/>
-			<workflow name="activiti$lecm-contract-fake_document"/>
 			<workflow name="activiti$lecm-additional-document_additionalDocument"/>
 			<workflow name="activiti$lecm-contract_document"/>
 		</hidden-workflows>

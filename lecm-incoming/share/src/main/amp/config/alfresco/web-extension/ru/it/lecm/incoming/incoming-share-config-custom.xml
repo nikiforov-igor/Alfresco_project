@@ -1151,6 +1151,12 @@
         </hidden-workflows>
     </config>
 
+    <config evaluator="string-compare" condition="LECMStatemachineWorkflow">
+        <hidden-workflows>
+            <workflow name="activiti$lecm-incoming_document"/>
+        </hidden-workflows>
+    </config>
+
     <config evaluator="string-compare" condition="activiti$incomingSendToReview">
         <forms>
             <form>
