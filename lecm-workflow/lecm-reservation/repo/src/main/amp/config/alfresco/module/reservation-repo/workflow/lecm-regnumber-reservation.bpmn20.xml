@@ -21,6 +21,9 @@
 						document.save();
 					]]></activiti:string>
                 </activiti:field>
+                <activiti:field name="runAs">
+                    <activiti:string><![CDATA[workflow]]></activiti:string>
+                </activiti:field>
             </activiti:executionListener>
         </extensionElements>
         <startEvent id="startevent1" name="Start" activiti:formKey="lecmRegnumRes:startTask"></startEvent>
