@@ -6,7 +6,7 @@
 	{
 		var query = " +PATH:\"" + parentXPath + "/*\"";
 		var columns = [];
-		if (filterData !== "") {
+		if (filterData) {
 			var keyWord = filterData.match(/.*:(.*)$/)[1];
 
 			if(keyWord) {
@@ -21,7 +21,7 @@
 			ampersand = " @";
 		for (var i=0; i < columns.length; i++) {
 			var namespace = columns[i].split(":");
-			if (columns[i+1] == undefined ) {
+			if (!columns[i+1]) {
 				or = "";
 				ampersand = " @";
 			}
@@ -39,7 +39,7 @@
 
 			params += ampersand + namespace[0]+"\\:" + namespace[1] + ":"+ '(' + filter + ')' + or;
 		}
-		if (params !== "") {
+		if (params) {
 			//если явный поиск - то ищем неограниченно глубоко
 			query = " +PATH:\"" + parentXPath + "//*\" AND " + "(" + params + " )";
 		}
