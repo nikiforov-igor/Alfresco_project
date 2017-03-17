@@ -287,8 +287,10 @@
             <conditionExpression xsi:type="tFormalExpression">${registrarsList.size() == 0}</conditionExpression>
         </sequenceFlow>
         <sequenceFlow id="flow7" sourceRef="regnumReservationTask" targetRef="emptyAsyncScriptTask"> </sequenceFlow>
-        <sequenceFlow id="flow8" sourceRef="emptyAsyncScriptTask" targetRef="endevent1"> </sequenceFlow>
-        <sequenceFlow id="flow9" sourceRef="emptyRegistrarsList" targetRef="endevent1"> </sequenceFlow>
+        <sequenceFlow id="flow8" sourceRef="emptyAsyncScriptTask" targetRef="exclusiveGatewayEnd"> </sequenceFlow>
+        <sequenceFlow id="flow9" sourceRef="emptyRegistrarsList" targetRef="exclusiveGatewayEnd"> </sequenceFlow>
+	    <exclusiveGateway id="exclusiveGatewayEnd" name="Gates to the end"></exclusiveGateway>
+	    <sequenceFlow id="flow10" sourceRef="exclusiveGatewayEnd" targetRef="endevent1"> </sequenceFlow>
         <endEvent id="endevent1" name="End"></endEvent>
     </process>
 </definitions>
