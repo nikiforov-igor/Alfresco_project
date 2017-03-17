@@ -10,7 +10,14 @@
     function processField(layer, args) {
         var formId = args[1].formId;
         var selectedItems = args[1].selectedItems;
-        var confirmCompletionDiv = Dom.get(formId + "_prop_" + "lecm-ord_confirm-completion").parentElement.parentElement.parentElement;
-        Dom.setStyle(confirmCompletionDiv, "display", !selectedItems || !Object.keys(selectedItems).length ? "none" : "block")
+        var confirmCompletionValueEl = Dom.get(formId + "_prop_" + "lecm-ord_confirm-completion");
+        var confirmCompletionCheckBox = Dom.get(formId + "_prop_" + "lecm-ord_confirm-completion-entry");
+        var confirmCompletionDiv = confirmCompletionValueEl.parentElement.parentElement.parentElement;
+        Dom.setStyle(confirmCompletionDiv, "display", !selectedItems || !Object.keys(selectedItems).length ? "none" : "block");
+        if (!selectedItems || !Object.keys(selectedItems).length) {
+            if (confirmCompletionValueEl.value == "true" && confirmCompletionCheckBox) {
+                confirmCompletionCheckBox.click();
+            }
+        }
     }
 })();
