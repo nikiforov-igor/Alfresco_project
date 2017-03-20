@@ -3,6 +3,11 @@ var ErrandsCompletionSignalScript = {
     processCompletionSignal: function() {
         var doc = bpm_package.children[0];
         if (doc) {
+            var hasAccess = lecmPermission.hasPermission(doc, "_WriteProperties");
+            if (!hasAccess) {
+                lecmPermission.pushAuthentication();
+                lecmPermission.setRunAsUserSystem();
+            }
             var signalSender = null;
             var signalSenderAssoc = doc.assocs["lecm-eds-aspect:completion-signal-sender-assoc"];
             if (signalSenderAssoc && signalSenderAssoc.length) {
@@ -41,6 +46,9 @@ var ErrandsCompletionSignalScript = {
             }
             doc.properties["lecm-errands:execution-report-status"] = "ACCEPT";
             doc.save();
+            if (!hasAccess) {
+                lecmPermission.popAuthentication();
+            }
             var recipients = [];
             var authorAssoc = doc.assocs["lecm-errands:initiator-assoc"];
             if (authorAssoc && authorAssoc.length) {

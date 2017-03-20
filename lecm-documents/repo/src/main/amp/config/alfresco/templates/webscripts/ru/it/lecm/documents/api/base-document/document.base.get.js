@@ -6,5 +6,5 @@ if (baseDocAssoc && baseDocAssoc.length > 0) {
     var baseDoc = baseDocAssoc[0];
     model.baseDocNodeRef = baseDoc.getNodeRef().toString();
 } else {
-    logger.error("ERROR: Base document association with name \"" + baseDocAssoc + "\" not found on " + nodeRef);
+    model.baseDocNodeRef = "";
 }

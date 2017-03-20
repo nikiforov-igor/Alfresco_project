@@ -23,7 +23,8 @@
                         <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[par_Period]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[10]]></property>
-                        <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
+                        <property name="lecm-rpeditor:dataColumnControlParams">
+                            <![CDATA[fromDateDefault=START_YEAR;fillDates=true;toDateDefault=NOW]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"

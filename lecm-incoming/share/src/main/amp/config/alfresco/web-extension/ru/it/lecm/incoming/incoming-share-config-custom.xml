@@ -470,7 +470,6 @@
             <form id="doc-right-parts">
                 <field-visibility>
                     <show id="fake:document-actions"/>
-                    <show id="fake:base-doc-actions"/>
                     <show id="fake:document-metadata"/>
                     <show id="fake:document-attachments"/>
                     <show id="fake:document-workflows"/>
@@ -485,11 +484,6 @@
                     <field id="fake:document-actions">
                         <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
                             <control-param name="uri">/lecm/components/dashlets/document-actions</control-param>
-                        </control>
-                    </field>
-                    <field id="fake:base-doc-actions">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">lecm/components/dashlets/base-doc-actions</control-param>
                         </control>
                     </field>
                     <field id="fake:document-metadata">
@@ -1433,6 +1427,12 @@
             <workflow name="activiti$incomingRegistration"/>
             <workflow name="activiti$incomingReturn"/>
             <workflow name="activiti$incomingFinishWork"/>
+        </hidden-workflows>
+    </config>
+
+    <config evaluator="string-compare" condition="LECMStatemachineWorkflow">
+        <hidden-workflows>
+            <workflow name="activiti$lecm-incoming_document"/>
         </hidden-workflows>
     </config>
 

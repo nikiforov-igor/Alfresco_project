@@ -175,18 +175,11 @@
              * @method _handleContentChange
              * @private
              */
-            _handleContentChange: function RichTextControl__handleContentChange()
-            {
-                // save the current contents of the editor to the underlying textarea
-                if (this.editor.isDirty())
-                {
-                    this.editor.save();
-
-                    // inform the forms runtime if this field is mandatory
-                    if (this.options.mandatory)
-                    {
-                        YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
-                    }
+            _handleContentChange: function RichTextControl__handleContentChange() {
+                this.editor.save();
+                // inform the forms runtime if this field is mandatory
+                if (this.options.mandatory) {
+                    YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
                 }
             }
         });
