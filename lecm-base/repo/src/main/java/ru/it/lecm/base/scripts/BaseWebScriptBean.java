@@ -21,6 +21,8 @@ import org.alfresco.util.FileFilterMode;
 import org.alfresco.util.Pair;
 import org.alfresco.util.ParameterCheck;
 import org.mozilla.javascript.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.ListOfUsedTypesBean;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
@@ -30,6 +32,8 @@ import ru.it.lecm.base.beans.getchildren.FilterPropLECM;
 import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -41,6 +45,8 @@ import org.alfresco.repo.dictionary.constraint.ListOfValuesConstraint;
  *         Time: 12:53
  */
 public class BaseWebScriptBean extends BaseWebScript {
+    final static protected Logger logger = LoggerFactory.getLogger(BaseWebScriptBean.class);
+
 	private NamespaceService namespaceService;
 	private LecmObjectsService lecmObjectsService;
 	private DictionaryService dictionaryService;
@@ -372,12 +378,27 @@ public class BaseWebScriptBean extends BaseWebScript {
 	}
 
     public String getGlobalProperty(String key) {
-        return this.globalProperties.getProperty(key, null);
+        return encodeGlobalPropertyValue(this.globalProperties.getProperty(key, null));
     }
 
     public String getGlobalProperty(String key, String defaultValue) {
-        return this.globalProperties.getProperty(key, defaultValue);
+        return encodeGlobalPropertyValue(this.globalProperties.getProperty(key, defaultValue));
     }
+
+    private String encodeGlobalPropertyValue(String value) {
+        Charset isoCharset = Charset.forName("ISO-8859-1");
+        if (isoCharset.newEncoder().canEncode(value)) {
+            try {
+                byte[] byteText = value.getBytes(isoCharset);
+                return new String(byteText , "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                logger.warn("Error encode global property value");
+            }
+        }
+
+        return value;
+    }
+
     /**
      * Получение ноды по её ID
      *

@@ -21,7 +21,7 @@
                             mode:"view",
                             hasStatemachine: ${hasStatemachine?string},
                             mayView: ${(mayView!false)?string},
-                            mayAdd: ${(mayAdd!false)?string}
+                            mayAdd: ${(canAttrEdit!false)?string}
                             <#if args.setId?? >, setId: "${args.setId}"</#if>
                         },
                         successCallback:{
@@ -55,15 +55,15 @@
 </script>
 
 <div class="metadata-form" id="${id}_metadata">
-    <#if hasStatemachine && (mayAdd!false)>
     <div class="panel-header">
         <div class="panel-title">${msg("heading")}</div>
         <div class="lecm-dashlet-actions">
-            <a id="${id}-action-edit" class="edit metadata-edit" title="${msg("dashlet.edit.tooltip")}"></a>
+            <#if hasStatemachine && (canAttrEdit!false)>
+                <a id="${id}-action-edit" class="edit metadata-edit" title="${msg("dashlet.edit.tooltip")}"></a>
+            </#if>
             <a id="${id}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
         </div>
     </div>
-    </#if>
     <div id="${id}_container"></div>
 </div>
 </#if>

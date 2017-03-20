@@ -5,7 +5,7 @@ function main(){
         AlfrescoUtil.param("nodeRef");
 
         model.mayView = hasPermission(model.nodeRef, PERM_ATTR_LIST);
-        model.mayAdd = hasPermission(model.nodeRef, PERM_ATTR_EDIT);
+        model.canAttrEdit = hasPermission(model.nodeRef, PERM_ATTR_EDIT);
         model.hasStatemachine = hasStatemachine(model.nodeRef);
 }
 
