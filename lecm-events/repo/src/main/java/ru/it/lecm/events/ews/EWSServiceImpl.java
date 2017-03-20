@@ -54,7 +54,8 @@ public class EWSServiceImpl extends AbstractEWSService {
 	private List<EmployeeAvailability> getEvents(List<EmployeeAvailability> events, List<AttendeeInfo> attendees, Date fromDate, Date toDate) {
 		try {
 			int i = 0;
-			Interval requiredInterval = new Interval(fromDate.getTime() - TimeZone.getDefault().getRawOffset(), toDate.getTime() - TimeZone.getDefault().getRawOffset());
+			int tzOffset = TimeZone.getDefault().getRawOffset();
+			Interval requiredInterval = new Interval(fromDate.getTime() - tzOffset, toDate.getTime() - tzOffset);
 			GetUserAvailabilityResults results = service.getUserAvailability(attendees, new TimeWindow(fromDate, toDate), AvailabilityData.FreeBusyAndSuggestions);
 			for (AttendeeAvailability availability : results.getAttendeesAvailability()) {
 				EmployeeAvailability employeeAvailability = events.get(i++);
