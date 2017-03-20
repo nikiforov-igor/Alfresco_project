@@ -10362,12 +10362,13 @@ if (doc) {
     var ord = stm_document;
     /*Регистрация*/
     regnumbers.registerDocument(ord, "ORD_NUMBER");
-    ord.save();
+    ord.reset();
   /*Выставление флага "На контроле"*/
-    registratorAssocs = ord.assocs['lecm-ord:controller-assoc'];
-  	if (registratorAssocs && registratorAssocs.length){
-      ord.properties["lecm-document-aspects:is-on-control"] = "true";
-  	}
+ 	registratorAssocs = ord.assocs['lecm-ord:controller-assoc'];
+	if (registratorAssocs && registratorAssocs.length){
+		ord.properties["lecm-document-aspects:is-on-control"] = "true";
+	}
+    ord.save();
     /*Отмена документов*/
     var canceldDocAssoc = ord.assocs["lecm-ord:canceled-assoc"];
     if (canceldDocAssoc != null && canceldDocAssoc.length > 0) {
