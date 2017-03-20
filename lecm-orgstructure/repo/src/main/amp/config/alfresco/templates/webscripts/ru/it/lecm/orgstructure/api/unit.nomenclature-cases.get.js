@@ -1,13 +1,16 @@
-function main() {
-    var unit = search.findNode(args["nodeRef"]);
-    var hasNomenclatureCases = "false";
-    if (unit) {
-        var linkedNomenclatureCasesAssocs = unit.sourceAssocs["lecm-os:nomenclature-case-visibility-unit-assoc"];
-        if (linkedNomenclatureCasesAssocs && linkedNomenclatureCasesAssocs.length > 0) {
-            hasNomenclatureCases = "true";
-        }
-    }
-    model.hasNomenclatureCases = hasNomenclatureCases;
-}
+(function() {
+	function getCountCases(qnamePath, isRecursive) {
+		var qnamePathResult = isRecursive ? qnamePath + '/' : qnamePath;
+		return searchCounter.query({
+			language: 'fts-alfresco',
+			query: 'PATH:"/' + qnamePathResult + '/*" AND (+TYPE:"lecm-os:nomenclature-case")'
+		});
+	}
 
-main();
+    var unit = search.findNode(args["nodeRef"]),
+        casesCount = 0;
+    if (unit) {
+	    casesCount = getCountCases(unit.getQnamePath(), true);
+    }
+    model.hasNomenclatureCases = casesCount > 0;
+})();
