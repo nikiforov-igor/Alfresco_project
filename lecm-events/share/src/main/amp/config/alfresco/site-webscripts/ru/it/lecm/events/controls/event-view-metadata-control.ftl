@@ -9,7 +9,7 @@
 		function init() {
 			var nodeRef = "${documentRef}";
 			var data = {
-				htmlid: "mainFormDocumentMetadata-" + nodeRef.replace(/\//g,"_"),
+                htmlid: "mainFormDocumentMetadata-" + "${id}",
 				nodeRef: nodeRef
 			};
 			Alfresco.util.Ajax.request(

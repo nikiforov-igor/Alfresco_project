@@ -93,7 +93,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             expand: function (tabId) {
                 // Load the form
                 var data = {
-                    htmlid: "documentMetadata-" + this.options.nodeRef.replace(/\//g,"_"),
+                    htmlid: "documentMetadata-" + Alfresco.util.generateDomId(),
                     nodeRef: this.options.nodeRef
                 };
                 if (tabId != null) {

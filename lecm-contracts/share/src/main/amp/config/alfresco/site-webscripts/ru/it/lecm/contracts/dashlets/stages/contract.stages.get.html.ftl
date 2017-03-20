@@ -17,7 +17,7 @@
                     {
                         url:Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
                         dataObj:{
-                            htmlid: htmlId + nodeRef.replace(/\//g, "_"),
+                            htmlid: htmlId + "-" + Alfresco.util.generateDomId(),
                             itemKind: "node",
                             itemId:nodeRef,
                             formId: formId,
@@ -33,7 +33,7 @@
                         },
                         failureMessage:"message.failure",
                         execScripts: true,
-                        htmlId:htmlId + nodeRef.replace(/\//g, "_"),
+                        htmlId: htmlId + "-" + Alfresco.util.generateDomId()
                     });
             var param = decodeURIComponent(location.search.substr(1)).split('&');
             for (var i=0; i < param.length; i++) {
