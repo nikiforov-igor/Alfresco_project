@@ -392,7 +392,7 @@ public class BaseWebScriptBean extends BaseWebScript {
                 byte[] byteText = value.getBytes(isoCharset);
                 return new String(byteText , "UTF-8");
             } catch (UnsupportedEncodingException e) {
-                logger.warn("Error encode global property value");
+                logger.warn("Error encode global property value", e);
             }
         }
 
