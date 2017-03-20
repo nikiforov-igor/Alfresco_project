@@ -29,7 +29,7 @@
                                         }
                                      });
                                     statusCode = "CANCELED_BY_CONTROLLER_STATUS";
-                                    comment = actionComment;
+                                    comment = "Работа по пункту отменена в связи с завершением работы по документу";
                                 } else if (completionOption == "EXECUTE") {
                                     reason = "Поручение исполнено в связи с завершением работы по документу Контролером ОРД " + currentUser.properties["lecm-orgstr:employee-short-name"];
                                     childErrands.forEach(function (childErrand) {
@@ -38,7 +38,7 @@
                                         }
                                     });
                                     statusCode = "EXECUTED_BY_CONTROLLER_STATUS";
-                                    comment = actionComment;
+                                    comment = "Пункт исполнен в связи с завершением работы по документу";
                                 }
                                 ordPoints.forEach(function(point){
                                     var pointStatusAssoc = point.assocs["lecm-ord-table-structure:item-status-assoc"][0];
