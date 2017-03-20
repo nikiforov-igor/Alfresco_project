@@ -28,11 +28,6 @@
 <div class="clear"></div>
 <script type="text/javascript">//<![CDATA[
 (function () {
-    new LogicECM.DocumentAttachmentsPreview("${el}").setOptions({
-        nodeRef: "${nodeRef}",
-        inclBaseDoc: ${inclBaseDoc?string("true", "false")}
-    }).setMessages(${messages});
-
     function init() {
         LogicECM.module.Base.Util.loadResources([
                     'scripts/lecm-documents/lecm-document-preview-control.js',
@@ -63,12 +58,26 @@
     }
 
     function createControl() {
+        loadExternalResourceBundle();
+        new LogicECM.DocumentAttachmentsPreview("${el}").setOptions({
+            nodeRef: "${nodeRef}",
+            inclBaseDoc: ${inclBaseDoc?string("true", "false")}
+        }).setMessages(${messages});
+        
         var control = new LogicECM.module.Documents.DocumentPreviewControl("${el}").setMessages(${messages});
         control.setOptions({
             resizeable: true,
             itemId: "${nodeRef}",
             forTask: false
         });
+    }
+
+    function loadExternalResourceBundle() {
+        var resourceRef = document.createElement('link');
+        resourceRef.setAttribute('rel', 'resource');
+        resourceRef.setAttribute('type', 'application/l10n');
+        resourceRef.setAttribute('href', Alfresco.constants.URL_RESCONTEXT + 'extras/components/preview/locale/locale.properties');
+        document.getElementsByTagName("head")[0].appendChild(resourceRef);
     }
 
     YAHOO.util.Event.onDOMReady(init);
