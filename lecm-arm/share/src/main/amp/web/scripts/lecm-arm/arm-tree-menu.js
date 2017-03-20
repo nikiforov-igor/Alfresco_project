@@ -584,7 +584,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         },
 
         _buildPreferencesKey: function () {
-            return this.PREFERENCE_KEY +  LogicECM.module.ARM.SETTINGS.ARM_CODE + ".menu-state." + LogicECM.currentUser;
+            return this.PREFERENCE_KEY + encodeURIComponent(LogicECM.module.ARM.SETTINGS.ARM_CODE) + ".menu-state." + encodeURIComponent(LogicECM.currentUser);
         },
 
         _isNodeExpanded: function (nodeId) {
