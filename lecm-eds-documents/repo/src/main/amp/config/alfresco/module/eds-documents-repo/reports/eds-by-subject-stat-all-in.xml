@@ -63,7 +63,7 @@
                     <item name="cm:Тип документа" type="lecm-rpeditor:reportDataColumn">
                         <property name="cm:name"><![CDATA[Тип документа]]></property>
                         <property name="lecm-rpeditor:dataColumnControlParams">
-                            <![CDATA[options=ОРД,НД,Внутренний,Входящий,Исходящий]]></property>
+                            <![CDATA[options=ОРД,НД,Внутренний,Входящий,Исходящий,Протокол]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:text]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
                             <![CDATA[{lecm-document:doc-type}]]></property>
