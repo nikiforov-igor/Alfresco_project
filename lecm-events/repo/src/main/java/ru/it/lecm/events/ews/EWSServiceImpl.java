@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TimeZone;
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.enumeration.availability.AvailabilityData;
 import microsoft.exchange.webservices.data.core.enumeration.misc.ExchangeVersion;
@@ -21,6 +22,7 @@ import microsoft.exchange.webservices.data.misc.availability.TimeWindow;
 import microsoft.exchange.webservices.data.property.complex.availability.CalendarEvent;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.joda.time.Interval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.events.beans.EWSEvent;
@@ -52,13 +54,16 @@ public class EWSServiceImpl extends AbstractEWSService {
 	private List<EmployeeAvailability> getEvents(List<EmployeeAvailability> events, List<AttendeeInfo> attendees, Date fromDate, Date toDate) {
 		try {
 			int i = 0;
+			Interval requiredInterval = new Interval(fromDate.getTime() - TimeZone.getDefault().getRawOffset(), toDate.getTime() - TimeZone.getDefault().getRawOffset());
 			GetUserAvailabilityResults results = service.getUserAvailability(attendees, new TimeWindow(fromDate, toDate), AvailabilityData.FreeBusyAndSuggestions);
 			for (AttendeeAvailability availability : results.getAttendeesAvailability()) {
 				EmployeeAvailability employeeAvailability = events.get(i++);
 				if (availability.getErrorCode() == ServiceError.NoError) {
 					Collection<CalendarEvent> calendarEvents = availability.getCalendarEvents();
 					for (CalendarEvent calendarEvent : calendarEvents) {
-						employeeAvailability.getEvents().add(new EWSEvent(calendarEvent.getStartTime(), calendarEvent.getEndTime()));
+						if (requiredInterval.contains(calendarEvent.getStartTime().getTime())) {
+							employeeAvailability.getEvents().add(new EWSEvent(calendarEvent.getStartTime(), calendarEvent.getEndTime()));
+						}
 					}
 				} else {
 					logger.error("EWS Error code: {}", availability.getErrorCode().toString());
