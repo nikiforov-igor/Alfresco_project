@@ -43,7 +43,7 @@
                                         <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[3]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
-                                        <property name="lecm-arm:field-name"><![CDATA[lecm-document:title]]></property>
+                                        <property name="lecm-arm:field-name"><![CDATA[lecm-errands:title]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                     </item>
                                     <item name="cm:4d8cb26c-1c00-4a1e-8d02-755fdadeb283" type="lecm-arm:field">
