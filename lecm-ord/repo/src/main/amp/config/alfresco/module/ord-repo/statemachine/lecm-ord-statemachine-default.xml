@@ -10363,11 +10363,6 @@ if (doc) {
     /*Регистрация*/
     regnumbers.registerDocument(ord, "ORD_NUMBER");
     ord.save();
-  /*Выставление флага "На контроле"*/
-    registratorAssocs = ord.assocs['lecm-ord:controller-assoc'];
-  	if (registratorAssocs && registratorAssocs.length){
-      ord.properties["lecm-document-aspects:is-on-control"] = "true";
-  	}
     /*Отмена документов*/
     var canceldDocAssoc = ord.assocs["lecm-ord:canceled-assoc"];
     if (canceldDocAssoc != null && canceldDocAssoc.length > 0) {
@@ -10412,6 +10407,35 @@ if (doc) {
       businessJournal.log(acceptedDoc.nodeRef.toString(), "ACCEPT_DOCUMENT", "Документ " + acceptedDocDesc + " введен в действие документом " + mainDocDesc, []);
       }
     }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>d98c6252-246a-4041-a794-08b25f2c5111</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/61df1bcc-e157-4ce5-8e35-a8791b05c73f
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Выставление флага "На контроле"]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+var ord = stm_document;
+registratorAssocs = ord.assocs['lecm-ord:controller-assoc'];
+if (registratorAssocs && registratorAssocs.length){
+ord.properties["lecm-document-aspects:is-on-control"] = "true";
+ord.save();
+}
 })();]]></value>
                                                             </property>
                                                         </properties>
