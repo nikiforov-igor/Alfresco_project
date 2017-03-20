@@ -7,10 +7,15 @@
 		});
 	}
 
-    var unit = search.findNode(args["nodeRef"]),
-        casesCount = 0;
+    var unit = search.findNode(args['nodeRef']),
+        casesCount = 0,
+	    nomenclatureUnitSections = [],
+	    nomenclatureUnitSection;
     if (unit) {
-	    casesCount = getCountCases(unit.getQnamePath(), true);
+	    nomenclatureUnitSections = unit.sourceAssocs['lecm-os:nomenclature-unit-section-unit-assoc'];
+	    for each (nomenclatureUnitSection in nomenclatureUnitSections) {
+		    casesCount += getCountCases(nomenclatureUnitSection.getQnamePath(), true);
+	    }
     }
     model.hasNomenclatureCases = casesCount > 0;
 })();
