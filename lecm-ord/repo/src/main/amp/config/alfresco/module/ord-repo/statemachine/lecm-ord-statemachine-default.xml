@@ -10363,7 +10363,7 @@ if (doc) {
     /*Регистрация*/
     regnumbers.registerDocument(ord, "ORD_NUMBER");
     ord.reset();
-    /*Выставление флага на контроле*/
+  /*Выставление флага "На контроле"*/
  	registratorAssocs = ord.assocs['lecm-ord:controller-assoc'];
 	if (registratorAssocs && registratorAssocs.length){
 		ord.properties["lecm-document-aspects:is-on-control"] = "true";
