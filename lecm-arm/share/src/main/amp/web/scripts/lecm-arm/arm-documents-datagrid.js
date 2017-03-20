@@ -391,8 +391,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                             break;
                                     }
 
-                                    var firstColumnIndex = scope.options.showCheckboxColumn ? 2 : 1;
-                                    if (oColumn.getKeyIndex() == firstColumnIndex) {
+                                    if (oColumn.showLink) {
                                         columnContent = "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + oRecord.getData("page") + '?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
                                     }
 
@@ -423,7 +422,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         },
 
         _buildPreferencesKey: function () {
-            return this.PREFERENCE_KEY +  LogicECM.module.ARM.SETTINGS.ARM_CODE + ".menu-state." + LogicECM.currentUser;
+            return this.PREFERENCE_KEY + encodeURIComponent(LogicECM.module.ARM.SETTINGS.ARM_CODE) + ".menu-state." + encodeURIComponent(LogicECM.currentUser);
         }
     }, true);
 })();

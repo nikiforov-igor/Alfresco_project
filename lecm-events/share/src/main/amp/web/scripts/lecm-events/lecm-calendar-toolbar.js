@@ -97,7 +97,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		},
 
 		onCalendarReady: function onCalendarReady() {
-			var calendarPref = LogicECM.module.Base.Util.getCookie(this.PREFERENCE_KEY  + LogicECM.currentUser);
+			var calendarPref = LogicECM.module.Base.Util.getCookie(this.PREFERENCE_KEY  + encodeURIComponent(LogicECM.currentUser));
 			if (calendarPref !== null) {
 				for (var i = 0; i < this.navButtonGroup._buttons.length; i++) {
 					if (this.navButtonGroup._buttons[i]._button.id.match(calendarPref)) {

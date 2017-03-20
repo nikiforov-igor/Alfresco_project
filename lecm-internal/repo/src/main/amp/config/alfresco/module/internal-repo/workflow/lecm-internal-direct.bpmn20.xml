@@ -78,12 +78,13 @@
                         documentMembers.addMemberWithoutCheckPermission(document, employee, businessRole, true);
 
                         var initiator = orgstructure.getCurrentEmployee();
+                        var author = document.assocs["lecm-document:author-assoc"][0];
                         var answer = table.createNode(null, "lecm-internal-table-structure:answer", "cm:contains");
 
                         answer.setInheritsPermissions(false);
                         lecmPermission.grantDynamicRole(answer, employee, "DA_RECIPIENT_DYN", "LECM_BASIC_PG_ActionPerformer");
                         lecmPermission.grantDynamicRole(document, employee, "DA_RECIPIENT_DYN", "LECM_BASIC_PG_Employee");
-                        lecmPermission.grantDynamicRole(answer, initiator, "BR_INITIATOR", "LECM_BASIC_PG_Owner");
+                        lecmPermission.grantDynamicRole(answer, author, "BR_INITIATOR", "LECM_BASIC_PG_Owner");
 
                         var signerAssoc = document.assocs['lecmSignAspects:signerEmployeeAssoc'];
                         var signer = signerAssoc && signerAssoc.length ? signerAssoc[0] : null;
@@ -142,7 +143,7 @@
 
 							var answerObject = search.findNode(task.getVariableLocal("answer"));
 							var curator = search.findNode(task.getVariableLocal("initiatorEmployee"));
-							var author = document.assocs["lecm-document:author-assoc"][0]
+							var author = document.assocs["lecm-document:author-assoc"][0];
 							var curators = [];
 							curators.push(author);
 							var currentUser = orgstructure.getCurrentEmployee();

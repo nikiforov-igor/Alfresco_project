@@ -1287,7 +1287,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     return false;
                 };
 
-                var column, sortable;
+                var column, sortable, isLinkShown = false;
                 for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
                     column = this.datagridColumns[i];
 
@@ -1302,8 +1302,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             if (column.dataType == "lecm-orgstr:employee" || inArray(column.name, this.options.nowrapColumns)) {
                                 className = "nowrap "
                             }
-
-                            columnDefinitions.push({
+                            var columnObj = {
                                 key: this.dataResponseFields[i],
                                 label: column.label.length ? column.label : this.msg(column.name.replace(":", "_")),
                                 sortable: sortable,
@@ -1314,7 +1313,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 },
                                 formatter: this.getCellFormatter(column.dataType),
                                 className: className + ((column.dataType == 'boolean') ? 'centered' : '')
-                            });
+                            };
+                            if (!isLinkShown && (column.dataType != "lecm-orgstr:employee")) {
+                                isLinkShown = true;
+                                columnObj.showLink = isLinkShown;
+                            }
+                            columnDefinitions.push(columnObj);
                         }
                     } else {
                         columnDefinitions.push({
