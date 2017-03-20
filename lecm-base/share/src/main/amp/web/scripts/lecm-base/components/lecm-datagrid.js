@@ -1287,7 +1287,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     return false;
                 };
 
-                var column, sortable;
+                var column, sortable, isFirstColumn = true;
                 for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
                     column = this.datagridColumns[i];
 
@@ -1303,6 +1303,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 className = "nowrap "
                             }
 
+                            var showLink = isFirstColumn && (column.dataType != "lecm-orgstr:employee");
                             columnDefinitions.push({
                                 key: this.dataResponseFields[i],
                                 label: column.label.length ? column.label : this.msg(column.name.replace(":", "_")),
@@ -1313,8 +1314,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                     sortFunction: this.getSortFunction()
                                 },
                                 formatter: this.getCellFormatter(column.dataType),
-                                className: className + ((column.dataType == 'boolean') ? 'centered' : '')
+                                className: className + ((column.dataType == 'boolean') ? 'centered' : ''),
+                                showLink: showLink
                             });
+
+                            if (showLink) {/*показываем на первой подходящей*/
+                                isFirstColumn = false;
+                            }
                         }
                     } else {
                         columnDefinitions.push({
