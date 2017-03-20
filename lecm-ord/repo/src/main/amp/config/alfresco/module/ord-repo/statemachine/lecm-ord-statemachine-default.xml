@@ -12428,6 +12428,35 @@ if (doc) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>ab500efa-24d9-410d-ae0c-61b49d73549b</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/d7e34a5d-14f2-41b6-b8f8-8eb7198b5857
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Включение контролёра в участники]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function() {
+  if (stm_document) {
+    var controllerAssoc = stm_document.assocs["lecm-ord:controller-assoc"];
+    if (controllerAssoc && controllerAssoc.length) {
+      documentMembers.addMemberWithoutCheckPermission(stm_document, controllerAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    }
+  }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -12910,7 +12939,42 @@ if (doc) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>0044369f-6184-479f-add3-5b6527ed3c29</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/df8a4aeb-5046-48f1-ada4-972020ed1431
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Включение контролёра в участники]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function() {
+  if (stm_document) {
+    var controllerAssoc = stm_document.assocs["lecm-ord:controller-assoc"];
+    if (controllerAssoc && controllerAssoc.length) {
+      documentMembers.addMemberWithoutCheckPermission(stm_document, controllerAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    }
+  }
+})();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                 </nodes>
                             </subFolder>
