@@ -11389,7 +11389,8 @@ if (doc) {
                                                 number: "Пункт номер " + number,
                                                 numberTitle: title + " " + content,
                                                 status: pointStatus,
-                                                statusTitle: ""
+                                                statusTitle: "",
+                                                errand: errand
                                             },
                                             dontCheckAccessToObject: true
                                         });
