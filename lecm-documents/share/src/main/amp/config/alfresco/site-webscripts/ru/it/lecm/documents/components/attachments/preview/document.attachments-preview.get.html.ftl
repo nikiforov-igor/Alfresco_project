@@ -11,11 +11,13 @@
                     <input id="${el}-versions-actions-button" type="button">
                 </div>
                 <div id="${el}-attachment-actions" class="preview-actions hidden1">
-                    <input id="${el}-attachment-actions-button" type="button"></input>
+                    <input id="${el}-attachment-actions-button" type="button"/>
                 </div>
-                <div id="${el}-attachment-add-container" class="preview-upload hidden1">
-                    <div id="${el}-attachment-add"></div>
-                </div>
+                <#if hasAddAttachmentPerm>
+                    <div id="${el}-attachment-add-container" class="preview-upload hidden1">
+                        <div id="${el}-attachment-add"></div>
+                    </div>
+                </#if>
             </div>
             <div class="lecm-dashlet-actions">
                 <a id="${el}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
