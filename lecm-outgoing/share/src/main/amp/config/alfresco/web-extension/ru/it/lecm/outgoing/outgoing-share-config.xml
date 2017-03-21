@@ -1055,7 +1055,7 @@
 							<control-param name="person_getArgumentsFromForm">LogicECM.getExtArgsForPerson</control-param>
 						</control>
 					</field>
-					<field id="lecm-document:author-assoc">
+					<field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler">
 						<control>
 							<control-param name="endpointMany">true</control-param>
 						</control>
