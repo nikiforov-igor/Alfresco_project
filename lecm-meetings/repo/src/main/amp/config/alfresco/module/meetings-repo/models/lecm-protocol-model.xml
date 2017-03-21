@@ -11,6 +11,7 @@
 		<import uri="http://www.it.ru/logicECM/protocol/table-structure/1.0" prefix="lecm-protocol-ts"/>
 		<import uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
 		<import uri="http://www.it.ru/logicECM/model/review-ts/1.0" prefix="lecm-review-ts"/>
+        <import uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/protocol/1.0" prefix="lecm-protocol"/>
