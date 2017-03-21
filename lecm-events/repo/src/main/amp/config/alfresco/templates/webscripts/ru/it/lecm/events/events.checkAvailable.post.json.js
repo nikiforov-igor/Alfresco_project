@@ -12,6 +12,7 @@
 	var i;
 	var start;
 	var end;
+	var endDate;
 	var ewsMembers;
 
 	model.locationAvailable = events.checkLocationAvailable(location, event, fromDate, toDate, allDay, clientServerTimezoneDifference);
@@ -26,9 +27,9 @@
 	}
 
 	start = fromDate.slice(0, fromDate.indexOf("T"));
-	end = utils.fromISO8601(toDate);
-	end.setDate(end.getDate() + 1);
-	end = utils.toISO8601(end);
+	endDate = utils.fromISO8601(toDate);
+	endDate.setDate(endDate.getDate() + 1);
+	end = utils.toISO8601(endDate);
 	end = end.slice(0, end.indexOf("T"));
 	ewsMembers = ews.getEvents(members, start + "T00:00:00Z", end +  "T00:00:00Z");
 
