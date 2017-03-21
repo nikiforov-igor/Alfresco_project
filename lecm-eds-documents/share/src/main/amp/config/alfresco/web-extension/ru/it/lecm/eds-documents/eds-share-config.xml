@@ -306,4 +306,28 @@
             </form>
         </forms>
     </config>
+
+	<config evaluator="model-type" condition="lecm-eds-globset:terms-of-execution-settings">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-eds-globset:short-n-days"/>
+					<show id="lecm-eds-globset:n-days"/>
+					<show id="lecm-eds-globset:short-limit-days"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-eds-globset:terms-of-execution-settings">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-eds-globset:short-n-days"/>
+					<show id="lecm-eds-globset:n-days"/>
+					<show id="lecm-eds-globset:short-limit-days"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

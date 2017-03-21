@@ -26,6 +26,10 @@
                 </list>
             </parameter>
         </constraint>
+        <constraint name="lecm-eds-globset:natural-number-constraint" type="REGEX">
+            <parameter name="expression"><value>^\+?(0|[1-9]\d*)$</value></parameter>
+            <parameter name="requiresMatch"><value>true</value></parameter>
+        </constraint>
     </constraints>
 
     <types>
@@ -174,5 +178,39 @@
 				</association>
 			</associations>
 		</type>
+
+        <type name="lecm-eds-globset:terms-of-execution-settings">
+            <title>Logic Ecm Documents terms of execution settings</title>
+            <parent>cm:cmobject</parent>
+            <properties>
+                <!--Срок уведомления о приближении исполнения-->
+                <!--Для краткосрочного исполнения-->
+                <property name="lecm-eds-globset:short-n-days">
+                    <type>d:int</type>
+                    <mandatory>true</mandatory>
+                    <default>1</default>
+                    <constraints>
+                        <constraint ref="lecm-eds-globset:natural-number-constraint"/>
+                    </constraints>
+                </property>
+                <!--Для долгосрочного исполнения-->
+                <property name="lecm-eds-globset:n-days">
+                    <type>d:int</type>
+                    <mandatory>true</mandatory>
+                    <default>5</default>
+                    <constraints>
+                        <constraint ref="lecm-eds-globset:natural-number-constraint"/>
+                    </constraints>
+                </property>
+                <!--Краткий срок исполнения-->
+                <property name="lecm-eds-globset:short-limit-days">
+                    <type>d:int</type>
+                    <default>10</default>
+                    <constraints>
+                        <constraint ref="lecm-eds-globset:natural-number-constraint"/>
+                    </constraints>
+                </property>
+            </properties>
+        </type>
     </types>
 </model>

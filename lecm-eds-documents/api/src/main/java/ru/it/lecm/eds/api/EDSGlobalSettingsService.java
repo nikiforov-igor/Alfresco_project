@@ -36,6 +36,14 @@ public interface EDSGlobalSettingsService {
 	QName ASSOC_POTENTIAL_ROLE_EMPLOYEE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-employee-assoc");
 	QName ASSOC_POTENTIAL_ROLE_ORGANIZATION_ELEMENT = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-organization-element-assoc");
 
+	QName PROP_N_DAYS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "n-days");
+	QName PROP_SHORT_N_DAYS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE,"short-n-days");
+	QName PROP_SHORT_LIMIT_DAYS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE,"short-limit-days");
+
+	int DEFAULT_N_DAYS = 5;
+	int DEFAULT_SHORT_N_DAYS = 1;
+	int DEFAULT_SHORT_LIMIT_DAYS = 10;
+
 	NodeRef getSettingsNode();
 	NodeRef createSettingsNode() throws WriteTransactionNeededException;
 
@@ -61,4 +69,13 @@ public interface EDSGlobalSettingsService {
 
 	@Deprecated
 	String getLinksViewMode();
+
+	/**
+	 * @return Количество рабочих дней за которое должно высылаться уведомление
+	 */
+	int getSettingsNDays();
+
+	int getSettingsShortNDays();
+
+	int getSettingsShortLimitDays();
 }

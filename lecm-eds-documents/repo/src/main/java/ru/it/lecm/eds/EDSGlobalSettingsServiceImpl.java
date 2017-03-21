@@ -303,4 +303,34 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	public String getLinksViewMode() {
 		return documentGlobalSettingsService.getLinksViewMode();
 	}
+
+	@Override
+	public int getSettingsNDays() {
+		NodeRef globalSettingsNode = getSettingsNode();
+		if (globalSettingsNode != null) {
+			return (Integer) nodeService.getProperty(globalSettingsNode, PROP_N_DAYS);
+		} else {
+			return DEFAULT_N_DAYS;
+		}
+	}
+
+	@Override
+	public int getSettingsShortNDays() {
+		NodeRef globalSettingsNode = getSettingsNode();
+		if (globalSettingsNode != null && nodeService.getProperty(globalSettingsNode, PROP_SHORT_N_DAYS) != null) {
+			return (Integer) nodeService.getProperty(globalSettingsNode, PROP_SHORT_N_DAYS);
+		} else {
+			return DEFAULT_SHORT_N_DAYS;
+		}
+	}
+
+	@Override
+	public int getSettingsShortLimitDays() {
+		NodeRef globalSettingsNode = getSettingsNode();
+		if (globalSettingsNode != null &&  nodeService.getProperty(globalSettingsNode, PROP_SHORT_LIMIT_DAYS) != null) {
+			return (Integer) nodeService.getProperty(globalSettingsNode, PROP_SHORT_LIMIT_DAYS);
+		} else {
+			return DEFAULT_SHORT_LIMIT_DAYS;
+		}
+	}
 }
