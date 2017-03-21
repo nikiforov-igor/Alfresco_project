@@ -80,6 +80,7 @@
 				<aspect>lecm-document-aspects:finalize-to-unit</aspect>
 				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
 				<aspect>lecm-review-ts:review-aspect</aspect>
+				<aspect>lecm-eds-aspect:execution-state-aspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>

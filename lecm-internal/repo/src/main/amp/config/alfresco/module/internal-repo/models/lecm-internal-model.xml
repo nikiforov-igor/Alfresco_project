@@ -141,6 +141,7 @@
 				</association>
 			</associations>
 			<mandatory-aspects>
+				<aspect>lecm-eds-aspect:execution-state-aspect</aspect>
 				<aspect>lecm-review-ts:review-aspect</aspect>
 				<aspect>lecm-document-aspects:response-to-aspect</aspect>
 				<aspect>lecm-internal-table-structure:table-answers-aspect</aspect>
