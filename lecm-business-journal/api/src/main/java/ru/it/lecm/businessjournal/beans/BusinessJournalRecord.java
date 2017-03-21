@@ -231,93 +231,63 @@ public class BusinessJournalRecord implements Serializable {
 	public NodeRef getObject5Id() {
 		return objects != null && objects.size() > 4 ? objects.get(4).getNodeRef() : null;
 	}
+	
+	private RecordObject getObject(int index) {
+		while (objects.size() < index + 1) {
+			objects.add(new RecordObject());
+		}
+		
+		return objects.get(index);
+	}
 
 	public void setObject1(String object1) {
-		RecordObject obj = objects.isEmpty() ? new RecordObject() : objects.get(0);
+		RecordObject obj = getObject(0);
 		obj.setDescription(object1);
-		if(objects.isEmpty()) {
-			objects.add(obj);
-		}
 	}
 
 	public void setObject1Id(String object1Id) {
-		RecordObject obj = objects.isEmpty() ? new RecordObject() : objects.get(0);
+		RecordObject obj = getObject(0);
 		obj.setNodeRef(new NodeRef(object1Id));
-		if(objects.isEmpty()) {
-			objects.add(obj);
-		}
 	}
 
 	public void setObject2(String object2) {
-		boolean notExists = objects.size() < 2;
-		RecordObject obj = notExists ? new RecordObject() : objects.get(1);
+		RecordObject obj = getObject(1);
 		obj.setDescription(object2);
-		if(notExists) {
-			objects.add(obj);
-		}
 	}
 
 	public void setObject2Id(String object2Id) {
-		boolean notExists = objects.size() < 2;
-		RecordObject obj = notExists ? new RecordObject() : objects.get(1);
+		RecordObject obj = getObject(1);
 		obj.setNodeRef(new NodeRef(object2Id));
-		if(notExists) {
-			objects.add(obj);
-		}
 	}
 
 	public void setObject3(String object3) {
-		boolean notExists = objects.size() < 3;
-		RecordObject obj = notExists ? new RecordObject() : objects.get(2);
+		RecordObject obj = getObject(2);
 		obj.setDescription(object3);
-		if(notExists) {
-			objects.add(obj);
-		}
 	}
 
 	public void setObject3Id(String object3Id) {
-		boolean notExists = objects.size() < 3;
-		RecordObject obj = notExists ? new RecordObject() : objects.get(2);
+		RecordObject obj = getObject(2);
 		obj.setNodeRef(new NodeRef(object3Id));
-		if(notExists) {
-			objects.add(obj);
-		}
 	}
 
 	public void setObject4(String object4) {
-		boolean notExists = objects.size() < 4;
-		RecordObject obj = notExists ? new RecordObject() : objects.get(3);
+		RecordObject obj = getObject(3);
 		obj.setDescription(object4);
-		if(notExists) {
-			objects.add(obj);
-		}
 	}
 
 	public void setObject4Id(String object4Id) {
-		boolean notExists = objects.size() < 4;
-		RecordObject obj = notExists ? new RecordObject() : objects.get(3);
+		RecordObject obj = getObject(3);
 		obj.setNodeRef(new NodeRef(object4Id));
-		if(notExists) {
-			objects.add(obj);
-		}
 	}
 
 	public void setObject5(String object5) {
-		boolean notExists = objects.size() < 5;
-		RecordObject obj = notExists ? new RecordObject() : objects.get(4);
+		RecordObject obj = getObject(4);
 		obj.setDescription(object5);
-		if(notExists) {
-			objects.add(obj);
-		}
 	}
 
 	public void setObject5Id(String object5Id) {
-		boolean notExists = objects.size() < 5;
-		RecordObject obj = notExists ? new RecordObject() : objects.get(4);
+		RecordObject obj = getObject(4);
 		obj.setNodeRef(new NodeRef(object5Id));
-		if(notExists) {
-			objects.add(obj);
-		}
 	}
 
 	public String getObjectTypeText() {
