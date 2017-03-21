@@ -32,7 +32,7 @@
 				<#assign it = it + 1>
 			</td>
 			<td>
-				<a class="atype" href="${url.context}/proxy/alfresco/lecm/typesView/info?typeName=${typeName['name']}" target="_blank">${typeName['name']}</a>
+				<a class="atype" href="${url.context}/service/lecm/typesView/info?typeName=${typeName['name']}" target="_blank">${typeName['name']}</a>
 			</td>
 			<td>
 				${typeName['desc']!""}
@@ -56,7 +56,7 @@
 				<#assign it = it + 1>
 			</td>
 			<td>
-				<a class="atype" href="${url.context}/proxy/alfresco/lecm/typesView/info?typeName=${aspectName['name']}" target="_blank">${aspectName['name']}</a>
+				<a class="atype" href="${url.context}/service/lecm/typesView/info?typeName=${aspectName['name']}" target="_blank">${aspectName['name']}</a>
 			</td>
 			<td>
 				${aspectName['desc']!""}
