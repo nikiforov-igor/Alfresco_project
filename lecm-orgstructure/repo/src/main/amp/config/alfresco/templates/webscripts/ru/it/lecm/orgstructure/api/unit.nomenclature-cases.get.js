@@ -7,14 +7,14 @@
 		});
 	}
 
+	function hasCases(nomenclatureUnitSection) {
+		return getCountCases(nomenclatureUnitSection.getQnamePath(), true) > 0;
+	}
+
     var unit = search.findNode(args['nodeRef']),
-        casesPresent = false,
 	    nomenclatureUnitSections = [];
     if (unit) {
 	    nomenclatureUnitSections = unit.sourceAssocs['lecm-os:nomenclature-unit-section-unit-assoc'];
-	    casesPresent = nomenclatureUnitSections.some(function (nomenclatureUnitSection) {
-	        return getCountCases(nomenclatureUnitSection.getQnamePath(), true) > 0;
-	    });
     }
-    model.hasNomenclatureCases = casesPresent;
+    model.hasNomenclatureCases = nomenclatureUnitSections.some(hasCases);
 })();
