@@ -1,5 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
 <!--
 	Licensed to the Apache Software Foundation (ASF) under one or more
 	contributor license agreements.  See the NOTICE file distributed with
@@ -17,7 +16,21 @@
 	limitations under the License.
 
 -->
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <util:list id="review.actions.incoming">
+        <value>alfresco/module/${artifactId}/actions/send-to-review-action-incoming.xml</value>
+    </util:list>
+
+    <bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
+          p:rootPath="/Business platform/LECM/Сервис Групповые операции"
+          p:dictionaries-ref="review.actions.incoming"/>
+
     <bean id="incoming.LogicEcmIncomingBootstrap" parent="modelsToRepositoryLoader"
           depends-on="dictionaryBootstrap,dictionary.fileRegister.LogicEcmModelsBootstrap,
           eds.models.bootstrap, ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap,
