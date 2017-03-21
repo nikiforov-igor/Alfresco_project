@@ -343,7 +343,7 @@
                                             <item name="cm:e89f6a1d-45f4-4e8e-88da-d7f20639044a" type="lecm-arm:field">
                                                 <property name="lecm-arm:order"><![CDATA[3]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-errands:title]]></property>
+                                                    <![CDATA[lecm-errands:title ]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Заголовок]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[56027817-6fd4-4705-849b-022d3eeaaca8]]></property>
