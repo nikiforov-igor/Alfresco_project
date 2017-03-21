@@ -95,6 +95,7 @@ LogicECM.module.Events.doBaseChangeAllDayValidation = function (field, form, fro
 
 		var allDay = field.value == "true";
 		toDateField.readOnly = !allDay;
+
 		var times = [
 			{
 				field: fromTime,
@@ -172,10 +173,8 @@ LogicECM.module.Events.doBaseChangeAllDayValidation = function (field, form, fro
 						}
 						toDateField.value = dates[1].value.toString(Alfresco.util.message("lecm.form.control.date-picker.entry.date.format"));
 						toTime.value = dates[1].value.toString(Alfresco.util.message("form.control.date-picker.entry.time.format"));
-
+						LogicECM.module.Events.toDateValue = toTime.value;
 						changed = true;
-
-
 					} else if (date.value.getFullYear() != date.previousValue.getFullYear() ||
 						date.value.getMonth() != date.previousValue.getMonth() ||
 						date.value.getDate() != date.previousValue.getDate()) {
@@ -193,6 +192,7 @@ LogicECM.module.Events.doBaseChangeAllDayValidation = function (field, form, fro
 							dates[1].value.setMinutes(dates[0].value.getMinutes());
 
 							toTime.value = dates[1].value.toString(Alfresco.util.message("form.control.date-picker.entry.time.format"));
+							LogicECM.module.Events.toDateValue = toTime.value;
 						}
 
 						changed = true;
