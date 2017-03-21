@@ -18,18 +18,16 @@
 -->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:util="http://www.springframework.org/schema/util"
-       xmlns:p="http://www.springframework.org/schema/p"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <util:list id="review.actions.incoming">
-        <value>alfresco/module/${artifactId}/actions/send-to-review-action-incoming.xml</value>
-    </util:list>
-
-    <bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
-          p:rootPath="/Business platform/LECM/Сервис Групповые операции"
-          p:dictionaries-ref="review.actions.incoming"/>
+    <bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/actions/send-to-review-action-incoming.xml</value>
+            </list>
+        </property>
+    </bean>
 
     <bean id="incoming.LogicEcmIncomingBootstrap" parent="modelsToRepositoryLoader"
           depends-on="dictionaryBootstrap,dictionary.fileRegister.LogicEcmModelsBootstrap,
