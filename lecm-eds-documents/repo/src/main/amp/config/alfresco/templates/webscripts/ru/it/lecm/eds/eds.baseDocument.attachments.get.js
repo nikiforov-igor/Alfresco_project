@@ -17,27 +17,18 @@ function getAttachmentslist() {
 
 	var documentNode = parsedArgs.pathNode;
 	var baseDocument = null;
+	var baseDocAssoc = null;
 	if (documentNode.typeShort == "lecm-resolutions:document") {
-		baseDocument = documentNode;
-		var baseDocAssoc = baseDocument.assocs["lecm-resolutions:base-document-assoc"];
-		if (baseDocAssoc != null && baseDocAssoc.length > 0) {
-			baseDocument = baseDocAssoc[0];
-		} else {
-			baseDocument = null;
-		}
+		baseDocAssoc = baseDocument.assocs["lecm-resolutions:base-document-assoc"];
 	}
 	if (documentNode.typeShort == "lecm-errands:document") {
-		baseDocument = documentNode;
-		while (baseDocument != null && baseDocument.typeShort == "lecm-errands:document" && baseDocument.hasPermission("Read")) {
-			var baseDocAssoc = baseDocument.assocs["lecm-errands:base-assoc"];
-			if (baseDocAssoc != null && baseDocAssoc.length > 0) {
-				baseDocument = baseDocAssoc[0];
-			} else {
-				baseDocument = null;
-			}
-		}
+		baseDocAssoc = baseDocument.assocs["lecm-errands:base-assoc"];
 	}
-
+	if (baseDocAssoc != null && baseDocAssoc.length > 0) {
+		baseDocument = baseDocAssoc[0];
+	} else {
+		baseDocument = null;
+	}
 	if (baseDocument != null) {
 		var categories = documentAttachments.getCategories(baseDocument.nodeRef.toString());
 		if (categories != null) {
