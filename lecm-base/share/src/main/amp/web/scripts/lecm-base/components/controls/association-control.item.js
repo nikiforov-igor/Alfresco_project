@@ -209,7 +209,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 			function onFailure (failureResponse) {
 				this.widgets.datatable.set('MSG_ERROR', failureResponse.json.message);
-				this.widgets.datatable.showTableMessage(this.msg('form.control.object-picker.items-list.empty'), YAHOO.widget.DataTable.CLASS_ERROR);
+				var message = this.msg('form.control.object-picker.items-list.no_available', this.msg("form.control.object-picker.items-list.empty"));
+				this.widgets.datatable.showTableMessage(message, YAHOO.widget.DataTable.CLASS_ERROR);
 			}
 
 			var dataObj = {
