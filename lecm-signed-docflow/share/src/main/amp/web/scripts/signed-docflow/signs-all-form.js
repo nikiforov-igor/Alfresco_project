@@ -1,4 +1,4 @@
-/* global YAHOO, Alfresco, LogicECM, ko, cryptoAppletModule */
+/* global YAHOO, Alfresco, LogicECM, ko, cryptoAppletModule, CryptoApplet */
 (function() {
 	"use strict";
 
@@ -165,25 +165,33 @@
 					nodeRef: this.options.signedContentRef
 				},
 				successCallback: {
+					scope: this,
 					fn: function(response) {
 						var plainViewModel,
 							CompGet = Alfresco.util.ComponentManager.get,
-							merge = YAHOO.lang.merge;
+							merge = YAHOO.lang.merge,
+							p_dialog = CompGet(this.htmlId);
 
 						plainViewModel = merge(this.signsViewModel, {signs: response.json});
 						plainViewModel.sortByOrganization();
 
 						this.signsViewModel.signs(response.json);
 
-						CompGet(this.htmlId).dialog.center();
-					},
-					scope: this
+						p_dialog.dialog.center();
+						YAHOO.util.Dom.removeClass(p_dialog.dialog.element, "visible-force-hidden");
+					}
 				},
 				failureCallback: {
+					scope: this,
 					fn: function() {
+						var CompGet = Alfresco.util.ComponentManager.get,
+							p_dialog = CompGet(this.htmlId);
+
 						Alfresco.util.PopupManager.displayMessage({
 							text: Alfresco.util.message('lecm.signdoc.msg.get.sign.info.fail.try')
 						});
+						p_dialog.dialog.center();
+						YAHOO.util.Dom.removeClass(p_dialog.dialog.element, "visible-force-hidden");
 					}
 				}
 			});
