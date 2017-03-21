@@ -212,8 +212,6 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 		return edsGlobalSettingsService.getLinksViewMode();
 	}
 
-
-
 	/**
 	 * Получение настроек уведомлений
 	 * @return узел с настройками уведомлений
