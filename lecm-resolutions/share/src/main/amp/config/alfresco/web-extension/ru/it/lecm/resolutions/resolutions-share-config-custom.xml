@@ -413,32 +413,37 @@
                     <show id="lecm-review-aspects:related-review-records-assoc" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <set id="limitation-date" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-view-limitation-date-set.ftl"/>
+                    <set id="common" template="/ru/it/lecm/eds/controls/bordered-set.ftl"/>
 
-                    <set id="execution" appearance="title" label-id="label.execution"/>
-                    <set id="reviewers-hidden" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="limitation-date" parent="common" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-view-limitation-date-set.ftl"/>
+
+                    <set id="execution" parent="common" appearance="title" label-id="label.execution"/>
+                    <set id="reviewers-hidden" parent="common" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
                     <set id="reviewers" parent="reviewers-hidden" appearance="title" label-id="label.review"/>
                     <set id="reviewers-list-hidden" parent="reviewers" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
                     <set id="reviewers-table-hidden" parent="reviewers" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
 
-                    <field id="lecm-base-dummy-aspects:script2">
+                    <field id="lecm-base-dummy-aspects:script2" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-resolution/lecm-view-resolution-form.js</control-param>
                             <control-param name="scriptLoadedFireAction">resolutionViewFormScriptLoaded</control-param>
                         </control>
                     </field>
-                    <field id="lecm-resolutions:base-document-assoc" read-only="true">
+                    <field id="lecm-resolutions:base-document-assoc" read-only="true" set="common">
                         <control>
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                         </control>
                     </field>
-                    <field id="lecm-resolutions:base-assoc" read-only="true">
+                    <field id="lecm-resolutions:base-assoc" read-only="true" set="common">
                         <control>
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document-aspects:is-on-control" label-id="label.resolution.control"/>
-                    <field id="lecm-document:author-assoc" label-id="label.resolution.creator"/>
+                    <field id="lecm-document-aspects:is-on-control" label-id="label.resolution.control" set="common"/>
+                    <field id="lecm-document:author-assoc" label-id="label.resolution.creator" set="common"/>
+                    <field id="lecm-document:subject-assoc" set="common"/>
+                    <field id="lecm-resolutions:author-assoc" set="common"/>
+                    <field id="lecm-resolutions:controller-assoc" set="common"/>
 
                     <field id="lecm-resolutions:limitation-date-radio" set="limitation-date">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
@@ -772,7 +777,7 @@
                     <field id="fake:base-doc-actions">
                         <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
                             <control-param name="uri">lecm/components/dashlets/base-doc-actions</control-param>
-                            <control-param name="baseDocAssocName">lecm-errands:additional-document-assoc</control-param>
+                            <control-param name="baseDocAssocName">lecm-resolutions:base-document-assoc</control-param>
                         </control>
                     </field>
                     <field id="fake:document-metadata">
@@ -783,7 +788,7 @@
                     <field id="fake:document-attachments">
                         <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
                             <control-param name="uri">/lecm/components/document/document-attachments</control-param>
-                            <control-param name="baseDocAssocName">lecm-errands:additional-document-assoc</control-param>
+                            <control-param name="baseDocAssocName">lecm-resolutions:base-document-assoc</control-param>
                         </control>
                     </field>
                     <field id="fake:document-errands">

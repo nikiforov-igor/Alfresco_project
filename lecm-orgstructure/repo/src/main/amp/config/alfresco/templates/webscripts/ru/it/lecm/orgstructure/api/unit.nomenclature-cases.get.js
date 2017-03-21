@@ -1,13 +1,20 @@
-function main() {
-    var unit = search.findNode(args["nodeRef"]);
-    var hasNomenclatureCases = "false";
-    if (unit) {
-        var linkedNomenclatureCasesAssocs = unit.sourceAssocs["lecm-os:nomenclature-case-visibility-unit-assoc"];
-        if (linkedNomenclatureCasesAssocs && linkedNomenclatureCasesAssocs.length > 0) {
-            hasNomenclatureCases = "true";
-        }
-    }
-    model.hasNomenclatureCases = hasNomenclatureCases;
-}
+(function() {
+	function getCountCases(qnamePath, isRecursive) {
+		var qnamePathResult = isRecursive ? qnamePath + '/' : qnamePath;
+		return searchCounter.query({
+			language: 'fts-alfresco',
+			query: 'PATH:"/' + qnamePathResult + '/*" AND (+TYPE:"lecm-os:nomenclature-case")'
+		});
+	}
 
-main();
+	function hasCases(nomenclatureUnitSection) {
+		return getCountCases(nomenclatureUnitSection.getQnamePath(), true) > 0;
+	}
+
+    var unit = search.findNode(args['nodeRef']),
+	    nomenclatureUnitSections = [];
+    if (unit) {
+	    nomenclatureUnitSections = unit.sourceAssocs['lecm-os:nomenclature-unit-section-unit-assoc'];
+    }
+    model.hasNomenclatureCases = nomenclatureUnitSections.some(hasCases);
+})();

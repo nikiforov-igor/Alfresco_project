@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <page>
-    <title>Редактироваине резолюции</title>
-    <description>Редактироваине резолюции</description>
+    <title>Редактирование резолюции</title>
+    <description>Редактирование резолюции</description>
     <template-instance>resolution-edit</template-instance>
     <authentication>user</authentication>
 </page>
