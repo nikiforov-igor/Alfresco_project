@@ -179,6 +179,58 @@
                         </roleAssociations>
                         <subFolders/>
                     </node>
+                    <node>
+                        <type>static-role-item</type>
+                        <name>774d4561-644e-4ff4-8983-27442f8258a7</name>
+                        <nodeRef>workspace://SpacesStore/f26fd67c-517d-46e4-89af-5bc401097918</nodeRef>
+                        <properties>
+                            <property>
+                                <name>static-role-privilege</name>
+                                <value><![CDATA[]]></value>
+                            </property>
+                            <property>
+                                <name>isCreator</name>
+                                <value><![CDATA[false]]></value>
+                            </property>
+                        </properties>
+                        <aspects>
+                            <business-role/>
+                        </aspects>
+                        <associations/>
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>DOCUMENTS_READER</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders/>
+                    </node>
+                    <node>
+                        <type>static-role-item</type>
+                        <name>21f80e35-b53f-4fe1-a008-09fb87a48d6f</name>
+                        <nodeRef>workspace://SpacesStore/22a04b48-4d89-4bcd-adfa-0a3210d5c71d</nodeRef>
+                        <properties>
+                            <property>
+                                <name>static-role-privilege</name>
+                                <value><![CDATA[]]></value>
+                            </property>
+                            <property>
+                                <name>isCreator</name>
+                                <value><![CDATA[false]]></value>
+                            </property>
+                        </properties>
+                        <aspects>
+                            <business-role/>
+                        </aspects>
+                        <associations/>
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>RESOLUTION_READERS</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders/>
+                    </node>
                 </nodes>
             </subFolder>
             <subFolder>
@@ -1178,6 +1230,57 @@
                         <associations/>
                         <roleAssociations/>
                         <subFolders>
+                            <subFolder>
+                                <name>staticRoles</name>
+                                <nodes>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>5d51838c-9049-406e-99e5-c30eb462640c</name>
+                                        <nodeRef>workspace://SpacesStore/6c5d59d3-ef31-44aa-ad47-860824ea8a45</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DOCUMENTS_READER</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>ed75a5f4-9723-40b9-8dd0-9f5a40e1c7d5</name>
+                                        <nodeRef>workspace://SpacesStore/d608adf3-e5f3-4124-862f-eeeea4751bf8</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_READERS</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                </nodes>
+                            </subFolder>
                             <subFolder>
                                 <name>dynamicRoles</name>
                                 <nodes>
@@ -2478,6 +2581,57 @@ if (document) {
                         <roleAssociations/>
                         <subFolders>
                             <subFolder>
+                                <name>staticRoles</name>
+                                <nodes>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>1e9c5630-1d17-487e-8025-826df38a2fca</name>
+                                        <nodeRef>workspace://SpacesStore/7e2b2bbc-4a04-4219-bd7e-e8a7d23e13d0</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_READERS</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>31375e9e-bfba-46fa-b578-e2898fc81ede</name>
+                                        <nodeRef>workspace://SpacesStore/c70d59b6-9f68-4ef0-8a38-ca16f2f43476</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DOCUMENTS_READER</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                </nodes>
+                            </subFolder>
+                            <subFolder>
                                 <name>dynamicRoles</name>
                                 <nodes>
                                     <node>
@@ -3580,6 +3734,57 @@ if (document) {
                         <associations/>
                         <roleAssociations/>
                         <subFolders>
+                            <subFolder>
+                                <name>staticRoles</name>
+                                <nodes>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>ca867977-f63f-435b-ac42-a46614de3631</name>
+                                        <nodeRef>workspace://SpacesStore/64c39170-4f39-4424-b0c1-7f8f0a26a803</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESOLUTION_READERS</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>d38e74a0-dff7-4a9e-8d80-f35b83b5485f</name>
+                                        <nodeRef>workspace://SpacesStore/11fbd273-22fe-480d-be76-e4eb1fc42545</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DOCUMENTS_READER</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                </nodes>
+                            </subFolder>
                             <subFolder>
                                 <name>dynamicRoles</name>
                                 <nodes>
