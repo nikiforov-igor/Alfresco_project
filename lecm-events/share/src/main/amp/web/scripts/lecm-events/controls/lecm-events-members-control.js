@@ -1434,7 +1434,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				}
 			}
 			if (!this.allDay && this.endDateField ) {
-				Dom.get(this.endDateField.id + "-date").value = this.formatDate(this.startDate);
+				Dom.get(this.endDateField.id + "-date").value = valueField.value.length ? this.formatDate(this.startDate) : '';
 				Bubbling.fire("handleFieldChange", {
 					fieldId: this.endDateField.configName,
 					formId: this.endDateField.formId
@@ -1481,13 +1481,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			if (control.checkbox) {
 				this.allDay = control.checkbox.checked;
 			}
-			if (!this.allDay && this.endDateField ) {
-				Dom.get(this.endDateField.id + "-date").value = this.formatDate(this.startDate);
-				Bubbling.fire("handleFieldChange", {
-					fieldId: this.endDateField.configName,
-					formId: this.endDateField.formId
-				});
-			} else if (this.allDay) {
+			if (this.allDay) {
 				this.requestMembersTime();
 			}
 		},

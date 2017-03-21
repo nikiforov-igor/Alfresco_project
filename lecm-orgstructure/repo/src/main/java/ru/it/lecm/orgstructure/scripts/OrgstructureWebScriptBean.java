@@ -1218,7 +1218,10 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
     }
 
     public ScriptNode getUnitByOrganization(ScriptNode organization) {
-		NodeRef unitByOrganization = orgstructureService.getUnitByOrganization(organization.getNodeRef());
+		NodeRef unitByOrganization = null;
+		if (organization != null) {
+			unitByOrganization = orgstructureService.getUnitByOrganization(organization.getNodeRef());
+		}
 		return unitByOrganization != null ? new ScriptNode(unitByOrganization, serviceRegistry, getScope()) : null;
 	}
 

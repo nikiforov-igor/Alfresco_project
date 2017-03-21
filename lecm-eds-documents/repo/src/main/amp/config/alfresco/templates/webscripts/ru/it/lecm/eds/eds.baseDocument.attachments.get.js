@@ -15,27 +15,28 @@ function getAttachmentslist() {
 	var allNodes = [],
 		favourites = Common.getFavourites();
 
-	var errandsNode = parsedArgs.pathNode;
-	if (errandsNode.typeShort == "lecm-errands:document") {
-		var document = errandsNode;
-		while (document != null && document.typeShort == "lecm-errands:document" && document.hasPermission("Read")) {
-			var baseDocAssoc = document.assocs["lecm-errands:additional-document-assoc"];
-		 	if (baseDocAssoc != null && baseDocAssoc.length > 0) {
-			    document = baseDocAssoc[0];
-		    } else {
-			    document = null;
-		    }
-		}
-
-		if (document != null) {
-			var categories = documentAttachments.getCategories(document.nodeRef.toString());
-			if (categories != null) {
-				for (var i = 0; i < categories.length; i++) {
-					var attachments = documentAttachments.getAttachmentsByCategory(categories[i]);
-					if (attachments != null && attachments.length > 0) {
-						for (var j = 0; j < attachments.length; j++) {
-							allNodes.push(attachments[j]);
-						}
+	var documentNode = parsedArgs.pathNode;
+	var baseDocument = null;
+	var baseDocAssoc = null;
+	if (documentNode.typeShort == "lecm-resolutions:document") {
+		baseDocAssoc = baseDocument.assocs["lecm-resolutions:base-document-assoc"];
+	}
+	if (documentNode.typeShort == "lecm-errands:document") {
+		baseDocAssoc = baseDocument.assocs["lecm-errands:base-assoc"];
+	}
+	if (baseDocAssoc != null && baseDocAssoc.length > 0) {
+		baseDocument = baseDocAssoc[0];
+	} else {
+		baseDocument = null;
+	}
+	if (baseDocument != null) {
+		var categories = documentAttachments.getCategories(baseDocument.nodeRef.toString());
+		if (categories != null) {
+			for (var i = 0; i < categories.length; i++) {
+				var attachments = documentAttachments.getAttachmentsByCategory(categories[i]);
+				if (attachments != null && attachments.length > 0) {
+					for (var j = 0; j < attachments.length; j++) {
+						allNodes.push(attachments[j]);
 					}
 				}
 			}

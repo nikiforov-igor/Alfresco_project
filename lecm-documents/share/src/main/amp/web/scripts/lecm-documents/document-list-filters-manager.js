@@ -29,7 +29,7 @@ LogicECM.module.Documents = LogicECM.module.Documents|| {};
 
         _buildPreferencesKey: function (filterId) {
             var opt = this.options;
-            return (this.options.archiveDocs ? this.PREFERENCE_ARCHIVE_DOCUMENTS : this.PREFERENCE_DOCUMENTS)+ "." + opt.docType.split(":").join("_") + (filterId ? ("." + filterId): "") + ("." + LogicECM.currentUser) ;
+            return (this.options.archiveDocs ? this.PREFERENCE_ARCHIVE_DOCUMENTS : this.PREFERENCE_DOCUMENTS)+ "." + opt.docType.split(":").join("_") + (filterId ? ("." + filterId): "") + ("." + encodeURIComponent(LogicECM.currentUser)) ;
         },
 
         save: function (filter, value, reload) {

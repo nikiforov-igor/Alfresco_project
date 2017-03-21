@@ -68,7 +68,7 @@
             </item>
             <item name="cm:ORD_ITEM_CHANGE_STATUS" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#wrapTitle(#number, #numberTitle)} {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:ext-present-string}"))} переведен в статус {#wrapTitle(#status, #statusTitle)}.]]></property>
+                    <![CDATA[{#wrapTitle(#number, #numberTitle)} {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:ext-present-string}"))} переведен в статус {#wrapTitle(#status, #statusTitle)}{(#errand != null && #errand != "") ? ", поручение по пункту: " + {#errand.wrapAsLink(#errand.getFormatted("{lecm-document:present-string}"))} : ""}.]]></property>
                 <property name="cm:name"><![CDATA[ORD_ITEM_CHANGE_STATUS]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[ОРД. Смена статуса пункта ОРД]]></property>
