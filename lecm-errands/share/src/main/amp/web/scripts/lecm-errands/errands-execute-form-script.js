@@ -20,8 +20,8 @@
             scriptLayer = layer;
             formId = args[1].formId;
             if (scriptLayer == "errandsExecuteWFScriptLoaded") {
-                Event.onContentReady(formId + "_assoc_packageItems-added", function () {
-                    var errandRef = Dom.get(formId + "_assoc_packageItems-added").value;
+                Event.onContentReady(formId + "_assoc_packageItems", function () {
+                    var errandRef = Dom.get(formId + "_assoc_packageItems").value;
                     processCloseChildCheckbox(errandRef, "lecmErrandWf_execute_1CloseChild");
                     processReportTextField(errandRef, "lecmErrandWf_execute_1ReportText");
                 });
