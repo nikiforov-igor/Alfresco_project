@@ -8,14 +8,13 @@
 	}
 
     var unit = search.findNode(args['nodeRef']),
-        casesCount = 0,
-	    nomenclatureUnitSections = [],
-	    nomenclatureUnitSection;
+        casesPresent = false,
+	    nomenclatureUnitSections = [];
     if (unit) {
 	    nomenclatureUnitSections = unit.sourceAssocs['lecm-os:nomenclature-unit-section-unit-assoc'];
-	    for each (nomenclatureUnitSection in nomenclatureUnitSections) {
-		    casesCount += getCountCases(nomenclatureUnitSection.getQnamePath(), true);
-	    }
+	    casesPresent = nomenclatureUnitSections.some(function (nomenclatureUnitSection) {
+	        return getCountCases(nomenclatureUnitSection.getQnamePath(), true) > 0;
+	    });
     }
-    model.hasNomenclatureCases = casesCount > 0;
+    model.hasNomenclatureCases = casesPresent;
 })();
