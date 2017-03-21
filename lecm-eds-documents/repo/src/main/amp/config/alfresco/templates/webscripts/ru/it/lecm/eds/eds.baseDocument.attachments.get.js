@@ -19,15 +19,12 @@ function getAttachmentslist() {
 	var baseDocument = null;
 	var baseDocAssoc = null;
 	if (documentNode.typeShort == "lecm-resolutions:document") {
-		baseDocAssoc = baseDocument.assocs["lecm-resolutions:base-document-assoc"];
-	}
-	if (documentNode.typeShort == "lecm-errands:document") {
-		baseDocAssoc = baseDocument.assocs["lecm-errands:base-assoc"];
+		baseDocAssoc = documentNode.assocs["lecm-resolutions:base-document-assoc"];
+	} else if (documentNode.typeShort == "lecm-errands:document") {
+		baseDocAssoc = documentNode.assocs["lecm-errands:base-assoc"];
 	}
 	if (baseDocAssoc != null && baseDocAssoc.length > 0) {
 		baseDocument = baseDocAssoc[0];
-	} else {
-		baseDocument = null;
 	}
 	if (baseDocument != null) {
 		var categories = documentAttachments.getCategories(baseDocument.nodeRef.toString());
