@@ -70,37 +70,22 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
         PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
         PropertyCheck.mandatory(this, "defaultScheduleStartTime", defaultScheduleStartTime);
         PropertyCheck.mandatory(this, "defaultScheduleEndTime", defaultScheduleEndTime);
-
-//        // TODO: DONE Ввиду "устранения" транзакции в AbstractCommonWCalendarBean здесь
-//        // при необходимости открывается транзакция
-//        // там ещё ниже изменение свойств, так что стоит завернуть весь инит-метод
-//        RetryingTransactionHelper.RetryingTransactionCallback<Void> cb = new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-//
-//            @Override
-//            public Void execute() throws Throwable {
-//                // Создание контейнера (если не существует).
-//                if (getWCalendarContainer() == null) {
-//                    createWCalendarContainer();
-//                }
-//
-//                defaultSchedule = getScheduleByOrgSubject(orgstructureService.getOrganization());
-//                if (defaultSchedule == null) {
-//                    defaultSchedule = createDefaultSchedule();
-//                } else {
-//                    if (!getScheduleBeginTime(defaultSchedule).equals(defaultScheduleStartTime)
-//                            || !getScheduleEndTime(defaultSchedule).equals(defaultScheduleEndTime)) {
-//                        //TODO DONE замена нескольких setProperty на setProperties.
-//                        Map<QName, Serializable> properties = nodeService.getProperties(defaultSchedule);
-//                        properties.put(PROP_SCHEDULE_STD_BEGIN, defaultScheduleStartTime);
-//                        properties.put(PROP_SCHEDULE_STD_END, defaultScheduleEndTime);
-//                        nodeService.setProperties(defaultSchedule, properties);
-//                    }
-//                }
-//                return null;
-//            }
-//        };
-//        lecmTransactionHelper.doInTransaction(cb, false);
     }
+
+	@Override
+	public void initServiceImpl() {
+		super.initServiceImpl();
+		defaultSchedule = getScheduleByOrgSubject(orgstructureService.getOrganization());
+		if (defaultSchedule == null) {
+			defaultSchedule = createDefaultSchedule();
+		} else if (!getScheduleBeginTime(defaultSchedule).equals(defaultScheduleStartTime)
+				|| !getScheduleEndTime(defaultSchedule).equals(defaultScheduleEndTime)) {
+			Map<QName, Serializable> properties = nodeService.getProperties(defaultSchedule);
+			properties.put(PROP_SCHEDULE_STD_BEGIN, defaultScheduleStartTime);
+			properties.put(PROP_SCHEDULE_STD_END, defaultScheduleEndTime);
+			nodeService.setProperties(defaultSchedule, properties);
+		}
+	}
 
     @Override
     protected Map<String, Object> containerParams() {
