@@ -16,6 +16,7 @@ public interface EDSGlobalSettingsService {
 	String EDS_GLOBAL_SETTINGS_FOLDER_ID = "GLOBAL_EDS_SETTINGS_FOLDER_ID";
 
 	String EDS_GLOBAL_SETTINGS_NODE_NAME = "Settings-node";
+	String TERMS_OF_NOTIFICATION_SETTINGS_NODE_NAME = "Terms-of-notification-settings-node";
 
 	String POTENTIAL_ROLES_DICTIONARY_NAME = "Потенциальные роли";
 
@@ -35,6 +36,8 @@ public interface EDSGlobalSettingsService {
 	QName ASSOC_POTENTIAL_ROLE_BUSINESS_ROLE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-business-role-assoc");
 	QName ASSOC_POTENTIAL_ROLE_EMPLOYEE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-employee-assoc");
 	QName ASSOC_POTENTIAL_ROLE_ORGANIZATION_ELEMENT = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-organization-element-assoc");
+
+	QName TYPE_TERMS_OF_NOTIFICATION_SETTINGS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "terms-of-notification-settings");
 
 	QName PROP_N_DAYS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "n-days");
 	QName PROP_SHORT_N_DAYS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE,"short-n-days");
@@ -78,4 +81,7 @@ public interface EDSGlobalSettingsService {
 	int getSettingsShortNDays();
 
 	int getSettingsShortLimitDays();
+
+	NodeRef getTermsOfNotificationSettingsNode();
+	NodeRef createTermsOfNotificationSettingsNode() throws WriteTransactionNeededException;
 }

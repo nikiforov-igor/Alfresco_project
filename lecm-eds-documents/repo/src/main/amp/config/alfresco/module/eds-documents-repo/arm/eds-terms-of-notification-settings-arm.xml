@@ -4,7 +4,7 @@
         <property name="cm:name"><![CDATA[Сроки приближения исполнения]]></property>
         <property name="lecm-arm:order"><![CDATA[25]]></property>
         <property name="lecm-arm:html-url">
-            <![CDATA[page/components/console/eds-term-of-execute-settings]]>
+            <![CDATA[page/components/console/eds-terms-of-notification-settings]]>
         </property>
     </item>
 </items>

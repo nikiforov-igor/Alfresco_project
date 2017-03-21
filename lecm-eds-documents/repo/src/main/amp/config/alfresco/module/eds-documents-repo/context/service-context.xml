@@ -185,12 +185,12 @@
 		</property>
 	</bean>
 
-	<bean id="eds.termOfExecute.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+	<bean id="eds.termsOfNotification.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="arm.settings.LogicEcmBootstrap">
 		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Настройки СЭД"/>
 		<property name="dictionaries">
 			<list>
-				<value>alfresco/module/${artifactId}/arm/eds-term-of-execute-settings-arm.xml</value>
+				<value>alfresco/module/${artifactId}/arm/eds-terms-of-notification-settings-arm.xml</value>
 			</list>
 		</property>
 	</bean>

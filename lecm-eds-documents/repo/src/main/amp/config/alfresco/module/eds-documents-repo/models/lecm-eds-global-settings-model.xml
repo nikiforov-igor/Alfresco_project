@@ -179,7 +179,7 @@
 			</associations>
 		</type>
 
-        <type name="lecm-eds-globset:terms-of-execution-settings">
+        <type name="lecm-eds-globset:terms-of-notification-settings">
             <title>Logic Ecm Documents terms of execution settings</title>
             <parent>cm:cmobject</parent>
             <properties>

@@ -17,13 +17,13 @@ LogicECM.module = LogicECM.module || {};
 {
     var Dom = YAHOO.util.Dom;
 
-    LogicECM.module.EDSTermOfExecuteSettings = function(htmlId)
+    LogicECM.module.EdsTermsOfNotificationSettings = function(htmlId)
     {
-        LogicECM.module.EDSTermOfExecuteSettings.superclass.constructor.call(this, "LogicECM.module.EDSTermOfExecuteSettings", htmlId, ["container", "json"]);
+        LogicECM.module.EdsTermsOfNotificationSettings.superclass.constructor.call(this, "LogicECM.module.EdsTermsOfNotificationSettings", htmlId, ["container", "json"]);
         return this;
     };
 
-    YAHOO.extend(LogicECM.module.EDSTermOfExecuteSettings, Alfresco.component.Base,
+    YAHOO.extend(LogicECM.module.EdsTermsOfNotificationSettings, Alfresco.component.Base,
         {
             onReady: function () {
                 this.loadSettings();
@@ -31,7 +31,7 @@ LogicECM.module = LogicECM.module || {};
 
             loadSettings: function() {
                 Alfresco.util.Ajax.jsonGet({
-                    url: Alfresco.constants.PROXY_URI + "lecm/documents/global-settings/api/getSettingsNode",
+                    url: Alfresco.constants.PROXY_URI + "/lecm/eds/global-settings/api/getTermsOfNotificationSettings",
                     successCallback: {
                         fn: function (response) {
                             if (response.json && response.json.nodeRef) {
@@ -50,7 +50,7 @@ LogicECM.module = LogicECM.module || {};
                     {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
                         dataObj: {
-                            htmlid: "eds-term-of-execute-settings-edit-form",
+                            htmlid: "eds-terms-of-notification-settings-edit-form",
                             itemKind:"node",
                             itemId: settingsNode,
                             mode: "edit",
@@ -64,9 +64,9 @@ LogicECM.module = LogicECM.module || {};
                                 var container = Dom.get(me.id + "-settings");
                                 container.innerHTML = response.serverResponse.responseText;
 
-                                Dom.get("eds-term-of-execute-settings-edit-form-submit").value = me.msg("label.save");
+                                Dom.get("eds-terms-of-notification-settings-edit-form-form-submit").value = me.msg("label.save");
 
-                                var form = new Alfresco.forms.Form("eds-term-of-execute-settings-edit-form-form");
+                                var form = new Alfresco.forms.Form("eds-terms-of-notification-settings-edit-form-form");
                                 form.setSubmitAsJSON(true);
                                 form.setAJAXSubmit(true,
                                     {
