@@ -2775,6 +2775,10 @@
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
+                        <constraint-handlers>
+                            <constraint type="LENGTH" event="keyup" validation-handler="Alfresco.forms.validation.length"/>
+                            <constraint type="MANDATORY" event="focus" validation-handler="Alfresco.forms.validation.mandatory"/>
+                        </constraint-handlers>
                     </field>
                 </appearance>
             </form>
@@ -3035,7 +3039,7 @@
 		            <field id="packageItems">
 			            <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
 		            </field>
-                    <field id="lecmErrandWf:cancel_1CancelReason">
+                    <field id="lecmErrandWf:cancel_1CancelReason" mandatory="true">
                         <control  template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отмены_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-cancel-reason</control-param>
@@ -3045,6 +3049,10 @@
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
+                        <constraint-handlers>
+                            <constraint type="LENGTH" event="keyup" validation-handler="Alfresco.forms.validation.length"/>
+                            <constraint type="MANDATORY" event="focus" validation-handler="Alfresco.forms.validation.mandatory"/>
+                        </constraint-handlers>
                     </field>
                     <field id="lecmErrandWf:cancel_1CancelChildren">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
