@@ -1314,7 +1314,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -1360,7 +1360,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -2710,7 +2710,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
