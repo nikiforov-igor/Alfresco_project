@@ -605,7 +605,7 @@
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                         <property name="cm:name"><![CDATA[На ознакомление]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
-                                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                                        <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[60]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
@@ -623,7 +623,7 @@
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                         <property name="cm:name"><![CDATA[На согласовании]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
-                                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                                        <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[10]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
@@ -641,7 +641,7 @@
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                         <property name="cm:name"><![CDATA[На подписании]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
-                                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                                        <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[20]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
@@ -715,7 +715,7 @@
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                         <property name="cm:name"><![CDATA[Ожидают отправки по маршруту]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
-                                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                                        <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
@@ -735,7 +735,7 @@
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                         <property name="cm:name"><![CDATA[Подписано]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
-                                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                                        <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[40]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
@@ -755,7 +755,7 @@
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                         <property name="cm:name"><![CDATA[Согласовано]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
-                                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                                        <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[30]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
@@ -775,7 +775,7 @@
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                         <property name="cm:name"><![CDATA[Полученные входящие]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                                        <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[80]]></property>
                                         <property name="lecm-arm:types"><![CDATA[lecm-incoming:document]]></property>
@@ -937,7 +937,7 @@
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                         <property name="cm:name"><![CDATA[На доработке]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
-                                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                                        <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[50]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
@@ -957,7 +957,7 @@
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                         <property name="cm:name"><![CDATA[Полученные внутренние]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
-                                        <property name="lecm-arm:expression"><![CDATA[]]></property>
+                                        <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[70]]></property>
                                         <property name="lecm-arm:types"><![CDATA[lecm-internal:document]]></property>
