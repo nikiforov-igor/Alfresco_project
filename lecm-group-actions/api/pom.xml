@@ -21,7 +21,7 @@
     <parent>
         <groupId>ru.it.lecm.group-actions</groupId>
         <artifactId>group-actions</artifactId>
-        <version>1.8.6</version>
+        <version>1.8.7</version>
     </parent>
 
     <artifactId>group-actions-repo-api</artifactId>

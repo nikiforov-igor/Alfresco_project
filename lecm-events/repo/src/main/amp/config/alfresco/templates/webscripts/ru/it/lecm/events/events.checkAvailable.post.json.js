@@ -44,7 +44,7 @@
 		return {
 			nodeRef: member.nodeRef.toString(),
 			name: substitude.formatNodeTitle(member, "{lecm-orgstr:employee-short-name}"),
-			available: isAvailable && events.checkMemberAvailable(member, event, fromDate, toDate, allDay)
+			available: isAvailable && events.checkMemberAvailable(member.nodeRef.toString(), event, fromDate, toDate, allDay)
 		};
 	});
 })();
