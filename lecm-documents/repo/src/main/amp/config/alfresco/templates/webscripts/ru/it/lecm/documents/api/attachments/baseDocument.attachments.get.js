@@ -15,41 +15,41 @@ function getAttachmentslist() {
 	var allNodes = [],
 		favourites = Common.getFavourites();
 
-	var errandsNode = parsedArgs.pathNode;
-	if (errandsNode.typeShort == "lecm-errands:document") {
-		var document = errandsNode;
-		while (document != null && document.typeShort == "lecm-errands:document" && document.hasPermission("Read")) {
-			var baseDocAssoc = document.assocs["lecm-errands:additional-document-assoc"];
-		 	if (baseDocAssoc != null && baseDocAssoc.length > 0) {
-			    document = baseDocAssoc[0];
-		    } else {
-			    document = null;
-		    }
-		}
+    var baseDocAssocName = url.templateArgs.baseDocAssocName;
+    if (baseDocAssocName) {
+        var document = parsedArgs.pathNode;
+        if (document) {
+            var baseDoc = null;
+            while (document && document.hasPermission("Read")) {
+                var baseDocs = document.assocs[baseDocAssocName];
+                if (baseDocs && baseDocs.length) {
+                    baseDoc = baseDocs[0];
+                    document = baseDocs[0];
+                } else {
+                    document = null;
+                }
+            }
 
-		if (document != null) {
-			var categories = documentAttachments.getCategories(document.nodeRef.toString());
-			if (categories != null) {
-				for (var i = 0; i < categories.length; i++) {
-					var attachments = documentAttachments.getAttachmentsByCategory(categories[i]);
-					if (attachments != null && attachments.length > 0) {
-						for (var j = 0; j < attachments.length; j++) {
-							allNodes.push(attachments[j]);
-						}
-					}
-				}
-			}
-		}
-	}
+            if (baseDoc) {
+                var categories = documentAttachments.getCategories(baseDoc.nodeRef.toString());
+                if (categories) {
+                    categories.forEach(function (category) {
+                        var attachments = documentAttachments.getAttachmentsByCategory(category);
+                        if (attachments) {
+                            allNodes = allNodes.concat(attachments);
+                        }
+                    });
+                }
+            }
+        }
+    }
 
-	var isThumbnailNameRegistered = thumbnailService.isThumbnailNameRegistered(THUMBNAIL_NAME),
-		thumbnail = null,
-		item;
+	var isThumbnailNameRegistered = thumbnailService.isThumbnailNameRegistered(THUMBNAIL_NAME);
 
 	// Loop through and evaluate each node in this result set
-	for each(node in allNodes) {
+    allNodes.forEach(function (node) {
 		// Get evaluated properties.
-		item = Evaluator.run(node);
+		var item = Evaluator.run(node);
 		if (item !== null) {
 			item.isFavourite = (favourites[item.node.nodeRef] === true);
 			item.likes = Common.getLikes(node);
@@ -59,7 +59,7 @@ function getAttachmentslist() {
 			// Is our thumbnail type registered?
 			if (isThumbnailNameRegistered && item.node.isSubType("cm:content")) {
 				// Make sure we have a thumbnail.
-				thumbnail = item.node.getThumbnail(THUMBNAIL_NAME);
+				var thumbnail = item.node.getThumbnail(THUMBNAIL_NAME);
 				if (thumbnail === null) {
 					// No thumbnail, so queue creation
 					item.node.createThumbnail(THUMBNAIL_NAME, true);
@@ -68,9 +68,9 @@ function getAttachmentslist() {
 
 			items.push(item);
 		}
-	}
+	});
 
 	return items;
-}
+};
 
 model.items = getAttachmentslist();
