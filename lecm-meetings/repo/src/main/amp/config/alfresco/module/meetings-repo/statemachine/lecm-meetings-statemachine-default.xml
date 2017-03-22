@@ -3339,16 +3339,18 @@ if (document !== null) {
                                                                 <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
                                                                 <name>transitionExpression</name>
                                                                 <value><![CDATA[@routesService.getApprovalState(doc.nodeRef) == "APPROVED"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
+                                                                <value><![CDATA[var meeting = stm_document;
+meeting.properties["lecmApproveAspects:approvalDecision"] = "APPROVED";
+meeting.save();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -3373,16 +3375,18 @@ if (document !== null) {
                                                                 <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
                                                                 <name>transitionExpression</name>
                                                                 <value><![CDATA[@routesService.getApprovalState(doc.nodeRef) == "APPROVED_FORCED"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
+                                                                <value><![CDATA[var meeting = stm_document;
+meeting.properties["lecmApproveAspects:approvalDecision"] = "APPROVED_FORCED";
+meeting.save();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -3407,16 +3411,18 @@ if (document !== null) {
                                                                 <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
                                                                 <name>transitionExpression</name>
                                                                 <value><![CDATA[@routesService.getApprovalState(doc.nodeRef) == "REJECTED_FORCED"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
+                                                                <value><![CDATA[var meeting = stm_document;
+meeting.properties["lecmApproveAspects:approvalDecision"] = "REJECTED_FORCED";
+meeting.save();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -3441,16 +3447,18 @@ if (document !== null) {
                                                                 <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
                                                                 <name>transitionExpression</name>
                                                                 <value><![CDATA[@routesService.getApprovalState(doc.nodeRef) == "APPROVED_WITH_REMARK"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
+                                                                <value><![CDATA[var meeting = stm_document;
+meeting.properties["lecmApproveAspects:approvalDecision"] = "APPROVED_WITH_REMARK";
+meeting.save();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -3475,16 +3483,19 @@ if (document !== null) {
                                                                 <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
                                                                 <name>transitionExpression</name>
-                                                                <value><![CDATA[@routesService.getApprovalState(doc.nodeRef) == "REJECTED"]]></value>
+                                                                <value>
+                                                                    <![CDATA[@routesService.getApprovalState(doc.nodeRef) == "REJECTED"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
+                                                                <value><![CDATA[var meeting = stm_document;
+meeting.properties["lecmApproveAspects:approvalDecision"] = "REJECTED";
+meeting.save();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
