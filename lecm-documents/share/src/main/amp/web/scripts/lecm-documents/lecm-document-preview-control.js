@@ -41,7 +41,6 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
             itemId: "",
             forTask: true,
             selectedAttachmentNodeRef: "",
-            inclBaseDoc: false,
             baseDocAssocName: null,
             resizeable: false,
             categories: null,
