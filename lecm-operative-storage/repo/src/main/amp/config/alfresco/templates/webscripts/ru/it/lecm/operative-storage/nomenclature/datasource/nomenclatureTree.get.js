@@ -15,7 +15,10 @@ var useStrictFilterByOrg = (useOnlyInSameOrg != null && ("" + useOnlyInSameOrg) 
 
 if (parentNode != null) {
 
-	var	query = 'PARENT:"' + nodeRef + '" AND {{FILTER_YEARS_BY_ORG({allowAdmin: true})}}';
+	var	query = 'PARENT:"' + nodeRef + '" AND {{FILTER_YEARS_BY_ORG({allowAdmin: true})}}',
+		isFilterByOpenCases = true,
+		isNeeded,
+		isLeaf;
 
 	switch(statusFilter) {
 		case 'ApprovedOnly':
@@ -23,6 +26,8 @@ if (parentNode != null) {
 			break;
 		case 'notClosed':
 			query = 'PARENT:"' + nodeRef + '" AND {{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND (ISNULL:\"lecm-os:nomenclature-year-section-status\" OR NOT EXISTS:\"lecm-os:nomenclature-year-section-status\" OR NOT @lecm\\-os\\:nomenclature\\-year\\-section\\-status:\"CLOSED\")';
+			// Не фильтровать по открытым номенклатурным делам для механизма копирования/перемещания номенклатурных дел
+			isFilterByOpenCases = false;
 			break;
 	}
 
@@ -40,18 +45,33 @@ if (parentNode != null) {
 		});
 	}
 
+	function hasNomenclatureUnitSections(qnamePath, isRecursive) {
+		var qnamePathResult = isRecursive ? qnamePath + '/' : qnamePath;
+		return searchCounter.query({
+			language: 'fts-alfresco',
+			query: 'PATH:"/' + qnamePathResult + '/*" AND (+TYPE:"lecm-os:nomenclature-unit-section")'
+		}) > 0;
+	}
+
 	for each(var item in values) {
 		if (isSubType(item, selectableType) && (!item.hasAspect("lecm-dic:aspect_active") || item.properties["lecm-dic:active"])
 			&& orgstructure.hasAccessToOrgElement(item, useStrictFilterByOrg)) {
-			currentOpenCases = getCountOpenCases(item.getQnamePath(), false);
-			recursiveOpenCases = getCountOpenCases(item.getQnamePath(), true);
-			if (recursiveOpenCases > 0) {
+			if (isFilterByOpenCases) {
+				currentOpenCases = getCountOpenCases(item.getQnamePath(), false);
+				recursiveOpenCases = getCountOpenCases(item.getQnamePath(), true);
+				isNeeded = recursiveOpenCases > 0;
+				isLeaf = (currentOpenCases == recursiveOpenCases);
+			} else {
+				isNeeded = true;
+				isLeaf = !hasNomenclatureUnitSections(item.getQnamePath(), true);
+			}
+			if (isNeeded) {
 				branch.push({
 					label: (nodeSubstituteString != null && nodeSubstituteString.length > 0) ? substitude.formatNodeTitle(item, nodeSubstituteString) : substitude.getObjectDescription(item),
 					title: substitude.formatNodeTitle(item, nodeTitleSubstituteString),
 					type: item.getTypeShort(),
 					nodeRef: item.getNodeRef().toString(),
-					isLeaf: "" + (currentOpenCases == recursiveOpenCases),
+					isLeaf: "" + isLeaf,
 					isContainer: "" + item.isContainer,
 					hasPermAddChildren: lecmPermission.hasPermission(item.nodeRef, "AddChildren")
 				});

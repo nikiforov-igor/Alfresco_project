@@ -27,10 +27,10 @@
     (function () {
         new LogicECM.DocumentAttachmentsList("${el}").setOptions(
                 {
-                    nodeRef: "${nodeRef}",
-                    <#if inclBaseDoc??>
-                        inclBaseDoc: ${inclBaseDoc?string("true","false")},
+                    <#if baseDocAssocName??>
+                        baseDocAssocName: "${baseDocAssocName}",
                     </#if>
+                    nodeRef: "${nodeRef}"
                 }
         );
     })();

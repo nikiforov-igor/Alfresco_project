@@ -38,17 +38,19 @@ if (categories) {
 
 	var document = utils.getNodeFromString(documentNodeRef);
 	if (document && baseDocAssocName) {
+	    var baseDoc = null;
 		while (document && document.hasPermission("Read")) {
 			var baseDocs = document.assocs[baseDocAssocName];
 			if (baseDocs && baseDocs.length) {
+                baseDoc = baseDocs[0];
 				document = baseDocs[0];
 			} else {
 				document = null;
 			}
 		}
 
-		if (document) {
-			var categories = documentAttachments.getCategories(document.nodeRef.toString());
+		if (baseDoc) {
+			var categories = documentAttachments.getCategories(baseDoc.nodeRef.toString());
 			if (categories) {
 				var showAttachments = [];
 				for (var i = 0; i < categories.length; i++) {
