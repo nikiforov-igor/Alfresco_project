@@ -759,7 +759,7 @@
                     </field>
                     <field id="lecm-statemachine:status">
                         <control template="/ru/it/lecm/documents/controls/select-status-control.ftl">
-                            <control-param name="docType">lecm-outgoing:document</control-param>
+                            <control-param name="docType">lecm-internal:document</control-param>
                             <control-param name="withEmpty">true</control-param>
                             <control-param name="endpointMany">true</control-param>
                             <control-param name="nameSuffix">-multiText</control-param>

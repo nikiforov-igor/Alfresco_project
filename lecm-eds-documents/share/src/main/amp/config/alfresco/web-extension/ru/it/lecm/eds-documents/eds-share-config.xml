@@ -247,7 +247,10 @@
 				</field-visibility>
 				<appearance>
 					<field id="cm:created">
-						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl">
+							<control-param name="forceEditable">true</control-param>
+						</control>
+
 					</field>
 					<field id="lecm-document:doc-date" label="Дата документа">
 						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>

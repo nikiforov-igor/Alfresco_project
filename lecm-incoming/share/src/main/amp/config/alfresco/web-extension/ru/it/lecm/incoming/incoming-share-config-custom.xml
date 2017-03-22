@@ -938,7 +938,7 @@
                 <field-visibility>
                     <show id="lecm-eds-document:document-type-assoc"/>                                                  <!-- Вид документа -->
                     <show id="lecm-statemachine:status" force="true"/>                                                  <!-- Статус -->
-                    <show id="lecm-document:regnum"/>                                                                   <!-- Номер -->
+                    <show id="lecm-document-aspects:reg-data-number"/>                                                                   <!--Рег. Номер -->
                     <show id="lecm-document-aspects:reg-data-date"/>                                                                 <!-- Дата -->
                     <show id="lecm-document:title"/>                                                                    <!-- Заголовок -->
                     <show id="lecm-incoming:outgoing-number"/>                                                          <!-- Исходящий номер -->

@@ -309,7 +309,7 @@
                 </field-visibility>
 
                 <appearance>
-                    <field id="lecm-resolutions:number" label-id="errands.number">
+                    <field id="lecm-resolutions:number" label-id="label.resolution.number">
                         <control>
                             <control-param name="hideValue"/>
                         </control>
