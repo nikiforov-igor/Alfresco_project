@@ -325,7 +325,7 @@
                     </item>
                     <item name="cm:Тип документа-основания" type="lecm-rpeditor:reportDataColumn">
                         <property name="lecm-rpeditor:dataColumnControlParams">
-                            <![CDATA[options=Входящий документ,ОРД,НД,Внутренний документ,Протокол,Поручение,Резолюция]]></property>
+                            <![CDATA[options=Входящий документ,ОРД,Внутренний документ,Протокол,Поручение,Резолюция,|Без документа основания]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:text]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
                             <![CDATA[{lecm-eds-aspect:base-document-type}]]></property>
