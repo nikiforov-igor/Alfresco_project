@@ -533,18 +533,38 @@
 			</form>
 			<form id="search">
 				<field-visibility>
+					<!--Вид документа-->
+					<show id="lecm-eds-document:document-type-assoc"/>
+					<show id="lecm-statemachine:status" force="true"/>                                                  <!-- Статус -->
 					<show id="lecm-document:regnum"/>
 					<show id="lecm-document:doc-date"/>
 					<!-- Заголовок -->
 					<show id="lecm-document:title"/>
+					<show id="lecm-eds-document:execution-date"/>
+					<show id="lecm-document:author-assoc"/>
 					<!--Председатель совещания-->
 					<show id="lecm-protocol:meeting-chairman-assoc"/>
-					<!--Вид документа-->
-					<show id="lecm-eds-document:document-type-assoc"/>
-					<!--Подписанты-->
-					<show id="lecm-protocol:signers-assoc"/>
+					<show id="lecm-protocol:secretary-assoc"/>
+					<show id="lecm-protocol:attended-assoc"/>
+					<show id="lecm-eds-aspect:execution-state"/>                                                        <!-- Исполнение -->
+					<show id="lecm-review-ts:doc-review-state"/>                                                        <!-- Ознакомление -->
 				</field-visibility>
 				<appearance>
+					<field id="lecm-eds-document:document-type-assoc">
+						<control>
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_протокола</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="endpointMany">true</control-param>
+						</control>
+					</field>
+					<field id="lecm-statemachine:status">
+						<control template="/ru/it/lecm/documents/controls/select-status-control.ftl">
+							<control-param name="docType">lecm-protocol:document</control-param>
+							<control-param name="withEmpty">true</control-param>
+							<control-param name="endpointMany">true</control-param>
+							<control-param name="nameSuffix">-multiText</control-param>
+						</control>
+					</field>
 					<field id="lecm-document:doc-date">
 						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
 					</field>
@@ -553,11 +573,45 @@
 							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
 						</constraint-handlers>
 					</field>
-					<field id="lecm-eds-document:document-type-assoc">
-                        <control>
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_протокола</control-param>
-                            <control-param name="plane">true</control-param>
-                        </control>
+					<field id="lecm-eds-document:execution-date">
+						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+					</field>
+					<field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler">
+						<control>
+							<control-param name="endpointMany">true</control-param>
+						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-protocol:meeting-chairman-assoc" label="Председатель">
+						<control>
+							<control-param name="endpointMany">true</control-param>
+						</control>
+					</field>
+					<field id="lecm-protocol:secretary-assoc">
+						<control>
+							<control-param name="endpointMany">true</control-param>
+						</control>
+					</field>
+					<field id="lecm-protocol:attended-assoc">
+						<control>
+							<control-param name="endpointMany">true</control-param>
+						</control>
+					</field>
+					<field id="lecm-eds-aspect:execution-state" label-id="ord.execution.lable">
+						<control template="/ru/it/lecm/eds/controls/selectmany.ftl">
+							<control-param name="withEmpty">true</control-param>
+							<control-param name="nameSuffix">-multiText</control-param>
+							<control-param name="useDefaultValue">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-review-ts:doc-review-state" label-id="ord.review.lable">
+						<control template="/ru/it/lecm/eds/controls/selectmany.ftl">
+							<control-param name="withEmpty">true</control-param>
+							<control-param name="nameSuffix">-multiText</control-param>
+							<control-param name="useDefaultValue">false</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>

@@ -12,6 +12,7 @@
 		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
 		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
 		<import uri="http://www.it.ru/logicECM/model/review-ts/1.0" prefix="lecm-review-ts"/>
+		<import uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-aspect"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/lecm/ND/1.0" prefix="lecm-nd"/>
@@ -80,6 +81,7 @@
 				<aspect>lecm-document-aspects:finalize-to-unit</aspect>
 				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
 				<aspect>lecm-review-ts:review-aspect</aspect>
+				<aspect>lecm-eds-aspect:execution-state-aspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>

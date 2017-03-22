@@ -236,46 +236,80 @@
             <form id="search">
                 <field-visibility>
                     <show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
+                    <show id="lecm-statemachine:status" force="true"/>                                                  <!-- Статус -->
+                    <show id="lecm-document:regnum"/>                                                                   <!-- Номер -->
+                    <show id="lecm-document:doc-date"/>											<!-- Дата регистрации & Регистрационный номер -->
                     <show id="lecm-document:title"/>																	<!-- Заголовок -->
-                    <show id="cm:created"/>
-                    <show id="lecm-document-aspects:reg-project-data-date"/>																<!-- Дата регистрации & Регистрационный номер -->
-                    <show id="lecm-document-aspects:reg-project-data-number"/>																	<!-- Номер проекта -->
                     <show id="lecm-document:author-assoc"/>
-                    <show id="lecm-nd:begin-date"/>
-                    <show id="lecm-nd:end-date"/>
+                    <show id="lecm-eds-document:executor-assoc"/>                                                       <!-- Исполнитель -->
+                    <show id="lecmSignAspects:signerEmployeeAssoc"/>                                                    <!-- Подписанты -->
+                    <show id="lecm-document-aspects:additional-organization-unit-assoc"/>
+                    <show id="lecm-eds-aspect:execution-state"/>                                                        <!-- Исполнение -->
+                    <show id="lecm-review-ts:doc-review-state"/>                                                        <!-- Ознакомление -->
                 </field-visibility>
                 <appearance>
                     <set id="nd-document-search-common-set" template="/ru/it/lecm/ord/components/class-set.ftl"/>
-                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа" set="nd-document-search-common-set">
+                    <field id="lecm-eds-document:document-type-assoc" set="nd-document-search-common-set">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_НД</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:title" set="nd-document-search-common-set" mandatory="false">
+                    <field id="lecm-statemachine:status" set="nd-document-search-common-set">
+                        <control template="/ru/it/lecm/documents/controls/select-status-control.ftl">
+                            <control-param name="docType">lecm-nd:document</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="endpointMany">true</control-param>
+                            <control-param name="nameSuffix">-multiText</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document:regnum" set="nd-document-search-common-set"/>
+                    <field id="lecm-document:doc-date" set="nd-document-search-common-set" >
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                    </field>
+                    <field id="lecm-document:title" set="nd-document-search-common-set">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="cm:created" set="nd-document-search-common-set" >
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl">
-                            <control-param name="forceEditable">true</control-param>
+                    <field id="lecm-document:author-assoc" set="nd-document-search-common-set" label-id="label.eds.assoc.compiler">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
                         </control>
-                    </field>
-                    <field id="lecm-document-aspects:reg-project-data-date" set="nd-document-search-common-set" >
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
-                    </field>
-                    <field id="lecm-document-aspects:reg-project-data-number" set="nd-document-search-common-set" />
-                    <field id="lecm-document:author-assoc" set="nd-document-search-common-set" mandatory="false">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-nd:begin-date" set="nd-document-search-common-set">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                    <field id="lecm-eds-document:executor-assoc" set="nd-document-search-common-set">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
                     </field>
-                    <field id="lecm-nd:end-date" set="nd-document-search-common-set">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                    <field id="lecmSignAspects:signerEmployeeAssoc" set="nd-document-search-common-set">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document-aspects:additional-organization-unit-assoc" set="nd-document-search-common-set">
+                        <control>
+                            <control-param name="useStrictFilterByOrg">true</control-param>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-eds-aspect:execution-state" set="nd-document-search-common-set" label-id="ord.execution.lable">
+                        <control template="/ru/it/lecm/eds/controls/selectmany.ftl">
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="nameSuffix">-multiText</control-param>
+                            <control-param name="useDefaultValue">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-review-ts:doc-review-state" set="nd-document-search-common-set" label-id="ord.review.lable">
+                        <control template="/ru/it/lecm/eds/controls/selectmany.ftl">
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="nameSuffix">-multiText</control-param>
+                            <control-param name="useDefaultValue">false</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
