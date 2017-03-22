@@ -5,17 +5,37 @@
 	<script type="text/javascript">
 		function hideButton() {
             if(location.hash != "#expanded") {
-                YAHOO.util.Dom.setStyle(this, 'display', 'none');
+                YAHOO.util.Dom.addClass(this, 'hidden');
+            }
+        }
+        function hideShowPreviewerButton() {
+            if(location.hash != "#expanded") {
+                YAHOO.util.Dom.addClass(this, 'hidden');
             }
         }
         YAHOO.util.Event.onAvailable("${el}-action-collapse", hideButton);
+        YAHOO.util.Event.onAvailable("${el}-action-show-previewer", hideShowPreviewerButton);
 	</script>
-	<div class="metadata-form">
-		<div class="lecm-dashlet-actions">
+    <div class="panel-header">
+		<div class="panel-title">${msg("label.title")}</div>
+        <div class="lecm-dashlet-actions">
         	<a id="${el}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
+            <a id="${el}-action-show-previewer" class="show-previewer" title="${msg("btn.show-previewer")}"></a>
     	</div>
     </div>
-	<div id="${el}">
+    <script type="text/javascript">//<![CDATA[
+    (function () {
+        new LogicECM.DocumentAttachmentsList("${el}").setOptions(
+                {
+                    <#if baseDocAssocName??>
+                        baseDocAssocName: "${baseDocAssocName}",
+                    </#if>
+                    nodeRef: "${nodeRef}"
+                }
+        );
+    })();
+    //]]></script>
+	<div id="${el}" class="attachments-list-container">
 	    <#if categories??>
 	        <#list categories as category>
 	            <#assign categoryId = el + "-" + category.nodeRef?replace("/", "")?replace(":", "")/>
@@ -83,7 +103,7 @@
 						var path = "${category.path}";
 						path = path.substring(path.indexOf("/", 1), path.length);
 
-			            new LogicECM.DocumentAttachmentsList("${categoryId}").setOptions(
+			            new LogicECM.DocumentCategoryAttachmentsList("${categoryId}").setOptions(
 			                    {
 			                        nodeRef: "${category.nodeRef}",
 				                    categoryName: "${category.name}",
@@ -111,4 +131,5 @@
 	    })();
 	    //]]></script>
 	</div>
+
 </#if>

@@ -13,6 +13,7 @@
 		<import uri="http://www.it.ru/logicECM/internal/table-structure/1.0" prefix="lecm-internal-table-structure"/>
 		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+		<import uri="http://www.it.ru/logicECM/model/review-ts/1.0" prefix="lecm-review-ts"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/internal/1.0" prefix="lecm-internal"/>
@@ -140,6 +141,7 @@
 				</association>
 			</associations>
 			<mandatory-aspects>
+				<aspect>lecm-review-ts:review-aspect</aspect>
 				<aspect>lecm-document-aspects:response-to-aspect</aspect>
 				<aspect>lecm-internal-table-structure:table-answers-aspect</aspect>
 				<aspect>lecm-document-aspects:event-listeners-aspect</aspect>

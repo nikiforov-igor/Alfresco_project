@@ -214,6 +214,22 @@ function getSearchQuery(params) {
                                     } else if (propName.match("-strong-constant$") == "-strong-constant") {
                                         propName = propName.substr(0, propName.length - "-strong-constant".length);
                                         propValue = '"' + propValue + '"';
+                                    } else if (propName.match("-multiText$") == "-multiText") {
+                                        propName = propName.substr(0, propName.length - "-multiText".length);
+                                        var searchTermsArray = propValue.split(",");
+                                        searchTerm = "";
+                                        for (var k = 0; k < searchTermsArray.length; k++) {
+                                            var newSearchTerm = searchTermsArray[k];
+                                            if (newSearchTerm) {
+                                                if (searchTerm.length) {
+                                                    searchTerm += ' OR ';
+                                                }
+                                                searchTerm += '"' + escapeString(searchTermsArray[k]) + '"';
+                                            }
+                                        }
+                                        if (searchTerm) {
+                                            propValue = '(' + searchTerm + ')';
+                                        }
                                     } else {
                                         if (propValue != null && propValue != "") {
                                             var searchTermsArray = propValue.split(" ");

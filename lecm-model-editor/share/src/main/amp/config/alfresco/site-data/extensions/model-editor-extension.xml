@@ -1,24 +1,13 @@
 <extension>
 	<modules>
 		<module>
-			<id>Forms Editor Header</id>
+			<id>Model Editor Header</id>
 			<version>1.0</version>
 			<auto-deploy>true</auto-deploy>
 			<customizations>
 				<customization>
 					<targetPackageRoot>org.alfresco.share.header</targetPackageRoot>
-					<sourcePackageRoot>ru.it.lecm.documentforms.header</sourcePackageRoot>
-				</customization>
-			</customizations>
-		</module>
-		<module>
-			<id>Controls Editor Header</id>
-			<version>1.0</version>
-			<auto-deploy>true</auto-deploy>
-			<customizations>
-				<customization>
-					<targetPackageRoot>org.alfresco.share.header</targetPackageRoot>
-					<sourcePackageRoot>ru.it.lecm.documentcontrols.header</sourcePackageRoot>
+					<sourcePackageRoot>ru.it.lecm.modeleditor.header</sourcePackageRoot>
 				</customization>
 			</customizations>
 		</module>

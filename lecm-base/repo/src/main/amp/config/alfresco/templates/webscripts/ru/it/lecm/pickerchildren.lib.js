@@ -24,19 +24,18 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 		showFolders = getArg('showFolders', isPost, itemParams),
 		docType = getArg('docType', isPost, itemParams),
         useOnlyInSameOrg = ("true" == getArg('onlyInSameOrg', isPost, itemParams)),
-		doNotCheck = (doNotCheckAccess == null || ("" + doNotCheckAccess) == "false") ?
+		doNotCheck = (!doNotCheckAccess || ("" + doNotCheckAccess) == "false") ?
 			("true" == getArg('doNotCheckAccess', isPost, itemParams)) : doNotCheckAccess,
 		sortProp = getArg('sortProp', isPost, itemParams) ? getArg('sortProp', isPost, itemParams) : "cm:name",
 		additionalProperties = getArg('additionalProperties', isPost, itemParams),
 		argsPathRoot = getArg('pathRoot', isPost, itemParams),
 		argsPathNameSubstituteString = getArg('pathNameSubstituteString', isPost, itemParams),
 		argsUseObjectDescription = ("true" == getArg('useObjectDescription', isPost, itemParams));
-	if (additionalProperties != null) {
+	if (additionalProperties) {
 		additionalProperties = additionalProperties.split(',');
 	}
 
-	if (logger.isLoggingEnabled())
-	{
+	if (logger.isLoggingEnabled()) {
 		logger.log("children type = " + url.templateArgs.type);
 		logger.log("argsSelectableType = " + argsSelectableType);
 		logger.log("argsFilterType = " + argsFilterType);
@@ -50,29 +49,25 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 		logger.log("argsXPathRoot = " + argsXPathRoot);
 	}
 
-	try
-	{
+	try {
 		// construct the NodeRef from the URL
 		var nodeRef = url.templateArgs.store_type + "://" + url.templateArgs.store_id + "/" + url.templateArgs.id;
 
 		// determine if we need to resolve the parent NodeRef
 
-		if (argsXPath != null)
-		{
+		if (argsXPath) {
 			// resolve the provided XPath to a NodeRef
 			var nodes = search.xpathSearch(argsXPath);
-			if (nodes.length > 0)
-			{
+			if (nodes.length) {
 				nodeRef = String(nodes[0].nodeRef);
 			}
 		}
-		if (argsXPathLocation != null)
-		{
+		if (argsXPathLocation) {
 			var root = businessPlatform.getHomeRef();
 			// resolve the root for XPath
-			if (argsXPathRoot != null) {
+			if (argsXPathRoot) {
 				var node = resolveNode(argsXPathRoot);
-				if (node != null) {
+				if (node) {
 					root = node;
 				}
 			}
@@ -87,64 +82,56 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 		}
 
 		var skipCount = 0;
-		if (argsSkipCount != null)
-		{
+		if (argsSkipCount) {
 			// force the argsMaxResults var to be treated as a number
 			skipCount = parseInt(argsSkipCount, 10) || skipCount;
 		}
 		// default to max of 100 results
 		var maxResults = 20;
-		if (argsMaxResults != null)
-		{
+		if (argsMaxResults) {
 			// force the argsMaxResults var to be treated as a number
 			maxResults = parseInt(argsMaxResults, 10) || maxResults;
 		}
 
 		// if the last path element is 'doclib' or 'siblings' find parent node
-		if (pathElements.length > 0)
-		{
-			lastPathElement = pathElements[pathElements.length-1];
+		if (pathElements.length) {
+			lastPathElement = pathElements[pathElements.length - 1];
 
-			if (logger.isLoggingEnabled())
+			if (logger.isLoggingEnabled()) {
 				logger.log("lastPathElement = " + lastPathElement);
+			}
 
-			if (lastPathElement == "siblings")
-			{
+			if (lastPathElement == "siblings") {
 				// the provided nodeRef is the node we want the siblings of so get it's parent
 				var node = search.findNode(nodeRef);
-				if (node !== null)
-				{
+				if (node) {
 					nodeRef = node.parent.nodeRef;
-				}
-				else
-				{
+				} else {
 					// if the provided node was not found default to companyhome
 					nodeRef = "alfresco://company/home";
 				}
 			}
-			else if (lastPathElement == "doclib")
-			{
+			else if (lastPathElement == "doclib") {
 				// we want to find the document library for the nodeRef provided
 				nodeRef = findDoclib(nodeRef);
 			}
 		}
 
-		if (url.templateArgs.type == "node")
-		{
+		if (url.templateArgs.type == "node") {
 			var childNodes = [];
 
 			parent = resolveNode(nodeRef);
-			if (parent === null && argsXPath === null) {
+			if (!parent && !argsXPath) {
 				status.setCode(status.STATUS_NOT_FOUND, "Not a valid nodeRef: '" + nodeRef + "'");
 				return null;
 			}
-			if (argsRootNode != null){
+			if (argsRootNode){
 				rootNode = resolveNode(argsRootNode) || businessPlatform.getHomeRef();
 			}
 
-			if (parent != null && (argsSearchTerm == null || argsSearchTerm == "") && (argsAdditionalFilter== null || argsAdditionalFilter == "") && (filter== null || filter == ""))  {
+			if (parent && !argsSearchTerm && !argsAdditionalFilter && !filter)  {
 				var ignoreTypes = null;
-                if (argsFilterType != null) {
+                if (argsFilterType) {
                     if (logger.isLoggingEnabled()) {
                         logger.log("ignoring types = " + argsFilterType);
                     }
@@ -159,28 +146,32 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
                 childNodes = base.getChilds(parent, childType, ignoreTypes, maxResults, skipCount, sortProp, true, true, doNotCheck, useOnlyInSameOrg).page;
 			} else {
 				var parentXPath = null, query;
-				if (parent != null) {
+				if (parent) {
 					parentXPath = parent.getQnamePath();
-				} else if (argsXPath != null) {
+				} else if (argsXPath) {
 					parentXPath = argsXPath;
 				}
 
-				if (parentXPath === null) {
+				if (!parentXPath) {
 					status.setCode(status.STATUS_NOT_FOUND, "Not a valid parent xPath");
 					return null;
 				}
 
-				query = getFilterParams('' + argsSearchTerm, parentXPath);
+				/*оставил для совместимости (если вдруг где-то существует переопределенный скрипт) передачу пустой строки при отсутствии параметра*/
+				query = getFilterParams(argsSearchTerm ? argsSearchTerm : "", parentXPath);
 
                 if (showNotSelectable != "true") { //включим фильтрацию по типам/аспектам
                     var selectableQuery = getItemSelectableQuery(argsSelectableType, showFolders);
-                    if (selectableQuery !== "") {
-                        query = (query !== "" ? (query + ' AND (') : '(') + selectableQuery + ')';
+                    if (selectableQuery) {
+                        query = (query ? (query + ' AND (') : '(') + selectableQuery + ')';
                     }
                 }
 
-				query = addAdditionalFilter(query, "" + searchQueryProcessor.processQuery(argsAdditionalFilter));
-				if (filter != null) {
+				if (argsAdditionalFilter) {
+					query = addAdditionalFilter(query, "" + searchQueryProcessor.processQuery(argsAdditionalFilter));
+				}
+
+				if (filter) {
 					query = addAdditionalFilter(query, filter);
 				}
 
@@ -188,16 +179,15 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 					query = addAdditionalFilter(query, "{{IN_SAME_ORGANIZATION({strict:" + useOnlyInSameOrg + "})}}");
 				}
 
-                query = (query !== "" ? (query + ' AND ') : '') + "NOT @lecm\\-dic\\:active:false";
+                query = (query ? (query + ' AND ') : '') + "NOT @lecm\\-dic\\:active:false";
 
 				// Query the nodes - passing in default sort and result limit parameters
-				if (query !== "")
-				{
+				if (query) {
 					var sort = [{
 						column: "@" + sortProp,
 						ascending: true
 					}];
-					if (argsSearchTerm != null && argsSearchTerm.length > 0) {
+					if (argsSearchTerm && argsSearchTerm.length) {
 						sort.splice(0, 0, {
 							column: "score",
 							ascending: false
@@ -208,8 +198,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 						{
 							query: searchQueryProcessor.processQuery(query),
 							language: "fts-alfresco",
-							page:
-							{
+							page: {
 								skipCount: skipCount,
 								maxItems: maxResults
 							},
@@ -221,34 +210,31 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 			// retrieve the children of this node
 
 			// Ensure folders and folderlinks appear at the top of the list
-			var containerResults = new Array(),
-				contentResults = new Array();
+			var containerResults = [],
+				contentResults = [];
 
 			for each (var result in childNodes)
 			{
-                if (result.isContainer || result.type == "{http://www.alfresco.org/model/application/1.0}folderlink")
-                {
-                    resultObj =
-                    {
-                        item: result,
-                        selectable: isItemSelectable(result, argsSelectableType)
-                    };
-                    containerResults.push(resultObj);
-                }
-                else
-                {
-                    // wrap result and determine if it is selectable in the UI
-                    resultObj =
-                    {
-                        item: result,
-                        selectable: isItemSelectable(result, argsSelectableType)
-                    };
-                    //проверку можно оставить, так как используется на данный момент в одном месте - при выборе логотипа организации
-                    // и в том месте ограничение по максимальному числу результатов остутсвует (=1000 - то есть все элементы на одном уровне репозитория)
-                    if (checkDocType(result, docType)) {
-                        contentResults.push(resultObj);
-                    }
-                }
+				if (result.isContainer || result.type == "{http://www.alfresco.org/model/application/1.0}folderlink") {
+					resultObj =
+					{
+						item: result,
+						selectable: isItemSelectable(result, argsSelectableType)
+					};
+					containerResults.push(resultObj);
+				} else {
+					// wrap result and determine if it is selectable in the UI
+					resultObj =
+					{
+						item: result,
+						selectable: isItemSelectable(result, argsSelectableType)
+					};
+					//проверку можно оставить, так как используется на данный момент в одном месте - при выборе логотипа организации
+					// и в том месте ограничение по максимальному числу результатов остутсвует (=1000 - то есть все элементы на одном уровне репозитория)
+					if (checkDocType(result, docType)) {
+						contentResults.push(resultObj);
+					}
+				}
 
 				if (argsUseObjectDescription) {
 					resultObj.visibleName = substitude.getObjectDescription(result);
@@ -263,16 +249,15 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 				var path = "/";
 				var simplePath = "/";
 
-				if (argsPathRoot != null) {
+				if (argsPathRoot) {
 					var rootNodes = search.xpathSearch(argsPathRoot);
-					if (rootNodes.length > 0)
-					{
+					if (rootNodes.length) {
 						var pathRoot = rootNodes[0];
 						var temp = result.parent;
-						while (temp != null && !temp.equals(pathRoot)) {
+						while (temp && !temp.equals(pathRoot)) {
 							var pathNodeName;
-							if (argsPathNameSubstituteString != null) {
-								if (argsPathNameSubstituteString.length > 0) {
+							if (argsPathNameSubstituteString) {
+								if (argsPathNameSubstituteString.length) {
 									pathNodeName = substitude.formatNodeTitle(temp, argsPathNameSubstituteString);
 								} else {
 									pathNodeName = substitude.getObjectDescription(temp);
@@ -300,34 +285,26 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 				});
 			}
 			results = containerResults.concat(contentResults);
-		}
-		else if (url.templateArgs.type == "category")
-		{
+		} else if (url.templateArgs.type == "category") {
 			var catAspect = getArg('aspect', isPost, itemParams) ? getArg('aspect', isPost, itemParams) : "cm:generalclassifiable";
 
 			// TODO: Better way of finding this
 			var rootCategories = classification.getRootCategories(catAspect);
-			if (rootCategories != null && rootCategories.length > 0)
-			{
+			if (rootCategories && rootCategories.length) {
 				rootNode = rootCategories[0].parent;
-				if (nodeRef == "alfresco://category/root")
-				{
+				if (nodeRef == "alfresco://category/root") {
 					parent = rootNode;
 					categoryResults = classification.getRootCategories(catAspect);
 				}
-				else
-				{
+				else {
 					parent = search.findNode(nodeRef);
 					categoryResults = parent.children;
 				}
 
-				if (argsSearchTerm != null)
-				{
+				if (argsSearchTerm) {
 					var filteredResults = [];
-					for each (result in categoryResults)
-					{
-						if (result.properties.name.indexOf(argsSearchTerm) == 0)
-						{
+					for each(result in categoryResults){
+						if (result.properties.name.indexOf(argsSearchTerm) == 0) {
 							filteredResults.push(result);
 						}
 					}
@@ -336,8 +313,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 				categoryResults.sort(sortByName);
 
 				// make each result an object and indicate it is selectable in the UI
-				for each (var result in categoryResults)
-				{
+				for each (var result in categoryResults){
 					results.push(
 						{
 							item: result,
@@ -345,34 +321,27 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 						});
 				}
 			}
-		}
-		else if (url.templateArgs.type == "authority")
-		{
-			if (argsSelectableType == "cm:person" || argsSelectableType.indexOf("cm:person") > 0)
-			{
+		} else if (url.templateArgs.type == "authority") {
+			if (argsSelectableType == "cm:person" || argsSelectableType.indexOf("cm:person") > 0) {
 				findUsers(argsSearchTerm, maxResults, results);
-			}
-			else if (argsSelectableType == "cm:authorityContainer" || argsSelectableType.indexOf("cm:authorityContainer") > 0)
-			{
+			} else if (argsSelectableType == "cm:authorityContainer" || argsSelectableType.indexOf("cm:authorityContainer") > 0) {
 				findGroups(argsSearchTerm, maxResults, results);
-			}
-			else
-			{
+			} else {
 				// combine groups and users
 				findGroups(argsSearchTerm, maxResults, results);
 				findUsers(argsSearchTerm, maxResults, results);
 			}
 		}
 
-		if (logger.isLoggingEnabled())
+		if (logger.isLoggingEnabled()) {
 			logger.log("Found " + results.length + " results");
-	}
-	catch (e)
-	{
+		}
+	} catch (e) {
 		var msg = e.message;
 
-		if (logger.isLoggingEnabled())
-			logger.log(msg);
+		if (logger.isWarnLoggingEnabled()) {
+			logger.warn(msg);
+		}
 
 		status.setCode(500, msg);
 
@@ -394,16 +363,17 @@ function getPickerChildrenItems(filter, doNotCheckAccess, isPost, itemParams)
 }
 
 function getArg(argName, isPost, itemParams) {
+	var argValue;
 	if (itemParams && itemParams.hasOwnProperty(argName)) {
 		// Получение аргумента из объекта переметров элемента
-		return itemParams[argName];
-	} else if (isPost) {
-		// Получение аргумента для POST-запроса
-		return json.has(argName) ? json.get(argName) : null;
+		argValue = itemParams[argName];
+	} else if (isPost && json.has(argName)) {
+		argValue = json.get(argName);
 	} else {
 		// Получение аргумента для GET-запроса
-		return args[argName];
+		argValue = args[argName];
 	}
+	return argValue ? '' + argValue : null;
 }
 
 function getItemSelectableQuery(selectableType, showFolders) {
@@ -414,7 +384,7 @@ function getItemSelectableQuery(selectableType, showFolders) {
 		typesLength = types.length;
 		for (var i = 0; i < typesLength; i++) {
 			type = types[i];
-			if (type.length > 0) {
+			if (type.length) {
 				var isAspect = base.isAspect(type);
 				selectable += (selectable ? " OR " : "") + (isAspect ? "ASPECT:" : "TYPE:") + '"' + type + '"';
             }
@@ -432,10 +402,10 @@ function getItemSelectableQuery(selectableType, showFolders) {
 function isItemSelectable(node, selectableType) {
     var selectable = true;
 
-    if (selectableType !== null && selectableType !== "") {
+    if (selectableType) {
         var types = selectableType.split(",");
         for (var i = 0; i < types.length; i++) {
-            if (types[i].length > 0) {
+            if (types[i].length) {
                 selectable = node.isSubType(types[i]);
                 if (!selectable) {
                     // the selectableType could also be an aspect,
@@ -454,21 +424,19 @@ function isItemSelectable(node, selectableType) {
 }
 
 /* Sort the results by case-insensitive name */
-function sortByName(a, b)
-{
+function sortByName(a, b) {
 	return (b.properties.name.toLowerCase() > a.properties.name.toLowerCase() ? -1 : 1);
 }
 
-function findUsers(searchTerm, maxResults, results)
-{
+function findUsers(searchTerm, maxResults, results) {
 	var paging = utils.createPaging(maxResults, -1);
 	var searchResults = groups.searchUsers(searchTerm, paging, "lastName");
 
 	// create person object for each result
-	for each(var user in searchResults)
-	{
-		if (logger.isLoggingEnabled())
+	for each(var user in searchResults) {
+		if (logger.isLoggingEnabled()) {
 			logger.log("found user = " + user.userName);
+		}
 
 		// add to results
 		results.push(
@@ -479,17 +447,17 @@ function findUsers(searchTerm, maxResults, results)
 	}
 }
 
-function findGroups(searchTerm, maxResults, results)
-{
-	if (logger.isLoggingEnabled())
+function findGroups(searchTerm, maxResults, results) {
+	if (logger.isLoggingEnabled()) {
 		logger.log("Finding groups matching pattern: " + searchTerm);
+	}
 
 	var paging = utils.createPaging(maxResults, 0);
 	var searchResults = groups.getGroupsInZone(searchTerm, "APP.DEFAULT", paging, "displayName");
-	for each(var group in searchResults)
-	{
-		if (logger.isLoggingEnabled())
+	for each(var group in searchResults) {
+		if (logger.isLoggingEnabled()) {
 			logger.log("found group = " + group.fullName);
+		}
 
 		// add to results
 		results.push(
@@ -500,10 +468,8 @@ function findGroups(searchTerm, maxResults, results)
 	}
 
 	// sort the groups by name alphabetically
-	if (results.length > 0)
-	{
-		results.sort(function(a, b)
-		{
+	if (results.length) {
+		results.sort(function (a, b) {
 			return (a.item.properties.name < b.item.properties.name) ? -1 : (a.item.properties.name > b.item.properties.name) ? 1 : 0;
 		});
 	}
@@ -518,26 +484,23 @@ function findGroups(searchTerm, maxResults, results)
  * @return The nodeRef of the doclib or "alfresco://company/home" if the node
  *         is not located within a site
  */
-function findDoclib(nodeRef)
-{
+function findDoclib(nodeRef) {
 	var resultNodeRef = "alfresco://company/home";
 
 	// find the given node
 	var node = search.findNode(nodeRef);
-	if (node !== null)
-	{
+	if (node) {
 		// get the name of the site
 		var siteName = node.siteShortName;
 
-		if (logger.isLoggingEnabled())
+		if (logger.isLoggingEnabled()) {
 			logger.log("siteName = " + siteName);
+		}
 
 		// if the node is in a site find the document library node using an XPath search
-		if (siteName !== null)
-		{
+		if (siteName) {
 			var nodes = search.xpathSearch("/app:company_home/st:sites/cm:" + search.ISO9075Encode(siteName) + "/cm:documentLibrary");
-			if (nodes.length > 0)
-			{
+			if (nodes.length) {
 				// there should only be 1 result, get the first one
 				resultNodeRef = String(nodes[0].nodeRef);
 			}
@@ -554,44 +517,30 @@ function findDoclib(nodeRef)
  * @param reference {string} "virtual" nodeRef, nodeRef or xpath expressions
  * @return {ScriptNode|null} Node corresponding to supplied expression. Returns null if node cannot be resolved.
  */
-function resolveNode(reference)
-{
+function resolveNode(reference) {
 	var node = null;
-	try
-	{
-		if (reference == "alfresco://company/home" || reference == "{companyhome}")
-		{
+	try {
+		if (reference == "alfresco://company/home" || reference == "{companyhome}") {
 			node = companyhome;
-		}
-		else if (reference == "alfresco://user/home")
-		{
+		} else if (reference == "alfresco://user/home") {
 			node = userhome;
-		}
-		else if (reference == "alfresco://sites/home")
-		{
+		} else if (reference == "alfresco://sites/home") {
 			node = companyhome.childrenByXPath("st:sites")[0];
-		}
-		else if (reference.indexOf("://") > 0)
-		{
+		} else if (reference.indexOf("://") > 0) {
 			node = search.findNode(reference);
-		}
-		else if (reference.substring(0, 1) == "/")
-		{
+		} else if (reference.substring(0, 1) == "/") {
 			node = search.xpathSearch(reference)[0];
-		}
-		else if (reference == "{organization}") {
+		} else if (reference == "{organization}") {
 			node = companyhome.childByNamePath("Организация");
-		}
-		else if (reference == "{lecmMyPrimaryUnit}")
-		{
+		} else if (reference == "{lecmMyPrimaryUnit}") {
 			node = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee());
-		} else if (reference == "{lecmMyOrganization}")
-		{
+		} else if (reference == "{lecmMyOrganization}") {
 			node = orgstructure.getUnitByOrganization(orgstructure.getEmployeeOrganization(orgstructure.getCurrentEmployee()));
 		}
-	}
-	catch (e)
-	{
+	} catch (e) {
+		if (logger.isWarnLoggingEnabled()) {
+			logger.warn(e.message);
+		}
 		return null;
 	}
 	return node;
@@ -604,8 +553,7 @@ function resolveNode(reference)
  * @param node
  * @return Object representing the person
  */
-function createPersonResult(node)
-{
+function createPersonResult(node) {
 	var personObject =
 	{
 		typeShort: node.typeShort,
@@ -613,14 +561,14 @@ function createPersonResult(node)
 		properties: {},
 		displayPath: node.displayPath,
 		nodeRef: "" + node.nodeRef
-	}
+	};
 
 	// define properties for person
 	personObject.properties.userName = node.properties.userName;
 	personObject.properties.name = (node.properties.firstName ? node.properties.firstName + " " : "") +
 		(node.properties.lastName ? node.properties.lastName : "") +
 		" (" + node.properties.userName + ")";
-	personObject.properties.jobtitle = (node.properties.jobtitle ? node.properties.jobtitle  : "");
+	personObject.properties.jobtitle = (node.properties.jobtitle ? node.properties.jobtitle : "");
 
 	return personObject;
 }
@@ -632,8 +580,7 @@ function createPersonResult(node)
  * @param node
  * @return Object representing the group
  */
-function createGroupResult(node)
-{
+function createGroupResult(node) {
 	var groupObject =
 	{
 		typeShort: node.typeShort,
@@ -641,23 +588,18 @@ function createGroupResult(node)
 		properties: {},
 		displayPath: node.displayPath,
 		nodeRef: "" + node.nodeRef
-	}
+	};
 
 	// find most appropriate name for the group
 	var name = node.properties.name;
-	if (node.properties.authorityDisplayName != null && node.properties.authorityDisplayName.length > 0)
-	{
+	if (node.properties.authorityDisplayName && node.properties.authorityDisplayName.length) {
 		name = node.properties.authorityDisplayName;
 	}
-	else if (node.properties.authorityName != null && node.properties.authorityName.length > 0)
-	{
+	else if (node.properties.authorityName && node.properties.authorityName.length) {
 		var authName = node.properties.authorityName;
-		if (authName.indexOf("GROUP_") == 0)
-		{
+		if (authName.indexOf("GROUP_") == 0) {
 			name = authName.substring(6);
-		}
-		else
-		{
+		} else {
 			name = authName;
 		}
 	}
@@ -669,27 +611,26 @@ function createGroupResult(node)
 }
 
 function trimString(str) {
-  return str.replace(/^\s+|\s+$/g, '');
+  return str ? str.replace(/^\s+|\s+$/g, '') : '';
 }
 
 function escapeString(str) {
-  return str.replace(/"/g, '\\\"');
+  return str ? str.replace(/"/g, '\\\"') : '';
 }
 
-function getFilterParams(filterData, parentXPath)
-{
+function getFilterParams(filterData, parentXPath) {
 	var query = " +PATH:\"" + parentXPath + "//*\"";
 	var columns = [];
-	if (filterData !== "") {
+	if (filterData) {
 		columns = filterData.split('#');
 	}
 
 	var params = "",
 		or = " OR",
 		ampersand = " @";
-	for (var i=0; i < columns.length; i++) {
+	for (var i = 0; i < columns.length; i++) {
 		var namespace = columns[i].split(":");
-		if (columns[i+1] == undefined ) {
+		if (!columns[i + 1]) {
 			or = "";
 			ampersand = " @";
 		}
@@ -704,9 +645,9 @@ function getFilterParams(filterData, parentXPath)
 			}
 		}
 
-		params += ampersand + escapeQuery(namespace[0]) + "\\:" + escapeQuery(namespace[1]) + ":"+ '(' + filter + ')' + or;
+		params += ampersand + escapeQuery(namespace[0]) + "\\:" + escapeQuery(namespace[1]) + ":" + '(' + filter + ')' + or;
 	}
-	if (params !== "") {
+	if (params) {
 		query += " AND " + "(" + params + " )";
 	}
 	return query;
@@ -728,7 +669,7 @@ function addAdditionalFilter(query, additionalParameters) {
 
 function checkDocType(item, docType) {
 	var result = false;
-	if (docType == null) {
+	if (!docType) {
 		return true;
 	}
 	var extns =
@@ -807,7 +748,7 @@ function checkDocType(item, docType) {
 
 function getFilterForAvailableElement(availableElements) {
 	var filter = "=@sys\\:node-uuid:\"00000000\-0000\-0000\-0000\-000000000000\"";
-	if (availableElements != null && availableElements.length > 0) {
+	if (availableElements && availableElements.length) {
 		for (var i = 0; i < availableElements.length; i++) {
 			filter += " OR =@sys\\:node-uuid:\"" + availableElements[i].nodeRef.getId() + "\"";
 		}

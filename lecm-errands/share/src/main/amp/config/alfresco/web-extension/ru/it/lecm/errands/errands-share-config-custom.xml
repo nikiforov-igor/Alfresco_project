@@ -32,10 +32,12 @@
             <form>
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
                 <field-visibility>
-                    <!-- Важное -->
-                    <show id="lecm-errands:is-important"/>
                     <!-- Статус -->
                     <show id="lecm-statemachine:status" force="true"/>
+                    <!-- Важное -->
+                    <show id="lecm-errands:is-important"/>
+                    <!-- ПРОСРОЧЕНО -->
+                    <show id="lecm-errands:is-expired"/>
                     <!-- Документ-основание -->
                     <show id="lecm-errands:base-assoc"/>
                     <!-- Основание -->
@@ -99,11 +101,14 @@
                     <set id="lineReports" parent="reports"/>
                     <set id="coexecutors-reports" parent="reports" appearance="title" label-id="title.errands.coexecutors-reports"/>
 
+                    <field id="lecm-statemachine:status" set="statuses">
+                        <control template="/ru/it/lecm/base-share/components/controls/status.ftl" />
+                    </field>
                     <field id="lecm-errands:is-important" set="statuses">
                         <control template="/ru/it/lecm/base-share/components/controls/important.ftl" />
                     </field>
-                    <field id="lecm-statemachine:status" set="statuses">
-                        <control template="/ru/it/lecm/base-share/components/controls/status.ftl" />
+                    <field id="lecm-errands:is-expired" set="statuses">
+                        <control template="/ru/it/lecm/errands/controls/expired.ftl"/>
                     </field>
                     <field id="lecm-errands:base-assoc" set="commonField">
                         <control>
@@ -206,7 +211,7 @@
                         <control template="/ru/it/lecm/errands/controls/execution-reports-table-control.ftl">
                             <control-param name="isTableSortable">true</control-param>
                             <control-param name="sort">lecm-errands-ts:execution-report-create-date|false</control-param>
-                            <control-param name="expandDataSource">components/form?formId=table-structure-expand</control-param>
+                            <control-param name="expandDataSource">lecm/components/form?formId=table-structure-expand</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script4" set="reports">
@@ -360,12 +365,12 @@
                             <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
-                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
@@ -373,7 +378,7 @@
                     </field>
                     <field id="lecm-errands:limitation-date" set="limitation-date">
                         <constraint-handlers>
-                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
@@ -426,7 +431,7 @@
                         <control template="/ru/it/lecm/errands/controls/execution-reports-table-control.ftl">
                             <control-param name="isTableSortable">true</control-param>
                             <control-param name="sort">lecm-errands-ts:execution-report-create-date|false</control-param>
-                            <control-param name="expandDataSource">components/form?formId=table-structure-expand</control-param>
+                            <control-param name="expandDataSource">lecm/components/form?formId=table-structure-expand</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script8" set="lineReports">
@@ -572,6 +577,100 @@
                     </field>
                 </appearance>
             </form>
+            <form id="ord-table-structure-info">
+                <field-visibility>
+                    <show id="ord-item-execution-tree" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="ord-item-execution-tree">
+                        <control template="/ru/it/lecm/eds/controls/execution-tree-control.ftl">
+                            <control-param name="showFirstLevel">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="doc-right-parts">
+                <field-visibility>
+                    <show id="fake:document-actions"/>
+                    <show id="fake:base-doc-actions"/>
+                    <show id="fake:document-metadata"/>
+                    <show id="fake:document-attachments"/>
+                    <show id="fake:document-errands"/>
+                    <show id="fake:document-workflows"/>
+                    <show id="fake:document-connections"/>
+                    <show id="fake:document-members"/>
+                    <show id="fake:document-tags"/>
+                    <show id="fake:document-history"/>
+                    <show id="fake:document-forms"/>
+                    <show id="fake:comments"/>
+                </field-visibility>
+                <appearance>
+                    <field id="fake:document-actions">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/dashlets/document-actions</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:base-doc-actions">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">lecm/components/dashlets/base-doc-actions</control-param>
+                            <control-param name="baseDocAssocName">lecm-errands:additional-document-assoc</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-metadata">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-meta</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-attachments">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-attachments</control-param>
+                            <control-param name="baseDocAssocName">lecm-errands:additional-document-assoc</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-errands">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-errands</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-workflows">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-workflows</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-connections">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/connections</control-param>
+                            <control-param name="excludeType">lecm-errands:document</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-members">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-members</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-tags">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-tags</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-history">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-history</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-forms">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/forms</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:comments">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/comments</control-param>
+                            <control-param name="activityType">document</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 
@@ -701,12 +800,12 @@
                             <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
-                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
@@ -714,7 +813,7 @@
                     </field>
                     <field id="lecm-errands:limitation-date" set="limitation-date">
                         <constraint-handlers>
-                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
@@ -1180,7 +1279,7 @@
                             <control-param name="changeItemsFireAction">initiatorChanged</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-radio" set="limitation-date"  mandatory="true">
@@ -1189,12 +1288,12 @@
                             <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
-                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-errands:limitation-date-type" set="limitation-date">
@@ -1205,7 +1304,7 @@
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
@@ -1559,7 +1658,7 @@
                             <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-base-dummy-aspects:script" set="limitation-date">
@@ -1569,7 +1668,7 @@
                     </field>
                     <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
                         <constraint-handlers>
-                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Resolutions.ErrandsExecutionDateValidation" message-id="message.errandExecutionDate.laterResolution" event="keyup"/>
                         </constraint-handlers>
                     </field>
@@ -1581,7 +1680,7 @@
                             <control-param name="maxLimitArg">parentDocLimitationDate</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint message-id="Alfresco.forms.validation.mandatory.message" type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Resolutions.ErrandsExecutionDateValidation" message-id="message.errandExecutionDate.laterResolution" event="keyup"/>
                         </constraint-handlers>
                     </field>
@@ -2532,7 +2631,7 @@
                         <control template="/ru/it/lecm/documents/controls/workflow/format-packageItems-document.ftl">
                             <control-param name="substituteString">
                                 <![CDATA[
-					                <a href='/{~SHARE_CONTEXT}/view-metadata?nodeRef={lecm-errands:executor-assoc/nodeRef}'>
+					                <a href='/{~SHARE_CONTEXT}/page/view-metadata?nodeRef={lecm-errands:executor-assoc/nodeRef}'>
 					                    {lecm-errands:executor-assoc/lecm-orgstr:employee-short-name} {lecm-errands:executor-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}
 					                </a>
 				                ]]>
@@ -3405,6 +3504,12 @@
         </forms>
     </config>
 
+    <config evaluator="string-compare" condition="LECMStatemachineWorkflow">
+        <hidden-workflows>
+            <workflow name="activiti$lecm-errands_document"/>
+        </hidden-workflows>
+    </config>
+
     <config evaluator="string-compare" condition="Workflow">
         <hidden-workflows>
             <workflow name="activiti$lecm-errands_document"/>
@@ -3444,6 +3549,12 @@
                     <show id="lecm-errands:dashlet-settings-unexecuted-important"/>
                     <show id="lecm-errands:dashlet-settings-await-execution"/>
                     <show id="lecm-errands:dashlet-settings-await-execution-important"/>
+                    <show id="lecm-errands:dashlet-settings-on-execution"/>
+                    <show id="lecm-errands:dashlet-settings-on-execution-important"/>
+                    <show id="lecm-errands:dashlet-settings-on-check-report"/>
+                    <show id="lecm-errands:dashlet-settings-on-check-report-important"/>
+                    <show id="lecm-errands:dashlet-settings-on-completion"/>
+                    <show id="lecm-errands:dashlet-settings-on-completion-important"/>
                     <show id="lecm-errands:dashlet-settings-expired"/>
                     <show id="lecm-errands:dashlet-settings-expired-important"/>
                     <show id="lecm-errands:dashlet-settings-approaching-deadline"/>

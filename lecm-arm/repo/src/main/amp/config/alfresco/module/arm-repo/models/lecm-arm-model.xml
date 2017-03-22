@@ -94,9 +94,6 @@
 				<property name="lecm-dic:valueContainsType">
 					<default>lecm-arm:node</default>
 				</property>
-				<property name="lecm-arm:types">
-					<mandatory>true</mandatory>
-				</property>
 			</overrides>
             <mandatory-aspects>
                 <aspect>lecm-arm:ordered</aspect>

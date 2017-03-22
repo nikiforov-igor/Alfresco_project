@@ -229,7 +229,6 @@
 			<form id="agenda">
 				<field-visibility>
 					<!--Повестка-->
-					<show id="lecm-meetings-ts:items-assoc-label"/>
 					<show id="lecm-meetings-ts:items-assoc"/>
 					<show id="approve-agenda-label" force="true"/>
 					<!--Требование согласовать повестку-->
@@ -237,11 +236,6 @@
 					<show id="lecm-meetings:approval"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-meetings-ts:items-assoc-label">
-						<control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
-							<control-param name="msg">label.items.bold</control-param>
-						</control>
-					</field>
 					<!--"Повестка"-->
 					<field id="lecm-meetings-ts:items-assoc" label-id="label.items">
 						<control template="/ru/it/lecm/meetings/components/controls/meetings-document-table-control.ftl">
@@ -449,6 +443,49 @@
 							<constraint type="INVALID1" validation-handler="LogicECM.module.Meetings.toDateValidation" message-id="message.validation.toDateValidation" event="change"/>
 							<constraint type="INVALID2" validation-handler="LogicECM.module.Meetings.dateMoreThanCurrentDateValidation" message-id="message.validation.dateMoreThanCurrentDateValidation" event="change"/>
 						</constraint-handlers>
+					</field>
+				</appearance>
+			</form>
+			<form id="doc-right-parts">
+				<field-visibility>
+					<show id="fake:document-actions"/>
+					<show id="fake:meetings-agenda"/>
+					<show id="fake:document-attachments"/>
+					<show id="fake:document-connections"/>
+					<show id="fake:document-history"/>
+					<show id="fake:comments"/>
+				</field-visibility>
+				<appearance>
+					<field id="fake:document-actions">
+						<control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+							<control-param name="uri">/lecm/components/dashlets/document-actions</control-param>
+						</control>
+					</field>
+                    <field id="fake:meetings-agenda">
+						<control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+							<control-param name="uri">/lecm/components/meetings/meeting-agenda</control-param>
+						</control>
+					</field>
+					<field id="fake:document-attachments">
+						<control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+							<control-param name="uri">/lecm/components/document/document-attachments</control-param>
+						</control>
+					</field>
+					<field id="fake:document-connections">
+						<control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+							<control-param name="uri">/lecm/components/document/connections</control-param>
+						</control>
+					</field>
+					<field id="fake:document-history">
+						<control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+							<control-param name="uri">/lecm/components/document/document-history</control-param>
+						</control>
+					</field>
+					<field id="fake:comments">
+						<control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+							<control-param name="uri">/lecm/components/document/comments</control-param>
+							<control-param name="activityType">document</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>
@@ -1067,7 +1104,8 @@
 					<field id="lecm-meetings-ts:coreporter-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="items">employee,representative</control-param>
-							<control-param name="showAutocomplete">false</control-param>
+							<control-param name="showAutocomplete">true</control-param>
+							<control-param name="autocompleteDataSourceMethodPost">true</control-param>
 							<control-param name="dataSourceLogic">OR</control-param>
 							<control-param name="sortSelected">true</control-param>
 							<!-- lecm-orgstr:employee -->
@@ -1178,7 +1216,8 @@
 					<field id="lecm-meetings-ts:coreporter-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="items">employee,representative</control-param>
-							<control-param name="showAutocomplete">false</control-param>
+							<control-param name="showAutocomplete">true</control-param>
+							<control-param name="autocompleteDataSourceMethodPost">true</control-param>
 							<control-param name="dataSourceLogic">OR</control-param>
 							<control-param name="sortSelected">true</control-param>
 							<!-- lecm-orgstr:employee -->
@@ -1276,7 +1315,8 @@
 					<field id="lecm-meetings-ts:coreporter-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
 							<control-param name="items">employee,representative</control-param>
-							<control-param name="showAutocomplete">false</control-param>
+							<control-param name="showAutocomplete">true</control-param>
+							<control-param name="autocompleteDataSourceMethodPost">true</control-param>
 							<control-param name="dataSourceLogic">OR</control-param>
 							<control-param name="sortSelected">true</control-param>
 							<!-- lecm-orgstr:employee -->
@@ -1431,6 +1471,12 @@
 	</config>
 
 	<config evaluator="string-compare" condition="Workflow">
+		<hidden-workflows>
+			<workflow name="activiti$lecm-meetings_document"/>
+		</hidden-workflows>
+	</config>
+
+	<config evaluator="string-compare" condition="LECMStatemachineWorkflow">
 		<hidden-workflows>
 			<workflow name="activiti$lecm-meetings_document"/>
 		</hidden-workflows>

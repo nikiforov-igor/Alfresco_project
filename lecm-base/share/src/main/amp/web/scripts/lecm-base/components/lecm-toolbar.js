@@ -477,7 +477,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
             onSelectedItemsChanged: function Toolbar_onSelectedItemsChanged(layer, args) {
                 if (this.modules.dataGrid && this.modules.dataGrid._hasEventInterest(args[1])) {
-                    var items = this.modules.dataGrid.getSelectedItems();
+                    var items = this.modules.dataGrid.getAllSelectedItems();
                     for (var index in this.groupActions) {
                         if (this.groupActions.hasOwnProperty(index)) {
                             var action = this.groupActions[index];

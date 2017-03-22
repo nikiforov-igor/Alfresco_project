@@ -38,8 +38,16 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
     YAHOO.lang.augmentObject(LogicECM.DocumentWorkflows.prototype,
         {
             onReady: function DocumentWorkflows_onReady() {
-                var linkEl = Dom.get(this.id + "-action-expand");
-                linkEl.onclick = this.onExpand.bind(this);
+                var expandButton = Dom.getElementsByClassName('workflows-expand');
+                Event.addListener(expandButton, 'click', this.onExpand, this, true);
+
+                LogicECM.services = LogicECM.services || {};
+                if(LogicECM.services.documentViewPreferences) {
+                    var lastCustomPanelViewTitle = this.getLastCustomPanelView();
+                    if (lastCustomPanelViewTitle == this.getTitle() && this.isSplitPanel()) {
+                        this.onExpand();
+                    }
+                }
             },
 
             onExpand: function () {

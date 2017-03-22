@@ -103,6 +103,9 @@
 			<control id="select-one-with-empty" template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl" localName="Выпадающий список для выбора значения с пустым значением по умолчанию">
 				<param id="options" localName="Перечень значений для выбора" description="Значения для выбора задаются в формате значение1|заголовок1,значение2|заголовок2 и тд."/>
 			</control>
+			<control id="right-part-dashlet" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Дашлет в правой области">
+				<param id="uri" localName="Адрес веб-скрипта" mandatory="true"/>
+			</control>
 		</controls-templates>
 	</config>
 </alfresco-config>

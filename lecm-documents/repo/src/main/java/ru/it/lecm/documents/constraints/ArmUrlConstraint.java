@@ -1,5 +1,8 @@
 package ru.it.lecm.documents.constraints;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.alfresco.repo.dictionary.constraint.AbstractConstraint;
 
 /**
@@ -20,10 +23,20 @@ public class ArmUrlConstraint extends AbstractConstraint {
 
 	@Override
 	public String getType() {
-		return "LECM_PRESENT_STRING";
+		return "LECM_ARM_URL";
 	}
 
 	@Override
 	protected void evaluateSingleValue(Object value) {
 	}
+	
+	@Override
+    public Map<String, Object> getParameters()
+    {
+        Map<String, Object> params = new HashMap<String, Object>(1);
+        
+        params.put("armUrl", this.armUrl);
+        
+        return params;
+    }
 }

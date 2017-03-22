@@ -58,7 +58,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             if (this.doubleClickLock) return;
             this.doubleClickLock = true;
 			var form = new Alfresco.module.SimpleDialog(this.id + "-signs-short-form");
-            
+
 			form.setOptions({
 				width: "50em",
 				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
@@ -76,6 +76,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				doBeforeDialogShow:{
 					fn: function( p_form, p_dialog ) {
                         this.doubleClickLock = false;
+						Dom.addClass(p_dialog.dialog.element, "visible-force-hidden");
 						p_dialog.dialog.setHeader(this.msg("title.signing_info"));
 						p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id, force: true}, this);
 						p_form.doBeforeFormSubmit = {
@@ -143,15 +144,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onUploadSignature: function(event) {
-            var localSign = Dom.get(this.id+"-localSign"); 
+            var localSign = Dom.get(this.id+"-localSign");
             localSign.click();
 		},
-        
+
         handleClientLocalSign: function(evt) {
             if (!window.FileReader) {
                 Alfresco.util.PopupManager.displayMessage({	text: 'Подписи не загружены, браузер не поддерживает FileAPI' });
                 return;
-            } 
+            }
             var oFile = evt.target.files[0];
             var oFReader = new FileReader();
             if (!YAHOO.lang.isFunction(oFReader.readAsDataURL)) {
@@ -159,14 +160,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 return;
             }
             oFReader.onload = this.oFileReaderOnLoad.bind(this);
-            oFReader.readAsText(oFile);            
+            oFReader.readAsText(oFile);
         },
-        
-        oFileReaderOnLoad: function(oFREvent) { 
+
+        oFileReaderOnLoad: function(oFREvent) {
             var sFileData = oFREvent.target.result;
             CryptoApplet.loadSignAction(this.options.nodeRef, sFileData, {successCallback: {fn: this.checkSigned, scope: this}});
 	    },
-        
+
         onExportSignature: function(event) {
 			CryptoApplet.exportSignAction(this.options.nodeRef);
 		},
@@ -389,7 +390,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 							if(result.gateResponse.responseType == "UNAUTHORIZED") {
 								// Показываем форму авторизации, в ином случае
-								
 
 								authSimpleDialog = new Alfresco.module.SimpleDialog(id + "-auth-form");
 

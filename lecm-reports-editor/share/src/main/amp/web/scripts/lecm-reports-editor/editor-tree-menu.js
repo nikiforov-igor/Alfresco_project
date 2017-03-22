@@ -51,7 +51,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
             this.expiresDate = date;
 
             var menu = this;
-            var menuPref = LogicECM.module.Base.Util.getCookie(this.PREFERENCE_KEY  + LogicECM.currentUser);
+            var menuPref = LogicECM.module.Base.Util.getCookie(this.PREFERENCE_KEY  + encodeURIComponent(LogicECM.currentUser));
             if (menuPref !== null) {
                 menu.menuState = YAHOO.lang.JSON.parse(menuPref);
             } else {
@@ -109,7 +109,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                 this.menuState.expanded = this.menuState.expanded.substr(1, this.menuState.expanded.length - 1);
             }
 
-            LogicECM.module.Base.Util.setCookie(this.PREFERENCE_KEY  + LogicECM.currentUser, this._buildPreferencesValue(), {expires:this.expiresDate});
+            LogicECM.module.Base.Util.setCookie(this.PREFERENCE_KEY  + encodeURIComponent(LogicECM.currentUser), this._buildPreferencesValue(), {expires:this.expiresDate});
         },
 
         onExpand: function (oNode) {
@@ -121,7 +121,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                 this.menuState.expanded = this.menuState.expanded.substr(1, this.menuState.expanded.length - 1);
             }
 
-            LogicECM.module.Base.Util.setCookie(this.PREFERENCE_KEY  + LogicECM.currentUser, this._buildPreferencesValue(), {expires:this.expiresDate});
+            LogicECM.module.Base.Util.setCookie(this.PREFERENCE_KEY  + encodeURIComponent(LogicECM.currentUser), this._buildPreferencesValue(), {expires:this.expiresDate});
         },
 
         onExpandComplete: function (oNode) {
@@ -267,7 +267,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                         execScripts: true
                     });
 
-                LogicECM.module.Base.Util.setCookie(this.PREFERENCE_KEY + LogicECM.currentUser, this._buildPreferencesValue(), {expires: this.expiresDate});
+                LogicECM.module.Base.Util.setCookie(this.PREFERENCE_KEY + encodeURIComponent(LogicECM.currentUser), this._buildPreferencesValue(), {expires: this.expiresDate});
             }
         },
 

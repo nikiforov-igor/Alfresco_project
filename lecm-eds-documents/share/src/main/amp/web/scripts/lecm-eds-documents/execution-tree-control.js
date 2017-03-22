@@ -48,7 +48,8 @@ LogicECM.module = LogicECM.module || {};
             options: {
                 documentNodeRef: null,
                 formId: null,
-                fieldId: null
+                fieldId: null,
+                showFirstLevel: null
             },
 
             folerUrl: Alfresco.constants.PROXY_URI + "/lecm/eds/tree/execution/datasource?documentNodeRef={documentNodeRef}",
@@ -57,11 +58,11 @@ LogicECM.module = LogicECM.module || {};
             onReady: function () {
                 if (this.options.documentNodeRef) {
                     this.receivedItems[this.options.documentNodeRef] = 0;
-                    this.layerByLayer(YAHOO.lang.substitute(this.folerUrl, {
-                        documentNodeRef: this.options.documentNodeRef
+                    this.layerByLayer(YAHOO.lang.substitute(this.folerUrl + "&showFirstLevel={showFirstLevel}", {
+                        documentNodeRef: this.options.documentNodeRef,
+                        showFirstLevel: this.options.showFirstLevel.toString()
                     }), this.id + "-expandable-table");
                 }
-
                 LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
             },
 
@@ -303,7 +304,7 @@ LogicECM.module = LogicECM.module || {};
                         url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                         dataObj: {
                             nodeRef: nodeRef,
-                            substituteString: "{lecm-eds-aspect:execution-statistics}#{lecm-resolutions:base-document-assoc/lecm-review-ts:doc-review-statistics}"
+                            substituteString: "{lecm-eds-aspect:execution-statistics}#{lecm-review-aspects:related-review-statistics}"
                         },
                         successCallback: {
                             fn: function (response) {

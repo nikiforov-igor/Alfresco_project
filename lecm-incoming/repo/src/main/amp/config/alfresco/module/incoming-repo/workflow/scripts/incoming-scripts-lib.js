@@ -14,26 +14,41 @@ var LECMIncomingActions = {
                 var allResolutionsFinal = true;
                 var childResolutions = document.sourceAssocs["lecm-resolutions:base-document-assoc"];
                 if (childResolutions) {
-                    allResolutionsFinal = childErrands.every(function (resolution) {
+                    allResolutionsFinal = childResolutions.every(function (resolution) {
                         return statemachine.isFinal(resolution.nodeRef.toString());
                     });
                 }
 
                 if (allResolutionsFinal) {
+                    var hasErrands = childErrands && childErrands.length;
                     var allExecutedErrands = true;
-                    if (childErrands) {
+                    if (hasErrands) {
                         allExecutedErrands = childErrands.every(function (errand) {
                             return errand.properties["lecm-statemachine:status"] == "Исполнено";
                         });
                     }
+                    var hasResolutions = childResolutions && childResolutions.length;
                     var allExecutedResolutions = true;
-                    if (childResolutions) {
+                    if (hasResolutions) {
                         allExecutedResolutions = childResolutions.every(function (resolution) {
                             return resolution.properties["lecm-statemachine:status"] == "Завершено";
                         });
                     }
+                    var hasReview = false;
+                    var allReviewReviewed = true;
+                    var reviewTable = document.associations['lecm-review-ts:review-table-assoc'];
+                    if (reviewTable && reviewTable.length) {
+                        var reviewRecords = documentTables.getTableDataRows(reviewTable[0].nodeRef.toString());
+                        hasReview = reviewRecords && reviewRecords.length;
+                        if (hasReview) {
+                            allReviewReviewed = reviewRecords.every(function (record) {
+                                return record.properties["lecm-review-ts:review-state"] == "REVIEWED";
+                            });
+                        }
+                    }
 
-                    if (reviewState == "COMPLETE" && allExecutedErrands && allExecutedResolutions) {
+                    if (allReviewReviewed && allExecutedErrands && allExecutedResolutions
+                        && (hasErrands || hasResolutions || hasReview)) {
                         lecmPermission.pushAuthentication();
                         lecmPermission.setRunAsUserSystem();
                         document.properties["lecm-incoming:auto-transition-to-execute"] = true;

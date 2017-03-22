@@ -12,7 +12,7 @@ var DocumentUtils = {
 	},
 	getNodeDetails: function getNodeDetails(nodeRef, site, options) {
 		if (nodeRef) {
-			var url = '/slingshot/doclib2/node/' + nodeRef.replace('://', '/');
+			var url = '/lecm/node/' + nodeRef.replace('://', '/');
 			if (!site) {
 				// Repository mode
 				url += "?libraryRoot=" + encodeURIComponent(DocumentUtils.getRootNode());

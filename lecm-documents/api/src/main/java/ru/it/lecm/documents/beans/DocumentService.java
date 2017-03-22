@@ -340,7 +340,8 @@ public interface DocumentService {
      * @param expression
      * @return
      */
-    public String execStringExpression(NodeRef document, String expression);
+    String execStringExpression(NodeRef document, String expression);
+    String execStringExpression(NodeRef document, String expression, boolean withContext);
 
     /**
      * Установить настройки финализации в папку подразделения

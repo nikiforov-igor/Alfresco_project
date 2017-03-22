@@ -4,7 +4,7 @@
 
 function main() {
     AlfrescoUtil.param("nodeRef");
-	var inclBaseDoc = ('' + AlfrescoUtil.param("inclBaseDoc", "false")) == "true";
+    model.baseDocAssocName = AlfrescoUtil.param("baseDocAssocName", null);
 
 	model.hasViewListPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
 	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
@@ -34,9 +34,9 @@ function main() {
         if (cats != null) {
             model.categories = cats.categories;
 
-	        if (inclBaseDoc) {
+	        if (model.baseDocAssocName) {
 		        model.categories.push({
-			        nodeRef: "base-document-attachments/" + model.nodeRef.replace(":/", ""),
+			        nodeRef: "base-document-attachments/" + model.nodeRef.replace(":/", "") + "/" + model.baseDocAssocName,
 			        name: msg.get("label.attachments.base-document"),
 			        path: "",
 			        isReadOnly: true
@@ -95,7 +95,7 @@ function main() {
 	}
 
 	model.allActions = allActions;
-}
+};
 
 function getCategories(nodeRef, defaultValue) {
     var url = '/lecm/document/attachments/api/categories?documentNodeRef=' + nodeRef;

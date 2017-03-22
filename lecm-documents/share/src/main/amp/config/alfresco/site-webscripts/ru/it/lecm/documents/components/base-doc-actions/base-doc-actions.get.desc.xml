@@ -1,0 +1,5 @@
+<webscript>
+    <shortname>Действия с документом-основанием</shortname>
+    <description>Компонент "Действия с документом-основанием"</description>
+    <url>/lecm/components/dashlets/base-doc-actions?baseDocAssocName={baseDocAssocName}</url>
+</webscript>

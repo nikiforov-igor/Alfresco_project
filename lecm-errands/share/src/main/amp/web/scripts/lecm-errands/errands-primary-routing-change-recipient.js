@@ -28,9 +28,9 @@
                             fn: function (response) {
                                 var additionalFilter;
                                 if (response.json) {
-                                    additionalFilter = "@lecm\\-errands\\-dic\\:errand\\-type\\-launch\\-review:true"
+                                    additionalFilter = "@lecm\\-errands\\-dic\\:errand\\-type\\-manual\\-selection:true AND @lecm\\-errands\\-dic\\:errand\\-type\\-launch\\-review:true"
                                 } else {
-                                    additionalFilter = "@lecm\\-errands\\-dic\\:errand\\-type\\-launch\\-review:false"
+                                    additionalFilter = "@lecm\\-errands\\-dic\\:errand\\-type\\-manual\\-selection:true AND @lecm\\-errands\\-dic\\:errand\\-type\\-launch\\-review:false"
                                 }
 
                                 LogicECM.module.Base.Util.reInitializeControl(formId, "lecm-errands:type-assoc", {

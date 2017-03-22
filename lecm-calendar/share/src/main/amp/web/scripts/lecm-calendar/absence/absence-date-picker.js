@@ -26,6 +26,10 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 		// Initialise prototype properties
 		this.widgets = {};
 
+		if(!$.inputmask) {
+			$.noConflict();
+			$ = $ || jQuery; // Возможен вариант, когда предыдущей версии нету, восстановим что есть
+		}
 		return this;
 	};
 
@@ -64,13 +68,15 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			} else if (this.options.dateDefault && this.options.dateDefault.length) {
 				this.options.currentValue = this._getDateByKey(this.options.dateDefault);
 			}
+		} else {
+			this.options.currentValue = Alfresco.util.fromISO8601(this.options.currentValue);
 		}
 		// Calculate current date
 		var theDate = this.options.currentValue ? this.options.currentValue : new Date();
 
 		var page = (theDate.getMonth() + 1) + "/" + theDate.getFullYear();
 		var selected = (theDate.getMonth() + 1) + "/" + theDate.getDate() + "/" + theDate.getFullYear();
-		
+
 		// Populate the input fields
 		if (this.options.currentValue) {
 			// show the formatted date
@@ -114,6 +120,12 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			// Focus icon after calendar is closed
 			Dom.get(this.id + "-icon").focus();
 		}, this, true);
+
+		if (this.options.mask) {
+			$("#" + this.id + "-date").inputmask(this.options.mask, {
+				placeholder: this.options.placeholder
+			});
+		}
 		Event.addListener(this.id + "-date", "keyup", this._handleFieldChange, this, true);
 		Event.addListener(this.id + "-time", "keyup", this._handleFieldChange, this, true);
 

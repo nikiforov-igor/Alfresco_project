@@ -10,6 +10,14 @@
                 <property name="cm:name">Смена статуса пункта</property>
                 <property name="lecm-busjournal:eventCategory-code">POINT_STATUS_CHANGE</property>
             </item>
+            <item name="cm:Исполнение пункта" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Исполнение пункта</property>
+                <property name="lecm-busjournal:eventCategory-code">POINT_EXECUTED</property>
+            </item>
+            <item name="cm:Завершение работы по пункту" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Завершение работы по пункту ОРД</property>
+                <property name="lecm-busjournal:eventCategory-code">POINT_COMPLETED</property>
+            </item>
         </items>
     </item>
 </items>

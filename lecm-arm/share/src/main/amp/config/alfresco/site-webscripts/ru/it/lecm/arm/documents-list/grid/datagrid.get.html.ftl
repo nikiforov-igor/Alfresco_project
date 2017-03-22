@@ -12,34 +12,12 @@
 
 <#assign id = args.htmlid>
 
-<#assign filtersId = "arm-filters-toolbar-" + id/>
-
-<div id="${filtersId}" class="arm-filters-bar">
-<@comp.baseToolbar filtersId true false false>
-    <div>
-        <span class="arm-filters-label">
-	        ${msg("arm.filters.current")} (<a href="javascript:void(0);" id="${filtersId}-delete-all-link">${msg("arm.delete.all-filters")}</a>):
-        </span>
-	    <span id="${filtersId}-current-filters"></span>
-    </div>
-</@comp.baseToolbar>
-</div>
-
-<script type="text/javascript">//<![CDATA[
-function initFilters() {
-    new LogicECM.module.ARM.Filters("${filtersId}").setMessages(${messages}).setOptions({
-        bubblingLabel: "documents-arm"
-    });
-}
-YAHOO.util.Event.onContentReady("${filtersId}", initFilters);
-//]]></script>
-
 <div class="yui-t1" id="arm-grid">
 	<div id="yui-main-2">
 		<div class="yui-b" id="alf-content">
-		<@grid.datagrid id=id showViewForm=true>
-			<script type="text/javascript">//<![CDATA[
-                YAHOO.util.Event.onContentReady ('${id}', function () {
+        <@grid.datagrid id=id showViewForm=true>
+            <script type="text/javascript">//<![CDATA[
+                (function () {
                     new LogicECM.module.ARM.DataGrid('${id}').setOptions({
                         usePagination: true,
                         pageSize: 20,
@@ -47,7 +25,7 @@ YAHOO.util.Event.onContentReady("${filtersId}", initFilters);
                         searchShowInactive: true,
                         actions: [
                             {
-                            type: "datagrid-action-link-documents-arm",
+                                type: "datagrid-action-link-documents-arm",
                                 id: "onActionViewDocument",
                                 permission: "",
                                 label: "${msg("actions.edit")}"
@@ -66,16 +44,16 @@ YAHOO.util.Event.onContentReady("${filtersId}", initFilters);
                             itemType: "lecm-document:base",
                             datagridFormId: "datagrid-arm",
                             nodeRef: null,
-                            actionsConfig:{
-                                fullDelete:true,
+                            actionsConfig: {
+                                fullDelete: true,
                                 trash: false
                             },
-                            sort:"cm:modified|false"
+                            sort: "cm:modified|false"
                         }
                     }).setMessages(${messages});
-                });
-			//]]></script>
-		</@grid.datagrid>
+                })();
+                //]]></script>
+        </@grid.datagrid>
 		</div>
 	</div>
 </div>

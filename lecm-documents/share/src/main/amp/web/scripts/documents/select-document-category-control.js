@@ -68,19 +68,19 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			populateSelect: function (items) {
+				var i, item, opt;
 				if (items && items.length) {
-					for (var i = 0; i < items.length; i++) {
-						var item = items[i];
-						var opt = document.createElement('option');
-						opt.innerHTML = item.name;
-						opt.value = item.name;
-						if (item.isReadOnly) {
-							opt.disabled = "disabled";
+					for (i = 0; i < items.length; i++) {
+						item = items[i];
+						if (!item.isReadOnly) {
+							opt = document.createElement('option');
+							opt.innerHTML = item.name;
+							opt.value = item.name;
+							if (item.nodeRef == this.options.selectedValue) {
+								opt.selected = true;
+							}
+							this.selectItem.appendChild(opt);
 						}
-						if (item.nodeRef == this.options.selectedValue) {
-							opt.selected = true;
-						}
-						this.selectItem.appendChild(opt);
 					}
 				}
 

@@ -1,17 +1,16 @@
 .connections-list {
-	margin: 0 10px;
+	margin: 0 1em;
 }
-.connections-list .connections-title {
-	width: 100%;
-	padding: 0 .4em .4em;
-}
+.connections-list .connections-title,
 .connections-list .connections-table {
 	width: 100%;
+	padding: 0 0 .4em;
 }
+
 .connections-list .connections-title .connections-name {
 	color: #666666;
 	font-family: Arial;
-	font-size: 20px;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: bold;
 	text-align: left;
@@ -27,12 +26,17 @@
 }
 
 .connections-list .detail-list-item td.icon {
-	width: 70px;
+	width: 32px;
+}
+
+.connections-list .detail-list-item td.icon img {
+	width: 32px;
+	height: 32px;
+	margin-right: 8px;
+	margin-top: 8px;
 }
 
 .connections-list .detail-list-item .connection {
-	padding-left: 20px;
-
 	font-family: Arial;
 	font-size: 13px;
 	font-weight: normal;
@@ -42,12 +46,11 @@
 }
 
 .connections-list .detail-list-item .connection .connection-name {
-	padding-left: 20px;
 }
 
 .connections-list .detail-list-item .connection .connection-name div.document-name {
 	font-family: Arial;
-	font-size: 18px;
+	font-size: 13px;
 	font-weight: normal;
 	font-style: normal;
 }

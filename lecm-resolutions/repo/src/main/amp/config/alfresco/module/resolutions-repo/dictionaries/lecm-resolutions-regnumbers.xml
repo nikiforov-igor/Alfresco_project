@@ -4,15 +4,27 @@
         <items updateMode="CreateOrUpdate">
             <item name="cm:Номер свободной резолюции" type="lecm-regnum:template">
                 <property name="cm:name">Номер свободной резолюции</property>
-                <property name="lecm-regnum:template-string">{#formatNumber('00000', doc.counterYearDoctype)}-{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-string">Р-{#formatNumber('00000', doc.counterYearDoctype)}-{#formatDate('yy', doc.creationDate)}</property>
                 <property name="lecm-regnum:template-comment">Шаблон для номера свободной резолюции</property>
                 <property name="lecm-regnum:template-service-id">RESOLUTION_FREE_NUMBER</property>
             </item>
             <item name="cm:Номер резолюции на основании сущности" type="lecm-regnum:template">
                 <property name="cm:name">Номер резолюции на основании сущности</property>
-                <property name="lecm-regnum:template-string">{doc.associatedAttribute('lecm-resolutions:base-document-assoc', 'lecm-document-aspects:reg-data-number').substring(0, doc.associatedAttribute('lecm-resolutions:base-document-assoc', 'lecm-document-aspects:reg-data-number').length() - 3)}-{doc.attribute("lecm-resolutions:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-string">{doc.associatedAttribute('lecm-resolutions:base-assoc', 'lecm-document-aspects:reg-data-number').substring(0, doc.associatedAttribute('lecm-resolutions:base-assoc', 'lecm-document-aspects:reg-data-number').length() - 3)}-{doc.attribute("lecm-resolutions:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
                 <property name="lecm-regnum:template-comment">Шаблон для номера резолюции, созданного на основании сущности</property>
                 <property name="lecm-regnum:template-service-id">RESOLUTION_ON_BASIS_NUMBER</property>
+            </item>
+            <item name="cm:Номер резолюции на основании Входящего" type="lecm-regnum:template">
+                <property name="cm:name">Номер резолюции на основании Входящего</property>
+                <property name="lecm-regnum:template-string">ВХ-{doc.associatedAttribute('lecm-resolutions:base-assoc', 'lecm-document-aspects:reg-data-number').substring(0, doc.associatedAttribute('lecm-resolutions:base-assoc', 'lecm-document-aspects:reg-data-number').length() - 3)}-{doc.attribute("lecm-resolutions:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для номера резолюции, созданного на основании Входящего</property>
+                <property name="lecm-regnum:template-service-id">RESOLUTION_ON_INCOMING_BASIS_NUMBER</property>
+            </item>
+            <item name="cm:Номер резолюции на основании Внутреннего" type="lecm-regnum:template">
+                <property name="cm:name">Номер резолюции на основании Внутреннего</property>
+                <property name="lecm-regnum:template-string">ВН-{doc.associatedAttribute('lecm-resolutions:base-assoc', 'lecm-document-aspects:reg-data-number').substring(0, doc.associatedAttribute('lecm-resolutions:base-assoc', 'lecm-document-aspects:reg-data-number').length() - 3)}-{doc.attribute("lecm-resolutions:child-index-counter")}-{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для номера резолюции, созданного на основании Внутреннего</property>
+                <property name="lecm-regnum:template-service-id">RESOLUTION_ON_INTERNAL_BASIS_NUMBER</property>
             </item>
         </items>
     </item>

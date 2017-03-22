@@ -44,6 +44,12 @@
 				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
 				<property name="lecm-orgstr:business-role-description"></property>
 			</item>
+            <item name="cm:Резолюции. Читатель" type="lecm-orgstr:business-role">
+                <property name="cm:name">Резолюции. Читатель</property>
+                <property name="lecm-orgstr:business-role-identifier">RESOLUTION_READERS</property>
+                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
+                <property name="lecm-orgstr:business-role-description"> Сотрудники, имеющие доступ на чтение резолюций в СЭД</property>
+            </item>
 		</items>
 	</item>
 </items>

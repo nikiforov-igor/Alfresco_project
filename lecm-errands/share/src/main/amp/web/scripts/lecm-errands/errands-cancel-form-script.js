@@ -20,8 +20,8 @@
     }
 
     function processCancelChildCheckbox(field) {
-        Event.onContentReady(formId + "_assoc_packageItems-added", function () {
-            var errandRef = Dom.get(formId + "_assoc_packageItems-added").value;
+        Event.onContentReady(formId + "_assoc_packageItems", function () {
+            var errandRef = Dom.get(formId + "_assoc_packageItems").value;
             Alfresco.util.Ajax.request({
                 url: Alfresco.constants.PROXY_URI + "lecm/errands/api/hasChildOnLifeCycle",
                 dataObj: {

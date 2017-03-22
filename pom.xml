@@ -32,7 +32,7 @@
        below as the AMP module version. Instead we use the
        buildnumber-maven-plugin. This requires a scm connection.
     -->
-    <version>1.8.6</version>
+    <version>1.8.7</version>
     <description>Logic ECM Platform</description>
     <repositories>
         <repository>
@@ -56,10 +56,6 @@
         <pluginRepository>
             <id>alfresco-public</id>
             <url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>maven-rep</id>
-            <url>https://maven-repository.com/artifact/</url>
         </pluginRepository>
     </pluginRepositories>
     <properties>

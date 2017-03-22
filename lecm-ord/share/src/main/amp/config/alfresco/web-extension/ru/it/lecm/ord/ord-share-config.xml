@@ -23,8 +23,8 @@
 	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document:author-assoc"/>
                     <show id="lecm-eds-document:executor-assoc"/>
-                    <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
+                    <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:execution-date"/>
                     <show id="lecm-eds-document:summaryContent"/>
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
@@ -170,6 +170,8 @@
                             <control-param name="editRowDialogTitle">ord.item.edit.form.title</control-param>
                             <control-param name="datagridFormId">datagrid-create</control-param>
                             <control-param name="editFormId">edit</control-param>
+                            <control-param name="jsDependencies">scripts/lecm-ord/ord-items-create-form-datagrid.js</control-param>
+                            <control-param name="jsObjectName">LogicECM.ORD.PointsCreateFormDatagrid</control-param>
                         </control>
                     </field>
                     <field id="confirmCompletionHandler">
@@ -294,7 +296,8 @@
                     <show id="lecm-document-aspects:response-to-assoc"/>												<!-- В ответ на -->
                     <show id="lecm-eds-document:document-type-assoc"/>                                                                <!-- Вид документа ОРД -->
                     <show id="lecm-eds-document:execution-date"/>                                                       <!-- Срок исполнения -->
-                    <show id="lecm-ord:controller-assoc"/>                                                              <!-- Контролёр -->
+                    <show id="lecm-ord:controller-assoc"/>
+                    <show id="lecm-ord:confirm-completion"/>
                     <show id="lecm-eds-document:note"/>                                                                 <!-- Примечание -->
                     <show id="lecm-ord:canceled-assoc"/>                                                                <!-- Отменённые документы -->
                     <show id="lecm-ord:accepted-assoc"/>                                                                <!-- Принимаемые документы -->
@@ -331,51 +334,85 @@
                     <show id="lecm-statemachine:status" force="true"/>                                                  <!-- Статус -->
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа" >
+                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
                             <control-param name="plane">true</control-param>
+                            <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-statemachine:status"  mandatory="false">
+                    <field id="lecm-document:doc-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl">
+                            <control-param name="forceEditable">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-eds-document:executor-assoc">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document:author-assoc" mandatory="false" label-id="label.eds.assoc.compiler">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory"
-                                        event="keyup"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
                         </constraint-handlers>
-                        <control template="/ru/it/lecm/documents/controls/select-status-control.ftl">
-                            <control-param name="docType">lecm-ord:document</control-param>
-                            <control-param name="withEmpty">true</control-param>
-                            <control-param name="valuesDelimiter">,</control-param>
+                    </field>
+                    <field id="lecmSignAspects:signerEmployeeAssoc">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:doc-date" >
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                    <field id="lecm-ord:controller-assoc">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
                     </field>
-                    <field id="lecm-ord:confirm-completion">
+                    <field id="lecm-document:title" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-ord:confirm-completion" label-id="ord.confirm.completion.lable">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
                             <control-param name="options">true|Да,false|Нет</control-param>
                         </control>
                     </field>
-                    <field id="lecm-ord:transition-to-on-execution-date" >
+                    <field id="lecm-ord:transition-to-on-execution-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                    </field>
+                    <field id="lecm-eds-document:execution-date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
                     <field id="lecm-ord:real-end-date" >
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
-                    <field id="lecm-document:author-assoc" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory"
-                                        event="keyup"/>
-                        </constraint-handlers>
+                    <field id="lecm-eds-aspect:execution-state" label-id="ord.execution.lable">
+                        <control template="/ru/it/lecm/eds/controls/selectmany.ftl">
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="nameSuffix">-multiText</control-param>
+                            <control-param name="useDefaultValue">false</control-param>
+                        </control>
                     </field>
-                    <field id="lecm-document:title" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory"
-                                        event="keyup"/>
-                        </constraint-handlers>
+                    <field id="lecm-review-ts:doc-review-state" label-id="ord.review.lable">
+                        <control template="/ru/it/lecm/eds/controls/selectmany.ftl">
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="nameSuffix">-multiText</control-param>
+                            <control-param name="useDefaultValue">false</control-param>
+                        </control>
                     </field>
-                    <field id="lecm-eds-document:execution-date" >
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                    <field id="lecm-statemachine:status"  mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
+                        </constraint-handlers>
+                        <control template="/ru/it/lecm/documents/controls/select-status-control.ftl">
+                            <control-param name="docType">lecm-ord:document</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="valuesDelimiter">,</control-param>
+                            <control-param name="endpointMany">true</control-param>
+                            <control-param name="nameSuffix">-multiText</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
@@ -438,10 +475,11 @@
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-eds-aspect:execution-state" force="true"/>
-	                <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
+                    <show id="lecm-review-ts:doc-review-state" force="true"/>
+                    <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
 	                <show id="lecm-document-aspects:reg-data-date"/>
-	                <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
+	                <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:execution-date"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-ord:controller-assoc"/>
@@ -464,6 +502,8 @@
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
 					<show id="lecm-review-ts:review-table-assoc"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script3" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="ord-document-form-common-set" label-id="label.ord.common"/>
@@ -472,11 +512,15 @@
 					<set id="review" label="Ознакомление"/>
 
                     <field id="lecm-eds-aspect:execution-state" set="ord-document-form-common-set">
-                        <control template="/ru/it/lecm/eds/controls/execution-state-control.ftl">
+                        <control template="/ru/it/lecm/documents/controls/state-statistics-control.ftl">
                             <control-param name="statisticsField">lecm-eds-aspect:execution-statistics</control-param>
                         </control>
                     </field>
-
+                    <field id="lecm-review-ts:doc-review-state" set="ord-document-form-common-set">
+                        <control template="/ru/it/lecm/documents/controls/state-statistics-control.ftl">
+                            <control-param name="statisticsField">lecm-review-ts:doc-review-statistics</control-param>
+                        </control>
+                    </field>
 					<field id="lecm-document:regnum" set="ord-document-form-common-set" mandatory="true">
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.Documents.regnumUniqueness.validator"
@@ -506,6 +550,7 @@
                         <control>
                             <control-param name="showSearch">true</control-param>
                             <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                            <control-param name="changeItemsFireAction">ordControllerChangedEvent</control-param>
                         </control>
                     </field>
                     <field id="lecm-ord:confirm-completion" set="ord-document-form-common-set">
@@ -559,7 +604,7 @@
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
                             <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
-                            <control-param name="expandDataSource">components/form?formId=table-structure-info</control-param>
+                            <control-param name="expandDataSource">components/form?formId=ord-table-structure-info</control-param>
                             <control-param name="isTableSortable">false</control-param>
                             <control-param name="refreshAfterCreate">true</control-param>
                             <control-param name="forceEditable">true</control-param>
@@ -622,6 +667,17 @@
                             <control-param name="scriptLoadedFireAction">editExecutorEditFormScriptLoaded</control-param>
                         </control>
                     </field>
+                    <field id="lecm-base-dummy-aspects:script2" set="ord-document-form-common-set">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-ord/ord-view-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">ordViewFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script3" set="ord-document-form-common-set">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-ord/confirm-completion-handler-script.js</control-param>
+                        </control>
+                    </field>
                 </appearance>
             </form>
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
@@ -651,7 +707,75 @@
                     </field>
                 </appearance>
             </form>
-
+            <form id="doc-right-parts">
+                <field-visibility>
+                    <show id="fake:document-actions"/>
+                    <show id="fake:document-metadata"/>
+                    <show id="fake:document-attachments"/>
+                    <show id="fake:document-workflows"/>
+                    <show id="fake:document-connections"/>
+                    <show id="fake:document-members"/>
+                    <show id="fake:document-tags"/>
+                    <show id="fake:document-history"/>
+                    <show id="fake:document-forms"/>
+                    <show id="fake:comments"/>
+                </field-visibility>
+                <appearance>
+                    <field id="fake:document-actions">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/dashlets/document-actions</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-metadata">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-meta</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-attachments">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-attachments</control-param>
+                            <!--<control-param name="baseDocAssocName"></control-param>-->
+                        </control>
+                    </field>
+                    <field id="fake:document-workflows">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-workflows</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-connections">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/connections</control-param>
+                            <!--<control-param name="excludeType"></control-param>-->
+                        </control>
+                    </field>
+                    <field id="fake:document-members">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-members</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-tags">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-tags</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-history">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-history</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-forms">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/forms</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:comments">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/comments</control-param>
+                            <control-param name="activityType">document</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 
@@ -676,6 +800,11 @@
                 </field-visibility>
                 <appearance>
                     <set id="buttons" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <field id="lecm-ord-table-structure:item-content">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-ord-table-structure:errand-assoc" read-only="true">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
@@ -720,6 +849,11 @@
                     <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                     <set id="bottom"/>
 
+                    <field id="lecm-ord-table-structure:item-content">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-document:indexTableRow" mandatory="true" read-only="true"/>
                     <field id="lecm-ord-table-structure:report-required"  set="bottom">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
@@ -787,13 +921,31 @@
                     </field>
                 </appearance>
             </form>
-            <form id="table-structure-info">
+            <form id="ord-complete-item">
                 <field-visibility>
-                    <show id="ord-item-execution-tree" force="true"/>
+                    <show id="lecm-ord-table-structure:completion-option"/>
+                    <show id="lecm-ord-table-structure:item-comment"/>
+                    <show id="ord-item-completion-form-script" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="ord-item-execution-tree">
-                        <control template="/ru/it/lecm/eds/controls/execution-tree-control.ftl"/>
+                    <set id="ord-item-completion-option-set" template="/ru/it/lecm/ord/components/class-set.ftl"/>
+                    <set id="common"/>
+                    <field id="lecm-ord-table-structure:completion-option" mandatory="true" set="ord-item-completion-option-set">
+                        <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
+                            <control-param name="defaultValue">CANCEL</control-param>
+                            <control-param name="fireChangeEventName">changeCompletionOption</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-ord-table-structure:item-comment" mandatory="true" set="common">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
+                    <field id="ord-item-completion-form-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-ord/ord-item-completion-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">ordItemCompletionFormScriptLoaded</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
@@ -824,6 +976,11 @@
                 <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
                 <set id="bottom"/>
 
+                <field id="lecm-ord-table-structure:item-content">
+                    <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                        <control-param name="rows">4</control-param>
+                    </control>
+                </field>
                 <field id="lecm-document:indexTableRow" mandatory="true"/>
                 <field id="lecm-ord-table-structure:report-required" set="bottom">
                     <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
@@ -950,11 +1107,80 @@
             </form>
         </forms>
     </config>
-
+    <config evaluator="string-compare" condition="activiti$completeORD">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmORDWf:completeORDMessage"/>
+                    <show id="complete-ord-form-script" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmORDWf:completeORDMessage">
+                        <control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+                            <control-param name="msg">ord.action.complete.message</control-param>
+                        </control>
+                    </field>
+                    <field id="complete-ord-form-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-ord/complete-ord-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">completeORDWFScriptLoaded</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+    <config evaluator="string-compare" condition="activiti$completeActiveORD">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmORDWf:completionOption"/>
+                    <show id="lecmORDWf:comment"/>
+                    <show id="ord-complete-active-ord-form-script" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <set id="ord-item-completion-option-set" template="/ru/it/lecm/ord/components/class-set.ftl"/>
+                    <set id="common"/>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmORDWf:completionOption" mandatory="true" set="ord-item-completion-option-set">
+                        <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
+                            <control-param name="defaultValue">CANCEL</control-param>
+                            <control-param name="fireChangeEventName">changeCompletionOption</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmORDWf:comment" mandatory="true" set="common">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
+                    <field id="ord-complete-active-ord-form-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-ord/complete-ord-form-script.js</control-param>
+                            <control-param name="scriptLoadedFireAction">completeActiveORDWFScriptLoaded</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
     <config evaluator="string-compare" condition="Workflow">
+        <hidden-workflows>
+            <workflow name="activiti$lecm-ord_document"/>
+            <workflow name="activiti$completeORD"/>
+            <workflow name="activiti$completeActiveORD"/>
+        </hidden-workflows>
+    </config>
+
+    <config evaluator="string-compare" condition="LECMStatemachineWorkflow">
         <hidden-workflows>
             <workflow name="activiti$lecm-ord_document"/>
         </hidden-workflows>
     </config>
-
 </alfresco-config>

@@ -24,6 +24,7 @@ public interface DocumentGlobalSettingsService {
 	QName PROP_N_DAYS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "n-days");
 
 	int DEFAULT_N_DAYS = 5;
+	String DEFAULT_VIEW_MODE = "VIEW_ALL";
 
 	NodeRef getSettingsNode();
 	

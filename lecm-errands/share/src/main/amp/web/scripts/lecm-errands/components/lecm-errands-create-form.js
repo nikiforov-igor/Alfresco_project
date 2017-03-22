@@ -105,7 +105,26 @@
             Event.onContentReady(formId + "_assoc_lecm-errands_additional-document-assoc", function () {
                 var parentDocRef = this.value;
                 if (parentDocRef) {
-                    checkOtherChildAutoClose(parentDocRef);
+                    Alfresco.util.Ajax.jsonPost({
+                        url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                        dataObj: {
+                            nodeRef: parentDocRef,
+                            substituteString: "{lecm-document:doc-type}"
+                        },
+                        successCallback: {
+                            fn: function (response) {
+                                if (response && response.json.formatString) {
+                                    var docType = response.json.formatString;
+                                    if(docType == "Поручение"){
+                                        checkOtherChildAutoClose(parentDocRef);
+                                    }
+                                }
+                            },
+                            scope: this
+                        },
+                        failureMessage: Alfresco.util.message('message.failure'),
+                        scope: this
+                    });
 
                     Alfresco.util.Ajax.jsonGet({
                         url: Alfresco.constants.PROXY_URI + "lecm/errands/api/getBaseByAdditional",

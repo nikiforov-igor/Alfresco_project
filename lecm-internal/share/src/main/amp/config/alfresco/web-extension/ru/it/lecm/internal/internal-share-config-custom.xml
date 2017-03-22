@@ -39,11 +39,15 @@
 					<show id="lecmSignAspects:signingDate" for-mode="view"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
+                    <show id="lecm-review-ts:review-table-assoc"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label="Атрибуты" /> <!-- tab1 -->
                     <set id="approvalTab" appearance="" label="Согласование"/>
                     <set id="answers" appearance="" label="Ответы" />
+
+                    <set id="execution-tab" label-id="tab.label.execution"/>
+                    <set id="review" parent="execution-tab" appearance="title" label-id="label.review"/>
 
                     <field id="lecm-document:regnum" set="common"/>
                     <field id="lecm-document-aspects:reg-data-date" set="common"/>
@@ -164,6 +168,20 @@
                             <control-param name="scriptLoadedFireAction">editExecutorEditFormScriptLoaded</control-param>
                         </control>
                     </field>
+                    <field set="review" id="lecm-review-ts:review-table-assoc">
+                        <control template="/ru/it/lecm/workflow/review/controls/review-list-datagrid-control.ftl">
+                            <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
+                            <control-param name="datagridFormId">datagrid</control-param>
+                            <control-param name="isTableSortable">false</control-param>
+                            <control-param name="refreshAfterCreate">true</control-param>
+                            <control-param name="editable">true</control-param>
+                            <control-param name="forceEditable">true</control-param>
+                            <control-param name="showCreateBtn">false</control-param>
+                            <control-param name="allowCreate">false</control-param>
+                            <control-param name="allowEdit">false</control-param>
+                            <control-param name="allowDelete">false</control-param>
+                        </control>
+                    </field>
                 </appearance>
             </form>
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
@@ -208,6 +226,79 @@
 			        </field>
 		        </appearance>
 	        </form>
+            <form id="doc-right-parts">
+                <field-visibility>
+                    <show id="fake:document-actions"/>
+                    <show id="fake:document-metadata"/>
+                    <show id="fake:document-attachments"/>
+                    <show id="fake:document-errands"/>
+                    <show id="fake:document-workflows"/>
+                    <show id="fake:document-connections"/>
+                    <show id="fake:document-members"/>
+                    <show id="fake:document-tags"/>
+                    <show id="fake:document-history"/>
+                    <show id="fake:document-forms"/>
+                    <show id="fake:comments"/>
+                </field-visibility>
+                <appearance>
+                    <field id="fake:document-actions">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/dashlets/document-actions</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-metadata">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-meta</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-attachments">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-attachments</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-errands">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-errands</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-workflows">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-workflows</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-connections">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/connections</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-members">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-members</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-tags">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-tags</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-history">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-history</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-forms">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/forms</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:comments">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/comments</control-param>
+                            <control-param name="activityType">document</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 
@@ -728,6 +819,7 @@
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-eds-document:executor-assoc"/>
+                    <show id="lecm-review-ts:review-table-assoc"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecmApproveAspects:approvalFolderRef" label="Согласование"/>
@@ -890,6 +982,12 @@
         <hidden-workflows>
             <workflow name="activiti$lecm-internal_document"/>
             <workflow name="activiti$lecmInternalDirect"/>
+        </hidden-workflows>
+    </config>
+
+    <config evaluator="string-compare" condition="LECMStatemachineWorkflow">
+        <hidden-workflows>
+            <workflow name="activiti$lecm-internal_document"/>
         </hidden-workflows>
     </config>
 </alfresco-config>

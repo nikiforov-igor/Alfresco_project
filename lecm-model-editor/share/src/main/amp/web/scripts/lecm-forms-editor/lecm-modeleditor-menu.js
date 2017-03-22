@@ -94,7 +94,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 //		},
 
 		onModelEditorHome: function(event, obj) {
-			var urlTemplate = 'doc-model-edit?formId=edit-model&redirect=' + Alfresco.constants.URL_CONTEXT + 'page/doc-model-list&nodeRef=';
+			var urlTemplate = 'doc-model-edit?doctype='+this.options.modelItem.typeName+'&formId=edit-model&redirect=/share/page/doc-model-list&nodeRef=';
 			if (this.options.nodeRef) {
 				window.location.href = Alfresco.constants.URL_PAGECONTEXT + urlTemplate + this.options.nodeRef;
 			} else if (this.options.modelItem.nodeRef) {

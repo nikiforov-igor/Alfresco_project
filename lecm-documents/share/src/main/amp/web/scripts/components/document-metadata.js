@@ -68,10 +68,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @method onReady
              */
             onReady: function DocumentMain_onReady() {
-                // var linkEl = Dom.get(this.id + "-link");
-                // if (linkEl) {
-                //     linkEl.onclick = this.onExpand.bind(this);
-                // }
                 function expandStages() {
                     this.onExpandTab('contract-stages');
                 }
@@ -80,6 +76,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 YAHOO.util.Event.delegate('Share', 'click', expandStages, '.stages-expand', this, true);
                 Alfresco.util.createTwister(this.id + "-heading", "DocumentMetadata");
 
+                LogicECM.services = LogicECM.services || {};
+                if(LogicECM.services.documentViewPreferences) {
+                    var lastCustomPanelViewTitle = this.getLastCustomPanelView();
+                    if (lastCustomPanelViewTitle == this.getTitle() && this.isSplitPanel()) {
+                        this.onExpand();
+                    }
+                }
             },
 
             onExpandTab: function (tabId) {
@@ -93,7 +96,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             expand: function (tabId) {
                 // Load the form
                 var data = {
-                    htmlid: "documentMetadata-" + this.options.nodeRef.replace(/\//g,"_"),
+                    htmlid: "documentMetadata-" + Alfresco.util.generateDomId(),
                     nodeRef: this.options.nodeRef
                 };
                 if (tabId != null) {

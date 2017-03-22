@@ -1,6 +1,6 @@
 <#if hasPermission!false>
 <#assign aDateTime = .now>
-<#assign id = args.htmlid?js_string + aDateTime?iso_utc>
+<#assign id = args.htmlid?js_string + (aDateTime?iso_utc)?replace(":", "_")>
 
 <@markup id="js">
 	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-component-base.js"></@script>
@@ -17,10 +17,12 @@
         }
         YAHOO.util.Event.onAvailable("${id}-action-collapse", hideButton);
 </script>
-<div class="metadata-form">
+<div class="panel-header">
+    <div class="panel-title">${msg("heading")}</div>
 		<div class="lecm-dashlet-actions">
         	<a id="${id}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
     	</div>
+    </div>
 </div>
 <script type="text/javascript">
     //<![CDATA[
@@ -34,7 +36,7 @@
 			
 			var url = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
 			var dataObj = {
-                            htmlid: htmlId + nodeRef.replace(/\//g,"_"),
+                            htmlid: htmlId + "-" + Alfresco.util.generateDomId(),
                             itemKind: "node",
                             itemId: nodeRef,
                             formId: "agenda",
@@ -59,7 +61,7 @@
                         },
                         failureMessage:"message.failure",
                         execScripts:true,
-                        htmlId:htmlId + nodeRef
+                        htmlId: htmlId + "-" + Alfresco.util.generateDomId()
                     });
         }
 

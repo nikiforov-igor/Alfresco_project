@@ -18,6 +18,8 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
@@ -31,6 +33,7 @@ import ru.it.lecm.modelEditor.beans.ModelsListBeanImpl;
  * @author vmalygin
  */
 public class ModelItemScript extends AbstractWebScript {
+	private static final Logger logger = LoggerFactory.getLogger(ModelItemScript.class);
 
 	private DictionaryService dictionaryService;
 	private ContentService contentService;
@@ -58,7 +61,7 @@ public class ModelItemScript extends AbstractWebScript {
 		this.modelListService = modelListService;
 	}
 
-	private Map<String, Object> getModelItemByNodeRef(NodeRef nodeRef) {
+	private Map<String, Object> getModelItemByNodeRef(NodeRef nodeRef,String typeParam) {
 		Map<String, Object> modelObject = new HashMap<>();
 		ContentReader contentReader = contentService.getReader(nodeRef, ContentModel.PROP_CONTENT);
 		if (contentReader != null) {
@@ -67,20 +70,33 @@ public class ModelItemScript extends AbstractWebScript {
 			List<M2Type> types = model.getTypes();
 			M2Type firstType = null;
 			if (types != null && !types.isEmpty()) {    //для случая, если в модели нет типов (например только аспекты)
-				firstType = types.get(0);
+				if(!StringUtils.isNotBlank(typeParam)) {
+					firstType = types.get(0);
+				} else {
+					for(M2Type t:types) {
+						if(t.getName().equals(typeParam)) {
+							firstType = t;
+						}
+					}
+				}
 			}
 
 			if (firstType != null) {
 				Serializable modelActive = nodeService.getProperty(nodeRef, ContentModel.PROP_MODEL_ACTIVE);
 				Boolean isModelActive = modelActive != null && Boolean.TRUE.equals(modelActive);
-
-				QName typeQName = QName.createQName(firstType.getName(), namespaceService);
-				Boolean isDocumentModel = dictionaryService.isSubClass(typeQName, DocumentService.TYPE_BASE_DOCUMENT);
-
+				if(isModelActive) {
+					QName typeQName = QName.createQName(firstType.getName(), namespaceService);
+					Boolean isDocumentModel = dictionaryService.isSubClass(typeQName, DocumentService.TYPE_BASE_DOCUMENT);
+	
+					modelObject.put("typeName", firstType.getName());
+					modelObject.put("isDocumentModel", isDocumentModel);
+				} else {
+					modelObject.put("typeName", "Undefined");
+					modelObject.put("isDocumentModel", "false");
+				}
+				
 				modelObject.put("nodeRef", nodeRef.toString());
 				modelObject.put("isModelActive", isModelActive);
-				modelObject.put("typeName", firstType.getName());
-				modelObject.put("isDocumentModel", isDocumentModel);
 			}
 		}
 		return modelObject;
@@ -106,6 +122,11 @@ public class ModelItemScript extends AbstractWebScript {
 					M2Type firstType = null;
 					if (types != null && !types.isEmpty()) {    //для случая, если в модели нет типов (например только аспекты)
 						firstType = types.get(0);
+						for(M2Type t:types) {
+							if(t.getName().equals(typeQName.getPrefixString())) {
+								firstType = t;
+							}
+						}
 					}
 
 					if (firstType != null && firstType.getName().equalsIgnoreCase(typeQName.getPrefixString())) {
@@ -143,9 +164,11 @@ public class ModelItemScript extends AbstractWebScript {
 		String nodeRefParam = req.getParameter("nodeRef");
 		String typeParam = req.getParameter("type");
 
+		logger.info("!!!!!!!! nodeRefParam: "+nodeRefParam+", typeParam: "+typeParam);
+		
 		Map<String, Object> modelObject = null;
 		if (StringUtils.isNotBlank(nodeRefParam) && NodeRef.isNodeRef(nodeRefParam)) {
-			modelObject = getModelItemByNodeRef(new NodeRef(nodeRefParam));
+			modelObject = getModelItemByNodeRef(new NodeRef(nodeRefParam),typeParam);
 		} else if (StringUtils.isNotBlank(typeParam)) {
 			if (FAKE_ATTRIBUTE_TYPE.equals(typeParam)) {
 				modelObject = getModelItemByFakeType();

@@ -5,6 +5,7 @@
     <version>1.0</version>
     <imports>
         <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+        <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
@@ -112,6 +113,12 @@
                     <type>d:int</type>
                     <mandatory>false</mandatory>
                     <default>1</default>
+                    <constraints>
+                        <constraint type="REGEX">
+                            <parameter name="expression"><value>^[0-9]+$</value></parameter>
+                            <parameter name="requiresMatch"><value>true</value></parameter>
+                        </constraint>
+                    </constraints>
                 </property>
                 <property name="lecm-resolutions:limitation-date-type">
                     <type>d:text</type>
@@ -124,7 +131,7 @@
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                 </property>
-                <!-- Контроль-->
+                <!-- Контроль. Deprecated (используется lecm-document-aspects:is-on-control)-->
                 <property name="lecm-resolutions:control">
                     <type>d:boolean</type>
                     <default>false</default>
@@ -351,6 +358,7 @@
             <mandatory-aspects>
                 <aspect>lecm-errands-aspect:errandsExecutorsAspect</aspect>
                 <aspect>lecm-eds-aspect:execution-state-aspect</aspect>
+                <aspect>lecm-document-aspects:on-control-aspect</aspect>
             </mandatory-aspects>
         </type>
     </types>

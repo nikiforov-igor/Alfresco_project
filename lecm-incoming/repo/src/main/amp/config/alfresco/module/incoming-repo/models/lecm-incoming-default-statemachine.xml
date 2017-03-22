@@ -810,12 +810,12 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.hasDuplicates(true, "lecm-incoming:outgoing-number", "lecm-incoming:sender-assoc-ref")]]></value>
+                                                                                    <![CDATA[!doc.hasDuplicates(true, "lecm-incoming:outgoing-number", "lecm-incoming:outgoing-date", "lecm-incoming:sender-assoc-ref")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Документ уже зарегистрирован в системе]]></value>
+                                                                                    <![CDATA[Документ с такими корреспондентом, исходящим номером и исходящей датой в системе уже зарегистрирован]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -1869,12 +1869,12 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.hasDuplicates(true, "lecm-incoming:outgoing-number", "lecm-incoming:sender-assoc-ref")]]></value>
+                                                                                    <![CDATA[!doc.hasDuplicates(true, "lecm-incoming:outgoing-number", "lecm-incoming:outgoing-date", "lecm-incoming:sender-assoc-ref")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Документ уже зарегистрирован в системе]]></value>
+                                                                                    <![CDATA[Документ с такими корреспондентом, исходящим номером и исходящей датой в системе уже зарегистрирован]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -2874,38 +2874,6 @@
                                                                             <property>
                                                                                 <name>hideAction</name>
                                                                                 <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>2647e11f-2d68-440c-a753-98ee93152ce1
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/2bb3eac0-1466-4774-82b3-18b29706a5da
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Действие не может быть выполнено: вы не обладаете ролью "Поручения.Инициатор". Обратитесь к администратору Системы]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4131,6 +4099,38 @@
                                                                             <property>
                                                                                 <name>inputFromType</name>
                                                                                 <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>2647e11f-2d68-440c-a753-98ee93152ce1
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/2bb3eac0-1466-4774-82b3-18b29706a5da
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие не может быть выполнено: вы не обладаете ролью "Поручения.Инициатор". Обратитесь к администратору Системы]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -6099,12 +6099,12 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[!doc.hasDuplicates(true, "lecm-incoming:outgoing-number", "lecm-incoming:sender-assoc-ref")]]></value>
+                                                                                    <![CDATA[!doc.hasDuplicates(true, "lecm-incoming:outgoing-number", "lecm-incoming:outgoing-date", "lecm-incoming:sender-assoc-ref")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Документ уже зарегистрирован в системе]]></value>
+                                                                                    <![CDATA[Документ с такими корреспондентом, исходящим номером и исходящей датой в системе уже зарегистрирован]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>

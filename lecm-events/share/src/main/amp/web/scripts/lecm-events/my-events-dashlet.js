@@ -171,7 +171,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
             },
 
             _buildPreferencesKey: function () {
-                return this.PREFERENCES_EVENTS_DASHLET_FILTER + "." + LogicECM.currentUser;
+                return this.PREFERENCES_EVENTS_DASHLET_FILTER + "." + encodeURIComponent(LogicECM.currentUser);
             }
         });
 })();

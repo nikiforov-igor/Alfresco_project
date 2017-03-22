@@ -3,7 +3,9 @@ var nodeRef = url.templateArgs.store_type + "://" + url.templateArgs.store_id + 
 	nodeTitleSubstituteString = args['nodeTitleSubstituteString'],
 	selectableType = args['selectableType'],
 	useOnlyInSameOrg = args['onlyInSameOrg'],
-	statusFilter = url.templateArgs.filterStatus;
+	statusFilter = url.templateArgs.filterStatus,
+	currentOpenCases,
+	recursiveOpenCases;
 
 var parentNode = search.findNode(nodeRef);
 var branch = [];
@@ -13,7 +15,10 @@ var useStrictFilterByOrg = (useOnlyInSameOrg != null && ("" + useOnlyInSameOrg) 
 
 if (parentNode != null) {
 
-	var	query = 'PARENT:"' + nodeRef + '" AND {{FILTER_YEARS_BY_ORG({allowAdmin: true})}}';
+	var	query = 'PARENT:"' + nodeRef + '" AND {{FILTER_YEARS_BY_ORG({allowAdmin: true})}}',
+		isFilterByOpenCases = true,
+		isNeeded,
+		isLeaf;
 
 	switch(statusFilter) {
 		case 'ApprovedOnly':
@@ -21,6 +26,8 @@ if (parentNode != null) {
 			break;
 		case 'notClosed':
 			query = 'PARENT:"' + nodeRef + '" AND {{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND (ISNULL:\"lecm-os:nomenclature-year-section-status\" OR NOT EXISTS:\"lecm-os:nomenclature-year-section-status\" OR NOT @lecm\\-os\\:nomenclature\\-year\\-section\\-status:\"CLOSED\")';
+			// Не фильтровать по открытым номенклатурным делам для механизма копирования/перемещания номенклатурных дел
+			isFilterByOpenCases = false;
 			break;
 	}
 
@@ -30,33 +37,35 @@ if (parentNode != null) {
 			language: "fts-alfresco"
 		});
 
-	function getCountOpenCases(qnamePath) {
+	function getCountOpenCases(qnamePath, isRecursive) {
+		var qnamePathResult = isRecursive ? qnamePath + '/' : qnamePath;
 		return searchCounter.query({
 			language: 'fts-alfresco',
-			query: 'PATH:"/' + qnamePath + '//*" AND (+TYPE:"lecm-os:nomenclature-case") AND (@lecm\\-os:nomenclature\\-case\\-status:"OPEN")'
+			query: 'PATH:"/' + qnamePathResult + '/*" AND (+TYPE:"lecm-os:nomenclature-case") AND (@lecm\\-os:nomenclature\\-case\\-status:"OPEN")'
 		});
+	}
+
+	function hasNomenclatureUnitSections(qnamePath, isRecursive) {
+		var qnamePathResult = isRecursive ? qnamePath + '/' : qnamePath;
+		return searchCounter.query({
+			language: 'fts-alfresco',
+			query: 'PATH:"/' + qnamePathResult + '/*" AND (+TYPE:"lecm-os:nomenclature-unit-section")'
+		}) > 0;
 	}
 
 	for each(var item in values) {
 		if (isSubType(item, selectableType) && (!item.hasAspect("lecm-dic:aspect_active") || item.properties["lecm-dic:active"])
 			&& orgstructure.hasAccessToOrgElement(item, useStrictFilterByOrg)) {
-			var isLeaf = !searchCounter.hasChildren(item.getNodeRef().toString(), selectableType, true);
-
-			if (item.getTypeShort() == "lecm-os:nomenclature-unit-section") {
-				var unitSections = search.query(
-					{
-						query: 'PARENT:"' + nodeRef + '" AND (+TYPE:"lecm-os:nomenclature-unit-section")',
-						language: "fts-alfresco"
-					});
-				for each(var unitSection in unitSections) {
-					if (getCountOpenCases(unitSection.getQnamePath()) > 0) {
-						isLeaf = true;
-						break;
-					}
-				}
+			if (isFilterByOpenCases) {
+				currentOpenCases = getCountOpenCases(item.getQnamePath(), false);
+				recursiveOpenCases = getCountOpenCases(item.getQnamePath(), true);
+				isNeeded = recursiveOpenCases > 0;
+				isLeaf = (currentOpenCases == recursiveOpenCases);
+			} else {
+				isNeeded = true;
+				isLeaf = !hasNomenclatureUnitSections(item.getQnamePath(), true);
 			}
-
-			if (getCountOpenCases(item.getQnamePath()) > 0) {
+			if (isNeeded) {
 				branch.push({
 					label: (nodeSubstituteString != null && nodeSubstituteString.length > 0) ? substitude.formatNodeTitle(item, nodeSubstituteString) : substitude.getObjectDescription(item),
 					title: substitude.formatNodeTitle(item, nodeTitleSubstituteString),

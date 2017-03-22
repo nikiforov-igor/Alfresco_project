@@ -155,7 +155,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 itemType: this.datagridMeta.itemType,
                 sort: this.datagridMeta.sort,
                 offset: offset,
-                filter: this.currentFilters,
+                additionalFilters: this.currentFilters,
                 useOnlyInSameOrg: this.datagridMeta.useOnlyInSameOrg,
                 useFilterByOrg: this.datagridMeta.useFilterByOrg
             });
@@ -391,8 +391,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                             break;
                                     }
 
-                                    var firstColumnIndex = scope.options.showCheckboxColumn ? 2 : 1;
-                                    if (oColumn.getKeyIndex() == firstColumnIndex) {
+                                    if (oColumn.showLink) {
                                         columnContent = "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + oRecord.getData("page") + '?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
                                     }
 
@@ -422,18 +421,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             };
         },
 
-        getAllSelectedItems: function DataGrid_getSelectedItems() {
-            var items = [];
-            for (var item in this.selectedItems) {
-                if (this.selectedItems.hasOwnProperty(item) && this.selectedItems[item]) {
-                    items.push(item);
-                }
-            }
-            return items;
-        },
-
         _buildPreferencesKey: function () {
-            return this.PREFERENCE_KEY +  LogicECM.module.ARM.SETTINGS.ARM_CODE + ".menu-state." + LogicECM.currentUser;
+            return this.PREFERENCE_KEY + encodeURIComponent(LogicECM.module.ARM.SETTINGS.ARM_CODE) + ".menu-state." + encodeURIComponent(LogicECM.currentUser);
         }
     }, true);
 })();

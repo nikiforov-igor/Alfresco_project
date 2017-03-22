@@ -406,20 +406,15 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         List<String> status = stateMachineService.getStatuses("lecm-errands:document", true, false);
 
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-        // сортируем по важности поручения и по сроку исполнения
+        // сортируем поручения по важности, просроченности и по сроку исполнения
         sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_IS_IMPORTANT.toString(), false));
-        sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_LIMITATION_DATE.toString(), false));
+        sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_IS_EXPIRED.toString(), false));
+        sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_LIMITATION_DATE.toString(), true));
 
-        for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, paths, status, null, sort)) {
-            if (stateMachineService.isDraft(nodeRef)) {
-                continue;
-            }
-            if (stateMachineService.isFinal(nodeRef)) {
-                continue;
-            }
-            if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))) {
-                sortingErrands.add(nodeRef);
-            }
+        String filter = new String("(@lecm\\-errands\\:executor\\-assoc\\-ref:\"#current-user\" OR @lecm\\-errands\\:coexecutors\\-assoc\\-ref:\"#current-user\") AND NOT @lecm\\-statemachine\\-aspects\\:is\\-final:true AND NOT @lecm\\-statemachine\\-aspects\\:is\\-draft:true");
+
+        for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, paths, status, filter, sort)) {
+            sortingErrands.add(nodeRef);
         }
 
         int endIndex = (skipCount + maxItems) < sortingErrands.size() ? (skipCount + maxItems) : sortingErrands.size();
@@ -447,13 +442,9 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_NUMBER.toString(), false));
         sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_LIMITATION_DATE.toString(), false));
 
-        for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, paths, status, null, sort)) {
-            if (stateMachineService.isDraft(nodeRef)) {
-                continue;
-            }
-            if (stateMachineService.isFinal(nodeRef)) {
-                continue;
-            }
+        String filter = new String("NOT @lecm\\-statemachine\\-aspects\\:-final:true AND NOT @lecm\\-statemachine\\-aspects\\:is\\-draft:true");
+
+        for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, paths, status, filter, sort)) {
             if (employees.containsAll(findNodesByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))) {
                 sortingErrands.add(nodeRef);
             }
@@ -607,6 +598,14 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 			return assocs.get(0).getTargetRef();
 		}
 		return null;
+	}
+
+	public NodeRef getErrandBaseDocument(NodeRef errand) {
+        return findNodeByAssociationRef(errand, ASSOC_BASE_DOCUMENT, null, BaseBean.ASSOCIATION_TYPE.TARGET);
+	}
+
+	public NodeRef getInitiator(NodeRef errand) {
+        return findNodeByAssociationRef(errand, ASSOC_ERRANDS_INITIATOR, null, BaseBean.ASSOCIATION_TYPE.TARGET);
 	}
 
     @Override

@@ -13,7 +13,13 @@
 }
 .errands-wf-duedate-set .errands-wf-duedate-set-radio .control input {
     margin-top: 8px;
-    margin-bottom: 22px;
+    margin-bottom: 10px;
+}
+.errands-wf-duedate-set .errands-wf-duedate-set-radio .control .buttons-div {
+    padding: 0;
+}
+.errands-wf-duedate-set .errands-wf-duedate-set-limitless .control .container {
+    margin-top: 2px;
 }
 .errands-wf-duedate-set .errands-wf-duedate-set-radio .control input:last-of-type {
      margin-top: 14px;
