@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Terms Of Notification Settings Node</shortname>
+    <description>Terms Of Notification Settings Node</description>
+    <url>/lecm/eds/global-settings/api/getTermsOfNotificationSettings</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+</webscript>

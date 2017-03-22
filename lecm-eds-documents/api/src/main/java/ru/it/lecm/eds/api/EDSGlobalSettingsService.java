@@ -16,6 +16,7 @@ public interface EDSGlobalSettingsService {
 	String EDS_GLOBAL_SETTINGS_FOLDER_ID = "GLOBAL_EDS_SETTINGS_FOLDER_ID";
 
 	String EDS_GLOBAL_SETTINGS_NODE_NAME = "Settings-node";
+	String TERMS_OF_NOTIFICATION_SETTINGS_NODE_NAME = "Terms-of-notification-settings-node";
 
 	String POTENTIAL_ROLES_DICTIONARY_NAME = "Потенциальные роли";
 
@@ -35,6 +36,16 @@ public interface EDSGlobalSettingsService {
 	QName ASSOC_POTENTIAL_ROLE_BUSINESS_ROLE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-business-role-assoc");
 	QName ASSOC_POTENTIAL_ROLE_EMPLOYEE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-employee-assoc");
 	QName ASSOC_POTENTIAL_ROLE_ORGANIZATION_ELEMENT = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-organization-element-assoc");
+
+	QName TYPE_TERMS_OF_NOTIFICATION_SETTINGS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "terms-of-notification-settings");
+
+	QName PROP_N_DAYS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "n-days");
+	QName PROP_SHORT_N_DAYS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE,"short-n-days");
+	QName PROP_SHORT_LIMIT_DAYS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE,"short-limit-days");
+
+	int DEFAULT_N_DAYS = 5;
+	int DEFAULT_SHORT_N_DAYS = 1;
+	int DEFAULT_SHORT_LIMIT_DAYS = 10;
 
 	NodeRef getSettingsNode();
 	NodeRef createSettingsNode() throws WriteTransactionNeededException;
@@ -61,4 +72,34 @@ public interface EDSGlobalSettingsService {
 
 	@Deprecated
 	String getLinksViewMode();
+
+	/**
+	 * Получение количества рабочих дней за которое должно высылаться уведомление
+	 * @return Количество рабочих дней за которое должно высылаться уведомление
+	 */
+	int getSettingsNDays();
+
+	/**
+	 * Получение количества рабочих дней для краткосрочного исполнения за которое должно высылаться уведомление
+	 * @return Количество рабочих дней для краткосрочного исполнения за которое должно высылаться уведомление
+	 */
+	int getSettingsShortNDays();
+
+	/**
+	 * Получение предельного количества календарных дней краткосрочного исполнения
+	 * @return Предельное количество календарных дней краткосрочного исполнения
+	 */
+	int getSettingsShortLimitDays();
+
+	/**
+	 * Получение настроек сроков уведомлений
+	 * @return узел с настройками сроков уведомлений
+	 */
+	NodeRef getTermsOfNotificationSettingsNode();
+
+	/**
+	 * Создание настроек сроков уведомлений
+	 * Create an instance of {@link NodeRef }
+	 */
+	NodeRef createTermsOfNotificationSettingsNode();
 }

@@ -32,6 +32,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	private DictionaryBean dictionaryService;
 	private DocumentGlobalSettingsService documentGlobalSettingsService;
 	private NodeRef settingsNode;
+	private NodeRef termsOfNotificationSettingsNode;
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -75,6 +76,9 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 		if (null == getSettingsNode()) {
 			settingsNode = createSettingsNode();
 		}
+		if (null == getTermsOfNotificationSettingsNode()) {
+            termsOfNotificationSettingsNode = createTermsOfNotificationSettingsNode();
+        }
 	}
 
 	private void updatePotentialRolesMap(String businessRoleId, String organizationElementStrRef, NodeRef potentialRoleRef) {
@@ -302,5 +306,54 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	@Override
 	public String getLinksViewMode() {
 		return documentGlobalSettingsService.getLinksViewMode();
+	}
+
+
+    @Override
+    public NodeRef getTermsOfNotificationSettingsNode() {
+        if (termsOfNotificationSettingsNode == null) {
+            termsOfNotificationSettingsNode = nodeService.getChildByName(this.getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, TERMS_OF_NOTIFICATION_SETTINGS_NODE_NAME );
+        }
+
+        return termsOfNotificationSettingsNode;
+    }
+
+    @Override
+    public NodeRef createTermsOfNotificationSettingsNode() {
+        try {
+            return createNode(this.getServiceRootFolder(), TYPE_TERMS_OF_NOTIFICATION_SETTINGS, TERMS_OF_NOTIFICATION_SETTINGS_NODE_NAME , null);
+        } catch (WriteTransactionNeededException e) {
+            return null;
+        }
+    }
+
+	@Override
+	public int getSettingsNDays() {
+		NodeRef globalSettingsNode = getTermsOfNotificationSettingsNode();
+		if (globalSettingsNode != null) {
+			return (Integer) nodeService.getProperty(globalSettingsNode, PROP_N_DAYS);
+		} else {
+			return DEFAULT_N_DAYS;
+		}
+	}
+
+	@Override
+	public int getSettingsShortNDays() {
+		NodeRef globalSettingsNode = getTermsOfNotificationSettingsNode();
+		if (globalSettingsNode != null && nodeService.getProperty(globalSettingsNode, PROP_SHORT_N_DAYS) != null) {
+			return (Integer) nodeService.getProperty(globalSettingsNode, PROP_SHORT_N_DAYS);
+		} else {
+			return DEFAULT_SHORT_N_DAYS;
+		}
+	}
+
+	@Override
+	public int getSettingsShortLimitDays() {
+		NodeRef globalSettingsNode = getTermsOfNotificationSettingsNode();
+		if (globalSettingsNode != null && nodeService.getProperty(globalSettingsNode, PROP_SHORT_LIMIT_DAYS) != null) {
+			return (Integer) nodeService.getProperty(globalSettingsNode, PROP_SHORT_LIMIT_DAYS);
+		} else {
+			return DEFAULT_SHORT_LIMIT_DAYS;
+		}
 	}
 }
