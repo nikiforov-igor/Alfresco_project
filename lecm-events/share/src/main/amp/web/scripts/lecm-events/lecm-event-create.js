@@ -75,7 +75,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						"allDay": allDay.value,
 						"clientTimezoneOffset": timezoneOffset,
 						"location": location.value,
-						"members": members.value.split(",")
+						"members": members.value ? members.value.split(",") : []
 					},
 					successCallback: {
 						fn: function refreshSuccess(response) {
