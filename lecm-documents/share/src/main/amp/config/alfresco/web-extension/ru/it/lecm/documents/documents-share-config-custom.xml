@@ -464,6 +464,7 @@
             <actionGroup id="folder-link-details">
                 <action index="100" id="document-delete" icon="folder-delete" label="actions.link.delete" />
             </actionGroup>
+
         </actionGroups>
     </config>
 
@@ -1353,5 +1354,5 @@
             </form>
         </forms>
     </config>
-    
+
 </alfresco-config>
