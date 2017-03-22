@@ -33,16 +33,7 @@
 	                                    if (executorRef) {
                                             var executor = search.findNode(executorRef);
                                             if (executor) {
-                                                var recipientAssoc = document.assocs["lecm-incoming:recipient-assoc"];
-                                                var recipientExist = true;
-                                                if (recipientAssoc && recipientAssoc.length) {
-                                                    recipientExist = recipientAssoc.some(function(recipient){
-                                                        return recipient.equals(executor);
-                                                    });
-                                                }
-                                                if (!recipientExist) {
-                                                    document.createAssociation(executor, "lecm-incoming:recipient-assoc");
-                                                }
+                                               statemachine.grandDynamicRoleForEmployee(document, executor, "DA_RECIPIENT_DYN");
                                             }
 	                                    }
 	                                    errand["prop_lecm-errands_child-index-counter"] = "" + (childErrandsCount + i + 1);
