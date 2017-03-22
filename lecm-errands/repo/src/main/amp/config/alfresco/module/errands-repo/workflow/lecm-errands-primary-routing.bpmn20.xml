@@ -22,6 +22,7 @@
                                     if (childErrandsAssoc) {
                                         childErrandsCount = childErrandsAssoc.length;
                                     }
+                                    
 	                                for (i = 0; i < errandsList.length; i++) {
 	                                    var errand = errandsList[i];
                                         errand["assoc_lecm-errands_additional-document-assoc"] = document.nodeRef.toString();
