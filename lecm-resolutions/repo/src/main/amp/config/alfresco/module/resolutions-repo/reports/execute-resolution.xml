@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items updateMode="RewriteChildren">
-    <item name="cm:Отчет о ходе исполнения резолюции за период" type="lecm-rpeditor:reportDescriptor">
+    <item name="cm:Отчет о ходе исполнения резолюций за период" type="lecm-rpeditor:reportDescriptor">
         <property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
         <property name="lecm-rpeditor:reportQuery"><![CDATA[]]></property>
         <property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
-        <property name="cm:name"><![CDATA[Отчет о ходе исполнения резолюции за период]]></property>
+        <property name="cm:name"><![CDATA[Отчет о ходе исполнения резолюций за период]]></property>
         <property name="lecm-rpeditor:runAsSystem"><![CDATA[false]]></property>
         <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
         <property name="lecm-rpeditor:reportQuerySort"><![CDATA[]]></property>
