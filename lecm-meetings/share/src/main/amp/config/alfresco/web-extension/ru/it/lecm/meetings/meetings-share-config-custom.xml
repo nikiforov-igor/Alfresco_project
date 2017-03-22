@@ -1029,12 +1029,12 @@
 				<field-visibility>
 					<!-- Заголовок -->
 					<show id="lecm-events:title"/>
-					<!--Председатель-->
-					<show id="lecm-meetings:chairman-assoc"/>
 					<!-- Дата начала мероприятия -->
 					<show id="lecm-events:from-date"/>
-					<!-- Дата окончания мероприятия -->
-					<show id="lecm-events:to-date"/>
+					<!--Председатель-->
+					<show id="lecm-meetings:chairman-assoc"/>
+					<show id="lecm-meetings:secretary-assoc"/>
+					<show id="lecm-events:initiator-assoc"/>
 					<!-- Место проведения -->
 					<show id="lecm-events:location-assoc"/>
 					<!-- Тематика -->
@@ -1048,14 +1048,26 @@
 							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
 						</constraint-handlers>
 					</field>
-					<field id="lecm-events:from-date">
+					<field id="lecm-events:from-date" label="Дата начала">
 						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+					</field>
+					<field id="lecm-meetings:chairman-assoc">
+						<control>
+							<control-param name="endpointMany">true</control-param>
+						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
 						</constraint-handlers>
 					</field>
-					<field id="lecm-events:to-date">
-						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+					<field id="lecm-meetings:secretary-assoc">
+						<control>
+							<control-param name="endpointMany">true</control-param>
+						</control>
+					</field>
+					<field id="lecm-events:initiator-assoc">
+						<control>
+							<control-param name="endpointMany">true</control-param>
+						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
 						</constraint-handlers>
@@ -1067,6 +1079,11 @@
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
 						</constraint-handlers>
+					</field>
+					<field id="lecm-events:subject-assoc">
+						<control>
+							<control-param name="plane">true</control-param>
+						</control>
 					</field>
 					<field id="lecm-meetings:items-assoc-item-name" label-id="label.meeting.item.name"/>
 				</appearance>
