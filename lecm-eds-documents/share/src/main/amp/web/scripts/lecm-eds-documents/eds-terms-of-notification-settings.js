@@ -73,7 +73,12 @@ LogicECM.module = LogicECM.module || {};
                                     {
                                         successCallback:
                                         {
-                                            fn: me.onSuccess,
+                                            fn: function () {
+                                                Alfresco.util.PopupManager.displayMessage(
+                                                    {
+                                                        text: Alfresco.util.message("message.save.success")
+                                                    }
+                                                )},
                                             scope: this
                                         }
                                     });
