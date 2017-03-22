@@ -1,5 +1,15 @@
 <#if allowEdit >
-    <#assign el=args.htmlid?html>
+<#assign el=args.htmlid?html>
+
+<div id="${el}-body" class="terms-of-notifications-settings">
+    <div class="yui-g">
+        <div class="yui-u first">
+            <div class="title">${msg("label.title")}</div>
+        </div>
+    </div>
+
+    <div id="${el}-body-settings"></div>
+</div>
 
 <script type="text/javascript">//<![CDATA[
 (function(){
@@ -20,16 +30,6 @@
     YAHOO.util.Event.onDOMReady(init);
 })();
 //]]></script>
-
-<div id="${el}-body" class="terms-of-notifications-settings">
-    <div class="yui-g">
-        <div class="yui-u first">
-            <div class="title">${msg("label.title")}</div>
-        </div>
-    </div>
-
-    <div id="${el}-body-settings"></div>
-</div>
 
 <#else>
     <#include "/ru/it/lecm/base-share/components/forbidden.get.html.ftl">

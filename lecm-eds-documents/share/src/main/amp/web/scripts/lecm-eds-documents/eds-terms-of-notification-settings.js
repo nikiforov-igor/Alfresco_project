@@ -46,11 +46,12 @@ LogicECM.module = LogicECM.module || {};
 
             loadForm: function(settingsNode) {
                 var me = this;
+                var htmlId = "eds-terms-of-notification-settings-edit-form-" + Alfresco.util.generateDomId();
                 Alfresco.util.Ajax.request(
                     {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
                         dataObj: {
-                            htmlid: "eds-terms-of-notification-settings-edit-form",
+                            htmlid: htmlId,
                             itemKind:"node",
                             itemId: settingsNode,
                             mode: "edit",
@@ -64,9 +65,9 @@ LogicECM.module = LogicECM.module || {};
                                 var container = Dom.get(me.id + "-settings");
                                 container.innerHTML = response.serverResponse.responseText;
 
-                                Dom.get("eds-terms-of-notification-settings-edit-form-form-submit").value = me.msg("label.save");
+                                Dom.get(htmlId+ "-form-submit").value = me.msg("label.save");
 
-                                var form = new Alfresco.forms.Form("eds-terms-of-notification-settings-edit-form-form");
+                                var form = new Alfresco.forms.Form(htmlId + "-form");
                                 form.setSubmitAsJSON(true);
                                 form.setAJAXSubmit(true,
                                     {
@@ -82,21 +83,6 @@ LogicECM.module = LogicECM.module || {};
                         failureMessage: "message.failure",
                         execScripts: true
                     });
-            },
-
-            onSuccess: function (response)
-            {
-                if (response && response.json) {
-                    Alfresco.util.PopupManager.displayMessage(
-                        {
-                            text: Alfresco.util.message("message.save.success")
-                        });
-                } else {
-                    Alfresco.util.PopupManager.displayPrompt(
-                        {
-                            text: Alfresco.util.message("message.failure")
-                        });
-                }
             }
         });
 })();

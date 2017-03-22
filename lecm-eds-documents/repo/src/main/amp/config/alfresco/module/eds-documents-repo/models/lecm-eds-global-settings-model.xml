@@ -27,7 +27,7 @@
             </parameter>
         </constraint>
         <constraint name="lecm-eds-globset:natural-number-constraint" type="REGEX">
-            <parameter name="expression"><value>^\+?(0|[1-9]\d*)$</value></parameter>
+            <parameter name="expression"><value>^[0-9]+$</value></parameter>
             <parameter name="requiresMatch"><value>true</value></parameter>
         </constraint>
     </constraints>

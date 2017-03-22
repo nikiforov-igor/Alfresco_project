@@ -213,14 +213,11 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 	}
 
 	/**
-	 * Получение настроек уведомлений
-	 * @return узел с настройками уведомлений
+	 * Получение настроек сроков уведомлений
+	 * @return узел с настройками сроков уведомлений
 	 */
 	public ScriptNode getTermsOfNotificationSettingsNode() {
 		NodeRef settings = edsGlobalSettingsService.getTermsOfNotificationSettingsNode();
-		if(settings == null) {
-			settings = edsGlobalSettingsService.createTermsOfNotificationSettingsNode();
-		}
 		if(settings != null) {
 			ScriptNode a = new ScriptNode(settings, serviceRegistry, getScope());
 			return new ScriptNode(settings, serviceRegistry, getScope());
@@ -235,6 +232,7 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 	public int getSettingsNDays() {
 		return edsGlobalSettingsService.getSettingsNDays();
 	}
+
 	/**
 	 * Получение количества рабочих дней для краткосрочного исполнения за которое должно высылаться уведомление
 	 * @return количество рабочих дней для краткосрочного исполнения за которое должно высылаться уведомление
@@ -242,6 +240,7 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 	public int getSettingsShortNDays() {
 		return edsGlobalSettingsService.getSettingsShortNDays();
 	}
+
 	/**
 	 * Получение предельного количества календарных дней краткосрочного исполнения
 	 * @return предельное количество календарных дней краткосрочного исполнения

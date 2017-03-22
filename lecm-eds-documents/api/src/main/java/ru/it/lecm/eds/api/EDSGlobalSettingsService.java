@@ -78,10 +78,25 @@ public interface EDSGlobalSettingsService {
 	 */
 	int getSettingsNDays();
 
+	/**
+	 * @return Количество рабочих дней для краткосрочного исполнения за которое должно высылаться уведомление
+	 */
 	int getSettingsShortNDays();
 
+	/**
+	 * @return Предельное количество календарных дней краткосрочного исполнения
+	 */
 	int getSettingsShortLimitDays();
 
+	/**
+	 * Получение настроек сроков уведомлений
+	 * @return узел с настройками сроков уведомлений
+	 */
 	NodeRef getTermsOfNotificationSettingsNode();
-	NodeRef createTermsOfNotificationSettingsNode() throws WriteTransactionNeededException;
+
+	/**
+	 * Создание настроек сроков уведомлений
+	 * Create an instance of {@link NodeRef }
+	 */
+	NodeRef createTermsOfNotificationSettingsNode();
 }

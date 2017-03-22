@@ -32,7 +32,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	private DictionaryBean dictionaryService;
 	private DocumentGlobalSettingsService documentGlobalSettingsService;
 	private NodeRef settingsNode;
-	private NodeRef notificationsNode;
+	private NodeRef termsOfNotificationSettingsNode;
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -77,7 +77,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 			settingsNode = createSettingsNode();
 		}
 		if (null == getTermsOfNotificationSettingsNode()) {
-            notificationsNode = createTermsOfNotificationSettingsNode();
+            termsOfNotificationSettingsNode = createTermsOfNotificationSettingsNode();
         }
 	}
 
@@ -311,18 +311,18 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 
     @Override
     public NodeRef getTermsOfNotificationSettingsNode() {
-        if (notificationsNode == null) {
-            notificationsNode = nodeService.getChildByName(this.getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, TERMS_OF_NOTIFICATION_SETTINGS_NODE_NAME );
+        if (termsOfNotificationSettingsNode == null) {
+            termsOfNotificationSettingsNode = nodeService.getChildByName(this.getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, TERMS_OF_NOTIFICATION_SETTINGS_NODE_NAME );
         }
 
-        return notificationsNode;
+        return termsOfNotificationSettingsNode;
     }
 
     @Override
-    public NodeRef createTermsOfNotificationSettingsNode() throws WriteTransactionNeededException {
-        try{
+    public NodeRef createTermsOfNotificationSettingsNode() {
+        try {
             return createNode(this.getServiceRootFolder(), TYPE_TERMS_OF_NOTIFICATION_SETTINGS, TERMS_OF_NOTIFICATION_SETTINGS_NODE_NAME , null);
-        } catch(WriteTransactionNeededException e){
+        } catch(WriteTransactionNeededException e) {
             return null;
         }
     }
