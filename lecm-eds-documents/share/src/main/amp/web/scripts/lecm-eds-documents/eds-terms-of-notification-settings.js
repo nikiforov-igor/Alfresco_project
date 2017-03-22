@@ -13,18 +13,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
  */
 LogicECM.module = LogicECM.module || {};
 
-(function()
-{
+(function() {
     var Dom = YAHOO.util.Dom;
 
-    LogicECM.module.EdsTermsOfNotificationSettings = function(htmlId)
-    {
+    LogicECM.module.EdsTermsOfNotificationSettings = function(htmlId) {
         LogicECM.module.EdsTermsOfNotificationSettings.superclass.constructor.call(this, "LogicECM.module.EdsTermsOfNotificationSettings", htmlId, ["container", "json"]);
         return this;
     };
 
-    YAHOO.extend(LogicECM.module.EdsTermsOfNotificationSettings, Alfresco.component.Base,
-        {
+    YAHOO.extend(LogicECM.module.EdsTermsOfNotificationSettings, Alfresco.component.Base, {
             onReady: function () {
                 this.loadSettings();
             },

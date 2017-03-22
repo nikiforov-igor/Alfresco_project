@@ -219,7 +219,6 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 	public ScriptNode getTermsOfNotificationSettingsNode() {
 		NodeRef settings = edsGlobalSettingsService.getTermsOfNotificationSettingsNode();
 		if(settings != null) {
-			ScriptNode a = new ScriptNode(settings, serviceRegistry, getScope());
 			return new ScriptNode(settings, serviceRegistry, getScope());
 		}
 		return null;

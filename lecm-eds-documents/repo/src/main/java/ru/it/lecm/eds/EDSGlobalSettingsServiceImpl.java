@@ -322,7 +322,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
     public NodeRef createTermsOfNotificationSettingsNode() {
         try {
             return createNode(this.getServiceRootFolder(), TYPE_TERMS_OF_NOTIFICATION_SETTINGS, TERMS_OF_NOTIFICATION_SETTINGS_NODE_NAME , null);
-        } catch(WriteTransactionNeededException e) {
+        } catch (WriteTransactionNeededException e) {
             return null;
         }
     }
@@ -350,7 +350,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	@Override
 	public int getSettingsShortLimitDays() {
 		NodeRef globalSettingsNode = getTermsOfNotificationSettingsNode();
-		if (globalSettingsNode != null &&  nodeService.getProperty(globalSettingsNode, PROP_SHORT_LIMIT_DAYS) != null) {
+		if (globalSettingsNode != null && nodeService.getProperty(globalSettingsNode, PROP_SHORT_LIMIT_DAYS) != null) {
 			return (Integer) nodeService.getProperty(globalSettingsNode, PROP_SHORT_LIMIT_DAYS);
 		} else {
 			return DEFAULT_SHORT_LIMIT_DAYS;
