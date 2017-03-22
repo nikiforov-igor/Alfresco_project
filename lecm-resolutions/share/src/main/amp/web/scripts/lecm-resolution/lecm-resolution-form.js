@@ -252,7 +252,6 @@
     function init(layer, args) {
         var formId = args[1].formId;
         formButtons = Dom.get(formId + "-form-buttons");
-        Dom.setStyle(formId + "-form-submit", "display", "none");
 
         Alfresco.util.Ajax.jsonGet({
             url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/isCurrentEmployeeHasBusinessRole",
