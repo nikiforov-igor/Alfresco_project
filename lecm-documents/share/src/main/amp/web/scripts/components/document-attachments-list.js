@@ -40,7 +40,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
             options: {
                 nodeRef: null,
-                inclBaseDoc: false
+                baseDocAssocName: null
             },
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -60,7 +60,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         dataObj: {
                             nodeRef: this.options.nodeRef,
                             htmlid: this.id + Alfresco.util.generateDomId(),
-                            inclBaseDoc: this.options.inclBaseDoc
+                            baseDocAssocName: this.options.baseDocAssocName
                         },
                         successCallback: {
                             fn: function (response) {

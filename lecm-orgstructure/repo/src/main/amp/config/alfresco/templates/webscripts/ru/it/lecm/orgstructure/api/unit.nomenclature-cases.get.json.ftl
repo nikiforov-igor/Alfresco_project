@@ -1,5 +1,5 @@
 <#escape x as jsonUtils.encodeJSONString(x)!''>
 {
-	"hasNomenclatureCases": "${hasNomenclatureCases}"
+	"hasNomenclatureCases": ${hasNomenclatureCases?string}
 }
 </#escape>

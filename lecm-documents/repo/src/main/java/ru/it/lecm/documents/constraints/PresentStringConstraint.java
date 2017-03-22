@@ -1,5 +1,8 @@
 package ru.it.lecm.documents.constraints;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.alfresco.repo.dictionary.constraint.AbstractConstraint;
 
 /**
@@ -26,5 +29,15 @@ public class PresentStringConstraint extends AbstractConstraint {
 
     @Override
     protected void evaluateSingleValue(Object value) {
+    }
+    
+    @Override
+    public Map<String, Object> getParameters()
+    {
+        Map<String, Object> params = new HashMap<String, Object>(1);
+        
+        params.put("presentString", this.presentString);
+        
+        return params;
     }
 }

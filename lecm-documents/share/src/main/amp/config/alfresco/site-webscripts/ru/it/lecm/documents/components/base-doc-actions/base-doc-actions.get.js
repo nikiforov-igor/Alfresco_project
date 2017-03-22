@@ -1,6 +1,7 @@
     <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
     <import resource="classpath:/alfresco/site-webscripts/org/alfresco/components/documentlibrary/include/documentlist.lib.js">
     <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/document-utils.js">
+    <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 
     function main() {
         AlfrescoUtil.param('nodeRef');
@@ -9,7 +10,7 @@
         AlfrescoUtil.param('baseDocAssocName', null);
 
         var baseDocRef = getBaseDocNodeRef(model.nodeRef, model.baseDocAssocName);
-
+        model.hasPermission = false;
         if (baseDocRef) {
             model.baseDocRef = baseDocRef;
             if (isFinalStatus(baseDocRef)) {
@@ -22,12 +23,9 @@
                     doclibCommon();
                 }
             }
+            model.hasPermission = hasPermissions(baseDocRef);
         }
-
-        //var hasPerm = hasPermission(model.nodeRef, PERM_ACTION_EXEC);
-        model.hasPermission = true; // hasPerm || hasOnlyInDraftPermission(model.nodeRef, "LECM_BASIC_PG_Initiator");
         model.isAdmin = user.isAdmin;
-
     }
 
 function isFinalStatus(nodeRef, defaultValue) {
@@ -51,4 +49,10 @@ function getBaseDocNodeRef(nodeRef, baseDocAssocName) {
     else return null;
 }
 
+function hasPermissions(nodeRef) {
+    var actionExecPerm = hasPermission(nodeRef, PERM_ACTION_EXEC);
+    var draftPerm  = hasOnlyInDraftPermission(nodeRef, "LECM_BASIC_PG_Initiator");
+    var readPerm = hasPermission(nodeRef, "Read");
+    return (actionExecPerm || draftPerm) && readPerm;
+}
 main();

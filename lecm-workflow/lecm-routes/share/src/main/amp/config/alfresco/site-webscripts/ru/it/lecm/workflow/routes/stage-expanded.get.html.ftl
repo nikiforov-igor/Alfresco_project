@@ -63,6 +63,10 @@
 	});
 	LogicECM.CurrentModules["${id}"].moveLock = false;
 
+<#if isApproval>
+    LogicECM.CurrentModules["${id}"].getCustomCellFormatter = LogicECM.module.Approval.StageExpanded.getCustomCellFormatter;
+</#if>
+
 <#if editable>
 
 	function onMoveTableRow(direction, rowData, actionEl, moveRowFunction) {
@@ -138,9 +142,6 @@
 			}
 		});
 	};
-	<#if isApproval>
-        LogicECM.CurrentModules["${id}"].getCustomCellFormatter = LogicECM.module.Approval.StageExpanded.getCustomCellFormatter;
-	</#if>
     LogicECM.CurrentModules["${id}"].onActionDelete = function (p_items, owner, actionsConfig, fnDeleteComplete) {
         this.onDelete(p_items, owner, actionsConfig, function() {
 			<#if isApproval>

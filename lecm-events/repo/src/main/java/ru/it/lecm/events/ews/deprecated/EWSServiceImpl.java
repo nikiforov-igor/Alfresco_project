@@ -24,6 +24,7 @@ import microsoft.exchange.webservices.data.TimeWindow;
 import microsoft.exchange.webservices.data.CalendarEvent;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.joda.time.Interval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.events.beans.EWSEvent;
@@ -66,6 +67,8 @@ public class EWSServiceImpl extends AbstractEWSService {
 	private List<EmployeeAvailability> getEvents(List<EmployeeAvailability> events, List<AttendeeInfo> attendees, Date fromDate, Date toDate) {
 		try {
 			int i = 0;
+			int tzOffset = TimeZone.getDefault().getRawOffset();
+			Interval requiredInterval = new Interval(fromDate.getTime() - tzOffset, toDate.getTime() - tzOffset);
 			GetUserAvailabilityResults results = service.getUserAvailability(attendees, new TimeWindow(fromDate, toDate), AvailabilityData.FreeBusyAndSuggestions);
 			for (AttendeeAvailability availability : results.getAttendeesAvailability()) {
 				EmployeeAvailability employeeAvailability = events.get(i++);
@@ -76,7 +79,9 @@ public class EWSServiceImpl extends AbstractEWSService {
 						String endTime = formatter.format(calendarEvent.getEndTime());
 						Date start = serviceTimezoneFormatter.parse(startTime);
 						Date end = serviceTimezoneFormatter.parse(endTime);
-						employeeAvailability.getEvents().add(new EWSEvent(start, end));
+						if (requiredInterval.contains(start.getTime())) {
+							employeeAvailability.getEvents().add(new EWSEvent(start, end));
+						}
 					}
 				} else {
 					logger.error("EWS Error code: {}", availability.getErrorCode().toString());

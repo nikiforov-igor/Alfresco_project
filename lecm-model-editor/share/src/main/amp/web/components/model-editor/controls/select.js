@@ -29,6 +29,7 @@ IT.widget = IT.widget || {};
 			containerEl.innerHTML = "";
 		    var select = containerEl.appendChild(document.createElement('select'));
 		    select.name = this.get('name');
+		    select.disabled = this.get('disabled');
 		    select.id = this.get('id') || select.name;
 		    
 		    var _options = this.get('options');
@@ -79,6 +80,11 @@ IT.widget = IT.widget || {};
             this.setAttributeConfig("showdefault", {
             	validator: Lang.isBoolean,
                 value: (oAttributes.showdefault || true),
+                writeOnce: true
+            });
+            this.setAttributeConfig("disabled", {
+            	validator: Lang.isBoolean,
+                value: (oAttributes.disabled || false),
                 writeOnce: true
             });
 		},

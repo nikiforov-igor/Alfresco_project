@@ -192,8 +192,7 @@ public class ExportData extends AbstractWebScript {
                 result = value.get("displayValue").toString();
             }
         }
-        result = result.replaceAll("<a[^>]*>", "");
-        result = result.replaceAll("</a>", "");
+        result = result.replaceAll("<\\/?[^>]+>", "");
         return result;
     }
 

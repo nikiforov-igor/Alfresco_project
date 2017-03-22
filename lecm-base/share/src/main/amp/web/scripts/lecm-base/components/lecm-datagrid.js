@@ -1287,7 +1287,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     return false;
                 };
 
-                var column, sortable;
+                var column, sortable, isLinkShown = false;
                 for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
                     column = this.datagridColumns[i];
 
@@ -1302,8 +1302,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             if (column.dataType == "lecm-orgstr:employee" || inArray(column.name, this.options.nowrapColumns)) {
                                 className = "nowrap "
                             }
-
-                            columnDefinitions.push({
+                            var columnObj = {
                                 key: this.dataResponseFields[i],
                                 label: column.label.length ? column.label : this.msg(column.name.replace(":", "_")),
                                 sortable: sortable,
@@ -1314,7 +1313,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 },
                                 formatter: this.getCellFormatter(column.dataType),
                                 className: className + ((column.dataType == 'boolean') ? 'centered' : '')
-                            });
+                            };
+                            if (!isLinkShown && (column.dataType != "lecm-orgstr:employee")) {
+                                isLinkShown = true;
+                                columnObj.showLink = isLinkShown;
+                            }
+                            columnDefinitions.push(columnObj);
                         }
                     } else {
                         columnDefinitions.push({
@@ -2157,6 +2161,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 return items;
             },
 
+            getAllSelectedItems: function () {
+                var items = [];
+                for (var item in this.selectedItems) {
+                    if (this.selectedItems.hasOwnProperty(item) && this.selectedItems[item]) {
+                        items.push(item);
+                    }
+                }
+                return items;
+            },
             /**
              * Public function to select items by specified groups
              *
@@ -3149,13 +3162,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 inputTimeZone.value = new Date().getTimezoneOffset();
                 form.appendChild(inputTimeZone);
 
-                for(var key in this.selectedItems) {
+                var allSelected = this.getAllSelectedItems();
+                allSelected.forEach(function (item) {
                     var inputNodeRef = document.createElement("input");
                     inputNodeRef.type = "hidden";
                     inputNodeRef.name = "nodeRef";
-                    inputNodeRef.value = key;
+                    inputNodeRef.value = item;
                     form.appendChild(inputNodeRef);
-                }
+                });
 
                 for (i = 0; i < this.datagridColumns.length; i++) {
                     var column = this.datagridColumns[i];

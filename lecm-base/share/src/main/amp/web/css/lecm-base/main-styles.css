@@ -31,6 +31,12 @@
 .visible-visible {
 	visibility: visible;
 }
+.visible-force-hidden {
+	visibility: hidden !important;
+}
+.visible-force-visible {
+	visibility: visible !important;
+}
 .clear {
     clear: both;
 }
@@ -448,6 +454,10 @@ i.icon-building {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 	resize: none;
+}
+.control .container .value-div > input[type=text],
+.control.date .container .value-div > div > input[type=text] {
+    padding-left: 5px;
 }
 .yui-skin-lecmTheme form .mandatory,
 .yui-skin-lecmTheme .form-fields .mandatory,

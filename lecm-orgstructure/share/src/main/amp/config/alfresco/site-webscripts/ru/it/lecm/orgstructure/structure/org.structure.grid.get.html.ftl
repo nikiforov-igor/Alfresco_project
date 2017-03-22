@@ -73,7 +73,7 @@
                                                                     scope: this,
                                                                     fn: function (response) {
                                                                         var oResults = response.json;
-                                                                        if (oResults && oResults.hasNomenclatureCases && oResults.hasNomenclatureCases == "true") { // Нельзя удалять - есть связанные номенклатурные дела
+                                                                        if (oResults && oResults.hasNomenclatureCases) { // Нельзя удалять - есть связанные номенклатурные дела
                                                                             Alfresco.util.PopupManager.displayMessage({
                                                                                 text: this.msg("message.delete.unit.failure.has.nomenclature.cases")
                                                                             });

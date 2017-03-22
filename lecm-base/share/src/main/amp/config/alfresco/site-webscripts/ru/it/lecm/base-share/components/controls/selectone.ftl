@@ -13,6 +13,11 @@
 
 <#assign readonly = false>
 <#assign fieldValue=field.value>
+<#if form.mode == "create">
+    <#if form.arguments[field.name]?has_content>
+        <#assign fieldValue=form.arguments[field.name]>
+    </#if>
+</#if>
 
 <#if fieldValue?string == "" && field.control.params.defaultValueContextProperty??>
    <#if context.properties[field.control.params.defaultValueContextProperty]??>

@@ -218,7 +218,7 @@
                         var reqObj = {
                             formId: '${panelId}',
                             itemId: ref,
-                            htmlId: 'LinkMetadata-' + ref.replace(/\//g, "_"),
+                            htmlId: 'LinkMetadata-' + Alfresco.util.generateDomId(),
                             setId: 'common',
                             failureMessage: 'message.object-not-found'
                         };

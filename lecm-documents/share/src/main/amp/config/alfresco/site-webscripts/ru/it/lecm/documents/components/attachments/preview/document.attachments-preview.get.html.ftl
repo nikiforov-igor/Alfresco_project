@@ -11,11 +11,13 @@
                     <input id="${el}-versions-actions-button" type="button">
                 </div>
                 <div id="${el}-attachment-actions" class="preview-actions hidden1">
-                    <input id="${el}-attachment-actions-button" type="button"></input>
+                    <input id="${el}-attachment-actions-button" type="button"/>
                 </div>
-                <div id="${el}-attachment-add-container" class="preview-upload hidden1">
-                    <div id="${el}-attachment-add"></div>
-                </div>
+                <#if hasAddAttachmentPerm>
+                    <div id="${el}-attachment-add-container" class="preview-upload hidden1">
+                        <div id="${el}-attachment-add"></div>
+                    </div>
+                </#if>
             </div>
             <div class="lecm-dashlet-actions">
                 <a id="${el}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
@@ -28,11 +30,6 @@
 <div class="clear"></div>
 <script type="text/javascript">//<![CDATA[
 (function () {
-    new LogicECM.DocumentAttachmentsPreview("${el}").setOptions({
-        nodeRef: "${nodeRef}",
-        inclBaseDoc: ${inclBaseDoc?string("true", "false")}
-    }).setMessages(${messages});
-
     function init() {
         LogicECM.module.Base.Util.loadResources([
                     'scripts/lecm-documents/lecm-document-preview-control.js',
@@ -63,13 +60,32 @@
     }
 
     function createControl() {
+        loadExternalResourceBundle();
+        new LogicECM.DocumentAttachmentsPreview("${el}").setOptions({
+            <#if baseDocAssocName??>
+                baseDocAssocName: "${baseDocAssocName}",
+            </#if>
+            nodeRef: "${nodeRef}"
+        }).setMessages(${messages});
+        
         var control = new LogicECM.module.Documents.DocumentPreviewControl("${el}").setMessages(${messages});
         control.setOptions({
             inclBaseDoc:${inclBaseDoc?string("true", "false")},
             resizeable: true,
             itemId: "${nodeRef}",
+            <#if baseDocAssocName??>
+                baseDocAssocName: "${baseDocAssocName}",
+            </#if>
             forTask: false
         });
+    }
+
+    function loadExternalResourceBundle() {
+        var resourceRef = document.createElement('link');
+        resourceRef.setAttribute('rel', 'resource');
+        resourceRef.setAttribute('type', 'application/l10n');
+        resourceRef.setAttribute('href', Alfresco.constants.URL_RESCONTEXT + 'extras/components/preview/locale/locale.properties');
+        document.getElementsByTagName("head")[0].appendChild(resourceRef);
     }
 
     YAHOO.util.Event.onDOMReady(init);

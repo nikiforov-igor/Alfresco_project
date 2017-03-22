@@ -1,41 +1,50 @@
-function main() {
+(function () {
 	var fromDate = json.get("fromDate");
 	var toDate = json.get("toDate");
-	var allDay = json.get("allDay");
+	var allDay = ("" + json.get("allDay")) == "true";
 	var location = json.get("location");
-	var members = json.has("members") ? json.get("members") : null;
+	var jsonMembers = json.has("members") ? json.get("members") : null;
 	var event = json.has("event") ? json.get("event") : null;
-
 	var clientTimezoneOffset = json.get("clientTimezoneOffset");
 	var serverTimezoneOffset = new Date().getTimezoneOffset();
 	var clientServerTimezoneDifference = Math.floor((clientTimezoneOffset - serverTimezoneOffset)/60);
+	var members = [];
+	var i;
+	var start;
+	var end;
+	var endDate;
+	var ewsMembers;
 
-	model.locationAvailable = events.checkLocationAvailable(location, event, fromDate, toDate, allDay == "true", clientServerTimezoneDifference);
+	model.locationAvailable = events.checkLocationAvailable(location, event, fromDate, toDate, allDay, clientServerTimezoneDifference);
+	model.members = [];
 
-	var membersResult = [];
-	if (members == null && event != null) {
+	if (event && !jsonMembers) {
 		members = events.getEventMembers(event);
-		for (var i = 0; i < members.length; i++) {
-			var memberRef = members[i].nodeRef.toString();
-
-			membersResult.push({
-				nodeRef: memberRef,
-				name: substitude.formatNodeTitle(memberRef, "{lecm-orgstr:employee-short-name}"),
-				available: events.checkMemberAvailable(memberRef, event, fromDate, toDate, allDay == "true")
-			});
-		}
-	} else if (members != null) {
-		for (var i = 0; i < members.length(); i++) {
-			if (members.get(i).length() > 0) {
-				membersResult.push({
-					nodeRef: members.get(i),
-					name: substitude.formatNodeTitle(members.get(i), "{lecm-orgstr:employee-short-name}"),
-					available: events.checkMemberAvailable(members.get(i), event, fromDate, toDate, allDay == "true")
-				});
-			}
+	} else if (jsonMembers) {
+		for (i = 0; i < jsonMembers.length(); ++i) {
+			members.push(utils.getNodeFromString(jsonMembers.get(i)));
 		}
 	}
-	model.members = membersResult;
-}
 
-main();
+	start = fromDate.slice(0, fromDate.indexOf("T"));
+	endDate = utils.fromISO8601(toDate);
+	endDate.setDate(endDate.getDate() + 1);
+	end = utils.toISO8601(endDate);
+	end = end.slice(0, end.indexOf("T"));
+	ewsMembers = ews.getEvents(members, start + "T00:00:00Z", end +  "T00:00:00Z");
+
+	model.members = members.map(function (member) {
+		function isBusy (ewsMember) {
+			var ewsMemberRef = '' + ewsMember.employee;
+			var memberRef = '' + member.nodeRef.toString();
+			return (ewsMemberRef == memberRef) && ewsMember.busytime.length;
+		}
+
+		var isAvailable = !ewsMembers.some(isBusy);
+		return {
+			nodeRef: member.nodeRef.toString(),
+			name: substitude.formatNodeTitle(member, "{lecm-orgstr:employee-short-name}"),
+			available: isAvailable && events.checkMemberAvailable(member, event, fromDate, toDate, allDay)
+		};
+	});
+})();

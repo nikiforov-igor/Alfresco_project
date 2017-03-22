@@ -1,5 +1,8 @@
 package ru.it.lecm.documents.constraints;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.alfresco.repo.dictionary.constraint.AbstractConstraint;
 
 /**
@@ -26,5 +29,15 @@ public class AuthorPropertyConstraint extends AbstractConstraint {
 
     public void setAuthorProperty(String authorProperty) {
         this.authorProperty = authorProperty;
+    }
+    
+    @Override
+    public Map<String, Object> getParameters()
+    {
+        Map<String, Object> params = new HashMap<String, Object>(1);
+        
+        params.put("authorProperty", this.authorProperty);
+        
+        return params;
     }
 }

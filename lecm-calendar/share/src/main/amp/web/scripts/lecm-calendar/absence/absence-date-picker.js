@@ -76,7 +76,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 
 		var page = (theDate.getMonth() + 1) + "/" + theDate.getFullYear();
 		var selected = (theDate.getMonth() + 1) + "/" + theDate.getDate() + "/" + theDate.getFullYear();
-		
+
 		// Populate the input fields
 		if (this.options.currentValue) {
 			// show the formatted date
