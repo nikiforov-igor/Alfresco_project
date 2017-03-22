@@ -318,6 +318,7 @@ public class UserActionsServiceImpl implements UserActionsService {
                     actionStruct.put("subtype", "workflow");
                     actionStruct.put("workflowType", nodeService.getProperty(action, GroupActionsService.PROP_WORKFLOW));
                     Map<String, String> processingVars = processingVariables(nodeRef, action, statemachineId, hasStatemachine);
+                    processingVars.put("assoc_packageItems", nodeRef.toString());
                     actionStruct.put("variables", processingVars);
                     actionStruct.put("isForm", false);
                 } else {
