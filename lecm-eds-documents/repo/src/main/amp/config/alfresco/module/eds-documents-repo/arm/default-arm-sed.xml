@@ -15850,7 +15850,7 @@
                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                         <property name="lecm-arm:expression">
                             <![CDATA[user.currentUser().hasBusinessRole("DA_CONTROLLERS")]]></property>
-                        <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+                        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                         <property name="lecm-arm:order"><![CDATA[35]]></property>
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                         <property name="lecm-arm:types">
