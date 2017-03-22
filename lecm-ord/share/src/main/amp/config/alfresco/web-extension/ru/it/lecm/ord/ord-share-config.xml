@@ -269,7 +269,9 @@
                         </constraint-handlers>
                     </field>
                     <field id="cm:created" set="ord-document-search-common-set" >
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl">
+                            <control-param name="forceEditable">true</control-param>
+                        </control>
                     </field>
                     <field id="lecm-document-aspects:reg-project-data-date" set="ord-document-search-common-set" >
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
