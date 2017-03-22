@@ -1048,7 +1048,7 @@
 							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
 						</constraint-handlers>
 					</field>
-					<field id="lecm-events:from-date" label="Дата начала">
+					<field id="lecm-events:from-date" label-id="label.meetings.start.date">
 						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
 					</field>
 					<field id="lecm-meetings:chairman-assoc">
