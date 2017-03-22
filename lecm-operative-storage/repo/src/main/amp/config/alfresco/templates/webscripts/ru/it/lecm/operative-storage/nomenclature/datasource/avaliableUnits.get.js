@@ -4,15 +4,17 @@
 	// Переопределяем поведение построения фильтра - получаем только непосредственно дочерние результаты
 	getFilterParams = function getFilterParams(filterData, parentXPath)
 	{
-		var query = " +PATH:\"" + parentXPath + "/*\"";
-		var columns = [];
+		var query = " +PATH:\"" + parentXPath + "/*\"",
+			columnCandidates,
+			columns = [];
 		if (filterData) {
 			var keyWord = filterData.match(/.*:(.*)$/)[1];
 
 			if(keyWord) {
-				columns.push('lecm\\-os:nomenclature\\-year\\-section\\-year:' + keyWord);
-				columns.push('lecm\\-os:nomenclature\\-unit\\-section\\-index:' + keyWord);
-				columns.push('cm:title:' + keyWord);
+				columnCandidates = filterData.split('#');
+				for each (columnsCandidate in columnCandidates) {
+					columns.push(columnsCandidate.replace(/-/g, "\\-") + ':' + keyWord);
+				}
 			}
 		}
 

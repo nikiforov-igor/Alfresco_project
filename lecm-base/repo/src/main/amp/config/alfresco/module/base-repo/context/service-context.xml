@@ -262,8 +262,8 @@
 		<property name="nodeService" ref="nodeService"/>
 		<property name="tenantAdminService" ref="tenantAdminService"/>
 		<property name="dictionaryRepositoryBootstrap" ref="dictionaryRepositoryBootstrap"/>
-
 		<property name="repositoryModelsLocation" ref="customModelsRepositoryLocation"/>
+		<property name="forceUpdateCache" value="${lecm.models.forceUpdateCache}"/>
 	</bean>
 
 	<bean id="modelsToRepositoryLoader" class="ru.it.lecm.base.beans.ModelToRepositoryLoader" abstract="true"

@@ -5,6 +5,7 @@
 .yui-skin-lecmTheme .yui-dt table.execution-expanded-content {
     color: #999999;
     margin-left: 70px;
+    padding-right: 70px;
 }
 
 .execution-tree-control .graph-tree .yui-dt-data td {

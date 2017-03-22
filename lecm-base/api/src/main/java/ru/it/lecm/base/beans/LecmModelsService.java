@@ -51,6 +51,7 @@ public class LecmModelsService extends AbstractLifecycleBean {
     private final Logger logger = LoggerFactory.getLogger(LecmModelsService.class);
     private ContentService contentService;
     private NamespaceService namespaceService;
+	private boolean forceUpdateCache = false;
 
     public void setRepositoryModelsLocation(RepositoryLocation repositoryModelsLocation) {
         this.repositoryModelsLocation = repositoryModelsLocation;
@@ -84,6 +85,10 @@ public class LecmModelsService extends AbstractLifecycleBean {
         this.namespaceService = namespaceService;
     }
 
+	public void setForceUpdateCache(boolean forceUpdateCache) {
+		this.forceUpdateCache = forceUpdateCache;
+	}
+	
     public boolean isRestorable(String modelName) {
         return modelsMap.containsKey(modelName.replace(":","_"));
     }
@@ -244,6 +249,25 @@ public class LecmModelsService extends AbstractLifecycleBean {
 											if (update) {
 												logger.trace("Models are DIFFERENT. Model content in repository will BE UPDATED.");
 												contentInputStream = modelResource.getInputStream();
+												
+												if (forceUpdateCache) {
+													// ALFFIVE-185
+													// DictionaryRepositoryBootstrap.onBootstrap может отработать раньше, чем LecmModelsService.onBootstrap,
+													// что может привести к ошибкам компиляции модели в случае, если зависимости ещё не были загружены в репозиторий.
+													logger.debug("Force model cache update is enabled");
+													InputStream is = null;
+													M2Model model = null;
+													try {
+														is = modelResource.getInputStream();
+														model = M2Model.createModel(is);
+														dictionaryDAO.putModel(model);
+													} catch (Exception e) {
+														logger.error("Failed to register model {}", model.getName(), e);
+													} finally {
+														IOUtils.closeQuietly(is);
+													}
+												}
+												
 												/*
 												 ALF-3866
 												 если установлена опция lecm.models.useDefaultModels=true и у нас настроена аутентификация с использованием SSO,

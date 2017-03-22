@@ -777,7 +777,7 @@
                     <field id="fake:base-doc-actions">
                         <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
                             <control-param name="uri">lecm/components/dashlets/base-doc-actions</control-param>
-                            <control-param name="baseDocAssocName">lecm-errands:additional-document-assoc</control-param>
+                            <control-param name="baseDocAssocName">lecm-resolutions:base-document-assoc</control-param>
                         </control>
                     </field>
                     <field id="fake:document-metadata">
@@ -788,7 +788,7 @@
                     <field id="fake:document-attachments">
                         <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
                             <control-param name="uri">/lecm/components/document/document-attachments</control-param>
-                            <control-param name="baseDocAssocName">lecm-errands:additional-document-assoc</control-param>
+                            <control-param name="baseDocAssocName">lecm-resolutions:base-document-assoc</control-param>
                         </control>
                     </field>
                     <field id="fake:document-errands">
