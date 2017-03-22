@@ -31,6 +31,12 @@
 .visible-visible {
 	visibility: visible;
 }
+.visible-force-hidden {
+	visibility: hidden !important;
+}
+.visible-force-visible {
+	visibility: visible !important;
+}
 .clear {
     clear: both;
 }
