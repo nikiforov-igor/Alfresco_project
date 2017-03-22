@@ -737,38 +737,62 @@
             <form id="search">
                 <field-visibility>
                     <show id="lecm-eds-document:document-type-assoc"/>
-                    <show id="lecm-document:title"/>
-                    <show id="cm:created"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                    <show id="lecm-document:regnum"/>
                     <show id="lecm-document:doc-date"/>
-                    <show id="lecm-document-aspects:reg-data-number"/>
+                    <show id="lecm-internal:response-date"/>
+                    <show id="lecm-document:title"/>
                     <show id="lecm-document:author-assoc"/>
+                    <show id="lecm-eds-document:executor-assoc"/>
+                    <show id="lecmSignAspects:signerEmployeeAssoc"/>
                     <show id="lecm-internal:recipients-assoc"/>
-                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-eds-aspect:execution-state"/>                                                        <!-- Исполнение -->
+                    <show id="lecm-review-ts:doc-review-state"/>                                                        <!-- Ознакомление -->
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-document:title" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
-                        </constraint-handlers>
+                    <field id="lecm-eds-document:document-type-assoc">
+                        <control>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_внутреннего_x0020_документа</control-param>
+                            <control-param name="plane">true</control-param>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
                     </field>
-                    <field id="cm:created">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl">
-                            <control-param name="forceEditable">true</control-param>
+                    <field id="lecm-statemachine:status">
+                        <control template="/ru/it/lecm/documents/controls/select-status-control.ftl">
+                            <control-param name="docType">lecm-outgoing:document</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="endpointMany">true</control-param>
+                            <control-param name="nameSuffix">-multiText</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:doc-date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
-                    <field id="lecm-eds-document:document-type-assoc">
-                        <control>
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_внутреннего_x0020_документа</control-param>
-                            <control-param name="plane">true</control-param>
-                        </control>
+                    <field id="lecm-internal:response-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
-                    <field id="lecm-document:author-assoc" mandatory="false">
+                    <field id="lecm-document:title">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
+                    </field>
+                    <field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-eds-document:executor-assoc">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmSignAspects:signerEmployeeAssoc">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
                     </field>
                     <field id="lecm-internal:recipients-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-complex-control.ftl">
@@ -797,6 +821,20 @@
                             <control-param name="organization_plane">false</control-param>
                             <control-param name="organization_showSearch">true</control-param>
                             <control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-eds-aspect:execution-state" label-id="ord.execution.lable">
+                        <control template="/ru/it/lecm/eds/controls/selectmany.ftl">
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="nameSuffix">-multiText</control-param>
+                            <control-param name="useDefaultValue">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-review-ts:doc-review-state" label-id="ord.review.lable">
+                        <control template="/ru/it/lecm/eds/controls/selectmany.ftl">
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="nameSuffix">-multiText</control-param>
+                            <control-param name="useDefaultValue">false</control-param>
                         </control>
                     </field>
                 </appearance>
