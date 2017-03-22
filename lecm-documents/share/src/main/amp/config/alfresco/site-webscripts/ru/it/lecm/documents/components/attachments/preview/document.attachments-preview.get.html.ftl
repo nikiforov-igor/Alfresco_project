@@ -11,7 +11,7 @@
                     <input id="${el}-versions-actions-button" type="button">
                 </div>
                 <div id="${el}-attachment-actions" class="preview-actions hidden1">
-                    <input id="${el}-attachment-actions-button" type="button"/>
+                    <div id="${el}-attachment-actions-button" type="button"></div>
                 </div>
                 <#if hasAddAttachmentPerm>
                     <div id="${el}-attachment-add-container" class="preview-upload hidden1">
@@ -67,10 +67,40 @@
             </#if>
             nodeRef: "${nodeRef}"
         }).setMessages(${messages});
-        
+
         var control = new LogicECM.module.Documents.DocumentPreviewControl("${el}").setMessages(${messages});
         control.setOptions({
-            inclBaseDoc:${inclBaseDoc?string("true", "false")},
+            <#if categories??>
+                categories: [
+                        <#list categories as category>
+                            {
+                                name: "${category.name}",
+                                nodeRef: "${category.nodeRef}",
+                                isReadOnly: "${category.isReadOnly?string}"
+                            },
+                        </#list>
+                    ],
+            </#if>
+            readOnlyActions: [
+            <#if readOnlyActions??>
+                <#list readOnlyActions as action>
+                    {
+                        id: "${action.id}",
+                        onlyForOwn: ${action.onlyForOwn?string}
+                    }<#if action_has_next>,</#if>
+                </#list>
+            </#if>
+            ],
+            allActions: [
+                <#if allActions??>
+                    <#list allActions as action>
+                        {
+                            id: "${action.id}",
+                            onlyForOwn: ${action.onlyForOwn?string}
+                        }<#if action_has_next>,</#if>
+                    </#list>
+                </#if>
+            ],
             resizeable: true,
             itemId: "${nodeRef}",
             <#if baseDocAssocName??>
