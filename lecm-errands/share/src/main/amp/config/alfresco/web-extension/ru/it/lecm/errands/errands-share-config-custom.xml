@@ -301,6 +301,7 @@
                     <show id="lecm-base-dummy-aspects:script5" force="true"/>
                     <show id="lecm-base-dummy-aspects:script6" force="true"/>
                     <show id="lecm-base-dummy-aspects:script7" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script9" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" label-id="label.errands.forms.tab.common"/>
@@ -476,6 +477,12 @@
                     </field>
                     <field id="lecm-base-dummy-aspects:script7" set="execution">
                         <control template="/ru/it/lecm/eds/controls/execution-tree-control.ftl"/>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script9" set="afterDateSet">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-check-other-child-auto-close.js</control-param>
+                            <control-param name="scriptLoadedFireAction">errandProcessOtherChildAutoClose</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
@@ -1221,6 +1228,8 @@
 
                     <!-- Ссылка на документ основание  -->
                     <show id="lecm-errands:additional-document-assoc"/>
+
+                    <show id="errands-process-other-auto-close-script" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="exist-business-role" template="/ru/it/lecm/errands/controls/errands-choosing-set.ftl" />
@@ -1436,6 +1445,12 @@
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/components/lecm-errands-create-form.js</control-param>
                             <control-param name="scriptLoadedFireAction">errandsCreateFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                    <field id="errands-process-other-auto-close-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-check-other-child-auto-close.js</control-param>
+                            <control-param name="scriptLoadedFireAction">errandProcessOtherChildAutoClose</control-param>
                         </control>
                     </field>
                 </appearance>
