@@ -23,7 +23,7 @@ function processDueDateChanges (dateRadio, newDueDate, processChild, changeDateR
         var halfLimitDays = Math.round(fromWFELimitDays / 2);
         wfeDate.setDate(wfeDate.getDate() + halfLimitDays);
         document.properties["lecm-errands:half-limit-date"] = wfeDate;
-        var shortLimitDays = notifications.getSettingsShortLimitDays();
+        var shortLimitDays = edsGlobalSettings.getSettingsShortLimitDays();
         if (fromWFELimitDays <= shortLimitDays) {
             document.properties["lecm-errands:is-limit-short"] = true;
         } else {
