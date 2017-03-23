@@ -50,7 +50,7 @@
                     var children = response.json;
                     if (children && children.length) {
                         var haveSomeAutoCloseChild = children.some(function (child) {
-                            return !!child.autoClose
+                            return !!child.autoClose;
                         });
                         if (haveSomeAutoCloseChild) {
                             LogicECM.module.Base.Util.disableControl(formId, "lecm-errands:auto-close");
