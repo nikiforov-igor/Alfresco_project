@@ -516,6 +516,10 @@
                                     var dateTimePattern = me._msg("lecm.form.control.date-picker.entry.date.format") + " " + me._msg("form.control.date-picker.entry.time.format");
                                     parsedDate = Date.parseExact(dateTime, dateTimePattern);
                                 }
+                            } else if (parsedDate) {
+                                parsedDate.setHours(12);
+                                parsedDate.setMinutes(0);
+                                parsedDate.setSeconds(0);
                             }
 
                             var minLimitDate = null;
