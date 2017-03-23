@@ -1907,6 +1907,7 @@
         <forms>
             <form id="table-structure-expand">
                 <field-visibility>
+                    <show id="lecm-errands-ts:coexecutor-report-decline-reason"/>
                     <show id="lecm-errands-ts:coexecutor-report-text"/>
                     <show id="lecm-errands-ts:coexecutor-report-attachment-assoc"/>
                     <show id="lecm-errands-ts:coexecutor-report-connected-document-assoc"/>
@@ -1915,14 +1916,17 @@
                 <appearance>
                     <set id="fieldsAndButtons" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
                     <set id="fields" parent="fieldsAndButtons"/>
+                    <set id="hiddenFields" parent="fields" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="visibleFields" parent="fields"/>
                     <set id="buttons" parent="fieldsAndButtons"/>
-                    <field id="lecm-errands-ts:coexecutor-report-text" set="fields"/>
-                    <field id="lecm-errands-ts:coexecutor-report-attachment-assoc" set="fields">
+                    <field id="lecm-errands-ts:coexecutor-report-decline-reason" set="hiddenFields"/>
+                    <field id="lecm-errands-ts:coexecutor-report-text" set="visibleFields"/>
+                    <field id="lecm-errands-ts:coexecutor-report-attachment-assoc" set="visibleFields">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
                             <control-param name="viewUrl">document-attachment?nodeRef={nodeRef}</control-param> '
                         </control>
                     </field>
-                    <field id="lecm-errands-ts:coexecutor-report-connected-document-assoc" set="fields">
+                    <field id="lecm-errands-ts:coexecutor-report-connected-document-assoc" set="visibleFields">
                         <control>
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
@@ -1954,9 +1958,11 @@
                     <show id="route-report-button" force="true"/>
                     <show id="lecm-errands-ts:coexecutor-report-is-route"/>
                     <show id="coexecutor-report-form-script" force="true"/>
-
                 </field-visibility>
                 <appearance>
+                    <field id="lecm-errands-ts:coexecutor-report-text" mandatory="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+                    </field>
                     <field id="lecm-errands-ts:coexecutor-report-attachment-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
@@ -2490,7 +2496,7 @@
                             <control-param name="rows">5</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestDueDateChangeTaskRejectReasonValidation" event="change" message-id="message.reject.reason.mandatory"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestDueDateChangeTaskRejectReasonValidation" event="keyup" message-id="message.reject.reason.mandatory"/>
                         </constraint-handlers>
                     </field>
                     <field id="requestDueDateChangeTaskFormScript">

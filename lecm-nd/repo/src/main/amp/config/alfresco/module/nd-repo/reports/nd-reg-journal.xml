@@ -212,7 +212,7 @@
                     <item name="cm:Выводить отчет в формате" type="lecm-rpeditor:reportDataColumn">
                         <property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
                         <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:text]]></property>
-                        <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[PDF,XLSX]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[PDF,XLSX,DOC]]></property>
                         <property name="cm:name"><![CDATA[Выводить отчет в формате]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[90]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[targetFormat]]></property>

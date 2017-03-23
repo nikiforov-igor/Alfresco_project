@@ -10,7 +10,8 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
         Bubbling = YAHOO.Bubbling,
-        Substitute = YAHOO.lang.substitute;
+        Substitute = YAHOO.lang.substitute,
+        Selector = YAHOO.util.Selector;
 
     LogicECM.module.Errands.CoexecutorReportExpandActions = function (containerId) {
         return LogicECM.module.Errands.CoexecutorReportExpandActions.superclass.constructor.call(this, containerId);
@@ -111,6 +112,7 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                                                                         fn: function (response) {
                                                                             if (response && response.json.formatString) {
                                                                                 this.currentDocumentStatus = response.json.formatString;
+                                                                                this.processDeclineReasonField();
                                                                                 this.prepareButtons();
                                                                             }
                                                                         },
@@ -143,6 +145,12 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
                 }
             )
 
+        },
+        processDeclineReasonField: function () {
+            var declineReasonField = Selector.query(".hiddenFields.hidden1", Dom.get(this.options.formId), true);
+            if (declineReasonField && this.options.expandedReport.status == "DECLINE") {
+                Dom.removeClass(declineReasonField, "hidden1");
+            }
         },
         prepareButtons: function () {
             var me = this;
