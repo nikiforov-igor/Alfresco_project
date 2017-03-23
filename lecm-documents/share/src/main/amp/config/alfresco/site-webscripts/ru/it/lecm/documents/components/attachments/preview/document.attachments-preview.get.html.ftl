@@ -11,7 +11,7 @@
                     <input id="${el}-versions-actions-button" type="button">
                 </div>
                 <div id="${el}-attachment-actions" class="preview-actions hidden1">
-                    <div id="${el}-attachment-actions-button" type="button"></div>
+                    <input id="${el}-attachment-actions-button" type="button"/>
                 </div>
                 <#if hasAddAttachmentPerm>
                     <div id="${el}-attachment-add-container" class="preview-upload hidden1">

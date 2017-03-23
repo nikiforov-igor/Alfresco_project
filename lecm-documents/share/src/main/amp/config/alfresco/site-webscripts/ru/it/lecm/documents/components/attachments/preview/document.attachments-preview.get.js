@@ -15,7 +15,7 @@ function main() {
 
     if (model.hasViewListPerm) {
         var cats = getCategories(model.nodeRef);
-        if (cats != null) {
+        if (cats) {
             model.categories = cats.categories;
 
             if (model.baseDocAssocName) {
