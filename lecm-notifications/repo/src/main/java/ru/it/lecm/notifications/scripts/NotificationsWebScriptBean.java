@@ -421,18 +421,4 @@ public class NotificationsWebScriptBean extends BaseWebScript {
     public int getSettingsNDays() {
         return service.getSettingsNDays();
     }
-	/**
-	 * Получение количества рабочих дней для краткосрочного исполнения за которое должно высылаться уведомление
-	 * @return количество рабочих дней для краткосрочного исполнения за которое должно высылаться уведомление
-	 */
-	public int getSettingsShortNDays() {
-		return service.getSettingsShortNDays();
-	}
-	/**
-	 * Получение предельного количества календарных дней краткосрочного исполнения
-	 * @return предельное количество календарных дней краткосрочного исполнения
-	 */
-	public int getSettingsShortLimitDays() {
-		return service.getSettingsShortLimitDays();
-	}
 }
