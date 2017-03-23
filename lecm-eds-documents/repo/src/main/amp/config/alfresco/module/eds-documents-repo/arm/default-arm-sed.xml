@@ -12549,11 +12549,6 @@
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                         <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                     </item>
-                                    <item name="cm:enot" type="lecm-arm:user-settings">
-                                        <property name="cm:name">
-                                            <![CDATA[enot]]></property><!--<property name="cm:title"><value lang="ru"><![CDATA[ru value]]></value><value lang="en_GB"><![CDATA[en_GB value]]></value></property>-->
-                                        <assocs/>
-                                    </item>
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:filters-assoc"
