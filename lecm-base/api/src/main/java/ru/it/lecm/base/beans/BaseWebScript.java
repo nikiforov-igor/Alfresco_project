@@ -1,6 +1,5 @@
 package ru.it.lecm.base.beans;
 
-import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.jscript.ScriptVersion;
@@ -28,6 +27,7 @@ import java.util.List;
 public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 
     final static protected DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    final static protected DateFormat DateFormatISO8601TZ = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
     /**
      * Service registry
      */
