@@ -1314,7 +1314,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -1360,7 +1360,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -1742,6 +1742,8 @@ var currentUser = orgstructure.getCurrentEmployee();
 if (document && currentUser) {
   var annulReason = document.properties["lecm-resolutions:annul-signal-reason"];
 
+  lecmPermission.pushAuthentication();
+  lecmPermission.setRunAsUserSystem();
   var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
   if (childErrands) {
     childErrands.forEach(function (errand) {
@@ -1758,6 +1760,7 @@ if (document && currentUser) {
   if (reviewItemsAssocs && reviewItemsAssocs.length) {
     cancelReviewFromInitiatingDocument(document, reviewItemsAssocs);
   }
+  lecmPermission.popAuthentication();
 
   if (annulReason) {
     var recipients = [];
@@ -2089,22 +2092,40 @@ if (document) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function(){
+  var baseDoc = null;
+  var baseDocAssoc = stm_document.assocs["lecm-resolutions:base-document-assoc"];
+  if (baseDocAssoc && baseDocAssoc.length) {
+    baseDoc = baseDocAssoc[0];
+  }
+  
   /* Автор */
   var creatorAssoc = stm_document.assocs["lecm-resolutions:author-assoc"];
   if (creatorAssoc && creatorAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, creatorAssoc[0], "RESOLUTION_AUTHOR_DYN", task);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, creatorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    if (baseDoc) {
+      documentMembers.addMemberWithoutCheckPermission(baseDoc, creatorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    }
   }
 
   /* Создатель */
   var authorAssoc = stm_document.assocs["lecm-document:author-assoc"];
   if (authorAssoc && authorAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, authorAssoc[0], "RESOLUTION_CREATOR_DYN", task);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, authorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    if (baseDoc) {
+      documentMembers.addMemberWithoutCheckPermission(baseDoc, authorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    }
   }
 
   /* Контролер */
   var controllerAssoc = stm_document.assocs["lecm-resolutions:controller-assoc"];
   if (controllerAssoc && controllerAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, controllerAssoc[0], "RESOLUTION_CONTROLLER_DYN", task);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, controllerAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    if (baseDoc) {
+      documentMembers.addMemberWithoutCheckPermission(baseDoc, controllerAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    }
 
     notifications.sendNotificationFromCurrentUser({
       recipients: controllerAssoc,
@@ -2664,7 +2685,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployeeExtended]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployee]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -2710,7 +2731,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -2785,7 +2806,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2800,7 +2821,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2830,7 +2851,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2845,7 +2866,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2875,7 +2896,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2905,7 +2926,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2920,7 +2941,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2935,7 +2956,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2950,7 +2971,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2965,7 +2986,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -3206,10 +3227,20 @@ if (document) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function(){
+  var baseDoc = null;
+  var baseDocAssoc = stm_document.assocs["lecm-resolutions:base-document-assoc"];
+  if (baseDocAssoc && baseDocAssoc.length) {
+    baseDoc = baseDocAssoc[0];
+  }
+
   /* Автор */
   var authorAssoc = stm_document.assocs["lecm-resolutions:author-assoc"];
   if (authorAssoc && authorAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, authorAssoc[0], "RESOLUTION_AUTHOR_DYN", task);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, authorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    if (baseDoc) {
+      documentMembers.addMemberWithoutCheckPermission(baseDoc, authorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    }
 
     notifications.sendNotificationFromCurrentUser({
       recipients: authorAssoc,
@@ -3226,6 +3257,10 @@ if (document) {
   var creatorAssoc = stm_document.assocs["lecm-document:author-assoc"];
   if (creatorAssoc && creatorAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, creatorAssoc[0], "RESOLUTION_CREATOR_DYN", task);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, creatorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    if (baseDoc) {
+      documentMembers.addMemberWithoutCheckPermission(baseDoc, creatorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    }
   }
 })();]]></value>
                                                             </property>
@@ -3939,7 +3974,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -3954,7 +3989,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -3969,7 +4004,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -3984,7 +4019,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -3999,7 +4034,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -4029,7 +4064,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -4059,7 +4094,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -4074,7 +4109,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -4089,7 +4124,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -4104,7 +4139,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -4119,7 +4154,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>

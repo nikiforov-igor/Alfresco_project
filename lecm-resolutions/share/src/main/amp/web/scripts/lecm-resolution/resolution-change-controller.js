@@ -39,7 +39,8 @@
                                 subFieldId: "lecm-errands:controller-assoc",
                                 options: {
                                     currentValue: controllerValue,
-                                    defaultValue: controllerValue
+                                    defaultValue: controllerValue,
+                                    resetValue: !controllerValue.length
                                 }
                             });
                             this.destroy();

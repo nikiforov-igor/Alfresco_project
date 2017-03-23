@@ -106,7 +106,8 @@ LogicECM.errands = LogicECM.errands || {};
                 if (currentUser.isCoexecutor && !currentUser.isExecutor) {
                     defaultFilter = filters.OWN;
                     changedFilter = filters.COMMON;
-                    Dom.get(this.id + "-cntrl-change-filter-label").innerHTML = Alfresco.util.message("errands.label.showAll");
+                    Dom.get(this.id + "-cntrl-change-filter-label").innerHTML = Alfresco.util.message("errands.label.showMy");
+                    Dom.get(this.id + "-cntrl-change-filter").checked = true;
                 } else {
                     defaultFilter = filters.DECLINED;
                     changedFilter = filters.COMMON;
@@ -160,17 +161,20 @@ LogicECM.errands = LogicECM.errands || {};
             datagrid.draw();
 
             YAHOO.util.Event.on(this.id + "-cntrl-change-filter", "change", function () {
-                var filter = defaultFilter;
-                if (this.checked) {
-                    filter = changedFilter;
-                }
                 var datagridMeta = datagrid.datagridMeta;
-                datagridMeta.searchConfig.filter = filter;
+                if (datagridMeta.searchConfig.filter == defaultFilter) {
+                    datagridMeta.searchConfig.filter = changedFilter;
+                } else {
+                    datagridMeta.searchConfig.filter = defaultFilter
+                }
                 datagrid.search.performSearch(datagridMeta);
             });
 
             //получаем кнопку переноса отчетов
             var transferSelectedReportsButton = Dom.get(this.id + "-cntrl-exec-report-transfer-coexecutors-reports");
+            if (currentUser.isExecutor && !currentUser.isCoexecutor) {
+                Dom.removeClass(transferSelectedReportsButton.parentElement, "hidden");
+            }
             var buttonEl = YAHOO.util.Selector.query("span button", transferSelectedReportsButton, true);
             var isStatusOK = "На исполнении" == datagrid.options.currentDocumentStatus || "На доработке" == datagrid.options.currentDocumentStatus;
 

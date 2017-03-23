@@ -232,6 +232,60 @@
 					<show id="lecm-eds-document:reviewers-assoc-text-content"/>
 				</field-visibility>
 			</form>
+			<!-- Форма атрибутивного поиска-->
+			<form id="search">
+				<field-visibility>
+					<show id="lecm-document:regnum"/>
+					<show id="cm:created"/>
+					<show id="lecm-document:doc-date"/>
+					<show id="lecm-eds-document:document-type-assoc"/>
+					<show id="lecm-eds-document:summaryContent"/>
+					<show id="lecm-document:title"/>
+					<show id="lecm-internal:response-date"/>
+					<show id="lecm-document:author-assoc"/>
+					<show id="lecm-document:subject-assoc"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:created">
+						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl">
+							<control-param name="forceEditable">true</control-param>
+						</control>
+
+					</field>
+					<field id="lecm-document:doc-date" label="Дата документа">
+						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+					</field>
+					<field id="lecm-eds-document:document-type-assoc">
+						<control>
+							<control-param name="endpointMany">true</control-param>
+						</control>
+					</field>
+					<field id="lecm-eds-document:summaryContent">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							<control-param name="rows">4</control-param>
+						</control>
+					</field>
+					<field id="lecm-document:title">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+						</constraint-handlers>
+					</field>
+					<field id="lecm-document:author-assoc" label-id="label.creator">
+						<control>
+							<control-param name="endpointMany">true</control-param>
+						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+						</constraint-handlers>
+					</field>
+					<field id="lecm-document:subject-assoc">
+						<control>
+							<control-param name="plane">true</control-param>
+							<control-param name="endpointMany">true</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
 		</forms>
 	</config>
 

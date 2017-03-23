@@ -62,14 +62,19 @@
     function createControl() {
         loadExternalResourceBundle();
         new LogicECM.DocumentAttachmentsPreview("${el}").setOptions({
-            nodeRef: "${nodeRef}",
-            inclBaseDoc: ${inclBaseDoc?string("true", "false")}
+            <#if baseDocAssocName??>
+                baseDocAssocName: "${baseDocAssocName}",
+            </#if>
+            nodeRef: "${nodeRef}"
         }).setMessages(${messages});
         
         var control = new LogicECM.module.Documents.DocumentPreviewControl("${el}").setMessages(${messages});
         control.setOptions({
             resizeable: true,
             itemId: "${nodeRef}",
+            <#if baseDocAssocName??>
+                baseDocAssocName: "${baseDocAssocName}",
+            </#if>
             forTask: false
         });
     }

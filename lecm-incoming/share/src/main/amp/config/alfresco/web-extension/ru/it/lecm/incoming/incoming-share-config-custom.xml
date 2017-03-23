@@ -938,8 +938,8 @@
                 <field-visibility>
                     <show id="lecm-eds-document:document-type-assoc"/>                                                  <!-- Вид документа -->
                     <show id="lecm-statemachine:status" force="true"/>                                                  <!-- Статус -->
-                    <show id="lecm-document:regnum"/>                                                                   <!-- Номер -->
-                    <show id="lecm-document:doc-date"/>                                                                 <!-- Дата -->
+                    <show id="lecm-document-aspects:reg-data-number"/>                                                                   <!--Рег. Номер -->
+                    <show id="lecm-document-aspects:reg-data-date"/>                                                                 <!-- Дата -->
                     <show id="lecm-document:title"/>                                                                    <!-- Заголовок -->
                     <show id="lecm-incoming:outgoing-number"/>                                                          <!-- Исходящий номер -->
                     <show id="lecm-incoming:outgoing-date"/>                                                            <!-- Исходящая дата -->
@@ -949,20 +949,14 @@
                     <show id="lecm-document:subject-assoc"/>                                                            <!-- Тематика -->
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-eds-document:document-type-assoc" mandatory="true">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
-                        </constraint-handlers>
+                    <field id="lecm-eds-document:document-type-assoc" label-id="label.document.type">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_входящего</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-statemachine:status" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
-                        </constraint-handlers>
+                    <field id="lecm-statemachine:status">
                         <control template="/ru/it/lecm/documents/controls/select-status-control.ftl">
                             <control-param name="docType">lecm-incoming:document</control-param>
                             <control-param name="withEmpty">true</control-param>
@@ -970,8 +964,7 @@
                             <control-param name="nameSuffix">-multiText</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:regnum"/>
-                    <field id="lecm-document:doc-date">
+                    <field id="lecm-document-aspects:reg-data-date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
                     <field id="lecm-document:title">
@@ -979,7 +972,6 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-incoming:outgoing-number"/>
                     <field id="lecm-incoming:outgoing-date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>

@@ -309,7 +309,7 @@
                 </field-visibility>
 
                 <appearance>
-                    <field id="lecm-resolutions:number">
+                    <field id="lecm-resolutions:number" label-id="label.resolution.number">
                         <control>
                             <control-param name="hideValue"/>
                         </control>
@@ -348,7 +348,7 @@
                     </field>
                     <field id="lecm-resolutions:limitation-date-radio" label-id="label.resolution.limitless">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
-                            <control-param name="options">LIMITLESS|Да,*|Нет</control-param>
+                            <control-param name="options">LIMITLESS|Да,DATE|Нет</control-param>
                         </control>
                     </field>
                     <field id="lecm-resolutions:is-expired">
@@ -736,6 +736,7 @@
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
+                    <show id="lecm-resolutions:completion-method-assoc"/>
                     <show id="lecm-statemachine:status"/>
                 </field-visibility>
                 <appearance>

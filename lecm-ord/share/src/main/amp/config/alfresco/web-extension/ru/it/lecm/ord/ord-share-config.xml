@@ -334,7 +334,7 @@
                     <show id="lecm-statemachine:status" force="true"/>                                                  <!-- Статус -->
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа">
+                    <field id="lecm-eds-document:document-type-assoc">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_ОРД</control-param>
                             <control-param name="plane">true</control-param>
@@ -351,7 +351,7 @@
                             <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:author-assoc" mandatory="false" label-id="label.eds.assoc.compiler">
+                    <field id="lecm-document:author-assoc" label-id="label.eds.assoc.compiler">
                         <control>
                             <control-param name="endpointMany">true</control-param>
                         </control>
@@ -369,14 +369,14 @@
                             <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:title" mandatory="false">
+                    <field id="lecm-document:title">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-ord:confirm-completion" label-id="ord.confirm.completion.lable">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
-                            <control-param name="options">true|Да,false|Нет</control-param>
+                            <control-param name="options">true|Да,false|Нет,*|Все</control-param>
                         </control>
                     </field>
                     <field id="lecm-ord:transition-to-on-execution-date">
@@ -402,7 +402,7 @@
                             <control-param name="useDefaultValue">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-statemachine:status"  mandatory="false">
+                    <field id="lecm-statemachine:status">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup"/>
                         </constraint-handlers>

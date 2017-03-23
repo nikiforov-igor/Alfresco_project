@@ -49,3 +49,7 @@
 .resolution-form .control.resolution-base-doc-control {
     font-size: 14px;
 }
+
+.resolution-form form .form-buttons .yui-submit-button {
+    display: none;
+}
