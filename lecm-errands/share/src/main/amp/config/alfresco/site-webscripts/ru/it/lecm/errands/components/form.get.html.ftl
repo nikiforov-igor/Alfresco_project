@@ -36,11 +36,6 @@
         var Dom = YAHOO.util.Dom,
             Event = YAHOO.util.Event;
 
-		var viewHistory = new LogicECM.module.Document.ViewHistory("save-view-history").setOptions({
-			nodeRef: "${nodeRef}"
-		});
-		viewHistory.save();
-
         function init() {
 			<#if hasAttrEditPerm>
 	            new LogicECM.module.Errands.Links("${id}").setOptions(
