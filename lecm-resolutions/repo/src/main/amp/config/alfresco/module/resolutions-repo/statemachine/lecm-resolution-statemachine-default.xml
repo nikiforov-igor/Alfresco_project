@@ -2093,18 +2093,21 @@ if (document) {
   var creatorAssoc = stm_document.assocs["lecm-resolutions:author-assoc"];
   if (creatorAssoc && creatorAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, creatorAssoc[0], "RESOLUTION_AUTHOR_DYN", task);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, creatorAssoc[0], 'LECM_BASIC_PG_Reader', true);
   }
 
   /* Создатель */
   var authorAssoc = stm_document.assocs["lecm-document:author-assoc"];
   if (authorAssoc && authorAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, authorAssoc[0], "RESOLUTION_CREATOR_DYN", task);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, authorAssoc[0], 'LECM_BASIC_PG_Reader', true);
   }
 
   /* Контролер */
   var controllerAssoc = stm_document.assocs["lecm-resolutions:controller-assoc"];
   if (controllerAssoc && controllerAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, controllerAssoc[0], "RESOLUTION_CONTROLLER_DYN", task);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, controllerAssoc[0], 'LECM_BASIC_PG_Reader', true);
 
     notifications.sendNotificationFromCurrentUser({
       recipients: controllerAssoc,
@@ -3210,6 +3213,7 @@ if (document) {
   var authorAssoc = stm_document.assocs["lecm-resolutions:author-assoc"];
   if (authorAssoc && authorAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, authorAssoc[0], "RESOLUTION_AUTHOR_DYN", task);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, authorAssoc[0], 'LECM_BASIC_PG_Reader', true);
 
     notifications.sendNotificationFromCurrentUser({
       recipients: authorAssoc,
@@ -3226,6 +3230,7 @@ if (document) {
   var creatorAssoc = stm_document.assocs["lecm-document:author-assoc"];
   if (creatorAssoc && creatorAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, creatorAssoc[0], "RESOLUTION_CREATOR_DYN", task);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, creatorAssoc[0], 'LECM_BASIC_PG_Reader', true);
   }
 })();]]></value>
                                                             </property>
