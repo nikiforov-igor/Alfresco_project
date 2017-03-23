@@ -1,6 +1,8 @@
 (function () {
 	var fromDate = json.get("fromDate");
+	var from = utils.fromISO8601(fromDate).getTime();
 	var toDate = json.get("toDate");
+	var to = utils.fromISO8601(toDate).getTime();
 	var allDay = ("" + json.get("allDay")) == "true";
 	var location = json.get("location");
 	var jsonMembers = json.has("members") ? json.get("members") : null;
@@ -31,13 +33,17 @@
 	endDate.setDate(endDate.getDate() + 1);
 	end = utils.toISO8601(endDate);
 	end = end.slice(0, end.indexOf("T"));
-	ewsMembers = ews.getEvents(members, start + "T00:00:00Z", end +  "T00:00:00Z");
+	ewsMembers = ews.getEvents(members, start + "T00:00:00Z", end + "T00:00:00Z");
 
 	model.members = members.map(function (member) {
 		function isBusy (ewsMember) {
 			var ewsMemberRef = '' + ewsMember.employee;
 			var memberRef = '' + member.nodeRef.toString();
-			return (ewsMemberRef == memberRef) && ewsMember.busytime.length;
+			return (ewsMemberRef == memberRef) && ewsMember.busytime.some(function (busytime) {
+				var start = utils.fromISO8601(busytime.startDate).getTime();
+				var end = utils.fromISO8601(busytime.endDate).getTime();
+				return (from >= start && from < end) || (to > start && to <= end);
+			});
 		}
 
 		var isAvailable = !ewsMembers.some(isBusy);
