@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.statemachine.StatemachineModel;
@@ -20,6 +21,7 @@ import java.util.*;
 public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
     private NotificationsService notificationsService;
     private NodeService nodeService;
+    private EDSGlobalSettingsService edsGlobalSettingsService;
 
     public void setNotificationsService(NotificationsService notificationsService) {
         this.notificationsService = notificationsService;
@@ -27,6 +29,10 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
+    }
+
+    public void setEdsGlobalSettingsService(EDSGlobalSettingsService edsGlobalSettingsService) {
+        this.edsGlobalSettingsService = edsGlobalSettingsService;
     }
 
     @Override
@@ -74,10 +80,10 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
         boolean isLimitShort = (boolean) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_IS_LIMIT_SHORT_DATE);
         if(isLimitShort) {
             // Уведомление о приближении срока исполнения карткосрочного поручения.
-            calendar.add(Calendar.DAY_OF_MONTH, notificationsService.getSettingsShortNDays());
+            calendar.add(Calendar.DAY_OF_MONTH, edsGlobalSettingsService.getSettingsShortNDays());
         }else{
             // Уведомление о приближении срока исполнения долгосрочного поручения.
-            calendar.add(Calendar.DAY_OF_MONTH, notificationsService.getSettingsNDays());
+            calendar.add(Calendar.DAY_OF_MONTH, edsGlobalSettingsService.getSettingsNDays());
         }
         now = calendar.getTime();
         if (limitDate != null && limitDate.before(now)) {
