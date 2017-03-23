@@ -11,11 +11,14 @@
     var formButtons;
     var baseDocExecutionDate = null;
     var currentUserIsErrandsInitiator = false;
+    var baseDocHasReview = false;
+    var isCreateForm = true;
 
     Bubbling.on('saveDraftResolutionButtonClick', saveDraft);
     Bubbling.on('sendResolutionButtonClick', sendResolutionClick);
     Bubbling.on('sendResolution', sendResolution);
-    Bubbling.on('resolutionFormScriptLoaded', init);
+    Bubbling.on('resolutionCreateFormScriptLoaded', init);
+    Bubbling.on('resolutionEditFormScriptLoaded', init);
 
     function saveDraft(layer, args) {
         var form;
@@ -40,11 +43,10 @@
         if (currentUserIsErrandsInitiator) {
             var errandsCount = Dom.get(args[1].formId + '_prop_lecm-resolutions_errands-json-count');
             var reviewers = Dom.get(args[1].formId + '_assoc_lecm-resolutions_reviewers-assoc');
-            if ((errandsCount && parseInt(errandsCount.value)) || (reviewers && reviewers.value && reviewers.value.length)) {
+            if (!isCreateForm || (errandsCount && parseInt(errandsCount.value)) || (reviewers && reviewers.value && reviewers.value.length)) {
                 submitResolutionForm(true, form);
             } else {
-                var baseDoc = Dom.get(args[1].formId + '_assoc_lecm-resolutions_base-document-assoc');
-                if (baseDoc && baseDoc.value && baseDoc.value.length) {
+                if (baseDocHasReview) {
                     Alfresco.util.PopupManager.displayMessage(
                         {
                             text: Alfresco.util.message('title.resolution.errands.reviewers.empty')
@@ -249,7 +251,8 @@
         }
     }
 
-    function init(layer, args) {
+    function init(layer, args, aaa, bbb) {
+        isCreateForm = layer == "resolutionCreateFormScriptLoaded";
         var formId = args[1].formId;
         formButtons = Dom.get(formId + "-form-buttons");
 
@@ -269,15 +272,31 @@
 
         var form = Dom.get(formId + "-form");
         if (form && form["assoc_lecm-resolutions_base-document-assoc"] && form["assoc_lecm-resolutions_base-document-assoc"].value) {
-            var queryTemplate = 'div[class^=\"{formId}-form-panel {targetClass}\"]';
-            var sets = Selector.query(Substitute(queryTemplate, {
-                targetClass: 'reviewers-hidden',
-                formId: formId
-            }));
+            Alfresco.util.Ajax.jsonPost(
+                {
+                    url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                    dataObj: {
+                        nodeRef: form["assoc_lecm-resolutions_base-document-assoc"].value,
+                        substituteString: "{@doc.hasAspect('lecm-review-ts:review-aspect')}"
+                    },
+                    successCallback: {
+                        fn: function (response) {
+                            if (response.json && response.json.formatString && response.json.formatString == "true") {
+                                baseDocHasReview = true;
+                                var queryTemplate = 'div[class^=\"{formId}-form-panel {targetClass}\"]';
+                                var sets = Selector.query(Substitute(queryTemplate, {
+                                    targetClass: 'reviewers-hidden',
+                                    formId: formId
+                                }));
 
-            if (sets && sets.length) {
-                Dom.removeClass(sets[0], 'hidden1');
-            }
+                                if (sets && sets.length) {
+                                    Dom.removeClass(sets[0], 'hidden1');
+                                }
+                            }
+                        },
+                        scope: this
+                    }
+                });
         }
     }
 })();
