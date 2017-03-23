@@ -2490,7 +2490,7 @@
                             <control-param name="rows">5</control-param>
                         </control>
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestDueDateChangeTaskRejectReasonValidation" event="change" message-id="message.reject.reason.mandatory"/>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.requestDueDateChangeTaskRejectReasonValidation" event="keyup" message-id="message.reject.reason.mandatory"/>
                         </constraint-handlers>
                     </field>
                     <field id="requestDueDateChangeTaskFormScript">
