@@ -251,7 +251,7 @@
         }
     }
 
-    function init(layer, args, aaa, bbb) {
+    function init(layer, args) {
         isCreateForm = layer == "resolutionCreateFormScriptLoaded";
         var formId = args[1].formId;
         formButtons = Dom.get(formId + "-form-buttons");
