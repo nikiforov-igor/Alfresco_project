@@ -303,8 +303,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                     })
                 }
                 attachmentAddEl.innerHTML = "";
-                this.widgets.addAttachmentMenuButton = new YAHOO.widget.Button({
-                    container: attachmentAddEl,
+                this.widgets.addAttachmentMenuButton = new YAHOO.widget.Button(attachmentAddEl, {
                     type: "menu",
                     label: this.msg("label.attachment.add"),
                     menu: addAttachmentActions
@@ -552,7 +551,6 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                             if (this.options.itemId) {
                                 me.loadAttachments();
                             }
-                            me.reloadAttachmentPreview();
                         },
                         scope: this
                     },
