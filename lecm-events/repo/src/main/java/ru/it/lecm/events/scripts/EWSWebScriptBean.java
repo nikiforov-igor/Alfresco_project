@@ -26,24 +26,24 @@ public class EWSWebScriptBean extends BaseWebScript {
 
 	private Scriptable processEvents(List<EmployeeAvailability> availabilities) {
 		Object[] results = new Object[availabilities.size()];
-		int i = 0;
-		for(EmployeeAvailability availability : availabilities) {
+		for (int i = 0; i < availabilities.size(); ++i) {
+			EmployeeAvailability availability = availabilities.get(i);
 			List<EWSEvent> events = availability.getEvents();
 			Scriptable obj = Context.getCurrentContext().newObject(getScope());
 			Object[] arr = new Object[events.size()];
-			int j = 0;
-			for (EWSEvent event : events) {
+			for (int j = 0; j < events.size(); ++j) {
+				EWSEvent event = events.get(j);
 				Scriptable busyTime = Context.getCurrentContext().newObject(getScope());
 				busyTime.put("title", busyTime, "");
 				busyTime.put("start", busyTime, ISO8601DateFormat.format(event.getStart()));
 				busyTime.put("startDate", busyTime, DateFormatISO8601TZ.format(event.getStart()));
 				busyTime.put("end", busyTime, ISO8601DateFormat.format(event.getEnd()));
 				busyTime.put("endDate", busyTime, DateFormatISO8601TZ.format(event.getEnd()));
-				arr[j++] = busyTime;
+				arr[j] = busyTime;
 			}
 			obj.put("employee", obj, availability.getEmployeeRef().toString());
 			obj.put("busytime", obj, Context.getCurrentContext().newArray(getScope(), arr));
-			results[i++] = obj;
+			results[i] = obj;
 		}
 		return Context.getCurrentContext().newArray(getScope(), results);
 	}
