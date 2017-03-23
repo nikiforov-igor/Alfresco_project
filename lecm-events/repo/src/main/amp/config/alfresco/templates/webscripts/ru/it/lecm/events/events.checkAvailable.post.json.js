@@ -42,7 +42,7 @@
 			return (ewsMemberRef == memberRef) && ewsMember.busytime.some(function (busytime) {
 				var start = utils.fromISO8601(busytime.startDate).getTime();
 				var end = utils.fromISO8601(busytime.endDate).getTime();
-				return (from >= start && from < end) || (to > start && to <= end);
+				return (start <= from && from < end) || (start < to && to <= end);
 			});
 		}
 
