@@ -90,19 +90,22 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
         },
 
         loadDocument: function DocumentPreviewControl_loadDocument() {
-            if (this.options.itemId != null) {
-                if (this.options.forTask === true) {
+            if (this.options.itemId) {
+                if (this.options.forTask) {
                     Alfresco.util.Ajax.jsonGet({
-                        url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/GetDocumentDataByTaskId?taskID=" + this.options.itemId,
+                        url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/GetDocumentDataByTaskId",
+                        dataObj: {
+                            taskID: this.options.itemId
+                        },
                         successCallback: {
+                            scope: this,
                             fn: function (response) {
                                 var result = response.json;
-                                if (result != null && result.nodeRef != null) {
+                                if (result && result.nodeRef) {
                                     this.documentNodeRef = result.nodeRef;
                                     this.loadAttachments();
                                 }
-                            },
-                            scope: this
+                            }
                         }
                     });
                 } else {
@@ -127,23 +130,23 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                             nodeRef: categoryNodeRef
                         },
                         successCallback: {
+                            scope: this,
                             fn: function (response) {
                                 var categoryAttachments = response.json.items;
                                 var categoryNodeRef = response.config.dataObj.nodeRef;
                                 if (categoryAttachments) {
                                     this.onCategoryAttachmentsLoaded(categoryNodeRef, categoryAttachments);
                                 }
-                            },
-                            scope: this
+                            }
                         }
                     });
                 }
                 this.deferredCategoriesLoad = new Alfresco.util.Deferred(nodeRefs, {
-                    fn: this.onAttachmentsLoaded,
-                    scope: this
+                    scope: this,
+                    fn: this.onAttachmentsLoaded
                 });
             } else {
-                if (this.options.itemId != null) {
+                if (this.options.itemId) {
                     Alfresco.util.Ajax.jsonGet({
                         url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/attachments/api/get",
                         dataObj: {
@@ -151,6 +154,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                             showEmptyCategory: true
                         },
                         successCallback: {
+                            scope: this,
                             fn: function (response) {
                                 var data = response.json.items;
                                 if (data && data.length) {
@@ -184,7 +188,6 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                                 }
                                 this.reloadAttachmentPreview();
                             },
-                            scope: this
                         }
                     });
                 }
@@ -321,11 +324,12 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                             htmlid: this.id + "-preview-container"
                         },
                         successCallback: {
+                            scope: this,
                             fn: function (response) {
                                 Dom.get(this.id + "-preview-container").innerHTML = response.serverResponse.responseText;
                                 var previewId = this.id + "-preview-container-full-window-div";
                                 var dialog = LogicECM.module.Base.Util.getLastDialog();
-                                if (dialog != null) {
+                                if (dialog) {
                                     dialog.dialog.center();
                                 }
                                 Event.onAvailable(previewId, function () {
@@ -337,7 +341,6 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                                     container.appendChild(preview);
                                 }, {}, this);
                             },
-                            scope: this
                         },
                         failureMessage: this.msg("message.failure"),
                         scope: this,
@@ -355,6 +358,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                                 format: "json"
                             },
                             successCallback: {
+                                scope: this,
                                 fn: function (response) {
                                     var container = Dom.get(this.id + "-actions");
                                     if (response.json.item.actions) {
@@ -398,8 +402,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                                             }
                                         }
                                     }
-                                },
-                                scope: this
+                                }
                             },
                             failureMessage: this.msg("message.failure"),
                             scope: this,
@@ -463,8 +466,8 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                     for (var j = 0; j < showActions.length; j++) {
                         if (action.id == showActions[j].id &&
                             (!showActions[j].onlyForOwn ||
-                            (record.node != null && record.node.properties["cm:creator"] != null
-                            && record.node.properties["cm:creator"].userName == Alfresco.constants.USERNAME))) {
+                            (record.node && record.node.properties["cm:creator"] &&
+                            record.node.properties["cm:creator"].userName == Alfresco.constants.USERNAME))) {
                             show = true;
                         }
                     }
@@ -530,32 +533,32 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 
             var title = name ? this.msg('label.attachment.upload-to-category') + ': "' + name + '"' : this.msg('label.attachment.add-attachment');
 
-            if (nodeRef != null) {
+            if (nodeRef) {
                 if (!this.fileUpload) {
                     this.fileUpload = Alfresco.getFileUploadInstance();
                 }
                 var me = this;
                 var uploadConfig =
-                {
-                    destination: nodeRef,
-                    filter: [],
-                    mode: this.fileUpload.MODE_SINGLE_UPLOAD,
-                    thumbnails: "doclib",
-                    onFileUploadComplete: {
-                        fn: function (obj) {
-                            if (obj.successful != null && obj.successful.length > 0) {
-                                me.selectedAttachment = {};
-                                me.selectedAttachment.nodeRef = obj.successful[0].nodeRef;
-                            }
+                    {
+                        destination: nodeRef,
+                        filter: [],
+                        mode: this.fileUpload.MODE_SINGLE_UPLOAD,
+                        thumbnails: "doclib",
+                        onFileUploadComplete: {
+                            scope: this,
+                            fn: function (obj) {
+                                if (obj.successful && obj.successful.length > 0) {
+                                    me.selectedAttachment = {};
+                                    me.selectedAttachment.nodeRef = obj.successful[0].nodeRef;
+                                }
 
-                            if (this.options.itemId) {
-                                me.loadAttachments();
+                                if (this.options.itemId) {
+                                    me.loadAttachments();
+                                }
                             }
                         },
-                        scope: this
-                    },
-                    suppressRefreshEvent: true
-                };
+                        suppressRefreshEvent: true
+                    };
                 this.fileUpload.show(uploadConfig);
                 if (this.fileUpload.uploader.titleText) {
                     this.fileUpload.uploader.titleText.innerHTML = title;
@@ -571,9 +574,9 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
             }
             var selectedOption = this.attachmentsSelect.options[this.attachmentsSelect.selectedIndex];
             var nodeRef = selectedOption.value;
-            if (nodeRef != null && nodeRef.length > 0) {
+            if (nodeRef && nodeRef.length > 0) {
                 this.selectedAttachment = this.attachmentsList[nodeRef];
-                if (this.selectedAttachment != null) {
+                if (this.selectedAttachment) {
                     this._loadVersions(nodeRef);
                 }
             }
@@ -595,6 +598,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                     nodeRef: nodeRef
                 },
                 successCallback: {
+                    scope: this,
                     fn: function (response) {
                         var data = response.json;
                         if (data) {
@@ -632,14 +636,13 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                             }
                         }
                     },
-                    scope: this
                 },
                 failureMessage: ""
             });
         },
 
         onActionDetails: function DocumentPreviewControl_onActionDetails() {
-            if (this.selectedAttachment != null) {
+            if (this.selectedAttachment) {
                 var scope = this,
                     nodeRef = this.selectedAttachment.nodeRef;
 
@@ -684,6 +687,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                             scope: this
                         },
                         onSuccess: {
+                            scope: this,
                             fn: function () {
                                 if (this.attachmentsSelect.selectedOptions && this.attachmentsSelect.selectedOptions.length > 0) {
                                     var option = this.attachmentsSelect.selectedOptions[0];
@@ -717,10 +721,10 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                                         }
                                     });
                                 }
-                            },
-                            scope: this
+                            }
                         },
                         onFailure: {
+                            scope: this,
                             fn: function (response) {
                                 var failureMsg = this.msg("message.details.failure");
                                 if (response.json && response.json.message.indexOf("Failed to persist field 'prop_cm_name'") !== -1) {
@@ -730,8 +734,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                                     {
                                         text: failureMsg
                                     });
-                            },
-                            scope: this
+                            }
                         }
                     });
                 editDetails.show();
@@ -739,7 +742,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
         },
 
         onActionDelete: function DocumentPreviewControl_onActionDelete() {
-            if (this.selectedAttachment != null) {
+            if (this.selectedAttachment) {
                 var me = this,
                     content = "document",
                     displayName = this.selectedAttachment.fileName;
@@ -808,7 +811,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
         },
 
         onActionUploadNewVersion: function DocumentPreviewControl_onActionUploadNewVersion() {
-            if (this.selectedAttachment != null) {
+            if (this.selectedAttachment) {
                 var displayName = this.selectedAttachment.fileName,
                     nodeRef = this.selectedAttachment.nodeRef,
                     version = this.selectedAttachment.version;
@@ -829,32 +832,32 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                 var me = this;
 
                 var singleUpdateConfig =
-                {
-                    updateNodeRef: nodeRef.toString(),
-                    updateFilename: displayName,
-                    updateVersion: version,
-                    overwrite: true,
-                    filter: [
-                        {
-                            description: description,
-                            extensions: extensions
-                        }],
-                    mode: this.fileUpload.MODE_SINGLE_UPDATE,
-                    onFileUploadComplete: {
-                        fn: function (obj) {
-                            setTimeout(function () {
-                                if (obj.successful != null && obj.successful.length > 0) {
-                                    // TODO: Костыль, надо бы переписать логику
-                                    me.selectedAttachment = {};
-                                    me.selectedAttachment.nodeRef = obj.successful[0].nodeRef;
-                                }
-                                me.loadAttachments();
-                            }, 2000);
+                    {
+                        updateNodeRef: nodeRef.toString(),
+                        updateFilename: displayName,
+                        updateVersion: version,
+                        overwrite: true,
+                        filter: [
+                            {
+                                description: description,
+                                extensions: extensions
+                            }],
+                        mode: this.fileUpload.MODE_SINGLE_UPDATE,
+                        onFileUploadComplete: {
+                            fn: function (obj) {
+                                setTimeout(function () {
+                                    if (obj.successful && obj.successful.length > 0) {
+                                        // TODO: Костыль, надо бы переписать логику
+                                        me.selectedAttachment = {};
+                                        me.selectedAttachment.nodeRef = obj.successful[0].nodeRef;
+                                    }
+                                    me.loadAttachments();
+                                }, 2000);
+                            },
+                            scope: this
                         },
-                        scope: this
-                    },
-                    suppressRefreshEvent: true
-                };
+                        suppressRefreshEvent: true
+                    };
                 this.fileUpload.show(singleUpdateConfig);
             }
         },
