@@ -15,7 +15,7 @@
                 </div>
                 <#if hasAddAttachmentPerm>
                     <div id="${el}-attachment-add-container" class="preview-upload hidden1">
-                        <div id="${el}-attachment-add"></div>
+                        <input id="${el}-attachment-add" type="button">
                     </div>
                 </#if>
             </div>
