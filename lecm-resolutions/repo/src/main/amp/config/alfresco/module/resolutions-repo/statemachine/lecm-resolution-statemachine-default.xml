@@ -817,7 +817,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.assocList("lecm-resolutions:base-document-assoc").size() == 0 OR doc.assocList("lecm-resolutions:reviewers-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                                    <![CDATA[doc.assocAttrs("lecm-resolutions:base-document-assoc", "lecm-review-ts:doc-review-state").size() == 0 OR doc.assocList("lecm-resolutions:reviewers-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -849,7 +849,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.assocList("lecm-resolutions:base-document-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                                    <![CDATA[doc.assocAttrs("lecm-resolutions:base-document-assoc", "lecm-review-ts:doc-review-state").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -1054,7 +1054,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.assocList("lecm-resolutions:base-document-assoc").size() == 0 OR doc.assocList("lecm-resolutions:reviewers-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                                    <![CDATA[doc.assocAttrs("lecm-resolutions:base-document-assoc", "lecm-review-ts:doc-review-state").size() == 0 OR doc.assocList("lecm-resolutions:reviewers-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -1086,7 +1086,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.assocList("lecm-resolutions:base-document-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                                    <![CDATA[doc.assocAttrs("lecm-resolutions:base-document-assoc", "lecm-review-ts:doc-review-state").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -4555,6 +4555,70 @@ if (document) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>e2f3b701-7010-434c-993e-dc4aa4e57fd9
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/34b66676-90e3-49e9-bca5-13cd509a350a
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.assocAttrs("lecm-resolutions:base-document-assoc", "lecm-review-ts:doc-review-state").size() == 0 OR doc.assocList("lecm-resolutions:reviewers-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Добавьте поручение или лист ознакомления]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>6428253d-829e-4e0c-9f4a-3612b23c77ca
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/b293c0b3-0ad9-4a09-a51e-758fa913e771
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.assocAttrs("lecm-resolutions:base-document-assoc", "lecm-review-ts:doc-review-state").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Добавьте поручение]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -4717,6 +4781,70 @@ if (document) {
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие не может быть выполнено: вы не обладаете ролью "Поручения.Инициатор". Обратитесь к администратору Системы]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>bb7f7424-2825-4579-bb5c-11eb69efeccc
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/3c0eaa45-38e3-448d-a9b7-2f1ed8357d0e
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.assocAttrs("lecm-resolutions:base-document-assoc", "lecm-review-ts:doc-review-state").size() == 0 OR doc.assocList("lecm-resolutions:reviewers-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Добавьте поручение или лист ознакомления]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>0e6bf7c1-4d31-4aea-ba2a-c19138e697db
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/0bd8ea67-44f7-4b13-8d6e-0f7ecceb094c
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.assocAttrs("lecm-resolutions:base-document-assoc", "lecm-review-ts:doc-review-state").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Добавьте поручение]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>

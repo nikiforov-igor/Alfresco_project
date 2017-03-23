@@ -232,7 +232,7 @@
                     <field id="lecm-base-dummy-aspects:script2" set="end">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-resolution/lecm-resolution-form.js</control-param>
-                            <control-param name="scriptLoadedFireAction">resolutionFormScriptLoaded</control-param>
+                            <control-param name="scriptLoadedFireAction">resolutionCreateFormScriptLoaded</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script3" label-id="label.route-errand" set="end">
@@ -718,7 +718,7 @@
                     <field id="lecm-base-dummy-aspects:script2" set="end">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-resolution/lecm-resolution-form.js</control-param>
-                            <control-param name="scriptLoadedFireAction">resolutionFormScriptLoaded</control-param>
+                            <control-param name="scriptLoadedFireAction">resolutionEditFormScriptLoaded</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script3" label-id="label.resolution.edit.save" set="end">
