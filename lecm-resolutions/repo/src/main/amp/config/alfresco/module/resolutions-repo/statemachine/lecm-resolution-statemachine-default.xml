@@ -1742,6 +1742,8 @@ var currentUser = orgstructure.getCurrentEmployee();
 if (document && currentUser) {
   var annulReason = document.properties["lecm-resolutions:annul-signal-reason"];
 
+  lecmPermission.pushAuthentication();
+  lecmPermission.setRunAsUserSystem();
   var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
   if (childErrands) {
     childErrands.forEach(function (errand) {
@@ -1758,6 +1760,7 @@ if (document && currentUser) {
   if (reviewItemsAssocs && reviewItemsAssocs.length) {
     cancelReviewFromInitiatingDocument(document, reviewItemsAssocs);
   }
+  lecmPermission.popAuthentication();
 
   if (annulReason) {
     var recipients = [];
