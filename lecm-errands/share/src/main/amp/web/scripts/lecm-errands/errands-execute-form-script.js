@@ -70,6 +70,12 @@
                         if (isReportRequired == "true") {
                             var reportTextReadyElId = Util.getComponentReadyElementId(formId, field.replace("_", ":"));
                             Event.onContentReady(reportTextReadyElId, function () {
+                                var reportTextControl = Dom.get(formId + "_prop_" + field + "-cntrl");
+                                var mandatoryEl = document.createElement('span');
+                                mandatoryEl.className = "mandatory-indicator";
+                                mandatoryEl.innerHTML = "*";
+                                var reportTextLabelDiv = Selector.query(".label-div label", reportTextControl, true);
+                                reportTextLabelDiv.appendChild(mandatoryEl);
                                 YAHOO.Bubbling.fire("registerValidationHandler",
                                     {
                                         fieldId: formId + "_prop_" + field,
