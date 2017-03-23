@@ -73,7 +73,7 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Резолюция. Превышен срок исполнения]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} не исполнена в установленный срок.]]></property>
+                    <![CDATA[Резолюция {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} не исполнена в установленный срок.]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
                 <assocs>
                     <assoc type="lecm-notification-template:template-assoc"

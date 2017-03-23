@@ -1,7 +1,7 @@
 (function () {
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
-        Bubbling = YAHOO.Bubbling;
+        Bubbling = YAHOO.Bubbling,
         Selector = YAHOO.util.Selector;
     var formId;
     LogicECM.module.Base.Util.loadCSS([
@@ -9,7 +9,9 @@
     ]);
 
     Bubbling.on('errandsWFChangeDueDateScriptLoaded', init);
-    Bubbling.on('requestDueDateChangeTaskFormScriptLoaded', process);
+    if (Bubbling.addLayer('requestDueDateChangeTaskFormScriptLoaded')) {
+        Bubbling.on('requestDueDateChangeTaskFormScriptLoaded', process);
+    }
     Bubbling.on('changeDueDateRadioEvent', processDueDateSet);
 
     function init(layer, args) {
@@ -50,6 +52,11 @@
             Event.onContentReady(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1RejectReason", function () {
                 var rejectReasonElement = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1RejectReason");
                 var rejectReasonControl = rejectReasonElement.parentElement.parentElement.parentElement;
+                var mandatoryEl = document.createElement('span');
+                mandatoryEl.className = "mandatory-indicator";
+                mandatoryEl.innerHTML = "*";
+                var rejectReasonLabelDiv = Selector.query(".label-div label", rejectReasonControl, true);
+                rejectReasonLabelDiv.appendChild(mandatoryEl);
                 Event.onContentReady(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1Result-container-APPROVED", function () {
                     Event.onContentReady(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1Result-container-REJECTED", function () {
                         var defaultResultValueEl = Dom.get(formId + "_prop_lecmErrandWf_requestDueDateChangeTask_1Result-container-APPROVED");
