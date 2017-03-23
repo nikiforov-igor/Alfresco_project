@@ -13,6 +13,22 @@ function main() {
     model.hasDeleteOwnAttachmentPerm = hasPermission(model.nodeRef, PERM_OWN_CONTENT_DELETE);
     model.hasStatemachine = hasStatemachine(model.nodeRef);
 
+    if (model.hasViewListPerm) {
+        var cats = getCategories(model.nodeRef);
+        if (cats) {
+            model.categories = cats.categories;
+
+            if (model.baseDocAssocName) {
+                model.categories.push({
+                    nodeRef: "base-document-attachments/" + model.nodeRef.replace(":/", "") + "/" + model.baseDocAssocName,
+                    name: msg.get("label.attachments.base-document"),
+                    path: "",
+                    isReadOnly: true
+                });
+            }
+        }
+    }
+
     var allActions = [];
     model.readOnlyActions = [
         {
@@ -47,13 +63,6 @@ function main() {
         });
     }
 
-    if (hasPermission(model.nodeRef, PERM_CONTENT_COPY)) {
-        allActions.push({
-            id: "move-to-another-category",
-            onlyForOwn: false
-        });
-    }
-
     if (hasPermission(model.nodeRef, PERM_CONTENT_DELETE)) {
         allActions.push({
             id: "document-delete",
@@ -66,7 +75,19 @@ function main() {
         });
     }
 
-    model.allActions = allActions;
-};
+        model.allActions = allActions;
+    }
+
+function getCategories(nodeRef, defaultValue) {
+    var url = '/lecm/document/attachments/api/categories?documentNodeRef=' + nodeRef;
+    var result = remote.connect("alfresco").get(url);
+    if (result.status != 200) {
+        if (defaultValue !== undefined) {
+            return defaultValue;
+        }
+        return null;
+    }
+    return eval('(' + result + ')');
+}
 
 main();

@@ -488,7 +488,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 				additionalFilter += " AND NOT ID:\"" + ignoreNode.toString() + "\"";
 			}
 
-			List<NodeRef> events = getEvents(fromDate, toDate, additionalFilter);
+			List<NodeRef> events = getEvents(fromDate, toDate, additionalFilter, false, null, false);
 
 			return events == null || events.isEmpty();
 		}

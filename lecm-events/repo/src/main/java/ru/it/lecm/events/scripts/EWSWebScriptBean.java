@@ -5,8 +5,7 @@ import java.util.List;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.ISO8601DateFormat;
-import org.mozilla.javascript.NativeArray;
-import org.mozilla.javascript.NativeObject;
+import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.events.beans.EWSEvent;
@@ -25,32 +24,33 @@ public class EWSWebScriptBean extends BaseWebScript {
 		this.ewsService = ewsService;
 	}
 
-	private ArrayList<NativeObject> processEvents(List<EmployeeAvailability> availabilities) {
-		ArrayList<NativeObject> results = new ArrayList<>();
-		for(EmployeeAvailability availability : availabilities) {
+	private Scriptable processEvents(List<EmployeeAvailability> availabilities) {
+		Object[] results = new Object[availabilities.size()];
+		for (int i = 0; i < availabilities.size(); ++i) {
+			EmployeeAvailability availability = availabilities.get(i);
 			List<EWSEvent> events = availability.getEvents();
-			NativeObject obj = new NativeObject();
-			NativeArray arr = new NativeArray(events.size());
-			int i = 0;
-			for (EWSEvent event : events) {
-				NativeObject busyTime = new NativeObject();
+			Scriptable obj = Context.getCurrentContext().newObject(getScope());
+			Object[] arr = new Object[events.size()];
+			for (int j = 0; j < events.size(); ++j) {
+				EWSEvent event = events.get(j);
+				Scriptable busyTime = Context.getCurrentContext().newObject(getScope());
 				busyTime.put("title", busyTime, "");
 				busyTime.put("start", busyTime, ISO8601DateFormat.format(event.getStart()));
-				busyTime.put("startDate", busyTime, DateFormatISO8601.format(event.getStart()));
+				busyTime.put("startDate", busyTime, DateFormatISO8601TZ.format(event.getStart()));
 				busyTime.put("end", busyTime, ISO8601DateFormat.format(event.getEnd()));
-				busyTime.put("endDate", busyTime, DateFormatISO8601.format(event.getEnd()));
-				arr.put(i++, arr, busyTime);
+				busyTime.put("endDate", busyTime, DateFormatISO8601TZ.format(event.getEnd()));
+				arr[j] = busyTime;
 			}
 			obj.put("employee", obj, availability.getEmployeeRef().toString());
-			obj.put("busytime", obj, arr);
-			results.add(obj);
+			obj.put("busytime", obj, Context.getCurrentContext().newArray(getScope(), arr));
+			results[i] = obj;
 		}
-		return results;
+		return Context.getCurrentContext().newArray(getScope(), results);
 	}
 
 	public Scriptable getEvents(ScriptNode employee, String fromDate, String toDate) {
 		List<EmployeeAvailability> availabilities = ewsService.getEvents(employee.getNodeRef(), ISO8601DateFormat.parse(fromDate), ISO8601DateFormat.parse(toDate));
-		return (Scriptable)getValueConverter().convertValueForScript(serviceRegistry, getScope(), null, processEvents(availabilities));
+		return processEvents(availabilities);
 	}
 
 	public Scriptable getEvents(Scriptable employees, String fromDate, String toDate) {
@@ -64,6 +64,6 @@ public class EWSWebScriptBean extends BaseWebScript {
 			}
 		}
 		List<EmployeeAvailability> availabilities = ewsService.getEvents(employeeRefList, ISO8601DateFormat.parse(fromDate), ISO8601DateFormat.parse(toDate));
-		return (Scriptable)getValueConverter().convertValueForScript(serviceRegistry, getScope(), null, processEvents(availabilities));
+		return processEvents(availabilities);
 	}
 }

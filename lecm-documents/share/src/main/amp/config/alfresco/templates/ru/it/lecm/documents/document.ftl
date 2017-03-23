@@ -43,6 +43,21 @@
 
 
     <@templateHtmlEditorAssets />
+    <script type="text/javascript">//<![CDATA[
+        if (typeof LogicECM == "undefined" || !LogicECM) {
+            LogicECM = {};
+        }
+        LogicECM.module = LogicECM.module || {};
+        LogicECM.module.Documents = LogicECM.module.Documents|| {};
+        (function() {
+            var viewHistory = new LogicECM.module.Document.ViewHistory("save-view-history").setOptions({
+                nodeRef: "${page.url.args.nodeRef}"
+            });
+
+            viewHistory.save();
+
+        })();
+    //]]></script>
 	</@>
 
     <#if documentType??>
