@@ -79,7 +79,7 @@
 			<input type="checkbox" id="${controlId}-change-filter">
 			<label id="${controlId}-change-filter-label" for="${controlId}-change-filter"></label>
 		</div>
-		<div class="reports-transfer-block">
+		<div class="reports-transfer-block hidden">
 			 <span id="${controlId}-exec-report-transfer-coexecutors-reports" class="yui-button yui-push-button disabled-button">
 				<span class="first-child">
 					<button disabled>${msg("button.errands.executionReport.transferCoexecutorsReports")}</button>
