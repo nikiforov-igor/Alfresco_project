@@ -76,10 +76,12 @@ public class ItemChangedPolicy extends BaseBean implements NodeServicePolicies.O
 				ReviewService.TYPE_REVIEW_TS_REVIEW_TABLE_ITEM, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-                ReviewService.ASPECT_RELATED_REVIEW, ReviewService.ASSOC_RELATED_REVIEW_RECORDS, new JavaBehaviour(this, "onChangeAssociationRelatedReview"));
+                ReviewService.ASPECT_RELATED_REVIEW, ReviewService.ASSOC_RELATED_REVIEW_RECORDS,
+                new JavaBehaviour(this, "onChangeAssociationRelatedReview", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-                ReviewService.ASPECT_RELATED_REVIEW, ReviewService.ASSOC_RELATED_REVIEW_RECORDS, new JavaBehaviour(this, "onChangeAssociationRelatedReview"));
+                ReviewService.ASPECT_RELATED_REVIEW, ReviewService.ASSOC_RELATED_REVIEW_RECORDS,
+                new JavaBehaviour(this, "onChangeAssociationRelatedReview", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	@Override
