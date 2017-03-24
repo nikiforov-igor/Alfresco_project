@@ -523,6 +523,7 @@
         <property name="ignoreLock" value="false"/>
         <property name="notificationsService" ref="notificationsService"/>
         <property name="nodeService" ref="nodeService"/>
+        <property name="edsGlobalSettingsService" ref="edsGlobalSettingsService"/>
     <property name="publicAction" value="false" />
     </bean>
 

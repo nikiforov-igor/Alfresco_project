@@ -3266,7 +3266,7 @@ if (document) {
           date.setDate(date.getDate() + Math.round(limitDays / 2));
           document.properties["lecm-errands:half-limit-date"] = date;
 
-          var shortLimitDays = notifications.getSettingsShortLimitDays();
+          var shortLimitDays = edsGlobalSettings.getSettingsShortLimitDays();
           if (limitDays <= shortLimitDays) {
             document.properties["lecm-errands:is-limit-short"] = true;
           }
@@ -4958,7 +4958,7 @@ if (doc) {
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.attr("lecm-errands:execute-result") == "executed" AND doc.attr("lecm-statemachine:is-final") != true]]></value>
+                                                                    <![CDATA[doc.attr("lecm-errands:execute-result") == "executed"]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -5213,7 +5213,7 @@ if (document) {
         var halfLimitDays = Math.round(fromWFELimitDays / 2);
         wfeDate.setDate(wfeDate.getDate() + halfLimitDays);
         document.properties["lecm-errands:half-limit-date"] = wfeDate;
-        var shortLimitDays = notifications.getSettingsShortLimitDays();
+        var shortLimitDays = edsGlobalSettings.getSettingsShortLimitDays();
         if (fromWFELimitDays <= shortLimitDays) {
             document.properties["lecm-errands:is-limit-short"] = true;
         } else {
@@ -7730,7 +7730,7 @@ if (doc) {
       ExecuteErrandScript.processReviewErrandChildExecuted(doc);
     }
     ExecuteErrandScript.processChildExecutedSignal(doc);
-    edsDocument.resetChildChangeSignal(document);
+    edsDocument.resetChildChangeSignal(doc);
 }]]></value>
                                                             </property>
                                                         </properties>
@@ -7802,7 +7802,7 @@ if (document) {
         var halfLimitDays = Math.round(fromWFELimitDays / 2);
         wfeDate.setDate(wfeDate.getDate() + halfLimitDays);
         document.properties["lecm-errands:half-limit-date"] = wfeDate;
-        var shortLimitDays = notifications.getSettingsShortLimitDays();
+        var shortLimitDays = edsGlobalSettings.getSettingsShortLimitDays();
         if (fromWFELimitDays <= shortLimitDays) {
             document.properties["lecm-errands:is-limit-short"] = true;
         } else {
@@ -10230,7 +10230,7 @@ ErrandsCompletionSignalScript.processCompletionSignal();]]></value>
                                                                 var doc = bpm_package.children[0];
 if (doc) {
   	ExecuteErrandScript.processReviewErrandChildExecuted(doc);
-  	edsDocument.resetChildChangeSignal(document);
+  	edsDocument.resetChildChangeSignal(doc);
 }]]></value>
                                                             </property>
                                                         </properties>

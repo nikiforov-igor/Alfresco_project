@@ -63,9 +63,14 @@
 				 $ = $ || jQuery; // Возможен вариант, когда предыдущей версии нету, восстановим что есть
 			 }
 
-			var zIndex = $('#${containerId}').zIndex(),
+			var $container = $('#${containerId}'),
 				fieldNode = $('#${fieldHtmlId}');
-			fieldNode.zIndex(zIndex+1);
+
+			function updateZIndex() {
+				fieldNode.zIndex($container.zIndex() + 1);
+			}
+
+			fieldNode.bind('focus', updateZIndex);
 
 			fieldNode.timepicker({
 				timeFormat: '${msg("title.timepicker.timeformat")}',

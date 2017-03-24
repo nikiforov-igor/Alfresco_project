@@ -817,7 +817,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.assocList("lecm-resolutions:base-document-assoc").size() == 0 OR doc.assocList("lecm-resolutions:reviewers-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                                    <![CDATA[doc.assocAttrs("lecm-resolutions:base-document-assoc", "lecm-review-ts:doc-review-state").size() == 0 OR doc.assocList("lecm-resolutions:reviewers-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -849,7 +849,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.assocList("lecm-resolutions:base-document-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                                    <![CDATA[doc.assocAttrs("lecm-resolutions:base-document-assoc", "lecm-review-ts:doc-review-state").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -1054,7 +1054,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.assocList("lecm-resolutions:base-document-assoc").size() == 0 OR doc.assocList("lecm-resolutions:reviewers-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                                    <![CDATA[doc.assocAttrs("lecm-resolutions:base-document-assoc", "lecm-review-ts:doc-review-state").size() == 0 OR doc.assocList("lecm-resolutions:reviewers-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -1086,7 +1086,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.assocList("lecm-resolutions:base-document-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                                    <![CDATA[doc.assocAttrs("lecm-resolutions:base-document-assoc", "lecm-review-ts:doc-review-state").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -1314,7 +1314,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -1360,7 +1360,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -1742,9 +1742,13 @@ var currentUser = orgstructure.getCurrentEmployee();
 if (document && currentUser) {
   var annulReason = document.properties["lecm-resolutions:annul-signal-reason"];
 
+  lecmPermission.pushAuthentication();
+  lecmPermission.setRunAsUserSystem();
   var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
   if (childErrands) {
     childErrands.forEach(function (errand) {
+      //alfsed-732 фикс закрытия недоступных контроллеру поручений
+      documentMembers.addMemberWithoutCheckPermission(errand, currentUser, "LECM_BASIC_PG_Reader", true);
       errands.sendCancelSignal(errand.nodeRef.toString(), annulReason, currentUser.nodeRef.toString());
     });
   }
@@ -1758,6 +1762,7 @@ if (document && currentUser) {
   if (reviewItemsAssocs && reviewItemsAssocs.length) {
     cancelReviewFromInitiatingDocument(document, reviewItemsAssocs);
   }
+  lecmPermission.popAuthentication();
 
   if (annulReason) {
     var recipients = [];
@@ -2000,6 +2005,8 @@ if (document) {
   var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
   if (childErrands) {
     childErrands.forEach(function (errand) {
+      //alfsed-732 фикс закрытия недоступных контроллеру поручений
+      documentMembers.addMemberWithoutCheckPermission(errand, signalSender, "LECM_BASIC_PG_Reader", true);
       edsDocument.sendCompletionSignal(errand, signalReason, signalSender);
     });
   }
@@ -2089,22 +2096,40 @@ if (document) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function(){
+  var baseDoc = null;
+  var baseDocAssoc = stm_document.assocs["lecm-resolutions:base-document-assoc"];
+  if (baseDocAssoc && baseDocAssoc.length) {
+    baseDoc = baseDocAssoc[0];
+  }
+
   /* Автор */
   var creatorAssoc = stm_document.assocs["lecm-resolutions:author-assoc"];
   if (creatorAssoc && creatorAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, creatorAssoc[0], "RESOLUTION_AUTHOR_DYN", task);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, creatorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    if (baseDoc) {
+      documentMembers.addMemberWithoutCheckPermission(baseDoc, creatorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    }
   }
 
   /* Создатель */
   var authorAssoc = stm_document.assocs["lecm-document:author-assoc"];
   if (authorAssoc && authorAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, authorAssoc[0], "RESOLUTION_CREATOR_DYN", task);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, authorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    if (baseDoc) {
+      documentMembers.addMemberWithoutCheckPermission(baseDoc, authorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    }
   }
 
   /* Контролер */
   var controllerAssoc = stm_document.assocs["lecm-resolutions:controller-assoc"];
   if (controllerAssoc && controllerAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, controllerAssoc[0], "RESOLUTION_CONTROLLER_DYN", task);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, controllerAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    if (baseDoc) {
+      documentMembers.addMemberWithoutCheckPermission(baseDoc, controllerAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    }
 
     notifications.sendNotificationFromCurrentUser({
       recipients: controllerAssoc,
@@ -2187,9 +2212,10 @@ if (document && !regnumbers.isDocumentRegistered(document)) {
   document.save();
 
   regnumbers.registerDocument(document, regNumberCode);
-  regnumbers.setDocumentNumber(regNumberCode, document, "lecm-resolutions:number");
-
   document.reset();
+  document.properties["lecm-resolutions:number"] = document.properties["lecm-document:regnum"];
+  document.save();
+
   if (document && document.properties["lecm-resolutions:errands-json"]) {
     var errandsList = eval('(' + document.properties["lecm-resolutions:errands-json"] + ')');
     if (errandsList && errandsList.length) {
@@ -2664,7 +2690,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployeeExtended]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployee]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -2710,7 +2736,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -2785,7 +2811,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2800,7 +2826,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2830,7 +2856,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2845,7 +2871,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2875,7 +2901,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2905,7 +2931,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2920,7 +2946,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2935,7 +2961,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2950,7 +2976,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2965,7 +2991,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -3206,10 +3232,20 @@ if (document) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function(){
+  var baseDoc = null;
+  var baseDocAssoc = stm_document.assocs["lecm-resolutions:base-document-assoc"];
+  if (baseDocAssoc && baseDocAssoc.length) {
+    baseDoc = baseDocAssoc[0];
+  }
+
   /* Автор */
   var authorAssoc = stm_document.assocs["lecm-resolutions:author-assoc"];
   if (authorAssoc && authorAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, authorAssoc[0], "RESOLUTION_AUTHOR_DYN", task);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, authorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    if (baseDoc) {
+      documentMembers.addMemberWithoutCheckPermission(baseDoc, authorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    }
 
     notifications.sendNotificationFromCurrentUser({
       recipients: authorAssoc,
@@ -3226,6 +3262,10 @@ if (document) {
   var creatorAssoc = stm_document.assocs["lecm-document:author-assoc"];
   if (creatorAssoc && creatorAssoc.length) {
     statemachine.grandDynamicRoleForEmployee(stm_document, creatorAssoc[0], "RESOLUTION_CREATOR_DYN", task);
+    documentMembers.addMemberWithoutCheckPermission(stm_document, creatorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    if (baseDoc) {
+      documentMembers.addMemberWithoutCheckPermission(baseDoc, creatorAssoc[0], 'LECM_BASIC_PG_Reader', true);
+    }
   }
 })();]]></value>
                                                             </property>
@@ -3939,7 +3979,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -3954,7 +3994,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -3969,7 +4009,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -3984,7 +4024,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -3999,7 +4039,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -4029,7 +4069,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -4059,7 +4099,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -4074,7 +4114,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -4089,7 +4129,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -4104,7 +4144,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -4119,7 +4159,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -4520,6 +4560,70 @@ if (document) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>e2f3b701-7010-434c-993e-dc4aa4e57fd9
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/34b66676-90e3-49e9-bca5-13cd509a350a
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.assocAttrs("lecm-resolutions:base-document-assoc", "lecm-review-ts:doc-review-state").size() == 0 OR doc.assocList("lecm-resolutions:reviewers-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Добавьте поручение или лист ознакомления]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>6428253d-829e-4e0c-9f4a-3612b23c77ca
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/b293c0b3-0ad9-4a09-a51e-758fa913e771
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.assocAttrs("lecm-resolutions:base-document-assoc", "lecm-review-ts:doc-review-state").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Добавьте поручение]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -4682,6 +4786,70 @@ if (document) {
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие не может быть выполнено: вы не обладаете ролью "Поручения.Инициатор". Обратитесь к администратору Системы]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>bb7f7424-2825-4579-bb5c-11eb69efeccc
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/3c0eaa45-38e3-448d-a9b7-2f1ed8357d0e
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.assocAttrs("lecm-resolutions:base-document-assoc", "lecm-review-ts:doc-review-state").size() == 0 OR doc.assocList("lecm-resolutions:reviewers-assoc").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Добавьте поручение или лист ознакомления]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>0e6bf7c1-4d31-4aea-ba2a-c19138e697db
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/0bd8ea67-44f7-4b13-8d6e-0f7ecceb094c
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.assocAttrs("lecm-resolutions:base-document-assoc", "lecm-review-ts:doc-review-state").size() > 0 OR doc.attr("lecm-resolutions:errands-json").length() > 2]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Добавьте поручение]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>

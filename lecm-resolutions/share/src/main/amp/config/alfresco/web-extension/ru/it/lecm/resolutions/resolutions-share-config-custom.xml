@@ -232,7 +232,7 @@
                     <field id="lecm-base-dummy-aspects:script2" set="end">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-resolution/lecm-resolution-form.js</control-param>
-                            <control-param name="scriptLoadedFireAction">resolutionFormScriptLoaded</control-param>
+                            <control-param name="scriptLoadedFireAction">resolutionCreateFormScriptLoaded</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script3" label-id="label.route-errand" set="end">
@@ -400,6 +400,7 @@
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-document:author-assoc"/>
+                    <show id="lecm-resolutions:closers"/>
                     <show id="lecm-resolutions:controller-assoc"/>
 
                     <show id="lecm-resolutions:limitation-date-radio"/>
@@ -443,6 +444,9 @@
                     <field id="lecm-document:author-assoc" label-id="label.resolution.creator" set="common"/>
                     <field id="lecm-document:subject-assoc" set="common"/>
                     <field id="lecm-resolutions:author-assoc" set="common"/>
+                    <field id="lecm-resolutions:closers" set="common">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
                     <field id="lecm-resolutions:controller-assoc" set="common"/>
 
                     <field id="lecm-resolutions:limitation-date-radio" set="limitation-date">
@@ -718,7 +722,7 @@
                     <field id="lecm-base-dummy-aspects:script2" set="end">
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-resolution/lecm-resolution-form.js</control-param>
-                            <control-param name="scriptLoadedFireAction">resolutionFormScriptLoaded</control-param>
+                            <control-param name="scriptLoadedFireAction">resolutionEditFormScriptLoaded</control-param>
                         </control>
                     </field>
                     <field id="lecm-base-dummy-aspects:script3" label-id="label.resolution.edit.save" set="end">
@@ -736,6 +740,7 @@
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
+                    <show id="lecm-resolutions:completion-method-assoc"/>
                     <show id="lecm-statemachine:status"/>
                 </field-visibility>
                 <appearance>

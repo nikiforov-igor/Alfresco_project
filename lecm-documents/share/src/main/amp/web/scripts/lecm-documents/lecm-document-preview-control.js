@@ -22,215 +22,331 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
         Bubbling = YAHOO.Bubbling;
-    var $siteURL = Alfresco.util.siteURL;
+
+    var $html = Alfresco.util.encodeHTML,
+        $siteURL = Alfresco.util.siteURL,
+        $isValueSet = Alfresco.util.isValueSet;
 
     LogicECM.module.Documents.DocumentPreviewControl = function (fieldHtmlId) {
         LogicECM.module.Documents.DocumentPreviewControl.superclass.constructor.call(this, "LogicECM.module.Documents.DocumentPreviewControl", fieldHtmlId, ["container"]);
-
         return this;
     };
 
-    YAHOO.extend(LogicECM.module.Documents.DocumentPreviewControl, Alfresco.component.Base,
-        {
-            options: {
-                itemId: "",
-                forTask: true,
-                selectedAttachmentNodeRef: "",
-                baseDocAssocName: null,
-                resizeable: false
-            },
+    YAHOO.extend(LogicECM.module.Documents.DocumentPreviewControl, Alfresco.component.Base);
 
-            documentNodeRef: null,
-            attachmentsList: null,
+    YAHOO.lang.augmentProto(LogicECM.module.Documents.DocumentPreviewControl, Alfresco.doclib.Actions);
 
-            attachmentsSelect: null,
-            attachmentActions: null,
+    YAHOO.lang.augmentObject(LogicECM.module.Documents.DocumentPreviewControl.prototype, {
+        options: {
+            itemId: "",
+            forTask: true,
+            selectedAttachmentNodeRef: "",
+            baseDocAssocName: null,
+            resizeable: false,
+            categories: null,
+            allActions: null,
+            readOnlyActions: null
+        },
 
-            actionsSelect: null,
-            deletedAttachment: null,
-            selectedAttachment: null,
-            menu: null,
+        documentNodeRef: null,
+        attachmentsList: null,
+        attachmentsSelect: null,
+        attachmentActions: null,
+        categories: [],
+        actionsSelect: null,
+        deletedAttachment: null,
+        selectedAttachment: null,
+        deferredCategoriesLoad: null,
+        menu: null,
 
-            onReady: function () {
-                this.modules.actions = new LogicECM.module.Base.Actions();
-                this.attachmentsSelect = Dom.get(this.id + "-attachment-select");
+        onReady: function DocumentPreviewControl_onReady() {
+            this.modules.actions = new LogicECM.module.Base.Actions();
+            this.attachmentsSelect = Dom.get(this.id + "-attachment-select");
 
-                if (this.options.resizeable) {
-                    Bubbling.on("webPreviewSetupComplete", this.setHeights, this, true);
-                    YAHOO.util.Event.on(window, "resize", this.setHeights, this, true);
-                }
+            if (this.options.resizeable) {
+                Bubbling.on("webPreviewSetupComplete", this.setHeights, this, true);
+                YAHOO.util.Event.on(window, "resize", this.setHeights, this, true);
+            }
 
-                Bubbling.on("onAttachmentsDeleteSuccess", this.onAttachmentsDeleteSuccess, this);
+            Bubbling.on("onAttachmentsDeleteSuccess", this.onAttachmentsDeleteSuccess, this);
 
-                this.loadDocument();
+            this.loadDocument();
 
-                YAHOO.util.Event.on(this.attachmentsSelect, "change", this.selectAttachment, null, this);
+            YAHOO.util.Event.on(this.attachmentsSelect, "change", this.selectAttachment, null, this);
 
-                this.actionsSelect = Dom.get(this.id + "-attachment-actions");
-                if (this.actionsSelect) {
-                    this.attachmentActions = [
-                        {
-                            value: this.msg("label.attachment.download"),
-                            text: this.msg("label.attachment.download"),
-                            onclick: {fn: this.attachmentActionDownload.bind(this)},
-                            editmode: false,
-                            mimetype: ""
+            this.actionsSelect = Dom.get(this.id + "-attachment-actions");
+
+            this.loadAttachmentAddMenu();
+
+            Event.on(this.attachmentsSelect, "change", this.reloadAttachmentPreview, this, true);
+
+            this.widgets.versionsMenuButton = new YAHOO.widget.Button(this.id + '-versions-actions-button', {
+                type: 'menu',
+                label: this.msg('label.versions.menu'),
+                menu: [{
+                    text: 'label.attachment.no-versions'
+                }]
+            });
+        },
+
+        loadDocument: function DocumentPreviewControl_loadDocument() {
+            if (this.options.itemId) {
+                if (this.options.forTask) {
+                    Alfresco.util.Ajax.jsonGet({
+                        url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/GetDocumentDataByTaskId",
+                        dataObj: {
+                            taskID: this.options.itemId
                         },
-                        {
-                            value: this.msg("label.attachment.view"),
-                            text: this.msg("label.attachment.view"),
-                            onclick: {fn: this.attachmentActionView.bind(this)},
-                            editmode: false,
-                            mimetype: ""
-                        },
-                        {
-                            value: this.msg("label.attachment.editProperties"),
-                            text: this.msg("label.attachment.editProperties"),
-                            onclick: {fn: this.attachmentActionEditProperties.bind(this)},
-                            editmode: true,
-                            mimetype: ""
-                        },
-                        {
-                            value: this.msg("label.attachment.uploadNewVersion"),
-                            text: this.msg("label.attachment.uploadNewVersion"),
-                            onclick: {fn: this.attachmentActionUploadNewVersion.bind(this)},
-                            editmode: true,
-                            mimetype: ""
-                        },
-                        {
-                            value: this.msg("label.attachment.remove"),
-                            text: this.msg("label.attachment.remove"),
-                            onclick: {fn: this.attachmentActionDelete.bind(this)},
-                            editmode: true,
-                            mimetype: ""
-                        }
-                    ];
-
-                    this.widgets.attachmentMenuButton = new YAHOO.widget.Button(this.id + "-attachment-actions-button", {
-                        type: "menu",
-                        label: this.msg("label.attachment.actions"),
-                        menu: this.attachmentActions
-                    });
-
-                    this.widgets.versionsMenuButton = new YAHOO.widget.Button(this.id + '-versions-actions-button', {
-                        type: 'menu',
-                        label: this.msg('label.versions.menu'),
-                        menu: [{
-                            text: 'Нет версий'
-                        }]
-                    });
-                }
-
-                Event.on(this.attachmentsSelect, "change", this.reloadAttachmentPreview, this, true);
-            },
-
-            initAttachments: function (haveany) {
-                var select = this.attachmentsSelect;
-                var button = Dom.get(this.id + "-attachment-actions");
-                var area = Dom.get(this.id + "-preview");
-
-                if (haveany) {
-                    select.removeAttribute('disabled');
-                    Dom.removeClass(button, 'hidden');
-                    Dom.removeClass(area, 'hidden');
-                } else {
-                    select.innerHTML = '';
-
-                    var opt = document.createElement('option');
-                    opt.textContent = "Нет вложений";
-                    opt.value = null;
-                    select.appendChild(opt);
-                    select.setAttribute('disabled', "");
-                    Dom.addClass(button, 'hidden');
-                    Dom.addClass(area, 'hidden');
-                }
-            },
-
-            loadDocument: function () {
-                if (this.options.itemId != null) {
-                    if (this.options.forTask === true) {
-                        Alfresco.util.Ajax.jsonGet({
-                            url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/GetDocumentDataByTaskId?taskID=" + this.options.itemId,
-                            successCallback: {
-                                fn: function (response) {
-                                    var result = response.json;
-                                    if (result != null && result.nodeRef != null) {
-                                        this.documentNodeRef = result.nodeRef;
-                                        this.loadDocumentAttachments();
-                                    }
-                                },
-                                scope: this
+                        successCallback: {
+                            scope: this,
+                            fn: function (response) {
+                                var result = response.json;
+                                if (result && result.nodeRef) {
+                                    this.documentNodeRef = result.nodeRef;
+                                    this.loadAttachments();
+                                }
                             }
-                        });
-                    } else {
-                        this.documentNodeRef = this.options.itemId;
-                        this.loadDocumentAttachments();
-                    }
+                        }
+                    });
+                } else {
+                    this.documentNodeRef = this.options.itemId;
+                    this.loadAttachments();
                 }
-            },
+            }
+        },
 
-            loadDocumentAttachments: function () {
-                if (this.options.itemId != null) {
+        loadAttachments: function DocumentPreviewControl_loadAttachments() {
+            this.attachmentsList = {};
+            if (this.options.categories) {
+                this.categories = [];
+                var nodeRefs = [];
+                for (var i = 0; i < this.options.categories.length; i++) {
+                    var categoryNodeRef = this.options.categories[i].nodeRef;
+                    nodeRefs.push(categoryNodeRef);
+                    Alfresco.util.Ajax.jsonGet({
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/document/data/doclistAttachments/documents/node/" + categoryNodeRef.replace(":/", ""),
+                        dataObj: {
+                            view: "attachment",
+                            nodeRef: categoryNodeRef
+                        },
+                        successCallback: {
+                            scope: this,
+                            fn: function (response) {
+                                var categoryAttachments = response.json.items;
+                                var categoryNodeRef = response.config.dataObj.nodeRef;
+                                if (categoryAttachments) {
+                                    this.onCategoryAttachmentsLoaded(categoryNodeRef, categoryAttachments);
+                                }
+                            }
+                        }
+                    });
+                }
+                this.deferredCategoriesLoad = new Alfresco.util.Deferred(nodeRefs, {
+                    scope: this,
+                    fn: this.onAttachmentsLoaded
+                });
+            } else {
+                if (this.options.itemId) {
                     Alfresco.util.Ajax.jsonGet({
                         url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/attachments/api/get",
                         dataObj: {
                             documentNodeRef: this.documentNodeRef,
-                            showEmptyCategory: true,
-                            baseDocAssocName: this.options.baseDocAssocName
+                            showEmptyCategory: true
                         },
                         successCallback: {
+                            scope: this,
                             fn: function (response) {
-                                var result = response.json;
-                                if (result != null) {
-                                    if (this.attachmentsSelect) {
-                                        this.attachmentsList = {};
-                                        this.attachmentsSelect.innerHTML = "";
+                                var data = response.json.items;
+                                if (data && data.length) {
+                                    data.forEach(function (item) {
+                                        if (item) {
+                                            var readOnly = item.category.isReadOnly;
+                                            var gr = document.createElement('optgroup');
+                                            gr.label = item.category.name;
+                                            if (item.attachments && item.attachments.length) {
+                                                item.attachments.forEach(function (attachment) {
+                                                    var opt = document.createElement('option');
+                                                    opt.textContent = attachment.name;
+                                                    opt.value = attachment.nodeRef;
+                                                    opt.dataset.readonly = readOnly;
+                                                    gr.appendChild(opt);
+                                                    this.attachmentsList[attachment.nodeRef] = attachment;
+                                                    if (this.options.selectedAttachmentNodeRef && this.options.selectedAttachmentNodeRef === attachment.nodeRef) {
+                                                        this.selectedAttachment = attachment;
+                                                    }
+                                                }, this);
+                                            }
 
-                                        this.loadCategories(result.items);
-                                        this._processAttachments(result.items);
+                                            this.attachmentsSelect.appendChild(gr);
+                                        }
+                                    }, this);
+
+                                    if (this.selectedAttachment && this.attachmentsList.hasOwnProperty(this.selectedAttachment.nodeRef)) {
+                                        this.attachmentsSelect.value = this.selectedAttachment.nodeRef;
                                     }
-                                    this.reloadAttachmentPreview();
+                                    this.selectAttachment();
                                 }
+                                this.reloadAttachmentPreview();
                             },
-                            scope: this
                         }
                     });
                 }
-            },
+            }
+        },
 
-            reloadAttachmentPreview: function () {
-                if (this.selectedAttachment) {
-                    Alfresco.util.Ajax.jsonGet(
-                        {
-                            url: Alfresco.constants.URL_SERVICECONTEXT + "components/preview/web-preview",
-                            dataObj: {
-                                nodeRef: this.selectedAttachment.nodeRef,
-                                htmlid: this.id + "-preview-container"
-                            },
-                            successCallback: {
-                                fn: function (response) {
-                                    Dom.get(this.id + "-preview-container").innerHTML = response.serverResponse.responseText;
-                                    var previewId = this.id + "-preview-container-full-window-div";
-                                    var dialog = LogicECM.module.Base.Util.getLastDialog();
-                                    if (dialog != null) {
-                                        dialog.dialog.center();
-                                    }
-                                    Event.onAvailable(previewId, function () {
-                                        var preview = Dom.get(previewId);
-                                        var container = Dom.get(this.id + "-preview-container-previewer-div");
-
-                                        container.innerHTML = "";
-                                        preview.setAttribute("style", "");
-                                        container.appendChild(preview);
-                                    }, {}, this);
-                                },
-                                scope: this
-                            },
-                            failureMessage: this.msg("message.failure"),
-                            scope: this,
-                            execScripts: true
-                        });
+        onAttachmentsLoaded: function DocumentPreviewControl_onAttachmentsLoaded() {
+            if (this.options.categories) {
+                var sortedCategories = [];
+                for (var i = 0; i < this.options.categories.length; i++) {
+                    for (var ii = 0; ii < this.categories.length; ii++) {
+                        if (this.options.categories[i].nodeRef == this.categories[ii].nodeRef) {
+                            sortedCategories.push(this.categories[ii]);
+                        }
+                    }
                 }
+                this.categories = sortedCategories;
+
+                if (this.attachmentsSelect) {
+                    this.populateAttachmentsSelect();
+                    this.selectAttachment();
+
+                    var select = this.attachmentsSelect;
+                    var button = Dom.get(this.id + "-attachment-actions");
+
+                    var haveAny = false;
+                    for (var prop in this.attachmentsList) {
+                        haveAny = true;
+                    }
+
+                    if (haveAny) {
+                        select.removeAttribute('disabled');
+                        Dom.removeClass(button, 'hidden');
+                    } else {
+                        select.innerHTML = '';
+
+                        var opt = document.createElement('option');
+                        opt.textContent = this.msg("label.attachment.no-attachments");
+                        opt.value = null;
+                        select.appendChild(opt);
+                        select.setAttribute('disabled', "");
+                        Dom.addClass(button, 'hidden');
+                    }
+                }
+            }
+            this.reloadAttachmentPreview();
+        },
+
+        populateAttachmentsSelect: function DocumentPreviewControl_populateAttachmentsSelect() {
+            this.attachmentsSelect.innerHTML = "";
+            for (var i = 0; i < this.categories.length; i++) {
+                var category = this.categories[i];
+                var gr = document.createElement('optgroup');
+                gr.label = category.name;
+                for (var ii = 0; ii < category.attachments.length; ii++) {
+                    var attachment = category.attachments[ii];
+                    var opt = document.createElement('option');
+                    opt.textContent = attachment.fileName;
+                    opt.value = attachment.nodeRef;
+                    gr.appendChild(opt);
+                    this.attachmentsList[attachment.nodeRef] = attachment;
+                    if (this.options.selectedAttachmentNodeRef && this.options.selectedAttachmentNodeRef === attachment.nodeRef) {
+                        this.selectedAttachment = attachment;
+                    }
+                }
+                this.attachmentsSelect.appendChild(gr);
+            }
+            if (this.selectedAttachment && this.attachmentsList.hasOwnProperty(this.selectedAttachment.nodeRef)) {
+                this.attachmentsSelect.value = this.selectedAttachment.nodeRef;
+            }
+        },
+
+        onCategoryAttachmentsLoaded: function DocumentPreviewControl_onCategoryAttachmentsLoaded(categoryNodeRef, categoryAttachments) {
+            var category = this.getCategoryByNodeRef(categoryNodeRef);
+            category.nodeRef = categoryNodeRef;
+            category.attachments = [];
+            for (var i = 0; i < categoryAttachments.length; i++) {
+                category.attachments.push(categoryAttachments[i]);
+            }
+            this.categories.push(category);
+            this.deferredCategoriesLoad.fulfil(category.nodeRef);
+        },
+
+        getCategoryByNodeRef: function DocumentPreviewControl_getCategoryByNodeRef(categoryNodeRef) {
+            for (var i = 0; i < this.options.categories.length; i++) {
+                if (this.options.categories[i].nodeRef == categoryNodeRef) {
+                    return {
+                        name: this.options.categories[i].name,
+                        isReadOnly: this.options.categories[i].isReadOnly == "true"
+                    }
+                }
+            }
+        },
+
+        loadAttachmentAddMenu: function DocumentPreviewControl_loadAttachmentAddMenu() {
+            var attachmentAddEl = Dom.get(this.id + "-attachment-add");
+            if (attachmentAddEl) {
+                var addAttachmentActions = [];
+                if (this.widgets.addAttachmentMenuButton) {
+                    this.widgets.addAttachmentMenuButton.destroy();
+                }
+                for (var i = 0; i < this.options.categories.length; i++) {
+                    var category = this.options.categories[i];
+                    addAttachmentActions.push({
+                        value: category.nodeRef,
+                        text: category.name,
+                        disabled: category.isReadOnly == "true",
+                        onclick: {
+                            fn: this.attachmentActionAdd,
+                            scope: this,
+                            obj: {
+                                name: category.name,
+                                nodeRef: category.nodeRef
+                            },
+                        }
+                    })
+                }
+                attachmentAddEl.innerHTML = "";
+                this.widgets.addAttachmentMenuButton = new YAHOO.widget.Button(attachmentAddEl, {
+                    type: "menu",
+                    label: this.msg("label.attachment.add"),
+                    menu: addAttachmentActions
+                });
+            }
+        },
+
+        reloadAttachmentPreview: function DocumentPreviewControl_reloadAttachmentPreview() {
+            if (this.selectedAttachment) {
+                Alfresco.util.Ajax.jsonGet(
+                    {
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "components/preview/web-preview",
+                        dataObj: {
+                            nodeRef: this.selectedAttachment.nodeRef,
+                            htmlid: this.id + "-preview-container"
+                        },
+                        successCallback: {
+                            scope: this,
+                            fn: function (response) {
+                                Dom.get(this.id + "-preview-container").innerHTML = response.serverResponse.responseText;
+                                var previewId = this.id + "-preview-container-full-window-div";
+                                var dialog = LogicECM.module.Base.Util.getLastDialog();
+                                if (dialog) {
+                                    dialog.dialog.center();
+                                }
+                                Event.onAvailable(previewId, function () {
+                                    var preview = Dom.get(previewId);
+                                    var container = Dom.get(this.id + "-preview-container-previewer-div");
+
+                                    container.innerHTML = "";
+                                    preview.setAttribute("style", "");
+                                    container.appendChild(preview);
+                                }, {}, this);
+                            },
+                        },
+                        failureMessage: this.msg("message.failure"),
+                        scope: this,
+                        execScripts: true
+                    });
+
                 var actionsEl = Dom.get(this.id + "-actions");
                 if (actionsEl) {
                     actionsEl.innerHTML = '';
@@ -242,6 +358,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                                 format: "json"
                             },
                             successCallback: {
+                                scope: this,
                                 fn: function (response) {
                                     var container = Dom.get(this.id + "-actions");
                                     if (response.json.item.actions) {
@@ -285,471 +402,436 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                                             }
                                         }
                                     }
-                                },
-                                scope: this
+                                }
                             },
                             failureMessage: this.msg("message.failure"),
                             scope: this,
                             execScripts: true
                         });
                 }
-            },
+            }
+        },
 
-            _processAttachments: function (data) {
-                this.attachmentsSelect.innerHTML = '';
-                var hasAttachments = false;
-                var attachmentsCount = 0;
-                if (data && data.length) {
-                    data.forEach(function (item) {
-                        if (item) {
-                            var readOnly = item.category.isReadOnly;
-                            var gr = document.createElement('optgroup');
-                            gr.label = item.category.name;
-                            if (item.attachments && item.attachments.length) {
-                                hasAttachments = true;
-                                attachmentsCount += item.attachments.length;
-                                item.attachments.forEach(function (attachment) {
-                                    var opt = document.createElement('option');
-                                    opt.textContent = attachment.name;
-                                    opt.value = attachment.nodeRef;
-                                    opt.dataset.readonly = readOnly;
-                                    gr.appendChild(opt);
-                                    this.attachmentsList[attachment.nodeRef] = attachment;
-                                    if (this.options.selectedAttachmentNodeRef && this.options.selectedAttachmentNodeRef === attachment.nodeRef) {
-                                        this.selectedAttachment = attachment;
-                                    }
-                                }, this);
-                            }
+        renderActions: function DocumentPreviewControl_renderActions(actions, item) {
+            item.jsNode = new Alfresco.util.Node(item.node);
 
-                            this.attachmentsSelect.appendChild(gr);
+            this.attachmentActions = [];
+
+            for (var i = 0; i < actions.length; i++) {
+                var action = actions[i];
+                this.attachmentActions.push({
+                    value: this.msg(action.label),
+                    text: this.msg(action.label),
+                    onclick: {
+                        fn: this.getActionMenuFunction(action, item),
+                        scope: this
+                    }
+                });
+            }
+
+            if (this.widgets.attachmentMenuButton) {
+                var menu = this.widgets.attachmentMenuButton.getMenu();
+                menu.clearContent();
+                menu.itemData = this.attachmentActions;
+                menu.render();
+            } else {
+                this.widgets.attachmentMenuButton = new YAHOO.widget.Button(this.id + "-attachment-actions-button", {
+                    type: "menu",
+                    label: this.msg("label.attachment.actions"),
+                    menu: this.attachmentActions
+                });
+            }
+        },
+
+        showActions: function DocumentPreviewControl_showActions() {
+            var actionSet = Dom.get(this.id + "-action-set");
+            Dom.removeClass(actionSet, "hidden");
+        },
+
+        checkActions: function DocumentPreviewControl_checkActions(record) {
+            if (record.meta && record.meta.category) {
+                var categoryNodeRef = record.meta.category;
+                var category = this.getCategoryByNodeRef(categoryNodeRef);
+                var isReadOnly = category.isReadOnly;
+            } else {
+                isReadOnly = true;
+            }
+            var showActions = (isReadOnly) ? this.options.readOnlyActions : this.options.allActions;
+            var result = [];
+            var actions = record.actions;
+            if (actions != null) {
+                for (var i = 0; i < actions.length; i++) {
+                    var action = actions[i];
+                    var show = false;
+                    for (var j = 0; j < showActions.length; j++) {
+                        if (action.id == showActions[j].id &&
+                            (!showActions[j].onlyForOwn ||
+                            (record.node && record.node.properties["cm:creator"] &&
+                            record.node.properties["cm:creator"].userName == Alfresco.constants.USERNAME))) {
+                            show = true;
                         }
-                    }, this);
-
-                    if (this.selectedAttachment && this.attachmentsList.hasOwnProperty(this.selectedAttachment.nodeRef)) {
-                        this.attachmentsSelect.value = this.selectedAttachment.nodeRef;
                     }
-                    this.selectAttachment();
+                    if (show) {
+                        result.push(action);
+                    }
                 }
-                this.initAttachments(hasAttachments);
-            },
+            }
+            return result;
+        },
 
-            loadCategories: function (data) {
-                var addAttachmentActions = [];
-                this.attachmentsList = {};
-
-                var me = this;
-
-                if(this.widgets.addAttachmentMenuButton) {
-                    this.widgets.addAttachmentMenuButton.destroy();
+        getActionMenuFunction: function DocumentPreviewControl_checkActions_(action, item) {
+            if (action.type === "link") {
+                if (action.params.href) {
+                    var href = Alfresco.util.substituteDotNotation(action.params.href, item);
+                    var actionUrls = this.getActionUrls(item);
+                    var target = action.params.target ? "target=\"" + action.params.target + "\"" : "";
+                    var url = YAHOO.lang.substitute(href, actionUrls);
+                    return this["openLink"].bind(this, url, target);
                 }
-
-                this.categories = new Object();
-                if (data && data.length) {
-                    data.forEach(function (item) {
-                        var readonly = (me.MODE !== me.MODE_EDIT || item.category.isReadOnly);
-                        me.categories[item.category.name] = {
-                            readonly: readonly,
-                            nodeRef: item.category.nodeRef
-                        };
-                        addAttachmentActions.push({
-                            value: item.category.nodeRef,
-                            text: item.category.name,
-                            disabled: ((me.MODE !== me.MODE_EDIT && item.category.name === "Прочее") || (me.MODE === me.MODE_EDIT && item.category.isReadOnly)),
-                            onclick: {
-                                fn: me.attachmentActionAdd,
-                                scope: me,
-                                obj: {
-                                    name: item.category.name,
-                                    nodeRef: item.category.nodeRef
-                                }
-                            }
+                else {
+                    Alfresco.logger.warn("Action configuration error: Missing 'href' parameter for actionId: ", action.id);
+                }
+            }
+            else if (action.type === "pagelink") {
+                if (action.params.page) {
+                    var recordSiteName = $isValueSet(item.location.site) ? item.location.site.name : null;
+                    var pageUrl = $siteURL(Alfresco.util.substituteDotNotation(action.params.page, item),
+                        {
+                            site: recordSiteName
                         });
-                    }, this);
+                    actionUrls = this.getActionUrls(item);
+                    url = YAHOO.lang.substitute(pageUrl, actionUrls);
+                    return this["goToPage"].bind(this, url);
                 }
-                var button = Dom.get(this.id + "-attachment-add");
-                if (button) {
-                    button.innerHTML = "";
-                    this.widgets.addAttachmentMenuButton = new YAHOO.widget.Button({
-                        container: button,
-                        type: "menu",
-                        label: this.msg("label.attachment.add"),
-                        disabled: (this.hasAddContentRight != null && !this.hasAddContentRight),
-                        menu: addAttachmentActions
-                    });
+                else {
+                    Alfresco.logger.warn("Action configuration error: Missing 'page' parameter for actionId: ", action.id);
                 }
-            },
-
-            attachmentActionAdd: function(arg1, arg2, arg3) {
-                var silent = false;
-                if (arguments.length == 2) {
-                    var name = arg2.name;
-                    var nodeRef = arg2.nodeRef;
-                    silent = arg2.silent;
-                } else {
-                    var name = arg3.name;
-                    var nodeRef = arg3.nodeRef;
+            }
+            else if (action.type === "javascript") {
+                if (action.params["function"]) {
+                    return this[action.params["function"]];
                 }
+                else {
+                    Alfresco.logger.warn("Action configuration error: Missing 'function' parameter for actionId: ", action.id);
+                }
+            }
+        },
 
-                var title = name ? 'Загрузить в категорию: "' + name + '"' : 'Добавить вложение';
+        openLink: function DocumentPreviewControl_openLink(url) {
+            var urlParts = url.replace("\"", "").split(" ");
+            url = urlParts[0];
+            window.open(url);
+        },
 
-                if (nodeRef != null) {
-                    if (!this.fileUpload) {
-                        this.fileUpload = Alfresco.getFileUploadInstance();
-                    }
-                    var me = this;
-                    var uploadConfig =
+        goToPage: function DocumentPreviewControl_goToPage(url) {
+            window.open(url);
+        },
+
+        attachmentActionAdd: function DocumentPreviewControl_attachmentActionAdd(layer, event, args) {
+            var name = args.name;
+            var nodeRef = args.nodeRef;
+
+            var title = name ? this.msg('label.attachment.upload-to-category') + ': "' + name + '"' : this.msg('label.attachment.add-attachment');
+
+            if (nodeRef) {
+                if (!this.fileUpload) {
+                    this.fileUpload = Alfresco.getFileUploadInstance();
+                }
+                var me = this;
+                var uploadConfig =
                     {
                         destination: nodeRef,
                         filter: [],
                         mode: this.fileUpload.MODE_SINGLE_UPLOAD,
                         thumbnails: "doclib",
-                        onFileUploadComplete:
-                        {
+                        onFileUploadComplete: {
+                            scope: this,
                             fn: function (obj) {
-                                if (!silent) {
-                                    if (obj.successful != null && obj.successful.length > 0) {
-                                        // TODO: Костыль, надо бы переписать логику
-                                        me.selectedAttachment = {};
-                                        me.selectedAttachment.nodeRef = obj.successful[0].nodeRef;
-                                    }
-
-                                    if (this.options.nodeRef) {
-                                        me.loadDocumentAttachments(false);
-                                    } else {
-                                        me.attachmentsList[obj.successful[0].nodeRef] = {
-                                            nodeRef: obj.successful[0].nodeRef,
-                                            name: obj.successful[0].fileName
-                                        };
-
-                                        me.initAttachments(true);
-                                        me.manualAttachmentListUpdate();
-                                    }
-                                    me.reloadAttachmentPreview();
+                                if (obj.successful && obj.successful.length > 0) {
+                                    me.selectedAttachment = {};
+                                    me.selectedAttachment.nodeRef = obj.successful[0].nodeRef;
                                 }
 
-                            },
-                            scope: this
+                                if (this.options.itemId) {
+                                    me.loadAttachments();
+                                }
+                            }
                         },
                         suppressRefreshEvent: true
                     };
-                    this.fileUpload.show(uploadConfig);
-                    if (this.fileUpload.uploader.titleText) {
-                        this.fileUpload.uploader.titleText.innerHTML = title;
-                    } else if (this.fileUpload.uploader.widgets && this.fileUpload.uploader.widgets.panel) {
-                        this.fileUpload.uploader.widgets.panel.setHeader(title);
-                    }
+                this.fileUpload.show(uploadConfig);
+                if (this.fileUpload.uploader.titleText) {
+                    this.fileUpload.uploader.titleText.innerHTML = title;
+                } else if (this.fileUpload.uploader.widgets && this.fileUpload.uploader.widgets.panel) {
+                    this.fileUpload.uploader.widgets.panel.setHeader(title);
                 }
-            },
+            }
+        },
 
-            selectAttachment: function () {
-                if (this.attachmentsSelect.selectedIndex < 0) {
-                    return null;
+        selectAttachment: function DocumentPreviewControl_selectAttachment() {
+            if (this.attachmentsSelect.selectedIndex < 0) {
+                return null;
+            }
+            var selectedOption = this.attachmentsSelect.options[this.attachmentsSelect.selectedIndex];
+            var nodeRef = selectedOption.value;
+            if (nodeRef && nodeRef.length > 0) {
+                this.selectedAttachment = this.attachmentsList[nodeRef];
+                if (this.selectedAttachment) {
+                    this._loadVersions(nodeRef);
                 }
-                var selectedOption = this.attachmentsSelect.options[this.attachmentsSelect.selectedIndex];
-                var nodeRef = selectedOption.value;
-                var readonly = selectedOption.dataset.readonly === "true";
-                if (nodeRef != null && nodeRef.length > 0) {
-                    this.setMenuAttachmentButtonAccess(readonly, nodeRef);
-                    this.selectedAttachment = this.attachmentsList[nodeRef];
-                    if (this.selectedAttachment != null) {
-                        this._loadVersions(nodeRef);
-                    }
-                }
-            },
+            }
+            var actionsElSelect = Dom.get(this.id + "-attachment-actions");
+            if (actionsElSelect) {
+                this.updateActions();
+            }
+        },
 
-            attachmentActionDownload: function () {
-                if (this.selectedAttachment != null) {
-                    document.location = Alfresco.constants.PROXY_URI_RELATIVE + "api/node/content/" + this.selectedAttachment.nodeRef.replace(":/", "") + "/" + this.selectedAttachment.name + "?a=true";
-                }
-            },
+        updateActions: function DocumentPreviewControl_selectAttachment() {
+            var actions = this.checkActions(this.selectedAttachment);
+            this.renderActions(actions, this.selectedAttachment);
+        },
 
-            _loadVersions: function (nodeRef) {
-                Alfresco.util.Ajax.jsonGet({
-                    url: Alfresco.constants.PROXY_URI_RELATIVE + 'api/version',
-                    dataObj: {
-                        nodeRef: nodeRef
+        _loadVersions: function DocumentPreviewControl_loadVersions(nodeRef) {
+            Alfresco.util.Ajax.jsonGet({
+                url: Alfresco.constants.PROXY_URI_RELATIVE + 'api/version',
+                dataObj: {
+                    nodeRef: nodeRef
+                },
+                successCallback: {
+                    scope: this,
+                    fn: function (response) {
+                        var data = response.json;
+                        if (data) {
+                            if (data.length > 1) {
+                                var versions = data.map(function (el) {
+                                    return {
+                                        text: el.label,
+                                        url: Alfresco.constants.PROXY_URI + '/api/node/content/' + el.nodeRef.replace(":/", "") + '/' + el.name + '?a=true'
+                                    }
+                                });
+
+                                this.selectedAttachment.version = data[0].label;
+                                Dom.removeClass(this.id + '-versions-actions', 'hidden');
+
+                                function updateMenu() {
+                                    var items = Alfresco.util.deepCopy(menu.getItems());
+                                    this.addItems(versions);
+
+                                    items.forEach(function (item) {
+                                        this.removeItem(item);
+                                    }, this);
+
+                                    this.unsubscribe('render', updateMenu);
+                                    this.unsubscribe('show', updateMenu);
+                                }
+
+                                var menu = this.widgets.versionsMenuButton.getMenu();
+                                if (!menu._rendered) {
+                                    menu.subscribe('render', updateMenu);
+                                } else {
+                                    menu.subscribe('show', updateMenu);
+                                }
+                            } else {
+                                Dom.addClass(this.id + '-versions-actions', 'hidden');
+                            }
+                        }
                     },
-                    successCallback: {
-                        fn: function (response) {
-                            var data = response.json;
-                            if (data) {
-                                if (data.length > 1) {
-                                    var versions = data.map(function (el) {
-                                        return {
-                                            text: el.label,
-                                            url: Alfresco.constants.PROXY_URI + '/api/node/content/' + el.nodeRef.replace(":/", "") + '/' + el.name + '?a=true'
+                },
+                failureMessage: ""
+            });
+        },
+
+        onActionDetails: function DocumentPreviewControl_onActionDetails() {
+            if (this.selectedAttachment) {
+                var scope = this,
+                    nodeRef = this.selectedAttachment.nodeRef;
+
+                // Intercept before dialog show
+                var doBeforeDialogShow = function (p_form, p_dialog) {
+                    // Dialog title
+                    var fileSpan = '<span class="light">' + $html(this.selectedAttachment.fileName) + '</span>';
+
+                    Alfresco.util.populateHTML(
+                        [p_dialog.id + "-dialogTitle", scope.msg("edit-details.title", fileSpan)]
+                    );
+
+                    // Edit metadata link button
+                    this.widgets.editMetadata = Alfresco.util.createYUIButton(p_dialog, "editMetadata", null,
+                        {
+                            type: "link",
+                            label: scope.msg("edit-details.label.edit-metadata"),
+                            href: $siteURL("edit-metadata?nodeRef=" + nodeRef)
+                        });
+                };
+
+                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
+                    {
+                        itemKind: "node",
+                        itemId: nodeRef,
+                        mode: "edit",
+                        submitType: "json",
+                        formId: "doclib-simple-metadata"
+                    });
+
+                // Using Forms Service, so always create new instance
+                var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails-" + Alfresco.util.generateDomId());
+
+                editDetails.setOptions(
+                    {
+                        width: "auto",
+                        templateUrl: templateUrl,
+                        actionUrl: null,
+                        destroyOnHide: true,
+                        doBeforeDialogShow: {
+                            fn: doBeforeDialogShow,
+                            scope: this
+                        },
+                        onSuccess: {
+                            scope: this,
+                            fn: function () {
+                                if (this.attachmentsSelect.selectedOptions && this.attachmentsSelect.selectedOptions.length > 0) {
+                                    var option = this.attachmentsSelect.selectedOptions[0];
+                                    var nodeRef = option.getAttribute("value");
+
+                                    var onSuccess = function refresh_onSuccess(response) {
+                                        var items = response.json.data.items;
+                                        if (items && items.length > 0) {
+                                            option.innerHTML = items[0].name;
+                                            this.attachmentsList[nodeRef].name = items[0].name;
+                                        }
+                                    };
+
+                                    Alfresco.util.Ajax.jsonRequest({
+                                        method: 'POST',
+                                        url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/forms/picker/items',
+                                        dataObj: {
+                                            items: nodeRef.split(",")
+                                        },
+                                        successCallback: {
+                                            fn: onSuccess,
+                                            scope: this
+                                        },
+                                        failureCallback: {
+                                            fn: function () {
+                                                Alfresco.util.PopupManager.displayMessage({
+                                                    text: Alfresco.component.Base.prototype.msg("Сбой")
+                                                });
+                                            },
+                                            scope: this
                                         }
                                     });
-
-                                    this.selectedAttachment.version = data[0].label;
-                                    Dom.removeClass(this.id + '-versions-actions', 'hidden');
-
-                                    function updateMenu() {
-                                        var items = Alfresco.util.deepCopy(menu.getItems());
-                                        this.addItems(versions);
-
-                                        items.forEach(function (item) {
-                                            this.removeItem(item);
-                                        }, this);
-
-                                        this.unsubscribe('render', updateMenu);
-                                        this.unsubscribe('show', updateMenu);
-                                    }
-
-                                    var menu = this.widgets.versionsMenuButton.getMenu();
-                                    if (!menu._rendered) {
-                                        menu.subscribe('render', updateMenu);
-                                    } else {
-                                        menu.subscribe('show', updateMenu);
-                                    }
-                                } else {
-                                    Dom.addClass(this.id + '-versions-actions', 'hidden');
                                 }
                             }
                         },
-                        scope: this
-                    },
-                    failureMessage: ""
-                });
-            },
-
-            setMenuAttachmentButtonAccess: function (readonly, nodeRef) {
-                if (this.widgets.attachmentMenuButton != null) {
-                    var i;
-                    var menu = this.widgets.attachmentMenuButton.getMenu();
-                    var items = menu.getItems();
-
-                    function updateItems(readonly) {
-                        for (i = 0; i < menu.itemData.length; i++) {
-                            var item = menu.getItem(i);
-                            // TODO you know what to do
-                            var editable = menu.itemData[i].editmode;
-                            item.cfg.setProperty('disabled', (editable && readonly && this.MODE !== this.MODE_CREATE) || menu.itemData[i].disabled);
-                        }
-                    }
-
-                    if (items && items.length) {
-                        updateItems(readonly);
-                    } else {
-                        menu.subscribe('render', updateItems.bind(this, readonly));
-                    }
-                }
-            },
-
-            attachmentActionView: function () {
-                if (this.selectedAttachment != null) {
-                    window.open(Alfresco.constants.PROXY_URI_RELATIVE + "api/node/content/" + this.selectedAttachment.nodeRef.replace(":/", "") + "/" + this.selectedAttachment.name, '_blank');
-                }
-            },
-
-            attachmentActionEditProperties: function () {
-                if (this.selectedAttachment != null) {
-                    var scope = this,
-                        nodeRef = this.selectedAttachment.nodeRef;
-
-                    // Intercept before dialog show
-                    var doBeforeDialogShow = function (p_form, p_dialog) {
-                        // Dialog title
-                        var fileSpan = '<span class="light">' + $html(this.selectedAttachment.name) + '</span>';
-
-                        Alfresco.util.populateHTML(
-                            [p_dialog.id + "-dialogTitle", scope.msg("edit-details.title", fileSpan)]
-                        );
-
-                        // Edit metadata link button
-                        this.widgets.editMetadata = Alfresco.util.createYUIButton(p_dialog, "editMetadata", null,
-                            {
-                                type: "link",
-                                label: scope.msg("edit-details.label.edit-metadata"),
-                                href: $siteURL("edit-metadata?nodeRef=" + nodeRef)
-                            });
-                    };
-
-                    var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
-                        {
-                            itemKind: "node",
-                            itemId: nodeRef,
-                            mode: "edit",
-                            submitType: "json",
-                            formId: "doclib-simple-metadata"
-                        });
-
-                    // Using Forms Service, so always create new instance
-                    var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails-" + Alfresco.util.generateDomId());
-
-                    editDetails.setOptions(
-                        {
-                            width: "auto",
-                            templateUrl: templateUrl,
-                            actionUrl: null,
-                            destroyOnHide: true,
-                            doBeforeDialogShow: {
-                                fn: doBeforeDialogShow,
-                                scope: this
-                            },
-                            onSuccess: {
-                                fn: function () {
-                                    if (this.attachmentsSelect.selectedOptions && this.attachmentsSelect.selectedOptions.length > 0) {
-                                        var option = this.attachmentsSelect.selectedOptions[0];
-                                        var nodeRef = option.getAttribute("value");
-
-                                        var onSuccess = function refresh_onSuccess(response) {
-                                            var items = response.json.data.items;
-                                            if (items && items.length > 0) {
-                                                option.innerHTML = items[0].name;
-                                                this.attachmentsList[nodeRef].name = items[0].name;
-                                            }
-                                        };
-
-                                        Alfresco.util.Ajax.jsonRequest({
-                                            method: 'POST',
-                                            url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/forms/picker/items',
-                                            dataObj: {
-                                                items: nodeRef.split(",")
-                                            },
-                                            successCallback: {
-                                                fn: onSuccess,
-                                                scope: this
-                                            },
-                                            failureCallback: {
-                                                fn: function () {
-                                                    Alfresco.util.PopupManager.displayMessage({
-                                                        text: Alfresco.component.Base.prototype.msg("Сбой")
-                                                    });
-                                                },
-                                                scope: this
-                                            }
-                                        });
-                                    }
-                                },
-                                scope: this
-                            },
-                            onFailure: {
-                                fn: function (response) {
-                                    var failureMsg = this.msg("message.details.failure");
-                                    if (response.json && response.json.message.indexOf("Failed to persist field 'prop_cm_name'") !== -1) {
-                                        failureMsg = this.msg("message.details.failure.name");
-                                    }
-                                    Alfresco.util.PopupManager.displayMessage(
-                                        {
-                                            text: failureMsg
-                                        });
-                                },
-                                scope: this
-                            }
-                        });
-                    editDetails.show();
-                }
-            },
-
-            attachmentActionDelete: function () {
-                if (this.selectedAttachment != null) {
-                    var me = this,
-                        content = "document",
-                        displayName = this.selectedAttachment.name;
-
-                    var displayPromptText = this.msg("message.confirm.delete", displayName);
-
-                    Alfresco.util.PopupManager.displayPrompt(
-                        {
-                            title: this.msg("actions." + content + ".delete"),
-                            text: displayPromptText,
-                            noEscape: true,
-                            buttons: [
-                                {
-                                    text: this.msg("button.delete"),
-                                    handler: function () {
-                                        this.destroy();
-                                        me.attachmentActionDeleteConfirm.call(me, me.selectedAttachment, displayName);
-                                    }
-                                },
-                                {
-                                    text: this.msg("button.cancel"),
-                                    handler: function () {
-                                        this.destroy();
-                                    },
-                                    isDefault: true
-                                }]
-                        });
-                }
-            },
-
-            attachmentActionDeleteConfirm: function (attachment, displayName) {
-                // Весьма глупый способ, но щито поделать
-                this.deletedAttachment = attachment.nodeRef;
-                this.modules.actions.genericAction(
-                    {
-                        success: {
-                            event: {
-                                name: "onAttachmentsDeleteSuccess"
-                            },
-                            message: this.msg("message.delete.success", displayName)
-                        },
-                        failure: {
-                            message: this.msg("message.delete.failure", displayName)
-                        },
-                        webscript: {
-                            method: Alfresco.util.Ajax.DELETE,
-                            name: "delete",
-                            queryString: "full=true"
-                        },
-                        config: {
-                            requestContentType: Alfresco.util.Ajax.JSON,
-                            dataObj: {
-                                nodeRefs: [attachment.nodeRef]
+                        onFailure: {
+                            scope: this,
+                            fn: function (response) {
+                                var failureMsg = this.msg("message.details.failure");
+                                if (response.json && response.json.message.indexOf("Failed to persist field 'prop_cm_name'") !== -1) {
+                                    failureMsg = this.msg("message.details.failure.name");
+                                }
+                                Alfresco.util.PopupManager.displayMessage(
+                                    {
+                                        text: failureMsg
+                                    });
                             }
                         }
                     });
-            },
+                editDetails.show();
+            }
+        },
 
-            onAttachmentsDeleteSuccess: function () {
-                if (this.options.itemId) {
-                    this.loadDocumentAttachments(false);
-                } else {
-                    delete this.attachmentsList[this.deletedAttachment];
-                    this.manualAttachmentListUpdate();
+        onActionDelete: function DocumentPreviewControl_onActionDelete() {
+            if (this.selectedAttachment) {
+                var me = this,
+                    content = "document",
+                    displayName = this.selectedAttachment.fileName;
 
-                    function getMapSize(obj) {
-                        var size = 0, key;
-                        for (key in obj) {
-                            if (obj.hasOwnProperty(key)) size++;
+                var displayPromptText = this.msg("message.confirm.delete", displayName);
+
+                Alfresco.util.PopupManager.displayPrompt(
+                    {
+                        title: this.msg("actions." + content + ".delete"),
+                        text: displayPromptText,
+                        noEscape: true,
+                        buttons: [
+                            {
+                                text: this.msg("button.delete"),
+                                handler: function () {
+                                    this.destroy();
+                                    me.attachmentActionDeleteConfirm.call(me, me.selectedAttachment, displayName);
+                                }
+                            },
+                            {
+                                text: this.msg("button.cancel"),
+                                handler: function () {
+                                    this.destroy();
+                                },
+                                isDefault: true
+                            }]
+                    });
+            }
+        },
+
+        attachmentActionDeleteConfirm: function DocumentPreviewControl_attachmentActionDeleteConfirm(attachment, displayName) {
+            // Весьма глупый способ, но щито поделать
+            this.deletedAttachment = attachment.nodeRef;
+            this.modules.actions.genericAction(
+                {
+                    success: {
+                        event: {
+                            name: "onAttachmentsDeleteSuccess"
+                        },
+                        message: this.msg("message.delete.success", displayName)
+                    },
+                    failure: {
+                        message: this.msg("message.delete.failure", displayName)
+                    },
+                    webscript: {
+                        method: Alfresco.util.Ajax.DELETE,
+                        name: "delete",
+                        queryString: "full=true"
+                    },
+                    config: {
+                        requestContentType: Alfresco.util.Ajax.JSON,
+                        dataObj: {
+                            nodeRefs: [attachment.nodeRef]
                         }
-                        return size;
                     }
+                });
+        },
 
-                    if (getMapSize(this.attachmentsList) == 0) {
-                        this.initAttachments(false);
-                    }
+        onAttachmentsDeleteSuccess: function DocumentPreviewControl_onAttachmentsDeleteSuccess() {
+            this.loadAttachments();
+
+            Bubbling.fire('removeAttachmentAction', {
+                nodeRef: this.deletedAttachment
+            });
+            this.deletedAttachment = null;
+        },
+
+        onActionUploadNewVersion: function DocumentPreviewControl_onActionUploadNewVersion() {
+            if (this.selectedAttachment) {
+                var displayName = this.selectedAttachment.fileName,
+                    nodeRef = this.selectedAttachment.nodeRef,
+                    version = this.selectedAttachment.version;
+
+                if (!this.fileUpload) {
+                    this.fileUpload = Alfresco.getFileUploadInstance();
                 }
 
-                Bubbling.fire('removeAttachmentAction', {
-                    nodeRef: this.deletedAttachment
-                });
-                this.deletedAttachment = null;
-            },
+                // Show uploader for multiple files
+                var description = this.msg("label.filter-description", displayName),
+                    extensions = "*";
 
-            attachmentActionUploadNewVersion: function () {
-                if (this.selectedAttachment != null) {
-                    var displayName = this.selectedAttachment.name,
-                        nodeRef = this.selectedAttachment.nodeRef,
-                        version = this.selectedAttachment.version;
+                if (displayName && new RegExp(/[^\.]+\.[^\.]+/).exec(displayName)) {
+                    // Only add a filtering extension if filename contains a name and a suffix
+                    extensions = "*" + displayName.substring(displayName.lastIndexOf("."));
+                }
 
-                    if (!this.fileUpload) {
-                        this.fileUpload = Alfresco.getFileUploadInstance();
-                    }
+                var me = this;
 
-                    // Show uploader for multiple files
-                    var description = this.msg("label.filter-description", displayName),
-                        extensions = "*";
-
-                    if (displayName && new RegExp(/[^\.]+\.[^\.]+/).exec(displayName)) {
-                        // Only add a filtering extension if filename contains a name and a suffix
-                        extensions = "*" + displayName.substring(displayName.lastIndexOf("."));
-                    }
-
-                    var me = this;
-
-                    var singleUpdateConfig =
+                var singleUpdateConfig =
                     {
                         updateNodeRef: nodeRef.toString(),
                         updateFilename: displayName,
@@ -764,85 +846,62 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                         onFileUploadComplete: {
                             fn: function (obj) {
                                 setTimeout(function () {
-                                   if (obj.successful != null && obj.successful.length > 0) {
+                                    if (obj.successful && obj.successful.length > 0) {
                                         // TODO: Костыль, надо бы переписать логику
                                         me.selectedAttachment = {};
                                         me.selectedAttachment.nodeRef = obj.successful[0].nodeRef;
                                     }
-                                    me.loadDocumentAttachments();
+                                    me.loadAttachments();
                                 }, 2000);
                             },
                             scope: this
                         },
                         suppressRefreshEvent: true
                     };
-                    this.fileUpload.show(singleUpdateConfig);
+                this.fileUpload.show(singleUpdateConfig);
+            }
+        },
+
+        setHeights: function DocumentPreviewControl_setHeights() {
+            var page = Dom.get('doc-bd');
+            var footer = Dom.get('alf-ft');
+
+            // UFAS-1303 - Иногда форма приходит очень жирной, что вызывает
+            // не совсем верный рассчёт её максимальной высоты.
+            // Подозреваю, что дело не совсем в этом, нужно переделать логику установки высоты
+
+            // Dirty hack to get visible part of element
+            // Proudly borrowed from http://stackoverflow.com/questions/24768795/get-the-visible-height-of-a-div-with-jquery
+            function inViewport($el) {
+                var elH = $el.outerHeight(),
+                    H = $(window).height(),
+                    r = $el[0].getBoundingClientRect(), t = r.top, b = r.bottom;
+                return Math.max(0, t > 0 ? Math.min(elH, H - t) : (b < H ? b : H ));
+            }
+
+            if (page) {
+                var actualPageHeight = inViewport($(page));
+                var actualFooterHeight = footer.getBoundingClientRect().height;
+
+                var contentBoxHeight = actualPageHeight - actualFooterHeight;
+                var attachActionsContainer = Dom.get(this.id + '-attachments-header');
+                var attachActionsHeight = attachActionsContainer && attachActionsContainer.getBoundingClientRect().height || 0;
+
+                var previewerContainerEl = Dom.get(this.id + '-preview-container');
+                if (previewerContainerEl) {
+                    var previewerDiv = YAHOO.util.Selector.query('.previewer', previewerContainerEl)[0];
+                    var previewerControls = YAHOO.util.Selector.query('.controls', previewerContainerEl)[0];
+                    var previewerControlsHeight = previewerControls && previewerControls.getBoundingClientRect().height || 0;
+                    var previewerDocument = YAHOO.util.Selector.query('.viewer', previewerContainerEl)[0];
+
+                    var effectiveContainerHeight = contentBoxHeight - attachActionsHeight;
+                    var effectivePreviewHeight = contentBoxHeight - attachActionsHeight - previewerControlsHeight;
+
+                    Dom.setStyle(previewerDiv, 'height', effectiveContainerHeight + "px");
+                    Dom.setStyle(previewerDocument, 'height', 'auto');
+                    Dom.setStyle(previewerDocument, 'max-height', effectivePreviewHeight + "px");
                 }
-            },
-
-            manualAttachmentListUpdate: function () {
-                // Прицельное обновление списка вложений - нужно только для страницы создания
-                // Т.к дёргать категрии как обычно бессмыслено - будет создана папка "Основные"
-                // и вытянуты все вложения оттуда, даже если они остались там от другого док-а
-
-                this.attachmentsSelect.innerHTML = "";
-
-                for (var nodeRef in this.attachmentsList) {
-                    if (this.attachmentsList.hasOwnProperty(nodeRef)) {
-                        var attachmentObj = this.attachmentsList[nodeRef];
-                        var opt = document.createElement('option');
-                        opt.textContent = attachmentObj.name;
-                        opt.value = attachmentObj.nodeRef;
-                        this.attachmentsSelect.appendChild(opt);
-                    }
-                }
-
-                if (this.attachmentsSelect.options.length) {
-                    this.attachmentsSelect.selectedIndex = this.attachmentsSelect.options.length - 1;
-                    this.selectAttachment();
-                }
-            },
-
-            setHeights: function () {
-                var page = Dom.get('doc-bd');
-                var footer = Dom.get('alf-ft');
-
-                // UFAS-1303 - Иногда форма приходит очень жирной, что вызывает
-                // не совсем верный рассчёт её максимальной высоты.
-                // Подозреваю, что дело не совсем в этом, нужно переделать логику установки высоты
-
-                // Dirty hack to get visible part of element
-                // Proudly borrowed from http://stackoverflow.com/questions/24768795/get-the-visible-height-of-a-div-with-jquery
-                function inViewport($el) {
-                    var elH = $el.outerHeight(),
-                        H = $(window).height(),
-                        r = $el[0].getBoundingClientRect(), t = r.top, b = r.bottom;
-                    return Math.max(0, t > 0 ? Math.min(elH, H - t) : (b < H ? b : H ));
-                }
-
-                if (page) {
-                    var actualPageHeight = inViewport($(page));
-                    var actualFooterHeight = footer.getBoundingClientRect().height;
-
-                    var contentBoxHeight = actualPageHeight - actualFooterHeight;
-                    var attachActionsContainer = Dom.get(this.id + '-attachments-header');
-                    var attachActionsHeight = attachActionsContainer && attachActionsContainer.getBoundingClientRect().height || 0;
-
-                    var previewerContainerEl = Dom.get(this.id + '-preview-container');
-                    if (previewerContainerEl) {
-                        var previewerDiv = YAHOO.util.Selector.query('.previewer', previewerContainerEl)[0];
-                        var previewerControls = YAHOO.util.Selector.query('.controls', previewerContainerEl)[0];
-                        var previewerControlsHeight = previewerControls && previewerControls.getBoundingClientRect().height || 0;
-                        var previewerDocument = YAHOO.util.Selector.query('.viewer', previewerContainerEl)[0];
-
-                        var effectiveContainerHeight = contentBoxHeight - attachActionsHeight;
-                        var effectivePreviewHeight = contentBoxHeight - attachActionsHeight - previewerControlsHeight;
-
-                        Dom.setStyle(previewerDiv, 'height', effectiveContainerHeight + "px");
-                        Dom.setStyle(previewerDocument, 'height', 'auto');
-                        Dom.setStyle(previewerDocument, 'max-height', effectivePreviewHeight + "px");
-                    }
-                }
-            },
-        });
+            }
+        },
+    }, true);
 })();
