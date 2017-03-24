@@ -5,6 +5,7 @@ import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
@@ -73,6 +74,12 @@ public class ItemChangedPolicy extends BaseBean implements NodeServicePolicies.O
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 				ReviewService.TYPE_REVIEW_TS_REVIEW_TABLE_ITEM, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+                ReviewService.ASPECT_RELATED_REVIEW, ReviewService.ASSOC_RELATED_REVIEW_RECORDS, new JavaBehaviour(this, "onChangeAssociationRelatedReview"));
+
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+                ReviewService.ASPECT_RELATED_REVIEW, ReviewService.ASSOC_RELATED_REVIEW_RECORDS, new JavaBehaviour(this, "onChangeAssociationRelatedReview"));
 	}
 
 	@Override
@@ -172,5 +179,14 @@ public class ItemChangedPolicy extends BaseBean implements NodeServicePolicies.O
             jsonArray.put(jsonObject);
         }
         nodeService.setProperty(document, propStatistic, jsonArray.toString());
+    }
+
+    public void onChangeAssociationRelatedReview(AssociationRef nodeAssocRef) {
+        NodeRef initiatingDocument = nodeAssocRef.getSourceRef();
+        reviewService.addRelatedReviewChangeCount(initiatingDocument);
+
+        /*Обновляем статистику в инициирующем документе*/
+        List<NodeRef> tableRows = findNodesByAssociationRef(initiatingDocument, ReviewService.ASSOC_RELATED_REVIEW_RECORDS, null, ASSOCIATION_TYPE.TARGET);
+        updateStatistics(tableRows, initiatingDocument, ReviewService.PROP_RELATED_REVIEW_STATE, ReviewService.PROP_RELATED_REVIEW_STATISTICS);
     }
 }

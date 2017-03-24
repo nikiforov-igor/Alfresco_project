@@ -59,6 +59,7 @@ public interface ReviewService extends InitializingBean {
 	QName ASSOC_REVIEW_REVIEW_LIST = QName.createQName(REVIEW_INFO_NAMESPACE, "review-list-assoc");
 	QName ASSOC_REVIEW_INFO = QName.createQName(REVIEW_INFO_NAMESPACE, "info-assoc");
 
+    QName ASPECT_RELATED_REVIEW = QName.createQName(REVIEW_ASPECTS_NAMESPACE, "related-review-aspect");
     QName PROP_RELATED_REVIEW_RECORDS_CHANGE_COUNT = QName.createQName(REVIEW_ASPECTS_NAMESPACE, "related-review-records-change-count");
 	QName ASSOC_RELATED_REVIEW_RECORDS = QName.createQName(REVIEW_ASPECTS_NAMESPACE, "related-review-records-assoc");
 
