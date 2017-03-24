@@ -26,7 +26,7 @@
                                     childErrands.forEach(function (childErrand) {
                                         if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
                                             //alfsed-732 фикс закрытия недоступных контроллеру поручений
-                                            documentMembers.addMemberWithoutCheckPermission(childErrand, currentUser, "WriteProperties", true);
+                                            documentMembers.addMemberWithoutCheckPermission(childErrand, currentUser, "LECM_BASIC_PG_Reader", true);
                                             errands.sendCancelSignal(childErrand.nodeRef.toString(), reason, currentUser.nodeRef.toString());
                                         }
                                      });
@@ -37,7 +37,7 @@
                                     childErrands.forEach(function (childErrand) {
                                         if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
                                             //alfsed-732 фикс закрытия недоступных контроллеру поручений
-                                            documentMembers.addMemberWithoutCheckPermission(childErrand, currentUser, "WriteProperties", true);
+                                            documentMembers.addMemberWithoutCheckPermission(childErrand, currentUser, "LECM_BASIC_PG_Reader", true);
                                             edsDocument.sendCompletionSignal(childErrand, reason, currentUser);
                                         }
                                     });
