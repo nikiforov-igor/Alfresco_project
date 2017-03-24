@@ -54,14 +54,17 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             onShowInPreviewPressed: function DocumentAttachmentsList_onShowInPreviewPressed() {
+                var dataObj = {
+                    nodeRef: this.options.nodeRef,
+                    htmlid: this.id + Alfresco.util.generateDomId(),
+                };
+                if (this.options.baseDocAssocName) {
+                    dataObj.baseDocAssocName = this.options.baseDocAssocName;
+                }
                 Alfresco.util.Ajax.jsonGet(
                     {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/attachments/preview",
-                        dataObj: {
-                            nodeRef: this.options.nodeRef,
-                            htmlid: this.id + Alfresco.util.generateDomId(),
-                            baseDocAssocName: this.options.baseDocAssocName
-                        },
+                        dataObj: dataObj,
                         successCallback: {
                             fn: function (response) {
                                 var html = response.serverResponse.responseText;

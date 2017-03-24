@@ -283,4 +283,12 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean id="protocol.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
+		<property name="configs">
+			<list>
+				<value>alfresco/module/meetings-repo/reports/configs/protocol.properties</value>
+			</list>
+		</property>
+	</bean>
 </beans>
