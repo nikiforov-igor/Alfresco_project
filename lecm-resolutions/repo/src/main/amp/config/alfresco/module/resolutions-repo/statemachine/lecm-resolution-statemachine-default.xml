@@ -2097,7 +2097,7 @@ if (document) {
   if (baseDocAssoc && baseDocAssoc.length) {
     baseDoc = baseDocAssoc[0];
   }
-  
+
   /* Автор */
   var creatorAssoc = stm_document.assocs["lecm-resolutions:author-assoc"];
   if (creatorAssoc && creatorAssoc.length) {
@@ -2208,9 +2208,10 @@ if (document && !regnumbers.isDocumentRegistered(document)) {
   document.save();
 
   regnumbers.registerDocument(document, regNumberCode);
-  regnumbers.setDocumentNumber(regNumberCode, document, "lecm-resolutions:number");
-
   document.reset();
+  document.properties["lecm-resolutions:number"] = document.properties["lecm-document:regnum"];
+  document.save();
+
   if (document && document.properties["lecm-resolutions:errands-json"]) {
     var errandsList = eval('(' + document.properties["lecm-resolutions:errands-json"] + ')');
     if (errandsList && errandsList.length) {
