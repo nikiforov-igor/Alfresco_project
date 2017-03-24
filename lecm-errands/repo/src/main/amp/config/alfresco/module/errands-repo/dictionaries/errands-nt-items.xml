@@ -242,7 +242,7 @@
             <item name="cm:ERRANDS_EXECUTED_WITH_REPORT" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[ERRANDS_EXECUTED_WITH_REPORT]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} направил вам отчет об исполнении по поручению: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} направил Вам отчет об исполнении по поручению: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Исполнено (направлен отчет)]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
