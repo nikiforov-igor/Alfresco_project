@@ -1,5 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
 <!--
 	Licensed to the Apache Software Foundation (ASF) under one or more
 	contributor license agreements.  See the NOTICE file distributed with
@@ -17,7 +16,11 @@
 	limitations under the License.
 	
 -->
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <bean id="resolutions.LogicEcmBootstrap" parent="modelsToRepositoryLoader"
           depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
@@ -72,10 +75,18 @@
         <property name="path" value="alfresco/module/${artifactId}/statemachine/lecm-resolution-statemachine-default.xml"/>
     </bean>
 
+    <util:constant id="RESOLUTIONS_ROOT_ID" static-field="ru.it.lecm.resolutions.api.ResolutionsService.RESOLUTIONS_ROOT_ID"/>
+    <util:constant id="RESOLUTIONS_ROOT_NAME" static-field="ru.it.lecm.resolutions.api.ResolutionsService.RESOLUTIONS_ROOT_NAME"/>
+
     <bean id="resolutionsService" class="ru.it.lecm.resolutions.beans.ResolutionsServiceImpl" parent="baseBean"
           depends-on="resolutions.LogicEcmBootstrap, WorkCalendarService, namespaceService">
         <property name="namespaceService" ref="namespaceService"/>
         <property name="edsDocumentService" ref="edsService"/>
+        <property name="folders">
+            <map>
+                <entry key="#{RESOLUTIONS_ROOT_ID}" value="#{RESOLUTIONS_ROOT_NAME}"/>
+            </map>
+        </property>
     </bean>
 
     <bean id="resolutionsScript" parent="baseScript" class="ru.it.lecm.resolutions.scripts.ResolutionsWebScriptBean"
@@ -207,6 +218,15 @@
                 <value>state_execute_resolutions</value>
                 <value>execute-resolution</value>
                 <value>reference_on_resolutions_calling_for_completion</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="resolutions.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="userProfile.arm.LogicEcmBootstrap,arm.settings.LogicEcmBootstrap,eds.documents.arm.settings.LogicEcmBootstrap">
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Настройки СЭД"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/arm/resolutions-settings-arm.xml</value>
             </list>
         </property>
     </bean>

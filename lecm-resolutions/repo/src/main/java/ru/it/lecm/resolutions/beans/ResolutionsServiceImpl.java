@@ -1,5 +1,6 @@
 package ru.it.lecm.resolutions.beans;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -10,6 +11,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.resolutions.api.ResolutionsService;
@@ -28,6 +30,7 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
 
     private NamespaceService namespaceService;
     private EDSDocumentService edsDocumentService;
+    private NodeRef dashletSettingsNode;
 
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
@@ -39,7 +42,7 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
 
     @Override
     public NodeRef getServiceRootFolder() {
-        return null;
+        return getFolder(RESOLUTIONS_ROOT_ID);
     }
 
     @Override
@@ -98,6 +101,30 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
         }
 
         return result;
+    }
+
+    @Override
+    public void initServiceImpl() {
+        if (null == getDashletSettingsNode()) {
+            dashletSettingsNode = createDashletSettingsNode();
+        }
+    }
+
+    @Override
+    public NodeRef getDashletSettingsNode() {
+        if (dashletSettingsNode == null) {
+                dashletSettingsNode = nodeService.getChildByName(this.getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, RESOLUTION_DASHLET_SETTINGS_NODE_NAME);
+        }
+        return dashletSettingsNode;
+    }
+
+    @Override
+    public NodeRef createDashletSettingsNode() {
+        try {
+            return createNode(this.getServiceRootFolder(), TYPE_RESOLUTION_DASHLET_SETTINGS, RESOLUTION_DASHLET_SETTINGS_NODE_NAME , null);
+        } catch (WriteTransactionNeededException e) {
+            return null;
+        }
     }
 
     @Override
