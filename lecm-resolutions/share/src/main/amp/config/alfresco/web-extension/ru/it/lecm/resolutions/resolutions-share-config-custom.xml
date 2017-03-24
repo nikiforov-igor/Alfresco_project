@@ -400,6 +400,7 @@
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-document:author-assoc"/>
+                    <show id="lecm-resolutions:closers"/>
                     <show id="lecm-resolutions:controller-assoc"/>
 
                     <show id="lecm-resolutions:limitation-date-radio"/>
@@ -443,6 +444,9 @@
                     <field id="lecm-document:author-assoc" label-id="label.resolution.creator" set="common"/>
                     <field id="lecm-document:subject-assoc" set="common"/>
                     <field id="lecm-resolutions:author-assoc" set="common"/>
+                    <field id="lecm-resolutions:closers" set="common">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
                     <field id="lecm-resolutions:controller-assoc" set="common"/>
 
                     <field id="lecm-resolutions:limitation-date-radio" set="limitation-date">
