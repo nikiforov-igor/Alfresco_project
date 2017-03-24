@@ -1747,7 +1747,8 @@ if (document && currentUser) {
   var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
   if (childErrands) {
     childErrands.forEach(function (errand) {
-      documentMembers.addMemberWithoutCheckPermission(errand, signalSender, "LECM_BASIC_PG_Reader", true);
+      //alfsed-732 фикс закрытия недоступных контроллеру поручений
+      documentMembers.addMemberWithoutCheckPermission(errand, currentUser, "LECM_BASIC_PG_Reader", true);
       errands.sendCancelSignal(errand.nodeRef.toString(), annulReason, currentUser.nodeRef.toString());
     });
   }
@@ -2013,7 +2014,7 @@ if (document) {
   var recipients = [];
   var authorAssoc = document.assocs["lecm-resolutions:author-assoc"];
   if (authorAssoc && authorAssoc.length) {
-    recipients.push(authorAssoc[0]);an
+    recipients.push(authorAssoc[0]);
   }
   var creatorAssoc = document.assocs["lecm-document:author-assoc"];
   if (creatorAssoc && creatorAssoc.length) {
