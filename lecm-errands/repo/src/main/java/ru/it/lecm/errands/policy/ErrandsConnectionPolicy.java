@@ -4,6 +4,7 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -218,6 +219,9 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
     }
 
     private void transferRight(NodeRef errandDoc, NodeRef baseDoc) {
+        AuthenticationUtil.pushAuthentication();
+        AuthenticationUtil.setRunAsUserSystem();
+        AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
         NodeRef executor = errandsService.getExecutor(errandDoc);
         NodeRef initiator = errandsService.getInitiator(errandDoc);
         if (baseDoc != null && executor != null && initiator != null) {
@@ -265,6 +269,7 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
                 }
             }
         }
+        AuthenticationUtil.popAuthentication();
     }
 
     public void setDocumentMembersService(DocumentMembersService documentMembersService) {
