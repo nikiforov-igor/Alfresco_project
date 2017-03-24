@@ -73,7 +73,16 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
                 ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-                ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_ERRANDS_EXECUTOR, new JavaBehaviour(this, "onCreateErrandExecutor"));
+                ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_ERRANDS_EXECUTOR, new JavaBehaviour(this, "onCreateAssocForTransferRightToBaseDocument"));
+
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+                ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_ERRANDS_INITIATOR, new JavaBehaviour(this, "onCreateAssocForTransferRightToBaseDocument"));
+
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+                ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS, new JavaBehaviour(this, "onCreateAssocForTransferRightToBaseDocument"));
+
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+                ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_ERRANDS_CONTROLLER, new JavaBehaviour(this, "onCreateAssocForTransferRightToBaseDocument"));
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
                 ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateBaseDocAssociation"));
@@ -186,20 +195,8 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
         }
     }
 
-    public void onCreateErrandExecutor(AssociationRef associationRef) {
+    public void onCreateAssocForTransferRightToBaseDocument(AssociationRef associationRef) {
         NodeRef errandDoc = associationRef.getSourceRef();
-
-        //		TODO: Метод transferRightToBaseDocument в итоге использует метод erransService.getSettingsNode,
-//		который ранее был типа getOrCreate, поэтому здесь надо бы проверить ноду на
-//		существование и создать при необходимости
-//              не понятно, зачем это делать здесь. Это не инит метод, и не точка изменения настроек.
-//		if(errandsService.getSettingsNode() == null) {
-//			try {
-//				errandsService.createSettingsNode();
-//			} catch (WriteTransactionNeededException ex) {
-//				throw new RuntimeException("Can't create settings node", ex);
-//			}
-//		}
 
         //OnCreateAssociationPolicy : транзакция должна быть.
         try {
@@ -251,6 +248,8 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
                 }
             } else {
                 documentMembersService.addMemberWithoutCheckPermission(baseDoc, executor, new HashMap<QName, Serializable>());
+
+                documentMembersService.addMemberWithoutCheckPermission(baseDoc, initiator, new HashMap<QName, Serializable>());
 
                 List<AssociationRef> coexecutors = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS);
                 if (coexecutors != null) {
