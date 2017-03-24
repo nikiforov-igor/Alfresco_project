@@ -1747,6 +1747,8 @@ if (document && currentUser) {
   var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
   if (childErrands) {
     childErrands.forEach(function (errand) {
+      //alfsed-732 фикс закрытия недоступных контроллеру поручений
+      documentMembers.addMemberWithoutCheckPermission(errand, currentUser, "LECM_BASIC_PG_Reader", true);
       errands.sendCancelSignal(errand.nodeRef.toString(), annulReason, currentUser.nodeRef.toString());
     });
   }
@@ -2003,6 +2005,8 @@ if (document) {
   var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
   if (childErrands) {
     childErrands.forEach(function (errand) {
+      //alfsed-732 фикс закрытия недоступных контроллеру поручений
+      documentMembers.addMemberWithoutCheckPermission(errand, signalSender, "LECM_BASIC_PG_Reader", true);
       edsDocument.sendCompletionSignal(errand, signalReason, signalSender);
     });
   }

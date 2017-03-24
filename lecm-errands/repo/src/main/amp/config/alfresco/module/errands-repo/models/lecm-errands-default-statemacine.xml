@@ -7730,7 +7730,7 @@ if (doc) {
       ExecuteErrandScript.processReviewErrandChildExecuted(doc);
     }
     ExecuteErrandScript.processChildExecutedSignal(doc);
-    edsDocument.resetChildChangeSignal(document);
+    edsDocument.resetChildChangeSignal(doc);
 }]]></value>
                                                             </property>
                                                         </properties>
@@ -10230,7 +10230,7 @@ ErrandsCompletionSignalScript.processCompletionSignal();]]></value>
                                                                 var doc = bpm_package.children[0];
 if (doc) {
   	ExecuteErrandScript.processReviewErrandChildExecuted(doc);
-  	edsDocument.resetChildChangeSignal(document);
+  	edsDocument.resetChildChangeSignal(doc);
 }]]></value>
                                                             </property>
                                                         </properties>

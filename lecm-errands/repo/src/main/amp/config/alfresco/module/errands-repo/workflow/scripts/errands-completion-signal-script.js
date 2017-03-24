@@ -20,11 +20,17 @@ var ErrandsCompletionSignalScript = {
                 var childrenResolutions = errands.getChildResolutions(doc.nodeRef.toString());
                 childrenErrands.forEach(function (childErrand) {
                     if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
+                        //alfsed-732 фикс закрытия недоступных контроллеру поручений
+                        documentMembers.addMemberWithoutCheckPermission(childErrand, signalSender, "LECM_BASIC_PG_Reader", true);
+
                         edsDocument.sendCompletionSignal(childErrand, signalReason, signalSender);
                     }
                 });
                 childrenResolutions.forEach(function (childResolution) {
                     if (!statemachine.isFinal(childResolution.nodeRef.toString()) && !statemachine.isDraft(childResolution)) {
+                        //alfsed-732 фикс закрытия недоступных контроллеру поручений
+                        documentMembers.addMemberWithoutCheckPermission(childResolution, signalSender, "LECM_BASIC_PG_Reader", true);
+
                         edsDocument.sendCompletionSignal(childResolution, signalReason, signalSender);
                     }
                 });
