@@ -1,6 +1,7 @@
 var errandNodeRef = args['nodeRef'];
 var items = [];
-
+//alfsed-835 нет доступа у исполнителя к поручениям соисполнителей
+lecmPermission.setRunAsUserSystem();
 var childErrands = errands.getChildErrands(errandNodeRef);
 if (childErrands != null) {
 	for (var i = 0; i < childErrands.length; i++) {
