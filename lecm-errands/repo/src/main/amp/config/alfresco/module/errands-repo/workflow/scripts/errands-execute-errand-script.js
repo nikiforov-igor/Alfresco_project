@@ -25,8 +25,8 @@ var ExecuteErrandScript = {
                 doc.properties["lecm-errands:execution-report"] = doc.properties["lecm-eds-aspect:completion-signal-reason"];
             }
             ExecuteErrandScript.executeErrand(doc, false);
+            doc.save();
         }
-        doc.save();
     },
     processReviewErrandChildExecuted: function(document){
         var childrenErrands = errands.getChildErrands(doc.nodeRef.toString());

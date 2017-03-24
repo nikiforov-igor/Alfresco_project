@@ -2834,6 +2834,8 @@ if (document) {
                                                                 <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-execute-errand-script.js">
                                                                 var doc = bpm_package.children[0];
 if(doc){
+  lecmPermission.pushAuthentication();
+  lecmPermission.setRunAsUserSystem();
   var type = doc.assocs["lecm-errands:type-assoc"][0];
   var isReview = type.properties["lecm-errands-dic:errand-type-launch-review"];
   if (isReview) {
@@ -2861,6 +2863,7 @@ if(doc){
   doc.properties["lecm-errands:transit-to-on-execution"] = hasOnExecution;
   doc.save();
   edsDocument.resetChildChangeSignal(doc);
+  lecmPermission.popAuthentication();
 }]]></value>
                                                             </property>
                                                         </properties>
@@ -5082,6 +5085,8 @@ if (doc) {
                                                                 <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-execute-errand-script.js">
 var doc = bpm_package.children[0];
 if (doc) {
+  lecmPermission.pushAuthentication();
+  lecmPermission.setRunAsUserSystem();
   var type = doc.assocs["lecm-errands:type-assoc"][0];
   var isReview = type.properties["lecm-errands-dic:errand-type-launch-review"];
   if (isReview) {
@@ -5102,6 +5107,7 @@ if (doc) {
       }
   }
   edsDocument.resetChildChangeSignal(doc);
+  lecmPermission.popAuthentication();
 }]]></value>
                                                             </property>
                                                         </properties>
@@ -7724,13 +7730,16 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                 <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-execute-errand-script.js">
 var doc = bpm_package.children[0];
 if (doc) {
+    lecmPermission.pushAuthentication();
+    lecmPermission.setRunAsUserSystem();
     var type = doc.assocs["lecm-errands:type-assoc"][0];
     var isReview = type.properties["lecm-errands-dic:errand-type-launch-review"];
     if (isReview) {
       ExecuteErrandScript.processReviewErrandChildExecuted(doc);
     }
     ExecuteErrandScript.processChildExecutedSignal(doc);
-    edsDocument.resetChildChangeSignal(document);
+    edsDocument.resetChildChangeSignal(doc);
+    lecmPermission.popAuthentication();
 }]]></value>
                                                             </property>
                                                         </properties>
@@ -10229,8 +10238,11 @@ ErrandsCompletionSignalScript.processCompletionSignal();]]></value>
                                                                 <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/errands-execute-errand-script.js">
                                                                 var doc = bpm_package.children[0];
 if (doc) {
+    lecmPermission.pushAuthentication();
+    lecmPermission.setRunAsUserSystem();
   	ExecuteErrandScript.processReviewErrandChildExecuted(doc);
-  	edsDocument.resetChildChangeSignal(document);
+  	edsDocument.resetChildChangeSignal(doc);
+  	lecmPermission.popAuthentication();
 }]]></value>
                                                             </property>
                                                         </properties>

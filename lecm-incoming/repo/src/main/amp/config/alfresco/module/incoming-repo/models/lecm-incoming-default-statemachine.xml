@@ -6240,7 +6240,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.attr("lecm-incoming:is-not-registered")]]></value>
+                                                                                    <![CDATA[!doc.attr("lecm-incoming:is-not-registered")]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
