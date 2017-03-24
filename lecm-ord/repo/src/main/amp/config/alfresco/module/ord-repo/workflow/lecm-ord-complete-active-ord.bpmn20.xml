@@ -25,6 +25,8 @@
                                     reason = "Поручение отменено в связи с завершением работы по документу Контролером ОРД " + currentUser.properties["lecm-orgstr:employee-short-name"];
                                     childErrands.forEach(function (childErrand) {
                                         if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
+                                            //alfsed-732 фикс закрытия недоступных контроллеру поручений
+                                            documentMembers.addMemberWithoutCheckPermission(childErrand, currentUser, "WriteProperties", true);
                                             errands.sendCancelSignal(childErrand.nodeRef.toString(), reason, currentUser.nodeRef.toString());
                                         }
                                      });
@@ -34,6 +36,8 @@
                                     reason = "Поручение исполнено в связи с завершением работы по документу Контролером ОРД " + currentUser.properties["lecm-orgstr:employee-short-name"];
                                     childErrands.forEach(function (childErrand) {
                                         if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
+                                            //alfsed-732 фикс закрытия недоступных контроллеру поручений
+                                            documentMembers.addMemberWithoutCheckPermission(childErrand, currentUser, "WriteProperties", true);
                                             edsDocument.sendCompletionSignal(childErrand, reason, currentUser);
                                         }
                                     });

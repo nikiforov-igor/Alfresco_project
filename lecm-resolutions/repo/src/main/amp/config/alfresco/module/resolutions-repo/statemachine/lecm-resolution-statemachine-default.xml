@@ -2003,6 +2003,8 @@ if (document) {
   var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
   if (childErrands) {
     childErrands.forEach(function (errand) {
+      //alfsed-732 фикс закрытия недоступных контроллеру поручений
+      documentMembers.addMemberWithoutCheckPermission(errand, signalSender, "WriteProperties", true);
       edsDocument.sendCompletionSignal(errand, signalReason, signalSender);
     });
   }

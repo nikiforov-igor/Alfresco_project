@@ -62,11 +62,17 @@ var ErrandCancelScript = {
                 var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
                 childrenErrands.forEach(function (childErrand) {
                     if (!statemachine.isFinal(childErrand.nodeRef.toString()) && !statemachine.isDraft(childErrand)) {
+                        //alfsed-732 фикс закрытия недоступных контроллеру поручений
+                        documentMembers.addMemberWithoutCheckPermission(childErrand, signalSender, "WriteProperties", true);
+
                         errands.sendCancelSignal(childErrand.nodeRef.toString(), reason, signalSender.nodeRef.toString());
                     }
                 });
                 childrenResolutions.forEach(function (childResolution) {
                     if (!statemachine.isFinal(childResolution.nodeRef.toString()) && !statemachine.isDraft(childResolution)) {
+                        //alfsed-732 фикс закрытия недоступных контроллеру поручений
+                        documentMembers.addMemberWithoutCheckPermission(childResolution, signalSender, "WriteProperties", true);
+
                         resolutionsScript.sendAnnulSignal(childResolution.nodeRef.toString(), reason);
                     }
                 });
