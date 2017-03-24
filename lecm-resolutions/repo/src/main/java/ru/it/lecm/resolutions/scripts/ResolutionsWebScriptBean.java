@@ -38,4 +38,16 @@ public class ResolutionsWebScriptBean extends BaseWebScript {
             resolutionsService.sendAnnulSignal(resolution, reason);
         }
     }
+
+    /**
+     * Возвращает NodeRef настроек дашлетов для резолюций
+     * @return NodeRef настроек дашлетов для резолюций
+     */
+    public ScriptNode getDashletSettings() {
+        NodeRef settings = resolutionsService.getDashletSettingsNode();
+        if(settings != null) {
+            return new ScriptNode(settings, serviceRegistry, getScope());
+        }
+        return null;
+    }
 }

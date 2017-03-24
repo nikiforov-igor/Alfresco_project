@@ -934,4 +934,28 @@
             <workflow name="activiti$resolutionCompletion"/>
         </hidden-workflows>
     </config>
+
+    <config evaluator="node-type" condition="lecm-resolutions:dashlet-settings">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-resolutions:dashlet-settings-arm"/>
+                    <show id="lecm-resolutions:dashlet-settings-path"/>
+                    <show id="lecm-resolutions:dashlet-settings-on-approval"/>
+                    <show id="lecm-resolutions:dashlet-settings-on-approval-control"/>
+                    <show id="lecm-resolutions:dashlet-settings-on-completion"/>
+                    <show id="lecm-resolutions:dashlet-settings-on-completion-control"/>
+                    <show id="lecm-resolutions:dashlet-settings-on-execution"/>
+                    <show id="lecm-resolutions:dashlet-settings-on-execution-control"/>
+                    <show id="lecm-resolutions:dashlet-settings-required-solution"/>
+                    <show id="lecm-resolutions:dashlet-settings-required-solution-control"/>
+                    <show id="lecm-resolutions:dashlet-settings-expired"/>
+                    <show id="lecm-resolutions:dashlet-settings-expired-control"/>
+                    <show id="lecm-resolutions:dashlet-settings-approaching-deadline"/>
+                    <show id="lecm-resolutions:dashlet-settings-approaching-deadline-control"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
 </alfresco-config>

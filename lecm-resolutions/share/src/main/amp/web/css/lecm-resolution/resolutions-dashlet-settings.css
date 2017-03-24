@@ -1,0 +1,23 @@
+.resolutions-dashlet-settings {
+    margin: 16px 10px 10px;
+}
+
+.resolutions-dashlet-settings .title {
+    font-size: 123.1%;
+    font-weight: bold;
+    padding-bottom: 0.75em;
+}
+
+.resolutions-dashlet-settings .control.checkbox-control {
+    margin-left: -2px;
+}
+
+.resolutions-dashlet-settings .control.checkbox-control .label-div {
+    width: 0;
+    padding: 0;
+}
+
+.yui-skin-lecmTheme .admin-page .resolutions-dashlet-settings .form-container .form-buttons {
+    padding-left: 0;
+    margin-left: 10px;
+}
