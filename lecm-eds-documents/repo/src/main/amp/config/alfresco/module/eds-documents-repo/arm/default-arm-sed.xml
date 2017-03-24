@@ -16381,6 +16381,132 @@
                             </item>
                         </items>
                     </item>
+                    <item name="cm:Корзина" type="lecm-arm:accordion">
+                        <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                        <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                        <property name="cm:name"><![CDATA[Корзина]]></property>
+                        <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                        <property name="lecm-arm:expression">
+                            <![CDATA[user.currentUser().hasBusinessRole("DA_ENGINEER")]]></property>
+                        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                        <property name="lecm-arm:order"><![CDATA[90]]></property>
+                        <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
+                        <property name="lecm-arm:types"><![CDATA[]]></property>
+                        <items>
+                            <item name="cm:6425c5eb-c3c0-45f8-b28d-7b80e4312a0d" type="lecm-arm:field">
+                                <property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
+                                <property name="cm:name"><![CDATA[8069dc60-efb4-49ce-8691-de6df0e9cfd1]]></property>
+                                <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                <property name="lecm-arm:order"><![CDATA[0]]></property>
+                                <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
+                                <property name="lecm-arm:field-name"><![CDATA[lecm-document:regnum]]></property>
+                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                            </item>
+                            <item name="cm:6dd05f06-6de3-4550-8f08-f68147475fc1" type="lecm-arm:field">
+                                <property name="lecm-arm:field-title"><![CDATA[Дата]]></property>
+                                <property name="cm:name"><![CDATA[94e57d68-28ac-496a-93e4-e7973f834874]]></property>
+                                <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                <property name="lecm-arm:order"><![CDATA[1]]></property>
+                                <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
+                                <property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
+                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                            </item>
+                            <item name="cm:a15a4780-affe-438c-a707-c0ebd7b263ec" type="lecm-arm:field">
+                                <property name="lecm-arm:field-title"><![CDATA[Тип]]></property>
+                                <property name="cm:name"><![CDATA[a15a4780-affe-438c-a707-c0ebd7b263ec]]></property>
+                                <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                <property name="lecm-arm:order"><![CDATA[2]]></property>
+                                <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
+                                <property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-type]]></property>
+                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                            </item>
+                            <item name="cm:7126268f-125e-4957-a37d-06dbf6e91aea" type="lecm-arm:field">
+                                <property name="lecm-arm:field-title"><![CDATA[Создал]]></property>
+                                <property name="cm:name"><![CDATA[b4fb6baf-0892-47b1-946e-cc6e9dcfd268]]></property>
+                                <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                <property name="lecm-arm:order"><![CDATA[4]]></property>
+                                <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
+                                <property name="lecm-arm:field-name"><![CDATA[lecm-document:author-assoc]]></property>
+                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                            </item>
+                            <item name="cm:14fbb8cd-3f0d-4207-9087-364ec79b5a22" type="lecm-arm:field">
+                                <property name="lecm-arm:field-title"><![CDATA[Дата удаления]]></property>
+                                <property name="cm:name"><![CDATA[14fbb8cd-3f0d-4207-9087-364ec79b5a22]]></property>
+                                <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                <property name="lecm-arm:order"><![CDATA[5]]></property>
+                                <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
+                                <property name="lecm-arm:field-name"><![CDATA[lecm-document:status-changed-date]]></property>
+                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                            </item>
+                            <item name="cm:5a086340-b8c8-4832-9f45-8c42fc6a8073" type="lecm-arm:field">
+                                <property name="lecm-arm:field-title"><![CDATA[Вид]]></property>
+                                <property name="cm:name"><![CDATA[4c85b8ce-14d0-4dbc-a06f-dce90410cff8]]></property>
+                                <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
+                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                <property name="lecm-arm:order"><![CDATA[6]]></property>
+                                <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
+                                <property name="lecm-arm:field-name">
+                                    <![CDATA[lecm-eds-document:document-type-assoc]]></property>
+                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                            </item>
+                            <item name="cm:Корзина" type="lecm-arm:node">
+                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                                <property name="lecm-arm:search-query">
+                                    <![CDATA[@lecm\-statemachine\:status:"Удален"]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                <property name="cm:name"><![CDATA[Корзина]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:expression"><![CDATA[]]></property>
+                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                                <property name="lecm-arm:order"><![CDATA[0]]></property>
+                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                            </item>
+                            <item name="cm:5fd757ed-b833-436a-bc59-a02373663b79" type="lecm-arm:field">
+                                <property name="lecm-arm:field-title"><![CDATA[Заголовок]]></property>
+                                <property name="cm:name"><![CDATA[9dc84976-3b50-435a-8bfb-877a9e7ca5e9]]></property>
+                                <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                <property name="lecm-arm:order"><![CDATA[3]]></property>
+                                <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
+                                <property name="lecm-arm:field-name"><![CDATA[lecm-document:title]]></property>
+                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                            </item>
+                            <item name="cm:a27ec214-f39f-486d-b4c6-e208f4243aa3" type="lecm-arm:field">
+                                <property name="lecm-arm:field-title"><![CDATA[Заголовок (поруч.)]]></property>
+                                <property name="cm:name"><![CDATA[db392ca1-095f-411f-a496-fc79679e3d2d]]></property>
+                                <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
+                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                <property name="lecm-arm:order"><![CDATA[7]]></property>
+                                <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
+                                <property name="lecm-arm:field-name"><![CDATA[lecm-errands:title]]></property>
+                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                            </item>
+                        </items>
+                        <assocs>
+                            <assoc type="lecm-arm:fields-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Корзина/14fbb8cd-3f0d-4207-9087-364ec79b5a22"/>
+                            <assoc type="lecm-arm:filters-assoc" path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По типу"/>
+                            <assoc type="lecm-arm:fields-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Корзина/94e57d68-28ac-496a-93e4-e7973f834874"/>
+                            <assoc type="lecm-arm:fields-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Корзина/a15a4780-affe-438c-a707-c0ebd7b263ec"/>
+                            <assoc type="lecm-arm:fields-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Корзина/b4fb6baf-0892-47b1-946e-cc6e9dcfd268"/>
+                            <assoc type="lecm-arm:fields-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Корзина/8069dc60-efb4-49ce-8691-de6df0e9cfd1"/>
+                            <assoc type="lecm-arm:fields-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Корзина/4c85b8ce-14d0-4dbc-a06f-dce90410cff8"/>
+                            <assoc type="lecm-arm:fields-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Корзина/9dc84976-3b50-435a-8bfb-877a9e7ca5e9"/>
+                            <assoc type="lecm-arm:fields-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Корзина/db392ca1-095f-411f-a496-fc79679e3d2d"/>
+                        </assocs>
+                    </item>
                 </items>
             </item>
         </items>
