@@ -13,6 +13,9 @@
 	<packaging>amp</packaging>
 	<name>Logic ECM Registration Numbers Repo</name>
 	<description>Logic ECM Registration Numbers Repo</description>
+	<properties>
+		<module.log.level>info</module.log.level>
+	</properties>
 
 	<dependencies>
 		<!-- <dependency>
