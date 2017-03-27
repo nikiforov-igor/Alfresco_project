@@ -146,10 +146,6 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
     }
 
     public NodeRef getResolutionBase(NodeRef resolution) {
-        List<AssociationRef> assocs = nodeService.getTargetAssocs(resolution, ASSOC_BASE);
-        if (assocs != null && assocs.size() > 0) {
-            return assocs.get(0).getTargetRef();
-        }
-        return null;
+        return findNodeByAssociationRef(resolution, ASSOC_BASE, null, BaseBean.ASSOCIATION_TYPE.TARGET);
     }
 }

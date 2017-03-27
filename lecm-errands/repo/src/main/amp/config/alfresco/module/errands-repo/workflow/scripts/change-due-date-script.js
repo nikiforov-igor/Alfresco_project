@@ -1,9 +1,6 @@
 function processDueDateChanges(params) {
     var document = params.document;
     var currentUser = orgstructure.getCurrentEmployee();
-    lecmPermission.pushAuthentication();
-    lecmPermission.setRunAsUserSystem();
-
     var processChild, changeDateReason, newDueDate, dateRadio;
     var isSignal = params.isSignal;
     var logObjects = [];
@@ -82,16 +79,15 @@ function processDueDateChanges(params) {
             children = children.concat(childrenResolutions);
         }
         children.forEach(function (child) {
-            child.properties["lecm-eds-aspect:duedate-shift-size"] = shiftSize;
-            child.properties["lecm-eds-aspect:duedate-limitless"] = limitless;
-            child.properties["lecm-eds-aspect:new-limitation-date"] = newLimitationDate;
-            child.properties["lecm-eds-aspect:change-duedate-reason"] = changeDateReason;
-            child.save();
+            edsDocument.sendChangeDueDateSignal(child, shiftSize, limitless, newLimitationDate, changeDateReason);
         });
     }
     if (changed) {
+        lecmPermission.pushAuthentication();
+        lecmPermission.setRunAsUserSystem();
         document.properties["lecm-errands:limitation-date-text"] = dueDateString;
         document.save();
+        lecmPermission.popAuthentication();
         var recipients = [];
         var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
         var coexecutorsAssoc = document.assocs["lecm-errands:coexecutors-assoc"];
@@ -126,5 +122,4 @@ function processDueDateChanges(params) {
     if (isSignal) {
         edsDocument.resetChangeDueDateSignal(document);
     }
-    lecmPermission.popAuthentication();
 }

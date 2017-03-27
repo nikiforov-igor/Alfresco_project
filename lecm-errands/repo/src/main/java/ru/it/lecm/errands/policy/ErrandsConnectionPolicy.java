@@ -114,10 +114,6 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
 
         businessJournalService.log(additionalDoc, "CREATE_ERRAND_BASED_ON_DOC", "#initiator создал(а) поручение по документу " + wrapperLink(additionalDoc, documentService.getDocumentActualNumber(additionalDoc) + " от " + regDateString, documentService.getDocumentUrl(additionalDoc)), null);
 
-        //TODO ALF-2843
-        //	   После рефакторинга транзакций валится добавление участника
-        //     т.к. у дочернего поручение в этот момент еще нет папки с участниками
-        //     Узнать нужно ли еще это условие в принципе
         QName additionalDoctype = nodeService.getType(additionalDoc);
         NodeRef parentDoc = additionalDoc;
         while (parentDoc != null) {
@@ -132,7 +128,7 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
             }
             if (initiatorRef != null) {
                 try {
-                    documentMembersService.addMemberWithoutCheckPermission(errandDoc, initiatorRef, "LECM_BASIC_PG_Reader");
+                    documentMembersService.addMemberWithoutCheckPermission(errandDoc, initiatorRef, "LECM_BASIC_PG_Reader", true);
                 } catch (WriteTransactionNeededException ex) {
                     logger.error("Can't add document member.", ex);
                 }
