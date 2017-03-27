@@ -45,7 +45,7 @@ public class ResolutionsWebScriptBean extends BaseWebScript {
      */
     public ScriptNode getDashletSettings() {
         NodeRef settings = resolutionsService.getDashletSettingsNode();
-        if(settings != null) {
+        if (settings != null) {
             return new ScriptNode(settings, serviceRegistry, getScope());
         }
         return null;

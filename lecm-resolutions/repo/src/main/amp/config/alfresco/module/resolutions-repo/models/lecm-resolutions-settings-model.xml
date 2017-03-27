@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-resolutions-settings:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Logic Resolutions settings model</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+    <imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/resolutions-settings/1.0" prefix="lecm-resolutions-settings"/>
+    </namespaces>
+
+    <types>
+        <type name="lecm-resolutions-settings:dashlet-settings">
+            <title>Logic Ecm Resolutions Dashlet Settings</title>
+            <parent>cm:cmobject</parent>
+            <properties>
+                <!-- Код арм  -->
+                <property name="lecm-resolutions-settings:dashlet-settings-arm">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <default>SED</default>
+                </property>
+
+                <!-- Путь до основного узла с резолюциями -->
+                <property name="lecm-resolutions-settings:dashlet-settings-path">
+                    <type>d:text</type>
+                    <default>Моя работа/Все созданные мной/Резолюции</default>
+                </property>
+
+                <!-- Путь до узла с резолюциями на утверждении -->
+                <property name="lecm-resolutions-settings:dashlet-settings-on-approval">
+                    <type>d:text</type>
+                    <default>Моя работа/Все созданные мной/Резолюции/На утверждении</default>
+                </property>
+
+                <!-- Путь до узла с контрольными резолюциями на утверждении -->
+                <property name="lecm-resolutions-settings:dashlet-settings-on-approval-control">
+                    <type>d:text</type>
+                    <default>Моя работа/Все созданные мной/Резолюции/На утверждении&amp;filters=BY_CONTROL[0]</default>
+                </property>
+
+                <!-- Путь до узла с резолюциями на доработке -->
+                <property name="lecm-resolutions-settings:dashlet-settings-on-completion">
+                    <type>d:text</type>
+                    <default>Моя работа/Все созданные мной/Резолюции/На доработке</default>
+                </property>
+
+                <!-- Путь до узла с контрольными резолюциями на доработке -->
+                <property name="lecm-resolutions-settings:dashlet-settings-on-completion-control">
+                    <type>d:text</type>
+                    <default>Моя работа/Все созданные мной/Резолюции/На доработке&amp;filters=BY_CONTROL[0]</default>
+                </property>
+
+                <!-- Путь до узла с резолюциями на исполнении -->
+                <property name="lecm-resolutions-settings:dashlet-settings-on-execution">
+                    <type>d:text</type>
+                    <default>Моя работа/Все созданные мной/Резолюции/На исполнении</default>
+                </property>
+
+                <!-- Путь до узла с контрольными резолюциями на исполнении -->
+                <property name="lecm-resolutions-settings:dashlet-settings-on-execution-control">
+                    <type>d:text</type>
+                    <default>Моя работа/Все созданные мной/Резолюции/На исполнении&amp;filters=BY_CONTROL[0]</default>
+                </property>
+
+                <!-- Путь до узла с резолюциями, требующими принятия решения -->
+                <property name="lecm-resolutions-settings:dashlet-settings-required-solution">
+                    <type>d:text</type>
+                    <default>Моя работа/Все созданные мной/Резолюции/Требуют принятия решения</default>
+                </property>
+
+                <!-- Путь до узла с контрольными резолюциями, требующими принятия решения -->
+                <property name="lecm-resolutions-settings:dashlet-settings-required-solution-control">
+                    <type>d:text</type>
+                    <default>Моя работа/Все созданные мной/Резолюции/Требуют принятия
+                        решения&amp;filters=BY_CONTROL[0]
+                    </default>
+                </property>
+
+                <!-- Путь до узла с просроченными резолюциями -->
+                <property name="lecm-resolutions-settings:dashlet-settings-expired">
+                    <type>d:text</type>
+                    <default>Моя работа/Все созданные мной/Резолюции&amp;filters=DATE_FILTER[0]</default>
+                </property>
+
+                <!-- Путь до узла с контрольными просроченными резолюциями -->
+                <property name="lecm-resolutions-settings:dashlet-settings-expired-control">
+                    <type>d:text</type>
+                    <default>Моя работа/Все созданные мной/Резолюции&amp;filters=DATE_FILTER[0];BY_CONTROL[0]</default>
+                </property>
+
+                <!-- Путь до узла с резолюциями с приближающимся сроком -->
+                <property name="lecm-resolutions-settings:dashlet-settings-approaching-deadline">
+                    <type>d:text</type>
+                    <default>Моя работа/Все созданные мной/Резолюции&amp;filters=DATE_FILTER[2]</default>
+                </property>
+
+                <!-- Путь до узла с контрольными резолюциями с приближающимся сроком -->
+                <property name="lecm-resolutions-settings:dashlet-settings-approaching-deadline-control">
+                    <type>d:text</type>
+                    <default>Моя работа/Все созданные мной/Резолюции&amp;filters=DATE_FILTER[2];BY_CONTROL[0]</default>
+                </property>
+            </properties>
+        </type>
+    </types>
+</model>

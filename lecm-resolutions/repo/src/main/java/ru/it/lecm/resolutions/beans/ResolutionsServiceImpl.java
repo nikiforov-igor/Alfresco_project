@@ -105,7 +105,8 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
 
     @Override
     public void initServiceImpl() {
-        if (null == getDashletSettingsNode()) {
+        dashletSettingsNode = getDashletSettingsNode();
+        if (dashletSettingsNode == null) {
             dashletSettingsNode = createDashletSettingsNode();
         }
     }
@@ -113,7 +114,7 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
     @Override
     public NodeRef getDashletSettingsNode() {
         if (dashletSettingsNode == null) {
-                dashletSettingsNode = nodeService.getChildByName(this.getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, RESOLUTION_DASHLET_SETTINGS_NODE_NAME);
+            dashletSettingsNode = nodeService.getChildByName(this.getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, RESOLUTION_DASHLET_SETTINGS_NODE_NAME);
         }
         return dashletSettingsNode;
     }
@@ -121,7 +122,7 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
     @Override
     public NodeRef createDashletSettingsNode() {
         try {
-            return createNode(this.getServiceRootFolder(), TYPE_RESOLUTION_DASHLET_SETTINGS, RESOLUTION_DASHLET_SETTINGS_NODE_NAME , null);
+            return createNode(this.getServiceRootFolder(), TYPE_RESOLUTION_DASHLET_SETTINGS, RESOLUTION_DASHLET_SETTINGS_NODE_NAME, null);
         } catch (WriteTransactionNeededException e) {
             return null;
         }
