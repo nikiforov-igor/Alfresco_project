@@ -58,7 +58,7 @@
                 if (contentElement && !contentElement.value) {
                     contentElement.value = errandsTypes[nodeRef].defaultTitle;
                 }
-                if (limitationDateRadio && param.reinitLimitationDate) {
+                if (limitationDateRadio && param && param.reinitLimitationDate) {
                     var checkedRadioButton = YAHOO.util.Selector.query("input[checked]", limitationDateRadio.parentElement, true);
                     checkedRadioButton.checked = false;
                     if (errandsTypes[nodeRef].limitless) {
