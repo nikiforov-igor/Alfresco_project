@@ -39,6 +39,7 @@
 					<show id="lecmSignAspects:signingDate" for-mode="view"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
                     <show id="lecm-review-ts:review-table-assoc"/>
                 </field-visibility>
                 <appearance>
@@ -47,6 +48,7 @@
                     <set id="answers" appearance="" label="Ответы" />
 
                     <set id="execution-tab" label-id="tab.label.execution"/>
+                    <set id="execution" parent="execution-tab" appearance="title" label-id="label.execution"/>
                     <set id="review" parent="execution-tab" appearance="title" label-id="label.review"/>
 
                     <field id="lecm-document:regnum" set="common"/>
@@ -59,7 +61,9 @@
                         </control>
                     </field>
                     <field id="lecm-document:title" set="common"/>
-
+                    <field set="execution" id="lecm-base-dummy-aspects:script2">
+                        <control template="/ru/it/lecm/eds/controls/execution-tree-control.ftl"/>
+                    </field>
                     <field id="lecm-eds-document:document-type-assoc" set="common" mandatory="true">
                         <control>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа/cm:Вид_x0020_внутреннего_x0020_документа</control-param>
