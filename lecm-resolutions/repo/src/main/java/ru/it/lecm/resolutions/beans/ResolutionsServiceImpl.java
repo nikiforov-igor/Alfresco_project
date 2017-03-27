@@ -124,6 +124,7 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
         try {
             return createNode(this.getServiceRootFolder(), TYPE_RESOLUTION_DASHLET_SETTINGS, RESOLUTION_DASHLET_SETTINGS_NODE_NAME, null);
         } catch (WriteTransactionNeededException e) {
+            logger.error("Can't create node.", e);
             return null;
         }
     }
