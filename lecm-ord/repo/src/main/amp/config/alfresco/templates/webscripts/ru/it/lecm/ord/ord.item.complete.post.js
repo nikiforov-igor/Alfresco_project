@@ -42,7 +42,7 @@ if (completionOption == "CANCEL") {
     errands.sendCancelSignal(errand.nodeRef.toString(), reason, currentUser.nodeRef.toString());
     statusCode = "CANCELED_BY_CONTROLLER_STATUS";
 } else if (completionOption == "EXECUTE") {
-    reason = "Поручение исполнено Контролером пункта/Контролером ОРД " + currentUser.properties["lecm-orgstr:employee-short-name"] + ". Комментарий к исполнению: " + comment;
+    reason = "Поручение исполнено Контролером пункта/Контролером ОРД " + currentUser.properties["lecm-orgstr:employee-short-name"] + "\nКомментарий к исполнению: " + comment;
     edsDocument.sendCompletionSignal(errand, reason, currentUser);
     statusCode = "EXECUTED_BY_CONTROLLER_STATUS";
 }

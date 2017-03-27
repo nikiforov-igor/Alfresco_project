@@ -10,7 +10,7 @@
 (function() {
 	function init() {
 		new LogicECM.module.ARM.Tree("${id}").setOptions({
-            dictionaryURL: "lecm/arm/dictionary/dictionary-tree"
+            dictionaryURL: "lecm/dictionary/dictionary-tree"
         }).setMessages(${messages});
 	}
 
