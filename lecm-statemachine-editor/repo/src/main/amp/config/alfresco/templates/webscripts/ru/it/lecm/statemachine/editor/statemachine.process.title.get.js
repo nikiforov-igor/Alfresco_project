@@ -1,7 +1,7 @@
 var statemachineId = args["statemachineId"],
 	typeDef;
 
-if (statemachineId != null) {
+if (statemachineId) {
 	typeDef = base.getType(statemachineId.replace("_", ":"));
 	model.title = typeDef.getTitle();
 } else {
