@@ -31,6 +31,7 @@
                 <value>alfresco/module/${artifactId}/models/lecm-resolutions-dictionaries-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-resolutions-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-resolutions-aspects-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-resolutions-settings-model.xml</value>
             </list>
         </property>
         <property name="labels">
@@ -38,6 +39,7 @@
                 <value>alfresco/module/${artifactId}/messages/lecm-resolutions-dictionaries-model</value>
                 <value>alfresco/module/${artifactId}/messages/lecm-resolutions-model</value>
                 <value>alfresco/module/${artifactId}/messages/lecm-resolutions-aspects-model</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-resolutions-settings-model</value>
             </list>
         </property>
     </bean>
