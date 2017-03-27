@@ -73,11 +73,12 @@
     function init(layer,args){
         formId = args[1].formId;
         formButtons = Dom.get(formId + "-form-buttons");
-        var submitButtonElement = Dom.get(formId + "-form-submit-button");
-
         Dom.addClass(formButtons, "form-4-buttons");
-        submitButtonElement.innerHTML = Alfresco.util.message("label.route-errand");
-
+        Event.onContentReady(formId + "-form-submit-button", function() {
+            var submitButtonElement = Dom.get(formId + "-form-submit-button");
+            submitButtonElement.innerHTML = Alfresco.util.message("label.route-errand");
+        });
+        
         Alfresco.util.Ajax.request({
             url: Alfresco.constants.PROXY_URI + "lecm/errands/isHideAdditionAttributes",
             successCallback: {
