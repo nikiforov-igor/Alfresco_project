@@ -196,7 +196,7 @@ public class MailReciever extends BaseBean {
 	public void recieveMail() throws WriteTransactionNeededException {
         //Queue<String> icals = new LinkedList<>();
         if (mailHost.equals("${mail.ical.host}")) {
-            logger.warn("iCal settings is not set");
+            logger.debug("iCal settings is not set");
             return;
         }
 		IMAPClient client = new IMAPClient(mailHost, mailUsername, mailPassword, mailProtocol, mailInboxFolder);
