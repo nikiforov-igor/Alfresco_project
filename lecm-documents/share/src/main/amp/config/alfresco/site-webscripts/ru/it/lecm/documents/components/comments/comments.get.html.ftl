@@ -52,7 +52,7 @@
         LogicECM.DocumentCommentsComponent = new LogicECM.DocumentComments("${el}").setOptions({
             nodeRef: "${nodeRef?js_string}",
             site: <#if site??>"${site?js_string}"<#else>null</#if>,
-            activityType: <#if activityType??>${activityType}<#else>null</#if>,
+            activityType: <#if activityType??>"${activityType}"<#else>null</#if>,
             title: "${msg('header.comments')}"
         }).setMessages(${messages});
     }
