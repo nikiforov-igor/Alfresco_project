@@ -1,6 +1,7 @@
 package ru.it.lecm.resolutions.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -142,5 +143,13 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
         } else {
             return null;
         }
+    }
+
+    public NodeRef getResolutionBase(NodeRef resolution) {
+        List<AssociationRef> assocs = nodeService.getTargetAssocs(resolution, ASSOC_BASE);
+        if (assocs != null && assocs.size() > 0) {
+            return assocs.get(0).getTargetRef();
+        }
+        return null;
     }
 }

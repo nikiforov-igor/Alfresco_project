@@ -41,6 +41,7 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
     private DocumentMembersService documentMembersService;
     private ErrandsService errandsService;
     private BusinessJournalService businessJournalService;
+    private ResolutionsService resolutionsService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -48,6 +49,10 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
 
     public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
         this.documentConnectionService = documentConnectionService;
+    }
+
+    public void setResolutionsService(ResolutionsService resolutionsService) {
+        this.resolutionsService = resolutionsService;
     }
 
     public void setNodeService(NodeService nodeService) {
@@ -114,12 +119,23 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
         //     т.к. у дочернего поручение в этот момент еще нет папки с участниками
         //     Узнать нужно ли еще это условие в принципе
         QName additionalDoctype = nodeService.getType(additionalDoc);
-        if (additionalDoctype.equals(ErrandsService.TYPE_ERRANDS)){
-            NodeRef initiatorRef = nodeService.getTargetAssocs(additionalDoc, ErrandsService.ASSOC_ERRANDS_INITIATOR).get(0).getTargetRef();
-            try {
-                documentMembersService.addMemberWithoutCheckPermission(errandDoc, initiatorRef, new HashMap<QName, Serializable>());
-            } catch (WriteTransactionNeededException ex) {
-                logger.error("Can't add document member.", ex);
+        NodeRef parentDoc = additionalDoc;
+        while (parentDoc != null) {
+            QName parentType = nodeService.getType(parentDoc);
+            NodeRef initiatorRef = null;
+            if (parentType.equals(ErrandsService.TYPE_ERRANDS)) {
+                initiatorRef = nodeService.getTargetAssocs(parentDoc, ErrandsService.ASSOC_ERRANDS_INITIATOR).get(0).getTargetRef();
+                parentDoc = errandsService.getBaseDocument(parentDoc);
+            } else if (parentType.equals(ResolutionsService.TYPE_RESOLUTION_DOCUMENT)) {
+                initiatorRef = nodeService.getTargetAssocs(parentDoc, ResolutionsService.ASSOC_AUTHOR).get(0).getTargetRef();
+                parentDoc = resolutionsService.getResolutionBase(parentDoc);
+            }
+            if (initiatorRef != null) {
+                try {
+                    documentMembersService.addMemberWithoutCheckPermission(errandDoc, initiatorRef, "LECM_BASIC_PG_Reader");
+                } catch (WriteTransactionNeededException ex) {
+                    logger.error("Can't add document member.", ex);
+                }
             }
         }
 

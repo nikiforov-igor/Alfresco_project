@@ -19,7 +19,15 @@
                                 var newDueDate = execution.getVariable("lecmErrandWf_changeDueDateNewDueDate");
                                 var processChild = execution.getVariable("lecmErrandWf_changeDueDateChangeChildDueDate");
                                 var changeDateReason = execution.getVariable("lecmErrandWf_changeDueDateReason");
-                                processDueDateChanges(dateRadio, newDueDate, processChild, changeDateReason);
+                                var params = {
+                                    isSignal: false,
+                                    document: document,
+                                    dateRadio: dateRadio,
+                                    newDueDate: newDueDate,
+                                    processChild: processChild,
+                                    changeDateReason: changeDateReason
+                                };
+                                processDueDateChanges(params);
 	                        }
                    		]]></activiti:string>
                     </activiti:field>

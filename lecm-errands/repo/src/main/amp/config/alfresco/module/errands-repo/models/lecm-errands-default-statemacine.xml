@@ -5180,108 +5180,16 @@ if (doc) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var document = bpm_package.children[0];
-var currentUser = orgstructure.getCurrentEmployee();
-if (document) {
-    var changed = true;
-    var logObjects = [];
-    var logText;
-    var dueDateString = "";
-    var limitless = document.properties["lecm-eds-aspect:duedate-limitless"];
-    var shiftSize = document.properties["lecm-eds-aspect:duedate-shift-size"];
-    var newLimitationDate = new Date(document.properties["lecm-eds-aspect:new-limitation-date"].getTime());
-    var reason = document.properties["lecm-eds-aspect:change-duedate-reason"];
-    var oldLimitDate = document.properties["lecm-errands:limitation-date"];
-    var oldLimitRadio = document.properties["lecm-errands:limitation-date-radio"];
-    if (limitless) {
-        if (oldLimitDate && oldLimitRadio != "LIMITLESS") {
-            document.properties["lecm-errands:limitation-date-radio"] = "LIMITLESS";
-            document.properties["lecm-errands:limitation-date"] = null;
-            document.properties["lecm-errands:is-limit-short"] = false;
-            document.properties["lecm-errands:half-limit-date"] = null;
-            dueDateString = "Без срока";
-        } else if (document.properties["lecm-errands:limitation-date-radio"] == "LIMITLESS" || !oldLimitDate) {
-            changed = false;
-        }
-    } else {
-        if (oldLimitDate && oldLimitRadio != "LIMITLESS") {
-            newLimitationDate = new Date(oldLimitDate.getTime() + shiftSize);
-            document.properties["lecm-errands:limitation-date"] = newLimitationDate;
-        } else if (oldLimitRadio == "LIMITLESS" || !oldLimitDate) {
-            document.properties["lecm-errands:limitation-date"] = newLimitationDate;
-        }
-        var day = utils.pad(newLimitationDate.getDate(), 2);
-        var month = utils.pad(newLimitationDate.getMonth() + 1, 2);
-        var year = utils.pad(newLimitationDate.getFullYear(), 4);
-        dueDateString = day + "." + month + "." + year;
-        var wfeDate = new Date(document.properties["lecm-errands:wait-for-execution-date"]);
-        var fromWFELimitDays = Math.round((newLimitationDate - wfeDate) / (1000 * 60 * 60 * 24));
-        var halfLimitDays = Math.round(fromWFELimitDays / 2);
-        wfeDate.setDate(wfeDate.getDate() + halfLimitDays);
-        document.properties["lecm-errands:half-limit-date"] = wfeDate;
-        var shortLimitDays = edsGlobalSettings.getSettingsShortLimitDays();
-        if (fromWFELimitDays <= shortLimitDays) {
-            document.properties["lecm-errands:is-limit-short"] = true;
-        } else {
-            document.properties["lecm-errands:is-limit-short"] = false;
-        }
-
-        document.properties["lecm-errands:limitation-date-radio"] = "DATE";
-    }
-
-    if (changed) {
-        document.properties["lecm-errands:limitation-date-text"] = dueDateString;
-        document.save();
-        var recipients = [];
-        var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
-        var coexecutorsAssoc = document.assocs["lecm-errands:coexecutors-assoc"];
-        var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
-        if (executorAssoc && executorAssoc.length == 1) {
-            recipients.push(executorAssoc[0]);
-        }
-        if (coexecutorsAssoc && coexecutorsAssoc.length) {
-            for (i = 0; i < coexecutorsAssoc.length; i++) {
-                recipients.push(coexecutorsAssoc[i]);
-            }
-        }
-        if (controllerAssoc != null && controllerAssoc.length == 1) {
-            recipients.push(controllerAssoc[0]);
-        }
-        notifications.sendNotificationFromCurrentUser({
-            recipients: recipients,
-            templateCode: 'ERRANDS_CHANGE_DUE_DATE',
-            templateConfig: {
-                mainObject: document,
-                eventExecutor: currentUser,
-                dueDate: dueDateString,
-                reason: reason
-            }
-        });
-        logObjects.push(dueDateString);
-        logText = "#initiator ";
-        logText += documentScript.wrapperTitle("изменил", reason);
-        logText += " срок исполнения поручения #mainobject на  #object1";
-        businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, logObjects);
-    }
-
-    var children = [];
-    var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
-    var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
-    if (childrenErrands) {
-        children = children.concat(childrenErrands);
-    }
-    if (childrenResolutions) {
-        children = children.concat(childrenResolutions);
-    }
-    children.forEach(function (child) {
-        child.properties["lecm-eds-aspect:duedate-shift-size"] = shiftSize;
-        child.properties["lecm-eds-aspect:duedate-limitless"] = limitless;
-        child.properties["lecm-eds-aspect:new-limitation-date"] = newLimitationDate;
-        child.properties["lecm-eds-aspect:change-duedate-reason"] = reason;
-        child.save();
-    });
-    document.removeAspect("lecm-eds-aspect:changeDueDateSignal");
-}]]></value>
+                                                                <value><![CDATA[<import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/change-due-date-script.js">
+                                                                var document = bpm_package.children[0];
+                                                                if (document) {
+                                                                    var params = {
+                                                                        isSignal: true,
+                                                                        document: document
+                                                                    };
+                                                                    processDueDateChanges(params);
+                                                                }
+]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -7772,108 +7680,18 @@ if (doc) {
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[var document = bpm_package.children[0];
-var currentUser = orgstructure.getCurrentEmployee();
-if (document) {
-    var changed = true;
-    var logObjects = [];
-    var logText;
-    var dueDateString = "";
-    var limitless = document.properties["lecm-eds-aspect:duedate-limitless"];
-    var shiftSize = document.properties["lecm-eds-aspect:duedate-shift-size"];
-    var newLimitationDate = new Date(document.properties["lecm-eds-aspect:new-limitation-date"].getTime());
-    var reason = document.properties["lecm-eds-aspect:change-duedate-reason"];
-    var oldLimitDate = document.properties["lecm-errands:limitation-date"];
-    var oldLimitRadio = document.properties["lecm-errands:limitation-date-radio"];
-    if (limitless) {
-        if (oldLimitDate && oldLimitRadio != "LIMITLESS") {
-            document.properties["lecm-errands:limitation-date-radio"] = "LIMITLESS";
-            document.properties["lecm-errands:limitation-date"] = null;
-            document.properties["lecm-errands:is-limit-short"] = false;
-            document.properties["lecm-errands:half-limit-date"] = null;
-            dueDateString = "Без срока";
-        } else if (document.properties["lecm-errands:limitation-date-radio"] == "LIMITLESS" || !oldLimitDate) {
-            changed = false;
-        }
-    } else {
-        if (oldLimitDate && oldLimitRadio != "LIMITLESS") {
-            newLimitationDate = new Date(oldLimitDate.getTime() + shiftSize);
-            document.properties["lecm-errands:limitation-date"] = newLimitationDate;
-        } else if (oldLimitRadio == "LIMITLESS" || !oldLimitDate) {
-            document.properties["lecm-errands:limitation-date"] = newLimitationDate;
-        }
-        var day = utils.pad(newLimitationDate.getDate(), 2);
-        var month = utils.pad(newLimitationDate.getMonth() + 1, 2);
-        var year = utils.pad(newLimitationDate.getFullYear(), 4);
-        dueDateString = day + "." + month + "." + year;
-        var wfeDate = new Date(document.properties["lecm-errands:wait-for-execution-date"]);
-        var fromWFELimitDays = Math.round((newLimitationDate - wfeDate) / (1000 * 60 * 60 * 24));
-        var halfLimitDays = Math.round(fromWFELimitDays / 2);
-        wfeDate.setDate(wfeDate.getDate() + halfLimitDays);
-        document.properties["lecm-errands:half-limit-date"] = wfeDate;
-        var shortLimitDays = edsGlobalSettings.getSettingsShortLimitDays();
-        if (fromWFELimitDays <= shortLimitDays) {
-            document.properties["lecm-errands:is-limit-short"] = true;
-        } else {
-            document.properties["lecm-errands:is-limit-short"] = false;
-        }
+                                                                <value><![CDATA[
+                                                                <import resource="classpath:/alfresco/module/errands-repo/workflow/scripts/change-due-date-script.js">
+                                                                var document = bpm_package.children[0];
+                                                                if (document) {
+                                                                    var params = {
+                                                                        isSignal: true,
+                                                                        document: document
+                                                                    };
+                                                                    processDueDateChanges(params);
+                                                                }
 
-        document.properties["lecm-errands:limitation-date-radio"] = "DATE";
-    }
-
-    if (changed) {
-        document.properties["lecm-errands:limitation-date-text"] = dueDateString;
-        document.save();
-        var recipients = [];
-        var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
-        var coexecutorsAssoc = document.assocs["lecm-errands:coexecutors-assoc"];
-        var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
-        if (executorAssoc && executorAssoc.length == 1) {
-            recipients.push(executorAssoc[0]);
-        }
-        if (coexecutorsAssoc && coexecutorsAssoc.length) {
-            for (i = 0; i < coexecutorsAssoc.length; i++) {
-                recipients.push(coexecutorsAssoc[i]);
-            }
-        }
-        if (controllerAssoc != null && controllerAssoc.length == 1) {
-            recipients.push(controllerAssoc[0]);
-        }
-        notifications.sendNotificationFromCurrentUser({
-            recipients: recipients,
-            templateCode: 'ERRANDS_CHANGE_DUE_DATE',
-            templateConfig: {
-                mainObject: document,
-                eventExecutor: currentUser,
-                dueDate: dueDateString,
-                reason: reason
-            }
-        });
-        logObjects.push(dueDateString);
-        logText = "#initiator ";
-        logText += documentScript.wrapperTitle("изменил", reason);
-        logText += " срок исполнения поручения #mainobject на  #object1";
-        businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, logObjects);
-    }
-
-    var children = [];
-    var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
-    var childrenResolutions = errands.getChildResolutions(document.nodeRef.toString());
-    if (childrenErrands) {
-        children = children.concat(childrenErrands);
-    }
-    if (childrenResolutions) {
-        children = children.concat(childrenResolutions);
-    }
-    children.forEach(function (child) {
-        child.properties["lecm-eds-aspect:duedate-shift-size"] = shiftSize;
-        child.properties["lecm-eds-aspect:duedate-limitless"] = limitless;
-        child.properties["lecm-eds-aspect:new-limitation-date"] = newLimitationDate;
-        child.properties["lecm-eds-aspect:change-duedate-reason"] = reason;
-        child.save();
-    });
-    document.removeAspect("lecm-eds-aspect:changeDueDateSignal");
-}]]></value>
+]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>

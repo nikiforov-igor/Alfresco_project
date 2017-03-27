@@ -1,5 +1,7 @@
 var LECMResolutionActions = {
     processChangeDueDateSignal: function (document) {
+        lecmPermission.pushAuthentication();
+        lecmPermission.setRunAsUserSystem();
         var limitless = document.properties["lecm-eds-aspect:duedate-limitless"];
         var shiftSize = document.properties["lecm-eds-aspect:duedate-shift-size"];
         var newDate = document.properties["lecm-eds-aspect:new-limitation-date"];
@@ -62,6 +64,7 @@ var LECMResolutionActions = {
         }
 
         edsDocument.resetChangeDueDateSignal(document);
+        lecmPermission.popAuthentication();
     },
 
     processChangeChildSignal: function (document) {
