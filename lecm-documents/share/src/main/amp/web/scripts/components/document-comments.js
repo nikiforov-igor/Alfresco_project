@@ -68,7 +68,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/comments/list",
                         dataObj: {
                             nodeRef: this.options.nodeRef,
-                            activityType: "document",
+                            activityType: this.options.activityType,
                             htmlid: this.id + Alfresco.util.generateDomId()
                         },
                         successCallback: {
