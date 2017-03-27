@@ -74,8 +74,7 @@
                 <!-- Путь до узла с контрольными резолюциями, требующими принятия решения -->
                 <property name="lecm-resolutions-settings:dashlet-settings-required-solution-control">
                     <type>d:text</type>
-                    <default>Моя работа/Все созданные мной/Резолюции/Требуют принятия
-                        решения&amp;filters=BY_CONTROL[0]
+                    <default>Моя работа/Все созданные мной/Резолюции/Требуют принятия решения&amp;filters=BY_CONTROL[0]
                     </default>
                 </property>
 
