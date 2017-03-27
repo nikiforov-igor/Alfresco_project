@@ -3344,6 +3344,31 @@ if (doc) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>5f879258-b176-44b6-ade7-c5c7e382ac3f</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/e62aacc4-aedf-4d83-aebf-74f0f3df8cfb
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Сброс сигналов]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+  document.properties["lecm-errands:cancellation-signal"]=false;
+  document.properties["lecm-eds-aspect:completion-signal"]=false;
+  document.properties["lecm-eds-aspect:child-change-signal"]=false;
+  document.save();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -5525,6 +5550,31 @@ if(doc){
       edsDocument.sendChildChangeSignal(additionalDoc);
     }
 }]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>aa396150-fe14-4650-b2a5-8b40772da21f</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/66092311-839f-4032-a286-9d1d4a6118ca
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Сброс сигналов]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+  document.properties["lecm-errands:cancellation-signal"]=false;
+  document.properties["lecm-eds-aspect:completion-signal"]=false;
+  document.properties["lecm-eds-aspect:child-change-signal"]=false;
+  document.save();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -8038,6 +8088,31 @@ if (document != null) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>37b2f700-fac9-4b23-93c9-5283ad30b713</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/591c0d37-68d8-4c03-ada6-80b29a0e354f
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Сброс сигналов]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+  document.properties["lecm-errands:cancellation-signal"]=false;
+  document.properties["lecm-eds-aspect:completion-signal"]=false;
+  document.properties["lecm-eds-aspect:child-change-signal"]=false;
+  document.save();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -10295,6 +10370,31 @@ if (document) {
   	document.properties["lecm-errands:execution-date"] = new Date();
 	document.save();
 }]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>e9fe0e9c-ceae-4f1e-bcd0-a4b040df9709</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/873d19b8-3e14-4345-975e-93e585b094c7
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Сброс сигналов]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+  document.properties["lecm-errands:cancellation-signal"]=false;
+  document.properties["lecm-eds-aspect:completion-signal"]=false;
+  document.properties["lecm-eds-aspect:child-change-signal"]=false;
+  document.save();]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>

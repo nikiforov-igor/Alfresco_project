@@ -4953,6 +4953,29 @@
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>dd9c5621-d30c-48a6-bdba-35c0924bcd56</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/ac2bd3bc-59a5-411d-ae79-98271f45e652
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Сброс сигналов]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+  document.properties["lecm-eds-aspect:child-change-signal-count"]=0;
+  document.save();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
