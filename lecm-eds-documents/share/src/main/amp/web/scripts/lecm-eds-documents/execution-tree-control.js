@@ -347,8 +347,8 @@ LogicECM.module = LogicECM.module || {};
                                     container.innerHTML = YAHOO.lang.substitute(content, {
                                         errandsStatisticLabel: this.msg("msg.resolution.errands.statistic.label"),
                                         reviewStatisticLabel: this.msg("msg.resolution.review.statistic.label"),
-                                        errandsStatisticList: this.getTableListLayout(executionList),
-                                        reviewStatisticList: this.getTableListLayout(reviewList)
+                                        errandsStatisticList: executionList.length ? this.getTableListLayout(executionList) : this.msg("msg.resolution.errands.statistic.empty.text"),
+                                        reviewStatisticList: reviewList.length ? this.getTableListLayout(reviewList) : this.msg("msg.resolution.review.statistic.empty.text")
                                     });
                                 }
                             },
