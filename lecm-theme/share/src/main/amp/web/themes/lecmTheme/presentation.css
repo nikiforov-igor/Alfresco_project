@@ -2363,7 +2363,7 @@ div.currentValueDisplay,
 }
 
 .yui-skin-lecmTheme.alfresco-share .share-header-title {
-	margin-top: 25px;
+	padding-top: 28px;
 }
 
 .yui-skin-lecmTheme.alfresco-share #share-header {
@@ -2419,12 +2419,21 @@ div.currentValueDisplay,
 	max-width: none;
 }
 
-.alfresco-share .logo {
-  margin-top: 34px !important;
+.alfresco-share .alfresco-logo-Logo {
+	margin: 10px 30px 12px 8px;
 }
 
-#share-header .alf-menu-title {
-  margin-top: 42px !important;
+#share-header .alfresco-header-Title {
+	margin-top: 23px !important;
+}
+
+.alfresco-share .alfresco-logo-Logo:after {
+    content: "";
+    height: 50px;
+    width: 1px;
+    left: 70px;
+    position: absolute;
+    background-color: #d3d3d3;
 }
 
 #no_menu_page #bd #lecm-page {
