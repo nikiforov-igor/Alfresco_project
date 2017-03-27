@@ -1172,7 +1172,7 @@ if (document) {
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Действие доступно если у поручения нет документа-основания или он не в финальном статусе]]></value>
+                                                                                    <![CDATA[Работа по документу-основанию поручения завершена. Продолжить отправку поручения на исполнение?]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
