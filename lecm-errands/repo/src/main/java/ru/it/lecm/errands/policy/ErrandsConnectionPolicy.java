@@ -251,21 +251,21 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
                     }
                 }
             } else {
-                documentMembersService.addMemberWithoutCheckPermission(baseDoc, executor, new HashMap<QName, Serializable>());
+                documentMembersService.addMemberWithoutCheckPermission(baseDoc, executor, new HashMap<QName, Serializable>(), true);
 
-                documentMembersService.addMemberWithoutCheckPermission(baseDoc, initiator, new HashMap<QName, Serializable>());
+                documentMembersService.addMemberWithoutCheckPermission(baseDoc, initiator, new HashMap<QName, Serializable>(), true);
 
                 List<AssociationRef> coexecutors = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS);
                 if (coexecutors != null) {
                     for (AssociationRef coexecutor : coexecutors) {
-                        documentMembersService.addMemberWithoutCheckPermission(baseDoc, coexecutor.getTargetRef(), new HashMap<QName, Serializable>());
+                        documentMembersService.addMemberWithoutCheckPermission(baseDoc, coexecutor.getTargetRef(), new HashMap<QName, Serializable>(), true);
                     }
                 }
 
                 List<AssociationRef> controlerAssocs = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_CONTROLLER);
                 if (controlerAssocs != null && !controlerAssocs.isEmpty()) {
                     NodeRef controller = controlerAssocs.get(0).getTargetRef();
-                    documentMembersService.addMemberWithoutCheckPermission(baseDoc, controller, new HashMap<QName, Serializable>());
+                    documentMembersService.addMemberWithoutCheckPermission(baseDoc, controller, new HashMap<QName, Serializable>(), true);
                 }
             }
         }
