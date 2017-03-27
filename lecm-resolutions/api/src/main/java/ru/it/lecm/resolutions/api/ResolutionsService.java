@@ -16,8 +16,15 @@ public interface ResolutionsService {
     String CLOSERS_AUTHOR_AND_CONTROLLER = "AUTHOR_AND_CONTROLLER";
 
     String RESOLUTION_NAMESPACE_URI = "http://www.it.ru/logicECM/resolutions/1.0";
+    String RESOLUTION_SETTINGS_NAMESPACE_URI = "http://www.it.ru/logicECM/resolutions-settings/1.0";
+
+    String RESOLUTIONS_ROOT_NAME = "Сервис Резолюции";
+    String RESOLUTIONS_ROOT_ID = "RESOLUTIONS_ROOT_ID";
+
+    String RESOLUTION_DASHLET_SETTINGS_NODE_NAME = "Dashlet Settings";
 
     QName TYPE_RESOLUTION_DOCUMENT = QName.createQName(RESOLUTION_NAMESPACE_URI, "document");
+    QName TYPE_RESOLUTION_DASHLET_SETTINGS = QName.createQName(RESOLUTION_SETTINGS_NAMESPACE_URI, "dashlet-settings");
 
     QName PROP_ERRANDS_JSON = QName.createQName(RESOLUTION_NAMESPACE_URI, "errands-json");
     QName PROP_LIMITATION_DATE = QName.createQName(RESOLUTION_NAMESPACE_URI, "limitation-date");
@@ -43,5 +50,18 @@ public interface ResolutionsService {
      * @param resolution документ
      * @param reason причина сигнала
      */
+
+    /**
+     * Возвращает NodeRef настроек дашлетов для резолюций
+     * @return NodeRef настроек дашлетов для резолюций
+     */
+    NodeRef getDashletSettingsNode();
+
+    /**
+     * Создание настроек дашлетов для резолюций
+     * Create an instance of {@link NodeRef }
+     */
+    NodeRef createDashletSettingsNode();
+
     void sendAnnulSignal(NodeRef resolution, String reason);
 }

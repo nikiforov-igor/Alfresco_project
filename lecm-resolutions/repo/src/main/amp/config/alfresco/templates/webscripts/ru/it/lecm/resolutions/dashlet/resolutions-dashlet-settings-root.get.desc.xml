@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Admin Console Resolutions Dashlet Settings Node</shortname>
+    <description>Admin Console Resolutions Dashlet Settings Node</description>
+    <url>/lecm/resolutions/dashlet/settings</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>

@@ -1,0 +1,5 @@
+<webscript>
+    <shortname>Admin Console Resolutions Dashlet Settings</shortname>
+    <description>Admin Console Resolutions Dashlet Settings</description>
+    <url>/components/console/resolutions-dashlet-settings</url>
+</webscript>
