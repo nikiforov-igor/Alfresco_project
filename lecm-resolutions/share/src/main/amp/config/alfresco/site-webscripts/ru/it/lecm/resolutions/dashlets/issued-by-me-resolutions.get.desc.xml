@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Мои резолюции</shortname>
+    <description>Мои резолюции</description>
+    <family>user-dashlet</family>
+    <url>/lecm/resolutions/dashlets/issued-by-me-resolutions</url>
+</webscript>

@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Resolutions</shortname>
+    <description>Resolutions</description>
+    <url>/lecm/resolutions/dashlet/issued</url>
+    <format default="json"/>
+    <authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+</webscript>

@@ -17,6 +17,7 @@ public interface ResolutionsService {
 
     String RESOLUTION_NAMESPACE_URI = "http://www.it.ru/logicECM/resolutions/1.0";
     String RESOLUTION_SETTINGS_NAMESPACE_URI = "http://www.it.ru/logicECM/resolutions-settings/1.0";
+    String DOCUMENT_ASPECTS_NAMESPACE_URI = "http://www.it.ru/lecm/document/aspects/1.0";
 
     String RESOLUTIONS_ROOT_NAME = "Сервис Резолюции";
     String RESOLUTIONS_ROOT_ID = "RESOLUTIONS_ROOT_ID";
@@ -34,8 +35,13 @@ public interface ResolutionsService {
     QName PROP_LIMITATION_DATE_TEXT = QName.createQName(RESOLUTION_NAMESPACE_URI, "limitation-date-text");
     QName PROP_CLOSERS = QName.createQName(RESOLUTION_NAMESPACE_URI, "closers");
     QName PROP_IS_EXPIRED = QName.createQName(RESOLUTION_NAMESPACE_URI, "is-expired");
-    QName PROP_ANNUL_SIGNAL = QName.createQName(RESOLUTION_NAMESPACE_URI,"annul-signal");
-    QName PROP_ANNUL_SIGNAL_REASON = QName.createQName(RESOLUTION_NAMESPACE_URI,"annul-signal-reason");
+    QName PROP_ANNUL_SIGNAL = QName.createQName(RESOLUTION_NAMESPACE_URI, "annul-signal");
+    QName PROP_ANNUL_SIGNAL_REASON = QName.createQName(RESOLUTION_NAMESPACE_URI, "annul-signal-reason");
+    QName PROP_REQUIRE_CLOSERS_DECISION = QName.createQName(RESOLUTION_NAMESPACE_URI, "require-closers-decision");
+
+    QName PROP_IS_ON_CONTROL = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "is-on-control");
+
+    QName PROP_RESOLUTIONS_AUTHOR_REF = QName.createQName(RESOLUTION_NAMESPACE_URI, "author-assoc-ref");
 
     QName ASSOC_BASE_DOCUMENT = QName.createQName(RESOLUTION_NAMESPACE_URI, "base-document-assoc");
     QName ASSOC_BASE = QName.createQName(RESOLUTION_NAMESPACE_URI, "base-assoc");

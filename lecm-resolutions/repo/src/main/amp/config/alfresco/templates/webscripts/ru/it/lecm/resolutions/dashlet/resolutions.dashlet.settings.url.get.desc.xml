@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Resolutions Module Dashlet Settings</shortname>
+    <description>Resolutions Module Dashlet Settings</description>
+    <url>/lecm/resolutions/dashlet/settings/url</url>
+    <format default="json"/>
+    <authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+</webscript>
