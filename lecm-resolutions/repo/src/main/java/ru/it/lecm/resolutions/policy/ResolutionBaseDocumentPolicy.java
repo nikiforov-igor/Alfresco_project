@@ -66,22 +66,25 @@ public class ResolutionBaseDocumentPolicy implements NodeServicePolicies.OnCreat
         AuthenticationUtil.pushAuthentication();
         AuthenticationUtil.setRunAsUserSystem();
         AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
-        documentConnectionService.createConnection(associationRef.getTargetRef(), associationRef.getSourceRef(), DocumentConnectionService.DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE, true, true);
-        NodeRef parentDoc = associationRef.getSourceRef();
-        while (parentDoc != null) {
-            QName parentType = nodeService.getType(parentDoc);
-            NodeRef initiatorRef = null;
-            if (parentType.equals(ErrandsService.TYPE_ERRANDS)) {
-                initiatorRef = nodeService.getTargetAssocs(parentDoc, ErrandsService.ASSOC_ERRANDS_INITIATOR).get(0).getTargetRef();
-                parentDoc = errandsService.getBaseDocument(parentDoc);
-            } else if (parentType.equals(ResolutionsService.TYPE_RESOLUTION_DOCUMENT)) {
-                initiatorRef = nodeService.getTargetAssocs(parentDoc, ResolutionsService.ASSOC_AUTHOR).get(0).getTargetRef();
-                parentDoc = resolutionsService.getResolutionBase(parentDoc);
+        try {
+            documentConnectionService.createConnection(associationRef.getTargetRef(), associationRef.getSourceRef(), DocumentConnectionService.DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE, true, true);
+            NodeRef parentDoc = associationRef.getSourceRef();
+            while (parentDoc != null) {
+                QName parentType = nodeService.getType(parentDoc);
+                NodeRef initiatorRef = null;
+                if (parentType.equals(ErrandsService.TYPE_ERRANDS)) {
+                    initiatorRef = nodeService.getTargetAssocs(parentDoc, ErrandsService.ASSOC_ERRANDS_INITIATOR).get(0).getTargetRef();
+                    parentDoc = errandsService.getBaseDocument(parentDoc);
+                } else if (parentType.equals(ResolutionsService.TYPE_RESOLUTION_DOCUMENT)) {
+                    initiatorRef = nodeService.getTargetAssocs(parentDoc, ResolutionsService.ASSOC_AUTHOR).get(0).getTargetRef();
+                    parentDoc = resolutionsService.getResolutionBase(parentDoc);
+                }
+                if (initiatorRef != null) {
+                    documentMembersService.addMemberWithoutCheckPermission(associationRef.getSourceRef(), initiatorRef, "LECM_BASIC_PG_Reader", true);
+                }
             }
-            if (initiatorRef != null) {
-                documentMembersService.addMemberWithoutCheckPermission(associationRef.getSourceRef(), initiatorRef, "LECM_BASIC_PG_Reader", true);
-            }
+        } finally {
+            AuthenticationUtil.popAuthentication();
         }
-        AuthenticationUtil.popAuthentication();
     }
 }

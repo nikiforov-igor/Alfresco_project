@@ -40,7 +40,7 @@ function processDueDateChanges(params) {
             if (oldLimitDate && oldLimitRadio != "LIMITLESS") {
                 newLimitationDate = new Date(oldLimitDate.getTime() + shiftSize);
                 document.properties["lecm-errands:limitation-date"] = newLimitationDate;
-            } else if (oldLimitRadio == "LIMITLESS" || !oldLimitDate) {
+            } else {
                 document.properties["lecm-errands:limitation-date"] = newLimitationDate;
             }
         }
@@ -64,7 +64,7 @@ function processDueDateChanges(params) {
             document.properties["lecm-errands:is-limit-short"] = false;
             document.properties["lecm-errands:half-limit-date"] = null;
             dueDateString = "Без срока";
-        } else if (oldLimitRadio == "LIMITLESS" || !oldLimitDate) {
+        } else {
             changed = false;
         }
     }
@@ -78,15 +78,21 @@ function processDueDateChanges(params) {
         if (childrenResolutions) {
             children = children.concat(childrenResolutions);
         }
+        lecmPermission.pushAuthentication();
+        lecmPermission.setRunAsUserSystem();
         children.forEach(function (child) {
             edsDocument.sendChangeDueDateSignal(child, shiftSize, limitless, newLimitationDate, changeDateReason);
         });
+        lecmPermission.popAuthentication();
     }
     if (changed) {
         lecmPermission.pushAuthentication();
         lecmPermission.setRunAsUserSystem();
         document.properties["lecm-errands:limitation-date-text"] = dueDateString;
         document.save();
+        if (isSignal) {
+            edsDocument.resetChangeDueDateSignal(document);
+        }
         lecmPermission.popAuthentication();
         var recipients = [];
         var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
@@ -118,8 +124,5 @@ function processDueDateChanges(params) {
         logText += documentScript.wrapperTitle("изменил", changeDateReason);
         logText += " срок исполнения поручения #mainobject на  #object1";
         businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, logObjects);
-    }
-    if (isSignal) {
-        edsDocument.resetChangeDueDateSignal(document);
     }
 }

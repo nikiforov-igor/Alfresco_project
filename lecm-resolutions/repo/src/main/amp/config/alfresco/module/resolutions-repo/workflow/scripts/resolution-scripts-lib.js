@@ -55,7 +55,8 @@ var LECMResolutionActions = {
 
         var logText = base.wrapperTitle("Изменен", reason) + " срок исполнения резолюции. Причина изменения: " + reason;
         businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, []);
-
+        lecmPermission.pushAuthentication();
+        lecmPermission.setRunAsUserSystem();
         var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
         if (childrenErrands && childrenErrands.length) {
             childrenErrands.forEach(function (errand) {
@@ -64,6 +65,7 @@ var LECMResolutionActions = {
         }
 
         edsDocument.resetChangeDueDateSignal(document);
+        lecmPermission.popAuthentication();
     },
 
     processChangeChildSignal: function (document) {
