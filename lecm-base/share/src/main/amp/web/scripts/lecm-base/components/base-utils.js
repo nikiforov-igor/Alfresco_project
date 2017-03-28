@@ -880,14 +880,12 @@ LogicECM.module.Base.Util = {
 
 		var viewDialog = LogicECM.module.Base.Util.createDialog("view-node-panel_" + Alfresco.util.generateDomId());
 		var requestObj = {
-			itemKind: obj.itemKind ? obj.itemKind : "node",
+			itemKind: obj.itemKind || "node",
 			itemId: obj.itemId,
 			mode: "view",
-			htmlid: obj.htmlid ? obj.htmlid : obj.itemId.replace("workspace://SpacesStore/", "").replace("-", "")
+			formId: obj.formId || "view-node-form",
+			htmlid: obj.htmlid || obj.itemId.replace("workspace://SpacesStore/", "").replace("-", "")
 		};
-		if(obj.formId){
-			requestObj.formId = obj.formId;
-		}
 		if (obj.nodeId) {
 			requestObj.nodeId = obj.nodeId;
 		}
