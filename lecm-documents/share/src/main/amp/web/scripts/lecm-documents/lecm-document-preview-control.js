@@ -151,6 +151,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                         url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/attachments/api/get",
                         dataObj: {
                             documentNodeRef: this.documentNodeRef,
+                            baseDocAssocName: this.options.baseDocAssocName,
                             showEmptyCategory: true
                         },
                         successCallback: {
