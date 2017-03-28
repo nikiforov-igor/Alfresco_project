@@ -38,10 +38,9 @@ public interface ResolutionsService {
     QName PROP_ANNUL_SIGNAL = QName.createQName(RESOLUTION_NAMESPACE_URI, "annul-signal");
     QName PROP_ANNUL_SIGNAL_REASON = QName.createQName(RESOLUTION_NAMESPACE_URI, "annul-signal-reason");
     QName PROP_REQUIRE_CLOSERS_DECISION = QName.createQName(RESOLUTION_NAMESPACE_URI, "require-closers-decision");
+    QName PROP_RESOLUTIONS_AUTHOR_REF = QName.createQName(RESOLUTION_NAMESPACE_URI, "author-assoc-ref");
 
     QName PROP_IS_ON_CONTROL = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "is-on-control");
-
-    QName PROP_RESOLUTIONS_AUTHOR_REF = QName.createQName(RESOLUTION_NAMESPACE_URI, "author-assoc-ref");
 
     QName ASSOC_BASE_DOCUMENT = QName.createQName(RESOLUTION_NAMESPACE_URI, "base-document-assoc");
     QName ASSOC_BASE = QName.createQName(RESOLUTION_NAMESPACE_URI, "base-assoc");
