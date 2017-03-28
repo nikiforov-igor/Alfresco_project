@@ -70,7 +70,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
 		PropertyCheck.mandatory(this, "documentConnectionService", documentConnectionService);
 		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
-		logger.info("!!!!!!!!!!!!!!!!!! init");
+		logger.trace("!!!!!!!!!!!!!!!!!! init");
 	}
 
 	public NodeRef getTemplateDictionaryNode() {
@@ -83,7 +83,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	@Override
 	protected void onShutdown(ApplicationEvent event)
 	{
-		logger.info("!!!!!!!!!!!!!!!!!! onShutdown :"+event);
+		logger.trace("!!!!!!!!!!!!!!!!!! onShutdown :"+event);
 	}
 
 	public void setNamespaceService(final NamespaceService namespaceService) {
