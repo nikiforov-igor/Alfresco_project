@@ -31,6 +31,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
     LogicECM.DocumentAttachments = function DocumentAttachments_constructor(htmlId) {
         LogicECM.DocumentAttachments.superclass.constructor.call(this, htmlId);
 		this.options.baseDocAssocName = null;
+		this.options.showBaseDocAttachmentsBottom = false;
 		this.options.showAfterReady = false;
 	    YAHOO.Bubbling.on("metadataRefresh", this.onAttachmentsUpdate, this);
 	    YAHOO.Bubbling.on("fileRenamed", this.onAttachmentsUpdate, this);
@@ -92,7 +93,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         dataObj: {
                             nodeRef: this.options.nodeRef,
                             htmlid: this.id + Alfresco.util.generateDomId(),
-                            baseDocAssocName: this.options.baseDocAssocName
+                            baseDocAssocName: this.options.baseDocAssocName,
+                            showBaseDocAttachmentsBottom: this.options.showBaseDocAttachmentsBottom
                         },
                         successCallback: {
                             fn:function(response){
@@ -119,7 +121,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         dataObj: {
                             nodeRef: this.options.nodeRef,
                             htmlid: this.id + Alfresco.util.generateDomId(),
-                            baseDocAssocName: this.options.baseDocAssocName
+                            baseDocAssocName: this.options.baseDocAssocName,
+                            showBaseDocAttachmentsBottom: this.options.showBaseDocAttachmentsBottom
                         },
                         successCallback: {
                             fn:function(response){
@@ -147,7 +150,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				        dataObj: {
 					        nodeRef: this.options.nodeRef,
 					        htmlid: newId,
-							baseDocAssocName: this.options.baseDocAssocName
+							baseDocAssocName: this.options.baseDocAssocName,
+                            showBaseDocAttachmentsBottom: this.options.showBaseDocAttachmentsBottom
 				        },
 				        successCallback: {
 					        fn:function(response){

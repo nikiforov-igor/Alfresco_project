@@ -1,5 +1,5 @@
 <webscript>
     <shortname>attachments-list</shortname>
     <description>Document Attachments List Component</description>
-    <url>/lecm/components/document/attachments-list?baseDocAssocName={baseDocAssocName}</url>
+    <url>/lecm/components/document/attachments-list?baseDocAssocName={baseDocAssocName}&amp;baseDocAssocName={baseDocAssocName}</url>
 </webscript>

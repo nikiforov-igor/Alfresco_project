@@ -265,6 +265,7 @@
 				<control id="attachments-control" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Вложения">
 					<param id="uri" localName="Адрес веб-скрипта" mandatory="true" visible="true">/lecm/components/document/document-attachments</param>
 					<param id="baseDocAssocName" localName="Название ассоциации документа-основания" mandatory="false" visible="true"/>
+					<param id="showBaseDocAttachmentsBottom" localName="Показывать вложения документа-основания снизу" mandatory="false" visible="true"/>
 				</control>
 				<control id="workflows-control" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Бизнес-процессы">
 					<param id="uri" localName="Адрес веб-скрипта" mandatory="true" visible="true">/lecm/components/document/document-workflows</param>

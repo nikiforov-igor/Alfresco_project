@@ -39,6 +39,7 @@
 				itemId: "${nodeRef}",
 				forTask: ${forTask?string},
 				baseDocAssocName: "${baseDocAssocName!""}",
+                showBaseDocAttachmentsBottom: ${(showBaseDocAttachmentsBottom!"false")?string},
                 selectedAttachmentNodeRef: "${selectedAttachmentNodeRef}"
 			});
             control.onReady();

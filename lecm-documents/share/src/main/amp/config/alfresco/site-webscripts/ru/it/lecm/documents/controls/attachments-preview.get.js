@@ -4,4 +4,5 @@
 	AlfrescoUtil.param("forTask");
 	AlfrescoUtil.param("selectedAttachmentNodeRef");
 	AlfrescoUtil.param("baseDocAssocName", null);
+	AlfrescoUtil.param("showBaseDocAttachmentsBottom", false);
 })();

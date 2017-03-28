@@ -30,6 +30,9 @@
                     <#if baseDocAssocName??>
                         baseDocAssocName: "${baseDocAssocName}",
                     </#if>
+                    <#if showBaseDocAttachmentsBottom??>
+                        showBaseDocAttachmentsBottom: ${showBaseDocAttachmentsBottom?string},
+                    </#if>
                     nodeRef: "${nodeRef}"
                 }
         );

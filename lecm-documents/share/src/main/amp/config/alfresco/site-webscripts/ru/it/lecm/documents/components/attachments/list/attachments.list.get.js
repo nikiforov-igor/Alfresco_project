@@ -5,6 +5,7 @@
 function main() {
     AlfrescoUtil.param("nodeRef");
     model.baseDocAssocName = AlfrescoUtil.param("baseDocAssocName", null);
+    model.showBaseDocAttachmentsBottom = AlfrescoUtil.param("showBaseDocAttachmentsBottom", false).toLowerCase() == "true";
 
 	model.hasViewListPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
 	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
@@ -35,12 +36,17 @@ function main() {
             model.categories = cats.categories;
 
 	        if (model.baseDocAssocName) {
-		        model.categories.push({
-			        nodeRef: "base-document-attachments/" + model.nodeRef.replace(":/", "") + "/" + model.baseDocAssocName,
-			        name: msg.get("label.attachments.base-document"),
-			        path: "",
-			        isReadOnly: true
-		        });
+	            var obj = {
+                    nodeRef: "base-document-attachments/" + model.nodeRef.replace(":/", "") + "/" + model.baseDocAssocName,
+                    name: msg.get("label.attachments.base-document"),
+                    path: "",
+                    isReadOnly: true
+                };
+	            if (model.showBaseDocAttachmentsBottom) {
+                    model.categories.push(obj);
+                } else {
+                    model.categories.unshift(obj);
+                }
 			}
         }
 	}
