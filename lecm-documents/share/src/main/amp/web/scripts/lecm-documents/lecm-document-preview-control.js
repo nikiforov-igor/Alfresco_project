@@ -42,6 +42,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
             forTask: true,
             selectedAttachmentNodeRef: "",
             baseDocAssocName: null,
+            showBaseDocAttachmentsBottom: false,
             resizeable: false,
             categories: null,
             allActions: null,
@@ -152,6 +153,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                         dataObj: {
                             documentNodeRef: this.documentNodeRef,
                             baseDocAssocName: this.options.baseDocAssocName,
+                            showBaseDocAttachmentsBottom: this.options.showBaseDocAttachmentsBottom,
                             showEmptyCategory: true
                         },
                         successCallback: {
