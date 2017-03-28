@@ -38,7 +38,14 @@ public class ResolutionsWebScriptBean extends BaseWebScript {
             resolutionsService.sendAnnulSignal(resolution, reason);
         }
     }
-
+    public void resetAnnulSignal(ScriptNode doc) {
+        if (doc != null) {
+            NodeRef document = doc.getNodeRef();
+            if (document != null) {
+                resolutionsService.resetAnnulSignal(document);
+            }
+        }
+    }
     /**
      * Возвращает NodeRef настроек дашлетов для резолюций
      * @return NodeRef настроек дашлетов для резолюций

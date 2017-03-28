@@ -4967,8 +4967,7 @@
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = stm_document;
-  document.properties["lecm-eds-aspect:child-change-signal-count"]=0;
-  document.save();]]></value>
+  edsDocument.resetChildChangeSignal(document);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>

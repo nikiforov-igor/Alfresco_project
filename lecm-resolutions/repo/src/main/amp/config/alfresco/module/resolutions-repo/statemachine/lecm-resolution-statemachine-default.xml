@@ -2308,10 +2308,9 @@ if (document) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = stm_document;
-  document.properties["lecm-resolutions:annul-signal"]=false;
-  document.properties["lecm-eds-aspect:completion-signal"]=false;
-  document.properties["lecm-eds-aspect:changeDueDateSignal"]=false;
-  document.save();]]></value>
+  resolutionsScript.resetAnnulSignal(document);
+  edsDocument.resetCompletionSignal(document);
+  edsDocument.resetChangeDueDateSignal(document);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -3314,9 +3313,8 @@ if (document) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = stm_document;
-  document.properties["lecm-resolutions:annul-signal"]=false;
-  document.properties["lecm-eds-aspect:changeDueDateSignal"]=false;
-  document.save();]]></value>
+    resolutionsScript.resetAnnulSignal(document);
+  edsDocument.resetChangeDueDateSignal(document);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -4448,9 +4446,8 @@ if (document) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = stm_document;
-  document.properties["lecm-resolutions:annul-signal"]=false;
-  document.properties["lecm-eds-aspect:changeDueDateSignal"]=false;
-  document.save();]]></value>
+  resolutionsScript.resetAnnulSignal(document);
+  edsDocument.resetChangeDueDateSignal(document);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>

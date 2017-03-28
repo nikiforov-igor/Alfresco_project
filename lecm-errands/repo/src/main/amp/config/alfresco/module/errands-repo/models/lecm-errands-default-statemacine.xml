@@ -3358,10 +3358,9 @@ if (doc) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = stm_document;
-  document.properties["lecm-errands:cancellation-signal"]=false;
-  document.properties["lecm-eds-aspect:completion-signal"]=false;
-  document.properties["lecm-eds-aspect:child-change-signal"]=false;
-  document.save();]]></value>
+  errands.resetCancelSignal(document);
+  edsDocument.resetCompletionSignal(document);
+  edsDocument.resetChildChangeSignal(document);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -5571,10 +5570,9 @@ if(doc){
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = stm_document;
-  document.properties["lecm-errands:cancellation-signal"]=false;
-  document.properties["lecm-eds-aspect:completion-signal"]=false;
-  document.properties["lecm-eds-aspect:child-change-signal"]=false;
-  document.save();]]></value>
+  errands.resetCancelSignal(document);
+  edsDocument.resetCompletionSignal(document);
+  edsDocument.resetChildChangeSignal(document);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -8102,10 +8100,9 @@ if (document != null) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = stm_document;
-  document.properties["lecm-errands:cancellation-signal"]=false;
-  document.properties["lecm-eds-aspect:completion-signal"]=false;
-  document.properties["lecm-eds-aspect:child-change-signal"]=false;
-  document.save();]]></value>
+  errands.resetCancelSignal(document);
+  edsDocument.resetCompletionSignal(document);
+  edsDocument.resetChildChangeSignal(document);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -10391,10 +10388,9 @@ if (document) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var document = stm_document;
-  document.properties["lecm-errands:cancellation-signal"]=false;
-  document.properties["lecm-eds-aspect:completion-signal"]=false;
-  document.properties["lecm-eds-aspect:child-change-signal"]=false;
-  document.save();]]></value>
+  errands.resetCancelSignal(document);
+  edsDocument.resetCompletionSignal(document);
+  edsDocument.resetChildChangeSignal(document);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>

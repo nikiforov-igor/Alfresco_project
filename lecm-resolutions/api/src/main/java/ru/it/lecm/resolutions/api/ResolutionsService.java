@@ -64,4 +64,5 @@ public interface ResolutionsService {
     NodeRef createDashletSettingsNode();
 
     void sendAnnulSignal(NodeRef resolution, String reason);
+    void resetAnnulSignal(NodeRef resolution);
 }
