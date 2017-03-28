@@ -211,7 +211,7 @@
 							        templateCode = 'RESERVATION_REQUEST_FINISHED_APPROVED_WITHOUT_DATE';
 							    }
 							} else if (decision == 'REJECTED') {
-							    document.properties['lecm-reservation-aspects:isReserved'] = true;
+							    document.properties['lecm-reservation-aspects:isReserved'] = false;
 
 							    /* Запись в бизнес журнал если решение плохое: */
 							    var commentLink = "<a href='#' title=" + comment + ">отклонил</a>";

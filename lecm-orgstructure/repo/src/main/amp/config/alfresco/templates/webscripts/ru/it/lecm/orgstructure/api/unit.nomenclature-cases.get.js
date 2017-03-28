@@ -16,5 +16,5 @@
     if (unit) {
 	    nomenclatureUnitSections = unit.sourceAssocs['lecm-os:nomenclature-unit-section-unit-assoc'];
     }
-    model.hasNomenclatureCases = nomenclatureUnitSections.some(hasCases);
+    model.hasNomenclatureCases = nomenclatureUnitSections ? nomenclatureUnitSections.some(hasCases) : false;
 })();

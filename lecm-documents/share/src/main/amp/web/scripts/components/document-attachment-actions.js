@@ -148,11 +148,10 @@ LogicECM.DocumentAttachmentActions = LogicECM.DocumentAttachmentActions || {};
 						message: this.msg("message.edit-cancel.failure", displayName)
 					},
 					webscript: {
-						name: "lecm/unlock?nodeRef={nodeRef}",
-						stem: Alfresco.constants.PROXY_URI,
-						method: Alfresco.util.Ajax.GET,
+						method: Alfresco.util.Ajax.POST,
+						name: "cancel-checkout/node/{nodeRef}",
 						params: {
-							nodeRef: file.nodeRef
+							nodeRef: record.jsNode.nodeRef.uri
 						}
 					}
 				});
