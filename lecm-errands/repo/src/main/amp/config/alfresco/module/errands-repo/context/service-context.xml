@@ -204,6 +204,7 @@
         <property name="documentMembersService" ref="documentMembersService" />
         <property name="errandsService" ref="errandsService" />
         <property name="businessJournalService" ref="businessJournalService"/>
+        <property name="resolutionsService" ref="resolutionsService"/>
     </bean>
 
     <bean id="errandsCoexecutorReportAssociationPolicy" class="ru.it.lecm.errands.policy.ErrandsCoexecutorReportAssociationPolicy"
