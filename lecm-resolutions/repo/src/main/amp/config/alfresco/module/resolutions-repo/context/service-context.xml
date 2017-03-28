@@ -183,6 +183,10 @@
            init-method="init" depends-on="resolutions.LogicEcmBootstrap, documentConnectionService">
         <property name="policyComponent" ref="policyComponent"/>
         <property name="documentConnectionService" ref="documentConnectionService"/>
+        <property name="documentMembersService" ref="documentMembersService"/>
+        <property name="errandsService" ref="errandsService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="resolutionsService" ref="resolutionsService"/>
     </bean>
 
     <bean id="resolutionBaseDocumentType" parent="edsBaseDocumentTypeBean" depends-on="resolutions.LogicEcmBootstrap">

@@ -122,7 +122,15 @@
                                         var newDueDate = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1NewDate");
                                         var processChild = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1ChildDueDate");
                                         var changeDateReason = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1DateReason");
-                                        processDueDateChanges(dateRadio, newDueDate, processChild, changeDateReason);
+                                        var params = {
+                                            isSignal: false,
+                                            document: document,
+                                            dateRadio: dateRadio,
+                                            newDueDate: newDueDate,
+                                            processChild: processChild,
+                                            changeDateReason: changeDateReason
+                                        };
+                                        processDueDateChanges(params);
                                     }
                                 }
                             }
