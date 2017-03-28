@@ -1,14 +1,13 @@
 <extension>
     <modules>
         <module>
-            <id>Statemachine Editor Header</id>
+            <id>Theme share header EDS extension</id>
             <version>1.0</version>
             <auto-deploy>true</auto-deploy>
-			<auto-deploy-index>200</auto-deploy-index>
             <customizations>
                 <customization>
                     <targetPackageRoot>org.alfresco.share.header</targetPackageRoot>
-                    <sourcePackageRoot>ru.it.lecm.statemachine.editor.header</sourcePackageRoot>
+                    <sourcePackageRoot>ru.it.lecm.eds.header</sourcePackageRoot>
                 </customization>
             </customizations>
         </module>

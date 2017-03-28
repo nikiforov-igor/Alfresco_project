@@ -206,15 +206,6 @@ var appItems = [
 		name: "logic_ecm/dummy"
 	},
 	{
-		id: "SED_MENU_ITEM",
-		name: "alfresco/menus/AlfMenuBarItem",
-		config: {
-			id: "SED_MENU_ITEM",
-			label: msg.get("label.SED.menu.item"),
-			targetUrl: "arm?code=SED"
-		}
-	},
-	{
 		id: "HOME_MENU_ITEM",
 		name: "alfresco/menus/AlfMenuBarItem",
 		config: {
