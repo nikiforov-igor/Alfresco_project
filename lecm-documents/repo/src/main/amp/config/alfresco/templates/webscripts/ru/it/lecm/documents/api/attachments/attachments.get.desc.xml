@@ -9,7 +9,7 @@
 		Дополнительные необязательные параметры для получения вложений документа-основания
 		baseDocAssocName - имя ассоциации указывающей на документ основание
 	</description>
-    <url>/lecm/document/attachments/api/get?documentNodeRef={documentNodeRef}&amp;count={count}&amp;showEmptyCategory={showEmptyCategory}&amp;baseDocAssocName={baseDocAssocName}</url>
+    <url>/lecm/document/attachments/api/get?documentNodeRef={documentNodeRef}&amp;count={count}&amp;showEmptyCategory={showEmptyCategory}&amp;baseDocAssocName={baseDocAssocName}&amp;showBaseDocAttachmentsBottom={showBaseDocAttachmentsBottom}</url>
     <authentication>user</authentication>
     <transaction allow="readonly">required</transaction>
     <format default="json"/>

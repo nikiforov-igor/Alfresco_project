@@ -65,6 +65,9 @@
             <#if baseDocAssocName??>
                 baseDocAssocName: "${baseDocAssocName}",
             </#if>
+            <#if showBaseDocAttachmentsBottom??>
+                showBaseDocAttachmentsBottom: ${showBaseDocAttachmentsBottom?string},
+            </#if>
             nodeRef: "${nodeRef}"
         }).setMessages(${messages});
 
@@ -105,6 +108,9 @@
             itemId: "${nodeRef}",
             <#if baseDocAssocName??>
                 baseDocAssocName: "${baseDocAssocName}",
+            </#if>
+            <#if showBaseDocAttachmentsBottom??>
+                showBaseDocAttachmentsBottom: ${showBaseDocAttachmentsBottom?string},
             </#if>
             forTask: false
         });

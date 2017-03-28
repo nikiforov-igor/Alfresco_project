@@ -5,7 +5,8 @@
 
 		Дополнительные необязательные параметры для получения вложений документа-основания
 		baseDocAssocName - имя ассоциации указывающей на документ основание
+        showBaseDocAttachmentsBottom - показывать вложения документа основания внизу
 	</description>
     <family>document-dashlet</family>
-    <url>/lecm/components/dashlets/document-attachments?baseDocAssocName={baseDocAssocName}</url>
+    <url>/lecm/components/dashlets/document-attachments?baseDocAssocName={baseDocAssocName}&amp;showBaseDocAttachmentsBottom={showBaseDocAttachmentsBottom}</url>
 </webscript>
