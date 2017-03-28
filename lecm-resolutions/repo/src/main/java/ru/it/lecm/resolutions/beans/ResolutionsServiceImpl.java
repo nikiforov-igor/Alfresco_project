@@ -141,7 +141,7 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
         try {
             nodeService.setProperty(resolution, ResolutionsService.PROP_ANNUL_SIGNAL, false);
         } catch (ConcurrencyFailureException ex) {
-            logger.warn("Send signal at the same time", ex);
+            logger.warn("Reset signal at the same time", ex);
         }
     }
 

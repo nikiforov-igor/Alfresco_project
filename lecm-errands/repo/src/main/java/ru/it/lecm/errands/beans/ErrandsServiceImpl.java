@@ -658,7 +658,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         try {
             nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_CANCELLATION_SIGNAL, false);
         } catch (ConcurrencyFailureException ex) {
-            logger.warn("Send signal at the same time", ex);
+            logger.warn("Reset signal at the same time", ex);
         }
     }
 
