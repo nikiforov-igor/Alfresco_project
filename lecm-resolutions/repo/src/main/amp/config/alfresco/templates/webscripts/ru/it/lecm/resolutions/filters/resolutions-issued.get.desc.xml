@@ -1,6 +1,6 @@
 <webscript>
-    <shortname>Resolutions</shortname>
-    <description>Resolutions</description>
+    <shortname>Issued Resolutions Dashlet</shortname>
+    <description>Issued Resolutions Dashlet</description>
     <url>/lecm/resolutions/dashlet/issued</url>
     <format default="json"/>
     <authentication>user</authentication>
