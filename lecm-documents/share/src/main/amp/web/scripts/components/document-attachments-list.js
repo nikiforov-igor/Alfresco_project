@@ -40,7 +40,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
             options: {
                 nodeRef: null,
-                baseDocAssocName: null
+                baseDocAssocName: null,
+                showBaseDocAttachmentsBottom: false
             },
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -60,6 +61,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 };
                 if (this.options.baseDocAssocName) {
                     dataObj.baseDocAssocName = this.options.baseDocAssocName;
+                    dataObj.showBaseDocAttachmentsBottom = this.options.showBaseDocAttachmentsBottom;
                 }
                 Alfresco.util.Ajax.jsonGet(
                     {

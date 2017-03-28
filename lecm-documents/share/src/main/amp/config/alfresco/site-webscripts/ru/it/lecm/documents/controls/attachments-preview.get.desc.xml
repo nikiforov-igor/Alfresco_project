@@ -11,6 +11,7 @@ and open the template in the editor.
 
 		Дополнительные необязательные параметры для получения вложений документа-основания
 		baseDocAssocName - имя ассоциации указывающей на документ основание
+        showBaseDocAttachmentsBottom - показывать вложения документа-основания снизу
 	</description>
-	<url>/lecm/components/document/attachments-preview?baseDocAssocName={baseDocAssocName}</url>
+	<url>/lecm/components/document/attachments-preview?baseDocAssocName={baseDocAssocName}&amp;showBaseDocAttachmentsBottom={showBaseDocAttachmentsBottom}</url>
 </webscript>

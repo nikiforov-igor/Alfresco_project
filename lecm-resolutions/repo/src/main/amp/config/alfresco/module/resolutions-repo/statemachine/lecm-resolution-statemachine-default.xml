@@ -2294,6 +2294,30 @@ if (document) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>95fbbc5c-e4d4-410e-8194-0c7935b7ae5f</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/f8ba6f98-75bc-4451-bc9d-61410a7a00ad
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Сброс сигналов]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+  resolutionsScript.resetAnnulSignal(document);
+  edsDocument.resetCompletionSignal(document);
+  edsDocument.resetChangeDueDateSignal(document);]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -3268,6 +3292,29 @@ if (document) {
     }
   }
 })();]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>98c89171-8f3f-452e-8587-ed17473003f5</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/1f8670db-607b-4ef9-8158-08fb183c7f27
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Сброс сигналов]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+    resolutionsScript.resetAnnulSignal(document);
+  edsDocument.resetChangeDueDateSignal(document);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
@@ -4381,7 +4428,36 @@ if (document) {
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>1c7acc49-0222-49fd-8b8c-aa1ec8e11b82</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/dbc455f7-7e11-480d-9eee-b83a33660a5c
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Сброс сигналов]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+  resolutionsScript.resetAnnulSignal(document);
+  edsDocument.resetChangeDueDateSignal(document);]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>TimerAction</type>

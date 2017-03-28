@@ -359,6 +359,12 @@ public interface ErrandsService {
      */
     void sendCancelSignal(NodeRef errand, String reason, NodeRef signalSender);
 
+    /**
+     * Сброс сигнал о необходимости завершения в поручения
+     * @param errand документ
+     */
+    void resetCancelSignal(NodeRef errand);
+
     enum ModeChoosingExecutors {
         ORGANIZATION,
         UNIT

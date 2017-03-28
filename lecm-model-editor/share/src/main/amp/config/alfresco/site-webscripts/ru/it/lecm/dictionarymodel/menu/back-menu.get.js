@@ -5,7 +5,11 @@
 		statemachineId = page.url.args['statemachineId'];
 
 	type = ((docType) ? docType : ((statemachineId) ? statemachineId : '')).replace('_', ':');
-
+	
+	if (!nodeRef && !type) {
+		return;
+	}
+	
 	url = '/lecm/docmodels/item?nodeRef=' + nodeRef + '&type=' + type;
 
 	result = remote.connect('alfresco').get(url);

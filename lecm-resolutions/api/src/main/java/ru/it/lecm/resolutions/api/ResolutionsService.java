@@ -70,5 +70,11 @@ public interface ResolutionsService {
 
     void sendAnnulSignal(NodeRef resolution, String reason);
 
+    /**
+     * Сброс сигнала о необходимости аннулировать резолюцию
+     * @param resolution
+     */
+    void resetAnnulSignal(NodeRef resolution);
+
     NodeRef getResolutionBase(NodeRef resolution);
 }
