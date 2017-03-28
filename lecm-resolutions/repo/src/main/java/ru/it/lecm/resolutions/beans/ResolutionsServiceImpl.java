@@ -1,7 +1,6 @@
 package ru.it.lecm.resolutions.beans;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -11,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.ConcurrencyFailureException;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.eds.api.EDSDocumentService;
@@ -138,7 +138,11 @@ public class ResolutionsServiceImpl extends BaseBean implements ResolutionsServi
 
     @Override
     public void resetAnnulSignal(NodeRef resolution) {
-        nodeService.setProperty(resolution, ResolutionsService.PROP_ANNUL_SIGNAL, false);
+        try {
+            nodeService.setProperty(resolution, ResolutionsService.PROP_ANNUL_SIGNAL, false);
+        } catch (ConcurrencyFailureException ex) {
+            logger.warn("Send signal at the same time", ex);
+        }
     }
 
     private String getPropFromJson(JSONObject json, QName propQName) throws JSONException {

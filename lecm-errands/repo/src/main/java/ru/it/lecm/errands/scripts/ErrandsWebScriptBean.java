@@ -56,7 +56,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     private IWorkCalendar workCalendar;
     private NodeService nodeService;
     private DocumentConnectionService documentConnectionService;
-	private LecmTransactionHelper lecmTransactionHelper;
+    private LecmTransactionHelper lecmTransactionHelper;
     private ThreadPoolExecutor threadPoolExecutor;
     private TransactionService transactionService;
     private RepositoryStructureHelper repositoryStructureHelper;
@@ -65,8 +65,8 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     private DocumentAttachmentsService documentAttachmentsService;
 
     public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
-		this.lecmTransactionHelper = lecmTransactionHelper;
-	}
+        this.lecmTransactionHelper = lecmTransactionHelper;
+    }
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -84,9 +84,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         this.nodeService = nodeService;
     }
 
-	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
-		this.documentConnectionService = documentConnectionService;
-	}
+    public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
+        this.documentConnectionService = documentConnectionService;
+    }
 
     public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
         this.threadPoolExecutor = threadPoolExecutor;
@@ -103,6 +103,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
         this.documentAttachmentsService = documentAttachmentsService;
     }
+
     public void setCopyService(CopyService copyService) {
         this.copyService = copyService;
     }
@@ -124,51 +125,54 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         ISSUED_ERRANDS_DEADLINE_IMPORTANT
     }
 
-	public void setErrandsService(ErrandsService errandsService) {
-		this.errandsService = errandsService;
-	}
+    public void setErrandsService(ErrandsService errandsService) {
+        this.errandsService = errandsService;
+    }
 
-	/**
-	 * Получение узла с глобальными настройками поручений
-	 * @return узел с глобальными настройками поручений
-	 */
-	public ScriptNode getSettingsNode() {
+    /**
+     * Получение узла с глобальными настройками поручений
+     *
+     * @return узел с глобальными настройками поручений
+     */
+    public ScriptNode getSettingsNode() {
 //		TODO: Метод getSettingsNode ранее был типа getOrCreate, поэтому здесь надо бы проверить ноду на
 //		существование и создать при необходимости
 //              нода создаётся при инициализации бина
-		NodeRef settings = errandsService.getSettingsNode();
-		return new ScriptNode(settings, serviceRegistry, getScope());
-	}
+        NodeRef settings = errandsService.getSettingsNode();
+        return new ScriptNode(settings, serviceRegistry, getScope());
+    }
 
 
-        //TODO может быть создавать ноду с настройками при создании пользователя?
-        //Пока будем создавать здесь - при входе в персональные настройки.
+    //TODO может быть создавать ноду с настройками при создании пользователя?
+    //Пока будем создавать здесь - при входе в персональные настройки.
 
-	/**
-	 * Получение узла с настройка для поручений текущего пользователя
-	 * @return узел с настройками поручений для текущего пользователя
-	 */
-	public ScriptNode getCurrentUserSettingsNode() {
-		NodeRef settings = errandsService.getCurrentUserSettingsNode();
-		if(settings == null) {
+    /**
+     * Получение узла с настройка для поручений текущего пользователя
+     *
+     * @return узел с настройками поручений для текущего пользователя
+     */
+    public ScriptNode getCurrentUserSettingsNode() {
+        NodeRef settings = errandsService.getCurrentUserSettingsNode();
+        if (settings == null) {
 //			Вызывается без транзакции, поэтому обернём
-			RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+            RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 
-				@Override
-				public NodeRef execute() throws Throwable {
-					return errandsService.createCurrentUserSettingsNode();
-				}
-			};
-			settings = (NodeRef) lecmTransactionHelper.doInTransaction(cb, false);
-		}
-		return new ScriptNode(settings, serviceRegistry, getScope());
-	}
+                @Override
+                public NodeRef execute() throws Throwable {
+                    return errandsService.createCurrentUserSettingsNode();
+                }
+            };
+            settings = (NodeRef) lecmTransactionHelper.doInTransaction(cb, false);
+        }
+        return new ScriptNode(settings, serviceRegistry, getScope());
+    }
 
-	/**
-	 * Получение списка сотрудников, доступных текущему пользователю для выбора
-	 * исполнителя и соисполнителей
-	 * @return список доступных исполнителей (сотрудников)
-	 */
+    /**
+     * Получение списка сотрудников, доступных текущему пользователю для выбора
+     * исполнителя и соисполнителей
+     *
+     * @return список доступных исполнителей (сотрудников)
+     */
     public Scriptable getAvailableExecutors() {
         List<NodeRef> results = errandsService.getAvailableExecutors();
         if (results != null) {
@@ -177,11 +181,12 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return null;
     }
 
-	/**
-	 * Получение списка сотрудников, доступных данному пользователю для выбора
-	 * исполнителя и соисполнителей
-	 * @return список доступных исполнителей (сотрудников)
-	 */
+    /**
+     * Получение списка сотрудников, доступных данному пользователю для выбора
+     * исполнителя и соисполнителей
+     *
+     * @return список доступных исполнителей (сотрудников)
+     */
     public Scriptable getAvailableExecutors(ScriptNode employeeRef) {
         List<NodeRef> results = errandsService.getAvailableExecutors(employeeRef.getNodeRef());
         if (results != null) {
@@ -190,7 +195,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return null;
     }
 
-	public Scriptable getAvailableExecutors(String employeeRef) {
+    public Scriptable getAvailableExecutors(String employeeRef) {
         List<NodeRef> results = errandsService.getAvailableExecutors(new NodeRef(employeeRef));
         if (results != null) {
             return createScriptable(results);
@@ -198,12 +203,13 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return null;
     }
 
-	/**
-	 * Проверяет личные настройки "Без утверждения Инициатором"
-	 * @return true - если в личных настройках выбрано "Без утверждения
-	 * Инициатором"
-	 */
-	public boolean isDefaultWithoutInitiatorApproval() {
+    /**
+     * Проверяет личные настройки "Без утверждения Инициатором"
+     *
+     * @return true - если в личных настройках выбрано "Без утверждения
+     * Инициатором"
+     */
+    public boolean isDefaultWithoutInitiatorApproval() {
 //		TODO: Метод isDefaultWithoutInitiatorApproval в итоге вызывает метод getCurrentUserSettingsNode,
 //		который был ранее типа getOrCreate, теперь он разделён и надо проверить существование папки и
 //		при необходимости создать её в короткой транзакции
@@ -221,15 +227,15 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 ////			TODO: Явно вызывается из вебскрипта без транзакции
 //			lecmTransactionHelper.doInTransaction(cb, false);
 //		}
-		return  errandsService.isDefaultWithoutInitiatorApproval();
-	}
+        return errandsService.isDefaultWithoutInitiatorApproval();
+    }
 
-	/**
-	 * Получает инициатора по умолчанию из личных настроек
-	 *
-	 * @return ссылка на сотрудника
-	 */
-	public NodeRef getDefaultInitiator() {
+    /**
+     * Получает инициатора по умолчанию из личных настроек
+     *
+     * @return ссылка на сотрудника
+     */
+    public NodeRef getDefaultInitiator() {
 //		TODO: Метод getDefaultSubject в итоге вызывает метод getCurrentUserSettingsNode,
 //		который был ранее типа getOrCreate, теперь он разделён и надо проверить существование папки и
 //		при необходимости создать её в короткой транзакции
@@ -247,15 +253,15 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 ////			TODO: Явно вызывается из вебскрипта без транзакции
 //			lecmTransactionHelper.doInTransaction(cb, false);
 //		}
-		return  errandsService.getDefaultInitiator();
-	}
+        return errandsService.getDefaultInitiator();
+    }
 
-	/**
-	 * Получает тематику по умолчанию из личных настроек
-	 *
-	 * @return ссылка на элеменнт справочника "Тематика"
-	 */
-	public NodeRef getDefaultSubject() {
+    /**
+     * Получает тематику по умолчанию из личных настроек
+     *
+     * @return ссылка на элеменнт справочника "Тематика"
+     */
+    public NodeRef getDefaultSubject() {
 //		TODO: Метод getDefaultSubject в итоге вызывает метод getCurrentUserSettingsNode,
 //		который был ранее типа getOrCreate, теперь он разделён и надо проверить существование папки и
 //		при необходимости создать её в короткой транзакции
@@ -274,8 +280,8 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 ////			TODO: Явно вызывается из вебскрипта без транзакции
 //			lecmTransactionHelper.doInTransaction(cb, false);
 //		}
-		return  errandsService.getDefaultSubject();
-	}
+        return errandsService.getDefaultSubject();
+    }
 
     public Scriptable getMyDocumentErrands(ScriptNode document, String filter) {
         List<NodeRef> myErrands = errandsService.getFilterDocumentErrands(document.getNodeRef(), filter,
@@ -291,8 +297,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
     /**
      * Получить поручения на контроле
+     *
      * @param document ScriptNode документа
-     * @param filter фильтр
+     * @param filter   фильтр
      * @return массив нод поручений
      */
     public Scriptable getDocumentErrandsControlledMe(ScriptNode document, String filter) {
@@ -314,8 +321,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
     /**
      * Получение всех поручений по документу
+     *
      * @param document ScriptNode документа
-     * @param filter фильтр
+     * @param filter   фильтр
      * @return массив нод поручений
      */
     public Scriptable getDocumentErrandsAll(ScriptNode document, String filter) {
@@ -323,8 +331,8 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return createScriptable(errandsAll);
     }
 
-    public Scriptable getActiveErrands(Scriptable paths,int skipCount, int maxItems) {
-        List<NodeRef> activeErrands= errandsService.getActiveErrands(getElements(Context.getCurrentContext().getElements(paths)), skipCount, maxItems);
+    public Scriptable getActiveErrands(Scriptable paths, int skipCount, int maxItems) {
+        List<NodeRef> activeErrands = errandsService.getActiveErrands(getElements(Context.getCurrentContext().getElements(paths)), skipCount, maxItems);
         return createScriptable(activeErrands);
     }
 
@@ -332,25 +340,26 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         this.namespaceService = namespaceService;
     }
 
-    private ArrayList<String> getElements(Object[] object){
+    private ArrayList<String> getElements(Object[] object) {
         ArrayList<String> arrayList = new ArrayList<String>();
         for (Object obj : object) {
             if (obj != null && obj instanceof NativeJavaObject) {
                 NativeJavaObject element = (NativeJavaObject) obj;
                 arrayList.add((String) element.unwrap());
-            } else if (obj != null && obj instanceof String){
+            } else if (obj != null && obj instanceof String) {
                 arrayList.add(obj.toString());
             }
         }
         return arrayList;
     }
 
-    public Scriptable getErrandsDocs(Scriptable paths,int skipCount, int maxItems) {
+    public Scriptable getErrandsDocs(Scriptable paths, int skipCount, int maxItems) {
         return createScriptable(errandsService.getErrandsDocuments(getElements(Context.getCurrentContext().getElements(paths)), skipCount, maxItems));
     }
 
     /**
      * Получить список выданных текущим пользователем поручений по ключу (все, на исполнении, просроченные, с приближающимся сроком)
+     *
      * @return список поручений
      */
     public Scriptable getIssuedErrands(String filterType) {
@@ -389,92 +398,92 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         String issuedFilterQuery = "@" + PROP_ITINITATOR + ":\"" + currentEmployee.toString().replace(":", "\\:") + "\"";
 
         if (filterType != null && !"".equals(filterType)) {
-                switch (IssuedByMeEnum.valueOf(filterType.toUpperCase())) {
-                    //просроченные
-                    case ISSUED_ERRANDS_EXPIRED_IMPORTANT: {
-                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
-                    }
-                    case ISSUED_ERRANDS_EXPIRED: {
-                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_EXPIRED + ":true ";
-                        break;
-                    }
-                    // на ожидании исполнения
-                    case ISSUED_ERRANDS_EXECUTION_IMPORTANT: {
-                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
-                    }
-                    case ISSUED_ERRANDS_EXECUTION: {
-                        statuses = getErrandsStatuses(filters, EXECUTION_KEY);
-                        break;
-                    }
-                    // на исполнении
-                    case ISSUED_ERRANDS_ON_EXECUTION_IMPORTANT: {
-                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
-                    }
-                    case ISSUED_ERRANDS_ON_EXECUTION: {
-                        statuses = getErrandsStatuses(filters, ON_EXECUTION_KEY);
-                        break;
-                    }
-                    //на проверке отчета (на контроле)
-                    case ISSUED_ERRANDS_ON_CHECK_REPORT_IMPORTANT: {
-                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
-                    }
-                    case ISSUED_ERRANDS_ON_CHECK_REPORT: {
-                        statuses = getErrandsStatuses(filters, ON_REPORT_CHECK_KEY);
-                        break;
-                    }
-                    // на доработке
-                    case ISSUED_ERRANDS_ON_COMPLETION_IMPORTANT: {
-                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
-                    }
-                    case ISSUED_ERRANDS_ON_COMPLETION: {
-                        statuses = getErrandsStatuses(filters, ON_COMPLETION_KEY);
-                        break;
-                    }
-                    //с приближающимся сроком
-                    case ISSUED_ERRANDS_DEADLINE_IMPORTANT: {
-                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
-                    }
-                    case ISSUED_ERRANDS_DEADLINE: {
-                        Date now = new Date();
-
-                        Date deadlineDate = workCalendar.getNextWorkingDate(now, DEADLINE_DAY_COUNT, Calendar.DAY_OF_MONTH);
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.setTime(deadlineDate);
-                        calendar.set(Calendar.HOUR_OF_DAY, 0);
-                        calendar.set(Calendar.MINUTE, 0);
-                        calendar.set(Calendar.SECOND, 0);
-
-                        Date end = calendar.getTime();
-
-                        final String MIN = DateFormatISO8601.format(now);
-                        final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
-
-                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_EXEC_DATE + ":[\"" + MIN + " \" TO \"" + MAX + "\"]";
-
-                        break;
-                    }
-                    // все
-                    case ISSUED_ERRANDS_ALL_IMPORTANT: {
-                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
-                    }
-                    case ISSUED_ERRANDS_ALL: {
-                        break;
-                    }
-                    default: {
-                        break;
-                    }
+            switch (IssuedByMeEnum.valueOf(filterType.toUpperCase())) {
+                //просроченные
+                case ISSUED_ERRANDS_EXPIRED_IMPORTANT: {
+                    issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
                 }
+                case ISSUED_ERRANDS_EXPIRED: {
+                    issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_EXPIRED + ":true ";
+                    break;
+                }
+                // на ожидании исполнения
+                case ISSUED_ERRANDS_EXECUTION_IMPORTANT: {
+                    issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
+                }
+                case ISSUED_ERRANDS_EXECUTION: {
+                    statuses = getErrandsStatuses(filters, EXECUTION_KEY);
+                    break;
+                }
+                // на исполнении
+                case ISSUED_ERRANDS_ON_EXECUTION_IMPORTANT: {
+                    issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
+                }
+                case ISSUED_ERRANDS_ON_EXECUTION: {
+                    statuses = getErrandsStatuses(filters, ON_EXECUTION_KEY);
+                    break;
+                }
+                //на проверке отчета (на контроле)
+                case ISSUED_ERRANDS_ON_CHECK_REPORT_IMPORTANT: {
+                    issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
+                }
+                case ISSUED_ERRANDS_ON_CHECK_REPORT: {
+                    statuses = getErrandsStatuses(filters, ON_REPORT_CHECK_KEY);
+                    break;
+                }
+                // на доработке
+                case ISSUED_ERRANDS_ON_COMPLETION_IMPORTANT: {
+                    issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
+                }
+                case ISSUED_ERRANDS_ON_COMPLETION: {
+                    statuses = getErrandsStatuses(filters, ON_COMPLETION_KEY);
+                    break;
+                }
+                //с приближающимся сроком
+                case ISSUED_ERRANDS_DEADLINE_IMPORTANT: {
+                    issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
+                }
+                case ISSUED_ERRANDS_DEADLINE: {
+                    Date now = new Date();
+
+                    Date deadlineDate = workCalendar.getNextWorkingDate(now, DEADLINE_DAY_COUNT, Calendar.DAY_OF_MONTH);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(deadlineDate);
+                    calendar.set(Calendar.HOUR_OF_DAY, 0);
+                    calendar.set(Calendar.MINUTE, 0);
+                    calendar.set(Calendar.SECOND, 0);
+
+                    Date end = calendar.getTime();
+
+                    final String MIN = DateFormatISO8601.format(now);
+                    final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
+
+                    issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_EXEC_DATE + ":[\"" + MIN + " \" TO \"" + MAX + "\"]";
+
+                    break;
+                }
+                // все
+                case ISSUED_ERRANDS_ALL_IMPORTANT: {
+                    issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
+                }
+                case ISSUED_ERRANDS_ALL: {
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
         }
 
         List<NodeRef> refs = documentService.getDocumentsByFilter(types, paths, statuses, issuedFilterQuery, sort);
         return createScriptable(refs);
     }
 
-    private List<String> getErrandsStatuses (Map<String, String> filters, String key) {
+    private List<String> getErrandsStatuses(Map<String, String> filters, String key) {
         List<String> statuses = new ArrayList<String>();
         String filtersStr = filters.get(key);
         String[] statusesArray = filtersStr.split(",");
-        for (String st:statusesArray) {
+        for (String st : statusesArray) {
             if (st != null && !st.isEmpty()) {
                 statuses.add(st.trim());
             }
@@ -484,6 +493,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
     /**
      * Получить строку с параметрами для списка поручений. Метод используется в дашлете "Выданные мною поручения" для формирования адреса перехода по ссылкам
+     *
      * @return строка с параметрами (query=[query]&formId=[formId]&filterOver=[filterOver]#filter=[filter]
      */
     public String getIssuedFilter(String filterType) {
@@ -533,7 +543,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         if (NodeRef.isNodeRef(parent)) {
             NodeRef parentRef = new NodeRef(parent);
             QName type = nodeService.getType(parentRef);
-			Scriptable result = null;
+            Scriptable result = null;
             if (type.equals(ErrandsService.TYPE_ERRANDS)) {
                 Set<NodeRef> employees = new HashSet<NodeRef>();
                 //соисполнители - подходят!
@@ -549,12 +559,12 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                 }
                 result = createScriptable(new ArrayList<>(employees));
             } else {
-				List<NodeRef> availableExecutors = errandsService.getAvailableExecutors();
-				if (availableExecutors != null) {
-					result = createScriptable(availableExecutors);
-				}
-			}
-			return result;
+                List<NodeRef> availableExecutors = errandsService.getAvailableExecutors();
+                if (availableExecutors != null) {
+                    result = createScriptable(availableExecutors);
+                }
+            }
+            return result;
         }
         return null;
     }
@@ -571,44 +581,44 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return null;
     }
 
-	/**
-	 * Получение папки со ссылками
-	 *
-	 * @param documentRef nodeRef документа
-	 * @return папка со ссылками
-	 */
-    public ScriptNode getLinkFolder(String documentRef){
+    /**
+     * Получение папки со ссылками
+     *
+     * @param documentRef nodeRef документа
+     * @return папка со ссылками
+     */
+    public ScriptNode getLinkFolder(String documentRef) {
 //		TODO: Метод getLinksFolderRef,
 //		был ранее типа getOrCreate, теперь он разделён и надо проверить существование папки и
 //		при необходимости создать её в короткой транзакции
 //              а может быть создавать её при создании документа?
         ParameterCheck.mandatory("documentRef", documentRef);
         final NodeRef document = new NodeRef(documentRef);
-		NodeRef linksFolderRef = errandsService.getLinksFolderRef(document);
-		if(linksFolderRef == null) {
-			RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef> () {
+        NodeRef linksFolderRef = errandsService.getLinksFolderRef(document);
+        if (linksFolderRef == null) {
+            RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 
-				@Override
-				public NodeRef execute() throws Throwable {
-					return errandsService.createLinksFolderRef(document);
-				}
+                @Override
+                public NodeRef execute() throws Throwable {
+                    return errandsService.createLinksFolderRef(document);
+                }
 
-			};
+            };
 
 //			TODO: Явно вызывается из вебскрипта без транзакции
-			linksFolderRef = (NodeRef) lecmTransactionHelper.doInTransaction(cb, false);
-		}
+            linksFolderRef = (NodeRef) lecmTransactionHelper.doInTransaction(cb, false);
+        }
         ParameterCheck.mandatory("documentRef", documentRef);
         return new ScriptNode(linksFolderRef, serviceRegistry, getScope());
     }
 
-	/**
-	 * Возвращает ссылки на внутренние и внешние объекты системы из формы
-	 * поручения.
-	 *
-	 * @param documentRef nodeRef документа
-	 * @return массив ссылок
-	 */
+    /**
+     * Возвращает ссылки на внутренние и внешние объекты системы из формы
+     * поручения.
+     *
+     * @param documentRef nodeRef документа
+     * @return массив ссылок
+     */
     public Scriptable getLinks(String documentRef) {
 //		TODO: Метод getLinks в итоге вызывает метод getLinksFolderRef,
 //		который был ранее типа getOrCreate, теперь он разделён и надо проверить существование папки и
@@ -635,15 +645,15 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return createScriptable(links);
     }
 
-	/**
-	 * Возвращает ссылки на внутренние и внешние объекты системы из формы
-	 * поручения.
-	 *
-	 * @param documentRef nodeRef документа
-	 * @param association ассоциация, например: "lecm-errands:links-assoc",
-	 * "lecm-errands:execution-links-assoc"
-	 * @return массив ссылок
-	 */
+    /**
+     * Возвращает ссылки на внутренние и внешние объекты системы из формы
+     * поручения.
+     *
+     * @param documentRef nodeRef документа
+     * @param association ассоциация, например: "lecm-errands:links-assoc",
+     *                    "lecm-errands:execution-links-assoc"
+     * @return массив ссылок
+     */
     public Scriptable getLinksByAssociation(String documentRef, String association) {
         ParameterCheck.mandatory("documentRef", documentRef);
         NodeRef document = new NodeRef(documentRef);
@@ -651,57 +661,58 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return createScriptable(links);
     }
 
-	/**
-	 * Создание ссылки lecm-links:link
-	 *
-	 * @param nodeRef nodeRef документf
-	 * @param name название ссылки
-	 * @param url ссылка например: http://www.test
-	 * @param isExecute true создание "lecm-errands:links-assoc" ассоциации
-	 * false создание "lecm-errands:execution-links-assoc" оссоциации
-	 * @return ссылка
-	 */
-    public NodeRef createLinks(String nodeRef, String name, String url, boolean isExecute){
+    /**
+     * Создание ссылки lecm-links:link
+     *
+     * @param nodeRef   nodeRef документf
+     * @param name      название ссылки
+     * @param url       ссылка например: http://www.test
+     * @param isExecute true создание "lecm-errands:links-assoc" ассоциации
+     *                  false создание "lecm-errands:execution-links-assoc" оссоциации
+     * @return ссылка
+     */
+    public NodeRef createLinks(String nodeRef, String name, String url, boolean isExecute) {
 //		TODO: Метод createLinks в итоге вызывает метод getLinksFolderRef,
 //		который был ранее типа getOrCreate, теперь он разделён и надо проверить существование папки и
 //		при необходимости создать её в короткой транзакции
-		NodeRef document = new NodeRef(nodeRef);
-		if(errandsService.getLinksFolderRef(document) == null) {
-			try {
-				errandsService.createLinksFolderRef(document);
-			} catch (WriteTransactionNeededException ex) {
-				throw new RuntimeException("Can't create links folder", ex);
-			}
-		}
+        NodeRef document = new NodeRef(nodeRef);
+        if (errandsService.getLinksFolderRef(document) == null) {
+            try {
+                errandsService.createLinksFolderRef(document);
+            } catch (WriteTransactionNeededException ex) {
+                throw new RuntimeException("Can't create links folder", ex);
+            }
+        }
 
         return errandsService.createLinks(document, name, url, isExecute);
     }
 
-	/**
-	 * Сохранение отчёта об исполнении
-	 *
-	 * @param documentRef nodeRef документа
-	 * @param report текст отчёта об исполнении
-	 */
-	public void setExecutionReport(String documentRef, String report) {
-		ParameterCheck.mandatory("documentRef", documentRef);
-		ParameterCheck.mandatory("report", report);
+    /**
+     * Сохранение отчёта об исполнении
+     *
+     * @param documentRef nodeRef документа
+     * @param report      текст отчёта об исполнении
+     */
+    public void setExecutionReport(String documentRef, String report) {
+        ParameterCheck.mandatory("documentRef", documentRef);
+        ParameterCheck.mandatory("report", report);
 
-		errandsService.setExecutionReport(new NodeRef(documentRef), report);
-	}
+        errandsService.setExecutionReport(new NodeRef(documentRef), report);
+    }
 
-	public Scriptable getChildErrands(String documentRef) {
-		ParameterCheck.mandatory("documentRef", documentRef);
-		NodeRef document = new NodeRef(documentRef);
-		if (nodeService.exists(document)) {
-			List<NodeRef> childErrands = errandsService.getChildErrands(document);
-			return createScriptable(childErrands);
-		}
-		return null;
-	}
+    public Scriptable getChildErrands(String documentRef) {
+        ParameterCheck.mandatory("documentRef", documentRef);
+        NodeRef document = new NodeRef(documentRef);
+        if (nodeService.exists(document)) {
+            List<NodeRef> childErrands = errandsService.getChildErrands(document);
+            return createScriptable(childErrands);
+        }
+        return null;
+    }
 
     /**
      * Получение списка нод подчиненных резолюций
+     *
      * @param documentRef документ
      * @return список нод подчиненных резолюций
      */
@@ -717,11 +728,11 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
     public ScriptNode getDashletSettings() {
         NodeRef settings = errandsService.getDashletSettingsNode();
-        if(settings == null){
-        	settings = errandsService.createDashletSettingsNode();
+        if (settings == null) {
+            settings = errandsService.createDashletSettingsNode();
         }
-        if(settings != null) {
-        	return new ScriptNode(settings, serviceRegistry, getScope());
+        if (settings != null) {
+            return new ScriptNode(settings, serviceRegistry, getScope());
         }
         return null;
     }
@@ -963,12 +974,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
             errandsService.sendCancelSignal(errand, reason, signalSender);
         }
     }
+
     public void resetCancelSignal(ScriptNode doc) {
-        if (doc != null) {
-            NodeRef document = doc.getNodeRef();
-            if (document != null) {
-                errandsService.resetCancelSignal(document);
-            }
-        }
+        ParameterCheck.mandatory("nodeRef", doc.getNodeRef());
+        errandsService.resetCancelSignal(doc.getNodeRef());
     }
 }

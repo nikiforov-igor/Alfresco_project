@@ -4,8 +4,6 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
 import org.alfresco.repo.node.getchildren.FilterProp;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -16,7 +14,7 @@ import org.alfresco.util.FileFilterMode;
 import org.alfresco.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEvent;
+import org.springframework.dao.ConcurrencyFailureException;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmObjectsService;
 import ru.it.lecm.base.beans.TransactionNeededException;
@@ -657,7 +655,11 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
     @Override
     public void resetCancelSignal(NodeRef errand) {
-        nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_CANCELLATION_SIGNAL, false);
+        try {
+            nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_CANCELLATION_SIGNAL, false);
+        } catch (ConcurrencyFailureException ex) {
+            logger.warn("Send signal at the same time", ex);
+        }
     }
 
 }
