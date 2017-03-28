@@ -5,7 +5,7 @@
 function main() {
     AlfrescoUtil.param("nodeRef");
 	var baseDocAssocName = AlfrescoUtil.param("baseDocAssocName", null);
-	var showBaseDocAttachmentsBottom = AlfrescoUtil.param("showBaseDocAttachmentsBottom", false);
+	var showBaseDocAttachmentsBottom = AlfrescoUtil.param("showBaseDocAttachmentsBottom", "false").toLowerCase() == "true";
 	var hasViewListPerm = false;
 	var isMlSupported;
 	var mlValue;

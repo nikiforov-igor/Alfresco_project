@@ -6,7 +6,7 @@ function main() {
 	AlfrescoUtil.param("nodeRef");
 	AlfrescoUtil.param("view", "");
 	var baseDocAssocName = AlfrescoUtil.param("baseDocAssocName", null);
-	var showBaseDocAttachmentsBottom = AlfrescoUtil.param("showBaseDocAttachmentsBottom", false);
+	var showBaseDocAttachmentsBottom = AlfrescoUtil.param("showBaseDocAttachmentsBottom", "false").toLowerCase() == "true";
 	var hasPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
 	if (hasPerm) {
 		var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
