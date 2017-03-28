@@ -1,3 +1,9 @@
-var typeDef = base.getType(args["statemachineId"].replace("_", ":"));
+var statemachineId = args["statemachineId"],
+	typeDef;
 
-model.title = typeDef.getTitle();
+if (statemachineId) {
+	typeDef = base.getType(statemachineId.replace("_", ":"));
+	model.title = typeDef.getTitle();
+} else {
+	status.setCode(500, "statemachineId is mandatory parameter!");
+}
