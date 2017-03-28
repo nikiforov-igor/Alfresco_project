@@ -34,7 +34,7 @@ function processDueDateChanges(params) {
         if (!isSignal) {
             document.properties["lecm-errands:limitation-date"] = newDueDate;
             if (oldLimitDate && oldLimitRadio != "LIMITLESS") {
-                shiftSize = new Date(newLimitationDate.getTime() - oldLimitDate.getTime());
+                shiftSize = newLimitationDate.getTime() - oldLimitDate.getTime();
             }
         } else {
             if (oldLimitDate && oldLimitRadio != "LIMITLESS") {
