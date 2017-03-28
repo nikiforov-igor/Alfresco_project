@@ -7,8 +7,8 @@
 }
 
 #main-region {
-    width: auto;
-    overflow: hidden;
+    float: left;
+    width: 50%;
 }
 
 #custom-region.split{
