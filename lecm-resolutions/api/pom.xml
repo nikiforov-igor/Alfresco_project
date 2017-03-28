@@ -24,7 +24,7 @@
         <dependency>
             <groupId>ru.it.lecm.documents</groupId>
             <artifactId>documents-repo-api</artifactId>
-            <version>1.8.7</version>
+            <version>${platform.version}</version>
         </dependency>
     </dependencies>
 
