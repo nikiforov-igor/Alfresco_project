@@ -1,4 +1,8 @@
-function processDueDateChanges (dateRadio, newDueDate, processChild, changeDateReason) {
+function processDueDateChanges(params) {
+    var document = params.document;
+    var currentUser = orgstructure.getCurrentEmployee();
+    var processChild, changeDateReason, newDueDate, dateRadio;
+    var isSignal = params.isSignal;
     var logObjects = [];
     var logText;
     var changed = true;
@@ -8,11 +12,37 @@ function processDueDateChanges (dateRadio, newDueDate, processChild, changeDateR
     var newLimitationDate = null;
     var oldLimitDate = document.properties["lecm-errands:limitation-date"];
     var oldLimitRadio = document.properties["lecm-errands:limitation-date-radio"];
+    if (isSignal) {
+        limitless = document.properties["lecm-eds-aspect:duedate-limitless"];
+        shiftSize = document.properties["lecm-eds-aspect:duedate-shift-size"];
+        newDueDate = document.properties["lecm-eds-aspect:new-limitation-date"];
+        changeDateReason = document.properties["lecm-eds-aspect:change-duedate-reason"];
+        processChild = true;
+        if (limitless) {
+            dateRadio = "LIMITLESS";
+        } else {
+            dateRadio = "DATE";
+        }
+    } else {
+         processChild = params.processChild;
+         changeDateReason = params.changeDateReason;
+         newDueDate = params.newDueDate;
+         dateRadio = params.dateRadio;
+    }
     if (dateRadio == "DATE") {
-        document.properties["lecm-errands:limitation-date"] = newDueDate;
         newLimitationDate = new Date(newDueDate.getTime());
-        if (oldLimitDate && oldLimitRadio != "LIMITLESS") {
-            shiftSize = new Date(newLimitationDate.getTime() - oldLimitDate.getTime());
+        if (!isSignal) {
+            document.properties["lecm-errands:limitation-date"] = newDueDate;
+            if (oldLimitDate && oldLimitRadio != "LIMITLESS") {
+                shiftSize = new Date(newLimitationDate.getTime() - oldLimitDate.getTime());
+            }
+        } else {
+            if (oldLimitDate && oldLimitRadio != "LIMITLESS") {
+                newLimitationDate = new Date(oldLimitDate.getTime() + shiftSize);
+                document.properties["lecm-errands:limitation-date"] = newLimitationDate;
+            } else {
+                document.properties["lecm-errands:limitation-date"] = newLimitationDate;
+            }
         }
         var day = utils.pad(newLimitationDate.getDate(), 2);
         var month = utils.pad(newLimitationDate.getMonth() + 1, 2);
@@ -24,11 +54,7 @@ function processDueDateChanges (dateRadio, newDueDate, processChild, changeDateR
         wfeDate.setDate(wfeDate.getDate() + halfLimitDays);
         document.properties["lecm-errands:half-limit-date"] = wfeDate;
         var shortLimitDays = edsGlobalSettings.getSettingsShortLimitDays();
-        if (fromWFELimitDays <= shortLimitDays) {
-            document.properties["lecm-errands:is-limit-short"] = true;
-        } else {
-            document.properties["lecm-errands:is-limit-short"] = false;
-        }
+        document.properties["lecm-errands:is-limit-short"] = fromWFELimitDays <= shortLimitDays;
         document.properties["lecm-errands:limitation-date-radio"] = dateRadio;
     } else if (dateRadio == "LIMITLESS") {
         limitless = true;
@@ -38,7 +64,7 @@ function processDueDateChanges (dateRadio, newDueDate, processChild, changeDateR
             document.properties["lecm-errands:is-limit-short"] = false;
             document.properties["lecm-errands:half-limit-date"] = null;
             dueDateString = "Без срока";
-        } else if (oldLimitRadio == "LIMITLESS" || !oldLimitDate) {
+        } else {
             changed = false;
         }
     }
@@ -52,17 +78,22 @@ function processDueDateChanges (dateRadio, newDueDate, processChild, changeDateR
         if (childrenResolutions) {
             children = children.concat(childrenResolutions);
         }
+        lecmPermission.pushAuthentication();
+        lecmPermission.setRunAsUserSystem();
         children.forEach(function (child) {
-            child.properties["lecm-eds-aspect:duedate-shift-size"] = shiftSize;
-            child.properties["lecm-eds-aspect:duedate-limitless"] = limitless;
-            child.properties["lecm-eds-aspect:new-limitation-date"] = newLimitationDate;
-            child.properties["lecm-eds-aspect:change-duedate-reason"] = changeDateReason;
-            child.save();
+            edsDocument.sendChangeDueDateSignal(child, shiftSize, limitless, newLimitationDate, changeDateReason);
         });
+        lecmPermission.popAuthentication();
     }
     if (changed) {
+        lecmPermission.pushAuthentication();
+        lecmPermission.setRunAsUserSystem();
         document.properties["lecm-errands:limitation-date-text"] = dueDateString;
         document.save();
+        if (isSignal) {
+            edsDocument.resetChangeDueDateSignal(document);
+        }
+        lecmPermission.popAuthentication();
         var recipients = [];
         var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
         var coexecutorsAssoc = document.assocs["lecm-errands:coexecutors-assoc"];

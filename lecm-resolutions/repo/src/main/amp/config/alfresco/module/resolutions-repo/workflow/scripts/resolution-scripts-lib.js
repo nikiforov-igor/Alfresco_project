@@ -6,7 +6,8 @@ var LECMResolutionActions = {
         var reason = document.properties["lecm-eds-aspect:change-duedate-reason"];
 
         var oldLimitRadio = document.properties["lecm-resolutions:limitation-date-radio"];
-
+        lecmPermission.pushAuthentication();
+        lecmPermission.setRunAsUserSystem();
         if (limitless) {
             if (oldLimitRadio != "LIMITLESS") {
                 document.properties["lecm-resolutions:limitation-date-radio"] = "LIMITLESS";
@@ -26,6 +27,7 @@ var LECMResolutionActions = {
             }
             document.save();
         }
+        lecmPermission.popAuthentication();
 
         var recipients = [];
         var authorAssoc = document.assocs["lecm-resolutions:author-assoc"];
@@ -53,7 +55,8 @@ var LECMResolutionActions = {
 
         var logText = base.wrapperTitle("Изменен", reason) + " срок исполнения резолюции. Причина изменения: " + reason;
         businessJournal.log(document.nodeRef.toString(), "EDS_CHANGE_DUE_DATE", logText, []);
-
+        lecmPermission.pushAuthentication();
+        lecmPermission.setRunAsUserSystem();
         var childrenErrands = errands.getChildErrands(document.nodeRef.toString());
         if (childrenErrands && childrenErrands.length) {
             childrenErrands.forEach(function (errand) {
@@ -62,6 +65,7 @@ var LECMResolutionActions = {
         }
 
         edsDocument.resetChangeDueDateSignal(document);
+        lecmPermission.popAuthentication();
     },
 
     processChangeChildSignal: function (document) {

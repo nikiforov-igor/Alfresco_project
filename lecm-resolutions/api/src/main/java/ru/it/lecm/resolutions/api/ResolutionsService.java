@@ -65,4 +65,6 @@ public interface ResolutionsService {
 
     void sendAnnulSignal(NodeRef resolution, String reason);
     void resetAnnulSignal(NodeRef resolution);
+
+    NodeRef getResolutionBase(NodeRef resolution);
 }
