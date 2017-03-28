@@ -963,4 +963,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
             errandsService.sendCancelSignal(errand, reason, signalSender);
         }
     }
+
+    public void resetCancelSignal(ScriptNode doc) {
+        ParameterCheck.mandatory("nodeRef", doc.getNodeRef());
+        errandsService.resetCancelSignal(doc.getNodeRef());
+    }
 }

@@ -2,6 +2,7 @@ package ru.it.lecm.resolutions.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.util.ParameterCheck;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.resolutions.api.ResolutionsService;
@@ -38,7 +39,10 @@ public class ResolutionsWebScriptBean extends BaseWebScript {
             resolutionsService.sendAnnulSignal(resolution, reason);
         }
     }
-
+    public void resetAnnulSignal(ScriptNode doc) {
+        ParameterCheck.mandatory("nodeRef", doc.getNodeRef());
+        resolutionsService.resetAnnulSignal(doc.getNodeRef());
+    }
     /**
      * Возвращает NodeRef настроек дашлетов для резолюций
      * @return NodeRef настроек дашлетов для резолюций

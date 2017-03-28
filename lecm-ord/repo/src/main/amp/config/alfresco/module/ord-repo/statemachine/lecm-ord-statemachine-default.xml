@@ -10421,6 +10421,28 @@ if (doc) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>27761ca4-9311-43e4-b120-d20502d71700</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/90118d76-ca0a-4e50-b84f-0811af442d5f
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Сброс сигналов]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+  edsDocument.resetChildChangeSignal(document);]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -11581,6 +11603,28 @@ if (doc) {
   doc.properties["lecm-ord:transition-to-on-execution-date"] = new Date();
   doc.save();
 }]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>1c1720b3-b8d2-40af-af02-773fb148a9f8</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/20f72246-1f78-497f-8f12-a85a634c1855
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Сброс сигналов]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = stm_document;
+  edsDocument.resetChildChangeSignal(document);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
