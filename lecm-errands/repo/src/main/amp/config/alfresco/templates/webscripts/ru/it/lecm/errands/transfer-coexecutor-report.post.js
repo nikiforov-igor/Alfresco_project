@@ -15,7 +15,7 @@ if (reportRefs && reportRefs.length) {
     var executionReportText = document.properties["lecm-errands:execution-report"];
     var executionReportStatus = document.properties["lecm-errands:execution-report-status"];
     var formText = executionReportStatus != "PROJECT" ? "" : executionReportText;
-    formText += reportRefs.length > 1 ? "Использованы отчеты Соисполнителей:" : "";
+    formText += reportRefs.length > 1 ? "\nИспользованы отчеты Соисполнителей:" : "";
 
     if (executionReportStatus == "PROJECT") {
         if (documentConnectionsAssoc) {
