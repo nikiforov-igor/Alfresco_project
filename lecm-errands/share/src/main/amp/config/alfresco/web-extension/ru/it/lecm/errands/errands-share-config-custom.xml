@@ -2726,6 +2726,11 @@
                             </control-param>
                         </control>
                     </field>
+                    <field id="lecmErrandWf:changeControllerNewController">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                        </control>
+                    </field>
                     <field id="lecmErrandWf:changeControllerReason">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">7</control-param>
