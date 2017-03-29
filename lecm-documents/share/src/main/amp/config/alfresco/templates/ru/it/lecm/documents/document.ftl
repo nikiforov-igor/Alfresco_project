@@ -113,7 +113,25 @@
                     <@region id="dashlet-panel" scope="template"/>
 	                <@region id="rating" scope="template"/>
 	            </div>
-	            <div id="custom-region" class="hidden1"></div>
+                <#if documentType??>
+                    <script type="text/javascript">//<![CDATA[
+                    var PANEL_SPLITED = LogicECM.services.documentViewPreferences.getPanelSplited();
+                    if (PANEL_SPLITED) {
+                        Dom.addClass("main-region", "split")
+                    }
+                    YAHOO.Bubbling.on("panelSplitedChanged", function () {
+                        var PANEL_SPLITED = LogicECM.services.documentViewPreferences.getPanelSplited();
+                        var mainRegion = Dom.get("main-region");
+
+                        if (PANEL_SPLITED) {
+                            Dom.addClass(mainRegion, "split");
+                        } else {
+                            Dom.removeClass(mainRegion, "split");
+                        }
+
+                    });
+                    //]]></script>
+                </#if>
 	        </div>
         </div>
     </#if>
