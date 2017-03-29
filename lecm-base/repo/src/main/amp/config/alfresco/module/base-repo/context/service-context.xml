@@ -31,9 +31,12 @@
 		<property name="lecmTransactionHelper" ref="lecmTransactionHelper"/>
 	</bean>
 
-	<bean id="lecmServicesRegistry" class="ru.it.lecm.base.beans.LecmServicesRegistryImpl"
-		  p:lecmTransactionHelper-ref="lecmTransactionHelper"
-	/>
+	<bean id="lecmServicesRegistry" class="ru.it.lecm.base.beans.LecmServicesRegistryImpl">
+		<property name="lecmTransactionHelper" ref="lecmTransactionHelper"/>
+		<property name="descriptorService" ref="descriptorComponent" />
+		<property name="sysAdminParams" ref="sysAdminParams" />
+		<property name="namesService" ref="lecmNamesService" />
+	</bean>
 
 	<!--TODO: проверить, что поломается, если использовать секьюрные сервисы (NodeService, TransactionService и т.п).
 	по возможности нужно использовать именно секьюрные сервисы-->
@@ -355,11 +358,33 @@
 		<property name="nameSpaceService" ref="NamespaceService" />
 	</bean>
 
-	<bean id="propertiesImpl" class="ru.it.lecm.base.beans.LecmBasePropertiesServiceImpl"></bean>
+	<bean id="propertiesService" class="ru.it.lecm.base.beans.LecmBasePropertiesServiceImpl">
+		<property name="namesService" ref="lecmNamesService" />
+		<property name="valuesService" ref="lecmValuesService" />
+	</bean>
 
-	<bean id="propertiesService"  class="org.springframework.aop.framework.ProxyFactoryBean">
-		<property name="proxyInterfaces" value="ru.it.lecm.base.beans.LecmBasePropertiesService"/>
-		<property name="target" ref="propertiesImpl"/>
+	<bean id="lecmNamesImpl" class="ru.it.lecm.base.beans.LecmBaseNamesServiceImpl" />
+
+	<bean id="lecmNamesService"  class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces" value="ru.it.lecm.base.beans.LecmBaseNamesService"/>
+		<property name="target" ref="lecmNamesImpl"/>
+		<property name="interceptorNames">
+			<list>
+				<value>nodesInterceptor</value>
+				<value>personInterceptor</value>
+				<value>resourcesInterceptor</value>
+				<value>repositoryInterceptor</value>
+				<value>runtimeInterceptor</value>
+				<value>delegationInterceptor</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="lecmValuesImpl" class="ru.it.lecm.base.beans.LecmBaseValuesServiceImpl" />
+
+	<bean id="lecmValuesService"  class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces" value="ru.it.lecm.base.beans.LecmBaseValuesService"/>
+		<property name="target" ref="lecmValuesImpl"/>
 		<property name="interceptorNames">
 			<list>
 				<value>propertiesInterceptor</value>
@@ -368,12 +393,20 @@
 	</bean>
 
 	<bean id="propertiesInterceptor" class="ru.it.lecm.base.utils.LecmBasePropertiesInterceptor"/>
+	<bean id="nodesInterceptor" class="ru.it.lecm.base.utils.LecmBaseNodesInterceptor"/>
+	<bean id="personInterceptor" class="ru.it.lecm.base.utils.LecmBasePersonInterceptor">
+		<property name="ticketComponent" ref="ticketComponent"/>
+	</bean>
+	<bean id="resourcesInterceptor" class="ru.it.lecm.base.utils.LecmBaseResourcesInterceptor"/>
+	<bean id="repositoryInterceptor" class="ru.it.lecm.base.utils.LecmBaseRepositoryInterceptor">
+		<property name="descriptorService" ref="descriptorComponent"/>
+	</bean>
+	<bean id="runtimeInterceptor" class="ru.it.lecm.base.utils.LecmBaseRuntimeInterceptor"/>
+	<bean id="delegationInterceptor" class="ru.it.lecm.base.utils.LecmDelegationInterceptor"/>
 
     <bean name="objTypeSharedCache" factory-bean="cacheFactory" factory-method="createCache">
         <constructor-arg value="cache.objTypeSharedCache"/>
     </bean>
-
-
 
 	<bean name="objTypeCache" class="org.alfresco.repo.cache.TransactionalCache">
 		<property name="sharedCache">
