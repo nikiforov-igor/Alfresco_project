@@ -4613,6 +4613,20 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:types"><![CDATA[]]></property>
                                             </item>
+                                            <item name="cm:Срок действия окончен" type="lecm-arm:node">
+                                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                                                <property name="lecm-arm:search-query">
+                                                    <![CDATA[@lecm\-statemachine\:status:'Срок действия окончен']]></property>
+                                                <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+                                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                                                <property name="lecm-arm:counter-description"><![CDATA[]]></property>
+                                                <property name="cm:name"><![CDATA[Срок действия окончен]]></property>
+                                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                                <property name="lecm-arm:expression"><![CDATA[]]></property>
+                                                <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[0]]></property>
+                                                <property name="lecm-arm:types"><![CDATA[]]></property>
+                                            </item>
                                             <item name="cm:Статусы" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query"><![CDATA[]]></property>
@@ -20609,7 +20623,7 @@
                                             <item name="cm:НД" type="lecm-arm:node">
                                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:search-query">
-                                                    <![CDATA[@lecm\-statemachine\:status:'Отменен']]></property>
+                                                    <![CDATA[@lecm\-statemachine\:status:'Отменен' OR @lecm\-statemachine\:status:'Срок действия окончен']]></property>
                                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                                 <property name="cm:name"><![CDATA[НД]]></property>
                                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
