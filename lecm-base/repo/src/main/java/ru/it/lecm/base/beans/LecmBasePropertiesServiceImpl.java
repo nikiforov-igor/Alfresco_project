@@ -2,42 +2,48 @@ package ru.it.lecm.base.beans;
 
 import java.util.List;
 
-/**
- * User: pmelnikov
- * Date: 03.04.14
- * Time: 13:56
- */
 public class LecmBasePropertiesServiceImpl implements LecmBasePropertiesService {
+
+    private LecmBaseNamesService namesService;
+    private LecmBaseValuesService valuesService;
+
+    public void setNamesService(LecmBaseNamesService namesService){
+        this.namesService = namesService;
+    }
+
+    public void setValuesService(LecmBaseValuesService valuesService){
+        this.valuesService = valuesService;
+    }
 
     @Override
     public Object getProperty(String property) throws LecmBaseException {
-        String prop = System.getProperty(property);
-        if (prop == null) {
-            throw new LecmBaseException();
+        Object propertyName = namesService.getPropertyName(property);
+        if (propertyName != null) {
+            return valuesService.getPropertyValue(property);
         }
-        String normalizeProp = prop.replaceAll("\\.|.", "");
-        if (normalizeProp.length() > 0) {
-            return  prop;
-        } else {
+        else {
             throw new LecmBaseException();
         }
     }
 
     @Override
     public List<Object> getProperties(String property) throws LecmBaseException {
-        return null;
+        Object propertyName = namesService.getPropertyName(property);
+        if (propertyName != null) {
+            return valuesService.getPropertyValueList(property);
+        }
+        else {
+            throw new LecmBaseException();
+        }
     }
 
     @Override
     public Boolean hasProperty(String property) throws LecmBaseException {
-        String prop = System.getProperty(property);
-        if (prop == null) {
-            throw new LecmBaseException();
+        Object propertyName = namesService.getPropertyName(property);
+        if (propertyName != null) {
+            return valuesService.hasPropertyValue(property);
         }
-        String normalizeProp = prop.replaceAll("\\.|.", "");
-        if (normalizeProp.length() > 0) {
-            return true;
-        } else {
+        else {
             throw new LecmBaseException();
         }
     }

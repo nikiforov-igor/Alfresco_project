@@ -92,12 +92,12 @@ public class LecmDictionaryBootstrap extends BaseBean {
         }
 		
 		if (dictionaries != null) {
-			logger.info("!!!!!!!!! dictionaries: "+dictionaries);
+			logger.debug("!!!!!!!!! dictionaries: "+dictionaries);
 			if (rootPath != null) {
-				logger.info("!!!!!!!!! rootPath: "+rootPath);
+				logger.debug("!!!!!!!!! rootPath: "+rootPath);
 				rootDir = getNodeByPath(rootPath);
 			} else {
-				logger.info("!!!!!!!!! dictionariesRoot");
+				logger.debug("!!!!!!!!! dictionariesRoot");
 				rootDir = dictionaryBean.getDictionariesRoot();
 			}
 
@@ -161,25 +161,25 @@ public class LecmDictionaryBootstrap extends BaseBean {
 
             NodeRef directoryRef = root;
             for (String pathString : directoryPaths) {
-            	logger.info("!!!!!!!!!!!!!! pathString: "+pathString);
+            	logger.trace("!!!!!!!!!!!!!! pathString: "+pathString);
                 NodeRef pathDir = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
                 if (pathDir == null) {
                     QName assocQName = QName.createQName(nameSpace, pathString);
                     Map<QName, Serializable> properties = new HashMap<>(1);
                     properties.put(ContentModel.PROP_NAME, pathString);
                     try {
-                    	logger.info("!!!!!!!!!!!!!! properties: "+properties);
+                    	logger.trace("!!!!!!!!!!!!!! properties: "+properties);
                         directoryRef = nodeService.createNode(directoryRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties).getChildRef();
                     } catch (DuplicateChildNodeNameException e) {
                         //есть вероятность, что папка создана другим потоком/транзакцией
-                    	logger.info("!!!!!!!!!!!!!! pathString 2: "+pathString);
+                    	logger.trace("!!!!!!!!!!!!!! pathString 2: "+pathString);
                         directoryRef = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
                     }
                 } else {
-                	logger.info("!!!!!!!!!!!!!! pathDir : "+pathDir);
+                	logger.trace("!!!!!!!!!!!!!! pathDir : "+pathDir);
                     directoryRef = pathDir;
                 }
-                logger.info("!!!!!!!!!!!!!! directoryRef: "+directoryRef);
+                logger.trace("!!!!!!!!!!!!!! directoryRef: "+directoryRef);
             }
             return directoryRef;
         }
