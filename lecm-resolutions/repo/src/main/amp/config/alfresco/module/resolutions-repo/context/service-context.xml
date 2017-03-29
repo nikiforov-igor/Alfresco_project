@@ -25,7 +25,7 @@
     <bean id="resolutions.LogicEcmBootstrap" parent="modelsToRepositoryLoader"
           depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
 					 documents.LogicEcmModelsBootstrap,
-                     errands.LogicEcmModelsBootstrap">
+                     errands.LogicEcmModelsBootstrap,eds.models.bootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-resolutions-dictionaries-model.xml</value>
