@@ -78,6 +78,8 @@ public class ResolutionBaseDocumentPolicy implements NodeServicePolicies.OnCreat
                 } else if (parentType.equals(ResolutionsService.TYPE_RESOLUTION_DOCUMENT)) {
                     initiatorRef = nodeService.getTargetAssocs(parentDoc, ResolutionsService.ASSOC_AUTHOR).get(0).getTargetRef();
                     parentDoc = resolutionsService.getResolutionBase(parentDoc);
+                } else {
+                    parentDoc = null;
                 }
                 if (initiatorRef != null) {
                     documentMembersService.addMemberWithoutCheckPermission(associationRef.getSourceRef(), initiatorRef, "LECM_BASIC_PG_Reader", true);
