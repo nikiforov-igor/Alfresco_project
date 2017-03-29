@@ -125,13 +125,11 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
             } else if (parentType.equals(ResolutionsService.TYPE_RESOLUTION_DOCUMENT)) {
                 initiatorRef = nodeService.getTargetAssocs(parentDoc, ResolutionsService.ASSOC_AUTHOR).get(0).getTargetRef();
                 parentDoc = resolutionsService.getResolutionBase(parentDoc);
+            } else {
+                parentDoc = null;
             }
             if (initiatorRef != null) {
-                try {
-                    documentMembersService.addMemberWithoutCheckPermission(errandDoc, initiatorRef, "LECM_BASIC_PG_Reader", true);
-                } catch (WriteTransactionNeededException ex) {
-                    logger.error("Can't add document member.", ex);
-                }
+                documentMembersService.addMemberWithoutCheckPermission(errandDoc, initiatorRef, "LECM_BASIC_PG_Reader", true);
             }
         }
 
