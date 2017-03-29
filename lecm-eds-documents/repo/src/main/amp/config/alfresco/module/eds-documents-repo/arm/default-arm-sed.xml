@@ -766,7 +766,7 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По типу"/>
                                         </assocs>
                                     </item>
-                                    <item name="cm:Полученные входящие" type="lecm-arm:node">
+                                    <item name="cm:Получены входящие" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
                                             <![CDATA[@lecm\-statemachine\:status:'Направлен' AND @lecm\-incoming\:recipient\-assoc\-ref:"#current-user"]]></property>
@@ -867,19 +867,19 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные входящие/8d6e6a4d-326a-4bae-b146-31516744f134"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены входящие/8d6e6a4d-326a-4bae-b146-31516744f134"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные входящие/e531cc7c-78a3-4458-9b93-981f97d21452"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены входящие/e531cc7c-78a3-4458-9b93-981f97d21452"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные входящие/91f08d35-1e24-4337-adeb-66a8376ac889"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены входящие/91f08d35-1e24-4337-adeb-66a8376ac889"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные входящие/50533c8e-0d01-4151-a8ae-adeb9073b940"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены входящие/50533c8e-0d01-4151-a8ae-adeb9073b940"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные входящие/b4b23955-15d9-43d8-9e11-a3190f30982b"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены входящие/b4b23955-15d9-43d8-9e11-a3190f30982b"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные входящие/c995ef20-e34d-4602-b613-21cdd69594fc"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены входящие/c995ef20-e34d-4602-b613-21cdd69594fc"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные входящие/1816d462-7987-404a-8382-67b3e75328bd"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены входящие/1816d462-7987-404a-8382-67b3e75328bd"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:e048e681-236c-441e-a86d-6853665f10aa" type="lecm-arm:field">
@@ -25709,14 +25709,14 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По типу"/>
                                         </assocs>
                                     </item>
-                                    <item name="cm:Полученные входящие" type="lecm-arm:node">
+                                    <item name="cm:Получены входящие" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[@lecm\-statemachine\:status:'Направлен' AND @lecm\-document\:recipient\-assoc\-ref:"#boss-ref"]]></property>
+                                            <![CDATA[@lecm\-statemachine\:status:'Направлен' AND @lecm\-incoming\:recipient\-assoc\-ref:"#boss-ref"]]></property>
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
-                                        <property name="cm:name"><![CDATA[Полученные входящие]]></property>
+                                        <property name="cm:name"><![CDATA[Получены входящие]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
@@ -25810,19 +25810,19 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные входящие/8d6e6a4d-326a-4bae-b146-31516744f134"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены входящие/8d6e6a4d-326a-4bae-b146-31516744f134"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные входящие/e531cc7c-78a3-4458-9b93-981f97d21452"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены входящие/e531cc7c-78a3-4458-9b93-981f97d21452"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные входящие/91f08d35-1e24-4337-adeb-66a8376ac889"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены входящие/91f08d35-1e24-4337-adeb-66a8376ac889"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные входящие/50533c8e-0d01-4151-a8ae-adeb9073b940"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены входящие/50533c8e-0d01-4151-a8ae-adeb9073b940"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные входящие/b4b23955-15d9-43d8-9e11-a3190f30982b"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены входящие/b4b23955-15d9-43d8-9e11-a3190f30982b"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные входящие/c995ef20-e34d-4602-b613-21cdd69594fc"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены входящие/c995ef20-e34d-4602-b613-21cdd69594fc"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные входящие/1816d462-7987-404a-8382-67b3e75328bd"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены входящие/1816d462-7987-404a-8382-67b3e75328bd"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:e048e681-236c-441e-a86d-6853665f10aa" type="lecm-arm:field">
