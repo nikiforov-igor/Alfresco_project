@@ -21,7 +21,7 @@ if (requestContent) {
         allConnectedDocuments = requestContent["assoc_lecm-errands-ts_execution-report-connected-document-assoc"];
         lecmPermission.pushAuthentication();
         lecmPermission.setRunAsUserSystem();
-        if (allConnectedDocuments && !allConnectedDocuments.equals("")) {
+        if (allConnectedDocuments) {
             connectedDocuments = allConnectedDocuments.split(",").map(function (ref) {
                 return search.findNode(ref);
             });
@@ -30,7 +30,7 @@ if (requestContent) {
     }
     if (requestContent.hasOwnProperty("assoc_lecm-errands-ts_execution-report-attachment-assoc")) {
         allAttachments =requestContent["assoc_lecm-errands-ts_execution-report-attachment-assoc"];
-        if (allAttachments && !allAttachments.equals("")) {
+        if (allAttachments) {
             attachments = allAttachments.split(",").map(function (ref) {
                 return search.findNode(ref);
             });
