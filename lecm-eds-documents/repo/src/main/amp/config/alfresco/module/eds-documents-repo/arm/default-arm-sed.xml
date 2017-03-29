@@ -769,7 +769,7 @@
                                     <item name="cm:Полученные входящие" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[@lecm\-statemachine\:status:'Направлен' AND @lecm\-document\:recipient\-assoc\-ref:"#current-user"]]></property>
+                                            <![CDATA[@lecm\-statemachine\:status:'Направлен' AND @lecm\-incoming\:recipient\-assoc\-ref:"#current-user"]]></property>
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
