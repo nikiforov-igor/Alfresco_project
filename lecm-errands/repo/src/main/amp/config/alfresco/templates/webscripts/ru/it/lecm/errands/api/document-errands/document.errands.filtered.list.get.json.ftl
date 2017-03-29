@@ -4,7 +4,10 @@
 		"description": "<#if errand.properties["lecm-errands:content"]?has_content>${errand.properties["lecm-errands:content"]?string}</#if>",
 		"title": "${errand.properties["lecm-errands:title"]?js_string}",
 		"statusMessage": "${errand.properties["lecm-statemachine:status"]}",
-		"dueDate": "<#if errand.properties["lecm-errands:limitation-date"]?has_content>${errand.properties["lecm-errands:limitation-date"]?string("dd.MM.yyyy")}</#if>",
+        <#if errand.properties["lecm-errands:limitation-date"]?has_content>
+		    "dueDate": "${errand.properties["lecm-errands:limitation-date"]?string("dd.MM.yyyy")}",
+        </#if>
+		"limitationDateText": "${errand.properties["lecm-errands:limitation-date-text"]!""}",
 		"startDate": "${errand.properties["cm:created"]?string("dd.MM.yyyy")}",
 		"isImportant": "${errand.properties["lecm-errands:is-important"]?string}",
 		"isExpired": "${errand.properties["lecm-errands:is-expired"]?string}",
