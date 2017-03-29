@@ -27,7 +27,8 @@
 			YAHOO.Bubbling.fire("hiddenAssociationFormReady",
 					{
 						fieldName: "${field.name}",
-						fieldId: "${fieldHtmlId}"
+						fieldId: "${fieldHtmlId}",
+						formId: "${args.htmlid}"
 					});
 		});
 
