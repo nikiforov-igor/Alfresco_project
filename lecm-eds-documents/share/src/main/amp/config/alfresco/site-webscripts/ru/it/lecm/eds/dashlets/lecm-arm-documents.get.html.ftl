@@ -21,7 +21,7 @@
                 actions: [
                     {
                         cssClass: "arm",
-                        linkOnClick: window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "arm?code=SED",
+                        linkOnClick: window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "arm?code=SED"  + "&path=" + encodeURI("${settings.title}"),
                         tooltip: "${msg("dashlet.arm.tooltip")?js_string}"
                     },
                     {
