@@ -105,11 +105,22 @@ public class ErrandsReportConnectedDocumentAssociationPolicy implements NodeServ
         }
         //создаем связь если не было.
         boolean conExist = false;
-        List<NodeRef> connections = documentConnectionService.getConnectionsWithDocument(errandNodeRef, ErrandsService.ERRANDS_REPORT_CONNECTION_TYPE);
-        for (NodeRef con : connections) {
-            NodeRef conDoc = nodeService.getTargetAssocs(con, DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT).get(0).getTargetRef();
-            if (conDoc.equals(connectedDoc)) {
-                conExist = true;
+        List<NodeRef> connections = documentConnectionService.getConnections(errandNodeRef);
+        for(NodeRef connection : connections) {
+            List<AssociationRef> conTypeAssocs = nodeService.getTargetAssocs(connection, DocumentConnectionService.ASSOC_CONNECTION_TYPE);
+            if (conTypeAssocs != null && conTypeAssocs.size() > 0) {
+                NodeRef conType = conTypeAssocs.get(0).getTargetRef();
+                String typeCode = (String) nodeService.getProperty(conType, DocumentConnectionService.PROP_CONNECTION_TYPE_CODE);
+                if (ErrandsService.ERRANDS_REPORT_CONNECTION_TYPE.equals(typeCode)) {
+                    List<AssociationRef> conDocAssocs = nodeService.getTargetAssocs(connection, DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT);
+                    if (conDocAssocs != null && conDocAssocs.size() > 0) {
+                        NodeRef conDoc = conDocAssocs.get(0).getTargetRef();
+                        if (conDoc.equals(connectedDoc)) {
+                            conExist = true;
+                            break;
+                        }
+                    }
+                }
             }
         }
         if (!conExist) {

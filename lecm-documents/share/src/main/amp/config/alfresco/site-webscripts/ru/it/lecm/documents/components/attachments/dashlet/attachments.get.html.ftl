@@ -62,6 +62,7 @@
                             usePagination: false,
                             documentRef: "${nodeRef?string}",
                             baseDocAssocName: "${baseDocAssocName!""}",
+                            showBaseDocAttachmentsBottom: ${(showBaseDocAttachmentsBottom!"false")?string},
                             showExtendSearchBlock: false,
                             actions: [
                                 <#if hasViewAttachmentPerm>

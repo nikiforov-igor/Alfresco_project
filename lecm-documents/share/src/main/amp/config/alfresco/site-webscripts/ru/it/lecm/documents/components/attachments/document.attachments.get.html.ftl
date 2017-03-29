@@ -28,7 +28,7 @@
 	                                    <li  title="${attachment.name!""}" class="text-cropped">
 		                                    <#if hasViewAttachmentPerm>
 			                                    <a class="text-cropped"
-												   onclick="LogicECM.module.Base.Util.showAttachmentsModalForm('${nodeRef}', '${attachment.nodeRef}', '${baseDocAssocName!""}')"
+												   onclick="LogicECM.module.Base.Util.showAttachmentsModalForm('${nodeRef}', '${attachment.nodeRef}', '${baseDocAssocName!""}', ${(showBaseDocAttachmentsBottom!"false")?string})"
 												   <#if item.category.nodeRef == "">target="_blank"</#if>>
 			                                        ${attachment.name!""}
 			                                    </a>
@@ -100,6 +100,7 @@
         LogicECM.DocumentAttachmentsComponent = new LogicECM.DocumentAttachments("${el}").setOptions({
             nodeRef: "${nodeRef}",
             baseDocAssocName: "${baseDocAssocName!""}",
+            showBaseDocAttachmentsBottom: ${(showBaseDocAttachmentsBottom!"false")?string},
             title: "${msg('heading')}",
             showAfterReady: ${(view?? && view == "attachments")?string}
         }).setMessages(${messages});

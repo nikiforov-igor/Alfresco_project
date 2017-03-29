@@ -19,10 +19,11 @@
 	                                var i;
 	                                var childErrandsCount = 0;
 	                                var childErrandsAssoc = document.sourceAssocs["lecm-errands:additional-document-assoc"];
-                                    if (childErrandsAssoc) {
-                                        childErrandsCount = childErrandsAssoc.length;
+                                    if (childErrandsAssoc && childErrandsAssoc.length) {
+                                       var childErrandsCount = childErrandsAssoc.filter(function(child){
+                                            return !statemachine.isDraft(child);
+                                       }).length;
                                     }
-                                    
 	                                for (i = 0; i < errandsList.length; i++) {
 	                                    var errand = errandsList[i];
                                         errand["assoc_lecm-errands_additional-document-assoc"] = document.nodeRef.toString();

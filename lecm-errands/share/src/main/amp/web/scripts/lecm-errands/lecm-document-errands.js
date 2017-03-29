@@ -96,9 +96,14 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                                 statusClass = "errands-overdue";
                             } else {
                                 var today = new Date();
-                                var endDate = Date.parse(errand.dueDate);
-                            var difference = (endDate.getTime()-today.getTime())/1000/60/24;
-                                if (difference > 5) {
+                                var difference = null;
+                                if (errand.dueDate) {
+                                    var endDate = Date.parse(errand.dueDate);
+                                    if (endDate) {
+                                        difference = (endDate.getTime() - today.getTime()) / 1000 / 60 / 24;
+                                    }
+                                }
+                                if (!difference || difference > 5) {
                                     status = this.msg("errandslist.label.new");
                                     statusClass = "errands-new";
                                 } else {
@@ -123,7 +128,7 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         detail +=       "<div class=\"workflow-task-description\">" + errand.description + "</div>";
                         detail +=       "<div>";
                         detail +=           "<div class=\"workflow-task-list-left-column\">";
-                        detail +=               "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.duedate") + ": </span>" + errand.dueDate;
+                        detail +=               "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.duedate") + ": </span>" + errand.limitationDateText;
                         detail +=           "</div>";
                         detail +=           "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.status") + ": </span>" + errand.statusMessage;
 

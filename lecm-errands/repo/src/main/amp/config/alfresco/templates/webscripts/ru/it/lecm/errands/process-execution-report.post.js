@@ -19,15 +19,18 @@ if (requestContent) {
     }
     if (requestContent.hasOwnProperty("assoc_lecm-errands-ts_execution-report-connected-document-assoc")) {
         allConnectedDocuments = requestContent["assoc_lecm-errands-ts_execution-report-connected-document-assoc"];
-        if (allConnectedDocuments && !allConnectedDocuments.equals("")) {
+        lecmPermission.pushAuthentication();
+        lecmPermission.setRunAsUserSystem();
+        if (allConnectedDocuments) {
             connectedDocuments = allConnectedDocuments.split(",").map(function (ref) {
                 return search.findNode(ref);
             });
         }
+        lecmPermission.popAuthentication();
     }
     if (requestContent.hasOwnProperty("assoc_lecm-errands-ts_execution-report-attachment-assoc")) {
         allAttachments =requestContent["assoc_lecm-errands-ts_execution-report-attachment-assoc"];
-        if (allAttachments && !allAttachments.equals("")) {
+        if (allAttachments) {
             attachments = allAttachments.split(",").map(function (ref) {
                 return search.findNode(ref);
             });

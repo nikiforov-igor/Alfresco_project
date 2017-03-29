@@ -1,6 +1,7 @@
 var documentNodeRef = args['documentNodeRef'];
 var count = parseInt(args['count']);
 var showEmptyCategory = ('' + args['showEmptyCategory']).toLowerCase() == 'true';
+var showBaseDocAttachmentsBottom = ('' + args['showBaseDocAttachmentsBottom']).toLowerCase() == 'true';
 var baseDocAssocName = '' + args['baseDocAssocName'];
 var lockStatus = {};
 
@@ -67,16 +68,22 @@ if (categories) {
 					}
 				}
 				if (showAttachments && (showAttachments.length || showEmptyCategory)) {
-					items.push({
-						category: {
-							node: {
-								nodeRef: "",
-								name: "Документ-основание"
-							},
-							isReadOnly: true
-						},
-						attachments: showAttachments
-					});
+				    var obj = {
+                        category: {
+                            node: {
+                                nodeRef: "",
+                                name: "Документ-основание"
+                            },
+                            isReadOnly: true
+                        },
+                        attachments: showAttachments
+                    };
+
+				    if (showBaseDocAttachmentsBottom) {
+                        items.push(obj);
+                    } else {
+				        items.unshift(obj);
+                    }
 				}
 			}
 		}

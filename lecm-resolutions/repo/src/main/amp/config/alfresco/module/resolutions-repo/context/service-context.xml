@@ -25,7 +25,7 @@
     <bean id="resolutions.LogicEcmBootstrap" parent="modelsToRepositoryLoader"
           depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
 					 documents.LogicEcmModelsBootstrap,
-                     errands.LogicEcmModelsBootstrap">
+                     errands.LogicEcmModelsBootstrap,eds.models.bootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-resolutions-dictionaries-model.xml</value>
@@ -97,6 +97,10 @@
             <value>resolutionsScript</value>
         </property>
         <property name="resolutionsService" ref="resolutionsService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="workCalendar" ref="WorkCalendarService"/>
     </bean>
 
     <bean id="resolutionsWorkflowBootstrap" parent="workflowDeployer"
@@ -193,7 +197,7 @@
         <property name="type" value="lecm-resolutions:document"/>
         <property name="assocBaseDocumentType" value="lecm-resolutions:base-document-assoc"/>
     </bean>
-    
+
     <bean id="resolutions.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
         <property name="configs">
             <list>
@@ -236,4 +240,26 @@
             </list>
         </property>
     </bean>
+    <bean id="resolutionsStatusesFilter" parent="documentStatusesFilter">
+        <property name="defaultFilters">
+            <map>
+                <entry key="lecm-resolutions:document" value="Все"/>
+                <entry key="lecm-resolutions:document-archive" value="Неисполненные"/>
+            </map>
+        </property>
+        <property name="filters">
+            <map>
+                <entry key="lecm-resolutions:document">
+                    <map>
+                        <entry key="Все" value="!Отменено, !Удалено, !Исполнено, !Не исполнено"/>
+                        <entry key="На утверждении" value="На утверждении"/>
+                        <entry key="На доработке" value="На доработке"/>
+                        <entry key="На исполнении" value="На исполнении"/>
+                        <entry key="Требуют принятия решения" value="На исполнении"/>
+                    </map>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
 </beans>

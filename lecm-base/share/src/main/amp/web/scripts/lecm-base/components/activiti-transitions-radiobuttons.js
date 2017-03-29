@@ -35,6 +35,9 @@ LogicECM.module = LogicECM.module || {};
 
 			return hiddenField;
 		},
+		onFormValidationError: function() {
+			return null;
+		},
 		_generateTransitionButtons: function() {
 			// create a submit button for each transition
 			for (var i = 0, ii = this.options.transitions.length; i < ii; i++) {

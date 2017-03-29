@@ -211,10 +211,14 @@ var ExecuteErrandScript = {
             }
         }
         totalNewConnectedDocs.forEach(function(doc) {
-            document.createAssociation(doc, "lecm-errands:execution-connected-document-assoc");
+            if (doc) {
+                document.createAssociation(doc, "lecm-errands:execution-connected-document-assoc");
+            }
         });
         totalRemovedConnectedDocs.forEach(function(doc) {
-            document.removeAssociation(doc, "lecm-errands:execution-connected-document-assoc");
+            if (doc) {
+                document.removeAssociation(doc, "lecm-errands:execution-connected-document-assoc");
+            }
         });
         document.properties["lecm-errands:execution-report-close-child"] = closeChild;
         document.properties["lecm-errands:execution-report"] = reportText;

@@ -4,6 +4,7 @@
             <id>Operative Storage Header Extension</id>
             <version>1.0</version>
             <auto-deploy>true</auto-deploy>
+			<auto-deploy-index>200</auto-deploy-index>
             <customizations>
                 <customization>
                     <targetPackageRoot>org.alfresco.share.header</targetPackageRoot>

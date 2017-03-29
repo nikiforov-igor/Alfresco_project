@@ -21,6 +21,11 @@
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-repository</artifactId>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>ru.it.lecm.documents</groupId>
+            <artifactId>documents-repo-api</artifactId>
+            <version>${platform.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

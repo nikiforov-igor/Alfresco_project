@@ -1,0 +1,15 @@
+<extension>
+    <modules>
+        <module>
+            <id>Theme share header EDS extension</id>
+            <version>1.0</version>
+            <auto-deploy>true</auto-deploy>
+            <customizations>
+                <customization>
+                    <targetPackageRoot>org.alfresco.share.header</targetPackageRoot>
+                    <sourcePackageRoot>ru.it.lecm.eds.header</sourcePackageRoot>
+                </customization>
+            </customizations>
+        </module>
+    </modules>
+</extension>
