@@ -323,7 +323,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:title"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-os:nomenclature-unit-section-unit-assoc"/>
                     <show id="lecm-os:nomenclature-unit-section-index"/>
                     <show id="os-aspects:sort-value"/>
@@ -356,7 +356,7 @@
             </form>
 			<form id="datagrid">
 				<field-visibility>
-					<show id="cm:title"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-os:nomenclature-unit-section-index"/>
 					<show id="lecm-os:nomenclature-unit-section-status"/>
 				</field-visibility>
@@ -369,7 +369,7 @@
             <form>
                 <field-visibility>
 					<show id="lecm-os:nomenclature-case-status" for-mode="view"/>
-                    <show id="cm:title"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-os:nomenclature-unit-section-unit-assoc"/>
                     <show id="lecm-os:nomenclature-unit-section-index"/>
                     <show id="os-aspects:sort-value"/>
@@ -409,7 +409,7 @@
             </form>
             <form id="view-node-form">
                 <field-visibility>
-                    <show id="cm:title"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-os:nomenclature-unit-section-unit-assoc"/>
                     <show id="lecm-os:nomenclature-unit-section-index"/>
                     <show id="lecm-os:nomenclature-unit-section-comment"/>
@@ -439,7 +439,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:title"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-os:nomenclature-case-index"/>
                     <show id="lecm-os:nomenclature-case-store-term-assoc"/>
                     <show id="lecm-os:nomenclature-case-security-classification-assoc"/>
@@ -512,7 +512,7 @@
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
-                    <show id="cm:title"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-os:nomenclature-case-index"/>
                     <show id="lecm-os:nomenclature-case-store-term-assoc"/>
                     <show id="lecm-os:nomenclature-case-security-classification-assoc"/>
@@ -630,7 +630,7 @@
                 <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-os:nomenclature-case-status" for-mode="view"/>
-                    <show id="cm:title"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-os:nomenclature-case-index"/>
                     <show id="lecm-os:nomenclature-case-store-term-assoc"/>
                     <show id="lecm-os:nomenclature-case-security-classification-assoc"/>
@@ -752,7 +752,7 @@
             <form id="view-node-form">
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
-                    <show id="cm:title"/>
+                    <show id="cm:title" force="true"/>
                     <show id="lecm-os:nomenclature-case-index"/>
                     <show id="lecm-os:nomenclature-case-store-term-assoc"/>
                     <show id="lecm-os:nomenclature-case-security-classification-assoc"/>
@@ -855,7 +855,7 @@
     	<forms>
 			<form id="datagrid">
     			<field-visibility>
-                    <show id="cm:title"/>
+                    <show id="cm:title" force="true"/>
                     <!--<show id="lecm-os:fake-index" force="true"/>-->
 					<show id="os-aspects:sort-value" force="true"/>
                     <show id="os-aspects:common-index" force="true"/>
@@ -1110,7 +1110,7 @@
             </form>
 			<form id="datagrid">
 				<field-visibility>
-					<show id="cm:title"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-os:store-entry-number"/>
 					<show id="lecm-os:store-entry-store-term-assoc"/>
 					<show id="lecm-os:store-entry-comment"/>
