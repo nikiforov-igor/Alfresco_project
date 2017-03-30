@@ -158,7 +158,7 @@
 				<targetPath>${app.amp.output.folder}</targetPath>
 				<excludes>
 					<exclude>**README-*</exclude>
-					<exclude>**/apache-xml-1.5.6_patched.jar</exclude>
+					<exclude>**/l2x-1.5.8_patched.jar</exclude>
 				</excludes>
 			</resource>
 			<resource>
@@ -166,7 +166,7 @@
 				<directory>src/main/amp</directory>
 				<targetPath>${app.amp.output.folder}</targetPath>
 				<includes>
-					<include>**/apache-xml-1.5.6_patched.jar</include>
+					<include>**/l2x-1.5.8_patched.jar</include>
 				</includes>
 			</resource>
 			<resource>

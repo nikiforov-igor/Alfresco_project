@@ -102,15 +102,7 @@ public class MessageToRepositoryLoader extends AbstractLifecycleBean implements 
 
 	@Override
 	protected void onBootstrap(ApplicationEvent ae) {
-		try {
-			Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.messages.editor.enabled");
-			boolean enabled = (editorEnabled == null) ? true : Boolean.valueOf((String) editorEnabled);
-			if (enabled) {
-				AuthenticationUtil.runAsSystem(this);
-			}
-		} catch (LecmBaseException ex) {
-			throw new IllegalStateException("Cannot read document messages properties");
-		}
+		AuthenticationUtil.runAsSystem(this);
 	}
 
 	@Override
