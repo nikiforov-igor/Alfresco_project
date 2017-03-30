@@ -219,7 +219,6 @@
                     <show id="fake:document-attachments"/>
                     <show id="fake:document-connections"/>
                     <show id="fake:document-history"/>
-                    <show id="fake:meetings-agenda"/>
                     <show id="fake:comments"/>
                 </field-visibility>
                 <appearance>
@@ -241,11 +240,6 @@
                     <field id="fake:document-history">
                         <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
                             <control-param name="uri">/lecm/components/document/document-history</control-param>
-                        </control>
-                    </field>
-                    <field id="fake:meetings-agenda">
-                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
-                            <control-param name="uri">/lecm/components/meetings/meeting-agenda</control-param>
                         </control>
                     </field>
                     <field id="fake:comments">

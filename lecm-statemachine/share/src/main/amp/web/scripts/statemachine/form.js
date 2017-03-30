@@ -357,7 +357,7 @@ LogicECM.module = LogicECM.module || {};
 					if (action && action.workflowType == 'activiti$regnumReservationExecution') {
 						dialogWidth = '30em';
 					}
-					
+
 					var dialog = new Alfresco.module.SimpleDialog('workflow-form').setOptions({
 						width: dialogWidth,
 						templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
@@ -423,8 +423,8 @@ LogicECM.module = LogicECM.module || {};
 												if (item.withErrors) {
 													var title = Alfresco.util.message('title.action_error') + ' ' + action.label;
 													this._displayErrorMessageWithDetails(title, item.message);
-												} else 
-												//2. есть отметка - показывать сообщение	
+												} else
+												//2. есть отметка - показывать сообщение
 												if (item.showModalWindow==true) {
 													message = '<div class="noerror-item">' + item.message + '</div>';
 													if (item.redirect) {
@@ -432,7 +432,7 @@ LogicECM.module = LogicECM.module || {};
 													} else {
 														this._openMessageWindow(action.label, message, true);
 													}
-												} else 
+												} else
 												//3. редирект
 												if (item.redirect) {
                                                     if (item.postRedirect) {
@@ -440,7 +440,7 @@ LogicECM.module = LogicECM.module || {};
                                                     } else {
                                                         window.location.href = Alfresco.constants.URL_PAGECONTEXT + item.redirect;
                                                     }
-												} else 
+												} else
 												//4. open window
 												if (item.openWindow) {
 													window.open(Alfresco.constants.URL_PAGECONTEXT + item.openWindow, '', 'toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no');
@@ -480,12 +480,12 @@ LogicECM.module = LogicECM.module || {};
 				reassignReload: true,
 				showCaption: false
 			};
-			
+
 			var dialogWidth = '55em';
 			if (taskName == 'Резервирование') {
 				dialogWidth = '30em';
 			}
-			
+
 			// Using Forms Service, so always create new instance
 			var taskDetails = new Alfresco.module.SimpleDialog(this.id + '-taskDetails');
 			taskDetails.setOptions({
