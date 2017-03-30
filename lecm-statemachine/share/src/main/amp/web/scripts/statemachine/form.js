@@ -33,7 +33,6 @@ LogicECM.module = LogicECM.module || {};
 		var module = LogicECM.module.StartWorkflow.superclass.constructor.call(this, 'LogicECM.module.StartWorkflow', htmlId, ['button']);
 		YAHOO.Bubbling.on('objectFinderReady', module.onObjectFinderReady, module);
 		YAHOO.Bubbling.on('stampControlReady', module.onStampControlReady, module);
-		YAHOO.Bubbling.on('hiddenAssociationFormReady', module.onHiddenAssociationFormReady, module);
 		YAHOO.Bubbling.on('formContentReady', module.onStartWorkflowFormContentReady, module);
 		YAHOO.Bubbling.on('redrawDocumentActions', module.draw, module);
 		return module;
@@ -45,8 +44,6 @@ LogicECM.module = LogicECM.module || {};
 		options: {
 			nodeRef: null
 		},
-		dialogId: null,
-
 		draw: function draw_function() {
 			var template = '{proxyUri}lecm/statemachine/actions?documentNodeRef={documentNodeRef}';
 			var url = YAHOO.lang.substitute(template, {
@@ -138,16 +135,6 @@ LogicECM.module = LogicECM.module || {};
 		onStampControlReady: function StartWorkflow_onStampControlReady(layer, args) {
 			var stampControl = args[1].eventGroup;
 			stampControl.options.itemId = this.options.nodeRef;
-		},
-		onHiddenAssociationFormReady: function StartWorkflow_onObjectFinderReady(layer, args) {
-            if (this.dialogId == args[1].formId) {
-                if (args[1].fieldName == 'assoc_packageItems') {
-                    Dom.get(args[1].fieldId + '-added').value = this.options.nodeRef;
-                    YAHOO.Bubbling.fire('afterSetItems', {
-                        items: this.options.nodeRef
-                    });
-                }
-            }
 		},
 		show: function showWorkflowForm(action) {
 			if (this.doubleClickLock) {
@@ -250,8 +237,7 @@ LogicECM.module = LogicECM.module || {};
 						templateRequestParams.formId = action.variables.formId;
 					}
 				}
-                this.dialogId = this.id + '-workflow-form';
-                var dialog = new Alfresco.module.SimpleDialog(this.dialogId).setOptions({
+				var dialog = new Alfresco.module.SimpleDialog('workflow-form').setOptions({
 					width: '65em',
 					templateUrl: templateUrl,
 					templateRequestParams: templateRequestParams,
@@ -371,8 +357,8 @@ LogicECM.module = LogicECM.module || {};
 					if (action && action.workflowType == 'activiti$regnumReservationExecution') {
 						dialogWidth = '30em';
 					}
-					this.dialogId = this.id + '-workflow-form';
-					var dialog = new Alfresco.module.SimpleDialog(this.dialogId).setOptions({
+
+					var dialog = new Alfresco.module.SimpleDialog('workflow-form').setOptions({
 						width: dialogWidth,
 						templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
 						templateRequestParams: templateRequestParams,
@@ -437,8 +423,8 @@ LogicECM.module = LogicECM.module || {};
 												if (item.withErrors) {
 													var title = Alfresco.util.message('title.action_error') + ' ' + action.label;
 													this._displayErrorMessageWithDetails(title, item.message);
-												} else 
-												//2. есть отметка - показывать сообщение	
+												} else
+												//2. есть отметка - показывать сообщение
 												if (item.showModalWindow==true) {
 													message = '<div class="noerror-item">' + item.message + '</div>';
 													if (item.redirect) {
@@ -446,7 +432,7 @@ LogicECM.module = LogicECM.module || {};
 													} else {
 														this._openMessageWindow(action.label, message, true);
 													}
-												} else 
+												} else
 												//3. редирект
 												if (item.redirect) {
                                                     if (item.postRedirect) {
@@ -454,7 +440,7 @@ LogicECM.module = LogicECM.module || {};
                                                     } else {
                                                         window.location.href = Alfresco.constants.URL_PAGECONTEXT + item.redirect;
                                                     }
-												} else 
+												} else
 												//4. open window
 												if (item.openWindow) {
 													window.open(Alfresco.constants.URL_PAGECONTEXT + item.openWindow, '', 'toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no');
@@ -494,14 +480,14 @@ LogicECM.module = LogicECM.module || {};
 				reassignReload: true,
 				showCaption: false
 			};
-			
+
 			var dialogWidth = '55em';
 			if (taskName == 'Резервирование') {
 				dialogWidth = '30em';
 			}
-            this.dialogId = this.id + '-taskDetails';
-            // Using Forms Service, so always create new instance
-			var taskDetails = new Alfresco.module.SimpleDialog(this.dialogId);
+
+			// Using Forms Service, so always create new instance
+			var taskDetails = new Alfresco.module.SimpleDialog(this.id + '-taskDetails');
 			taskDetails.setOptions({
 				width: dialogWidth,
 				templateUrl: templateUrl,
