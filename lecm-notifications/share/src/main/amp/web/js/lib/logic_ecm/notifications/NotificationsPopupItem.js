@@ -83,6 +83,7 @@ define(['dojo/_base/declare',
 				var pathname = evt.target.pathname;
 				var pageUrl = href.slice(href.indexOf(pathname), href.length);
 				var url = pageUrl.slice(Alfresco.constants.URL_PAGECONTEXT.length, pageUrl.length);
+				evt.preventDefault();
 				this.alfPublish('ALF_NAVIGATE_TO_PAGE', {
 					url: url,
 					type: this.targetUrlType,
