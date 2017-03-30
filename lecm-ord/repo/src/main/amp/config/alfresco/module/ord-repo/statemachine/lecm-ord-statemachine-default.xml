@@ -446,7 +446,7 @@
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -1362,7 +1362,7 @@ if (document) {
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -5079,7 +5079,7 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value><![CDATA[false]]></value>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
