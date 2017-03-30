@@ -133,6 +133,10 @@
 				<property name="lecmErrandWf:requestDueDateChangeTask_1NewDate">
 					<type>d:date</type>
 				</property>
+				<property name="lecmErrandWf:requestDueDateChangeTask_1ChildDueDate">
+					<type>d:boolean</type>
+					<default>true</default>
+				</property>
 				<property name="lecmErrandWf:requestDueDateChangeTask_1DateReason">
 					<type>d:text</type>
 				</property>

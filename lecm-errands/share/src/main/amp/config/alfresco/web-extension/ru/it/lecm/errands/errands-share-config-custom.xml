@@ -2456,6 +2456,7 @@
                     <show id="lecmErrandWf:requestDueDateChangeTask_1NewDueDateRadio"/>
                     <show id="lecmErrandWf:requestDueDateChangeTask_1NewDate"/>
                     <show id="lecm-base-dummy-aspects:script" force="true"/>
+                    <show id="lecmErrandWf:requestDueDateChangeTask_1ChildDueDate"/>
                     <show id="lecmErrandWf:requestDueDateChangeTask_1DateReason"/>
                     <show id="lecmErrandWf:requestDueDateChangeTask_1Result"/>
                     <show id="lecmErrandWf:requestDueDateChangeTask_1RejectReason"/>
@@ -2494,6 +2495,9 @@
                         <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
                             <control-param name="textCode">label.errand.limitless</control-param>
                         </control>
+                    </field>
+                    <field id="lecmErrandWf:requestDueDateChangeTask_1ChildDueDate" read-only="true" set="block2">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
                     <field id="lecmErrandWf:requestDueDateChangeTask_1DateReason" read-only="true" set="block2">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
