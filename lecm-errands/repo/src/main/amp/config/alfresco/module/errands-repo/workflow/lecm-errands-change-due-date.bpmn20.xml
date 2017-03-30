@@ -17,7 +17,7 @@
 	                        if (document) {
                                 var dateRadio = execution.getVariable("lecmErrandWf_changeDueDateNewDueDateRadio");
                                 var newDueDate = execution.getVariable("lecmErrandWf_changeDueDateNewDueDate");
-                                var processChild = execution.getVariable("lecmErrandWf_changeDueDateChangeChildDueDate");
+                                var processChild = execution.getVariable("lecmErrandWf_changeDueDateChangeChildDueDate") == true;
                                 var changeDateReason = execution.getVariable("lecmErrandWf_changeDueDateReason");
                                 var params = {
                                     isSignal: false,
