@@ -568,7 +568,7 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:filters-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Вид документа"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По типу"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/4f3bbcf8-e404-4d09-bc17-589a75ff0e95"/>
                                     <assoc type="lecm-arm:fields-assoc"
