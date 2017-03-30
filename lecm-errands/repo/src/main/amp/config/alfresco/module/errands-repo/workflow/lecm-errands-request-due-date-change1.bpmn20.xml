@@ -120,7 +120,7 @@
                                     } else if (decision == "APPROVED") {
                                         var dateRadio = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1NewDueDateRadio");
                                         var newDueDate = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1NewDate");
-                                        var processChild = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1ChildDueDate");
+                                        var processChild = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1ChildDueDate") == true;
                                         var changeDateReason = task.getVariable("lecmErrandWf_requestDueDateChangeTask_1DateReason");
                                         var params = {
                                             isSignal: false,

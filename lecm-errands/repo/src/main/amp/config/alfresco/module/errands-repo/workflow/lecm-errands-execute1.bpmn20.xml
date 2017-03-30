@@ -17,7 +17,7 @@
                                 var reportStatus = document.properties["lecm-errands-ts:execution-report-status"];
                                 var reportText = execution.getVariable("lecmErrandWf_execute_1ReportText");
                                 var isExecute = lecmErrandWf_execute_1Execute;
-                                var closeChild = lecmErrandWf_execute_1CloseChild;
+                                var closeChild = lecmErrandWf_execute_1CloseChild == true;
 
                                 if (reportStatus != "PROJECT"){
                                     document.properties["lecm-errands:execution-report-create-date"] = new Date();

@@ -23,7 +23,7 @@
 						        if (executor) {
                                     var recipients = [];
                                     recipients.push(executor);
-                                    ErrandCancelScript.processCancelErrand(lecmErrandWf_cancel_1CancelChildren, lecmErrandWf_cancel_1CancelReason);
+                                    ErrandCancelScript.processCancelErrand(lecmErrandWf_cancel_1CancelChildren == true, lecmErrandWf_cancel_1CancelReason);
                                 }
                             }
                             ]]>
