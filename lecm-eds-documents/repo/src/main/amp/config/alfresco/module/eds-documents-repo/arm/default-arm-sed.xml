@@ -5473,11 +5473,11 @@
                                                 <property name="cm:name">
                                                     <![CDATA[1d4cc6ef-ce52-4ade-a275-9b913a49f6b9]]></property>
                                                 <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                                <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[11]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-document-aspects:organization-unit-assoc]]></property>
+                                                    <![CDATA[lecm-document-aspects:additional-organization-unit-assoc]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                             </item>
                                             <item name="cm:6231d4fb-37cc-4458-8d74-1cbe52f13a8a" type="lecm-arm:field">
@@ -7026,7 +7026,7 @@
                                     <![CDATA[NOT (@lecm\-statemachine\:status:'Удален')]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="cm:name"><![CDATA[По состоянию]]></property>
-                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
                                 <property name="lecm-arm:expression"><![CDATA[]]></property>
                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                 <property name="lecm-arm:order"><![CDATA[20]]></property>
@@ -22805,10 +22805,10 @@
                                                 <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
                                             </item>
                                             <item name="cm:fbb3ffc4-cf4b-466f-ab18-900e28cf5c51" type="lecm-arm:field">
-                                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                                <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[11]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-document-aspects:organization-unit-assoc]]></property>
+                                                    <![CDATA[lecm-document-aspects:additional-organization-unit-assoc]]></property>
                                                 <property name="lecm-arm:field-title">
                                                     <![CDATA[Подразделение]]></property>
                                                 <property name="cm:name">
@@ -23828,10 +23828,10 @@
                                                 <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
                                             </item>
                                             <item name="cm:f9c9b9bf-2a16-4f3b-b871-58cf55d28028" type="lecm-arm:field">
-                                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                                <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[12]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-document-aspects:organization-unit-assoc]]></property>
+                                                    <![CDATA[lecm-document-aspects:additional-organization-unit-assoc]]></property>
                                                 <property name="lecm-arm:field-title">
                                                     <![CDATA[Подразделение]]></property>
                                                 <property name="cm:name">
