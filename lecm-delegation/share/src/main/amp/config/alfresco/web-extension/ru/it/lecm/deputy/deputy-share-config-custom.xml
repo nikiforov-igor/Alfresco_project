@@ -133,6 +133,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники</control-param>
 							<control-param name="plane">true</control-param>
+							<control-param name="useObjectDescription">true</control-param>
 						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="Alfresco.forms.validation.mandatory" event="keyup" />
@@ -189,6 +190,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники</control-param>
 							<control-param name="plane">false</control-param>
+							<control-param name="useObjectDescription">true</control-param>
 						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="Alfresco.forms.validation.mandatory" event="keyup" />
@@ -213,6 +215,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники</control-param>
 							<control-param name="plane">true</control-param>
+							<control-param name="useObjectDescription">true</control-param>
 						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="Alfresco.forms.validation.mandatory" event="keyup" />
