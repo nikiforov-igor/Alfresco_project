@@ -3509,10 +3509,6 @@
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                         <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                     </item>
-                                    <item name="cm:enot" type="lecm-arm:user-settings">
-                                        <property name="cm:name">
-                                            <![CDATA[enot]]></property><!--<property name="cm:title"><value lang="ru"><![CDATA[ru value]]></value><value lang="en_GB"><![CDATA[en_GB value]]></value></property>-->
-                                    </item>
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:filters-assoc"
@@ -5778,10 +5774,6 @@
                                                 <property name="lecm-arm:field-marker-icon">
                                                     <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
                                             </item>
-                                            <item name="cm:enot" type="lecm-arm:user-settings">
-                                                <property name="cm:name">
-                                                    <![CDATA[enot]]></property><!--<property name="cm:title"><value lang="ru"><![CDATA[ru value]]></value><value lang="en_GB"><![CDATA[en_GB value]]></value></property>-->
-                                            </item>
                                             <item name="cm:44b956cc-2671-4de4-b335-a6f619b8c3fd" type="lecm-arm:field">
                                                 <property name="lecm-arm:order"><![CDATA[7]]></property>
                                                 <property name="lecm-arm:field-name">
@@ -6293,6 +6285,7 @@
                                                     </item>
                                                     <item name="cm:4cea1650-c736-4e34-b32f-ba398e7f0f8f" type="lecm-arm:field">
                                                         <property name="lecm-arm:order"><![CDATA[6]]></property>
+                                                        <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-resolutions:base-document-assoc]]></property>
                                                         <property name="lecm-arm:field-title">
@@ -6496,6 +6489,7 @@
                                                             <![CDATA[Документ-основание]]></property>
                                                         <property name="cm:name">
                                                             <![CDATA[56b71708-1e45-49f4-a17e-810764800aa9]]></property>
+                                                        <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
                                                     </item>
                                                     <item name="cm:2ecbbc65-f17c-45cb-b35a-dde459455471" type="lecm-arm:field">
                                                         <property name="lecm-arm:field-title"><![CDATA[Исполнители]]></property>
@@ -13351,6 +13345,7 @@
                                             </item>
                                             <item name="cm:35e180d9-8e40-4f40-86f9-2818b4f66ebb" type="lecm-arm:field">
                                                 <property name="lecm-arm:order"><![CDATA[4]]></property>
+                                                <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-resolutions:base-document-assoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Документ-основание]]></property>
@@ -21349,10 +21344,6 @@
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                         <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                     </item>
-                                    <item name="cm:enot" type="lecm-arm:user-settings">
-                                        <property name="cm:name">
-                                            <![CDATA[enot]]></property><!--<property name="cm:title"><value lang="ru"><![CDATA[ru value]]></value><value lang="en_GB"><![CDATA[en_GB value]]></value></property>-->
-                                    </item>
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:filters-assoc"
@@ -21543,10 +21534,6 @@
                                         <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                         <property name="lecm-arm:field-name"><![CDATA[cm:created]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                    </item>
-                                    <item name="cm:enot" type="lecm-arm:user-settings">
-                                        <property name="cm:name">
-                                            <![CDATA[enot]]></property><!--<property name="cm:title"><value lang="ru"><![CDATA[ru value]]></value><value lang="en_GB"><![CDATA[en_GB value]]></value></property>-->
                                     </item>
                                 </items>
                                 <assocs>
@@ -28304,10 +28291,6 @@
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                         <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
-                                    </item>
-                                    <item name="cm:enot" type="lecm-arm:user-settings">
-                                        <property name="cm:name">
-                                            <![CDATA[enot]]></property><!--<property name="cm:title"><value lang="ru"><![CDATA[ru value]]></value><value lang="en_GB"><![CDATA[en_GB value]]></value></property>-->
                                     </item>
                                 </items>
                                 <assocs>
