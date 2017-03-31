@@ -42,6 +42,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
             forTask: true,
             selectedAttachmentNodeRef: "",
             baseDocAssocName: null,
+            showBaseDocAttachmentsBottom: false,
             resizeable: false,
             categories: null,
             allActions: null,
@@ -151,6 +152,8 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                         url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/attachments/api/get",
                         dataObj: {
                             documentNodeRef: this.documentNodeRef,
+                            baseDocAssocName: this.options.baseDocAssocName,
+                            showBaseDocAttachmentsBottom: this.options.showBaseDocAttachmentsBottom,
                             showEmptyCategory: true
                         },
                         successCallback: {

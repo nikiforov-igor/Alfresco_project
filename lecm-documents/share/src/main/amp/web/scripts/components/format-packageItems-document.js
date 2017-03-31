@@ -39,8 +39,8 @@ LogicECM.module = LogicECM.module || {};
 				var documentRef = null;
 
 				var form = Dom.get(this.id).form;
-				if (form != null && form["assoc_packageItems_added"] != null) {
-					documentRef = form["assoc_packageItems_added"].value;
+				if (form != null && form["assoc_packageItems"] != null) {
+					documentRef = form["assoc_packageItems"].value;
 				}
 
 				if (documentRef != null && documentRef.length > 0) {

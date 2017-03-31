@@ -55,7 +55,7 @@
     width: 22px;
     height: 22px;
     margin: 4px;
-    background-image: url(/share/res/components/documentlibrary/images/warning-16.png);
+    background-image: url(../../components/documentlibrary/images/warning-16.png);
     background-position: center center;
     background-repeat: no-repeat;
     float: left;
@@ -65,7 +65,7 @@
     width: 22px;
     height: 22px;
     margin: 4px 0 4px 4px;
-    background-image: url(/share/res/images/lecm-documents/expand-16.png);
+    background-image: url(../../images/lecm-documents/expand-16.png);
     background-position: center center;
     background-repeat: no-repeat;
     cursor: pointer;
