@@ -2,6 +2,11 @@
     background-image: url("../../components/images/site-16.png");
 }
 
+.datagrid a.site-link {
+	background-image: url("../../components/images/site-16.png");
+	width: 16px;
+}
+
 div.flat-button  div.new-row span.addAgendaItemSpanNewRow{
 	border-color:#ccc;
 	margin-bottom:1px;
