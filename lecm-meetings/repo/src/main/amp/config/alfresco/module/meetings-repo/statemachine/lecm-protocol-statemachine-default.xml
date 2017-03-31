@@ -6215,19 +6215,17 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
             } else {
                 protocolService.changePointStatus(point.nodeRef.toString(), 'PERFORMANCE_STATUS');
             }
-            if (auto) {
-                pointExecutors = point.assocs['lecm-protocol-ts:executor-assoc'];
-                if (pointExecutors && pointExecutors.length) {
-                    statemachine.grandDynamicRoleForEmployee(protocol, pointExecutors[0], 'PROTOCOL_POINT_EXECUTOR', task);
-                    notifications.sendNotification({
-                        recipients: pointExecutors,
-                        templateCode: 'PROTOCOL_POINT_EXECUTOR',
-                        templateConfig: {
-                            mainObject: protocol,
-                            pointNumber: point.properties['lecm-document:indexTableRow']
-                        }
-                    });
-                }
+            pointExecutors = point.assocs['lecm-protocol-ts:executor-assoc'];
+            if (pointExecutors && pointExecutors.length) {
+                statemachine.grandDynamicRoleForEmployee(protocol, pointExecutors[0], 'PROTOCOL_POINT_EXECUTOR', task);
+                notifications.sendNotification({
+                    recipients: pointExecutors,
+                    templateCode: 'PROTOCOL_POINT_EXECUTOR',
+                    templateConfig: {
+                        mainObject: protocol,
+                        pointNumber: point.properties['lecm-document:indexTableRow']
+                    }
+                });
             }
         }
 
