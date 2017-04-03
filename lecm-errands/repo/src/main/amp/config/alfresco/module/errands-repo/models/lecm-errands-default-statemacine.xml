@@ -2788,7 +2788,7 @@ if (document) {
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[(doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review")==true OR user.currentUser().hasBusinessRole("RVZ") ) AND doc.attr("lecm-errands:transit-to-on-execution")==true]]></value>
+                                                                    <![CDATA[((doc.assocClass("lecm-errands:type-assoc")!=null AND doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review")==true) OR user.currentUser().hasBusinessRole("RVZ") ) AND doc.attr("lecm-errands:transit-to-on-execution")==true]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -2973,7 +2973,7 @@ ErrandsCompletionSignalScript.processCompletionSignal();]]></value>
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review") AND doc.attr("lecm-errands:transit-to-executed")]]></value>
+                                                                    <![CDATA[doc.assocClass("lecm-errands:type-assoc")!=null AND doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review") AND doc.attr("lecm-errands:transit-to-executed")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -3500,7 +3500,7 @@ if (doc) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review")==false]]></value>
+                                                                                    <![CDATA[doc.assocClass("lecm-errands:type-assoc")==null OR (doc.assocClass("lecm-errands:type-assoc")!=null AND doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review")==false)]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -5281,7 +5281,7 @@ ErrandsCompletionSignalScript.processCompletionSignal();]]></value>
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review") AND doc.attr("lecm-errands:transit-to-executed")]]></value>
+                                                                    <![CDATA[doc.assocClass("lecm-errands:type-assoc")!=null AND doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review") AND doc.attr("lecm-errands:transit-to-executed")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -7807,7 +7807,7 @@ ErrandsCompletionSignalScript.processCompletionSignal();]]></value>
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review") AND doc.attr("lecm-errands:transit-to-executed")]]></value>
+                                                                    <![CDATA[doc.assocClass("lecm-errands:type-assoc")!=null AND doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review") AND doc.attr("lecm-errands:transit-to-executed")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -10081,7 +10081,7 @@ ErrandsCompletionSignalScript.processCompletionSignal();]]></value>
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review") AND doc.attr("lecm-errands:transit-to-executed")]]></value>
+                                                                    <![CDATA[doc.assocClass("lecm-errands:type-assoc")!=null AND doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review") AND doc.attr("lecm-errands:transit-to-executed")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -10120,7 +10120,7 @@ ErrandsCompletionSignalScript.processCompletionSignal();]]></value>
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:child-change-signal") AND doc.attr("lecm-eds-aspect:child-change-signal-count") !=0 AND doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review")]]></value>
+                                                                    <![CDATA[doc.hasAspect("lecm-eds-aspect:child-change-signal") AND doc.attr("lecm-eds-aspect:child-change-signal-count") !=0 AND doc.assocClass("lecm-errands:type-assoc")!=null AND doc.assocAttr("lecm-errands:type-assoc","lecm-errands-dic:errand-type-launch-review")]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
