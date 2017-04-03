@@ -187,6 +187,7 @@
                       ServiceRegistry, nodeService, transactionService"
 		  p:lecmDictionaryService-ref="serviceDictionary"
 		  p:documentService-ref="documentService"
+		  p:namespaceService-ref="namespaceService"
 		  p:documentEventService-ref="documentEventService"
 		  p:lecmPermissionService-ref="lecmPermissionServiceBean"
 		  p:orgstructureService-ref="serviceOrgstructure"
