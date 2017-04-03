@@ -8625,7 +8625,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                         <type>userTransition</type>
                                                         <name>2b580c0d-f3b8-45fa-a828-d8ad11185f20</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/437ecf5b-e142-4eb9-973c-35acc93cbd7f
+                                                            workspace://SpacesStore/ecdc2ceb-45a6-4463-b5a6-6c77c541be58
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -8664,42 +8664,10 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                 <nodes>
                                                                     <node>
                                                                         <type>conditionAccess</type>
-                                                                        <name>022804ea-3746-4e9e-a6a5-5788cd7ece2f
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/6d67fcee-68a2-4591-bfcb-afaca878b2a9
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[!@ordDocumentService.isDocumentHavePointsAndProperties(doc.getNodeRef())]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Возможно это действие не обладает всеми проверками]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
                                                                         <name>76823f29-a6c9-42c5-9642-c1aba0707aad
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/4f745556-b034-4ffb-905d-778e400cd5ed
+                                                                            workspace://SpacesStore/d527c15c-ea56-4d79-a233-4e5d82b50ab4
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -8731,7 +8699,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>ba39cf66-e9f7-44c2-8e32-7a5c5fec3e40
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/fac4e09e-f494-4f1c-ada8-331061d4afa5
+                                                                            workspace://SpacesStore/4de9362e-2e3a-4486-ad63-37474b4c4fca
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -8763,7 +8731,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>b040831c-245a-4710-a3e9-06c12c3f003e
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/0228b4ea-4063-457b-a358-cdbdb3c7332c
+                                                                            workspace://SpacesStore/25d64cbd-8a9a-4c49-8cd5-445097cb795d
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -8790,6 +8758,38 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>36cd5c05-95be-40cf-bff1-a8689d76ad7e
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/fbdffad2-e7b2-4983-b68d-a02f55b10328
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[@ordDocumentService.getOrdDocumentPoints(doc.getNodeRef()).size() == 0]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие недоступно, обновите страницу.]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -8798,7 +8798,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                         <type>userTransition</type>
                                                         <name>839749f3-e0fd-4e2e-8468-93437765d5ef</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/f91b0f4a-98d3-479b-b990-cb905d596fcf
+                                                            workspace://SpacesStore/cee5ebbf-620f-4e33-bd76-0cc80461e402
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -8840,12 +8840,12 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>022804ea-3746-4e9e-a6a5-5788cd7ece2f
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/83557866-ce6e-4ebe-a755-791da53b737d
+                                                                            workspace://SpacesStore/57ff088e-f332-42aa-a67f-91958a3ed521
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
                                                                                 <name>does-not-block</name>
-                                                                                <value><![CDATA[true]]></value>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -8855,7 +8855,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Нет пунктов, контроллера или даты]]></value>
+                                                                                    <![CDATA[Действие недоступно. Обновите страницу.]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -8872,7 +8872,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>050e6cab-0e58-41fb-b22f-ef8ab0be34dd
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/ef114b55-be2d-4af4-a10c-5e1a4e54da7a
+                                                                            workspace://SpacesStore/d9650e54-d591-4906-b6e6-0b4f09ec4a23
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -8904,7 +8904,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>68b639a4-a20e-4cc6-911a-70f460fa33de
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/4280d5bb-edb9-495e-b503-487a571f4b92
+                                                                            workspace://SpacesStore/d692da59-8e5c-40eb-bcf5-6f5dd418e8d2
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -8936,7 +8936,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>0f7be50f-6856-42af-a088-8bafc73b486a
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/9ad5fcd8-263f-4c8e-bc80-830da10960e2
+                                                                            workspace://SpacesStore/9810ebcf-1513-4114-a101-db32fe8ca876
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -8968,7 +8968,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>76823f29-a6c9-42c5-9642-c1aba0707aad
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/608516cb-75fd-41a0-a5a1-71b7546fffb5
+                                                                            workspace://SpacesStore/219ded91-2949-40ea-a892-421af02bfaad
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -9000,7 +9000,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>ba39cf66-e9f7-44c2-8e32-7a5c5fec3e40
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/5e661a98-8417-4913-8125-400e6fce3eb2
+                                                                            workspace://SpacesStore/273f8c6c-0ef5-4c50-82da-73c22a27e101
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -9032,7 +9032,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>d9781862-0bdf-4e0c-ac35-a205f549cc49
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/f4f40741-6c5d-411c-9338-3cc04a3e1af1
+                                                                            workspace://SpacesStore/13ce9587-7dab-4cd5-8e68-885ccba72be4
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -9067,7 +9067,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                         <type>userTransition</type>
                                                         <name>50355f81-073f-4109-97fd-0726701ecdfc</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/d848016c-821d-4302-87fd-0e5c8b6a63b6
+                                                            workspace://SpacesStore/48875d26-19e3-4493-9e09-b4f923c1be3e
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -9109,12 +9109,12 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>022804ea-3746-4e9e-a6a5-5788cd7ece2f
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/de1c65b8-3b4f-4dbf-908f-b38c637e8eba
+                                                                            workspace://SpacesStore/2a96370b-462d-43d5-9ff8-aa6035ff089a
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
                                                                                 <name>does-not-block</name>
-                                                                                <value><![CDATA[true]]></value>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -9124,7 +9124,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Нет пунктов, контроллера или даты]]></value>
+                                                                                    <![CDATA[Действие недоступно. Обновите страницу.]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -9141,7 +9141,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>186e6f18-9388-4abd-baa3-8e4b32a7f94d
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/e711fd3b-38e5-4a3b-958d-67c07e34a897
+                                                                            workspace://SpacesStore/3f410e1e-61ff-456d-8ed4-fcd9eb360028
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -9173,7 +9173,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>76823f29-a6c9-42c5-9642-c1aba0707aad
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/2b424e69-9cb2-4a28-b606-5849fcee1e27
+                                                                            workspace://SpacesStore/002c7a65-e224-47a5-aaac-09cd4e9be3c8
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -9205,7 +9205,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>ba39cf66-e9f7-44c2-8e32-7a5c5fec3e40
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/30dacd39-498a-40a2-8a23-a4b0d17d3466
+                                                                            workspace://SpacesStore/054836d0-21aa-4af5-b4ee-3a964011b67c
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -9237,7 +9237,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>1f8d2de8-1ec3-4c13-83df-073ed1545519
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/affe90b2-c9af-41ef-9f62-6724a09bfddb
+                                                                            workspace://SpacesStore/4ee736bf-0033-4a9d-819f-61490c656930
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -9272,7 +9272,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                         <type>userTransition</type>
                                                         <name>5a8f3530-a7c9-4519-a314-7d9669597290</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/2c315087-c84a-4600-9938-19290e9d6321
+                                                            workspace://SpacesStore/25cc11b7-46b5-4377-abfd-10a4ff7fa08c
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -9314,12 +9314,12 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>022804ea-3746-4e9e-a6a5-5788cd7ece2f
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/2b1465d9-fb0f-4ed4-915e-88fc28cc9f25
+                                                                            workspace://SpacesStore/284b83a8-7d7f-48d6-ac37-c8609f819848
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
                                                                                 <name>does-not-block</name>
-                                                                                <value><![CDATA[true]]></value>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -9329,7 +9329,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Нет пунктов, контроллера или даты]]></value>
+                                                                                    <![CDATA[Действие недоступно. Обновите страницу.]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -9346,7 +9346,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>4c438484-277e-4eff-8acf-4e69b95c80e0
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/0b4db647-cc90-4459-ab3c-4669affce99f
+                                                                            workspace://SpacesStore/b74a79d5-e685-4320-a7e7-7741aa033cc5
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -9378,7 +9378,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>76823f29-a6c9-42c5-9642-c1aba0707aad
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/5e558621-2152-481d-a603-792e3c3074cc
+                                                                            workspace://SpacesStore/9e9ada76-3fb4-4139-804b-ef6e894d6be2
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -9410,7 +9410,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>ba39cf66-e9f7-44c2-8e32-7a5c5fec3e40
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/18bbcd23-da0a-4621-b181-129700ef0809
+                                                                            workspace://SpacesStore/affb48bd-11d3-47e2-9862-dec495f55804
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -9442,7 +9442,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                         <name>be3ec59a-ed74-46e4-bd91-30e8ce9b4380
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/c617e49b-f584-4083-bd3a-92e0af674d13
+                                                                            workspace://SpacesStore/5151cb83-c442-453e-a329-7ef261ee37f1
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -9462,6 +9462,211 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
                                                                             <property>
                                                                                 <name>hideAction</name>
                                                                                 <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
+                                                    <node>
+                                                        <type>userTransition</type>
+                                                        <name>ed3f27d0-1f33-4dc5-bcc2-6c70e270b88e</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/2921550c-9a0d-475b-ba7d-a87363b0ced6
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>transition-script</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value><![CDATA[Зарегистрировать]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionLabelAspect/>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/77eea864-02d3-44d4-9102-0b5ad3375e71
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>12fe0556-5b84-4ccd-99b1-54724d9db26e
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/b02f9417-85cf-463b-a7f5-4f2bc476dcf7
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[@ordDocumentService.getOrdDocumentPoints(doc.getNodeRef()).size() != 0 and doc.assocClass("lecm-ord:controller-assoc")==null and doc.attr("lecm-eds-document:execution-date")==null]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие недоступно, обновите страницу.]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>8176bc6c-a8ab-4d9a-94a6-0f78a64e2dd0
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/1ab272e8-9b51-44d1-9847-560bda3a0396
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Поручения по пунктам документа не будут созданы автоматически в связи с тем, что у Вас отсутствуют права на создание поручений]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>0f72c716-e80f-4161-bdec-43f485ae4bd0
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/853cf1fd-e05e-4c24-a25d-3bc32ee39480
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-reservation-aspects:isReservationRunning") != true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Документ не может быть зарегистрирован, требуется завершить запросы на резервирование рег. номера]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>c6eeff8c-bb7a-4eca-8623-4a17cd5dd540
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/fc93d08d-fbaf-41a8-9610-df9a7ec4c36d
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[(@edsGlobalSettingsService.isRegistrationCenralized() AND user.currentUser().hasBusinessRole("DA_REGISTRARS")) OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), 'DA_REGISTRAR_DYN')]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Доступно только регистратору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>f2a13e16-7637-4f8a-a58c-8e4bcf0f22d7
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/88b7be27-177f-4b62-8ede-a72bc5f77b92
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[!@ordDocumentService.isDocumentHavePointsAndProperties(doc.getNodeRef())]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие недоступно, обновите страницу.]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -11461,7 +11666,7 @@ if (doc) {
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.attr("lecm-ord:transit-to-work-completed")==false AND (doc.hasAspect("lecm-eds-aspect:child-change-signal") AND doc.attr("lecm-eds-aspect:child-change-signal-count") !=0 OR doc.attr("lecm-review-ts:doc-review-state") != "IN_PROCESS" OR doc.attr("lecm-eds-aspect:execution-state")!="IN_PROCESS")]]></value>
+                                                                    <![CDATA[doc.attr("lecm-ord:transit-to-work-completed")==false AND ((doc.hasAspect("lecm-eds-aspect:child-change-signal") AND doc.attr("lecm-eds-aspect:child-change-signal-count") !=0) OR doc.attr("lecm-review-aspects:related-review-records-change-count") != 0)]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
@@ -11653,7 +11858,9 @@ if (doc) {
       var  pointAssocs = table.childAssocs["cm:contains"];
       if (pointAssocs!=null && pointAssocs.length > 0 ){
         /* формируем поручения */
-        ordStatemachine.formErrands(ord);
+        if (statemachine.isStarter("lecm-errands:document")) {
+            ordStatemachine.formErrands(ord);
+        }
       }
     }
 	var controllerAssoc = ord.assocs["lecm-ord:controller-assoc"];
