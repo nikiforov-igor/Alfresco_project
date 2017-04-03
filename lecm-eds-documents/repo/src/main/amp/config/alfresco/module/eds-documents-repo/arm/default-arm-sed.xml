@@ -4388,7 +4388,7 @@
                                                 <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                             </item>
                                             <item name="cm:45873cee-6e47-447d-902b-45291cbca508" type="lecm-arm:field">
-                                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                                <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[8]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-incoming:recipient-assoc]]></property>
@@ -24979,7 +24979,7 @@
                             <item name="cm:Совещания" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[NOT (@lecm\-statemachine\:status:'Удалено')]]></property>
+                                    <![CDATA[]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="cm:name"><![CDATA[Совещания]]></property>
                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
@@ -25215,7 +25215,7 @@
                                         <items>
                                             <item name="cm:9c57bca2-2524-4688-976b-0943ac2011ba"
                                                   type="lecm-arm:statuses-child-rule">
-                                                <property name="lecm-arm:selected-statuses"><![CDATA[На хранении]]></property>
+                                                <property name="lecm-arm:selected-statuses"><![CDATA[На хранении,Удален,Черновик]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[9c57bca2-2524-4688-976b-0943ac2011ba]]></property>
                                                 <property name="lecm-arm:statuses-rule"><![CDATA[EXCEPT_SELECTED]]></property>
