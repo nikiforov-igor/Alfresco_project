@@ -934,11 +934,16 @@
 
     <config evaluator="string-compare" condition="Workflow">
         <hidden-workflows>
+            <workflow name="activiti$lecm-resolutions_document"/>
             <workflow name="activiti$resolutionsDecline"/>
             <workflow name="activiti$resolutionCompletion"/>
         </hidden-workflows>
     </config>
-
+    <config evaluator="string-compare" condition="LECMStatemachineWorkflow">
+        <hidden-workflows>
+            <workflow name="activiti$lecm-resolutions_document"/>
+        </hidden-workflows>
+    </config>
     <config evaluator="node-type" condition="lecm-resolutions-settings:dashlet-settings">
         <forms>
             <form>
