@@ -1245,14 +1245,6 @@ tr.early {
    width: 14%;
 }
 
-/* The default body padding prevents the side bar from joining up at the bottom, and default margin at the side. remove them */
-
-#bd
-{
-   padding-bottom: 0;
-   margin: auto -10px;
-}
-
 .yui-dt-col-actions a
 {
    display: block;
