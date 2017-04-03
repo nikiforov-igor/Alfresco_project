@@ -705,8 +705,12 @@ LogicECM.module.MeetingsDocumentTableDataGrid = LogicECM.module.MeetingsDocument
 								data = oData[i];
 								switch (datalistColumn.dataType.toLowerCase()) {
 									case "st:site":
-										columnContent += "<a class='site-link datagrid-action-link' href='/share/page/site/" + data.displayValue + "/dashboard' title='" + data.displayValue + "'></a>";
-										break;
+                                        columnContent += "<a class='site-link datagrid-action-link' href='{context}page/site/{value}/dashboard' title='{value}'></a>";
+                                        columnContent = YAHOO.lang.substitute(columnContent, {
+                                            context: Alfresco.constants.URL_CONTEXT,
+                                            value: data.displayValue
+                                        });
+                                        break;
 								}
 								if (i < ii - 1) {
 									columnContent += "<br />";
