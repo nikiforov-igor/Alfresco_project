@@ -208,14 +208,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		}
 		
 		organizationRootRef = organizationRef;
-		
-        List<NodeRef> employees = getAllEmployees(true);
-        for (NodeRef employee : employees) {
-            String login = getEmployeeLogin(employee);
-            if (login != null) {
-                userOrganizationsCache.put(login, getEmployeeOrganization(employee));
-            }
-        }
 	}
 	
 	private Map<QName, Serializable> getNamedProps(String name) {
