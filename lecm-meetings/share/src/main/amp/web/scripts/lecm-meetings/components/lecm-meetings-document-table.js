@@ -668,6 +668,59 @@ LogicECM.module.MeetingsDocumentTableDataGrid = LogicECM.module.MeetingsDocument
 			});
 			
 			this.editWorkspaceDialogOpening = false;
+		},
+		getDataTableColumnDefinitions: function DataGrid_getDataTableColumnDefinitions() {
+			var columnDefinitions = LogicECM.module.DocumentTableDataGrid.prototype.getDataTableColumnDefinitions.call(this);
+
+			var column;
+			for (var i = 0, ii = columnDefinitions.length; i < ii; i++) {
+				column = columnDefinitions[i];
+				if (column.key == "assoc_lecm-meetings-ts_site-assoc") {
+					column.formatter = this.getMTSColumnFormatter(column.dataType);
+				}
+			}
+			return columnDefinitions;
+		},
+		getMTSColumnFormatter: function () {
+			var scope = this;
+			return function DataGrid_renderCellDataType(elCell, oRecord, oColumn, oData) {
+				var columnContent = "";
+				if (!oRecord) {
+					oRecord = this.getRecord(elCell);
+				}
+				if (!oColumn) {
+					oColumn = this.getColumn(elCell.parentNode.cellIndex);
+				}
+
+				if (oRecord && oColumn) {
+					if (!oData) {
+						oData = oRecord.getData("itemData")[oColumn.field];
+					}
+
+					if (oData) {
+						var datalistColumn = scope.datagridColumns[oColumn.key];
+						if (datalistColumn) {
+							oData = YAHOO.lang.isArray(oData) ? oData : [oData];
+							for (var i = 0, ii = oData.length, data; i < ii; i++) {
+								data = oData[i];
+								switch (datalistColumn.dataType.toLowerCase()) {
+									case "st:site":
+                                        columnContent += "<a class='site-link datagrid-action-link' href='{context}page/site/{value}/dashboard' title='{value}'></a>";
+                                        columnContent = YAHOO.lang.substitute(columnContent, {
+                                            context: Alfresco.constants.URL_CONTEXT,
+                                            value: data.displayValue
+                                        });
+                                        break;
+								}
+								if (i < ii - 1) {
+									columnContent += "<br />";
+								}
+							}
+						}
+					}
+				}
+				elCell.innerHTML = columnContent;
+			};
 		}
 	}, true)
 
