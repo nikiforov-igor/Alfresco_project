@@ -2,7 +2,7 @@
 	<#escape x as jsonUtils.encodeJSONString(x)!''>
 		"nodeRef": "${errand.getNodeRef().toString()}",
 		"description": "<#if errand.properties["lecm-errands:content"]?has_content>${errand.properties["lecm-errands:content"]?string}</#if>",
-		"title": "${errand.properties["lecm-errands:title"]?js_string}",
+		"title": "${errand.properties["lecm-errands:title"]?string}",
 		"statusMessage": "${errand.properties["lecm-statemachine:status"]}",
         <#if errand.properties["lecm-errands:limitation-date"]?has_content>
 		    "dueDate": "${errand.properties["lecm-errands:limitation-date"]?string("dd.MM.yyyy")}",
