@@ -21698,7 +21698,7 @@
                                         <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-eds-document:summaryContent]]></property>
-                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-format-string"><![CDATA[!html {lecm-eds-document:summaryContent}]]></property>
                                     </item>
                                     <item name="cm:ac70c067-f47b-44a3-9f94-cd8e1075e291" type="lecm-arm:field">
                                         <property name="lecm-arm:field-title"><![CDATA[Тематика]]></property>
