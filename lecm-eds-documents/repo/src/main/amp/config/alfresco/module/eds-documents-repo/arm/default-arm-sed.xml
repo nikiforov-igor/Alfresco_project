@@ -29007,7 +29007,8 @@
                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                         <property name="lecm-arm:order"><![CDATA[90]]></property>
                         <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
-                        <property name="lecm-arm:types"><![CDATA[]]></property>
+                        <property name="lecm-arm:types">
+                            <![CDATA[lecm-outgoing:document,lecm-nd:document,lecm-protocol:document,lecm-ord:document,lecm-errands:document,lecm-internal:document,lecm-resolutions:document,lecm-incoming:document,lecm-contract:document,lecm-eds-document:base,lecm-additional-document:additionalDocument]]></property>
                         <items>
                             <item name="cm:6425c5eb-c3c0-45f8-b28d-7b80e4312a0d" type="lecm-arm:field">
                                 <property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
