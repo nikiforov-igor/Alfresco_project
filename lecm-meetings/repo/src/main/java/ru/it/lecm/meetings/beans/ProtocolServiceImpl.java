@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
@@ -26,6 +27,8 @@ import java.util.*;
 public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
 
     private DictionaryBean lecmDictionaryService;
+
+    private NamespaceService namespaceService;
 
     private DocumentService documentService;
 
@@ -59,6 +62,10 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
 
     public void setDocumentEventService(DocumentEventService documentEventService) {
         this.documentEventService = documentEventService;
+    }
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
     }
 
     public LecmPermissionService getLecmPermissionService() {
@@ -182,7 +189,9 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                 if (null != errandInitiator) {
                     associations.put("lecm-errands:initiator-assoc", errandInitiator.toString());
                 }
-
+                // Тип поручения
+                NodeRef type = lecmDictionaryService.getRecordByParamValue(ErrandsService.ERRANDS_TYPE_DICTIONARY_NAME, ContentModel.PROP_NAME, ErrandsService.ERRAND_TYPE_ON_POINT_PROTOCOL);
+                associations.put(ErrandsService.ASSOC_ERRANDS_TYPE.toPrefixString(namespaceService), type.toString());
                 //исполнитель
                 List<AssociationRef> pointExecutorAssocs = nodeService.getTargetAssocs(point, ProtocolService.ASSOC_PROTOCOL_POINT_EXECUTOR);
                 if (pointExecutorAssocs.size() > 0) {

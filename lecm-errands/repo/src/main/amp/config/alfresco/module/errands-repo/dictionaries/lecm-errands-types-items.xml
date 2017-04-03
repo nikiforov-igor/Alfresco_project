@@ -42,6 +42,14 @@
                 <property name="lecm-errands-dic:errand-type-limitless">false</property>
                 <property name="lecm-errands-dic:errand-type-launch-review">false</property>
             </item>
+            <item name="cm:Поручение по пункту протокола" type="lecm-errands-dic:errand-type">
+                <property name="cm:name"><![CDATA[Поручение по пункту протокола]]></property>
+                <property name="lecm-errands-dic:errand-type-default-title"><![CDATA[]]></property>
+                <property name="lecm-errands-dic:errand-type-manual-selection">false</property>
+                <property name="lecm-errands-dic:errand-type-report-required">false</property>
+                <property name="lecm-errands-dic:errand-type-limitless">false</property>
+                <property name="lecm-errands-dic:errand-type-launch-review">false</property>
+            </item>
         </items>
     </item>
 </items>
