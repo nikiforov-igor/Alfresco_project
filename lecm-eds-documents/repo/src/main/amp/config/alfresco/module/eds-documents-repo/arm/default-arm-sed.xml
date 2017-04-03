@@ -4910,6 +4910,14 @@
                                             </item>
                                         </items>
                                         <assocs>
+                                    <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По срокам"/>
+                                    <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Мои документы"/>
+                                    <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По состоянию исполнения"/>
+                                    <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По состоянию ознакомления"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Внутренние/add8be59-f865-482b-9b1e-5a387556ef30"/>
                                             <assoc type="lecm-arm:fields-assoc"
@@ -5024,7 +5032,7 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[8]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-ord:signers-assoc]]></property>
+                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Подписант]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[3078c02d-2c21-4ac8-93e8-d395b5c61fbb]]></property>
@@ -6108,10 +6116,14 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По типу"/>
+                                    <assoc type="lecm-arm:filters-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Мои документы"/>
                                             <assoc type="lecm-arm:filters-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По роли"/>
                                             <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По состоянию исполнения"/>
+                                    <assoc type="lecm-arm:filters-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По состоянию ознакомления"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Протоколы/3121f3b1-ea6c-4718-9a2f-b03e26661f88"/>
@@ -28381,6 +28393,14 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По состоянию ознакомления"/>
                                         </assocs>
                                     </item>
+                                    <item name="cm:4e859e95-b833-43d0-9567-1198ef85bcbc" type="lecm-arm:field">
+                                        <property name="lecm-arm:order"><![CDATA[2]]></property>
+                                        <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
+                                        <property name="lecm-arm:field-title"><![CDATA[Дата]]></property>
+                                        <property name="cm:name"><![CDATA[16eb9e6e-34d5-4495-a9c8-22281d64aa59]]></property>
+                                    </item>
                                     <item name="cm:0bf067e1-6286-446f-9316-7df14f0782d0" type="lecm-arm:field">
                                         <property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
                                         <property name="cm:name"><![CDATA[a3844f59-86b9-4e00-9674-10f001064e12]]></property>
@@ -28501,14 +28521,6 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По состоянию ознакомления"/>
                                         </assocs>
                                     </item>
-                                    <item name="cm:463814e7-6f54-49d0-863c-1096e02773e9" type="lecm-arm:field">
-                                        <property name="lecm-arm:order"><![CDATA[2]]></property>
-                                        <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
-                                        <property name="lecm-arm:field-title"><![CDATA[Дата]]></property>
-                                        <property name="cm:name"><![CDATA[0fda5010-a00c-4941-9fec-6048ac60f984]]></property>
-                                    </item>
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
@@ -28529,6 +28541,8 @@
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа контролера/ОРД/13d362ad-5f99-4f09-a65d-107b1f47c00b"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа контролера/ОРД/ac34e10c-213f-4cf5-a939-7cbe0fdffe20"/>
+                                    <assoc type="lecm-arm:fields-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа контролера/ОРД/16eb9e6e-34d5-4495-a9c8-22281d64aa59"/>
                                     <assoc type="lecm-arm:filters-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По срокам"/>
                                     <assoc type="lecm-arm:filters-assoc"
