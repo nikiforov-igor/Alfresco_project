@@ -4678,7 +4678,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Поручения по пунктам документа не будут созданы автоматически в связи с тем, что у вас отсутствуют права на создание поручений.]]></value>
+                                                                                    <![CDATA[Поручения по пунктам документа не будут созданы автоматически в связи с тем, что у Вас отсутствуют права на создание поручений.]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
