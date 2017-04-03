@@ -11,7 +11,7 @@
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="cm:title"><![CDATA[Создать поручения]]></property>
         <property name="lecm-group-actions:type">
-            <![CDATA[[lecm-contract:document, lecm-protocol:document, lecm-ord:document, lecm-errands:document, lecm-additional-document:additionalDocument, lecm-internal:document, lecm-incoming:document]]]></property>
+            <![CDATA[[lecm-contract:document, lecm-protocol:document, lecm-ord:document, lecm-errands:document, lecm-internal:document, lecm-incoming:document]]]></property>
         <property name="lecm-group-actions:availableForReader"><![CDATA[false]]></property>
     </item>
 </items>
