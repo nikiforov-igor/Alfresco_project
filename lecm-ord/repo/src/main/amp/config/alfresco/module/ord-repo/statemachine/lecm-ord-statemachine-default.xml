@@ -11666,7 +11666,7 @@ if (doc) {
                                                             <property>
                                                                 <name>transitionExpression</name>
                                                                 <value>
-                                                                    <![CDATA[doc.attr("lecm-ord:transit-to-work-completed")==false AND ((doc.hasAspect("lecm-eds-aspect:child-change-signal") AND doc.attr("lecm-eds-aspect:child-change-signal-count") !=0) OR doc.attr("lecm-review-aspects:related-review-records-change-count") != 0)]]></value>
+                                                                    <![CDATA[doc.attr("lecm-ord:transit-to-work-completed")==false AND ((doc.hasAspect("lecm-eds-aspect:child-change-signal") AND doc.attr("lecm-eds-aspect:child-change-signal-count") !=0) OR (doc.attr("lecm-review-ts:active-reviewers")=="" AND doc.attr("lecm-review-ts:doc-review-statistics")!=null AND doc.attr("lecm-review-ts:doc-review-statistics")!=""))]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
