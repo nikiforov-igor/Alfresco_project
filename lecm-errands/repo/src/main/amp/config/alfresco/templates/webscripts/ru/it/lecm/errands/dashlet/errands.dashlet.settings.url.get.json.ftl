@@ -1,6 +1,7 @@
 <#escape x as jsonUtils.encodeJSONString(x)!''>
 {
     "armCode": "${armCode!"SED"}",
-    "armGeneralPath": "${armGeneralPath!""}"
+    "armGeneralPath": "${armGeneralPath!""}",
+    "armUnexecutedPath": "${armUnexecutedPath!""}"
 }
 </#escape>

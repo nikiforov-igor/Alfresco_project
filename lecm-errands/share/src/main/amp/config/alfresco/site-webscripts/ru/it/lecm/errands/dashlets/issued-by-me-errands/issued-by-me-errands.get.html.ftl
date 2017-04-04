@@ -100,7 +100,7 @@
                                 [
                                     {
                                         cssClass: "arm",
-                                        linkOnClick: window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "arm?code=" + encodeURI(oResponse.json.armCode) + "&path="  + encodeURI(oResponse.json.armGeneralPath),
+                                        linkOnClick: window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "arm?code=" + encodeURI(oResponse.json.armCode) + "&path="  + encodeURI(oResponse.json.armUnexecutedPath),
                                         tooltip: "${msg("dashlet.arm.tooltip")?js_string}"
                                     },
                                     {
