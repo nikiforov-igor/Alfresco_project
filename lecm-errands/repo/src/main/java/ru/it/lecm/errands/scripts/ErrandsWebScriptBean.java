@@ -379,6 +379,10 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
         final String PROP_ITINITATOR =
                 ErrandsService.PROP_ERRANDS_INITIATOR_REF.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+        final String PROP_AUTHOR =
+                DocumentService.PROP_AUTHOR_REF.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+        final String PROP_ERRANDS_EXECUTORS =
+                ErrandsService.PROP_ERRANDS_EXECUTORS_REF.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
         final String PROP_EXPIRED =
                 ErrandsServiceImpl.PROP_ERRANDS_IS_EXPIRED.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
         final String PROP_IMPORTANT =
@@ -386,7 +390,10 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         final String PROP_EXEC_DATE =
                 ErrandsServiceImpl.PROP_ERRANDS_LIMITATION_DATE.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
 
-        String issuedFilterQuery = "@" + PROP_ITINITATOR + ":\"" + currentEmployee.toString().replace(":", "\\:") + "\"";
+        String currentEmployeeStr = ":\"" + currentEmployee.toString().replace(":", "\\:") + "\"";
+        String issuedFilterQuery = "(@" + PROP_ITINITATOR + currentEmployeeStr +
+                " OR @" + PROP_AUTHOR + currentEmployeeStr +
+                " OR @" + PROP_ERRANDS_EXECUTORS + currentEmployeeStr + ")";
 
         if (filterType != null && !"".equals(filterType)) {
                 switch (IssuedByMeEnum.valueOf(filterType.toUpperCase())) {

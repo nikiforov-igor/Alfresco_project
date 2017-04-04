@@ -135,6 +135,10 @@ public class ResolutionsWebScriptBean extends BaseWebScript {
 
         final String PROP_AUTHOR =
                 ResolutionsService.PROP_RESOLUTIONS_AUTHOR_REF.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+        final String PROP_DOC_AUTHOR =
+                DocumentService.PROP_AUTHOR_REF.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+        final String PROP_ERRANDS_EXECUTORS =
+                ErrandsService.PROP_ERRANDS_EXECUTORS_REF.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
         final String PROP_EXPIRED =
                 ResolutionsService.PROP_IS_EXPIRED.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
         final String PROP_CONTROL =
@@ -144,7 +148,10 @@ public class ResolutionsWebScriptBean extends BaseWebScript {
         final String PROP_REQUIRE_CLOSERS_DECISION =
                 ResolutionsService.PROP_REQUIRE_CLOSERS_DECISION.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
 
-        String issuedFilterQuery = "@" + PROP_AUTHOR + ":\"" + currentEmployee.toString().replace(":", "\\:") + "\"";
+        String currentEmployeeStr = ":\"" + currentEmployee.toString().replace(":", "\\:") + "\"";
+        String issuedFilterQuery = "(@" + PROP_AUTHOR + currentEmployeeStr +
+                " OR @" + PROP_DOC_AUTHOR + currentEmployeeStr +
+                " OR @" + PROP_ERRANDS_EXECUTORS + currentEmployeeStr + ")";
 
         if (filterType != null && !"".equals(filterType)) {
             switch (IssuedByMeEnum.valueOf(filterType.toUpperCase())) {
