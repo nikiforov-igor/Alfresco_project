@@ -133,7 +133,7 @@ LogicECM.ORD = LogicECM.ORD || {};
 
         realCreateDatagrid: function (actions, currentUser, docStatus, allowedStatuses) {
             if (this.tableData != null && this.tableData.rowType != null) {
-                var expandable = !allowedStatuses.includes(docStatus);
+                var expandable = !allowedStatuses.includes(docStatus) && docStatus != "На подписании" && docStatus != "Зарегистрирован";
 
                 var datagrid = new LogicECM.ORD.PointsDatagrid(this.options.containerId).setOptions({
                     usePagination: true,
@@ -357,6 +357,13 @@ LogicECM.ORD = LogicECM.ORD || {};
                 scope: this
             });
         },
+        onAddRow: function (me, asset, owner, actionsConfig, confirmFunction) {
+            if (this.doubleClickLock) {
+                return;
+            }
+            this.doubleClickLock = true;
+            this.showCreateDialog(this.datagridMeta, null, null, true, me);
+        },
         onActionCompletePoint: function (me, asset, owner, actionsConfig, confirmFunction) {
             var nodeRef = arguments[0].nodeRef;
             if (nodeRef) {
@@ -407,7 +414,7 @@ LogicECM.ORD = LogicECM.ORD || {};
                 completePointDialog.show();
             }
         },
-        showCreateDialog: function (meta, callback, successMessage) {
+        showCreateDialog: function (meta, callback, successMessage, isAddRowClicked, dataRow) {
             if (this.editDialogOpening) return;
             this.editDialogOpening = true;
             var me = this;
@@ -449,6 +456,16 @@ LogicECM.ORD = LogicECM.ORD || {};
                                     Dom.addClass(contId, meta.itemType.replace(":", "_") + "_edit");
                                 }
                                 me.editDialogOpening = false;
+                                if (isAddRowClicked) {
+                                    if (dataRow) {
+                                        var tempIndexTag = Dom.get(p_dialog.id + "_prop_lecm-document_indexTableRow");
+                                        if (tempIndexTag) {
+                                            var index = eval(dataRow.itemData["prop_lecm-document_indexTableRow"].value);
+                                            tempIndexTag.value = index + 1;
+                                        }
+                                    }
+                                    this.doubleClickLock = false;
+                                }
                                 p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
                             };
                             var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
