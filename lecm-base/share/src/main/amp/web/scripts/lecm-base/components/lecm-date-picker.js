@@ -563,11 +563,7 @@
                         // when the date is completely cleared remove the hidden field and remove the invalid class
                         Dom.removeClass(me.id + "-date", "invalid");
                         Dom.get(me.currentValueHtmlId).value = "";
-                        if (me.options.changeFireAction) {
-                            Bubbling.fire(me.options.changeFireAction, {
-                                date: ""
-                            });
-                        }
+
                         if (Alfresco.logger.isDebugEnabled())
                             Alfresco.logger.debug("Hidden field '" + me.currentValueHtmlId + "' has been reset");
 
