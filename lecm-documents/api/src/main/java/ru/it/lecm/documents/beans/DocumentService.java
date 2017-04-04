@@ -50,6 +50,7 @@ public interface DocumentService {
     public static final QName PROP_DOCUMENT_IS_TRANSMIT = QName.createQName(DOCUMENT_NAMESPACE_URI, "istransmit");
     public static final QName PROP_DOCUMENT_DEPRIVE_RIGHT = QName.createQName(DOCUMENT_NAMESPACE_URI, "deprive-right");
     public static final QName PROP_DOCUMENT_EMPLOYEE_REF = QName.createQName(DOCUMENT_NAMESPACE_URI, "employee-ref");
+    public static final QName PROP_AUTHOR_REF = QName.createQName(DOCUMENT_NAMESPACE_URI, "author-assoc-ref");
 	public static final QName ASSOC_AUTHOR = QName.createQName(DOCUMENT_NAMESPACE_URI, "author-assoc");
 
     public static final String PREF_DOCUMENTS = "ru.it.lecm.documents";
