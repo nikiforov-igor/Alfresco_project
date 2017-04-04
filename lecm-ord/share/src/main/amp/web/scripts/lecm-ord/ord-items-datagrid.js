@@ -235,6 +235,35 @@ LogicECM.ORD = LogicECM.ORD || {};
                 nodeRef: args[1].nodeRef
             });
         }, this, true);
+        Bubbling.on("ordExecutionDateFormValueChangedEvent", function (layer, args) {
+            if (args[1].date) {
+                this.options.formDate.value = new Date(args[1].date);
+            } else {
+                this.options.formDate.value = null;
+            }
+            this.options.formDate.changed = true;
+        }, this);
+        Bubbling.on("ordControllerChangedEvent", function (layer, args) {
+            if (args[1].selectedItems) {
+                if (Object.keys(args[1].selectedItems).length) {
+                    this.options.formController.value = Object.keys(args[1].selectedItems)[0];
+                } else {
+                    this.options.formController.value = null;
+                }
+            }
+            this.options.formController.changed = true;
+
+        }, this);
+        Bubbling.on("ordSubjectFormValueChangedEvent", function (layer, args) {
+            if (args[1].selectedItems) {
+                if (Object.keys(args[1].selectedItems).length) {
+                    this.options.formSubject.value = Object.keys(args[1].selectedItems)[0];
+                } else {
+                    this.options.formSubject.value = null;
+                }
+            }
+            this.options.formSubject.changed = true;
+        }, this);
 
         return LogicECM.ORD.PointsDatagrid.superclass.constructor.call(this, htmlId);
     };
@@ -242,7 +271,20 @@ LogicECM.ORD = LogicECM.ORD || {};
     YAHOO.lang.extend(LogicECM.ORD.PointsDatagrid, LogicECM.module.DocumentTableDataGrid);
 
     YAHOO.lang.augmentObject(LogicECM.ORD.PointsDatagrid.prototype, {
-
+        options: {
+            formController: {
+                value: null,
+                changed: false
+            },
+            formSubject: {
+                value: null,
+                changed: false
+            },
+            formDate: {
+                value: null,
+                changed: false
+            }
+        },
         onExpand: function (record, isExpandAutomatically) {
             Alfresco.util.Ajax.jsonPost({
                 url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
@@ -381,15 +423,22 @@ LogicECM.ORD = LogicECM.ORD || {};
                         if (response && response.json.formatString) {
                             var data = response.json.formatString.split(",");
                             var args = {};
-                            if (data[0]) {
+                            if (this.options.formDate.changed && ((data[0] && this.options.formDate.value && new Date(data[0]).getTime() != this.options.formDate.value.getTime()) || (!data[0] && this.options.formDate.value) || (data[0] && !this.options.formDate.value))) {
+                                args["prop_lecm-ord-table-structure_execution-date"] = this.options.formDate.value;
+                            } else if (data[0]) {
                                 args["prop_lecm-ord-table-structure_execution-date"] = new Date(data[0]);
                             }
-                            if (data[1]) {
-                                args["assoc_lecm-ord-table-structure_subject-assoc"] =  data[1];
+                            if (this.options.formSubject.changed && this.options.formSubject.value != data[1]) {
+                                args["assoc_lecm-ord-table-structure_subject-assoc"] = this.options.formSubject.value;
+                            } else if (data[1]) {
+                                args["assoc_lecm-ord-table-structure_subject-assoc"] = data[1];
                             }
-                            if (data[2]) {
+                            if (this.options.formController.changed && this.options.formController.value != data[2]) {
+                                args["assoc_lecm-ord-table-structure_controller-assoc"] = this.options.formController.value;
+                            } else if (data[2]) {
                                 args["assoc_lecm-ord-table-structure_controller-assoc"] = data[2];
                             }
+
                             var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                                 var addMsg = meta.addMessage;
                                 var contId = p_dialog.id + "-form-container";
