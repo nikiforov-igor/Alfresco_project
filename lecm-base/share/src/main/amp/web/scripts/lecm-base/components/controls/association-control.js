@@ -346,6 +346,11 @@ LogicECM.module = LogicECM.module || {};
 			Dom.addClass(this.widgets.autocomplete.getInputEl(), 'wait-for-load');
 			searchTerm = searchTerm ? searchTerm : 'cm:name:' + decodedQuery;
 
+			// Форсирование заголовков
+			this.widgets.datasource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON);
+			this.widgets.datasource.connMgr.setDefaultXhrHeader(Alfresco.util.Ajax.JSON);
+			this.widgets.datasource.connMgr.initHeader("Content-Type", Alfresco.util.Ajax.JSON);
+
 			return ACUtils.generateRequest(this, searchTerm, 0, true);
 		},
 
