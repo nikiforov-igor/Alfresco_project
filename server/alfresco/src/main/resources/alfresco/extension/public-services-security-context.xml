@@ -69,6 +69,6 @@
     	<property name="nodeService" ref="nodeService" />
     	<property name="dictionaryService" ref="dictionaryService" />
     	<property name="authorityService" ref="authorityService" />
-    	<property name="userOrganizationsCache" ref="userOrganizationsCache" />
+    	<property name="orgstructureService" ref="serviceOrgstructure" />
     </bean>	
 </beans>
