@@ -211,7 +211,7 @@ var appItems = [
 		config: {
 			id: "HOME_MENU_ITEM",
 			label: msg.get("label.home.page"),
-			targetUrl: "user/" + encodeURIComponent(user.name) + "/dashboard"
+			targetUrl: getUserHomeTargetUrl()
 		}
 	},
 	{

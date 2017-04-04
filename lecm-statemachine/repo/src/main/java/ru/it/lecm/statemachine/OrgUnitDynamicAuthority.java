@@ -18,6 +18,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
 
 import java.util.List;
 import java.util.Set;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 public class OrgUnitDynamicAuthority implements DynamicAuthority, InitializingBean {
     final static protected Logger logger = LoggerFactory.getLogger(OrgUnitDynamicAuthority.class);
@@ -26,7 +27,7 @@ public class OrgUnitDynamicAuthority implements DynamicAuthority, InitializingBe
     private NodeService nodeService;
     private DictionaryService dictionaryService;
     private AuthorityService authorityService;
-    private SimpleCache<String, NodeRef> userOrganizationsCache;
+	private OrgstructureBean orgstructureService;
 
     public OrgUnitDynamicAuthority() {
         super();
@@ -48,9 +49,9 @@ public class OrgUnitDynamicAuthority implements DynamicAuthority, InitializingBe
         this.authorityService = authorityService;
     }
 
-    public void setUserOrganizationsCache(SimpleCache<String, NodeRef> userOrganizationsCache) {
-        this.userOrganizationsCache = userOrganizationsCache;
-    }
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
+	}
 
     public boolean hasAuthority(final NodeRef nodeRef, final String userName) {
         final long startTime = System.nanoTime();
@@ -68,14 +69,13 @@ public class OrgUnitDynamicAuthority implements DynamicAuthority, InitializingBe
                             result = false;
                         } else {
                             NodeRef organisation = null;
-                            NodeRef org = null;
-                            if (userOrganizationsCache.contains(userName)) {
-                                org = userOrganizationsCache.get(userName);
-                                List<AssociationRef> contractorAssoc = nodeService.getTargetAssocs(nodeRef, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
-                                if (!contractorAssoc.isEmpty()) {
-                                    organisation = contractorAssoc.get(0).getTargetRef();
-                                }
-                            }
+                            NodeRef org = orgstructureService.getUserOrganization(userName);
+							
+							List<AssociationRef> contractorAssoc = nodeService.getTargetAssocs(nodeRef, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+							if (!contractorAssoc.isEmpty()) {
+								organisation = contractorAssoc.get(0).getTargetRef();
+							}
+							
                             if (org != null && organisation != null) {
                                 if (org.equals(organisation)) result = false;
                             }
