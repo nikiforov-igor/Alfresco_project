@@ -3548,7 +3548,7 @@
                                     <![CDATA[NOT (@lecm\-statemachine\:status:'Удален') AND NOT @lecm\-statemachine\-aspects\:is\-draft:true]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="cm:name"><![CDATA[По типам документов]]></property>
-                                <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[lecm-document:base]]></property>
                                 <property name="lecm-arm:expression"><![CDATA[]]></property>
                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                 <property name="lecm-arm:order"><![CDATA[10]]></property>
@@ -7032,7 +7032,7 @@
                                     <![CDATA[NOT (@lecm\-statemachine\:status:'Удален')]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="cm:name"><![CDATA[По состоянию]]></property>
-                                <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[lecm-document:base]]></property>
                                 <property name="lecm-arm:expression"><![CDATA[]]></property>
                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                 <property name="lecm-arm:order"><![CDATA[20]]></property>
@@ -13405,7 +13405,7 @@
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                         <property name="cm:name"><![CDATA[Исполнение]]></property>
-                                        <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
+                                        <property name="lecm-arm:search-type"><![CDATA[lecm-document:base]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[20]]></property>
@@ -13420,7 +13420,7 @@
                                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                                 <property name="cm:name"><![CDATA[На исполнении]]></property>
                                                 <property name="lecm-arm:search-type">
-                                                    <![CDATA[lecm-eds-document:base]]></property>
+                                                    <![CDATA[lecm-document:base]]></property>
                                                 <property name="lecm-arm:expression"><![CDATA[]]></property>
                                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[10]]></property>
@@ -19589,7 +19589,7 @@
                                             <![CDATA[@lecm\-statemachine\-aspects\:is\-final:true AND NOT @lecm\-statemachine\:status:'Удален' AND NOT @lecm\-statemachine\:status:'Действует']]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="cm:name"><![CDATA[Работа завершена]]></property>
-                                        <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
+                                        <property name="lecm-arm:search-type"><![CDATA[lecm-document:base]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[50]]></property>
@@ -21583,7 +21583,7 @@
                                     <![CDATA[NOT (@lecm\-statemachine\:status:'Удален')]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="cm:name"><![CDATA[По тематикам]]></property>
-                                <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[lecm-document:base]]></property>
                                 <property name="lecm-arm:expression"><![CDATA[]]></property>
                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                 <property name="lecm-arm:order"><![CDATA[30]]></property>
@@ -21643,7 +21643,7 @@
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                         <property name="cm:name"><![CDATA[Тематики]]></property>
-                                        <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
+                                        <property name="lecm-arm:search-type"><![CDATA[lecm-document:base]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
