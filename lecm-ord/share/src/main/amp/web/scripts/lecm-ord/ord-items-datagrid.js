@@ -133,7 +133,7 @@ LogicECM.ORD = LogicECM.ORD || {};
 
         realCreateDatagrid: function (actions, currentUser, docStatus, allowedStatuses) {
             if (this.tableData != null && this.tableData.rowType != null) {
-                var expandable = !allowedStatuses.includes(docStatus);
+                var expandable = !allowedStatuses.includes(docStatus) && docStatus != "На подписании" && docStatus != "Зарегистрирован";
 
                 var datagrid = new LogicECM.ORD.PointsDatagrid(this.options.containerId).setOptions({
                     usePagination: true,
