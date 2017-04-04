@@ -596,14 +596,14 @@
                                 <property name="lecm-arm:types">
                                     <![CDATA[lecm-ord:document,lecm-nd:document,lecm-incoming:document,lecm-internal:document,lecm-protocol:document,lecm-outgoing:document]]></property>
                                 <items>
-                                    <item name="cm:На ознакомление" type="lecm-arm:node">
+                                    <item name="cm:На ознакомлении" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
                                             <![CDATA[{{ACTIVE_TASKS_ONLY({tasks:['lecmReview:reviewTask'],user:'#current-user'})}} OR @lecm\-review\-ts\:active\-reviewers:"*#current-user*"]]></property>
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
-                                        <property name="cm:name"><![CDATA[На ознакомление]]></property>
+                                        <property name="cm:name"><![CDATA[На ознакомлении]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
@@ -773,7 +773,7 @@
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
-                                        <property name="cm:name"><![CDATA[Полученные входящие]]></property>
+                                        <property name="cm:name"><![CDATA[Получены входящие]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
@@ -948,14 +948,14 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По типу"/>
                                         </assocs>
                                     </item>
-                                    <item name="cm:Полученные внутренние" type="lecm-arm:node">
+                                    <item name="cm:Получены внутренние" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
                                             <![CDATA[@lecm\-statemachine\:status:'Направлен' AND @lecm\-document\:recipient\-assoc\-ref:"#current-user"]]></property>
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
-                                        <property name="cm:name"><![CDATA[Полученные внутренние]]></property>
+                                        <property name="cm:name"><![CDATA[Получены внутренние]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
@@ -1083,25 +1083,25 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные внутренние/3978ddc1-4ba8-4506-8053-fc7c85022722"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены внутренние/3978ddc1-4ba8-4506-8053-fc7c85022722"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные внутренние/4afc00d2-5b87-473e-b340-0369960f9a50"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены внутренние/4afc00d2-5b87-473e-b340-0369960f9a50"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные внутренние/015b27c4-30f5-4d9b-802b-18e06ec29a74"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены внутренние/015b27c4-30f5-4d9b-802b-18e06ec29a74"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные внутренние/6eba1340-1ddb-4adb-b307-e2b8b3f58f72"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены внутренние/6eba1340-1ddb-4adb-b307-e2b8b3f58f72"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные внутренние/1c042fc8-ba2a-41a4-be34-3868a36424f1"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены внутренние/1c042fc8-ba2a-41a4-be34-3868a36424f1"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные внутренние/137f2e88-2ad3-41d4-a41b-0a23279f818d"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены внутренние/137f2e88-2ad3-41d4-a41b-0a23279f818d"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные внутренние/a52ed478-c58c-460f-a409-da910e07bc87"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены внутренние/a52ed478-c58c-460f-a409-da910e07bc87"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные внутренние/40a2d23c-567c-4326-874a-c7b89f9eb481"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены внутренние/40a2d23c-567c-4326-874a-c7b89f9eb481"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные внутренние/ef187461-0bda-4a81-845e-ba0fa1de1b3b"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены внутренние/ef187461-0bda-4a81-845e-ba0fa1de1b3b"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Полученные внутренние/830b4e95-5a34-40f1-ba1d-0323d3de13d8"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/Получены внутренние/830b4e95-5a34-40f1-ba1d-0323d3de13d8"/>
                                         </assocs>
                                     </item>
                                 </items>
@@ -3548,7 +3548,7 @@
                                     <![CDATA[NOT (@lecm\-statemachine\:status:'Удален') AND NOT @lecm\-statemachine\-aspects\:is\-draft:true]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="cm:name"><![CDATA[По типам документов]]></property>
-                                <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[lecm-document:base]]></property>
                                 <property name="lecm-arm:expression"><![CDATA[]]></property>
                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                 <property name="lecm-arm:order"><![CDATA[10]]></property>
@@ -4910,6 +4910,14 @@
                                             </item>
                                         </items>
                                         <assocs>
+                                    <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По срокам"/>
+                                    <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Мои документы"/>
+                                    <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По состоянию исполнения"/>
+                                    <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По состоянию ознакомления"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Внутренние/add8be59-f865-482b-9b1e-5a387556ef30"/>
                                             <assoc type="lecm-arm:fields-assoc"
@@ -5024,7 +5032,7 @@
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[8]]></property>
                                                 <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-ord:signers-assoc]]></property>
+                                                    <![CDATA[lecmSignAspects:signerEmployeeAssoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Подписант]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[3078c02d-2c21-4ac8-93e8-d395b5c61fbb]]></property>
@@ -6108,10 +6116,14 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По типу"/>
+                                    <assoc type="lecm-arm:filters-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Мои документы"/>
                                             <assoc type="lecm-arm:filters-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По роли"/>
                                             <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По состоянию исполнения"/>
+                                    <assoc type="lecm-arm:filters-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По состоянию ознакомления"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Протоколы/3121f3b1-ea6c-4718-9a2f-b03e26661f88"/>
@@ -7020,7 +7032,7 @@
                                     <![CDATA[NOT (@lecm\-statemachine\:status:'Удален')]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="cm:name"><![CDATA[По состоянию]]></property>
-                                <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[lecm-document:base]]></property>
                                 <property name="lecm-arm:expression"><![CDATA[]]></property>
                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                 <property name="lecm-arm:order"><![CDATA[20]]></property>
@@ -13393,7 +13405,7 @@
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                         <property name="cm:name"><![CDATA[Исполнение]]></property>
-                                        <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
+                                        <property name="lecm-arm:search-type"><![CDATA[lecm-document:base]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[20]]></property>
@@ -13408,7 +13420,7 @@
                                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                                 <property name="cm:name"><![CDATA[На исполнении]]></property>
                                                 <property name="lecm-arm:search-type">
-                                                    <![CDATA[lecm-eds-document:base]]></property>
+                                                    <![CDATA[lecm-document:base]]></property>
                                                 <property name="lecm-arm:expression"><![CDATA[]]></property>
                                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[10]]></property>
@@ -19577,7 +19589,7 @@
                                             <![CDATA[@lecm\-statemachine\-aspects\:is\-final:true AND NOT @lecm\-statemachine\:status:'Удален' AND NOT @lecm\-statemachine\:status:'Действует']]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="cm:name"><![CDATA[Работа завершена]]></property>
-                                        <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
+                                        <property name="lecm-arm:search-type"><![CDATA[lecm-document:base]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[50]]></property>
@@ -21373,7 +21385,7 @@
                             <item name="cm:По номенклатуре" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[@lecm\-statemachine\-aspects\:is\-final:true AND ASPECT:"lecm-document-aspects:dont-move-to-archive-folder"]]></property>
+                                    <![CDATA[@lecm\-statemachine\-aspects\:is\-final:true AND ISNOTNULL:"lecm-eds-document:file-register-assoc-text-content"]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="cm:name"><![CDATA[По номенклатуре]]></property>
                                 <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
@@ -21571,7 +21583,7 @@
                                     <![CDATA[NOT (@lecm\-statemachine\:status:'Удален')]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="cm:name"><![CDATA[По тематикам]]></property>
-                                <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[lecm-document:base]]></property>
                                 <property name="lecm-arm:expression"><![CDATA[]]></property>
                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                 <property name="lecm-arm:order"><![CDATA[30]]></property>
@@ -21631,7 +21643,7 @@
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                         <property name="cm:name"><![CDATA[Тематики]]></property>
-                                        <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
+                                        <property name="lecm-arm:search-type"><![CDATA[lecm-document:base]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
@@ -21698,7 +21710,7 @@
                                         <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-eds-document:summaryContent]]></property>
-                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-format-string"><![CDATA[!html {lecm-eds-document:summaryContent}]]></property>
                                     </item>
                                     <item name="cm:ac70c067-f47b-44a3-9f94-cd8e1075e291" type="lecm-arm:field">
                                         <property name="lecm-arm:field-title"><![CDATA[Тематика]]></property>
@@ -25540,14 +25552,14 @@
                                 <property name="lecm-arm:types">
                                     <![CDATA[lecm-ord:document,lecm-nd:document,lecm-incoming:document,lecm-internal:document,lecm-protocol:document,lecm-outgoing:document]]></property>
                                 <items>
-                                    <item name="cm:На ознакомление" type="lecm-arm:node">
+                                    <item name="cm:На ознакомлении" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
                                             <![CDATA[{{ACTIVE_TASKS_ONLY({tasks:['lecmReview:reviewTask'],user:'#boss-ref'})}} OR @lecm\-review\-ts\:active\-reviewers:"*#boss-ref*"]]></property>
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
-                                        <property name="cm:name"><![CDATA[На ознакомление]]></property>
+                                        <property name="cm:name"><![CDATA[На ознакомлении]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
@@ -25892,14 +25904,14 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По типу"/>
                                         </assocs>
                                     </item>
-                                    <item name="cm:Полученные внутренние" type="lecm-arm:node">
+                                    <item name="cm:Получены внутренние" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
                                             <![CDATA[@lecm\-statemachine\:status:'Направлен' AND @lecm\-document\:recipient\-assoc\-ref:"#boss-ref"]]></property>
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
-                                        <property name="cm:name"><![CDATA[Полученные внутренние]]></property>
+                                        <property name="cm:name"><![CDATA[Получены внутренние]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
@@ -26027,25 +26039,25 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные внутренние/3978ddc1-4ba8-4506-8053-fc7c85022722"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены внутренние/3978ddc1-4ba8-4506-8053-fc7c85022722"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные внутренние/4afc00d2-5b87-473e-b340-0369960f9a50"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены внутренние/4afc00d2-5b87-473e-b340-0369960f9a50"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные внутренние/015b27c4-30f5-4d9b-802b-18e06ec29a74"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены внутренние/015b27c4-30f5-4d9b-802b-18e06ec29a74"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные внутренние/6eba1340-1ddb-4adb-b307-e2b8b3f58f72"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены внутренние/6eba1340-1ddb-4adb-b307-e2b8b3f58f72"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные внутренние/1c042fc8-ba2a-41a4-be34-3868a36424f1"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены внутренние/1c042fc8-ba2a-41a4-be34-3868a36424f1"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные внутренние/137f2e88-2ad3-41d4-a41b-0a23279f818d"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены внутренние/137f2e88-2ad3-41d4-a41b-0a23279f818d"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные внутренние/a52ed478-c58c-460f-a409-da910e07bc87"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены внутренние/a52ed478-c58c-460f-a409-da910e07bc87"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные внутренние/40a2d23c-567c-4326-874a-c7b89f9eb481"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены внутренние/40a2d23c-567c-4326-874a-c7b89f9eb481"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные внутренние/ef187461-0bda-4a81-845e-ba0fa1de1b3b"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены внутренние/ef187461-0bda-4a81-845e-ba0fa1de1b3b"/>
                                             <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Полученные внутренние/830b4e95-5a34-40f1-ba1d-0323d3de13d8"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Документы в работе/Получены внутренние/830b4e95-5a34-40f1-ba1d-0323d3de13d8"/>
                                         </assocs>
                                     </item>
                                 </items>
@@ -28381,6 +28393,14 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По состоянию ознакомления"/>
                                         </assocs>
                                     </item>
+                                    <item name="cm:4e859e95-b833-43d0-9567-1198ef85bcbc" type="lecm-arm:field">
+                                        <property name="lecm-arm:order"><![CDATA[2]]></property>
+                                        <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
+                                        <property name="lecm-arm:field-title"><![CDATA[Дата]]></property>
+                                        <property name="cm:name"><![CDATA[16eb9e6e-34d5-4495-a9c8-22281d64aa59]]></property>
+                                    </item>
                                     <item name="cm:0bf067e1-6286-446f-9316-7df14f0782d0" type="lecm-arm:field">
                                         <property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
                                         <property name="cm:name"><![CDATA[a3844f59-86b9-4e00-9674-10f001064e12]]></property>
@@ -28501,14 +28521,6 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По состоянию ознакомления"/>
                                         </assocs>
                                     </item>
-                                    <item name="cm:463814e7-6f54-49d0-863c-1096e02773e9" type="lecm-arm:field">
-                                        <property name="lecm-arm:order"><![CDATA[2]]></property>
-                                        <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
-                                        <property name="lecm-arm:field-title"><![CDATA[Дата]]></property>
-                                        <property name="cm:name"><![CDATA[0fda5010-a00c-4941-9fec-6048ac60f984]]></property>
-                                    </item>
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
@@ -28529,6 +28541,8 @@
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа контролера/ОРД/13d362ad-5f99-4f09-a65d-107b1f47c00b"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа контролера/ОРД/ac34e10c-213f-4cf5-a939-7cbe0fdffe20"/>
+                                    <assoc type="lecm-arm:fields-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа контролера/ОРД/16eb9e6e-34d5-4495-a9c8-22281d64aa59"/>
                                     <assoc type="lecm-arm:filters-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По срокам"/>
                                     <assoc type="lecm-arm:filters-assoc"

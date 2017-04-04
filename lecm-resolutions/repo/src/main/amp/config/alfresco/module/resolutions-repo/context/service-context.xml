@@ -233,7 +233,7 @@
     </bean>
     <bean id="resolutions.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="userProfile.arm.LogicEcmBootstrap,arm.settings.LogicEcmBootstrap,eds.documents.arm.settings.LogicEcmBootstrap">
-        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Настройки СЭД"/>
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/arm/resolutions-settings-arm.xml</value>
