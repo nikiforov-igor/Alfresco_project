@@ -21385,7 +21385,7 @@
                             <item name="cm:По номенклатуре" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[@lecm\-statemachine\-aspects\:is\-final:true AND ASPECT:"lecm-document-aspects:dont-move-to-archive-folder"]]></property>
+                                    <![CDATA[@lecm\-statemachine\-aspects\:is\-final:true AND ISNOTNULL:"lecm-eds-document:file-register-assoc-text-content"]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="cm:name"><![CDATA[По номенклатуре]]></property>
                                 <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
