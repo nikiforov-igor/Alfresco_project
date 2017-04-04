@@ -316,7 +316,9 @@ LogicECM.ORD = LogicECM.ORD || {};
             });
         },
         onAddRow: function (me, asset, owner, actionsConfig, confirmFunction) {
-            if (this.doubleClickLock) return;
+            if (this.doubleClickLock) {
+                return;
+            }
             this.doubleClickLock = true;
             this.showCreateDialog(this.datagridMeta, null, null, true, me);
         },
