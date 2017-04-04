@@ -405,19 +405,19 @@ LogicECM.ORD = LogicECM.ORD || {};
                         if (response && response.json.formatString) {
                             var data = response.json.formatString.split(",");
                             var args = {};
-                            if (executionDateFormValue || executionDateFormValue != data[0]) {
+                            if (executionDateEl) {
                                 if (executionDateFormValue) {
                                     args["prop_lecm-ord-table-structure_execution-date"] = new Date(executionDateFormValue);
                                 }
                             } else if (data[0]) {
                                 args["prop_lecm-ord-table-structure_execution-date"] = new Date(data[0]);
                             }
-                            if (subjectFormValue || subjectFormValue != data[1]) {
+                            if (subjectEl) {
                                 args["assoc_lecm-ord-table-structure_subject-assoc"] = subjectFormValue;
                             } else if (data[1]) {
                                 args["assoc_lecm-ord-table-structure_subject-assoc"] = data[1];
                             }
-                            if (controllerFormValue || controllerFormValue != data[2]) {
+                            if (controllerEl) {
                                 args["assoc_lecm-ord-table-structure_controller-assoc"] = controllerFormValue;
                             } else if (data[2]) {
                                 args["assoc_lecm-ord-table-structure_controller-assoc"] = data[2];
