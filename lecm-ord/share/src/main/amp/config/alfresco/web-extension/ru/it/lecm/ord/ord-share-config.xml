@@ -539,7 +539,6 @@
                     <field id="lecm-eds-document:execution-date" set="ord-document-form-common-set">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="minLimitCurrentDate">true</control-param>
-                            <control-param name="changeFireAction">ordExecutionDateFormValueChangedEvent</control-param>
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent" set="ord-document-form-common-set">
@@ -568,11 +567,7 @@
 							<control-param name="maxLength">9</control-param>
 						</control>
 					</field>
-                    <field id="lecm-document:subject-assoc" set="ord-document-form-common-set">
-                        <control>
-                            <control-param name="changeItemsFireAction">ordSubjectFormValueChangedEvent</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-document:subject-assoc" set="ord-document-form-common-set"/>
                     <field id="lecm-eds-document:file-register-assoc" mandatory="true" set="ord-document-form-common-set"/>
 
                     <field id="lecm-ord:canceled-assoc" set="ord-document-form-common-set">
