@@ -429,9 +429,9 @@
 					<show id="lecm-eds-globset:n-days"/>
 				</field-visibility>
 				<appearance>
-					<set id="notifications-term-group" appearance="fieldset" label-id="label.notifications-term-group"/>
-					<field id="lecm-eds-globset:short-n-days" set="notifications-term-group"/>
-					<field id="lecm-eds-globset:n-days" set="notifications-term-group"/>
+					<set id="notifications-term-about-execution" appearance="fieldset" label-id="label.notifications-term-about-execution"/>
+					<field id="lecm-eds-globset:short-n-days" set="notifications-term-about-execution"/>
+					<field id="lecm-eds-globset:n-days" set="notifications-term-about-execution"/>
 				</appearance>
 			</form>
 		</forms>
@@ -446,9 +446,9 @@
 					<show id="lecm-eds-globset:n-days"/>
 				</field-visibility>
 				<appearance>
-					<set id="notifications-term-group" appearance="fieldset" label-id="label.notifications-term-group"/>
-					<field id="lecm-eds-globset:short-n-days" set="notifications-term-group"/>
-					<field id="lecm-eds-globset:n-days" set="notifications-term-group"/>
+					<set id="notifications-term-about-execution" appearance="fieldset" label-id="label.notifications-term-about-execution"/>
+					<field id="lecm-eds-globset:short-n-days" set="notifications-term-about-execution"/>
+					<field id="lecm-eds-globset:n-days" set="notifications-term-about-execution"/>
 				</appearance>
 			</form>
 		</forms>
