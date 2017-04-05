@@ -22,4 +22,5 @@ public interface ORDDocumentService {
 	Boolean haveNotPointsWithDueDateAndController(NodeRef document);
 	Boolean haveNotPointsWithControllerAndHaveDueDate(NodeRef document);
 	Boolean haveNotPointsWithDueDateAndHaveController(NodeRef document);
+	Boolean currentUserIsReviewer(NodeRef document);
 }
