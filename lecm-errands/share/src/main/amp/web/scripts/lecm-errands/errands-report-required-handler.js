@@ -40,7 +40,9 @@
                     Dom.get(args[1].formId + '_prop_' + propName).selectedIndex = 3;
                 } else {
                     recipientField.options[3].hidden = true;
-                    Dom.get(args[1].formId + '_prop_' + propName).selectedIndex = 0;
+                    if (Dom.get(args[1].formId + '_prop_' + propName).selectedIndex == 3) {
+                        Dom.get(args[1].formId + '_prop_' + propName).selectedIndex = 0;
+                    }
                 }
             }
         }
