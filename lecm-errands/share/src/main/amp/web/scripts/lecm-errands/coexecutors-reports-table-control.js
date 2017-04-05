@@ -169,7 +169,11 @@ LogicECM.errands = LogicECM.errands || {};
                 }
                 datagrid.search.performSearch(datagridMeta);
             });
-
+            YAHOO.Bubbling.on("onSearchSuccess", function (layer, args) {
+                if (datagrid.options.bubblingLabel == args[1].bubblingLabel) {
+                    YAHOO.Bubbling.fire("selectedItemsChanged", datagrid.options.bubblingLabel);
+                }
+            });
             //получаем кнопку переноса отчетов
             var transferSelectedReportsButton = Dom.get(this.id + "-cntrl-exec-report-transfer-coexecutors-reports");
             if (currentUser.isExecutor && !currentUser.isCoexecutor) {
