@@ -25,7 +25,20 @@
             isController = true;
         }
     }
+    var isErrandsCreated = false;
+    var tableAssocs = node.assocs["lecm-ord-table-structure:items-assoc"];
+    if (tableAssocs && tableAssocs.length) {
+        var table = tableAssocs[0];
+        var pointAssocs = table.childAssocs["cm:contains"];
+        if (pointAssocs && pointAssocs.length) {
+            isErrandsCreated = pointAssocs.some(function (point) {
+                var errandsAssoc = point.assocs["lecm-ord-table-structure:errand-assoc"];
+                return errandsAssoc && errandsAssoc.length;
+            });
+        }
+    }
     model.user.isController = isController;
     model.document.status = node.properties["lecm-statemachine:status"];
+    model.document.isErrandsCreated = isErrandsCreated;
 
 })();

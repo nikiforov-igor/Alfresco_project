@@ -121,7 +121,8 @@ LogicECM.ORD = LogicECM.ORD || {};
                             } else {
                                 Dom.setStyle(this.id + "-toolbar", "display", "none");
                             }
-                            this.realCreateDatagrid(actions, currentUser, docStatus, allowedStatuses);
+                            var expandable = response.json.document.isErrandsCreated;
+                            this.realCreateDatagrid(actions, currentUser, docStatus, expandable);
                         }
                     },
                     scope: this
@@ -131,10 +132,8 @@ LogicECM.ORD = LogicECM.ORD || {};
             });
         },
 
-        realCreateDatagrid: function (actions, currentUser, docStatus, allowedStatuses) {
+        realCreateDatagrid: function (actions, currentUser, docStatus, expandable) {
             if (this.tableData != null && this.tableData.rowType != null) {
-                var expandable = !allowedStatuses.includes(docStatus) && docStatus != "На подписании" && docStatus != "Зарегистрирован";
-
                 var datagrid = new LogicECM.ORD.PointsDatagrid(this.options.containerId).setOptions({
                     usePagination: true,
                     showExtendSearchBlock: false,
