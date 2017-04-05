@@ -84,6 +84,7 @@
 		  class="ru.it.lecm.ord.ORDDocumentServiceImpl"
 		  p:lecmDictionaryService-ref="serviceDictionary"
           p:documentService-ref="documentService"
+          p:orgstructureBean-ref="serviceOrgstructure"
           p:documentTableService-ref="documentTableService"/>
 
 

@@ -2,7 +2,7 @@
 <items updateMode="CreateOrUpdate">
     <item name="cm:Создание поручения из ОРД" type="lecm-group-actions:script-action">
         <property name="lecm-group-actions:expression">
-            <![CDATA[(((@edsGlobalSettingsService.isRegistrationCenralized() AND user.currentUser().hasBusinessRole("DA_REGISTRARS")) OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), 'DA_REGISTRAR_DYN')) OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_CONTROLLER_DYN") OR (doc.attr("lecm-statemachine:status") == "На исполнении" AND @reviewService.needReviewByCurrentUser(doc.getNodeRef()))) AND doc.attr("lecm-document-aspects:reg-data-date")!=null]]></property>
+            <![CDATA[(((@edsGlobalSettingsService.isRegistrationCenralized() AND user.currentUser().hasBusinessRole("DA_REGISTRARS")) OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), 'DA_REGISTRAR_DYN')) OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_CONTROLLER_DYN") OR (doc.attr("lecm-statemachine:status") == "На исполнении" AND @ordDocumentService.currentUserIsReviewer(doc.getNodeRef()))) AND doc.attr("lecm-document-aspects:reg-data-date")!=null]]></property>
         <property name="cm:name"><![CDATA[Создание поручения из ОРД]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[Зарегистрирован;На исполнении]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>

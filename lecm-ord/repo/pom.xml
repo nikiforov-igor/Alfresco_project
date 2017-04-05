@@ -154,6 +154,11 @@
             <artifactId>signing-repo-api</artifactId>
             <version>${platform.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.workflow.review</groupId>
+            <artifactId>review-repo-api</artifactId>
+            <version>${platform.version}</version>
+        </dependency>
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required
