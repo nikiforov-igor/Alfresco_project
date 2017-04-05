@@ -24,7 +24,7 @@
 		var valid = false;
 		var status = form.getFormData()['prop_lecmApprove3_decision'];
 		if (status === 'REJECTED' || status == 'APPROVED_WITH_REMARK') {
-			valid = form.getFormData()['prop_bpm_comment'] != '';
+			valid = form.getFormData()['prop_bpm_comment'].trim() != '';
 		} else {
 			valid = true;
 		}
