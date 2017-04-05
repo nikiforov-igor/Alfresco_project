@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-    <item name="cm:Сроки приближения исполнения" type="lecm-arm:html-node">
-        <property name="cm:name"><![CDATA[Сроки приближения исполнения]]></property>
+    <item name="cm:Настройка срочности исполнения" type="lecm-arm:html-node">
+        <property name="cm:name"><![CDATA[Настройка срочности исполнения]]></property>
         <property name="lecm-arm:order"><![CDATA[25]]></property>
         <property name="lecm-arm:html-url">
             <![CDATA[page/components/console/eds-terms-of-notification-settings]]>

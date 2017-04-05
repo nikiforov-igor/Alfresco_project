@@ -699,6 +699,7 @@
                 <value>alfresco/module/${artifactId}/actions/create-errand-from-incoming.xml</value>
                 <value>alfresco/module/${artifactId}/actions/create-errand-from-internal.xml</value>
                 <value>alfresco/module/${artifactId}/actions/create-errand-from-protocol.xml</value>
+                <value>alfresco/module/${artifactId}/actions/create-errand-from-ord.xml</value>
             </list>
         </property>
     </bean>

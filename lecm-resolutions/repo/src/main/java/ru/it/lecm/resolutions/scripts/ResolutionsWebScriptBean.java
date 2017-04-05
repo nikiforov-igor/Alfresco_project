@@ -176,6 +176,7 @@ public class ResolutionsWebScriptBean extends BaseWebScript {
                     issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_CONTROL + ":true ";
                 }
                 case ISSUED_RESOLUTIONS_ON_EXECUTION: {
+                    issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_REQUIRE_CLOSERS_DECISION + ":false ";
                     statuses = getResolutionsStatuses(filters, ON_EXECUTION_KEY);
                     break;
                 }

@@ -51,7 +51,7 @@ LogicECM.module = LogicECM.module || {};
 			if (decisionElement != null) {
 				transitionDecision = decisionElement.value
 			}
-			if ((transitionDecision == 'RESERVED') || (arg && arg.value != '')) {
+			if ((transitionDecision == 'RESERVED') || (arg && arg.value.trim() != '')) {
 				return true;
 			}
 			else {
