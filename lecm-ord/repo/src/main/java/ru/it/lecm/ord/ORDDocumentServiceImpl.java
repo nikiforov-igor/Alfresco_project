@@ -4,7 +4,9 @@ import java.util.*;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -12,6 +14,8 @@ import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.ord.api.ORDDocumentService;
 import ru.it.lecm.ord.api.ORDModel;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.workflow.review.api.ReviewService;
 
 /**
  *
@@ -22,8 +26,13 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 	private DictionaryBean lecmDictionaryService;
 	private DocumentService documentService;
 	private DocumentTableService documentTableService;
+    private OrgstructureBean orgstructureBean;
 
-	public void setDocumentTableService(DocumentTableService documentTableService) {
+    public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
+        this.orgstructureBean = orgstructureBean;
+    }
+
+    public void setDocumentTableService(DocumentTableService documentTableService) {
 		this.documentTableService = documentTableService;
 	}
 
@@ -151,7 +160,23 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 		return haveNotPointsWithDueDate(document) && !haveNotPointsWithController(document);
 	}
 
-	public void setDocumentService(DocumentService documentService) {
+    @Override
+    public Boolean currentUserIsReviewer(NodeRef document) {
+        NodeRef table = documentTableService.getTable(document, ReviewService.TYPE_REVIEW_TS_REVIEW_TABLE);
+        if (table != null) {
+            List<NodeRef> reviewList = documentTableService.getTableDataRows(table);
+            NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+            for (NodeRef reviewListRow : reviewList) {
+                NodeRef itemEmployee = findNodeByAssociationRef(reviewListRow, ReviewService.ASSOC_REVIEW_TS_REVIEWER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+                if (currentEmployee.equals(itemEmployee)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
 	}
 }

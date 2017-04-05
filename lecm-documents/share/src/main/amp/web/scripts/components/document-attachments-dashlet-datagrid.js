@@ -116,12 +116,12 @@ var $html = Alfresco.util.encodeHTML,
 							}
 
 							if (oColumn.field == "prop_cm_name") {
-								var href = '<a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.showAttachmentsModalForm(\'{documentRef}\', \'{attachmentRef}\', \'{baseDocAssocName}\', \'{showBaseDocAttachmentsBottom}\')">{columnContent}</a>';
+								var href = '<a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.showAttachmentsModalForm(\'{documentRef}\', \'{attachmentRef}\', \'{baseDocAssocName}\', {showBaseDocAttachmentsBottom})">{columnContent}</a>';
 								html += YAHOO.lang.substitute(href, {
 									documentRef: grid.options.documentRef,
 									attachmentRef: oRecord.getData("nodeRef"),
 									baseDocAssocName: grid.options.baseDocAssocName,
-                                    showBaseDocAttachmentsBottom: grid.options.showBaseDocAttachmentsBottom,
+                                    showBaseDocAttachmentsBottom: grid.options.showBaseDocAttachmentsBottom.toString(),
 									columnContent: columnContent
 								});
 								oColumn.maxAutoWidth = oColumn.getColEl().offsetWidth;
