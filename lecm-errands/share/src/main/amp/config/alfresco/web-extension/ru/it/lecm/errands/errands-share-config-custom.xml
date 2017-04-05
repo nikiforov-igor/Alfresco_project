@@ -247,8 +247,6 @@
                     <show id="lecm-errands:additional-document-assoc"/>
                     <!-- Автор -->
                     <show id="lecm-errands:initiator-assoc"/>
-                    <!-- Создатель -->
-                    <show id="lecm-document:author-assoc"/>
                     <!--  Тип поручения -->
                     <show id="lecm-errands:type-assoc"/>
                     <!--  Заголовок поручения -->
@@ -331,7 +329,6 @@
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:author-assoc" set="beforeDateSet" label-id="label.document.creator"/>
                     <field id="lecm-errands:type-assoc" set="beforeDateSet"/>
                     <field id="lecm-errands:title" set="beforeDateSet">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
