@@ -14,7 +14,8 @@
         </#if>
     },
     "document": {
-        "status": "${document.status}"
+        "status": "${document.status}",
+        "isErrandsCreated": ${document.isErrandsCreated?string}
     }
 
 }

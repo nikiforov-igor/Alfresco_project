@@ -11676,54 +11676,51 @@ if (doc) {
     var tableAssocs = doc.assocs["lecm-ord-table-structure:items-assoc"];
     if (tableAssocs && tableAssocs.length) {
         var table = tableAssocs[0];
-        if (tableAssocs && tableAssocs.length) {
-            var table = tableAssocs[0];
-            var pointAssocs = table.childAssocs["cm:contains"];
-            if (pointAssocs && pointAssocs.length) {
-                pointAssocs.forEach(function (point) {
-                    var errandAssoc = point.assocs["lecm-ord-table-structure:errand-assoc"];
-                    if (errandAssoc && errandAssoc.length) {
-                        var pointStatusAssoc = point.assocs["lecm-ord-table-structure:item-status-assoc"];
-                        if (pointStatusAssoc && pointStatusAssoc.length) {
-                            var pointStatus = pointStatusAssoc[0].properties["cm:name"];
-                            if (pointStatus == ordStatemachine.getPointStatusTextByCode("PERFORMANCE_STATUS")) {
-                                var errand = errandAssoc[0];
-                                var errandStatus = errand.properties["lecm-statemachine:status"];
-                                if (errandStatus == "Исполнено" || errandStatus == "Отменено") {
-                                    var pointStatusCode = "";
-                                  	if (errandStatus == "Исполнено") {
-                                        pointStatusCode = "EXECUTED_STATUS";
-                                    } else if (errandStatus == "Отменено") {
-                                        pointStatusCode = "CANCELED_STATUS";
-                                    }
-                                    ordStatemachine.changePointStatus(point.nodeRef.toString(), pointStatusCode);
-                                  	pointStatus = ordStatemachine.getPointStatusTextByCode(pointStatusCode);
-                                    var currentUser = orgstructure.getCurrentEmployee();
-                                    var title = point.properties["lecm-ord-table-structure:title"];
-                                    var content = point.properties["lecm-ord-table-structure:item-content"];
-                                    var number = point.properties["lecm-document:indexTableRow"];
-                                    if (ordControllerAssoc && ordControllerAssoc.length) {
-                                        notifications.sendNotificationFromCurrentUser({
-                                            recipients: [ordControllerAssoc[0]],
-                                            templateCode: 'ORD_ITEM_CHANGE_STATUS',
-                                            templateConfig: {
-                                                mainObject: doc,
-                                                eventExecutor: currentUser,
-                                                number: "Пункт номер " + number,
-                                                numberTitle: title + " " + content,
-                                                status: pointStatus,
-                                                statusTitle: "",
-                                                errand: errand
-                                            },
-                                            dontCheckAccessToObject: true
-                                        });
-                                    }
+        var pointAssocs = table.childAssocs["cm:contains"];
+        if (pointAssocs && pointAssocs.length) {
+            pointAssocs.forEach(function (point) {
+                var errandAssoc = point.assocs["lecm-ord-table-structure:errand-assoc"];
+                if (errandAssoc && errandAssoc.length) {
+                    var pointStatusAssoc = point.assocs["lecm-ord-table-structure:item-status-assoc"];
+                    if (pointStatusAssoc && pointStatusAssoc.length) {
+                        var pointStatus = pointStatusAssoc[0].properties["cm:name"];
+                        if (pointStatus == ordStatemachine.getPointStatusTextByCode("PERFORMANCE_STATUS")) {
+                            var errand = errandAssoc[0];
+                            var errandStatus = errand.properties["lecm-statemachine:status"];
+                            if (errandStatus == "Исполнено" || errandStatus == "Отменено") {
+                                var pointStatusCode = "";
+                                if (errandStatus == "Исполнено") {
+                                    pointStatusCode = "EXECUTED_STATUS";
+                                } else if (errandStatus == "Отменено") {
+                                    pointStatusCode = "CANCELED_STATUS";
+                                }
+                                ordStatemachine.changePointStatus(point.nodeRef.toString(), pointStatusCode);
+                                pointStatus = ordStatemachine.getPointStatusTextByCode(pointStatusCode);
+                                var currentUser = orgstructure.getCurrentEmployee();
+                                var title = point.properties["lecm-ord-table-structure:title"];
+                                var content = point.properties["lecm-ord-table-structure:item-content"];
+                                var number = point.properties["lecm-document:indexTableRow"];
+                                if (ordControllerAssoc && ordControllerAssoc.length) {
+                                    notifications.sendNotificationFromCurrentUser({
+                                        recipients: [ordControllerAssoc[0]],
+                                        templateCode: 'ORD_ITEM_CHANGE_STATUS',
+                                        templateConfig: {
+                                            mainObject: doc,
+                                            eventExecutor: currentUser,
+                                            number: "Пункт номер " + number,
+                                            numberTitle: title + " " + content,
+                                            status: pointStatus,
+                                            statusTitle: "",
+                                            errand: errand
+                                        },
+                                        dontCheckAccessToObject: true
+                                    });
                                 }
                             }
                         }
                     }
-                });
-            }
+                }
+            });
         }
     }
   	var reviewState = doc.properties["lecm-review-ts:doc-review-state"];
