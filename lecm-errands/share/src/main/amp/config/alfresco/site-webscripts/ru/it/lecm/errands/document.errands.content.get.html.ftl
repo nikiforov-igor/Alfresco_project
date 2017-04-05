@@ -19,7 +19,7 @@
 	            <div class="right-errand">
                     <div class="workflow-task-main-text text-broken">
 	                    <span class="errand-title">
-	                        <a href="${url.context}/page/document?nodeRef=${errand.nodeRef}">${msg('label.from')}: ${errand.initiatorName}, ${msg('label.date')}: ${errand.dueDate}</a>
+	                        <a href="${url.context}/page/document?nodeRef=${errand.nodeRef}">${msg('label.from')}: ${errand.initiatorName}, ${msg('label.date')}: ${errand.limitationDateText}</a>
 	                    </span>
                     </div>
                 </div>
