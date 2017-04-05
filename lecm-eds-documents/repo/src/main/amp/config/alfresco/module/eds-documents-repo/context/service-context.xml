@@ -162,7 +162,25 @@
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="documentService" ref="documentService"/>
 		<property name="stateMachineService" ref="stateMachineHelper"/>
+		<property name="propertiesService" ref="edsPropertiesService"/>
 	</bean>
+
+	<bean id="edsPropertiesService" class="ru.it.lecm.base.beans.LecmBasePropertiesServiceImpl">
+		<property name="namesService" ref="lecmEDSNamesService" />
+		<property name="valuesService" ref="lecmValuesService" />
+	</bean>
+
+	<bean id="lecmEDSNamesService"  class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces" value="ru.it.lecm.base.beans.LecmBaseNamesService"/>
+		<property name="target" ref="lecmNamesImpl"/>
+		<property name="interceptorNames">
+			<list>
+				<value>businessjournalInterceptor</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="businessjournalInterceptor" class="ru.it.lecm.base.utils.LecmBusinessjournalInterceptor"/>
 
 	<bean id="filterByDictionaryAttributeValueProcessor" class="ru.it.lecm.eds.processors.FilterByDictionaryAttributeValueProcessor" parent="searchQueryBaseProccesor">
 		<property name="id" value="FILTER_BY_DICTIONARY_ATTRIBUTE_VALUE"/>
