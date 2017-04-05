@@ -52,7 +52,7 @@
 	<bean id="eds.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
 					  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
-					  businessJournalLogEventsPolicy"
+					  businessJournalLogEventsPolicy, eds.models.bootstrap"
 		  p:dictionaries-ref="eds.dictionaries"/>
 
 	<bean id="eds.arm.filters.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
