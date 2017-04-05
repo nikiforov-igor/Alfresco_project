@@ -389,4 +389,48 @@
 		</forms>
 	</config>
 
+    <config evaluator="aspect" condition="exif:exif">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="exif:pixelXDimension" />
+                    <show id="exif:pixelYDimension" />
+                    <show id="exif:focalLength" />
+                    <show id="exif:exposureTime" />
+                    <show id="exif:fNumber" />
+                    <show id="exif:isoSpeedRatings" />
+                    <show id="exif:orientation" />
+                    <show id="exif:dateTimeOriginal" />
+                    <show id="exif:flash" />
+                    <show id="exif:xResolution" />
+                    <show id="exif:yResolution" />
+                    <show id="exif:resolutionUnit" />
+                    <show id="exif:manufacturer" />
+                    <show id="exif:model" />
+                    <show id="exif:software" />
+                </field-visibility>
+                <appearance>
+                    <set id="exif" appearance="bordered-panel" label-id="aspect.exif_exif" />
+                    <set id="exif-details" parent="exif" template="/org/alfresco/components/form/2-column-set.ftl" />
+                    <set id="exif-resolution" parent="exif" appearance="panel" label-id="aspect.exif_resolution" template="/org/alfresco/components/form/2-column-set.ftl" />
+                    <set id="exif-camera" parent="exif" appearance="panel" label-id="aspect.exif_camera" template="/org/alfresco/components/form/2-column-set.ftl" />
+                    <field set="exif-details" id="exif:pixelXDimension" />
+                    <field set="exif-details" id="exif:pixelYDimension" />
+                    <field set="exif-details" id="exif:focalLength" />
+                    <field set="exif-details" id="exif:exposureTime" />
+                    <field set="exif-details" id="exif:fNumber" />
+                    <field set="exif-details" id="exif:isoSpeedRatings" />
+                    <field set="exif-details" id="exif:flash" />
+                    <field set="exif-details" id="exif:orientation" />
+                    <field set="exif-details" id="exif:dateTimeOriginal" />
+                    <field set="exif-resolution" id="exif:xResolution" />
+                    <field set="exif-resolution" id="exif:yResolution" />
+                    <field set="exif-resolution" id="exif:resolutionUnit" />
+                    <field set="exif-camera" id="exif:manufacturer" />
+                    <field set="exif-camera" id="exif:model" />
+                    <field set="exif-camera" id="exif:software" />
+                </appearance>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>
