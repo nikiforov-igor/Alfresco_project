@@ -263,8 +263,6 @@
                     <show id="lecm-errands:limitation-date-days" />
                     <show id="lecm-errands:limitation-date-type"/>
                     <show id="lecm-errands:limitation-date" />
-                    <!-- Закрывает вышестоящее поручение -->
-                    <show id="lecm-errands:auto-close"/>
                     <!-- Направлять периодически  -->
                     <show id="lecm-errands:periodically"/>
                     <!-- Контролер -->
@@ -383,9 +381,6 @@
                         <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
                             <control-param name="textCode">label.errand.limitless</control-param>
                         </control>
-                    </field>
-                    <field id="lecm-errands:auto-close" set="afterDateSet">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
                     <field id="lecm-errands:periodically" set="afterDateSet" read-only="true">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
@@ -1162,6 +1157,292 @@
                 </appearance>
             </form>
             <form id="workflow-form">
+                <field-visibility>
+                    <!-- Тип Поручения -->
+                    <show id="lecm-errands:type-assoc"/>
+                    <!--  Заголовок поручения -->
+                    <show id="lecm-errands:title"/>
+                    <!-- Содержание -->
+                    <show id="lecm-errands:content"/>
+                    <!-- Исполнитель -->
+                    <show id="lecm-errands:executor-assoc"/>
+                    <!-- Соисполнители -->
+                    <show id="lecm-errands:coexecutors-assoc"/>
+                    <!-- Автор -->
+                    <show id="lecm-errands:initiator-assoc"/>
+                    <!-- Срок исполнения -->
+                    <show id="limitation-date-script" force="true"/>
+                    <show id="lecm-errands:limitation-date-radio" />
+                    <show id="lecm-base-dummy-aspects:script" force="true"/>
+                    <show id="lecm-errands:limitation-date-days" />
+                    <show id="lecm-errands:limitation-date-type"/>
+                    <show id="lecm-errands:limitation-date" />
+                    <!-- Периодичность -->
+                    <show id="lecm-errands:periodically"/>
+                    <show id="lecm-errands:periodically-radio"/>
+                    <show id="lecm-errands:reiteration-rule"/>
+                    <show id="lecm-errands:period-start"/>
+                    <show id="lecm-errands:period-end"/>
+                    <show id="lecm-errands:period-during"/>
+                    <show id="lecm-errands:period-during-type"/>
+                    <show id="lecm-errands:reiteration-count"/>
+                    <show id="reiteration-count-label" force="true"/>
+                    <show id="lecm-base-dummy-aspects:script2" force="true"/>
+                    <!-- Контролер-->
+                    <show id="lecm-errands:controller-assoc"/>
+                    <!-- Требуется отчет -->
+                    <show id="lecm-errands:report-required"/>
+                    <!--Получатель отчета-->
+                    <show id="lecm-errands:report-recipient-type"/>
+                    <!-- Важное -->
+                    <show id="lecm-errands:is-important"/>
+                    <!-- Тематика -->
+                    <show id="lecm-document:subject-assoc"/>
+                    <!--  Вложения -->
+                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
+                    <!-- Для проверки на черновик -->
+                    <show id="lecm-errands:is-short"/>
+                    <!-- Ссылки  -->
+                    <show id="lecm-errands:links-assoc"/>
+
+                    <show id="lecm-document-aspects:template-name" force="true"/>
+                    <show id="lecm-document-aspects:template-ref" force="true"/>
+
+                    <show id="change-errand-type-script" force="true"/>
+                    <show id="report-required-handler-script" force="true"/>
+                    <show id="errands-workflow-form-script" force="true"/>
+
+                    <!-- Buttons -->
+                    <show id="save-draft-button" force="true"/>
+                    <show id="expand-button" force="true"/>
+
+                    <!-- Ссылка на документ основание  -->
+                    <show id="lecm-errands:additional-document-assoc"/>
+
+                    <show id="errands-process-other-auto-close-script" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <set id="exist-business-role" template="/ru/it/lecm/errands/controls/errands-choosing-set.ftl" />
+                    <set id="limitation-date"  template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
+                    <set id="block2-1" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="block3"  template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="errand-validity" parent="block3" template="/ru/it/lecm/errands/controls/errands-validity-set.ftl"/>
+                    <set id="validity-dates" parent="errand-validity" template="/ru/it/lecm/base-share/components/controls/daterange.ftl"/>
+                    <set id="during" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
+                    <set id="repeat" parent="errand-validity" template="/org/alfresco/components/form/2-column-set.ftl"/>
+                    <set id="block2-2" template="/ru/it/lecm/eds/controls/hidden-set.ftl"/>
+                    <set id="static"/>
+
+                    <field id="lecm-errands:type-assoc" mandatory="true" >
+                        <control>
+                            <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
+                            <control-param name="additionalFilter">@lecm\-errands\-dic\:errand\-type\-manual\-selection:true</control-param>
+                        </control>
+                    </field>
+                    <field id="change-errand-type-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-reinit-title-by-type.js</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-errands:title" >
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
+                            <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-errands:content" >
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">8</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-errands:executor-assoc" >
+                        <control>
+                            <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+                            <control-param name="showSearch">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-errands:coexecutors-assoc" >
+                        <control>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-errands:initiator-assoc" set="exist-business-role">
+                        <control>
+                            <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
+                            <control-param name="changeItemsFireAction">initiatorChanged</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-errands:limitation-date-radio" set="limitation-date"  mandatory="true">
+                        <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
+                            <control-param name="defaultValue">DAYS</control-param>
+                            <control-param name="fireChangeEventName">changeLimitationDateRadio</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-errands:limitation-date-days" set="limitation-date" mandatory="true">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-errands:limitation-date-type" set="limitation-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                    <field id="lecm-errands:limitation-date" set="limitation-date">
+                        <control>
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script" set="limitation-date">
+                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                            <control-param name="textCode">label.errand.limitless</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-errands:periodically" set="block2-1" read-only="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+                            <control-param name="changeFireAction">periodicallyErrandChange</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-errands:reiteration-rule" set="block3">
+                        <control template="/ru/it/lecm/errands/controls/errands-reiteration-control.ftl">
+                            <control-param name="defaultType">DAILY</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-errands:periodically-radio" set="errand-validity" mandatory="true">
+                        <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
+                            <control-param name="defaultValue">DATERANGE</control-param>
+                        </control>
+                        <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.periodicallyValidation" event="change" />
+                    </field>
+
+                    <field id="lecm-errands:period-start" label="" set="validity-dates"/>
+                    <field id="lecm-errands:period-end" label="" set="validity-dates"/>
+                    <field id="lecm-errands:period-during" label-id="label.errand.during" set="during"/>
+                    <field id="lecm-errands:period-during-type" set="during">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                    <field id="lecm-errands:reiteration-count" label-id="label.errand.endAfter" set="repeat"/>
+                    <field id="reiteration-count-label" set="repeat">
+                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                            <control-param name="textCode">label.errand.reiterationCount</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-base-dummy-aspects:script2" set="errand-validity">
+                        <control template="/ru/it/lecm/eds/controls/static-text-control.ftl">
+                            <control-param name="textCode">label.errand.period-endless</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-errands:controller-assoc" set="block2-2">
+                        <control>
+                            <control-param name="showSearch">true</control-param>
+                            <control-param name="changeItemsFireAction">errandControllerChanged</control-param>
+                            <control-param name="childrenDataSource">lecm/employees/DA_CONTROLLERS/picker</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-errands:report-required" set="block2-2">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+                            <control-param name="changeFireAction">errandReportRequiredChanged</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-errands:report-recipient-type" set="block2-2">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+
+                    <field id="lecm-errands:is-important" set="block2-2">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    </field>
+
+                    <field id="lecm-document:subject-assoc" set="block2-2">
+                        <control>
+                            <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
+                            <control-param name="selectedItemsFormArgs">parentDocSubjectAssoc</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-document-aspects:attachments-temp-assoc" set="static">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
+                            <control-param name="directoryName">label.errands.attachments</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-errands:additional-document-assoc">
+                        <control template="/ru/it/lecm/errands/controls/additional-document-assoc.ftl">
+                            <control-param name="parentDocArg">parentDoc</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-errands:is-short" >
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+                    </field>
+                    <field id="lecm-errands:links-assoc" >
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecm-document-aspects:template-name" >
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+                    </field>
+                    <field id="lecm-document-aspects:template-ref" >
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+                    </field>
+
+                    <field id="save-draft-button" label-id="label.save-draft">
+                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
+                            <control-param name="clickFireAction">saveDraftButtonClick</control-param>
+                        </control>
+                    </field>
+                    <field id="expand-button" label-id="label.show-details">
+                        <control template="/ru/it/lecm/eds/controls/button-control.ftl">
+                            <control-param name="clickFireAction">expandButtonClick</control-param>
+                        </control>
+                    </field>
+
+                    <field id="limitation-date-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-eds-documents/complex-date-listener.js</control-param>
+                            <control-param name="scriptLoadedFireAction">complexDateScriptLoaded</control-param>
+                            <control-param name="bubblingName">changeLimitationDateRadio</control-param>
+                            <control-param name="dateField">lecm-errands:limitation-date</control-param>
+                            <control-param name="daysCountField">lecm-errands:limitation-date-days</control-param>
+                            <control-param name="daysTypeField">lecm-errands:limitation-date-type</control-param>
+                        </control>
+                    </field>
+                    <field id="report-required-handler-script" >
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-report-required-handler.js</control-param>
+                        </control>
+                    </field>
+                    <field id="errands-workflow-form-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/components/lecm-errands-create-form.js</control-param>
+                            <control-param name="scriptLoadedFireAction">errandsCreateFormScriptLoaded</control-param>
+                        </control>
+                    </field>
+                    <field id="errands-process-other-auto-close-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-check-other-child-auto-close.js</control-param>
+                            <control-param name="scriptLoadedFireAction">errandProcessOtherChildAutoClose</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="child-errand">
                 <field-visibility>
                     <!-- Тип Поручения -->
                     <show id="lecm-errands:type-assoc"/>
