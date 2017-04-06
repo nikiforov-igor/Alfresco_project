@@ -1,28 +1,28 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items updateMode="RewriteChildren">
     <item name="cm:Контент ОРД" type="lecm-rpeditor:reportDescriptor">
-        <property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
-        <property name="lecm-rpeditor:reportQuery"><![CDATA[]]></property>
-        <property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
-        <property name="cm:name"><![CDATA[Контент ОРД]]></property>
-        <property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
-        <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
-        <property name="lecm-rpeditor:reportQuerySort"><![CDATA[]]></property>
-        <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
-        <property name="lecm-rpeditor:loadColumnsFromSQL"><![CDATA[false]]></property>
         <property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-ord:document-fake]]></property>
+        <property name="cm:name"><![CDATA[Контент ОРД]]></property>
+        <property name="lecm-rpeditor:reportIsDeployed"><![CDATA[true]]></property>
+        <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
+        <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
+        <property name="lecm-rpeditor:reportQuery"><![CDATA[]]></property>
+        <property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
         <property name="lecm-rpeditor:reportCode"><![CDATA[ord-content]]></property>
         <property name="lecm-rpeditor:reportObjectsMultiplicity"><![CDATA[false]]></property>
+        <property name="lecm-rpeditor:reportQuerySort"><![CDATA[]]></property>
+        <property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
+        <property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
         <items>
             <item name="cm:0fbc9b6b-6b3e-47fd-8452-b0d75bac5391" type="lecm-rpeditor:reportDataSource">
                 <property name="cm:name"><![CDATA[85fda24c-83d5-4c7b-835e-f02f6e51e273]]></property>
                 <items>
                     <item name="cm:Пункты" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Пункты]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
                             <![CDATA[{{subreport::ord-item-subreport}}]]></property>
-                        <property name="cm:name"><![CDATA[Пункты]]></property>
-                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[ord-item-subreport]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
@@ -30,11 +30,11 @@
                         </assocs>
                     </item>
                     <item name="cm:Подписанты" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Подписанты]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
                             <![CDATA[{{subreport::ord-signer-subreport}}]]></property>
-                        <property name="cm:name"><![CDATA[Подписанты]]></property>
-                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[ord-signer-subreport]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
@@ -42,11 +42,11 @@
                         </assocs>
                     </item>
                     <item name="cm:Содержание" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Содержание]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
                             <![CDATA[{lecm-eds-document:summaryContent}]]></property>
-                        <property name="cm:name"><![CDATA[Содержание]]></property>
-                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[summary-content]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
@@ -54,9 +54,8 @@
                         </assocs>
                     </item>
                     <item name="cm:Заголовок" type="lecm-rpeditor:reportDataColumn">
-                        <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecm-document:title}]]></property>
                         <property name="cm:name"><![CDATA[Заголовок]]></property>
-                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecm-document:title}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[title]]></property>
                         <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
@@ -95,28 +94,28 @@
                 </items>
             </item>
             <item name="cm:Подписанты" type="lecm-rpeditor:subReportDescriptor">
-                <property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
-                <property name="lecm-rpeditor:reportQuery"><![CDATA[{lecmSignAspects:signerEmployeeAssoc/}]]></property>
-                <property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
-                <property name="cm:name"><![CDATA[Подписанты]]></property>
-                <property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
-                <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
-                <property name="lecm-rpeditor:reportQuerySort"><![CDATA[]]></property>
-                <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
-                <property name="lecm-rpeditor:loadColumnsFromSQL"><![CDATA[false]]></property>
                 <property name="lecm-rpeditor:reportDocType"><![CDATA[]]></property>
+                <property name="lecm-rpeditor:reportIsDeployed"><![CDATA[false]]></property>
+                <property name="cm:name"><![CDATA[Подписанты]]></property>
+                <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
+                <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
+                <property name="lecm-rpeditor:reportQuery"><![CDATA[{lecmSignAspects:signerEmployeeAssoc/}]]></property>
+                <property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
                 <property name="lecm-rpeditor:reportCode"><![CDATA[ord-signer-subreport]]></property>
                 <property name="lecm-rpeditor:reportObjectsMultiplicity"><![CDATA[false]]></property>
+                <property name="lecm-rpeditor:reportQuerySort"><![CDATA[]]></property>
+                <property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
+                <property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
                 <items>
                     <item name="cm:1ac201c4-3eb9-4a70-bb42-0c94db6c4576" type="lecm-rpeditor:reportDataSource">
                         <property name="cm:name"><![CDATA[dd0f9b36-e41e-453d-8f81-684d3fc07fb6]]></property>
                         <items>
                             <item name="cm:ФИО" type="lecm-rpeditor:reportDataColumn">
+                                <property name="cm:name"><![CDATA[ФИО]]></property>
                                 <property name="lecm-rpeditor:dataColumnExpression">
                                     <![CDATA[_____________/{lecm-orgstr:employee-short-name}]]></property>
-                                <property name="cm:name"><![CDATA[ФИО]]></property>
-                                <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                 <property name="lecm-rpeditor:dataColumnCode"><![CDATA[ord-signer-fio]]></property>
+                                <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                 <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                                 <assocs>
                                     <assoc type="lecm-rpeditor:columnTypeAssoc"
@@ -124,11 +123,11 @@
                                 </assocs>
                             </item>
                             <item name="cm:Должность подписанта" type="lecm-rpeditor:reportDataColumn">
+                                <property name="cm:name"><![CDATA[Должность подписанта]]></property>
                                 <property name="lecm-rpeditor:dataColumnExpression">
                                     <![CDATA[{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}]]></property>
-                                <property name="cm:name"><![CDATA[Должность подписанта]]></property>
-                                <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                 <property name="lecm-rpeditor:dataColumnCode"><![CDATA[ord-signer-position]]></property>
+                                <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                 <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                                 <assocs>
                                     <assoc type="lecm-rpeditor:columnTypeAssoc"
@@ -162,29 +161,29 @@
                 </assocs>
             </item>
             <item name="cm:Пункты" type="lecm-rpeditor:subReportDescriptor">
-                <property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
+                <property name="lecm-rpeditor:reportDocType"><![CDATA[]]></property>
+                <property name="lecm-rpeditor:reportIsDeployed"><![CDATA[false]]></property>
+                <property name="cm:name"><![CDATA[Пункты]]></property>
+                <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
+                <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
                 <property name="lecm-rpeditor:reportQuery">
                     <![CDATA[{lecm-ord-table-structure:items-assoc/cm:contains/}]]></property>
-                <property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
-                <property name="cm:name"><![CDATA[Пункты]]></property>
                 <property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
-                <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
-                <property name="lecm-rpeditor:reportQuerySort"><![CDATA[ord-item-number|ASC]]></property>
-                <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
-                <property name="lecm-rpeditor:loadColumnsFromSQL"><![CDATA[false]]></property>
-                <property name="lecm-rpeditor:reportDocType"><![CDATA[]]></property>
                 <property name="lecm-rpeditor:reportCode"><![CDATA[ord-item-subreport]]></property>
                 <property name="lecm-rpeditor:reportObjectsMultiplicity"><![CDATA[false]]></property>
+                <property name="lecm-rpeditor:reportQuerySort"><![CDATA[ord-item-number|ASC]]></property>
+                <property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
+                <property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
                 <items>
                     <item name="cm:f7555043-8124-4bfb-a73d-15cfd4d6c320" type="lecm-rpeditor:reportDataSource">
                         <property name="cm:name"><![CDATA[4511961a-8dd3-4a02-859e-2f563ee71c3a]]></property>
                         <items>
                             <item name="cm:Номер пункта" type="lecm-rpeditor:reportDataColumn">
+                                <property name="cm:name"><![CDATA[Номер пункта]]></property>
                                 <property name="lecm-rpeditor:dataColumnExpression">
                                     <![CDATA[{lecm-document:indexTableRow}]]></property>
-                                <property name="cm:name"><![CDATA[Номер пункта]]></property>
-                                <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                 <property name="lecm-rpeditor:dataColumnCode"><![CDATA[ord-item-number]]></property>
+                                <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                 <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                                 <assocs>
                                     <assoc type="lecm-rpeditor:columnTypeAssoc"
@@ -233,8 +232,8 @@
                 </assocs>
             </item>
             <item name="cm:Приказ" type="lecm-rpeditor:reportTemplate">
-                <property name="lecm-rpeditor:templateCode"><![CDATA[order-tmpl]]></property>
                 <property name="cm:name"><![CDATA[Приказ]]></property>
+                <property name="lecm-rpeditor:templateCode"><![CDATA[order-tmpl]]></property>
                 <assocs>
                     <assoc type="lecm-rpeditor:reportTemplateType"
                            path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип отчета/Jasper"/>
@@ -243,8 +242,8 @@
                 </assocs>
             </item>
             <item name="cm:Распоряжение" type="lecm-rpeditor:reportTemplate">
-                <property name="lecm-rpeditor:templateCode"><![CDATA[command-tmpl]]></property>
                 <property name="cm:name"><![CDATA[Распоряжение]]></property>
+                <property name="lecm-rpeditor:templateCode"><![CDATA[command-tmpl]]></property>
                 <assocs>
                     <assoc type="lecm-rpeditor:reportTemplateType"
                            path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип отчета/Jasper"/>
@@ -253,8 +252,8 @@
                 </assocs>
             </item>
             <item name="cm:Приказ без пунктов" type="lecm-rpeditor:reportTemplate">
-                <property name="lecm-rpeditor:templateCode"><![CDATA[order-without-items-tmpl]]></property>
                 <property name="cm:name"><![CDATA[Приказ без пунктов]]></property>
+                <property name="lecm-rpeditor:templateCode"><![CDATA[order-without-items-tmpl]]></property>
                 <assocs>
                     <assoc type="lecm-rpeditor:reportTemplateType"
                            path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип отчета/Jasper"/>
