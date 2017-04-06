@@ -567,7 +567,6 @@
                 <value>lecm-errands:content</value>
                 <value>lecm-errands:is-important</value>
                 <value>lecm-errands:just-in-time</value>
-                <value>lecm-errands:is-short</value>
                 <value>lecm-errands:report-required</value>
                 <value>lecm-errands:report-recipient-type</value>
             </list>
