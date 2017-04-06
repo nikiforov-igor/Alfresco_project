@@ -3842,6 +3842,32 @@ if (doc) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>inputFormVariable</type>
+                                                                        <name>8d0afee0-53b0-426e-bf38-aea0a4035dbd
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/af446d99-d735-4441-8a7b-ed72094a1ba9
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>formInputToValue</name>
+                                                                                <value><![CDATA[formId]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>formInputFromValue</name>
+                                                                                <value><![CDATA[child-errand]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>formInputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -5846,6 +5872,32 @@ if(doc){
                                                                             <property>
                                                                                 <name>hideAction</name>
                                                                                 <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputFormVariable</type>
+                                                                        <name>36fd3960-5ba9-40fb-9535-0c208b41636e
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/aa164ea2-2335-43eb-8e5d-c3a2bee055df
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>formInputToValue</name>
+                                                                                <value><![CDATA[formId]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>formInputFromValue</name>
+                                                                                <value><![CDATA[child-errand]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>formInputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -8286,6 +8338,32 @@ if (document != null) {
                                                                             <property>
                                                                                 <name>hideAction</name>
                                                                                 <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputFormVariable</type>
+                                                                        <name>22e38536-3d79-427e-aaf6-f5367af68a5b
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/46defa2b-6f71-4355-ab02-388bb49a60ba
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>formInputToValue</name>
+                                                                                <value><![CDATA[formId]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>formInputFromValue</name>
+                                                                                <value><![CDATA[child-errand]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>formInputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
