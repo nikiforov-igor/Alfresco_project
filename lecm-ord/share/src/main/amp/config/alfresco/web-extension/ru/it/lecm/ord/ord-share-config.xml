@@ -714,6 +714,7 @@
                     <show id="fake:document-attachments"/>
                     <show id="fake:document-workflows"/>
                     <show id="fake:document-connections"/>
+                    <show id="fake:document-errands"/>
                     <show id="fake:document-members"/>
                     <show id="fake:document-tags"/>
                     <show id="fake:document-history"/>
@@ -724,6 +725,11 @@
                     <field id="fake:document-actions">
                         <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
                             <control-param name="uri">/lecm/components/dashlets/document-actions</control-param>
+                        </control>
+                    </field>
+                    <field id="fake:document-errands">
+                        <control template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl">
+                            <control-param name="uri">/lecm/components/document/document-errands</control-param>
                         </control>
                     </field>
                     <field id="fake:document-metadata">
