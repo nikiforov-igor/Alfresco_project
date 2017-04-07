@@ -42,4 +42,11 @@
 		  p:nodeService-ref="nodeService"
 		  p:documentTableService-ref="documentTableService"/>
 
+    <bean id="ordErrandsPolicy" class="ru.it.lecm.ord.policies.ORDErrandsPolicy"
+          init-method="init" depends-on="resolutions.LogicEcmBootstrap, errandsService">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="documentMembersService" ref="documentMembersService"/>
+    </bean>
+
 </beans>
