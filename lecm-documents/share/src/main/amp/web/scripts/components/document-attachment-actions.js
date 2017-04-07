@@ -169,6 +169,12 @@ LogicECM.DocumentAttachmentActions = LogicECM.DocumentAttachmentActions || {};
 			}
 		},
 
+		onActionLECMContentCompare: function onActionLECMContentCompare_function(file) {
+			if (YAHOO.lang.isFunction(LogicECM.module.ContentCompare.compare)) {
+				LogicECM.module.ContentCompare.compare(file);
+			}
+		},
+
 		onFileCopiedComplete: function(layer, args) {
 			Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.PROXY_URI + "/lecm/document/attachments/api/logCopy",
