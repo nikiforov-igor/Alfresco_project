@@ -15,6 +15,11 @@ public interface StateMachineServiceBean {
 
 	String REDIRECT_VARIABLE = "lecm_redirect_url";
 	String ROLE_WITHOUT_PRIVELEGES = "LECM_BASIC_PG_None";
+	
+	String STATEMACHINES_ROOT_ID = "STATEMACHINES_ROOT_ID";
+	String STATEMACHINES_ROOT_NAME = "statemachines";
+	String STATEMACHINES_VERSIONS_ID = "STATEMACHINES_VERSIONS_ID";
+	String STATEMACHINES_VERSIONS_NAME = "statemachines/versions";
 
 	/**
 	 * Возвращает список категорий для документа с флагами "редактируемый/не редактируемый"
