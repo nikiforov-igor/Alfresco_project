@@ -28,6 +28,8 @@ public class ORDErrandsPolicy {
     private NodeService nodeService;
     private DocumentMembersService documentMembersService;
 
+    private String statusName;
+
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
     }
@@ -38,6 +40,10 @@ public class ORDErrandsPolicy {
 
     public void setDocumentMembersService(DocumentMembersService documentMembersService) {
         this.documentMembersService = documentMembersService;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
     }
 
     final public void init() {
@@ -52,7 +58,7 @@ public class ORDErrandsPolicy {
         String beforeStatus = (String) before.get(StatemachineModel.PROP_STATUS);
         String afterStatus = (String) after.get(StatemachineModel.PROP_STATUS);
 
-        if ("Ожидает исполнения".equals(afterStatus) && !afterStatus.equals(beforeStatus)) {
+        if (statusName.equals(afterStatus) && !afterStatus.equals(beforeStatus)) {
             List<AssociationRef> parentDocAssoc = nodeService.getTargetAssocs(errand, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
             if (parentDocAssoc != null && parentDocAssoc.size() > 0 && ORDModel.TYPE_ORD.equals(nodeService.getType(parentDocAssoc.get(0).getTargetRef()))) {
                 List<AssociationRef> ordControllerAssoc = nodeService.getTargetAssocs(parentDocAssoc.get(0).getTargetRef(), ORDModel.ASSOC_ORD_CONTROLLER);
