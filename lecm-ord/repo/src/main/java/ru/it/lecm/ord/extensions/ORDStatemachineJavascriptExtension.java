@@ -323,8 +323,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				properties.put(ErrandsService.PROP_ERRANDS_IS_IMPORTANT.toPrefixString(namespaceService), "false");
 				properties.put(ErrandsService.PROP_ERRANDS_JUST_IN_TIME.toPrefixString(namespaceService), "false");
 				properties.put(ErrandsService.PROP_ERRANDS_IS_PERIODICALLY.toPrefixString(namespaceService), "false");
-				boolean reportRequired = (boolean) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_REPORT_REQUIRED);
-				if (Boolean.TRUE.equals(reportRequired)){
+				if (Boolean.TRUE.equals(nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_ITEM_REPORT_REQUIRED))){
 					properties.put(ErrandsService.PROP_ERRANDS_REPORT_RECIPIENT_TYPE.toPrefixString(namespaceService), "CONTROLLER");
 				} else {
 					properties.put(ErrandsService.PROP_ERRANDS_REPORT_RECIPIENT_TYPE.toPrefixString(namespaceService), "NOT_REQUIRED");
