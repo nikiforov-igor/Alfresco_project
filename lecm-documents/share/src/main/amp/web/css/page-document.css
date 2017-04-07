@@ -533,3 +533,9 @@ div.metadata-form div.lecm-dashlet-actions + div {
 .doc-right-part .document-versions .panel-body {
 	overflow-x:hidden;
 }
+
+.doc-right-part-short .widget-bordered-panel .document-components-panel .yui-button button{
+    cursor: auto;
+    outline: none;
+    box-shadow: none !important;
+}
