@@ -71,25 +71,46 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
 
         // Уведомление о истечении половины срока исполнения поручения.
         Date halfLimitDate = (Date) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_HALF_LIMIT_DATE);
-        if(halfLimitDate != null && halfLimitDate.equals(now)){
-            notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_HALF_DEADLINE");
+        if (halfLimitDate != null) {
+            calendar.setTime(halfLimitDate);
+            calendar.add(Calendar.DAY_OF_MONTH, 0);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            halfLimitDate = calendar.getTime();
+            if (halfLimitDate.equals(now)) {
+                notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_HALF_DEADLINE");
+            }
         }
 
         // Уведомление о приближении срока исполнения поручения.
-        Date limitDate = (Date)nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         boolean isLimitShort = (boolean) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_IS_LIMIT_SHORT_DATE);
-        if(isLimitShort) {
+        if (isLimitShort) {
             // Уведомление о приближении срока исполнения карткосрочного поручения.
             calendar.add(Calendar.DAY_OF_MONTH, edsGlobalSettingsService.getSettingsShortNDays());
-        }else{
+        } else {
             // Уведомление о приближении срока исполнения долгосрочного поручения.
             calendar.add(Calendar.DAY_OF_MONTH, edsGlobalSettingsService.getSettingsNDays());
         }
-        now = calendar.getTime();
-        if (limitDate != null && limitDate.before(now)) {
-            notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_APPROACHING_DEADLINE");
+        Date computedDate = calendar.getTime();
+        Date limitDate = (Date)nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
+        if (limitDate != null) {
+            calendar.setTime(limitDate);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            limitDate = calendar.getTime();
+            if (computedDate.after(limitDate) || computedDate.equals(limitDate)) {
+                notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_APPROACHING_DEADLINE");
+            }
         }
-
         // Уведомление о направленном поручении
         if (nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS).equals("Ожидает исполнения")) {
             notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_DIRECTED");
