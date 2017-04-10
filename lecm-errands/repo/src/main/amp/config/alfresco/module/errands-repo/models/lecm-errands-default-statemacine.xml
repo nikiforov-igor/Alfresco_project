@@ -10585,7 +10585,7 @@ if (document) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER") OR  user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
+                                                                                    <![CDATA[(user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER") AND doc.attr("lecm-errands:report-recipient-type") == "CONTROLLER") OR  (user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-errands:report-recipient-type") == "AUTHOR") OR (doc.attr("lecm-errands:report-recipient-type") == "AUTHOR_AND_CONTROLLER" AND (user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER") OR  user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")))]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -10692,7 +10692,7 @@ if (doc) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER")]]></value>
+                                                                                    <![CDATA[(user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER") AND doc.attr("lecm-errands:report-recipient-type") == "CONTROLLER") OR  (user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-errands:report-recipient-type") == "AUTHOR") OR (doc.attr("lecm-errands:report-recipient-type") == "AUTHOR_AND_CONTROLLER" AND (user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER") OR  user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")))]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
