@@ -73,7 +73,6 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
         Date halfLimitDate = (Date) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_HALF_LIMIT_DATE);
         if (halfLimitDate != null) {
             calendar.setTime(halfLimitDate);
-            calendar.add(Calendar.DAY_OF_MONTH, 0);
             calendar.set(Calendar.HOUR_OF_DAY, 0);
             calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.SECOND, 0);
