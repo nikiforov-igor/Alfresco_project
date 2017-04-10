@@ -19,7 +19,7 @@
 
 	YAHOO.Bubbling.on('errandTypeChanged', reInit, {reinitLimitationDate: true});
 	YAHOO.Bubbling.on('resolutionErrandTypeChanged', reInit, {reinitLimitationDate: false});
-    YAHOO.Bubbling.on('createErrandsWFErrandTypeChanged', reInit);
+    YAHOO.Bubbling.on('createErrandsWFErrandTypeChanged', reInit, {reinitLimitationDate: true});
 
 	function reInit(layer, args, param) {
 		var obj = args[1];

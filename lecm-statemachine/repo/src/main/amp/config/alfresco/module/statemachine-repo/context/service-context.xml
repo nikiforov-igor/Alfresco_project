@@ -1,5 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
 <!--
 	Licensed to the Apache Software Foundation (ASF) under one or more
 	contributor license agreements.  See the NOTICE file distributed with
@@ -17,7 +16,11 @@
 	limitations under the License.
 
 -->
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<bean id="statemachine.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
@@ -89,6 +92,17 @@
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="transactionService" ref="transactionService"/>
 	</bean>
+	
+	<util:constant id="STATEMACHINES_ROOT_ID" static-field="ru.it.lecm.statemachine.StateMachineServiceBean.STATEMACHINES_ROOT_ID"/>
+	<util:constant id="STATEMACHINES_ROOT_NAME" static-field="ru.it.lecm.statemachine.StateMachineServiceBean.STATEMACHINES_ROOT_NAME"/>
+	
+	<util:constant id="STATEMACHINES_VERSIONS_ID" static-field="ru.it.lecm.statemachine.StateMachineServiceBean.STATEMACHINES_VERSIONS_ID"/>
+	<util:constant id="STATEMACHINES_VERSIONS_NAME" static-field="ru.it.lecm.statemachine.StateMachineServiceBean.STATEMACHINES_VERSIONS_NAME"/>
+	
+	<util:map id="statemachinesFolders">
+		<entry key="#{STATEMACHINES_ROOT_ID}" value="#{STATEMACHINES_ROOT_NAME}"/>
+		<entry key="#{STATEMACHINES_VERSIONS_ID}" value="#{STATEMACHINES_VERSIONS_NAME}"/>
+	</util:map>
 
 	<bean id="lifecycleStateMachineHelper" class="ru.it.lecm.statemachine.LifecycleStateMachineHelper" parent="baseBean">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
@@ -101,6 +115,7 @@
         <property name="workCalendarService" ref="WorkCalendarService" />
         <property name="statemachenesCache" ref="statemachines.cache" />
         <property name="namespaceService" ref="namespaceService" />
+        <property name="folders" ref="statemachinesFolders" />
 	</bean>
 
 	<bean id="simpleStateMachineHelper" class="ru.it.lecm.statemachine.SimpleStatemachineHelper" parent="lifecycleStateMachineHelper">

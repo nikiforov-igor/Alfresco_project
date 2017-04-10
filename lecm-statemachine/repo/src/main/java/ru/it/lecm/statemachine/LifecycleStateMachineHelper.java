@@ -148,11 +148,10 @@ public class LifecycleStateMachineHelper extends BaseBean implements StateMachin
     }
 
     @Override
-    public void afterPropertiesSet() {
+    public void afterPropertiesSet() throws Exception {
+		super.afterPropertiesSet();
 		ClockReader cr = new DefaultClockImpl();
-    	//ClockReader cr = Context.getProcessEngineConfiguration().getClock();
     	MapBusinessCalendarManager mapBusinessCalendarManager = new MapBusinessCalendarManager();
-        //mapBusinessCalendarManager.addBusinessCalendar(DurationBusinessCalendar.NAME, new DurationBusinessCalendar());
     	mapBusinessCalendarManager.addBusinessCalendar(LecmBusinessCalendar.NAME, new LecmBusinessCalendar(cr, workCalendarService));
         mapBusinessCalendarManager.addBusinessCalendar(DueDateBusinessCalendar.NAME, new DueDateBusinessCalendar(cr));
         mapBusinessCalendarManager.addBusinessCalendar(CycleBusinessCalendar.NAME, new CycleBusinessCalendar(cr));

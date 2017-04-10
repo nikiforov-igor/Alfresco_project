@@ -61,6 +61,7 @@ function setCheckedActions(document, category, nodeDetails) {
 		showActions.push("document-edit-properties");
 		showActions.push("document-inline-edit");
 		showActions.push("lecm-online-editing");
+		showActions.push("lecm-content-compare");
 		showActions.push("document-edit-online");
 		showActions.push("document-edit-offline");
 		showActions.push("document-view-working-copy");
