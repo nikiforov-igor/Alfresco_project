@@ -153,6 +153,10 @@
                     <mandatory>true</mandatory>
                     <default>false</default>
                 </property>
+                <property name="lecm-incoming:auto-transition-to-registered">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
             </properties>
             <associations>
                 <!-- Ссылки -->
