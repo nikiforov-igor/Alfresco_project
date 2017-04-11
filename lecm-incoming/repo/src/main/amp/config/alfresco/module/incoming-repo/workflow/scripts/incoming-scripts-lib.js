@@ -14,11 +14,13 @@ var LECMIncomingActions = {
                     });
                 }
             }
+            var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
+            var childResolutions = document.sourceAssocs["lecm-resolutions:base-document-assoc"];
+            var hasErrands = childErrands && childErrands.length;
 
             if (allReviewCancelled && hasReview) {
                 var allErrandsFinalOrDraft = true;
-                var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
-                if (childErrands) {
+                if (hasErrands) {
                     allErrandsFinalOrDraft = childErrands.every(function (errand) {
                         return (statemachine.isFinal(errand.nodeRef.toString()) || statemachine.isDraft(errand));
                     });
@@ -27,7 +29,6 @@ var LECMIncomingActions = {
                 if (allErrandsFinalOrDraft) {
                     var allResolutionsFinalOrDraft = true;
                     var oneOrMoreResolutionsOnExecution = false;
-                    var childResolutions = document.sourceAssocs["lecm-resolutions:base-document-assoc"];
                     if (childResolutions) {
                         allResolutionsFinalOrDraft = childResolutions.every(function (resolution) {
                             return (statemachine.isFinal(resolution.nodeRef.toString()) || statemachine.isDraft(resolution));
@@ -35,50 +36,45 @@ var LECMIncomingActions = {
                     }
 
                     if (!allResolutionsFinalOrDraft) {
-                        oneOrMoreResolutionsOnExecution = childResolutions.every(function (resolution) {
+                        oneOrMoreResolutionsOnExecution = childResolutions.some(function (resolution) {
                             return resolution.properties["lecm-statemachine:status"] == "На исполнении";
                         });
                     }
 
                     if (allResolutionsFinalOrDraft || !oneOrMoreResolutionsOnExecution) {
-                        var hasErrands = childErrands && childErrands.length;
                         var oneOrMoreExecutedErrands = false;
                         if (hasErrands) {
-                            for (var i = 0; i < childErrands.length; i++) {
-                                var errand = childErrands[i];
-                                if (errand.properties["lecm-statemachine:status"] == "Исполнено") {
-                                    oneOrMoreExecutedErrands = true;
-                                    break;
-                                }
-                            }
+                            oneOrMoreExecutedErrands = childErrands.some(function (errand) {
+                                return errand.properties["lecm-statemachine:status"] == "Исполнено";
+                            });
                         }
 
                         lecmPermission.pushAuthentication();
                         lecmPermission.setRunAsUserSystem();
-
-                        if (oneOrMoreExecutedErrands) {
-                            //Переход в статус "Исполнен"
-                            document.properties["lecm-incoming:auto-transition-to-execute"] = true;
-                        } else {
-                            //Переход в статус "Зарегистрирован"
-                            document.properties["lecm-incoming:auto-transition-to-registered"] = true;
+                        try {
+                            if (oneOrMoreExecutedErrands) {
+                                //Переход в статус "Исполнен"
+                                document.properties["lecm-incoming:auto-transition-to-execute"] = true;
+                            } else {
+                                //Переход в статус "Зарегистрирован"
+                                document.properties["lecm-incoming:auto-transition-to-registered"] = true;
+                            }
+                            document.save();
                         }
-
-                        document.save();
-                        lecmPermission.popAuthentication();
+                        finally {
+                            lecmPermission.popAuthentication();
+                        }
                     }
                 }
             } else {
                 var allErrandsFinal = true;
-                var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
-                if (childErrands) {
+                if (hasErrands) {
                     allErrandsFinal = childErrands.every(function (errand) {
                         return statemachine.isFinal(errand.nodeRef.toString());
                     });
                 }
                 if (allErrandsFinal) {
                     var allResolutionsFinal = true;
-                    var childResolutions = document.sourceAssocs["lecm-resolutions:base-document-assoc"];
                     if (childResolutions) {
                         allResolutionsFinal = childResolutions.every(function (resolution) {
                             return statemachine.isFinal(resolution.nodeRef.toString());
@@ -86,7 +82,6 @@ var LECMIncomingActions = {
                     }
 
                     if (allResolutionsFinal) {
-                        var hasErrands = childErrands && childErrands.length;
                         var allExecutedErrands = true;
                         if (hasErrands) {
                             allExecutedErrands = childErrands.every(function (errand) {
@@ -112,9 +107,12 @@ var LECMIncomingActions = {
                             && (hasErrands || hasResolutions || hasReview)) {
                             lecmPermission.pushAuthentication();
                             lecmPermission.setRunAsUserSystem();
-                            document.properties["lecm-incoming:auto-transition-to-execute"] = true;
-                            document.save();
-                            lecmPermission.popAuthentication();
+                            try {
+                                document.properties["lecm-incoming:auto-transition-to-execute"] = true;
+                                document.save();
+                            } finally {
+                                lecmPermission.popAuthentication();
+                            }
                         } else {
                             var registrars = orgstructure.getEmployeesByBusinessRoleId("DA_REGISTRARS", true);
                             notifications.sendNotificationFromCurrentUser({
