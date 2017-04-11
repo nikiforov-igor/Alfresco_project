@@ -4775,7 +4775,7 @@
                                                 <nodes>
                                                     <node>
                                                         <type>transition</type>
-                                                        <name>783dff01-9498-4985-a6c9-d8e8d3ace86b</name>
+                                                        <name>9fc6540b-9443-4339-b3d3-6dad83466531</name>
                                                         <nodeRef>
                                                             workspace://SpacesStore/df7f951a-e266-477d-af31-69fd8ed76c39
                                                         </nodeRef>
@@ -4811,7 +4811,7 @@
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/539a7f5c-acd1-438a-ac7f-7b518d0a383a
+                                                                    workspace://SpacesStore/b716e4bb-20d1-4f91-8b46-972c2d8412aa
                                                                 </reference>
                                                             </association>
                                                         </associations>
