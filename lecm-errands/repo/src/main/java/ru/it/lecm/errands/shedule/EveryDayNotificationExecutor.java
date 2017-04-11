@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.apache.commons.lang.time.DateUtils;
 import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.notifications.beans.NotificationsService;
@@ -38,27 +39,11 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
     @Override
     protected void executeImpl(Action action, NodeRef nodeRef) {
         Date now = new Date();
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(now);
-        calendar.add(Calendar.DAY_OF_MONTH, 0);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        now = calendar.getTime();
-
+        now = DateUtils.truncate(now, Calendar.DAY_OF_MONTH);
         // Уведомление о начале отложенного поручения
         Date startDate = (Date)nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_START_DATE);
-
         if (startDate != null) {
-            calendar.setTime(startDate);
-            calendar.add(Calendar.DAY_OF_MONTH, 0);
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            startDate = calendar.getTime();
+            startDate = DateUtils.truncate(startDate, Calendar.DAY_OF_MONTH);
             if (startDate.equals(now)) {
                 notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_DEADLINE_COME");
             }
@@ -71,25 +56,31 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
 
         // Уведомление о истечении половины срока исполнения поручения.
         Date halfLimitDate = (Date) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_HALF_LIMIT_DATE);
-        if(halfLimitDate != null && halfLimitDate.equals(now)){
-            notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_HALF_DEADLINE");
+        if (halfLimitDate != null) {
+            halfLimitDate = DateUtils.truncate(halfLimitDate, Calendar.DAY_OF_MONTH);
+            if (halfLimitDate.equals(now)) {
+                notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_HALF_DEADLINE");
+            }
         }
 
         // Уведомление о приближении срока исполнения поручения.
-        Date limitDate = (Date)nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
+        int settingsNDays = 0;
         boolean isLimitShort = (boolean) nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_IS_LIMIT_SHORT_DATE);
-        if(isLimitShort) {
+        if (isLimitShort) {
             // Уведомление о приближении срока исполнения карткосрочного поручения.
-            calendar.add(Calendar.DAY_OF_MONTH, edsGlobalSettingsService.getSettingsShortNDays());
-        }else{
+            settingsNDays =  edsGlobalSettingsService.getSettingsShortNDays();
+        } else {
             // Уведомление о приближении срока исполнения долгосрочного поручения.
-            calendar.add(Calendar.DAY_OF_MONTH, edsGlobalSettingsService.getSettingsNDays());
+            settingsNDays = edsGlobalSettingsService.getSettingsNDays();
         }
-        now = calendar.getTime();
-        if (limitDate != null && limitDate.before(now)) {
-            notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_APPROACHING_DEADLINE");
+        Date notificationLimitDate = DateUtils.addDays(now, settingsNDays);
+        Date realLimitDate = (Date)nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
+        if (realLimitDate != null) {
+            realLimitDate = DateUtils.truncate(realLimitDate, Calendar.DAY_OF_MONTH);
+            if (!notificationLimitDate.before(realLimitDate)) {
+                notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_APPROACHING_DEADLINE");
+            }
         }
-
         // Уведомление о направленном поручении
         if (nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS).equals("Ожидает исполнения")) {
             notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_DIRECTED");

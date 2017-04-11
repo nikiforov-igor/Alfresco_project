@@ -3706,6 +3706,38 @@ if (doc) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>e919a5c3-da97-4ee5-a8f5-614948adf2dc
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/6033d178-89f9-490c-b4c9-9d154d09d084
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[Имеется необработанный запрос отмены поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isCancelRequested") == null OR !doc.attr("lecm-errands-aspect:isCancelRequested")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -3943,6 +3975,38 @@ if (doc) {
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только Создателю,Автору и Контролеру поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>c9a740e6-d6b9-4f2f-9455-4d9c1fc912da
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/8bb1af17-9e80-4202-92ba-e4bc06822cb7
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Имеется необработанный запрос изменения срока]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -5743,6 +5807,38 @@ if(doc){
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>b07d8fcb-52f6-4216-86fd-bfcd2e4376ce
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/93c4b443-cba1-4c51-8501-89071e19a908
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isCancelRequested") == null OR !doc.attr("lecm-errands-aspect:isCancelRequested")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Имеется необработанный запрос отмены поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -6512,6 +6608,38 @@ if(doc){
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только Создателю, Автору и Контролеру поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>63584951-a634-4fce-ae4d-5afc1988b901
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/f193d7c6-7448-43aa-994c-1952b50dad64
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Имеется необработанный запрос изменения срока]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -8209,6 +8337,38 @@ if (document != null) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>bded62aa-6f41-4df4-9e60-656a5ad21dd1
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/3c02051e-699a-45f8-acc3-43317a929330
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isCancelRequested") == null OR !doc.attr("lecm-errands-aspect:isCancelRequested")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Имеется необработанный запрос отмены поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -8978,6 +9138,38 @@ if (document != null) {
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только Создателю, Автору и Контролеру поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>b48770d8-66c5-4f36-9a5a-73a052db13b2
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/f413d28a-2367-4eaa-a932-e6fbd4947851
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Имеется необработанный запрос изменения срока]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -10523,6 +10715,38 @@ if (document) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>6e2a06f8-c1df-4229-bede-769cc8f53917
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/75a466c1-d65b-4a44-bee9-96afdc0167c7
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isCancelRequested") == null OR !doc.attr("lecm-errands-aspect:isCancelRequested")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Имеется необработанный запрос отмены поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -10585,7 +10809,7 @@ if (document) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER") OR  user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
+                                                                                    <![CDATA[(user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER") AND doc.attr("lecm-errands:report-recipient-type") == "CONTROLLER") OR  (user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-errands:report-recipient-type") == "AUTHOR") OR (doc.attr("lecm-errands:report-recipient-type") == "AUTHOR_AND_CONTROLLER" AND (user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER") OR  user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")))]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -10692,7 +10916,7 @@ if (doc) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER")]]></value>
+                                                                                    <![CDATA[(user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER") AND doc.attr("lecm-errands:report-recipient-type") == "CONTROLLER") OR  (user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-errands:report-recipient-type") == "AUTHOR") OR (doc.attr("lecm-errands:report-recipient-type") == "AUTHOR_AND_CONTROLLER" AND (user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER") OR  user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")))]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -10784,6 +11008,38 @@ if (doc) {
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только Создателю, Автору и Контролеру поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>909a04db-057a-4b75-a079-36ce586f9372
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/d8519177-6377-43d5-a24f-8e6b4d2f3507
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Имеется необработанный запрос изменения срока]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
