@@ -3,7 +3,21 @@
 
 <#assign fieldValue=field.value!"">
 <#assign controlId = fieldHtmlId + "-cntrl">
-
-<div class="form-field">
+<#if field.control.params.cssClasses??>
+    <#assign cssClasses = field.control.params.cssClasses?string>
+<#else>
+    <#assign cssClasses = "text-on-mid">
+</#if>
+<div class="form-field ${cssClasses}">
     ${msg(field.control.params.msg)}
 </div>
+<script type="text/javascript">
+(function() {
+    function init() {
+        LogicECM.module.Base.Util.loadCSS([
+            'css/lecm-base/components/controls/message-control.css'
+        ]);
+    }
+    YAHOO.util.Event.onDOMReady(init);
+})();
+</script>
