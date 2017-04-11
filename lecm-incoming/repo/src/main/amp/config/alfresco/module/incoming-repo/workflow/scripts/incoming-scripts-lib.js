@@ -49,9 +49,9 @@ var LECMIncomingActions = {
                             });
                         }
 
-                        lecmPermission.pushAuthentication();
-                        lecmPermission.setRunAsUserSystem();
                         try {
+                            lecmPermission.pushAuthentication();
+                            lecmPermission.setRunAsUserSystem();
                             if (oneOrMoreExecutedErrands) {
                                 //Переход в статус "Исполнен"
                                 document.properties["lecm-incoming:auto-transition-to-execute"] = true;
@@ -105,9 +105,9 @@ var LECMIncomingActions = {
 
                         if (allReviewReviewed && allExecutedErrands && allExecutedResolutions
                             && (hasErrands || hasResolutions || hasReview)) {
-                            lecmPermission.pushAuthentication();
-                            lecmPermission.setRunAsUserSystem();
                             try {
+                                lecmPermission.pushAuthentication();
+                                lecmPermission.setRunAsUserSystem();
                                 document.properties["lecm-incoming:auto-transition-to-execute"] = true;
                                 document.save();
                             } finally {
