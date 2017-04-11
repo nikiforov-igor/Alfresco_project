@@ -39,27 +39,11 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
     @Override
     protected void executeImpl(Action action, NodeRef nodeRef) {
         Date now = new Date();
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(now);
-        calendar.add(Calendar.DAY_OF_MONTH, 0);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        now = calendar.getTime();
-
+        now = DateUtils.truncate(now, Calendar.DAY_OF_MONTH);
         // Уведомление о начале отложенного поручения
         Date startDate = (Date)nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_START_DATE);
-
         if (startDate != null) {
-            calendar.setTime(startDate);
-            calendar.add(Calendar.DAY_OF_MONTH, 0);
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            startDate = calendar.getTime();
+            startDate = DateUtils.truncate(startDate, Calendar.DAY_OF_MONTH);
             if (startDate.equals(now)) {
                 notificationsService.sendNotificationByTemplate(nodeRef, getEmployeeList(nodeRef), "ERRANDS_DEADLINE_COME");
             }
