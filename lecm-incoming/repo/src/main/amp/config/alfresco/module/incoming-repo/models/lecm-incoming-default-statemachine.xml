@@ -4775,6 +4775,51 @@
                                                 <nodes>
                                                     <node>
                                                         <type>transition</type>
+                                                        <name>9fc6540b-9443-4339-b3d3-6dad83466531</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/df7f951a-e266-477d-af31-69fd8ed76c39
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value>
+                                                                    <![CDATA[doc.attr("lecm-incoming:auto-transition-to-registered")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[(function(){
+  var document = bpm_package.children[0];
+  document.properties["lecm-incoming:auto-transition-to-execution"] = false;
+  document.properties["lecm-incoming:auto-transition-to-registered"] = false;
+  document.save();
+})();
+]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/b716e4bb-20d1-4f91-8b46-972c2d8412aa
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
                                                         <name>783dff01-9498-4985-a6c9-d8e8d3ace86b</name>
                                                         <nodeRef>
                                                             workspace://SpacesStore/7ab1c839-aa77-446f-a2ed-8a01050c9656
