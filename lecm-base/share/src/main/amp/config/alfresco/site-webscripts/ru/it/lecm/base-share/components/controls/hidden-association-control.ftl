@@ -54,6 +54,11 @@
 		function addNodeRef(nodeRef) {
 			YAHOO.util.Dom.get("${fieldHtmlId}").setAttribute("value", nodeRef);
 			YAHOO.util.Dom.get("${fieldHtmlId}-added").setAttribute("value", nodeRef);
+            if ("${field.name}" == "assoc_packageItems") {
+                YAHOO.Bubbling.fire('afterSetItems', {
+                    items: nodeRef
+                });
+            }
 		}
 	})();
 </script>
