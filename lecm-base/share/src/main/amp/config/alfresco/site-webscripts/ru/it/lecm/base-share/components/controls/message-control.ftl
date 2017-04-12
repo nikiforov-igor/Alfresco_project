@@ -13,11 +13,8 @@
 </div>
 <script type="text/javascript">
 (function() {
-    function init() {
-        LogicECM.module.Base.Util.loadCSS([
-            'css/lecm-base/components/controls/message-control.css'
-        ]);
-    }
-    YAHOO.util.Event.onDOMReady(init);
+    LogicECM.module.Base.Util.loadCSS([
+        'css/lecm-base/components/controls/message-control.css'
+    ]);
 })();
 </script>
