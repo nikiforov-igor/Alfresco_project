@@ -256,7 +256,7 @@
 					<field id="approve-agenda-label">
 						<control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
 							<control-param name="msg">label.approve.agenda</control-param>
-							<control-param name="cssClasses"> </control-param>
+							<control-param name="cssClasses"></control-param>
 						</control>
 					</field>
 					<field id="lecm-meetings:approve-agenda">
