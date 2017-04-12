@@ -3541,6 +3541,8 @@
                                                                 <value><![CDATA[(function(){
   var document = bpm_package.children[0];
   if (document) {
+    lecmPermission.pushAuthentication();
+    lecmPermission.setRunAsUserSystem();
     var resolutions = document.sourceAssocs["lecm-resolutions:base-document-assoc"];
     if (resolutions && resolutions.length) {
       var hasResolutionOnExecution = resolutions.some(function(resolution) {
@@ -3553,6 +3555,7 @@
       }
     }
     edsDocument.resetChildChangeSignal(document);
+    lecmPermission.popAuthentication();
   }
 })();]]></value>
                                                             </property>
