@@ -26,11 +26,10 @@
 <script type="text/javascript">
 	(function()
 	{
-		function init(){
-            LogicECM.module.Base.Util.loadScripts([
-                'scripts/lecm-base/components/controls/hidden-association-control.js'
-            ], createControl);
-		}
+        LogicECM.module.Base.Util.loadScripts([
+            'scripts/lecm-base/components/controls/hidden-association-control.js'
+        ], createControl);
+
 		function createControl(){
 			new LogicECM.module.HiddenAssociationControl("${fieldHtmlId}").setOptions({
 			<#if field.control.params.addedXpath??>
@@ -45,7 +44,6 @@
                 formId: "${args.htmlid}"
             }).setMessages( ${messages} );
 		}
-        YAHOO.util.Event.onContentReady("${fieldHtmlId}", init);
 	})();
 </script>
 

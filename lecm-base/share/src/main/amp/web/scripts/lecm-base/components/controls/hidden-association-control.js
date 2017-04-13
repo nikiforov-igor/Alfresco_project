@@ -44,21 +44,25 @@ LogicECM.module = LogicECM.module || {};
             }
         },
         addValue: function (xPath) {
-            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/node/search?titleProperty=" + encodeURIComponent("cm:name") + "&xpath=" + encodeURIComponent(xPath);
+            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/node/search";
             Alfresco.util.Ajax.jsonGet(
                 {
                     url: sUrl,
+                    dataObj: {
+                        titleProperty: encodeURIComponent("cm:name"),
+                        xpath: encodeURIComponent(xPath)
+                    },
                     successCallback: {
                         fn: function (response) {
                             var oResults = response.json;
-                            if (oResults != null && oResults.nodeRef != null) {
+                            if (oResults && oResults.nodeRef) {
                                 this.addNodeRef(oResults.nodeRef);
                             }
                         },
                         scope: this
                     },
                     failureMessage: Alfresco.util.message("message.details.failure"),
-                    scope:this
+                    scope: this
                 });
         }
     }, true);
