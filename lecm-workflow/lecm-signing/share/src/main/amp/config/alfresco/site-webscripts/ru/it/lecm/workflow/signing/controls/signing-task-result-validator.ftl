@@ -26,7 +26,7 @@
 		var commentContainer = field.parentNode.parentNode.parentNode;
 		if (status === 'REJECTED') {
 			YAHOO.util.Dom.removeClass(commentContainer, "hidden");
-			valid = form.getFormData()['prop_bpm_comment'] != '';
+			valid = form.getFormData()['prop_bpm_comment'].trim() != '';
 		} else {
 			YAHOO.util.Dom.addClass(commentContainer, "hidden");
 			valid = true;
