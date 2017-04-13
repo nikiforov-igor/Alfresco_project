@@ -11,6 +11,10 @@ LogicECM.module = LogicECM.module || {};
 
     LogicECM.module.HiddenAssociationControl = function (htmlId) {
         LogicECM.module.HiddenAssociationControl.superclass.constructor.call(this, "HiddenAssociationControl", htmlId);
+        this.fields = {
+            base: Dom.get(this.id),
+            added: Dom.get(this.id + "-added")
+        };
         return this;
     };
 
@@ -22,12 +26,7 @@ LogicECM.module = LogicECM.module || {};
             addedXpath: null,
             defaultValue: null
         },
-        fields: {
-
-        },
         onReady: function () {
-            this.fields.base = Dom.get(this.id);
-            this.fields.added = Dom.get(this.id + "-added");
             if (this.options.addedXpath) {
                 this.addValue(this.options.addedXpath);
             } else if (this.options.defaultValue) {
