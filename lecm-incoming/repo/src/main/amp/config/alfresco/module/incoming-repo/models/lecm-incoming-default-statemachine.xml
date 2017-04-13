@@ -3539,21 +3539,25 @@
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
                                                                 <value><![CDATA[(function(){
-  var document = bpm_package.children[0];
-  if (document) {
-    var resolutions = document.sourceAssocs["lecm-resolutions:base-document-assoc"];
-    if (resolutions && resolutions.length) {
-      var hasResolutionOnExecution = resolutions.some(function(resolution) {
-        return resolution.properties["lecm-statemachine:status"] == "На исполнении";
-      });
+var document = bpm_package.children[0];
+if (document) {
+    lecmPermission.pushAuthentication();
+    lecmPermission.setRunAsUserSystem();
+    try {
+        var resolutions = document.sourceAssocs["lecm-resolutions:base-document-assoc"];
+        var hasResolutionOnExecution = resolutions && resolutions.some(function(resolution) {
+                return resolution.properties["lecm-statemachine:status"] == "На исполнении";
+            });
 
-      if (hasResolutionOnExecution) {
-        document.properties["lecm-incoming:auto-transition-to-execution"] = true;
-        document.save();
-      }
+        if (hasResolutionOnExecution) {
+            document.properties["lecm-incoming:auto-transition-to-execution"] = true;
+            document.save();
+        }
+        edsDocument.resetChildChangeSignal(document);
+    } finally {
+        lecmPermission.popAuthentication();
     }
-    edsDocument.resetChildChangeSignal(document);
-  }
+}
 })();]]></value>
                                                             </property>
                                                         </properties>
