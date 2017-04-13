@@ -22,7 +22,7 @@ LogicECM.module = LogicECM.module || {};
             valueSetFireAction: null,
             isValueSetFireEvent: false,
             addedXpath: null,
-            defaultValue: null,
+            defaultValue: null
         },
         onReady: function () {
             if (this.options.addedXpath) {
@@ -36,7 +36,7 @@ LogicECM.module = LogicECM.module || {};
             Dom.get(this.id + "-added").setAttribute("value", nodeRef);
             if (this.options.isValueSetFireEvent && this.options.valueSetFireAction) {
                 YAHOO.Bubbling.fire(this.options.valueSetFireAction, {
-                    items: this.options.items,
+                    items: nodeRef,
                     formId: this.options.formId,
                     fieldId: this.options.fieldId,
                     control: this
