@@ -138,7 +138,7 @@ public class ExpressionDocument extends ExpressionNode {
                 JSONObject fieldObj = new JSONObject();
                 try {
                     fieldObj.put("name", prop);
-                    fieldObj.put("exactMatch", !searchByPartMatches);
+                    fieldObj.put("searchByPart", searchByPartMatches);
                     searchFields.put(fieldObj);
                 } catch (JSONException e) {
                     logger.error(e.getMessage(), e);
@@ -164,7 +164,7 @@ public class ExpressionDocument extends ExpressionNode {
             for (int i = 0; i < searchFields.length(); i++) {
                 JSONObject searchField = searchFields.getJSONObject(i);
                 String propName = searchField.getString("name");
-                boolean searchByExactMatch = searchField.has("exactMatch") && searchField.getBoolean("exactMatch");
+                boolean searchByPartMatches = searchField.has("searchByPart") && searchField.getBoolean("searchByPart");
 
                 Serializable propValue = nodeService.getProperty(this.nodeRef, QName.createQName(propName, serviceRegistry.getNamespaceService()));
                 if (propValue == null || "".equals(propValue)) {
@@ -180,7 +180,7 @@ public class ExpressionDocument extends ExpressionNode {
                     value = YYYY_MM_DD.format(propValue);
                 }
 
-                filters.append(searchByExactMatch ? "=" : "").append("@").append(propName.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-"))
+                filters.append(searchByPartMatches ? "" : "=").append("@").append(propName.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-"))
                         .append(":\"").append(value).append("\"");
             }
 
