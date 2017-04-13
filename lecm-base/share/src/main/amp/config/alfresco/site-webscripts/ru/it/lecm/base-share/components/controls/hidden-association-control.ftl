@@ -14,52 +14,38 @@
 	<#assign defaultValue = form.arguments[field.name]>
 </#if>
 
+<#assign isValueSetFireEvent = true/>
+<#if field.control.params.isValueSetFireEvent?? && field.control.params.isValueSetFireEvent == "false">
+	<#assign isValueSetFireEvent = false/>
+</#if>
+<#if field.control.params.valueSetFireAction??>
+	<#assign valueSetFireAction = field.control.params.valueSetFireAction>
+<#else>
+	<#assign valueSetFireAction = "afterSetItems">
+</#if>
 <script type="text/javascript">
 	(function()
 	{
-		YAHOO.util.Event.onContentReady("${fieldHtmlId}", function (){
+		function init(){
+            LogicECM.module.Base.Util.loadScripts([
+                'scripts/lecm-base/components/controls/hidden-association-control.js'
+            ], createControl);
+		}
+		function createControl(){
+			new LogicECM.module.HiddenAssociationControl("${fieldHtmlId}").setOptions({
 			<#if field.control.params.addedXpath??>
-				addValue("${field.control.params.addedXpath}");
-			<#elseif defaultValue != "">
-				addNodeRef("${defaultValue?string}");
+                addedXpath: "${field.control.params.addedXpath}",
 			</#if>
-
-			YAHOO.Bubbling.fire("hiddenAssociationFormReady",
-					{
-						fieldName: "${field.name}",
-						fieldId: "${fieldHtmlId}"
-					});
-		});
-
-		function addValue(xPath) {
-			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/node/search?titleProperty=" + encodeURIComponent("cm:name") + "&xpath=" + encodeURIComponent(xPath);
-			Alfresco.util.Ajax.jsonGet(
-					{
-						url: sUrl,
-						successCallback:
-						{
-							fn: function (response) {
-								var oResults = response.json;
-								if (oResults != null && oResults.nodeRef != null) {
-									addNodeRef(oResults.nodeRef);
-								}
-							}
-						},
-						failureCallback: {
-							fn: function() {}
-						}
-					});
+			<#if defaultValue != "">
+                defaultValue: "${defaultValue?string}",
+			</#if>
+                isValueSetFireEvent: ${isValueSetFireEvent?string},
+                valueSetFireAction: "${valueSetFireAction}",
+                fieldId: "${field.configName}",
+                formId: "${args.htmlid}"
+            }).setMessages( ${messages} );
 		}
-
-		function addNodeRef(nodeRef) {
-			YAHOO.util.Dom.get("${fieldHtmlId}").setAttribute("value", nodeRef);
-			YAHOO.util.Dom.get("${fieldHtmlId}-added").setAttribute("value", nodeRef);
-            if ("${field.name}" == "assoc_packageItems") {
-                YAHOO.Bubbling.fire('afterSetItems', {
-                    items: nodeRef
-                });
-            }
-		}
+        YAHOO.util.Event.onContentReady("${fieldHtmlId}", init);
 	})();
 </script>
 
