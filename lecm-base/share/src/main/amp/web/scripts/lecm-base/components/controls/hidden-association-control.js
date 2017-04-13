@@ -16,15 +16,18 @@ LogicECM.module = LogicECM.module || {};
 
     YAHOO.extend(LogicECM.module.HiddenAssociationControl, Alfresco.component.Base, {
 
-        fieldValues: [],
-
         options: {
             valueSetFireAction: null,
             isValueSetFireEvent: false,
             addedXpath: null,
             defaultValue: null
         },
+        fields: {
+
+        },
         onReady: function () {
+            this.fields.base = Dom.get(this.id);
+            this.fields.added = Dom.get(this.id + "-added");
             if (this.options.addedXpath) {
                 this.addValue(this.options.addedXpath);
             } else if (this.options.defaultValue) {
@@ -32,8 +35,8 @@ LogicECM.module = LogicECM.module || {};
             }
         },
         addNodeRef: function (nodeRef) {
-            Dom.get(this.id).setAttribute("value", nodeRef);
-            Dom.get(this.id + "-added").setAttribute("value", nodeRef);
+            this.fields.base.setAttribute("value", nodeRef);
+            this.fields.added.setAttribute("value", nodeRef);
             if (this.options.isValueSetFireEvent && this.options.valueSetFireAction) {
                 YAHOO.Bubbling.fire(this.options.valueSetFireAction, {
                     items: nodeRef,
@@ -53,15 +56,15 @@ LogicECM.module = LogicECM.module || {};
                         xpath: encodeURIComponent(xPath)
                     },
                     successCallback: {
+                        scope: this,
                         fn: function (response) {
                             var oResults = response.json;
                             if (oResults && oResults.nodeRef) {
                                 this.addNodeRef(oResults.nodeRef);
                             }
-                        },
-                        scope: this
+                        }
                     },
-                    failureMessage: Alfresco.util.message("message.details.failure"),
+                    failureMessage: this.msg("message.details.failure"),
                     scope: this
                 });
         }
