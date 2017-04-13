@@ -2087,7 +2087,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -5436,7 +5436,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
