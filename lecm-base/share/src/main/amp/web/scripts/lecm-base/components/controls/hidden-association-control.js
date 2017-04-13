@@ -48,12 +48,11 @@ LogicECM.module = LogicECM.module || {};
         },
         addValue: function (xPath) {
             var sUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/node/search";
-            Alfresco.util.Ajax.jsonGet(
-                {
+            Alfresco.util.Ajax.jsonGet({
                     url: sUrl,
                     dataObj: {
-                        titleProperty: encodeURIComponent("cm:name"),
-                        xpath: encodeURIComponent(xPath)
+                        titleProperty: "cm:name",
+                        xpath: xPath
                     },
                     successCallback: {
                         scope: this,
@@ -64,8 +63,7 @@ LogicECM.module = LogicECM.module || {};
                             }
                         }
                     },
-                    failureMessage: this.msg("message.details.failure"),
-                    scope: this
+                    failureMessage: this.msg("message.details.failure")
                 });
         }
     }, true);
