@@ -3701,9 +3701,9 @@ if (document) {
             var logText;
             var email = sender.properties["lecm-contractor:email"];
             var contractorName = sender.properties["lecm-contractor:fullname"];
-            if (email && email.length > 0) {
-            var outgoingNumber = incoming.properties["lecm-incoming:outgoing-number"];
-            var outgoingDate = substitude.formatNodeTitle(incoming, "{lecm-incoming:outgoing-date?dd.MM.yyyy}");
+            if (email && email.length) {
+                var outgoingNumber = incoming.properties["lecm-incoming:outgoing-number"];
+                var outgoingDate = substitude.formatNodeTitle(incoming, "{lecm-incoming:outgoing-date?dd.MM.yyyy}");
                 var message = "Добрый день! <br>";
                 message += "Ваше письмо ";
                 message += incoming.properties["lecm-document:title"];
