@@ -3,6 +3,11 @@ package ru.it.lecm.documents.expression;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -21,11 +26,13 @@ import java.util.List;
  * Time: 15:47
  */
 public class ExpressionDocument extends ExpressionNode {
+    private static final transient Logger logger = LoggerFactory.getLogger(ExpressionDocument.class);
+    private static final SimpleDateFormat YYYY_MM_DD = new SimpleDateFormat("yyyy-MM-dd");
 
     private static DocumentAttachmentsService documentAttachmentsService;
     private static DocumentConnectionService documentConnectionService;
     private static DocumentTableService documentTableService;
-	private static DocumentService documentService;
+    private static DocumentService documentService;
     private static StateMachineServiceBean stateMachineService;
 
     public ExpressionDocument() {
@@ -120,67 +127,80 @@ public class ExpressionDocument extends ExpressionNode {
 
     /**
      * Проверка на наличие у документа дубликатов
-     * @param onlyHasRegDat не используется
+     * @param searchByPartMatches искать по частичному совпадению
      * @param props свойства, по которым ищутся дубликаты (в виде prefix:localName)
      * @return true если в системе есть дубликат документа
      */
-	public boolean hasDuplicates(boolean onlyHasRegDat, String... props) {
-		NodeService nodeService = serviceRegistry.getNodeService();
-
-		List<QName> types = new ArrayList<QName>();
-		types.add(nodeService.getType(this.nodeRef));
-
-		StringBuilder filters = new StringBuilder();
-        List<QName> properties = new ArrayList<QName>();
-		if (props != null) {
-			for (String prop: props) {
-				QName propQName = QName.createQName(prop, serviceRegistry.getNamespaceService());
-                properties.add(propQName);
-			}
-		}
-        //проверяем свойсва на наличие пустых значений
-        boolean hasEmptyProperty = false;
-        for (QName property : properties) {
-            Serializable value = nodeService.getProperty(this.nodeRef, property);
-            hasEmptyProperty = hasEmptyProperty || value == null || "".equals(value);
-        }
-
-        if (!properties.isEmpty() && !hasEmptyProperty) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            for (String prop: props) {
-                QName propQName = QName.createQName(prop, serviceRegistry.getNamespaceService());
-                properties.add(propQName);
-                Serializable propValue = nodeService.getProperty(this.nodeRef, propQName);
-                if (propValue != null) {
-                    if (filters.length() > 0) {
-                        filters.append(" AND ");
-                    }
-
-                    String value = propValue.toString();
-                    if (propValue instanceof Date) {
-                        value = dateFormat.format(propValue);
-                    }
-
-                    filters.append("@").append(prop.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-"))
-                            .append(":\"").append(value).append("\"");
+    public boolean hasDuplicates(boolean searchByPartMatches, String... props) {
+        if (props != null && props.length > 0) {
+            JSONArray searchFields = new JSONArray();
+            for (String prop : props) {
+                JSONObject fieldObj = new JSONObject();
+                try {
+                    fieldObj.put("name", prop);
+                    fieldObj.put("searchByPart", searchByPartMatches);
+                    searchFields.put(fieldObj);
+                } catch (JSONException e) {
+                    logger.error(e.getMessage(), e);
                 }
             }
+
+            return hasDuplicates(searchFields.toString());
+        }
+        return false;
+    }
+
+    /**
+     * Проверка на наличие у документа дубликатов
+     * @param searchFieldsJSON свойства и их настройки
+     * @return true если в системе есть дубликат документа
+     */
+    public boolean hasDuplicates(String searchFieldsJSON) {
+        try {
+            NodeService nodeService = serviceRegistry.getNodeService();
+            StringBuilder filters = new StringBuilder();
+
+            JSONArray searchFields = new JSONArray(searchFieldsJSON);
+            for (int i = 0; i < searchFields.length(); i++) {
+                JSONObject searchField = searchFields.getJSONObject(i);
+                String propName = searchField.getString("name");
+                boolean searchByPartMatches = searchField.has("searchByPart") && searchField.getBoolean("searchByPart");
+
+                Serializable propValue = nodeService.getProperty(this.nodeRef, QName.createQName(propName, serviceRegistry.getNamespaceService()));
+                if (propValue == null || "".equals(propValue)) {
+                    return false;
+                }
+
+                if (filters.length() > 0) {
+                    filters.append(" AND ");
+                }
+
+                String value = propValue.toString();
+                if (propValue instanceof Date) {
+                    value = YYYY_MM_DD.format(propValue);
+                }
+
+                filters.append(searchByPartMatches ? "" : "=").append("@").append(propName.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-"))
+                        .append(":\"").append(value).append("\"");
+            }
+
+            List<QName> types = new ArrayList<>();
+            types.add(nodeService.getType(this.nodeRef));
 
             List<NodeRef> documents = documentService.getDocumentsByFilter(types, null, null, filters.toString(), null);
-            List<NodeRef> filteredDocuments = new ArrayList<NodeRef>();
             if (documents != null) {
-                for (NodeRef document: documents) {
+                for (NodeRef document : documents) {
                     if (!document.equals(this.nodeRef) && documentService.getDocumentRegNumber(document) != null) {
-                        filteredDocuments.add(document);
+                        return true;
                     }
                 }
             }
-
-		    return !filteredDocuments.isEmpty();
-        } else {
-            return false;
+        } catch (JSONException ex) {
+            logger.error(ex.getMessage(), ex);
         }
-	}
+
+        return false;
+    }
 
     public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
         ExpressionDocument.documentAttachmentsService = documentAttachmentsService;
