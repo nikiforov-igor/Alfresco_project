@@ -3716,7 +3716,7 @@ if (document) {
                 message += substitude.formatNodeTitle(incoming, "{lecm-document-aspects:reg-data-date?dd.MM.yyyy}");
                 message += " под номером <b>";
                 message += documentScript.getDocumentRegNumber(incoming);
-                messegr += "</b>.";
+                message += "</b>.";
 
                 notificationsEmail.sendEmail("", message, email);
 
