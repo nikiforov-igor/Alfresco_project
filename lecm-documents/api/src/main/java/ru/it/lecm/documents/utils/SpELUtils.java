@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import ru.it.lecm.base.utils.WrapUtils;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.lang.reflect.Method;
@@ -93,17 +94,9 @@ public final class SpELUtils implements ApplicationContextAware {
 
     @SpELTemplateFunction
     public static String wrapTitle(String text, String title) {
-        return "<span class=\"wrapper-title\" title=\"" + escapeQuotes(title) + "\">" + text + "</span>";
+        return WrapUtils.wrapTitle(text, title);
     }
 
-    /**
-     * Экранирование кавычек
-     * @param title
-     * @return
-     */
-    private static String escapeQuotes(String title) {
-        return title.replaceAll("\"", "&quot;");
-    }
     /**
      * Получить код подразделения, в котором занимает основную должность
      * указанный сотрудник. Если код не указан или сотрудник

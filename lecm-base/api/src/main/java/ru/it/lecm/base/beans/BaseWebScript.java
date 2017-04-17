@@ -11,6 +11,7 @@ import org.alfresco.service.cmr.version.Version;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
+import ru.it.lecm.base.utils.WrapUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -144,17 +145,8 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 	 * @return
 	 */
 	public String wrapperTitle(String text, String title) {
-		return  "<span class=\"wrapper-title\" title=\"" + escapeQuotes(title) + "\">" + text + "</span>";
+		return  WrapUtils.wrapTitle(text, title);
 	}
-
-	/**
-	 * Экранирование кавычек
-	 * @param title
-	 * @return
-     */
-	private String escapeQuotes(String title) {
-	    return title.replaceAll("\"", "&quot;");
-    }
 
 	/**
 	 * Получить значение свойства share.context из global.properties
