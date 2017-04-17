@@ -145,7 +145,7 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 	 * @return
 	 */
 	public String wrapperTitle(String text, String title) {
-		return  WrapUtils.wrapTitle(text, title);
+		return WrapUtils.wrapTitle(text, title);
 	}
 
 	/**

@@ -92,7 +92,7 @@ public final class Utils {
 
 	@NotificationsTemplateFunction
 	public static String wrapTitle(String text, String title) {
-		return  WrapUtils.wrapTitle(text, title);
+		return WrapUtils.wrapTitle(text, title);
 	}
 
 	private Utils() {
