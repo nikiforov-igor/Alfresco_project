@@ -8,7 +8,6 @@ import org.alfresco.repo.workflow.WorkflowNodeConverter;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.Version;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
@@ -145,7 +144,7 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 	 * @return
 	 */
 	public String wrapperTitle(String text, String title) {
-		return  "<span class=\"wrapper-title\" title=\"" + StringEscapeUtils.escapeHtml(title) + "\">" + text + "</span>";
+		return  "<span class=\"wrapper-title\" title=\"" + title.replaceAll("\"", "&quot;") + "\">" + text + "</span>";
 	}
 
 	/**
