@@ -92,9 +92,9 @@ public final class Utils {
 
 	@NotificationsTemplateFunction
 	public static String wrapTitle(String text, String title) {
-		return  "<span class=\"wrapper-title\" title=\"" + StringEscapeUtils.escapeHtml(title) + "\">" + text + "</span>";
+		return  "<span class=\"wrapper-title\" title=\"" + title.replaceAll("\"", "&quot;") + "\">" + text + "</span>";
 	}
-	
+
 	private Utils() {
 	}
 }
