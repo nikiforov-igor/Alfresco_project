@@ -91,7 +91,16 @@ public final class Utils {
 
 	@NotificationsTemplateFunction
 	public static String wrapTitle(String text, String title) {
-		return  "<span class=\"wrapper-title\" title=\"" + title.replaceAll("\"", "&quot;") + "\">" + text + "</span>";
+		return  "<span class=\"wrapper-title\" title=\"" + escapeQuotes(title) + "\">" + text + "</span>";
+	}
+
+	/**
+	 * Экранирование кавычек
+	 * @param title
+	 * @return
+	 */
+	private static String escapeQuotes(String title) {
+		return title.replaceAll("\"", "&quot;");
 	}
 
 	private Utils() {

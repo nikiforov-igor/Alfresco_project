@@ -93,9 +93,17 @@ public final class SpELUtils implements ApplicationContextAware {
 
     @SpELTemplateFunction
     public static String wrapTitle(String text, String title) {
-        return "<span class=\"wrapper-title\" title=\"" + title.replaceAll("\"", "&quot;") + "\">" + text + "</span>";
+        return "<span class=\"wrapper-title\" title=\"" + escapeQuotes(title) + "\">" + text + "</span>";
     }
 
+    /**
+     * Экранирование кавычек
+     * @param title
+     * @return
+     */
+    private static String escapeQuotes(String title) {
+        return title.replaceAll("\"", "&quot;");
+    }
     /**
      * Получить код подразделения, в котором занимает основную должность
      * указанный сотрудник. Если код не указан или сотрудник

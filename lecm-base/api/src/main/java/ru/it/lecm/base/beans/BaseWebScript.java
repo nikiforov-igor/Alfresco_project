@@ -144,8 +144,17 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 	 * @return
 	 */
 	public String wrapperTitle(String text, String title) {
-		return  "<span class=\"wrapper-title\" title=\"" + title.replaceAll("\"", "&quot;") + "\">" + text + "</span>";
+		return  "<span class=\"wrapper-title\" title=\"" + escapeQuotes(title) + "\">" + text + "</span>";
 	}
+
+	/**
+	 * Экранирование кавычек
+	 * @param title
+	 * @return
+     */
+	private String escapeQuotes(String title) {
+	    return title.replaceAll("\"", "&quot;");
+    }
 
 	/**
 	 * Получить значение свойства share.context из global.properties
