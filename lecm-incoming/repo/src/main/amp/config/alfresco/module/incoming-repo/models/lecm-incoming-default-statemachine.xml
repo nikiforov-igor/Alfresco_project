@@ -3691,39 +3691,38 @@ if (document) {
         regnumbers.registerDocument(incoming, "INCOMING_NUMBER");
         incoming.save();
 
-        var addressee = null;
-        var addresseeAssoc = incoming.assocs["lecm-incoming:addressee-assoc"];
-        if (addresseeAssoc != null && addresseeAssoc.length == 1) {
-            addressee = addresseeAssoc[0];
+        var sender = null;
+        var senderAssoc = incoming.assocs["lecm-incoming:sender-assoc"];
+        if (senderAssoc && senderAssoc.length == 1) {
+            sender = senderAssoc[0];
         }
 
-        if (addressee != null) {
-            var addresseeFIO = "";
-            addresseeFIO += addressee.properties["lecm-representative:surname"] + " ";
-            addresseeFIO += addressee.properties["lecm-representative:firstname"] + " ";
-            addresseeFIO += addressee.properties["lecm-representative:middlename"];
-
+        if (sender) {
             var logText;
-
-            var email = addressee.properties["lecm-representative:email"];
-            if (email != null && email.length > 0) {
-                var message = "Уважаемый(ая) <b>";
-                message += addresseeFIO;
-                message += "</b>!<br/>"
-
+            var email = sender.properties["lecm-contractor:email"];
+            var contractorName = sender.properties["lecm-contractor:fullname"];
+            if (email && email.length) {
+                var outgoingNumber = incoming.properties["lecm-incoming:outgoing-number"];
+                var outgoingDate = substitude.formatNodeTitle(incoming, "{lecm-incoming:outgoing-date?dd.MM.yyyy}");
+                var message = "Добрый день! <br>";
                 message += "Ваше письмо ";
                 message += incoming.properties["lecm-document:title"];
-                message += " от <b>";
+                message += " № ";
+                message += outgoingNumber ? outgoingNumber + " от ": "б/н от <b>";
+                message += outgoingDate ? outgoingDate : "дата не указана";
+                message += "</b>, поступившее ";
                 message += substitude.formatNodeTitle(incoming, "{cm:created?dd.MM.yyyy}");
-                message += "</b> зарегистрировано под номером <b>";
+                message += ", зарегистрировано ";
+                message += substitude.formatNodeTitle(incoming, "{lecm-document-aspects:reg-data-date?dd.MM.yyyy}");
+                message += " под номером <b>";
                 message += documentScript.getDocumentRegNumber(incoming);
                 message += "</b>.";
 
                 notificationsEmail.sendEmail("", message, email);
 
-                logText = "Адресанту " + addresseeFIO + " направлено уведомление о получении документа";
+                logText = "Корреспонденту " + contractorName + " направлено уведомление о получении документа";
             } else {
-                logText = "Адресанту " + addresseeFIO + " не было направлено уведомление по причине отсутствия адреса электронной почты";
+                logText = "Корреспонденту " + contractorName + " не было направлено уведомление по причине отсутствия адреса электронной почты";
             }
             businessJournal.log(incoming.nodeRef.toString(), "EDIT", logText, []);
         }
