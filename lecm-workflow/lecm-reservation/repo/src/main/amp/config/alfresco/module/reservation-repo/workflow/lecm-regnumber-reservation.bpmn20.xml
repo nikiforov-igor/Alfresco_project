@@ -221,7 +221,10 @@
                                 /* Подготовка уведомления */
 							    templateCode = 'RESERVATION_REQUEST_FINISHED_REJECTED';
 							}
-							document.save();
+							lecmPermission.pushAuthentication();
+                            lecmPermission.setRunAsUserSystem();
+                            document.save();
+                            lecmPermission.popAuthentication();
 
 							/* Уведомление при окончании запроса на резервирование рег.номера: */
                             notifications.sendNotification({
