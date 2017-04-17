@@ -21,7 +21,7 @@
 	model.members = [];
 
 	if (event && !jsonMembers) {
-		members = events.getEventMembers(event);
+		members = events.getEventMembers(event, true);
 	} else if (jsonMembers) {
 		for (i = 0; i < jsonMembers.length(); ++i) {
 			members.push(utils.getNodeFromString(jsonMembers.get(i)));
@@ -50,7 +50,7 @@
 		return {
 			nodeRef: member.nodeRef.toString(),
 			name: substitude.formatNodeTitle(member, "{lecm-orgstr:employee-short-name}"),
-			available: isAvailable && events.checkMemberAvailable(member.nodeRef.toString(), event, fromDate, toDate, allDay)
+			available: isAvailable && events.checkMemberAvailable(member.nodeRef.toString(), event, fromDate, toDate, allDay, true)
 		};
 	});
 })();
