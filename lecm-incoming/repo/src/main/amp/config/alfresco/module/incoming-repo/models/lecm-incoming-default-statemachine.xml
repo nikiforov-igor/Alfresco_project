@@ -175,7 +175,7 @@
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Входящее</name>
+                                        <name>Входящий</name>
                                         <nodeRef>workspace://SpacesStore/f82836ea-ce85-4022-a945-4c616fa5ec81</nodeRef>
                                         <properties>
                                             <property>
@@ -1225,7 +1225,7 @@
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Входящее</name>
+                                        <name>Входящий</name>
                                         <nodeRef>workspace://SpacesStore/cf86ff96-75ff-4d34-a145-36977c94ba54</nodeRef>
                                         <properties>
                                             <property>
@@ -2207,7 +2207,7 @@
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Входящее</name>
+                                        <name>Входящий</name>
                                         <nodeRef>workspace://SpacesStore/892619f3-0b45-4645-a1b5-a23640a5119a</nodeRef>
                                         <properties>
                                             <property>
@@ -3138,7 +3138,7 @@
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Входящее</name>
+                                        <name>Входящий</name>
                                         <nodeRef>workspace://SpacesStore/35129dc9-b279-455d-ae3f-67e28d37a3b5</nodeRef>
                                         <properties>
                                             <property>
@@ -4398,7 +4398,7 @@ if (document) {
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Входящее</name>
+                                        <name>Входящий</name>
                                         <nodeRef>workspace://SpacesStore/cec1c190-5b54-41c2-84f6-6413582e505b</nodeRef>
                                         <properties>
                                             <property>
@@ -5536,7 +5536,7 @@ if (document) {
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Входящее</name>
+                                        <name>Входящий</name>
                                         <nodeRef>workspace://SpacesStore/82ccb382-97f4-4a37-b679-a7e139644956</nodeRef>
                                         <properties>
                                             <property>
@@ -6448,7 +6448,7 @@ if (document) {
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Входящее</name>
+                                        <name>Входящий</name>
                                         <nodeRef>workspace://SpacesStore/f575f6e7-c80c-43ba-96f3-ce177d6e4ddb</nodeRef>
                                         <properties>
                                             <property>
@@ -6823,7 +6823,7 @@ if (document) {
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Входящее</name>
+                                        <name>Входящий</name>
                                         <nodeRef>workspace://SpacesStore/1190081d-5a41-478c-a762-5189560bd8fd</nodeRef>
                                         <properties>
                                             <property>
@@ -7198,7 +7198,7 @@ if (document) {
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Входящее</name>
+                                        <name>Входящий</name>
                                         <nodeRef>workspace://SpacesStore/8a3f9a7d-e1fe-4120-ab11-4867ffebba21</nodeRef>
                                         <properties>
                                             <property>
