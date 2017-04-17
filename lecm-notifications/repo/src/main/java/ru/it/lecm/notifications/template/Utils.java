@@ -2,7 +2,6 @@ package ru.it.lecm.notifications.template;
 
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.service.ServiceRegistry;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
