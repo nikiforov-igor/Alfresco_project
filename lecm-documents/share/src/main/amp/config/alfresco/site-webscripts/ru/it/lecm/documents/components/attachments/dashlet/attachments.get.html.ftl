@@ -28,7 +28,6 @@
                     LogicECM.module.Base.Util.loadScripts([
                             'scripts/lecm-base/components/advsearch.js',
                             'scripts/lecm-base/components/lecm-datagrid.js',
-                            'scripts/components/document-attachments.js',
                             'scripts/components/document-attachments-dashlet-datagrid.js'], create);
                 }
 
@@ -57,7 +56,7 @@
                     }
                     YAHOO.util.Event.on("${id}-attachment-categories", "change", onCategoriesSelectChange, this, true);
 
-                    datagrid = new LogicECM.DocumentAttachments.DataGrid('${containerId}').setOptions({
+                    datagrid = new LogicECM.DocumentAttachmentsDashlet.DataGrid('${containerId}').setOptions({
                         usePagination: false,
                         documentRef: "${nodeRef?string}",
                         baseDocAssocName: "${baseDocAssocName!""}",
