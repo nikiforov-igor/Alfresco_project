@@ -271,11 +271,15 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public Scriptable getEventMembers(String event) {
+        return getEventMembers(event, false);
+    }
+
+    public Scriptable getEventMembers(String event, boolean useAssocsFromConfigs) {
         ParameterCheck.mandatory("event", event);
 
         NodeRef eventRef = new NodeRef(event);
         if (this.nodeService.exists(eventRef)) {
-            List<NodeRef> results = eventService.getEventMembers(eventRef);
+            List<NodeRef> results = eventService.getEventMembers(eventRef, useAssocsFromConfigs);
             if (results != null) {
                 return createScriptable(results);
             }
@@ -309,6 +313,10 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public boolean checkMemberAvailable(String member, String ignoreNode, String fromDate, String toDate, boolean allDay) {
+        return checkMemberAvailable(member, ignoreNode, fromDate, toDate, allDay, false);
+    }
+
+    public boolean checkMemberAvailable(String member, String ignoreNode, String fromDate, String toDate, boolean allDay, boolean useAssocsfromConfig) {
         ParameterCheck.mandatory("member", member);
         ParameterCheck.mandatory("fromDate", fromDate);
         ParameterCheck.mandatory("toDate", toDate);
@@ -321,7 +329,7 @@ public class EventsWebScriptBean extends BaseWebScript {
                 ignoreNodeRef = new NodeRef(ignoreNode);
             }
 
-            return eventService.checkMemberAvailable(memberRef, ignoreNodeRef, ISO8601DateFormat.parse(fromDate), ISO8601DateFormat.parse(toDate), allDay);
+            return eventService.checkMemberAvailable(memberRef, ignoreNodeRef, ISO8601DateFormat.parse(fromDate), ISO8601DateFormat.parse(toDate), allDay, useAssocsfromConfig);
         }
 
         return false;
@@ -353,7 +361,11 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public Scriptable getEventMembers(ScriptNode event) {
-        return createScriptable(eventService.getEventMembers(event.getNodeRef()));
+        return getEventMembers(event, false);
+    }
+
+    public Scriptable getEventMembers(ScriptNode event, boolean useAssocsFromConfigs) {
+        return createScriptable(eventService.getEventMembers(event.getNodeRef(), useAssocsFromConfigs));
     }
 
     public Scriptable getEventInvitedMembers(ScriptNode event) {
@@ -497,7 +509,7 @@ public class EventsWebScriptBean extends BaseWebScript {
         };
         AuthenticationUtil.runAsSystem(memberAccept);
 	}
-	
+
 	public String getPropsForFilterShowInCalendar() {
 	    List<String> propsForFilterShowInCalendar = eventService.getPropsForFilterShowInCalendar();
 	    if (propsForFilterShowInCalendar != null && propsForFilterShowInCalendar.size() > 0) {
