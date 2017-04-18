@@ -169,6 +169,11 @@
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>
+                <!--Утверждено вне системы-->
+                <property name="lecm-resolutions:approved-outside-system">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
 
                 <!-- Служебные -->
                 <!-- Имя атрибута документа основания для срока исполнения -->
