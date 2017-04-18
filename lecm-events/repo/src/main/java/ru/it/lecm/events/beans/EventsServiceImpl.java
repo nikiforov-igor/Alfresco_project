@@ -517,14 +517,13 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 				assocsToGetMembers = new ArrayList<>();
 				assocsToGetMembers.add("lecm-events:temp-members-assoc");
 			}
-			additionalFilter.append(" AND ").append("(");
+			additionalFilter.append(" AND (");
 			for (String assocToGetMember : assocsToGetMembers) {
 				additionalFilter.append("@")
 						.append(assocToGetMember.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-"))
 						.append("\\-ref:\"*")
 						.append(member.toString())
-						.append("*\"")
-						.append(" OR ");
+						.append("*\" OR ");
 			}
 			if (additionalFilter.length() > 0) {
 				additionalFilter.delete(additionalFilter.length() - 4, additionalFilter.length());
