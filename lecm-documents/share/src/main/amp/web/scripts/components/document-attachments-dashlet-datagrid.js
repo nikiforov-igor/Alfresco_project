@@ -7,9 +7,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
  * LogicECM top-level module namespace.
  *
  * @namespace LogicECM
- * @class LogicECM.DocumentAttachments
+ * @class LogicECM.DocumentAttachmentsDashlet
  */
-LogicECM.DocumentAttachments = LogicECM.DocumentAttachments || {};
+LogicECM.DocumentAttachmentsDashlet = LogicECM.DocumentAttachmentsDashlet || {};
 
 var $html = Alfresco.util.encodeHTML,
 	$links = Alfresco.util.activateLinks,
@@ -17,8 +17,8 @@ var $html = Alfresco.util.encodeHTML,
 
 (function () {
 
-	LogicECM.DocumentAttachments.DataGrid = function (containerId) {
-		LogicECM.DocumentAttachments.DataGrid.superclass.constructor.call(this, containerId);
+	LogicECM.DocumentAttachmentsDashlet.DataGrid = function (containerId) {
+		LogicECM.DocumentAttachmentsDashlet.DataGrid.superclass.constructor.call(this, containerId);
 		this.options.baseDocAssocName = null;
 		this.options.showBaseDocAttachmentsBottom = false;
 		return this;
@@ -27,12 +27,12 @@ var $html = Alfresco.util.encodeHTML,
 	/**
 	 * Extend from LogicECM.module.Base.DataGrid
 	 */
-	YAHOO.lang.extend(LogicECM.DocumentAttachments.DataGrid, LogicECM.module.Base.DataGrid);
+	YAHOO.lang.extend(LogicECM.DocumentAttachmentsDashlet.DataGrid, LogicECM.module.Base.DataGrid);
 
 	/**
 	 * Augment prototype with main class implementation, ensuring overwrite is enabled
 	 */
-	YAHOO.lang.augmentObject(LogicECM.DocumentAttachments.DataGrid.prototype, {
+	YAHOO.lang.augmentObject(LogicECM.DocumentAttachmentsDashlet.DataGrid.prototype, {
 		fileUpload: null,
 
 		getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
