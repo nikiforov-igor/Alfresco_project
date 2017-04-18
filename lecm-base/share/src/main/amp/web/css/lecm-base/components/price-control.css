@@ -12,6 +12,6 @@
     min-width: 0;
 }
 .price-control .price-sum {
-    width: auto;
+    width: 330px;
     overflow: hidden;
 }
