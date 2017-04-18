@@ -11,7 +11,7 @@ import org.alfresco.service.cmr.version.Version;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
-import ru.it.lecm.base.utils.WrapUtils;
+import ru.it.lecm.base.utils.HtmlUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -114,7 +114,7 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
     }
 
 	public String wrapperAttribute(NodeRef nodeRef, String description, String formId) {
-        return "<a href=\"javascript:void(0);\" onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + nodeRef.toString() + "\', formId: \'" + formId + "\'})\">" + description + "</a>";
+        return HtmlUtils.wrapperAttribute(nodeRef, description, formId);
     }
 
 
@@ -145,7 +145,7 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 	 * @return
 	 */
 	public String wrapperTitle(String text, String title) {
-		return WrapUtils.wrapTitle(text, title);
+		return HtmlUtils.wrapTitle(text, title);
 	}
 
 	/**
