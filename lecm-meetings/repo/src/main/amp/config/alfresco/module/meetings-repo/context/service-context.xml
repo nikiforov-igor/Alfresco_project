@@ -100,8 +100,8 @@
 	<util:constant id="MEETINGS_ROOT_ID" static-field="ru.it.lecm.meetings.beans.MeetingsService.MEETINGS_ROOT_ID"/>
 
 	<util:list id="meetingsPropsForFilterShowInCalendar">
-		<value>lecm-meetings:chairman-assoc-ref</value>
-		<value>lecm-meetings:secretary-assoc-ref</value>
+		<value>lecm-meetings:chairman-assoc</value>
+		<value>lecm-meetings:secretary-assoc</value>
 	</util:list>
 	
 	<bean id="meetingsService" class="ru.it.lecm.meetings.beans.MeetingsServiceImpl" parent="baseBean"
