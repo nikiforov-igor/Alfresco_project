@@ -3545,11 +3545,15 @@ if (document) {
     lecmPermission.setRunAsUserSystem();
     try {
         var resolutions = document.sourceAssocs["lecm-resolutions:base-document-assoc"];
+		var errands = document.sourceAssocs["lecm-errands:base-assoc"];
         var hasResolutionOnExecution = resolutions && resolutions.some(function(resolution) {
                 return resolution.properties["lecm-statemachine:status"] == "На исполнении";
             });
+		var hasErrandOnExecution = errands && errands.some(function(errand) {
+				return errand.properties["lecm-statemachine:status"] == "Ожидает исполнения";
+			});
 
-        if (hasResolutionOnExecution) {
+        if (hasResolutionOnExecution || hasErrandOnExecution) {
             document.properties["lecm-incoming:auto-transition-to-execution"] = true;
             document.save();
         }
