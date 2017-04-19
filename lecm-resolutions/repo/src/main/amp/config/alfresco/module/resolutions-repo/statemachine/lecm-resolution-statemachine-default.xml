@@ -3,7 +3,7 @@
     <node>
         <type>statemachine</type>
         <name>lecm-resolutions_document</name>
-        <nodeRef>workspace://SpacesStore/edad6a5c-0e4b-4b8e-91a2-8389602f5e8f</nodeRef>
+        <nodeRef>workspace://SpacesStore/5d0d4561-c21e-4bee-b021-171660f0e3a3</nodeRef>
         <properties>
             <property>
                 <name>notArmCreate</name>
@@ -28,7 +28,7 @@
                     <node>
                         <type>static-role-item</type>
                         <name>8f268f4d-6474-456d-b5a6-9cb83ad55b08</name>
-                        <nodeRef>workspace://SpacesStore/18ac8e31-bd5e-45ea-9bc7-39535478c035</nodeRef>
+                        <nodeRef>workspace://SpacesStore/fba3cad7-d27b-4f6b-be9e-26844edeabdf</nodeRef>
                         <properties>
                             <property>
                                 <name>static-role-privilege</name>
@@ -54,7 +54,7 @@
                     <node>
                         <type>static-role-item</type>
                         <name>6be0e71c-89ee-435c-ba22-17270b5af37c</name>
-                        <nodeRef>workspace://SpacesStore/824c73bf-a074-4ece-a89a-7374ef05c79f</nodeRef>
+                        <nodeRef>workspace://SpacesStore/22aeeb61-cec8-46c8-8826-9a13e7874903</nodeRef>
                         <properties>
                             <property>
                                 <name>static-role-privilege</name>
@@ -80,7 +80,7 @@
                     <node>
                         <type>dynamic-role-item</type>
                         <name>8d44408e-b30f-49d3-a6af-626fb5d9c70f</name>
-                        <nodeRef>workspace://SpacesStore/c229082f-c69a-4c5c-9221-ede3584f4ec3</nodeRef>
+                        <nodeRef>workspace://SpacesStore/92119b8e-9aae-4800-9ff5-421fc61b65e3</nodeRef>
                         <properties/>
                         <aspects>
                             <business-role/>
@@ -97,7 +97,7 @@
                     <node>
                         <type>dynamic-role-item</type>
                         <name>479dcb3c-6d32-43e0-a866-773bd01340dd</name>
-                        <nodeRef>workspace://SpacesStore/4026149a-2983-42c7-9478-a299e1028c1c</nodeRef>
+                        <nodeRef>workspace://SpacesStore/18a4b6d4-ff84-4faf-871f-61243c95c1db</nodeRef>
                         <properties/>
                         <aspects>
                             <business-role/>
@@ -114,7 +114,7 @@
                     <node>
                         <type>dynamic-role-item</type>
                         <name>a7c7c535-434b-4c66-a791-ecba42215012</name>
-                        <nodeRef>workspace://SpacesStore/7936f791-084d-4469-882d-6c62b6a46a6e</nodeRef>
+                        <nodeRef>workspace://SpacesStore/e9ccbb6c-fa1b-4610-bae8-298081247357</nodeRef>
                         <properties/>
                         <aspects>
                             <business-role/>
@@ -131,7 +131,7 @@
                     <node>
                         <type>dynamic-role-item</type>
                         <name>d0447dee-b328-48b1-bb88-254683c8e271</name>
-                        <nodeRef>workspace://SpacesStore/5d0dc622-bff2-4b58-9e43-61588617eec2</nodeRef>
+                        <nodeRef>workspace://SpacesStore/c787265f-ddf5-4703-95b6-f562cffd249b</nodeRef>
                         <properties/>
                         <aspects>
                             <business-role/>
@@ -148,7 +148,7 @@
                     <node>
                         <type>dynamic-role-item</type>
                         <name>93af5f32-a5f2-48d6-91b3-e2e6ad869c96</name>
-                        <nodeRef>workspace://SpacesStore/944450c9-3484-4c09-bd33-b4883af1d0bc</nodeRef>
+                        <nodeRef>workspace://SpacesStore/0b333692-1895-4369-99e2-26daf102e710</nodeRef>
                         <properties/>
                         <aspects>
                             <business-role/>
@@ -165,7 +165,7 @@
                     <node>
                         <type>dynamic-role-item</type>
                         <name>a5788f87-5e29-4c7d-a1be-d3a4d57e9bc1</name>
-                        <nodeRef>workspace://SpacesStore/25fde716-47d8-4ac3-bcf9-a0ee795b3be8</nodeRef>
+                        <nodeRef>workspace://SpacesStore/27192da7-42cc-43e4-94c5-f2d386549a4c</nodeRef>
                         <properties/>
                         <aspects>
                             <business-role/>
@@ -182,7 +182,7 @@
                     <node>
                         <type>static-role-item</type>
                         <name>774d4561-644e-4ff4-8983-27442f8258a7</name>
-                        <nodeRef>workspace://SpacesStore/fcfa62d9-381f-4fa0-a636-0f2ffd3f81b8</nodeRef>
+                        <nodeRef>workspace://SpacesStore/f26fd67c-517d-46e4-89af-5bc401097918</nodeRef>
                         <properties>
                             <property>
                                 <name>static-role-privilege</name>
@@ -208,7 +208,7 @@
                     <node>
                         <type>static-role-item</type>
                         <name>21f80e35-b53f-4fe1-a008-09fb87a48d6f</name>
-                        <nodeRef>workspace://SpacesStore/12d469f6-b2b6-4dcb-8236-6486d1ee1e5d</nodeRef>
+                        <nodeRef>workspace://SpacesStore/22a04b48-4d89-4bcd-adfa-0a3210d5c71d</nodeRef>
                         <properties>
                             <property>
                                 <name>static-role-privilege</name>
@@ -239,7 +239,7 @@
                     <node>
                         <type>taskStatus</type>
                         <name>Черновик</name>
-                        <nodeRef>workspace://SpacesStore/afc17fad-dd6a-4d93-9f40-b70072915b8b</nodeRef>
+                        <nodeRef>workspace://SpacesStore/371f7156-33c0-4894-8913-5ad91c6dff16</nodeRef>
                         <properties>
                             <property>
                                 <name>startStatus</name>
@@ -266,7 +266,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_number</name>
-                                        <nodeRef>workspace://SpacesStore/607561d2-dba6-4b8e-b824-128fc2130a5c</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/07256eae-c51a-4a06-81de-af58ec46467a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -281,7 +281,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document-aspects_is-on-control</name>
-                                        <nodeRef>workspace://SpacesStore/3bab3554-449c-4eef-a9ca-3dcdee4c3419</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/b0068ce5-93a8-48e5-bb7f-d5e76ea4539f</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -296,7 +296,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document_subject-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/be93189b-3ca4-4fea-aa58-956b519d7034</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/96a11087-56ba-4d27-9edf-66daab14e6f7</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -311,7 +311,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_author-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/e99426e2-4c7f-4435-b6ff-dc97dab317bc</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/d984ffb5-2e30-492c-af43-499d51bd8022</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -326,7 +326,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_controller-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/d48d3472-3a00-48e8-92b6-fe9a4efe869c</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/7f4955b5-ad38-46a9-a159-45c4b84faba4</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -341,7 +341,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date</name>
-                                        <nodeRef>workspace://SpacesStore/372ff129-906e-4dea-81d7-06ab8d65bb8f</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/4c00f50a-917c-42a2-b8da-58e5a458f729</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -356,7 +356,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-radio</name>
-                                        <nodeRef>workspace://SpacesStore/91a4b2aa-4548-442c-8d39-59476cdfb2be</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/1db07733-948b-49b8-adf4-28e1b2652e0d</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -371,7 +371,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-days</name>
-                                        <nodeRef>workspace://SpacesStore/54e5f653-6d7b-49c0-846c-97f1445f94a5</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/e6b6f004-102d-454e-aad6-5bbbe0b55689</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -386,7 +386,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-type</name>
-                                        <nodeRef>workspace://SpacesStore/cb60e83b-af4b-480d-9de8-31adb108fe22</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/bedbbb2e-e5a9-47bd-8797-67eb322d719f</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -401,7 +401,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_reviewers-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/bc329286-fcb4-4da6-802b-463248937563</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/c3c1a30d-2e7d-4194-89b0-260eff8fc92f</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -416,7 +416,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_closers</name>
-                                        <nodeRef>workspace://SpacesStore/f1185248-c372-4363-8500-7487e4957866</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/d4695826-5dcd-4fa0-a94b-29d9449bbf30</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -431,7 +431,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>limitation-date-script</name>
-                                        <nodeRef>workspace://SpacesStore/e44ccfb9-93fb-4dc3-aae5-1a976b945152</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/0e5d97d2-5b7e-463a-9cb1-ac6072ff0d5e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -446,7 +446,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>resolutions-limitless</name>
-                                        <nodeRef>workspace://SpacesStore/dd34c72e-727a-49b9-848e-52bac7d7f5fe</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/c74be655-7d5e-48b1-88eb-0ec2c12a0eaa</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -461,7 +461,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_errands-json</name>
-                                        <nodeRef>workspace://SpacesStore/9fa36247-f934-4c34-8cef-1e12e9d9a2e1</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/b28d8f19-e443-419b-b3df-518cd3d625c5</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -476,7 +476,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/92cd3e84-fd0f-404b-8105-e9882850b637</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ffda6ddb-2da9-4675-a874-c5ece50f6a4f</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -491,7 +491,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-document-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/34d14b83-469c-4787-8567-6b60f4ce9912</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/f1a69f14-7af9-463c-8ce9-176bfb7fee74</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -541,7 +541,7 @@
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>5256d969-2d82-4365-bb96-5bc4a8e6d790</name>
-                                        <nodeRef>workspace://SpacesStore/55f1b661-2f04-4a1f-b416-b63dd7288f44</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/67eae4d7-1f61-4482-935e-f300a981b514</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -560,7 +560,7 @@
                                     <node>
                                         <type>WaitForDocumentChange</type>
                                         <name>d957edd8-1877-440c-9697-5db55511a666</name>
-                                        <nodeRef>workspace://SpacesStore/8554348f-77f8-492d-ba52-0e687b6751ab</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/76b4189d-3ea5-4a8e-8b42-1906e5c5f5c4</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -582,7 +582,7 @@
                                                         <type>transition</type>
                                                         <name>ef141e0a-a5a2-41f8-963f-116df2cfe22e</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/ab1575cc-fdc5-4a8c-87c6-4a8ca84e8a19
+                                                            workspace://SpacesStore/d6889a6c-5e0b-4445-b03d-aebbd9eda6a4
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -624,7 +624,7 @@
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>52609e83-0353-4378-80f2-73024508ba17</name>
-                                        <nodeRef>workspace://SpacesStore/01c03ca7-d606-446d-8d77-0da6f7dd73e9</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/8ccc48c1-5fc2-44fc-bade-7bac93f9cea2</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -643,7 +643,7 @@
                                     <node>
                                         <type>TimerAction</type>
                                         <name>aff7c918-9158-4c92-96b5-725ee4286791</name>
-                                        <nodeRef>workspace://SpacesStore/8e4c43a7-8996-4eec-a96c-16fad946e379</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/fa229c6c-bac4-41b8-9751-6840f0d8f5f4</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -662,7 +662,7 @@
                                     <node>
                                         <type>FinishStateWithTransition</type>
                                         <name>1b7ace9d-e865-4f47-bf78-ae787a9e00d4</name>
-                                        <nodeRef>workspace://SpacesStore/1ab6cee3-94ce-4920-8553-02d7f0f3eab0</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/5fa90ab8-41c2-4802-9fe3-ef6942c5848f</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -684,7 +684,7 @@
                                                         <type>userTransition</type>
                                                         <name>2950130a-9c80-4249-9ebd-1ec974eefec5</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/ea3c0ef6-414e-4efa-a0f3-1b0f84a5513e
+                                                            workspace://SpacesStore/be644b2a-574f-4e09-a734-7eae2215a611
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -712,7 +712,7 @@
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/57b0d816-8314-4a5a-b1dc-73a2187edc9c
+                                                                    workspace://SpacesStore/77c4fa43-d6a5-47f7-b473-eab277871fd6
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -726,7 +726,7 @@
                                                                         <name>c177ae1d-9f26-4c15-8438-4a4d30441527
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/24e1a324-e09a-4958-b165-c2ebbb1217aa
+                                                                            workspace://SpacesStore/6e07e8bc-0d48-4522-ad63-bb0d6b439074
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -758,7 +758,7 @@
                                                                         <name>61e11f7a-4da4-4876-92f4-2df3c8684eb2
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/65faca5d-8494-4129-9fd5-316bc48a9cce
+                                                                            workspace://SpacesStore/e1ab13b1-63cf-4656-87bc-f1fb1c4b13f2
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -790,7 +790,7 @@
                                                                         <name>2f86f845-7f29-4c7a-b568-21ad6cf77e34
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/24639a43-f898-45cd-b521-ad6efa43f0c5
+                                                                            workspace://SpacesStore/ee3bd591-08e0-4546-91ad-4735f6327797
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -822,7 +822,7 @@
                                                                         <name>5c203f70-c2a2-48db-b04f-e9973c4a7b53
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/c3d725ba-9863-41c1-af54-74e0eafde435
+                                                                            workspace://SpacesStore/9d15958d-61dc-4baf-90cc-44d5975cac8b
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -854,7 +854,7 @@
                                                                         <name>a5c12d10-a1dd-4478-a19d-4a6525e727ec
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/e3b588d9-ddab-41f8-ba01-c34c046e6916
+                                                                            workspace://SpacesStore/db11e661-fa91-4cdf-b5bc-a9a4021d5672
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -886,7 +886,7 @@
                                                                         <name>44c3f364-bd81-48d6-a7eb-0d1e0c336413
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/3c20b9f4-6da0-4eab-8b9f-243b3368150f
+                                                                            workspace://SpacesStore/f4b60d6c-e2aa-40cc-b028-3e9980222f2e
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -921,7 +921,7 @@
                                                         <type>userTransition</type>
                                                         <name>7fff70ee-712f-4f70-8543-e2bf6c61bafb</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/3b91105a-1aa8-4c59-a8be-39e561f039c2
+                                                            workspace://SpacesStore/4141a887-d835-48ac-ade6-4174a1c01e21
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -949,7 +949,7 @@
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/e943905c-5839-4767-92f1-39180d041d7b
+                                                                    workspace://SpacesStore/27ce573e-fd1c-42bb-a958-9e270732baf3
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -963,7 +963,7 @@
                                                                         <name>b63b0e48-cb86-4633-bdec-9c7f15c469b7
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/33cb8e03-6c2b-4ea9-bc78-3ced9b56be3b
+                                                                            workspace://SpacesStore/1628b469-bcca-4013-835f-36f8f552f5ca
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -995,7 +995,7 @@
                                                                         <name>9b67a6e7-3014-47ac-a5bb-235443587602
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/5410e6b0-ac73-440b-8de0-16725da5fa06
+                                                                            workspace://SpacesStore/574fddf8-b6d9-4ab4-90ee-3a8531567f66
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -1027,7 +1027,7 @@
                                                                         <name>004c07ca-7bbe-4e7d-a1df-5a5d5bb3e820
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/c4dadcbd-1ef1-4742-818a-9e15802b0287
+                                                                            workspace://SpacesStore/6d8deb88-ad06-44a8-b809-b13dae70cb9d
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -1059,7 +1059,7 @@
                                                                         <name>b1958625-23bf-42fc-94fa-56ab43280552
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/1dd8fe35-a372-4c0c-95d2-344932055612
+                                                                            workspace://SpacesStore/fc9f5e64-af49-4ce2-beec-0775ed37b9b8
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -1091,7 +1091,7 @@
                                                                         <name>d6db494c-9bf7-4272-bde4-27174ec14cad
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/5f08961a-cbd7-4317-b6f7-6519557629c9
+                                                                            workspace://SpacesStore/02e359be-b8c2-4ebd-a1a6-2c7099aa0ab3
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -1129,7 +1129,7 @@
                                     <node>
                                         <type>UserWorkflow</type>
                                         <name>60a8d986-9162-4301-9eac-5b95463402df</name>
-                                        <nodeRef>workspace://SpacesStore/4b697d6a-165b-4134-999a-744a3592cd73</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/75e5d64e-0105-4ba0-8633-cd394a4de1fb</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -1148,7 +1148,7 @@
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>e2448e6e-5e9d-4a79-94de-5df7adb503e6</name>
-                                        <nodeRef>workspace://SpacesStore/adb8f43f-d5ee-430b-af63-1c32ac001d24</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/832cc82f-b95d-404e-8afb-b76ade388946</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -1167,7 +1167,7 @@
                                     <node>
                                         <type>TransitionAction</type>
                                         <name>9ed9c834-9feb-4228-bcb6-35627eeb16f5</name>
-                                        <nodeRef>workspace://SpacesStore/e9109388-8930-4042-ae5e-21bdae7227cf</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/e86e1d78-c4ee-43f6-b1a0-9c0fa2412895</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -1186,7 +1186,7 @@
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>1115144d-d977-4a5b-a2cb-0782562f5938</name>
-                                        <nodeRef>workspace://SpacesStore/dbf674a5-0d7b-4769-abac-ad81a230f642</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/0fdf94e0-8b8b-4a81-b2d1-73d272b32e67</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -1205,7 +1205,7 @@
                                     <node>
                                         <type>TimerAction</type>
                                         <name>f326d045-17d6-4676-91ea-129728154b70</name>
-                                        <nodeRef>workspace://SpacesStore/b3e457a0-872f-4ed8-b71f-4e859454ccbb</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/3f2c257b-747c-4ecf-bd8e-3cd19f3ca233</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -1228,7 +1228,7 @@
                     <node>
                         <type>taskStatus</type>
                         <name>На исполнении</name>
-                        <nodeRef>workspace://SpacesStore/57b0d816-8314-4a5a-b1dc-73a2187edc9c</nodeRef>
+                        <nodeRef>workspace://SpacesStore/77c4fa43-d6a5-47f7-b473-eab277871fd6</nodeRef>
                         <properties>
                             <property>
                                 <name>do-not-ask-for-confirmation</name>
@@ -1251,7 +1251,7 @@
                                     <node>
                                         <type>static-role</type>
                                         <name>5d51838c-9049-406e-99e5-c30eb462640c</name>
-                                        <nodeRef>workspace://SpacesStore/1de49682-aaf2-4daa-9f51-8845c471e87c</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/6c5d59d3-ef31-44aa-ad47-860824ea8a45</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -1274,7 +1274,7 @@
                                     <node>
                                         <type>static-role</type>
                                         <name>ed75a5f4-9723-40b9-8dd0-9f5a40e1c7d5</name>
-                                        <nodeRef>workspace://SpacesStore/ac1db274-0a1d-4a0c-b22c-937c1f1f9740</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/d608adf3-e5f3-4124-862f-eeeea4751bf8</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -1302,7 +1302,7 @@
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>b23071ae-2895-4da7-8166-4c2d955f6268</name>
-                                        <nodeRef>workspace://SpacesStore/8c4c0a10-0ce4-4bfa-a26f-f581af825915</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/b9b5664e-8cb6-41a0-a847-f060f510f70a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -1325,7 +1325,7 @@
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>5556ba66-2179-4dba-92b4-451f44a510bc</name>
-                                        <nodeRef>workspace://SpacesStore/f35eb2c8-1011-4522-b410-16d46524528c</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/e19e7159-768b-4f61-b462-7b5bd3d35080</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -1348,7 +1348,7 @@
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>8b4ddc01-bca9-4bb6-9a62-4c19d9cc6043</name>
-                                        <nodeRef>workspace://SpacesStore/ca496b08-5fd4-483d-8f83-a9f50ff09ade</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/7622e762-de82-4ca6-94b5-d5da553cae7b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -1371,7 +1371,7 @@
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>b024f101-4d66-4467-a373-d74995b11bb9</name>
-                                        <nodeRef>workspace://SpacesStore/1847ebe4-6d94-4fcc-94ba-8193391162ec</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/27e3dda4-8636-4878-831e-b44b668d4ccb</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -1394,7 +1394,7 @@
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>54ca2e9a-b7f7-48e5-8701-c76f2af98412</name>
-                                        <nodeRef>workspace://SpacesStore/dddbe712-1d00-4014-94b4-47e1ac76db2a</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a606eff6-dfb0-4bda-a916-9fd28f40b691</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -1418,7 +1418,7 @@
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>677bd4a5-5c28-455d-9883-8f91f5edd02a</name>
-                                        <nodeRef>workspace://SpacesStore/74b4959a-c7c4-4d8a-a74c-f1291269c2e6</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/4c1386c2-f184-44c7-a614-0f6d69eee140</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -1446,7 +1446,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document-aspects_is-on-control</name>
-                                        <nodeRef>workspace://SpacesStore/c5c61463-5718-4f5c-a23c-d09b9af017d2</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/332bf5d3-f175-4625-9e95-6fb60c9240e3</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1461,7 +1461,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document_subject-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/0b8f7389-dad0-407a-8b44-4258e5544d3d</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/5abe2e15-1d46-42b7-90aa-026b5cdc5fab</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1476,7 +1476,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_author-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/7a1a2369-60b2-4494-95f6-5c286c295503</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/3a0f94ea-1a69-4196-8cce-f1631d6266e3</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1491,7 +1491,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_controller-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/94612d68-1059-49e7-960b-44da87734a3e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/c82f6054-3ae7-4bd5-9ef8-ed5bae524490</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1506,7 +1506,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_closers</name>
-                                        <nodeRef>workspace://SpacesStore/7a5500fc-6d7d-4c0e-9e37-734449c15b99</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/87e26e43-3508-4406-8d34-1658e34c828f</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1521,7 +1521,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>limitation-date-script</name>
-                                        <nodeRef>workspace://SpacesStore/f42031ff-d85d-4961-a4ed-44c120103799</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/1fb2e82d-622c-430d-86fd-9ae50bec051d</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1536,7 +1536,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-radio</name>
-                                        <nodeRef>workspace://SpacesStore/aa6d3f1a-876f-49b8-aab3-503c0ecb68fb</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/46c787e8-d65b-4ef6-8ce2-40f00f6a3e7e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1551,7 +1551,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>resolutions-limitless</name>
-                                        <nodeRef>workspace://SpacesStore/2224e15e-c547-44bf-8350-c40055fc5a5d</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/37844914-629c-495b-8e5d-00c6a22e6a65</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1566,7 +1566,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-days</name>
-                                        <nodeRef>workspace://SpacesStore/fe833f0e-4eab-4283-8dd6-42052381b8b3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/7737889a-5783-4b4f-951f-fd4f5dab7a08</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1581,7 +1581,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-type</name>
-                                        <nodeRef>workspace://SpacesStore/c1406212-043c-4294-bc1c-737b88c2972c</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a052575f-c962-4b97-a006-625c9d0633d7</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1596,7 +1596,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date</name>
-                                        <nodeRef>workspace://SpacesStore/1d329f40-2473-4f5a-81b9-8d4bfc5eea0e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/d9113a40-d727-4df0-93f5-ed4efbb3e989</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1611,7 +1611,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_errands-json</name>
-                                        <nodeRef>workspace://SpacesStore/d66788fe-b2cd-4cce-ab72-f1811fdd9762</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/78125fac-d50d-4d53-babc-a5879fa007e6</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1626,7 +1626,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_reviewers-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/1508d377-1e93-4cda-a054-e6b225c60cf3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/4691ea6f-4979-4311-bfbb-fbb10d5e0c12</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1641,7 +1641,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/bcbcb0b9-18a3-4150-9cfb-6f2c5d66d41b</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/7abb04ee-e1c9-41de-8bbf-c9025c274b51</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1656,7 +1656,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-document-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/18c951fa-6b1b-4e96-b91d-2afaccbe86cd</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/0307f813-2865-4b69-b87b-04c99fdda911</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1671,7 +1671,7 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-review-aspects_related-review-records-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/f378e894-d81e-4237-8163-47acf97a8fb7</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ef60f476-369f-4673-93e9-e701fcf1adb6</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -1706,7 +1706,7 @@
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>a4c63c4d-a965-4ac4-81c6-22767f5f8527</name>
-                                        <nodeRef>workspace://SpacesStore/55da1b8d-6144-4f9c-b9f0-48da9043903e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/3556d48f-a7c2-415d-beb8-abeb9513536c</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -1725,7 +1725,7 @@
                                     <node>
                                         <type>WaitForDocumentChange</type>
                                         <name>a695606b-ecc3-4d84-9f75-b0c48d9d1956</name>
-                                        <nodeRef>workspace://SpacesStore/93a0adf9-5099-4815-b647-a6dd821b6706</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/e1d9f62d-d229-4d81-8c8a-a37f61f01f83</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -1747,7 +1747,7 @@
                                                         <type>transition</type>
                                                         <name>dcd38f7f-a754-4ed2-b58b-3b7775205fab</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/c19beaaf-e399-424e-b58e-7842473255ce
+                                                            workspace://SpacesStore/dca4205b-c9da-446a-8ea6-0fb48e9237a1
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -1830,7 +1830,7 @@ if (document && currentUser) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/5245787b-c8fe-469e-9f11-d8bffdda0dd8
+                                                                    workspace://SpacesStore/c3f5030f-8b7b-4c53-a134-45f01773febb
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -1841,7 +1841,7 @@ if (document && currentUser) {
                                                         <type>transition</type>
                                                         <name>e9bf1aa9-6dc9-4a20-8708-ca34575a89b9</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/120701a6-f8f8-49ad-ab50-02d6545fedc3
+                                                            workspace://SpacesStore/4073791f-29fa-4e90-b912-183a9409fd03
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -1884,7 +1884,7 @@ if (document && currentUser) {
                                                         <type>transition</type>
                                                         <name>35879ee7-725e-4966-a234-c9ec29a51442</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/683262c2-2360-436d-98af-01f56594f655
+                                                            workspace://SpacesStore/47a69cfe-83ff-44fb-9fa1-33a485d9c863
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -1912,7 +1912,7 @@ if (document && currentUser) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/7df2c3e5-2b73-4480-b1fb-f1eb73c42e38
+                                                                    workspace://SpacesStore/fe084f3a-55a3-44e6-b4c2-7bcd8bafc5b6
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -1923,7 +1923,7 @@ if (document && currentUser) {
                                                         <type>transition</type>
                                                         <name>15535c11-82e8-4769-902d-8173e83c884d</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/31e5f60d-7617-464d-9883-b4e760a4bf93
+                                                            workspace://SpacesStore/b3e6b56f-6397-486b-a5ce-3b3a2c062b67
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -1962,7 +1962,7 @@ if (document && currentUser) {
                                                         <type>transition</type>
                                                         <name>fdf44554-e72a-4880-bc7c-e1664dc5a3ce</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/5606eb90-2457-4c53-9212-02d28ecbe0a5
+                                                            workspace://SpacesStore/bd43acd2-ab35-4f75-b324-c178c81f033b
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -2005,7 +2005,7 @@ if (document && currentUser) {
                                                         <type>transition</type>
                                                         <name>8c1eb417-877b-4442-ac02-942924a60213</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/0f4ea7da-e0d3-4fb3-a4ff-781df7925de4
+                                                            workspace://SpacesStore/3413f4ac-a65e-4452-a22d-520ea44bf637
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -2090,7 +2090,7 @@ if (document) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/7df2c3e5-2b73-4480-b1fb-f1eb73c42e38
+                                                                    workspace://SpacesStore/fe084f3a-55a3-44e6-b4c2-7bcd8bafc5b6
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -2104,7 +2104,7 @@ if (document) {
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>380966c4-e59c-4c15-b61a-9b4e992d106f</name>
-                                        <nodeRef>workspace://SpacesStore/4029769b-4c03-4df8-ac4b-94b77839d80a</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/8d5d7fb0-c3ee-4f8b-8383-41d506145487</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -2126,7 +2126,7 @@ if (document) {
                                                         <type>ScriptActionEntity</type>
                                                         <name>3161b3d4-f145-4e62-81ee-435adb76321f</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/2c55f099-b85e-4e92-bc9e-0a7ddcc1f88b
+                                                            workspace://SpacesStore/e4971964-7bda-45e5-8c45-dcb19fde39bf
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -2201,7 +2201,7 @@ if (document) {
                                                         <type>ScriptActionEntity</type>
                                                         <name>33b5099b-2261-45d5-8ce9-1febae838b67</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/8eeaa669-8883-4d8a-b359-9dbc4c928437
+                                                            workspace://SpacesStore/7b5c03e2-22dd-4d8f-b6f3-59010c008cdf
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -2282,7 +2282,7 @@ if (document && !regnumbers.isDocumentRegistered(document)) {
                                                         <type>ScriptActionEntity</type>
                                                         <name>14cd6190-8c32-4082-a302-4b0be13b7845</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/033a9a3d-e237-4e2c-9e7e-ded2e9bdb34d
+                                                            workspace://SpacesStore/5dece557-eed7-443f-b8f9-8089fb9c5464
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -2309,7 +2309,7 @@ if (document) {
                                                         <type>ScriptActionEntity</type>
                                                         <name>e780d9d9-283e-49a9-9628-4ab0d1d8e5bd</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/8cfe716a-7595-42c9-b057-0113d5eba794
+                                                            workspace://SpacesStore/738126a7-2f33-44b2-ba4d-36cf52248ba7
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -2338,7 +2338,7 @@ if (document) {
                                                         <type>ScriptActionEntity</type>
                                                         <name>95fbbc5c-e4d4-410e-8194-0c7935b7ae5f</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/9c082dd4-758f-43fa-b82e-dbea366c876d
+                                                            workspace://SpacesStore/f8ba6f98-75bc-4451-bc9d-61410a7a00ad
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -2365,7 +2365,7 @@ if (document) {
                                     <node>
                                         <type>TimerAction</type>
                                         <name>7ee0098c-e86f-48bb-a028-e0314c2d163a</name>
-                                        <nodeRef>workspace://SpacesStore/55d0413a-f5ba-4ad5-ba08-b9329c786837</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/45e09cef-d48d-4877-a2a4-f9f929574193</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -2384,7 +2384,7 @@ if (document) {
                                     <node>
                                         <type>FinishStateWithTransition</type>
                                         <name>dc7c2e54-ac74-4aac-a6b1-0bce1e36d1f9</name>
-                                        <nodeRef>workspace://SpacesStore/1f5abb28-6702-4aae-a6f4-821eb0980898</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/2794925a-94e8-485d-a106-62047e067be7</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -2406,7 +2406,7 @@ if (document) {
                                                         <type>transitionWorkflow</type>
                                                         <name>73ef9923-b474-4884-912e-032267ef0dac</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/2e0d27ee-b821-4472-9b36-cf8d01baba8c
+                                                            workspace://SpacesStore/3f9ff14c-7c59-4058-9a11-c7ed662ac99b
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -2435,7 +2435,7 @@ if (document) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/7df2c3e5-2b73-4480-b1fb-f1eb73c42e38
+                                                                    workspace://SpacesStore/fe084f3a-55a3-44e6-b4c2-7bcd8bafc5b6
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -2449,7 +2449,7 @@ if (document) {
                                                                         <name>10ce5cea-07d3-4a44-a29b-09e4f0674a3a
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/a6557529-e5fc-496b-96e0-569687bb331f
+                                                                            workspace://SpacesStore/d52690bd-6073-4ada-92cb-ae6635059544
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -2487,7 +2487,7 @@ if (document) {
                                     <node>
                                         <type>UserWorkflow</type>
                                         <name>86d84b4c-33a3-4ddc-b658-0240379ba689</name>
-                                        <nodeRef>workspace://SpacesStore/de468c1e-97e4-4057-8903-aa0926226ed3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/3b526aed-59df-4ff4-a2f2-d1fc710c402c</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -2509,7 +2509,7 @@ if (document) {
                                                         <type>UserWorkflowEntity</type>
                                                         <name>5aa04d50-e1a2-4d77-89f2-ebf100b544b6</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/0c40c3bb-7865-47c6-a787-3d2449c9d3f7
+                                                            workspace://SpacesStore/6c901e6e-e9f2-4019-b773-d7930687408c
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -2535,7 +2535,7 @@ if (document) {
                                                                         <name>85e67806-589d-4090-9915-8fb120d9360b
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/fa741ca1-23eb-4091-8641-fe3a6d9027ba
+                                                                            workspace://SpacesStore/5132f73a-32e5-4bc2-96ae-59162665a769
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -2573,7 +2573,7 @@ if (document) {
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>d96c29a5-45d0-482c-a6e5-39ca1ad1f5ee</name>
-                                        <nodeRef>workspace://SpacesStore/478fe0a0-cd96-4d57-9d34-dbfeadbec11a</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/35030e9f-3dbd-4b81-ab47-ed22b448fbe3</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -2592,7 +2592,7 @@ if (document) {
                                     <node>
                                         <type>TransitionAction</type>
                                         <name>d0d06343-9b02-4908-9074-86bbf507b9c9</name>
-                                        <nodeRef>workspace://SpacesStore/b22e6546-0870-4b7d-a3b3-b1c2351f7cd7</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/0f2ad282-8d03-4f18-9f36-40ebccd7af86</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -2611,7 +2611,7 @@ if (document) {
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>d20c2b2e-7eea-44df-87f0-decf20c6e014</name>
-                                        <nodeRef>workspace://SpacesStore/741affee-a728-44f7-9112-b81bdb78bfbd</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/8e404aa6-be0c-4455-96ea-830226f14fb9</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -2630,7 +2630,7 @@ if (document) {
                                     <node>
                                         <type>TimerAction</type>
                                         <name>d8c6a064-e87f-4cfb-8619-27bff4ea23b5</name>
-                                        <nodeRef>workspace://SpacesStore/2b2b53a3-4fcf-4c75-b2cb-8f9465e3fe74</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/6f45d6e8-2e94-4479-91c2-b788fb58e3cc</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -2653,7 +2653,7 @@ if (document) {
                     <node>
                         <type>taskStatus</type>
                         <name>На утверждении</name>
-                        <nodeRef>workspace://SpacesStore/e943905c-5839-4767-92f1-39180d041d7b</nodeRef>
+                        <nodeRef>workspace://SpacesStore/27ce573e-fd1c-42bb-a958-9e270732baf3</nodeRef>
                         <properties>
                             <property>
                                 <name>do-not-ask-for-confirmation</name>
@@ -2676,7 +2676,7 @@ if (document) {
                                     <node>
                                         <type>static-role</type>
                                         <name>1e9c5630-1d17-487e-8025-826df38a2fca</name>
-                                        <nodeRef>workspace://SpacesStore/c9323828-1b16-4553-a61a-2d6c5caf1cd5</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/7e2b2bbc-4a04-4219-bd7e-e8a7d23e13d0</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -2699,7 +2699,7 @@ if (document) {
                                     <node>
                                         <type>static-role</type>
                                         <name>31375e9e-bfba-46fa-b578-e2898fc81ede</name>
-                                        <nodeRef>workspace://SpacesStore/ed1500d6-13c3-4844-b0b5-22773d5e1efd</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/c70d59b6-9f68-4ef0-8a38-ca16f2f43476</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -2727,7 +2727,7 @@ if (document) {
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>62471a32-d3c9-4ef6-bc09-7303e35dbeb8</name>
-                                        <nodeRef>workspace://SpacesStore/64aa795f-533e-4111-b7eb-60181a2eb874</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a3f42914-120c-4ac1-9653-3d39bbfa8165</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -2750,7 +2750,7 @@ if (document) {
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>1555c0e1-ee06-4128-8338-61cd9f60ecef</name>
-                                        <nodeRef>workspace://SpacesStore/af4bb599-d897-4d64-831f-2428ad3d29c7</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a4ebe345-014f-4cfc-9d5f-205e374f118a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -2773,7 +2773,7 @@ if (document) {
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>59cc8f02-c99e-4f81-9c89-0dbee46bc18e</name>
-                                        <nodeRef>workspace://SpacesStore/4e573706-dbbd-45f5-a91c-426aedb631c7</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/6c066a8e-3de2-42e8-9682-8bfc998e31d1</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -2796,7 +2796,7 @@ if (document) {
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>901dd3ee-8f98-4f0d-a3f0-0365de2f247f</name>
-                                        <nodeRef>workspace://SpacesStore/c010502c-c8a3-40a1-acd4-a047cd80abc4</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/1c188284-876c-4a9c-8413-d0135b6a72db</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -2819,7 +2819,7 @@ if (document) {
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>9a2d910a-e4e8-4093-b710-c098f890375e</name>
-                                        <nodeRef>workspace://SpacesStore/aed48874-10a3-4711-be03-8d25240d7d60</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/60d0a430-30cc-401c-ad64-0f48f3f8f178</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -2843,7 +2843,7 @@ if (document) {
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>b2445b3a-1437-4d9f-92c3-06c2b81bae67</name>
-                                        <nodeRef>workspace://SpacesStore/49e4aaac-9f98-489e-b777-bb1e344df0d3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/4820af37-1aae-473e-a15f-9ab9e989227d</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -2871,7 +2871,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document-aspects_is-on-control</name>
-                                        <nodeRef>workspace://SpacesStore/b77ad695-e0f7-4628-a703-c4977dd8b503</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/3c247c9f-3f0b-483c-9ead-cc37f92ab8ac</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2886,7 +2886,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document_subject-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/4a97b04e-9186-46c3-a9ce-6f016501764c</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/e7ce99a3-2442-48a8-a34f-6d27719e1497</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2901,7 +2901,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_author-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/49f5fb20-8cde-48a9-a2c1-c171397d3944</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/49e71951-1ca0-4bf1-8e24-8330d8cbb5ae</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2916,7 +2916,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_controller-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/7ee9fccc-e315-470d-8dc3-1ca08f91e9b2</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/7a9acf25-cb92-46df-a308-b9d449e3cdc4</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2931,7 +2931,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_closers</name>
-                                        <nodeRef>workspace://SpacesStore/4377b0e2-ddcf-4c96-bff8-2bd717611d63</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/16797f46-8cc2-47f0-889c-61f19bddefb4</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2946,7 +2946,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>limitation-date-script</name>
-                                        <nodeRef>workspace://SpacesStore/3596aa7b-c05f-4c2e-8881-eb2b80a5d902</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ef75c572-a6b3-4546-8aef-ed0966de78cb</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2961,7 +2961,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-radio</name>
-                                        <nodeRef>workspace://SpacesStore/f57baae0-da9c-4f7b-9769-cfecdc392eac</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a9646ab3-372b-4e18-8d29-0cb160ca01a6</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2976,7 +2976,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>resolutions-limitless</name>
-                                        <nodeRef>workspace://SpacesStore/a4015f1d-4a4d-41e5-8268-7650f9596d63</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/632c74e3-0338-42b5-ae72-e73b847eff03</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2991,7 +2991,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-days</name>
-                                        <nodeRef>workspace://SpacesStore/4f723f8a-48d4-4ad7-9173-c9f68ed272ea</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/b111c1fc-c90e-47b4-8976-e5817673dfcc</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -3006,7 +3006,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-type</name>
-                                        <nodeRef>workspace://SpacesStore/5d8d7c99-beda-445c-8a67-4f3b595c86cb</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/3611aab7-33dd-4f38-badb-47aceb557e33</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -3021,7 +3021,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date</name>
-                                        <nodeRef>workspace://SpacesStore/41112d69-681f-4d9b-ae77-ce130e4361ad</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/91ece02b-34c4-4515-a7b9-61404602dbdd</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -3036,7 +3036,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_errands-json</name>
-                                        <nodeRef>workspace://SpacesStore/4df20bb3-d45c-4cff-ac60-56f7ee8a338a</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/8db5a814-5d2e-4c9b-bc52-6be4a99c7806</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -3051,7 +3051,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_reviewers-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/7dc370ab-cac6-4feb-b2b5-2a22a418dc02</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ed58f707-78a1-432b-9bed-7ef6c6910350</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -3066,7 +3066,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/678b77da-7f95-4071-99eb-c06a49d05247</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/690f1c87-1436-4d43-8f94-c22b314b240a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -3081,7 +3081,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-document-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/37af0b24-619b-49ac-b482-380a8e703bc3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/10e94f6d-0a88-4fc4-96d6-4c7b0396c0e9</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -3096,7 +3096,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-review-aspects_related-review-records-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/7e09bc50-8baa-4118-815b-92c0b44e9ab6</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/46f7ce3a-0528-4607-a7c0-beaca83c2be9</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -3131,7 +3131,7 @@ if (document) {
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>004074df-6cd1-483a-90e8-350a48b67d73</name>
-                                        <nodeRef>workspace://SpacesStore/ff547f38-992a-4770-b58e-8862de43aa87</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/04e011de-d926-415d-aa0b-f09d2a3f324e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -3150,7 +3150,7 @@ if (document) {
                                     <node>
                                         <type>WaitForDocumentChange</type>
                                         <name>b0ef5b71-72f2-4547-83ac-3b8d0ced39e0</name>
-                                        <nodeRef>workspace://SpacesStore/0c51b0bb-e251-4299-925e-a7aef4ecf429</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/2523fd10-54ec-43ff-a7c5-8c90d7c8a218</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -3172,7 +3172,7 @@ if (document) {
                                                         <type>transition</type>
                                                         <name>cf9f7846-5fad-427b-b550-d6769feccf5d</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/82a330e4-52f7-4822-afde-56a6a7799b19
+                                                            workspace://SpacesStore/5fbef5a7-f194-41b1-aeec-21e30540f837
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -3225,7 +3225,7 @@ if (document) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/5245787b-c8fe-469e-9f11-d8bffdda0dd8
+                                                                    workspace://SpacesStore/c3f5030f-8b7b-4c53-a134-45f01773febb
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -3236,7 +3236,7 @@ if (document) {
                                                         <type>transition</type>
                                                         <name>dc048d4f-8531-4ca3-8ca7-0c04a5f84c61</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/a5701536-c24e-420c-8e09-4bc0b62bb247
+                                                            workspace://SpacesStore/c70190d2-3e20-4537-8c38-d433da8c3701
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -3278,7 +3278,7 @@ if (document) {
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>37cf412b-88dd-4eda-a8b4-4b445323fb65</name>
-                                        <nodeRef>workspace://SpacesStore/655d0a51-c9ff-42ea-ad04-64a8421048b3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/abf34aa9-14a2-46b8-807b-75d9135b1da8</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -3300,7 +3300,7 @@ if (document) {
                                                         <type>ScriptActionEntity</type>
                                                         <name>6ac37178-291b-49b4-90f3-1f9dc88a60b7</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/3b9c0532-18db-42b0-823d-2eb774504a9d
+                                                            workspace://SpacesStore/3b313cca-527c-4d76-8673-a4e54e55226d
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -3358,7 +3358,7 @@ if (document) {
                                                         <type>ScriptActionEntity</type>
                                                         <name>98c89171-8f3f-452e-8587-ed17473003f5</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/4491ccc9-39a8-480a-b53a-0218a11d0bd3
+                                                            workspace://SpacesStore/1f8670db-607b-4ef9-8158-08fb183c7f27
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -3384,7 +3384,7 @@ if (document) {
                                     <node>
                                         <type>TimerAction</type>
                                         <name>8c066639-f56c-446e-9d21-434045df8bad</name>
-                                        <nodeRef>workspace://SpacesStore/9006f5ab-61bc-404a-ac1a-c9f2e3ba34a8</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/66ab68c5-9de8-42b4-ab1c-b638cb338203</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -3403,7 +3403,7 @@ if (document) {
                                     <node>
                                         <type>FinishStateWithTransition</type>
                                         <name>4247de9d-68f7-40bb-9d3c-a8307a207492</name>
-                                        <nodeRef>workspace://SpacesStore/740d4b08-e1bd-4e48-8e9f-339ba28c42bf</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/6a2724b2-1319-4f16-a1ed-3624df5294f1</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -3425,7 +3425,7 @@ if (document) {
                                                         <type>userTransition</type>
                                                         <name>8682d300-85a3-4106-a8f8-eb459009c8c6</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/b3a21b0e-b6c5-432b-9141-0a9b9113bc7d
+                                                            workspace://SpacesStore/f7227763-4037-4190-9198-c3e730594078
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -3467,7 +3467,7 @@ if (document) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/57b0d816-8314-4a5a-b1dc-73a2187edc9c
+                                                                    workspace://SpacesStore/77c4fa43-d6a5-47f7-b473-eab277871fd6
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -3481,7 +3481,7 @@ if (document) {
                                                                         <name>19c9c798-a62e-42c6-9603-f141697cf794
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/1e845b3c-ac84-4fb3-8a63-18f13ba32109
+                                                                            workspace://SpacesStore/68e8ec6a-6900-4ee8-9772-82515ab8a7e5
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -3513,7 +3513,7 @@ if (document) {
                                                                         <name>e55f8c98-24fd-456f-b3cf-fa65e001b52f
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/20edd25f-30b9-46a6-aa96-71e121d69bff
+                                                                            workspace://SpacesStore/6b99c747-57a9-4f75-9656-f4abbb95d901
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -3545,7 +3545,7 @@ if (document) {
                                                                         <name>a21aaa47-c62e-47d3-b97d-2395967cae27
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/81cb07a4-eb26-42ea-82bc-ead9f7d1dc76
+                                                                            workspace://SpacesStore/17d25131-a517-490a-a0f2-66493aedd22f
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -3577,7 +3577,7 @@ if (document) {
                                                                         <name>847832b2-6aca-4041-9130-14a359b49e25
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/3f049d5c-7de2-4902-a0f2-1cd2e5cbe9fa
+                                                                            workspace://SpacesStore/849a131d-710f-440b-b370-298498c0df61
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -3612,7 +3612,7 @@ if (document) {
                                                         <type>transitionWorkflow</type>
                                                         <name>5e4a0ced-f683-4d6c-b8c1-7432dd27df81</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/23a52905-afd9-49a2-88ba-05a9acfbdc70
+                                                            workspace://SpacesStore/40a8f503-b83f-4030-97fc-e010cec68262
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -3641,7 +3641,7 @@ if (document) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/68ea8b55-10da-4e4c-b926-46b9a8493593
+                                                                    workspace://SpacesStore/28629554-4fb0-4410-a539-5d7c37f310a3
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -3655,7 +3655,7 @@ if (document) {
                                                                         <name>537074c7-768a-4ce0-83c9-5fe903797cab
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/c7757b3a-176d-4534-b0fa-d152500479f3
+                                                                            workspace://SpacesStore/b412ce9f-7e77-48f0-a0c5-8d75ceb1b66c
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -3693,7 +3693,7 @@ if (document) {
                                     <node>
                                         <type>UserWorkflow</type>
                                         <name>58774b6b-caff-42d0-8aec-7ef333157871</name>
-                                        <nodeRef>workspace://SpacesStore/f6d4ccc3-1aea-4187-a51e-2b34320ca55a</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/bc75c4a2-e7b1-4ae8-9924-b88ad2086503</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -3715,7 +3715,7 @@ if (document) {
                                                         <type>UserWorkflowEntity</type>
                                                         <name>7f6fba9b-40c5-4efd-8945-4a731e96f369</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/a1a3102f-4a77-46bc-8fe4-e116948a485b
+                                                            workspace://SpacesStore/2f8a6b1e-e20a-49a6-be36-02dc61a62a3e
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -3741,7 +3741,7 @@ if (document) {
                                                                         <name>0dc7a56f-a11e-478f-b012-35e59656d864
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/c4a1ee74-db41-49a3-8478-43f71e1c2564
+                                                                            workspace://SpacesStore/61bca9a7-45f2-4648-904d-1a19e1bab5bb
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -3779,7 +3779,7 @@ if (document) {
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>3ce464a6-d082-4b39-8005-039e533df53b</name>
-                                        <nodeRef>workspace://SpacesStore/edf6784e-ee2c-4a62-9e25-f6c6fb8e0191</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/5f6ad23e-79c0-4d8f-bc41-52740ac92b16</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -3798,7 +3798,7 @@ if (document) {
                                     <node>
                                         <type>TransitionAction</type>
                                         <name>7b240a2c-9089-4151-bfd9-36136d920395</name>
-                                        <nodeRef>workspace://SpacesStore/3b50c92c-d0a2-43a8-b7b5-0711c0c3fbac</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/699c1a47-3d6b-412c-bb0a-623c3d4dbdf5</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -3817,7 +3817,7 @@ if (document) {
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>c2b9e10d-9a53-4df1-8180-3fee70f8316b</name>
-                                        <nodeRef>workspace://SpacesStore/9fa0242f-e4bb-4125-8b87-a1308901f261</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/39f642e0-a17f-4ed6-8703-658aa998d303</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -3836,7 +3836,7 @@ if (document) {
                                     <node>
                                         <type>TimerAction</type>
                                         <name>85325c18-c029-4974-aa42-a5faa190eeb4</name>
-                                        <nodeRef>workspace://SpacesStore/cb24ae47-9bbd-403a-866a-fe2bab187551</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/9c408870-11e9-430c-a72a-d50585de5330</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -3859,7 +3859,7 @@ if (document) {
                     <node>
                         <type>taskStatus</type>
                         <name>На доработке</name>
-                        <nodeRef>workspace://SpacesStore/68ea8b55-10da-4e4c-b926-46b9a8493593</nodeRef>
+                        <nodeRef>workspace://SpacesStore/28629554-4fb0-4410-a539-5d7c37f310a3</nodeRef>
                         <properties>
                             <property>
                                 <name>do-not-ask-for-confirmation</name>
@@ -3882,7 +3882,7 @@ if (document) {
                                     <node>
                                         <type>static-role</type>
                                         <name>ca867977-f63f-435b-ac42-a46614de3631</name>
-                                        <nodeRef>workspace://SpacesStore/e43a85c5-882c-4c19-ab73-ccf9df0f2fe3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/64c39170-4f39-4424-b0c1-7f8f0a26a803</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -3905,7 +3905,7 @@ if (document) {
                                     <node>
                                         <type>static-role</type>
                                         <name>d38e74a0-dff7-4a9e-8d80-f35b83b5485f</name>
-                                        <nodeRef>workspace://SpacesStore/42241a9d-c73b-4821-b198-ec3212ba4a40</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/11fbd273-22fe-480d-be76-e4eb1fc42545</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -3933,7 +3933,7 @@ if (document) {
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>defc69f5-4fe7-4cea-9705-cde13f292f36</name>
-                                        <nodeRef>workspace://SpacesStore/e4f10a57-d7b8-4487-95e1-6961e33f6dc6</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/14e59a3c-80ea-4489-8243-9a0cac82b451</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -3956,7 +3956,7 @@ if (document) {
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>d4d2bbd6-7f8f-4b86-a05a-f4831986418d</name>
-                                        <nodeRef>workspace://SpacesStore/e68a2f12-6948-4a23-b3c3-a1d759e1ce9e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/6b414331-6e5a-4aad-a14e-cdb4d41f7a90</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -3979,7 +3979,7 @@ if (document) {
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>30f44d27-dfbc-44ff-9b1c-ee8f2a46fd6d</name>
-                                        <nodeRef>workspace://SpacesStore/40ad9b23-2336-4ebf-9327-b695d53d583d</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/b89ba2dc-6a4f-44e7-a0b2-d94b23f9026e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -4002,7 +4002,7 @@ if (document) {
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>fbd6115e-cca2-4c34-8eb1-0fb477b15950</name>
-                                        <nodeRef>workspace://SpacesStore/9316e432-f33f-46cc-adf5-c37a0621125a</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/dbed2450-23cd-4b18-ad1d-f68db9b4c95c</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -4025,7 +4025,7 @@ if (document) {
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>20072845-9298-4254-b765-0a2f4e4d70ec</name>
-                                        <nodeRef>workspace://SpacesStore/442a364f-aaee-4ddb-8e2a-b47b0fab4a7e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/40c43fcd-fc7d-4d2c-8810-c55022a4d788</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -4049,7 +4049,7 @@ if (document) {
                                     <node>
                                         <type>dynamic-role</type>
                                         <name>7199b3b3-3876-43a6-bd97-a13114eccc34</name>
-                                        <nodeRef>workspace://SpacesStore/d8346a86-2432-40b3-b768-a39d50504fc8</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/2df2444c-3acc-46cd-a3fa-7f306225081c</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -4077,7 +4077,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document-aspects_is-on-control</name>
-                                        <nodeRef>workspace://SpacesStore/160d13a9-3753-4d9e-82ae-c8a5338270f0</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/1511a425-1c2c-4598-acfa-ce44b7727fe6</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4092,7 +4092,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document_subject-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/85774f39-b80d-4a5c-a108-3de27fdc93c1</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/585c33c3-221a-409b-b2f1-4791dc31fc0e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4107,7 +4107,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_author-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/839ed758-025f-44d6-b293-3a6c789c183c</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/57b22c3b-04cf-40e9-9a6a-84a01d25ba83</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4122,7 +4122,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_controller-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/d6a31243-6a1b-47ae-a6f2-bd2f2861fd7e</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/2c8b80f1-603f-4576-b558-5ba4c49cdf2e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4137,7 +4137,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_closers</name>
-                                        <nodeRef>workspace://SpacesStore/9e374891-99b8-4cc1-bfa4-c975a662a086</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/26347d60-3424-4742-8eb8-b64516758b32</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4152,7 +4152,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>limitation-date-script</name>
-                                        <nodeRef>workspace://SpacesStore/ac63c206-156f-4102-8d85-ec161cd6d5d8</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/86d68f52-dcf7-4efd-898e-f1ce23ff6b02</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4167,7 +4167,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-radio</name>
-                                        <nodeRef>workspace://SpacesStore/15f258d9-9f8b-40f8-bf35-ee39b8b11584</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ae493513-e920-4b0c-afb5-55788b9561bc</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4182,7 +4182,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>resolutions-limitless</name>
-                                        <nodeRef>workspace://SpacesStore/67e603f3-a259-4eeb-8afd-815bbab31de5</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/8e7915db-afe0-4938-92c3-fe8b7032934e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4197,7 +4197,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-days</name>
-                                        <nodeRef>workspace://SpacesStore/12ee3588-d3aa-4339-b265-16fe1e5ef6f4</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/3f101293-ac19-4d78-aa5f-2703cf26d6b7</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4212,7 +4212,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-type</name>
-                                        <nodeRef>workspace://SpacesStore/2e96dfba-ad7f-47bd-a334-55c445cfbc95</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/90ea1468-7b5a-4622-8ccd-75778db90917</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4227,7 +4227,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date</name>
-                                        <nodeRef>workspace://SpacesStore/473181a3-265b-4349-91d3-bb08da99db16</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/efb9da4f-ea4c-4bba-ab5f-a1375444d6af</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4242,7 +4242,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_errands-json</name>
-                                        <nodeRef>workspace://SpacesStore/613256c9-bc9c-46a6-8d16-686173444c43</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/18bf9ca0-59cd-43b1-9cfc-600698084a0c</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4257,7 +4257,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_reviewers-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/e3fb60c6-8d82-4b0a-bdad-dce29233c692</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/150e41b2-b5d7-4707-bd0f-3c93480bc2ea</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4272,7 +4272,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/ac65782d-33e7-4f85-9de0-3ecd26d7fd2f</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/89f532c3-7207-43fb-8370-1fa60d3afb74</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4287,7 +4287,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-document-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/e7659af0-47ba-4afb-97cf-664fe8fb6fe1</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/90286b3b-704f-4731-9def-4694204ae064</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4337,7 +4337,7 @@ if (document) {
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>a8f36e45-3eae-4af2-97e7-b1e3c1b5a209</name>
-                                        <nodeRef>workspace://SpacesStore/f2181aa2-da1d-4b6d-9724-8d0d0883989c</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/b7fb7e1e-2272-4a3f-9b74-3f5a57a6df8c</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -4356,7 +4356,7 @@ if (document) {
                                     <node>
                                         <type>WaitForDocumentChange</type>
                                         <name>3ad0c069-0132-47b0-8016-2d05724d4d00</name>
-                                        <nodeRef>workspace://SpacesStore/46b98569-6f1f-40cb-b70b-c45143471ed3</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/6c0278a8-66a1-46e5-9cd8-6eb903c61f06</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -4378,7 +4378,7 @@ if (document) {
                                                         <type>transition</type>
                                                         <name>523a544e-6bb6-4de5-916d-b1c928e06e9a</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/b07d82bc-b24a-48a8-862f-55ea7aeea57e
+                                                            workspace://SpacesStore/42cd3e19-dc3a-4bcc-80fe-41f5b064cc1d
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -4431,7 +4431,7 @@ if (document) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/5245787b-c8fe-469e-9f11-d8bffdda0dd8
+                                                                    workspace://SpacesStore/c3f5030f-8b7b-4c53-a134-45f01773febb
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -4442,7 +4442,7 @@ if (document) {
                                                         <type>transition</type>
                                                         <name>3b604ba5-5448-4184-952a-647935eb6389</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/723ea68f-dec4-4fe7-b3d0-cc9e4a41e890
+                                                            workspace://SpacesStore/cb65b137-310c-4288-a04b-1280e3dc2932
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -4484,7 +4484,7 @@ if (document) {
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>462f8e47-73ed-4acf-9d90-2f3e1a58bd3b</name>
-                                        <nodeRef>workspace://SpacesStore/cfe7bded-7d89-4400-b83c-a5df8f3482e0</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/628170f4-31ee-4b77-b426-0912a004b7a4</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -4506,7 +4506,7 @@ if (document) {
                                                         <type>ScriptActionEntity</type>
                                                         <name>1c7acc49-0222-49fd-8b8c-aa1ec8e11b82</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/e4f49d20-7efa-4f27-8fac-cd4d5bece238
+                                                            workspace://SpacesStore/dbc455f7-7e11-480d-9eee-b83a33660a5c
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -4532,7 +4532,7 @@ if (document) {
                                     <node>
                                         <type>TimerAction</type>
                                         <name>e7db4b17-7ab1-476f-8b82-bf27fd196a3f</name>
-                                        <nodeRef>workspace://SpacesStore/171c53a5-f131-4f38-b63b-0065994d48f2</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/f1e99a8a-fb1e-4680-b33a-c0288fa9a0c3</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -4551,7 +4551,7 @@ if (document) {
                                     <node>
                                         <type>FinishStateWithTransition</type>
                                         <name>d7e1c136-15c5-4602-b461-9c141be55f74</name>
-                                        <nodeRef>workspace://SpacesStore/230d2704-0727-4e48-97d0-0e67af2ada70</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/8676f452-a1f1-4bcd-9438-2176d2886885</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -4573,7 +4573,7 @@ if (document) {
                                                         <type>userTransition</type>
                                                         <name>efe0c573-e401-4fc8-b6fa-d5c1c8bbc89a</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/c786fe0f-65c0-4a92-9d77-6d74854b8cab
+                                                            workspace://SpacesStore/f1b90f53-4473-4041-aa1e-6b5ad2dc5c49
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -4601,7 +4601,7 @@ if (document) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/e943905c-5839-4767-92f1-39180d041d7b
+                                                                    workspace://SpacesStore/27ce573e-fd1c-42bb-a958-9e270732baf3
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -4615,7 +4615,7 @@ if (document) {
                                                                         <name>2fd5c458-2454-4088-860e-53209b8efd7e
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/45b9b827-349b-45c3-b219-336b003117b7
+                                                                            workspace://SpacesStore/5c6cf74c-614b-49e0-9f32-ec2b8d67ee42
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -4647,7 +4647,7 @@ if (document) {
                                                                         <name>9a21a1e2-b55d-4c56-abcc-b028b027dda1
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/0ef362d7-f2e6-49f0-b6c5-8dfbe24cd498
+                                                                            workspace://SpacesStore/82060669-80e6-4cc0-a051-98c6094e28f1
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -4679,7 +4679,7 @@ if (document) {
                                                                         <name>556d09d2-3033-4ae4-9c43-e49ca5622404
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/a3173ef1-cc8f-4574-aa7a-7eb67472b975
+                                                                            workspace://SpacesStore/6473e1bf-e072-4c35-a295-9557bb366c08
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -4711,7 +4711,7 @@ if (document) {
                                                                         <name>e2f3b701-7010-434c-993e-dc4aa4e57fd9
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/7b489843-e7b7-49e3-a35a-72f6f654f860
+                                                                            workspace://SpacesStore/34b66676-90e3-49e9-bca5-13cd509a350a
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -4743,7 +4743,7 @@ if (document) {
                                                                         <name>6428253d-829e-4e0c-9f4a-3612b23c77ca
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/857d31df-ae35-46fd-a1ae-875b663a371c
+                                                                            workspace://SpacesStore/b293c0b3-0ad9-4a09-a51e-758fa913e771
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -4778,7 +4778,7 @@ if (document) {
                                                         <type>userTransition</type>
                                                         <name>a8298212-07a2-42d8-9281-b9a76918e67d</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/50661013-81df-4359-93bb-816a46a7f5ac
+                                                            workspace://SpacesStore/73665856-6eef-4f34-a389-b8085884c815
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -4806,7 +4806,7 @@ if (document) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
-                                                                    workspace://SpacesStore/57b0d816-8314-4a5a-b1dc-73a2187edc9c
+                                                                    workspace://SpacesStore/77c4fa43-d6a5-47f7-b473-eab277871fd6
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -4820,7 +4820,7 @@ if (document) {
                                                                         <name>2417d145-e21f-4920-8890-05cbaf8f5173
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/c2a5b763-6d4c-4dd8-ba40-9d0ecc07915f
+                                                                            workspace://SpacesStore/fa551778-f4dc-4125-aea8-7f3dbe4b8226
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -4852,7 +4852,7 @@ if (document) {
                                                                         <name>ff0548a5-2b71-474e-9eae-cdc2d8af29a9
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/e26be5d3-0e2c-4ee5-9f85-b19cee432505
+                                                                            workspace://SpacesStore/59370ed9-8757-424c-93bc-b3d0f8196a47
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -4884,7 +4884,7 @@ if (document) {
                                                                         <name>7e7a7132-ca49-4876-abf4-4590c52266d1
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/fd285eae-d615-4674-871c-fb02e38317e0
+                                                                            workspace://SpacesStore/0369fa27-4ec3-4729-bdb7-10bd96bfef5f
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -4916,7 +4916,7 @@ if (document) {
                                                                         <name>a90e6486-0b52-415d-a417-4792c9a19e6d
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/198f9d22-ae6a-4da8-a3cc-77ef40c39119
+                                                                            workspace://SpacesStore/62bc701f-66a1-4eed-97ba-38512bf197e1
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -4948,7 +4948,7 @@ if (document) {
                                                                         <name>bb7f7424-2825-4579-bb5c-11eb69efeccc
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/6cfcd058-b4ee-4280-a800-fe68100ffb24
+                                                                            workspace://SpacesStore/3c0eaa45-38e3-448d-a9b7-2f1ed8357d0e
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -4980,7 +4980,7 @@ if (document) {
                                                                         <name>0e6bf7c1-4d31-4aea-ba2a-c19138e697db
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/10809200-0ca6-423f-b99f-321f806deae9
+                                                                            workspace://SpacesStore/0bd8ea67-44f7-4b13-8d6e-0f7ecceb094c
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -5018,7 +5018,7 @@ if (document) {
                                     <node>
                                         <type>UserWorkflow</type>
                                         <name>53f5c032-11e6-45c3-b9f9-d7c2977ee748</name>
-                                        <nodeRef>workspace://SpacesStore/a183be96-219f-4ccb-8ee0-723ccaf61d54</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/19b9d693-ceb8-4cf8-ad52-f7b7f5019641</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -5040,7 +5040,7 @@ if (document) {
                                                         <type>UserWorkflowEntity</type>
                                                         <name>54600579-4ca8-4107-8fc6-c5be8d94a5ef</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/099ae33c-05e5-4aef-951d-bbc84ceaecb2
+                                                            workspace://SpacesStore/949868b8-7ce3-49f6-8960-085bd3df89b2
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -5066,7 +5066,7 @@ if (document) {
                                                                         <name>e0270e11-b421-48e2-9012-667c908471c6
                                                                         </name>
                                                                         <nodeRef>
-                                                                            workspace://SpacesStore/402385fe-a7b9-45d9-8585-f2f271554fde
+                                                                            workspace://SpacesStore/0eb53fae-6c08-4f1a-89ba-6342769fee3c
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
@@ -5104,7 +5104,7 @@ if (document) {
                                     <node>
                                         <type>StartWorkflow</type>
                                         <name>328cafac-9fbc-48ad-a9ff-5f964aad00d8</name>
-                                        <nodeRef>workspace://SpacesStore/18ff09da-9f41-4f51-974d-d18fcf62dfb5</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/7cdfe4dd-5898-459f-bd12-3b5e13f8b069</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -5123,7 +5123,7 @@ if (document) {
                                     <node>
                                         <type>TransitionAction</type>
                                         <name>998ac57d-da77-4174-882d-e4ff38729c08</name>
-                                        <nodeRef>workspace://SpacesStore/7aa13572-8d57-4c31-a29a-740ae22c7336</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/e2f814a7-888a-49c0-9482-7174b6d48442</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -5142,7 +5142,7 @@ if (document) {
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>dcfbf819-61fd-4a91-83cd-cefa3928988e</name>
-                                        <nodeRef>workspace://SpacesStore/15a20099-25ce-40de-ae51-04c9d895623f</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/0a1b90c3-07c5-4b08-a351-ec7496a96fce</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -5161,7 +5161,7 @@ if (document) {
                                     <node>
                                         <type>TimerAction</type>
                                         <name>84da60ee-24ef-44b8-8724-7e5ed967c1a5</name>
-                                        <nodeRef>workspace://SpacesStore/5ffd7e84-ac1f-4808-b409-219ceea58887</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ba9218a4-2bc2-40d0-a8be-751648d1f9a7</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -5184,7 +5184,7 @@ if (document) {
                     <node>
                         <type>endEvent</type>
                         <name>Завершено</name>
-                        <nodeRef>workspace://SpacesStore/7df2c3e5-2b73-4480-b1fb-f1eb73c42e38</nodeRef>
+                        <nodeRef>workspace://SpacesStore/fe084f3a-55a3-44e6-b4c2-7bcd8bafc5b6</nodeRef>
                         <properties/>
                         <aspects/>
                         <associations/>
@@ -5196,7 +5196,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document-aspects_is-on-control</name>
-                                        <nodeRef>workspace://SpacesStore/2d463bd7-171e-424c-b156-8ee6adacd8d4</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/d740f36e-dfb2-442c-bfe1-f3675ad96b32</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5211,7 +5211,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document_subject-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/bfd4cde1-68f2-4d3b-9e8a-a4003c97c4c8</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/66684502-c439-45b6-a8ce-78cd36e794fa</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5226,7 +5226,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_author-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/0b4a0c4e-b419-417f-b55d-f6813a46d478</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/546e9609-357c-4e35-891e-658a037506c6</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5241,7 +5241,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_controller-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/75e78117-45c6-4ee4-a96c-5bf005ef7d6c</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/b202b15d-a270-407e-8bec-d1751d14b0bf</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5256,7 +5256,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_closers</name>
-                                        <nodeRef>workspace://SpacesStore/3bb823f6-20ba-42d7-9c8c-24c932d15c69</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/3348b8ca-a2d0-4d87-8250-44d52bd28464</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5271,7 +5271,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>limitation-date-script</name>
-                                        <nodeRef>workspace://SpacesStore/3c269d63-c1ff-4d0c-b8cb-74b2c144a2a7</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/53887f2f-49ea-4de8-a425-bef03d68f204</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5286,7 +5286,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-radio</name>
-                                        <nodeRef>workspace://SpacesStore/68927d0d-8c57-420e-bcfe-4a9bbd8cd2f5</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/874029b2-b63c-49db-9da2-54d636627773</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5301,7 +5301,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>resolutions-limitless</name>
-                                        <nodeRef>workspace://SpacesStore/3dc76084-da6a-42c8-a40b-f8f658820804</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/05392ef6-4c51-4123-a74b-7d5d4cb72242</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5316,7 +5316,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-days</name>
-                                        <nodeRef>workspace://SpacesStore/ceb5b1ae-5bc1-469b-a7b2-8b2f7ca92d38</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/1642a491-7508-4887-bd1a-a6224ca3ea5a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5331,7 +5331,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-type</name>
-                                        <nodeRef>workspace://SpacesStore/0a8979f4-f784-4387-9b5f-9457703a6718</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/9c6fd321-d6a3-484d-ae2b-16a101fc7a73</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5346,7 +5346,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date</name>
-                                        <nodeRef>workspace://SpacesStore/3dba9139-0c79-443b-8088-8761853b9d64</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/9f4b7e0b-f3e3-40f0-a6af-76a24fc6f913</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5361,7 +5361,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_errands-json</name>
-                                        <nodeRef>workspace://SpacesStore/11c5e137-4192-4bc2-b5f5-ef4c2c11f176</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/faa990ab-6fbb-42d7-867a-afb2579fdb66</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5376,7 +5376,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_reviewers-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/264fe618-36da-4bba-9a9f-6899b852e00d</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a2a3ea97-f454-4dcb-94d5-a273f783054c</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5391,7 +5391,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/307b7cf4-4209-4b89-b614-a90a1178123b</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/556306d7-7b2f-4e07-86d4-ddc6e0c4f6f1</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5406,7 +5406,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-document-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/de6131b8-adfd-4aeb-b8ed-48a2b89a525b</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/7c8eccc3-c4f3-4daf-a0fe-ff86ae399675</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5456,7 +5456,7 @@ if (document) {
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>8dde59d1-741d-4b00-b56d-9ca1edaf88a2</name>
-                                        <nodeRef>workspace://SpacesStore/b308ba20-2e8e-44f1-ac43-0817c91591ee</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/af695de0-096e-4894-87f0-2ad6dd5b7e22</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -5478,7 +5478,7 @@ if (document) {
                                                         <type>ScriptActionEntity</type>
                                                         <name>c5a6369c-3040-4473-9913-f62f8b65c2eb</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/4fb83621-2f6c-4003-8b4a-266f7acd4ad8
+                                                            workspace://SpacesStore/dbcb5e6b-97de-4a6d-9db4-1218b265c934
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -5512,7 +5512,7 @@ if (document) {
                     <node>
                         <type>endEvent</type>
                         <name>Аннулировано</name>
-                        <nodeRef>workspace://SpacesStore/5245787b-c8fe-469e-9f11-d8bffdda0dd8</nodeRef>
+                        <nodeRef>workspace://SpacesStore/c3f5030f-8b7b-4c53-a134-45f01773febb</nodeRef>
                         <properties/>
                         <aspects/>
                         <associations/>
@@ -5524,7 +5524,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document-aspects_is-on-control</name>
-                                        <nodeRef>workspace://SpacesStore/68c0ebb3-53e3-4b02-8b97-5abccd5207be</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/bda2b728-54b5-4bc8-ab8c-91a8ba53c76e</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5539,7 +5539,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-document_subject-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/de45701b-0808-42d5-adb9-52c61d88a5f5</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/35354e69-1188-48ef-af58-e5d274944150</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5554,7 +5554,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_author-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/ecab86e5-eed5-4ee4-a140-dc881dbd6fb0</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a91ee7df-617c-4f03-9b05-9920e008b4aa</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5569,7 +5569,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_controller-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/7583d83c-0e00-4f78-a632-46902a84bb6d</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/cb48f945-959e-49c4-a0d9-719c46e27369</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5584,7 +5584,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_closers</name>
-                                        <nodeRef>workspace://SpacesStore/dfaad0c5-0f40-4a5c-8b7e-b47f82c8f75b</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/9e25ca5d-b412-4e92-ac0c-319da78d2d34</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5599,7 +5599,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>limitation-date-script</name>
-                                        <nodeRef>workspace://SpacesStore/82da0925-c6c3-4b81-84d4-23aefed04e71</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/af49072b-e0ac-4282-bca7-4d58716d4ff2</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5614,7 +5614,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-radio</name>
-                                        <nodeRef>workspace://SpacesStore/73bb2b36-c9e9-4750-aaeb-2f978d6b8f1f</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/c350995f-ed6a-4ae2-9526-77082b26b72f</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5629,7 +5629,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>resolutions-limitless</name>
-                                        <nodeRef>workspace://SpacesStore/03e9ebc4-4c7a-4775-b921-f9fde5818d06</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/412cca6b-7b6d-4ce8-ac51-a66cce4c4474</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5644,7 +5644,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-days</name>
-                                        <nodeRef>workspace://SpacesStore/65feafbb-eecf-4fe5-b8a5-90962ec6bc09</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/2ba7e989-2b8e-4115-a5d9-ad85dd53c1f7</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5659,7 +5659,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date-type</name>
-                                        <nodeRef>workspace://SpacesStore/5cbacbc3-d247-480c-acec-a76f0712d9d1</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ac3af7ec-4923-47d7-a748-8de43ced007b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5674,7 +5674,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_limitation-date</name>
-                                        <nodeRef>workspace://SpacesStore/9d263a45-2e9d-4ca2-baa7-e7ca3c99260f</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/72287d2f-36e1-46a5-98fe-c4d2e7e79fec</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5689,7 +5689,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_errands-json</name>
-                                        <nodeRef>workspace://SpacesStore/dfd7f5f3-497c-4f7a-bca6-1597f13a8f9b</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/5a4464f6-ccfd-4537-9a9f-c00747d06a0a</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5704,7 +5704,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_reviewers-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/5192c03f-4b4b-4c98-a5aa-ad244a8e1ca6</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/93356f97-2413-4fdb-9079-81942dcf58cf</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5719,7 +5719,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/59460dff-bac8-445f-8cfe-c57a4d7313bf</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/fac140d9-25eb-4f2a-98c9-9887d33020c8</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5734,7 +5734,7 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-resolutions_base-document-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/aafae4f0-8da1-4fe4-9183-16ab511108b9</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/a25a9cff-d45c-4de5-ac4d-5fe87b5b8ca8</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5784,7 +5784,7 @@ if (document) {
                                     <node>
                                         <type>ScriptAction</type>
                                         <name>4945b39c-7035-45d6-ad77-3a7700afa000</name>
-                                        <nodeRef>workspace://SpacesStore/a9974c25-c41d-4017-a986-a2916899cfd4</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/97fc1eec-b949-4da4-a203-16e9cb8436bf</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>actionExecution</name>
@@ -5806,7 +5806,7 @@ if (document) {
                                                         <type>ScriptActionEntity</type>
                                                         <name>53767b53-363b-4bd2-bd0f-825bd8bb98a9</name>
                                                         <nodeRef>
-                                                            workspace://SpacesStore/8e1a6c5d-25cb-4312-90bd-98414d78fb0f
+                                                            workspace://SpacesStore/2f15efc8-a965-4721-81fa-3a4b65894256
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
@@ -5847,7 +5847,7 @@ if (document) {
                     <node>
                         <type>alternative</type>
                         <name>cd606954-e12a-4ca0-b03c-b70871b5e52f</name>
-                        <nodeRef>workspace://SpacesStore/9400c998-5171-4373-aeea-6f7a01759321</nodeRef>
+                        <nodeRef>workspace://SpacesStore/7a87b9e3-7e4e-4867-b27e-c0c6b8a521fd</nodeRef>
                         <properties>
                             <property>
                                 <name>alternativeExpression</name>
@@ -5859,7 +5859,7 @@ if (document) {
                         <associations>
                             <association>
                                 <type>alternativeStatus</type>
-                                <reference>workspace://SpacesStore/57b0d816-8314-4a5a-b1dc-73a2187edc9c</reference>
+                                <reference>workspace://SpacesStore/77c4fa43-d6a5-47f7-b473-eab277871fd6</reference>
                             </association>
                         </associations>
                         <roleAssociations/>
@@ -5868,7 +5868,7 @@ if (document) {
                     <node>
                         <type>alternative</type>
                         <name>6c4b4ff1-fcbc-450d-96cd-227c15600ab2</name>
-                        <nodeRef>workspace://SpacesStore/b6207e97-4ae1-41c5-9b83-437790ded761</nodeRef>
+                        <nodeRef>workspace://SpacesStore/ef8e20fe-1a8b-4f74-ba30-f7509f153939</nodeRef>
                         <properties>
                             <property>
                                 <name>alternativeExpression</name>
@@ -5880,7 +5880,7 @@ if (document) {
                         <associations>
                             <association>
                                 <type>alternativeStatus</type>
-                                <reference>workspace://SpacesStore/e943905c-5839-4767-92f1-39180d041d7b</reference>
+                                <reference>workspace://SpacesStore/27ce573e-fd1c-42bb-a958-9e270732baf3</reference>
                             </association>
                         </associations>
                         <roleAssociations/>
