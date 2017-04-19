@@ -29,7 +29,7 @@
 		<constraint name="lecm-outgoing:attachment-categories" type="LIST">
 			<parameter name="allowedValues">
 				<list>
-					<value>Исходящее|OUTGOING</value>
+					<value>Исходящий|OUTGOING</value>
 					<value>Согласование|APPROVAL</value>
 					<value>Прочее|OTHER</value>
 				</list>
@@ -48,7 +48,7 @@
 	</constraints>
 
 	<types>
-		<!-- Исходящее -->
+		<!-- Исходящий -->
 		<type name="lecm-outgoing:document">
 			<title>Исходящий документ</title>
 			<parent>lecm-eds-document:base</parent>

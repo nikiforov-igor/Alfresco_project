@@ -58,7 +58,7 @@
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящее</name>
+                                        <name>Исходящий</name>
                                         <nodeRef>workspace://SpacesStore/f0f02bd1-9efc-4e46-95b4-ea2661a6788e</nodeRef>
                                         <properties>
                                             <property>
@@ -725,7 +725,7 @@
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящее</name>
+                                        <name>Исходящий</name>
                                         <nodeRef>workspace://SpacesStore/ec746ca2-5a81-47e1-981f-204b72c95138</nodeRef>
                                         <properties>
                                             <property>
@@ -1207,7 +1207,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Необходимо добавить вложение в категорию "Исходящее"]]></value>
+                                                                                    <![CDATA[Необходимо добавить вложение в категорию "Исходящий"]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -1216,7 +1216,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Исходящее")]]></value>
+                                                                                    <![CDATA[doc.hasCategoryAttachment("Исходящий")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -1358,7 +1358,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Необходимо добавить вложение в категорию "Исходящее"]]></value>
+                                                                                    <![CDATA[Необходимо добавить вложение в категорию "Исходящий"]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -1367,7 +1367,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Исходящее")]]></value>
+                                                                                    <![CDATA[doc.hasCategoryAttachment("Исходящий")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -1449,7 +1449,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исходящее"]]></value>
+                                                                                    <![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исходящий"]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -1458,7 +1458,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Исходящее")]]></value>
+                                                                                    <![CDATA[doc.hasCategoryAttachment("Исходящий")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -2062,7 +2062,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящее</name>
+                                        <name>Исходящий</name>
                                         <nodeRef>workspace://SpacesStore/cedb19fe-3402-42cf-8c64-ba0043741850</nodeRef>
                                         <properties>
                                             <property>
@@ -2508,7 +2508,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящее</name>
+                                        <name>Исходящий</name>
                                         <nodeRef>workspace://SpacesStore/e8d69c26-3da5-404a-8743-486ba9f43036</nodeRef>
                                         <properties>
                                             <property>
@@ -3549,7 +3549,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящее</name>
+                                        <name>Исходящий</name>
                                         <nodeRef>workspace://SpacesStore/0cc2eaa6-04f4-455e-aa99-66bc5bbf0a81</nodeRef>
                                         <properties>
                                             <property>
@@ -4033,7 +4033,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исходящее"]]></value>
+                                                                                    <![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исходящий"]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -4042,7 +4042,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Исходящее")]]></value>
+                                                                                    <![CDATA[doc.hasCategoryAttachment("Исходящий")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4657,7 +4657,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящее</name>
+                                        <name>Исходящий</name>
                                         <nodeRef>workspace://SpacesStore/925fdd72-8d85-4aeb-ae70-3d4c7f35fc16</nodeRef>
                                         <properties>
                                             <property>
@@ -5108,7 +5108,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Необходимо добавить вложение в категорию "Исходящее"]]></value>
+                                                                                    <![CDATA[Необходимо добавить вложение в категорию "Исходящий"]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -5117,7 +5117,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Исходящее")]]></value>
+                                                                                    <![CDATA[doc.hasCategoryAttachment("Исходящий")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -5259,7 +5259,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Необходимо добавить вложение в категорию "Исходящее"]]></value>
+                                                                                    <![CDATA[Необходимо добавить вложение в категорию "Исходящий"]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -5268,7 +5268,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Исходящее")]]></value>
+                                                                                    <![CDATA[doc.hasCategoryAttachment("Исходящий")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -5350,7 +5350,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исходящее"]]></value>
+                                                                                    <![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исходящий"]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -5359,7 +5359,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Исходящее")]]></value>
+                                                                                    <![CDATA[doc.hasCategoryAttachment("Исходящий")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -6002,7 +6002,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящее</name>
+                                        <name>Исходящий</name>
                                         <nodeRef>workspace://SpacesStore/75f86d09-7457-47ee-bb2f-dbe05b997f77</nodeRef>
                                         <properties>
                                             <property>
@@ -6851,7 +6851,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящее</name>
+                                        <name>Исходящий</name>
                                         <nodeRef>workspace://SpacesStore/f2d49ef1-faf7-4e1b-a83a-6ab69c81d3fe</nodeRef>
                                         <properties>
                                             <property>
@@ -7661,7 +7661,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящее</name>
+                                        <name>Исходящий</name>
                                         <nodeRef>workspace://SpacesStore/8bf42c39-4787-4b57-b9b8-e087c84709f2</nodeRef>
                                         <properties>
                                             <property>
@@ -8590,7 +8590,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящее</name>
+                                        <name>Исходящий</name>
                                         <nodeRef>workspace://SpacesStore/28b02824-61f5-451f-80d0-1b2f25b68ae3</nodeRef>
                                         <properties>
                                             <property>
@@ -9416,7 +9416,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящее</name>
+                                        <name>Исходящий</name>
                                         <nodeRef>workspace://SpacesStore/6e23f4a2-695a-4142-9cd4-934c27e3ecc9</nodeRef>
                                         <properties>
                                             <property>
@@ -10312,7 +10312,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящее</name>
+                                        <name>Исходящий</name>
                                         <nodeRef>workspace://SpacesStore/891d5118-0138-4466-8eab-76402d007097</nodeRef>
                                         <properties>
                                             <property>
@@ -10747,7 +10747,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящее</name>
+                                        <name>Исходящий</name>
                                         <nodeRef>workspace://SpacesStore/86ee8828-060c-4caa-8176-17052b500eb6</nodeRef>
                                         <properties>
                                             <property>
