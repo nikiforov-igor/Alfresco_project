@@ -114,7 +114,7 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
     }
 
 	public String wrapperAttribute(NodeRef nodeRef, String description, String formId) {
-        return HtmlUtils.wrapperAttribute(nodeRef, description, formId);
+        return HtmlUtils.wrapAttribute(nodeRef, description, formId);
     }
 
 
