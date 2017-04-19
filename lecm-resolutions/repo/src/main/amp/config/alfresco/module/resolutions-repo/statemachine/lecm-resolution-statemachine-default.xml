@@ -736,7 +736,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.attr("lecm-resolutions:author-assoc-ref") == doc.attr("lecm-document:author-assoc-ref") OR (doc.attr("lecm-resolutions:author-assoc-ref") != doc.attr("lecm-document:author-assoc-ref") AND doc.attr("lecm-resolutions:approved-outside-system") == true)]]></value>
+                                                                                    <![CDATA[doc.attr("lecm-resolutions:author-assoc-ref") == doc.attr("lecm-document:author-assoc-ref") OR doc.attr("lecm-resolutions:approved-outside-system") == true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -4830,7 +4830,7 @@ if (document) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.attr("lecm-resolutions:author-assoc-ref") == doc.attr("lecm-document:author-assoc-ref") OR (doc.attr("lecm-resolutions:author-assoc-ref") != doc.attr("lecm-document:author-assoc-ref") AND doc.attr("lecm-resolutions:approved-outside-system") == true)]]></value>
+                                                                                    <![CDATA[doc.attr("lecm-resolutions:author-assoc-ref") == doc.attr("lecm-document:author-assoc-ref") OR doc.attr("lecm-resolutions:approved-outside-system") == true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
