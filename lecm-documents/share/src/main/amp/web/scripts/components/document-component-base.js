@@ -147,12 +147,14 @@ LogicECM.services = LogicECM.services || {};
 
             showSplitedPanel: function () {
                 Dom.setStyle(this.MAIN_REGION, "display", "block");
+                Dom.addClass(this.MAIN_REGION, "left-side");
                 Dom.addClass(this.CUSTOM_REGION, "split");
             },
 
             showOverflowedPanel: function () {
                 Dom.setStyle(this.MAIN_REGION, "display", "none");
                 Dom.removeClass(this.CUSTOM_REGION, "split");
+                Dom.removeClass(this.MAIN_REGION, "left-side");
             },
 
             getDocumentTitle: function () {
