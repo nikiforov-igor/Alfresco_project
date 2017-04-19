@@ -103,7 +103,7 @@
                 <property name="lecm-arm:filter-code">BY_TYPE_OF_CONTROL</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
-                <property name="lecm-arm:filter-values">ISNOTNULL:'lecm-ord:controller-assoc-ref' AND @lecm\\-ord\\:controller\\-assoc\\-ref:*#current-user*|Контролер документа,ISNOTNULL:'lecm-ord:items-assoc-controller-assoc-ref' AND @lecm\\-ord\\:items\\-assoc\\-controller\\-assoc\\-ref:*#current-user*|Контролер пункта</property>
+                <property name="lecm-arm:filter-values">ISNOTNULL:'lecm-ord:controller-assoc-ref' AND @lecm\\-ord\\:controller\\-assoc\\-ref:'#current-user'|Контролер документа,ISNOTNULL:'lecm-ord:items-assoc-controller-assoc-ref' AND @lecm\\-ord\\:items\\-assoc\\-controller\\-assoc\\-ref:'*#current-user*'|Контролер пункт</property>
                 <property name="lecm-arm:filter-query">#value</property>
             </item>
             <item name="cm:По типу исполнения" type="lecm-arm:filter">
