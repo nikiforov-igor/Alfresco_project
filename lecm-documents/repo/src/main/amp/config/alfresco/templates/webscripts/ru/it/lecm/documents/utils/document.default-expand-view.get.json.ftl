@@ -1,5 +1,5 @@
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
-"defaultExpandView": "${result}"
+"defaultExpandView": "${result!''}"
 }
 </#escape>
