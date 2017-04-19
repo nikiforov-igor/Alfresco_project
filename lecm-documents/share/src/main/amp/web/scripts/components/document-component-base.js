@@ -129,6 +129,7 @@ LogicECM.services = LogicECM.services || {};
                     } else {
                         this.showOverflowedPanel();
                     }
+                    Dom.addClass(this.MAIN_REGION, "left-side");
                     // отображаем дашлет
                     Dom.setStyle(this.CUSTOM_REGION, "display", "block");
                     // добавляем в header ссылку на главную страницу документа
@@ -173,7 +174,7 @@ LogicECM.services = LogicECM.services || {};
                 if (titleEl != null) {
                     titleEl.innerHTML = "";
                 }
-
+                Dom.removeClass(this.MAIN_REGION, "left-side");
                 Dom.setStyle(this.TITLE, "display", "none");
                 Dom.setStyle(this.TITLE + "-span", "display", "inline-block");
                 this.isExpanded = false;

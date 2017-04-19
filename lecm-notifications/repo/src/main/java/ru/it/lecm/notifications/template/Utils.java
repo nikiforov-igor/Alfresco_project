@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import ru.it.lecm.base.utils.HtmlUtils;
 
 import java.lang.reflect.Method;
 import java.text.DateFormat;
@@ -91,7 +92,7 @@ public final class Utils {
 
 	@NotificationsTemplateFunction
 	public static String wrapTitle(String text, String title) {
-		return  "<span class=\"wrapper-title\" title=\"" + title.replaceAll("\"", "&quot;") + "\">" + text + "</span>";
+		return HtmlUtils.wrapTitle(text, title);
 	}
 
 	private Utils() {
