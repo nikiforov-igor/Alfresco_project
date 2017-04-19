@@ -17,6 +17,11 @@
     overflow: visible;
 }
 
+#main-region.split .panel-header a.collapse,
+#main-region.left-side .panel-header a.collapse {
+    display: none;
+}
+
 #custom-region.split{
     float: right;
     width: 50%;
