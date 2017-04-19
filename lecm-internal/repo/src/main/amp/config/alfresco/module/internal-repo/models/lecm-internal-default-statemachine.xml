@@ -226,7 +226,7 @@
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящий</name>
+                                        <name>Исходящее</name>
                                         <nodeRef>workspace://SpacesStore/2ee8a606-bbf0-4a94-a9e5-762f10c9c084</nodeRef>
                                         <properties>
                                             <property>
@@ -1050,7 +1050,7 @@ if (document != null) {
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящий</name>
+                                        <name>Исходящее</name>
                                         <nodeRef>workspace://SpacesStore/13c1cc44-d699-495f-85bd-84f456865b94</nodeRef>
                                         <properties>
                                             <property>
@@ -2243,7 +2243,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящий</name>
+                                        <name>Исходящее</name>
                                         <nodeRef>workspace://SpacesStore/11a17af4-6917-4041-a150-8ca6d9cf031a</nodeRef>
                                         <properties>
                                             <property>
@@ -2815,7 +2815,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящий</name>
+                                        <name>Исходящее</name>
                                         <nodeRef>workspace://SpacesStore/9a4aa0cb-2743-4400-a971-3fe38ac60bc4</nodeRef>
                                         <properties>
                                             <property>
@@ -3834,7 +3834,7 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящий</name>
+                                        <name>Исходящее</name>
                                         <nodeRef>workspace://SpacesStore/ab7aea02-bfda-4e49-a91f-1d7746b9b5da</nodeRef>
                                         <properties>
                                             <property>
@@ -4831,7 +4831,7 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящий</name>
+                                        <name>Исходящее</name>
                                         <nodeRef>workspace://SpacesStore/2dfe3904-fdbe-44f3-9adc-efa777534a7f</nodeRef>
                                         <properties>
                                             <property>
@@ -6042,7 +6042,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящий</name>
+                                        <name>Исходящее</name>
                                         <nodeRef>workspace://SpacesStore/04192325-fedb-46b5-901d-71b9ec43f3f3</nodeRef>
                                         <properties>
                                             <property>
@@ -6869,7 +6869,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящий</name>
+                                        <name>Исходящее</name>
                                         <nodeRef>workspace://SpacesStore/3f60efe8-21ac-4658-bd1d-04f69e25885c</nodeRef>
                                         <properties>
                                             <property>
@@ -7734,7 +7734,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящий</name>
+                                        <name>Исходящее</name>
                                         <nodeRef>workspace://SpacesStore/c6ff067f-f431-43d0-9ad3-c6234da782a9</nodeRef>
                                         <properties>
                                             <property>
@@ -8707,7 +8707,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                 <nodes>
                                     <node>
                                         <type>documentField</type>
-                                        <name>Исходящий</name>
+                                        <name>Исходящее</name>
                                         <nodeRef>workspace://SpacesStore/3c5a9893-7b22-4e7c-920d-5488eae98351</nodeRef>
                                         <properties>
                                             <property>
