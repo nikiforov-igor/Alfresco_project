@@ -397,7 +397,7 @@ LogicECM.module.Base.Util = {
 
 
     getCookie: function (name) {
-        var results = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        var results = document.cookie.match('(^|;) ?' + encodeURIComponent(name) + '=([^;]*)(;|$)');
 
         if (results)
             return ( decodeURIComponent(results[2]) );
