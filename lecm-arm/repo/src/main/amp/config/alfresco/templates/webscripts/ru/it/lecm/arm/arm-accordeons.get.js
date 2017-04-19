@@ -10,6 +10,8 @@ if (url.getMatch().indexOf("forDashlet") != -1) {
                 rootIsOk = children.some(function (child) {
                     return child.typeShort == "lecm-arm:node";
                 });
+            } else {
+                rootIsOk = false;
             }
         }
         return rootIsOk;
