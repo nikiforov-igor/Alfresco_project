@@ -5852,7 +5852,7 @@ if (document) {
                             <property>
                                 <name>alternativeExpression</name>
                                 <value>
-                                    <![CDATA[${stm_document.properties["lecm-resolutions:is-draft"]!=true && (stm_document.properties["lecm-resolutions:author-assoc-ref"].equals(stm_document.properties["lecm-document:author-assoc-ref"]) || (!stm_document.properties["lecm-resolutions:author-assoc-ref"].equals(stm_document.properties["lecm-document:author-assoc-ref"]) && stm_document.properties["lecm-resolutions:approved-outside-system"]==true ))}]]></value>
+                                    <![CDATA[${stm_document.properties["lecm-resolutions:is-draft"]!=true && (stm_document.properties["lecm-resolutions:author-assoc-ref"].equals(stm_document.properties["lecm-document:author-assoc-ref"]) || stm_document.properties["lecm-resolutions:approved-outside-system"]==true )}]]></value>
                             </property>
                         </properties>
                         <aspects/>
