@@ -8,7 +8,7 @@ if (url.getMatch().indexOf("forDashlet") != -1) {
             if (children && children.length) {
                 //проверка узлов первого уровня
                 rootIsOk = children.some(function (child) {
-                    return child.typeShort == "lecm-arm:node";
+                    return ("" + child.typeShort) == "lecm-arm:node";
                 });
             } else {
                 rootIsOk = false;
