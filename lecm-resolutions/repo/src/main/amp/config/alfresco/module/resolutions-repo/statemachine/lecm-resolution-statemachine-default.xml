@@ -506,7 +506,22 @@
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-review-aspects_related-review-records-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/7faa34de-c83d-4814-8ba9-04736c161085</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/95edcae7-d5ea-43c0-8ab5-f49edce72abf</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_approved-outside-system</name>
+                                        <nodeRef>workspace://SpacesStore/a3c7306a-cdfe-437d-97bf-3897618c1760</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -721,7 +736,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.attr("lecm-resolutions:author-assoc-ref") == doc.attr("lecm-document:author-assoc-ref")]]></value>
+                                                                                    <![CDATA[doc.attr("lecm-resolutions:author-assoc-ref") == doc.attr("lecm-document:author-assoc-ref") OR (doc.attr("lecm-resolutions:author-assoc-ref") != doc.attr("lecm-document:author-assoc-ref") AND doc.attr("lecm-resolutions:approved-outside-system") == true)]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -958,7 +973,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.attr("lecm-resolutions:author-assoc-ref") != doc.attr("lecm-document:author-assoc-ref")]]></value>
+                                                                                    <![CDATA[doc.attr("lecm-resolutions:author-assoc-ref") != doc.attr("lecm-document:author-assoc-ref") AND doc.attr("lecm-resolutions:approved-outside-system") == false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -1661,6 +1676,21 @@
                                             <property>
                                                 <name>editableField</name>
                                                 <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_approved-outside-system</name>
+                                        <nodeRef>workspace://SpacesStore/2bf7d1ee-0f63-4308-81e2-a3f9fdc8e884</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -3078,6 +3108,21 @@ if (document) {
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_approved-outside-system</name>
+                                        <nodeRef>workspace://SpacesStore/2f97d4d7-93ec-4c30-9b61-038258d1b4a7</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -4257,7 +4302,22 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-review-aspects_related-review-records-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/09c21f11-a37c-44cd-a0c7-dfb3f77be8a7</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/0a16f151-6a5f-4dc3-ae71-fc413ac9aa26</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_approved-outside-system</name>
+                                        <nodeRef>workspace://SpacesStore/94e6dc95-1682-4095-b9ce-d9b160f1ddde</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -4565,7 +4625,7 @@ if (document) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.attr("lecm-resolutions:author-assoc-ref") != doc.attr("lecm-document:author-assoc-ref")]]></value>
+                                                                                    <![CDATA[doc.attr("lecm-resolutions:author-assoc-ref") != doc.attr("lecm-document:author-assoc-ref") AND doc.attr("lecm-resolutions:approved-outside-system") == false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -4770,7 +4830,7 @@ if (document) {
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.attr("lecm-resolutions:author-assoc-ref") == doc.attr("lecm-document:author-assoc-ref")]]></value>
+                                                                                    <![CDATA[doc.attr("lecm-resolutions:author-assoc-ref") == doc.attr("lecm-document:author-assoc-ref") OR (doc.attr("lecm-resolutions:author-assoc-ref") != doc.attr("lecm-document:author-assoc-ref") AND doc.attr("lecm-resolutions:approved-outside-system") == true)]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
@@ -5361,7 +5421,22 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-review-aspects_related-review-records-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/3bd9e86f-eda7-46cd-9786-acb1c2a27bf7</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/ab66b4d8-7966-4965-bdea-2a656a308dda</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_approved-outside-system</name>
+                                        <nodeRef>workspace://SpacesStore/0c2c87e5-c2df-4198-86c8-706a10a87f98</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5674,7 +5749,22 @@ if (document) {
                                     <node>
                                         <type>documentField</type>
                                         <name>lecm-review-aspects_related-review-records-assoc</name>
-                                        <nodeRef>workspace://SpacesStore/87638d3c-2051-4818-95c3-eadbe00a0341</nodeRef>
+                                        <nodeRef>workspace://SpacesStore/64a00dc5-6d56-4176-a1ff-f07f8ea2c152</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-resolutions_approved-outside-system</name>
+                                        <nodeRef>workspace://SpacesStore/a4874e67-2170-470b-a885-a73ea1578589</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -5762,7 +5852,7 @@ if (document) {
                             <property>
                                 <name>alternativeExpression</name>
                                 <value>
-                                    <![CDATA[${stm_document.properties["lecm-resolutions:is-draft"]!=true && stm_document.properties["lecm-resolutions:author-assoc-ref"].equals(stm_document.properties["lecm-document:author-assoc-ref"])}]]></value>
+                                    <![CDATA[${stm_document.properties["lecm-resolutions:is-draft"]!=true && (stm_document.properties["lecm-resolutions:author-assoc-ref"].equals(stm_document.properties["lecm-document:author-assoc-ref"]) || (!stm_document.properties["lecm-resolutions:author-assoc-ref"].equals(stm_document.properties["lecm-document:author-assoc-ref"]) && stm_document.properties["lecm-resolutions:approved-outside-system"]==true ))}]]></value>
                             </property>
                         </properties>
                         <aspects/>
@@ -5783,7 +5873,7 @@ if (document) {
                             <property>
                                 <name>alternativeExpression</name>
                                 <value>
-                                    <![CDATA[${stm_document.properties["lecm-resolutions:is-draft"]!=true && !stm_document.properties["lecm-resolutions:author-assoc-ref"].equals(stm_document.properties["lecm-document:author-assoc-ref"])}]]></value>
+                                    <![CDATA[${stm_document.properties["lecm-resolutions:is-draft"]!=true && !stm_document.properties["lecm-resolutions:author-assoc-ref"].equals(stm_document.properties["lecm-document:author-assoc-ref"]) && stm_document.properties["lecm-resolutions:approved-outside-system"]==false}]]></value>
                             </property>
                         </properties>
                         <aspects/>
