@@ -72,9 +72,9 @@ LogicECM.services = LogicECM.services || {};
             },
 
             getLastCustomPanelView: function () {
-                if (this.preferences.lastCustomPanel == null) {
+                if (!this.preferences.lastCustomPanel) {
                     this.preferences.lastCustomPanel = Alfresco.util.findValueByDotNotation(this.preferencesService.get(), this._getPreferenceKey(this.DOCUMENT_VIEW_PREFERENCES.LAST_CUSTOM_PANEL), "");
-                    if (this.preferences.lastCustomPanel == null) {
+                    if (!this.preferences.lastCustomPanel) {
                         this.preferences.lastCustomPanel = this.options.defaultExpandComponent;
                     }
                 }
