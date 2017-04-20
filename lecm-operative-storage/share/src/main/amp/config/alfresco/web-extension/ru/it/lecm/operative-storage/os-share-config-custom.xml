@@ -410,15 +410,21 @@
             <form id="view-node-form">
                 <field-visibility>
                     <show id="cm:title" force="true"/>
+                    <show id="lecm-os:nomenclature-unit-section-status" for-mode="view"/>
                     <show id="lecm-os:nomenclature-unit-section-unit-assoc"/>
                     <show id="lecm-os:nomenclature-unit-section-index"/>
                     <show id="lecm-os:nomenclature-unit-section-comment"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:title">
+                    <set id="set1" template="/ru/it/lecm/os/controls/nomenclature-custom-set.ftl"/>
+
+                    <field id="cm:title" set="set1">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
-                    <field id="lecm-os:nomenclature-unit-section-unit-assoc">
+                    <field id="lecm-os:nomenclature-unit-section-status" set="set1">
+                        <control template="/ru/it/lecm/os/controls/status-control.ftl"/>
+                    </field>
+                    <field id="lecm-os:nomenclature-unit-section-unit-assoc" set="set1">
                         <control template="/ru/it/lecm/os/controls/nomenclature-orgunit-validation.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
                             <control-param name="plane">false</control-param>
@@ -426,8 +432,8 @@
                             <control-param name="sortProp">lecm-orgstr:element-short-name</control-param>
                         </control>
                     </field>
-                    <field id="lecm-os:nomenclature-unit-section-index"/>
-                    <field id="lecm-os:nomenclature-unit-section-comment">
+                    <field id="lecm-os:nomenclature-unit-section-index" set="set1"/>
+                    <field id="lecm-os:nomenclature-unit-section-comment" set="set1">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
                 </appearance>
@@ -753,6 +759,7 @@
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="cm:title" force="true"/>
+                    <show id="lecm-os:nomenclature-case-status" for-mode="view"/>
                     <show id="lecm-os:nomenclature-case-index"/>
                     <show id="lecm-os:nomenclature-case-store-term-assoc"/>
                     <show id="lecm-os:nomenclature-case-security-classification-assoc"/>
@@ -784,6 +791,9 @@
 
                     <field id="cm:title" mandatory="true" set="set1">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+                    </field>
+                    <field id="lecm-os:nomenclature-case-status" set="set1">
+                        <control template="/ru/it/lecm/os/controls/status-control.ftl" />
                     </field>
                     <field id="lecm-os:nomenclature-case-index" set="set1"/>
                     <field id="lecm-os:nomenclature-case-store-term-assoc" set="set1">
