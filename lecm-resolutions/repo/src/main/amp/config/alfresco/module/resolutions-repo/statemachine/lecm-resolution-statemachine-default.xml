@@ -2322,9 +2322,13 @@ if (document) {
 
 var document = stm_document;
 if (document) {
+var reviewers = document.assocs["lecm-resolutions:reviewers-assoc"];
   var baseDocumentAssoc = document.assocs["lecm-resolutions:base-document-assoc"];
   if (baseDocumentAssoc && baseDocumentAssoc.length) {
-    sendDocumentToReview(baseDocumentAssoc[0], document.assocs["lecm-resolutions:reviewers-assoc"], document);
+    sendDocumentToReview(baseDocumentAssoc[0], reviewers, document);
+	for (var i = 0; i < reviewers.length; i++) {
+		documentMembers.addMemberWithoutCheckPermission(document, reviewers[i], 'LECM_BASIC_PG_Reader', true);
+	}
   }
 }]]></value>
                                                             </property>
