@@ -1011,6 +1011,16 @@
                                         <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order">4</property>
                                     </item>
+                                    <item name="cm:9716f936-3143-4d5f-87dc-8700edc2a907" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title"><![CDATA[Заголовок (поруч.)]]></property>
+                                        <property name="cm:name"><![CDATA[9716f936-3143-4d5f-87dc-8700edc2a907]]></property>
+                                        <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
+                                        <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[5]]></property>
+                                        <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
+                                        <property name="lecm-arm:field-name"><![CDATA[lecm-errands:title]]></property>
+                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                    </item>
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
@@ -1023,6 +1033,8 @@
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Избранное/837a3a0c-c9d0-4c07-9c5b-c756dd99aad3"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Избранное/e959b0d9-c58b-4bcc-b79b-06f4c928ca9c"/>
+                                    <assoc type="lecm-arm:fields-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Избранное/9716f936-3143-4d5f-87dc-8700edc2a907"/>
                                 </assocs>
                             </item>
                             <item name="cm:Последние просмотренные" type="lecm-arm:html-node">
