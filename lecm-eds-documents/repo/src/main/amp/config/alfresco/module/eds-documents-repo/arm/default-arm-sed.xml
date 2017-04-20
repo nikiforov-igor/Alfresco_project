@@ -28344,7 +28344,7 @@
                             <item name="cm:ОРД" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[(@lecm\-ord\:controller\-assoc\-ref:"#current-user" OR @lecm\-ord\:items\-assoc\-controller\-assoc\-ref:"#current-user") AND (@lecm\-statemachine\:status:'Зарегистрирован' OR @lecm\-statemachine\:status:'На исполнении')]]></property>
+                                    <![CDATA[(@lecm\-ord\:controller\-assoc\-ref:"#current-user" OR @lecm\-ord\:items\-assoc\-controller\-assoc\-ref:"*#current-user*") AND (@lecm\-statemachine\:status:'Зарегистрирован' OR @lecm\-statemachine\:status:'На исполнении')]]></property>
                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
