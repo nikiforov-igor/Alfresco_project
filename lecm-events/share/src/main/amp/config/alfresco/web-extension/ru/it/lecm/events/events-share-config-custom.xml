@@ -577,6 +577,8 @@
                 <field-visibility>
                     <!-- Заголовок -->
                     <show id="lecm-events:title"/>
+                    <!-- Инициатор -->
+                    <show id="lecm-events:initiator-assoc"/>
                     <!-- Дата начала мероприятия -->
                     <show id="lecm-events:from-date"/>
                     <!-- Дата окончания мероприятия -->
@@ -592,6 +594,14 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-events:title">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-events:initiator-assoc">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
                         </constraint-handlers>
