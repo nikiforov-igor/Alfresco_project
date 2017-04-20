@@ -13,6 +13,7 @@
     var currentUserIsErrandsInitiator = false;
     var baseDocHasReview = false;
     var isCreateForm = true;
+    var initialized = false;
 
     Bubbling.on('saveDraftResolutionButtonClick', saveDraft);
     Bubbling.on('sendResolutionButtonClick', sendResolutionClick);
@@ -252,6 +253,9 @@
     }
 
     function init(layer, args) {
+        if (initialized) {
+            return;
+        }
         isCreateForm = layer == "resolutionCreateFormScriptLoaded";
         var formId = args[1].formId;
         formButtons = Dom.get(formId + "-form-buttons");
@@ -271,12 +275,14 @@
 
 
         var form = Dom.get(formId + "-form");
-        if (form && form["assoc_lecm-resolutions_base-document-assoc"] && form["assoc_lecm-resolutions_base-document-assoc"].value) {
+        var value =(form && form["assoc_lecm-resolutions_base-document-assoc"] && form["assoc_lecm-resolutions_base-document-assoc"].value) || (args[1].fieldId && args[1].fieldId == "lecm-resolutions:base-assoc" && args[1].items);
+        if (value) {
+            initialized = true;
             Alfresco.util.Ajax.jsonPost(
                 {
                     url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
                     dataObj: {
-                        nodeRef: form["assoc_lecm-resolutions_base-document-assoc"].value,
+                        nodeRef: value,
                         substituteString: "{@doc.hasAspect('lecm-review-ts:review-aspect')}"
                     },
                     successCallback: {

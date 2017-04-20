@@ -224,7 +224,9 @@
                         <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
                     <field id="lecm-resolutions:base-assoc" set="end">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl">
+                            <control-param name="valueSetFireAction">resolutionCreateFormScriptLoaded</control-param>
+                        </control>
                     </field>
                     <field id="lecm-resolutions:base-document-assoc" set="end">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
