@@ -706,7 +706,7 @@
 					<show id="lecm-protocol-ts:execution-date-real"/>
 					<show id="lecm-protocol-ts:note"/>
 					<show id="lecm-protocol-ts:errand-assoc"/>
-					<show id="lecm-protocol:executed-button"/>
+					<show id="lecm-base-dummy-aspects:script" force="true"/>
 				</field-visibility>
 				<appearance>
 					<set id="common"/>
@@ -802,7 +802,7 @@
 							</control-param>
 						</control>
 					</field>
-					<field id="lecm-protocol:executed-button" set="item1">
+					<field id="lecm-base-dummy-aspects:script" set="item1">
 						<control template="/ru/it/lecm/meetings/components/controls/execute-point-control.ftl"/>
 					</field>
 				</appearance>
