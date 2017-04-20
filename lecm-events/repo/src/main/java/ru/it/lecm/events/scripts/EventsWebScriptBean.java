@@ -475,8 +475,7 @@ public class EventsWebScriptBean extends BaseWebScript {
         			nodeService.setProperty(memberRow, EventsService.PROP_EVENT_MEMBERS_STATUS, "CONFIRMED");
         		}
         		
-                List<NodeRef> repeatableEvents = new ArrayList<>();
-                repeatableEvents = eventService.getAllRepeatedEvents(docNodeRef);
+                List<NodeRef> repeatableEvents = eventService.getAllRepeatedEvents(docNodeRef);
         		if (repeatableEvents != null) {
         			for (int i = 0; i < repeatableEvents.size(); i++) {
         				memberRow = eventService.getMemberTableRow(repeatableEvents.get(i), currentEmployee);
@@ -488,7 +487,7 @@ public class EventsWebScriptBean extends BaseWebScript {
         		        		
         		NodeRef initiator = new NodeRef(nodeService.getProperty(docNodeRef, EventsService.PROP_EVENT_INITIATOR).toString());
         		
-        		if (currentEmployee != null && initiator != null) {			
+        		if (currentEmployee != null) {
         			String author = "WebScript";
         			
         			List<NodeRef> recipients = new ArrayList<NodeRef>();
@@ -499,10 +498,8 @@ public class EventsWebScriptBean extends BaseWebScript {
         			Map<String, Object> templateConfig = new HashMap<String, Object>();
         			templateConfig.put("mainObject", docNodeRef);
         			templateConfig.put("eventExecutor", currentEmployee);
-        			
-        			boolean dontCheckAccessToObject = false;
-        			
-        			notificationsService.sendNotification(author, initiator, recipients, templateCode, templateConfig, dontCheckAccessToObject);
+
+        			notificationsService.sendNotification(author, currentEmployee, recipients, templateCode, templateConfig, false);
         		}
                 return true;
             }
