@@ -1,5 +1,4 @@
-<#assign containerId = fieldHtmlId + "-container"/>
-<div id="${containerId}" class="set-bordered-panel actions-panel hidden">
+<div class="set-bordered-panel actions-panel">
 	<div class="set-bordered-panel-heading">Доступные действия</div>
 	<div class="set-bordered-panel-body">
 		<div class="control status editmode">
@@ -16,7 +15,6 @@
 	(function() {
 
 		function init() {
-			YAHOO.util.Dom.removeClass("${containerId}", "hidden");
 			LogicECM.module.Base.Util.loadResources([
 					'scripts/lecm-os/controls/case-status-control.js'
 				], [
@@ -42,30 +40,7 @@
 			control.updateArchiveCheckBox();
 		}
 
-		function isCurrentUserArchivist() {
-            Alfresco.util.Ajax.jsonGet({
-                url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/isCurrentEmployeeHasBusinessRole",
-                dataObj: {
-                    roleId: "DA_ARCHIVISTS"
-                },
-                successCallback: {
-                    scope: this,
-                    fn: function (response) {
-                        if (response.json) {
-                            init();
-                        }
-                    }
-                },
-                failureCallback: {
-                    scope: this,
-                    fn: function (response) {
-                        YAHOO.log("Failed to process XHR transaction.", "info", "example");
-                    }
-                }
-            });
-		}
-
-		YAHOO.util.Event.onContentReady("${fieldHtmlId}-actions-container", isCurrentUserArchivist);
+		YAHOO.util.Event.onContentReady("${fieldHtmlId}-actions-container", init);
 
 	})();
 </script>
