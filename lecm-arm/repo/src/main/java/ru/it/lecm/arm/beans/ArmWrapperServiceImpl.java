@@ -327,10 +327,10 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         String formatedQuery = substitudeService.formatNodeTitle(node, templateQuery);
 
         if (formatedQuery.contains(VALUE_WITH_SUBTREE_REFS)) {
-            StringBuilder stringBuilder = new StringBuilder("(\"" + node.toString() +"\"");
+            StringBuilder stringBuilder = new StringBuilder("(\"*" + node.toString() +"*\"");
 
             for (NodeRef child : dictionaryBean.getAllChildren(node)) {
-                stringBuilder.append(" \"").append(child.toString()).append('\"');
+                stringBuilder.append(" \"*").append(child.toString()).append("*\"");
             }
 
             stringBuilder.append(')');
