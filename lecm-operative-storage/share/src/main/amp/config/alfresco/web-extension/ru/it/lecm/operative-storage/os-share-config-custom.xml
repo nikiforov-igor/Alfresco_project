@@ -368,7 +368,7 @@
         <forms>
             <form>
                 <field-visibility>
-					<show id="lecm-os:nomenclature-case-status" for-mode="view"/>
+					<show id="lecm-os:nomenclature-unit-section-status" for-mode="view"/>
                     <show id="cm:title" force="true"/>
                     <show id="lecm-os:nomenclature-unit-section-unit-assoc"/>
                     <show id="lecm-os:nomenclature-unit-section-index"/>
@@ -378,16 +378,18 @@
                 </field-visibility>
                 <appearance>
 					<set id="set1" template="/ru/it/lecm/os/controls/nomenclature-custom-set.ftl"/>
+                    <set id="archivist" parent="set1" appearance="DA_ARCHIVISTS" template="/ru/it/lecm/base-share/components/exist-bussines-role.ftl" />
+                    <set id="set2" parent="set1"/>
 
-					<field id="lecm-os:nomenclature-case-status" set="set1">
+					<field id="lecm-os:nomenclature-unit-section-status" set="archivist">
                         <control template="/ru/it/lecm/os/controls/status-control.ftl" />
                     </field>
 
-                    <field id="cm:title" mandatory="true" set="set1">
+                    <field id="cm:title" mandatory="true" set="set2">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
 
-                    <field id="lecm-os:nomenclature-unit-section-unit-assoc" set="set1">
+                    <field id="lecm-os:nomenclature-unit-section-unit-assoc" set="set2">
                         <control template="/ru/it/lecm/os/controls/nomenclature-orgunit-validation.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
                             <control-param name="plane">false</control-param>
@@ -395,14 +397,14 @@
                             <control-param name="sortProp">lecm-orgstr:element-short-name</control-param>
                         </control>
                     </field>
-                    <field id="lecm-os:nomenclature-unit-section-index" set="set1"/>
-                    <field id="lecm-os:nomenclature-unit-section-comment" set="set1">
+                    <field id="lecm-os:nomenclature-unit-section-index" set="set2"/>
+                    <field id="lecm-os:nomenclature-unit-section-comment" set="set2">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
-                    <field id="os-aspects:sort-value" set="set1">
+                    <field id="os-aspects:sort-value" set="set2">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
-                    <field id="os-aspects:common-index" set="set1">
+                    <field id="os-aspects:common-index" set="set2">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
                 </appearance>
@@ -410,15 +412,23 @@
             <form id="view-node-form">
                 <field-visibility>
                     <show id="cm:title" force="true"/>
+                    <show id="lecm-os:nomenclature-unit-section-status"/>
                     <show id="lecm-os:nomenclature-unit-section-unit-assoc"/>
                     <show id="lecm-os:nomenclature-unit-section-index"/>
                     <show id="lecm-os:nomenclature-unit-section-comment"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:title">
+                    <set id="set1" template="/ru/it/lecm/os/controls/nomenclature-custom-set.ftl"/>
+                    <set id="archivist" parent="set1" appearance="DA_ARCHIVISTS" template="/ru/it/lecm/base-share/components/exist-bussines-role.ftl" />
+                    <set id="set2" parent="set1"/>
+
+                    <field id="lecm-os:nomenclature-unit-section-status" set="archivist">
+                        <control template="/ru/it/lecm/os/controls/status-control.ftl"/>
+                    </field>
+                    <field id="cm:title" set="set2">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
-                    <field id="lecm-os:nomenclature-unit-section-unit-assoc">
+                    <field id="lecm-os:nomenclature-unit-section-unit-assoc" set="set2">
                         <control template="/ru/it/lecm/os/controls/nomenclature-orgunit-validation.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
                             <control-param name="plane">false</control-param>
@@ -426,8 +436,8 @@
                             <control-param name="sortProp">lecm-orgstr:element-short-name</control-param>
                         </control>
                     </field>
-                    <field id="lecm-os:nomenclature-unit-section-index"/>
-                    <field id="lecm-os:nomenclature-unit-section-comment">
+                    <field id="lecm-os:nomenclature-unit-section-index" set="set2"/>
+                    <field id="lecm-os:nomenclature-unit-section-comment" set="set2">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
                 </appearance>
@@ -661,22 +671,22 @@
                 <appearance>
                     <set id="common" label-id="label.common"/>
                     <set id="set1" parent="common" template="/ru/it/lecm/os/controls/nomenclature-custom-set.ftl"/>
+                    <set id="archivist" parent="set1" appearance="DA_ARCHIVISTS" template="/ru/it/lecm/base-share/components/exist-bussines-role.ftl" />
+                    <set id="set2" parent="set1"/>
 					<set id="dates" parent="common" appearance="" template="/ru/it/lecm/os/controls/daterange-augmented.ftl" />
                     <set id="set3" parent="common"/>
                     <set id="volumes" label-id="label.volumes"/>
                     <set id="receipts" label-id="label.receipts"/>
                     <set id="security" label-id="label.security"/>
 
-                    <field id="cm:title" mandatory="true" set="set1">
-                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
-                    </field>
-
-					 <field id="lecm-os:nomenclature-case-status" set="set1">
+                    <field id="lecm-os:nomenclature-case-status" set="archivist">
                         <control template="/ru/it/lecm/os/controls/status-control.ftl" />
                     </field>
-
-                    <field id="lecm-os:nomenclature-case-index" set="set1"/>
-                    <field id="lecm-os:nomenclature-case-store-term-assoc" set="set1">
+                    <field id="cm:title" mandatory="true" set="set2">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+                    </field>
+                    <field id="lecm-os:nomenclature-case-index" set="set2"/>
+                    <field id="lecm-os:nomenclature-case-store-term-assoc" set="set2">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
                             <control-param name="nameSubstituteString">{cm:title}</control-param>
@@ -684,11 +694,11 @@
                             <control-param name="showCreateNewLink">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-os:nomenclature-case-security-classification-assoc" set="set1"/>
-                    <field id="lecm-os:nomenclature-case-valuable" set="set1"/>
-                    <field id="lecm-os:nomenclature-case-epk" set="set1"/>
-                    <field id="lecm-os:nomenclature-case-transient" set="set1"/>
-                    <field id="lecm-os:shared" set="set1"/>
+                    <field id="lecm-os:nomenclature-case-security-classification-assoc" set="set2"/>
+                    <field id="lecm-os:nomenclature-case-valuable" set="set2"/>
+                    <field id="lecm-os:nomenclature-case-epk" set="set2"/>
+                    <field id="lecm-os:nomenclature-case-transient" set="set2"/>
+                    <field id="lecm-os:shared" set="set2"/>
 
 
 
@@ -753,6 +763,7 @@
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="cm:title" force="true"/>
+                    <show id="lecm-os:nomenclature-case-status"/>
                     <show id="lecm-os:nomenclature-case-index"/>
                     <show id="lecm-os:nomenclature-case-store-term-assoc"/>
                     <show id="lecm-os:nomenclature-case-security-classification-assoc"/>
@@ -776,17 +787,22 @@
                 <appearance>
                     <set id="common" label-id="label.common"/>
                     <set id="set1" parent="common" template="/ru/it/lecm/os/controls/nomenclature-custom-set.ftl"/>
+                    <set id="archivist" parent="set1" appearance="DA_ARCHIVISTS" template="/ru/it/lecm/base-share/components/exist-bussines-role.ftl" />
+                    <set id="set2" parent="set1"/>
                     <set id="dates" parent="common" appearance="" template="/ru/it/lecm/os/controls/daterange-augmented.ftl" />
                     <set id="set3" parent="common"/>
                     <set id="volumes" label-id="label.volumes"/>
                     <set id="receipts" label-id="label.receipts"/>
                     <set id="security" label-id="label.security"/>
 
-                    <field id="cm:title" mandatory="true" set="set1">
+                    <field id="lecm-os:nomenclature-case-status" set="archivist">
+                        <control template="/ru/it/lecm/os/controls/status-control.ftl" />
+                    </field>
+                    <field id="cm:title" mandatory="true" set="set2">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
-                    <field id="lecm-os:nomenclature-case-index" set="set1"/>
-                    <field id="lecm-os:nomenclature-case-store-term-assoc" set="set1">
+                    <field id="lecm-os:nomenclature-case-index" set="set2"/>
+                    <field id="lecm-os:nomenclature-case-store-term-assoc" set="set2">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
                             <control-param name="nameSubstituteString">{cm:title}</control-param>
@@ -794,11 +810,11 @@
                             <control-param name="showCreateNewLink">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-os:nomenclature-case-security-classification-assoc" set="set1"/>
-                    <field id="lecm-os:nomenclature-case-valuable" set="set1"/>
-                    <field id="lecm-os:nomenclature-case-epk" set="set1"/>
-                    <field id="lecm-os:nomenclature-case-transient" set="set1"/>
-                    <field id="lecm-os:shared" set="set1"/>
+                    <field id="lecm-os:nomenclature-case-security-classification-assoc" set="set2"/>
+                    <field id="lecm-os:nomenclature-case-valuable" set="set2"/>
+                    <field id="lecm-os:nomenclature-case-epk" set="set2"/>
+                    <field id="lecm-os:nomenclature-case-transient" set="set2"/>
+                    <field id="lecm-os:shared" set="set2"/>
                     <field id="lecm-os:nomenclature-case-creation-date" set="dates">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="defaultValue">now</control-param>
