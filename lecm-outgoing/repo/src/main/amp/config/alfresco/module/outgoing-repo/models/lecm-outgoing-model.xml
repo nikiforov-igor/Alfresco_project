@@ -22,7 +22,7 @@
 		<!-- формат строки представления -->
 		<constraint name="lecm-outgoing:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
 			<parameter name="presentString">
-				<value><![CDATA[Исходящий от {cm:created?dd.MM.yyyy}, номер {~REGNUM}]]></value>
+				<value><![CDATA[Исходящий от {~REGDATE}, номер {~REGNUM}]]></value>
 			</parameter>
 		</constraint>
 		<!-- категории вложений -->

@@ -22,7 +22,7 @@
 		<constraint name="lecm-internal:present-string-constraint"
 					type="ru.it.lecm.documents.constraints.PresentStringConstraint">
 			<parameter name="presentString">
-				<value><![CDATA[Внутренний от {cm:created?dd.MM.yyyy}, номер {~REGNUM}]]></value>
+				<value><![CDATA[Внутренний от {~REGDATE}, номер {~REGNUM}]]></value>
 			</parameter>
 		</constraint>
 		<constraint name="lecm-internal:attachment-categories" type="LIST">
