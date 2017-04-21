@@ -83,7 +83,7 @@
                     <item name="cm:Тематика документа" type="lecm-rpeditor:reportDataColumn">
                         <property name="cm:name"><![CDATA[Тематика документа]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{lecm-document:subject-assoc/cm:name}]]></property>
+                            <![CDATA[{lecm-document:subject-assoc-text-content}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_DocSubject]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <assocs>

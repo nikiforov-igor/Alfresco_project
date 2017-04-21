@@ -5,7 +5,19 @@ function main() {
 	if (args["searchSimilar"]) {
 		var document = search.findNode(args["documentRef"]);
 		if (document != null) {
-			filter = addSimilarFilter(filter, document, "lecm-document:subject-assoc-ref");
+			var docSubjects = document.assocs["lecm-document:subject-assoc"];
+			var docSubjectsFilter = "";
+			if (docSubjects != null) {
+				for (var i = 0; i < docSubjects.length; i++) {
+					if (i != 0) {
+						docSubjectsFilter += " OR ";
+					}
+					docSubjectsFilter += '@lecm\\-document\\:subject\\-assoc\\-ref:"*' +  docSubjects[i].nodeRef.toString() + '*"';
+				}
+			}
+			if (docSubjectsFilter.length > 0) {
+				filter += (" AND (" + docSubjectsFilter + ")");
+			}
 			filter = addSimilarFilter(filter, document, "lecm-incoming:sender-assoc-ref");
 			filter = addSimilarFilter(filter, document, "lecm-incoming:addressee-assoc-ref");
 		}
@@ -17,7 +29,7 @@ function main() {
 	model.rootNode = data.rootNode;
 	model.results = data.results;
 	model.additionalProperties = data.additionalProperties;
-}
+};
 
 function addSimilarFilter(filter, document, prop) {
 	var propValue = document.properties[prop];

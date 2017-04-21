@@ -8,6 +8,7 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang.StringUtils;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
@@ -319,9 +320,12 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				}
 				//тематика поручения
 				List<AssociationRef> subjectAssocs = nodeService.getTargetAssocs(ord, DocumentService.ASSOC_SUBJECT);
-				if (subjectAssocs.size() > 0) {
-					NodeRef subject = subjectAssocs.get(0).getTargetRef();
-					associations.put("lecm-document:subject-assoc", subject.toString());
+				if (!subjectAssocs.isEmpty()) {
+					List<String> subjects = new ArrayList<>();
+					for (AssociationRef subjectAssoc : subjectAssocs) {
+						subjects.add(subjectAssoc.getTargetRef().toString());
+					}
+					associations.put("lecm-document:subject-assoc", StringUtils.join(subjects, ","));
 				}
 
 				NodeRef errand = documentService.createDocument("lecm-errands:document", properties, associations);

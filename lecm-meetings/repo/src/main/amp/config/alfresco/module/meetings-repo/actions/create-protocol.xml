@@ -41,8 +41,10 @@ if (draftRootFolder != null) {
   }
 
   var subjectAssoc = document.assocs["lecm-events:subject-assoc"];
-  if (subjectAssoc != null && subjectAssoc.length > 0) {
-    protocol.createAssociation(subjectAssoc[0], "lecm-document:subject-assoc");
+  if (subjectAssoc != null) {
+    for (var i = 0; i < subjectAssoc.length; i++) {
+      protocol.createAssociation(subjectAssoc[i], "lecm-document:subject-assoc");
+    }
   }
 
   var holdingItems = meetings.getMeetingHoldingItems(document.nodeRef.toString());
