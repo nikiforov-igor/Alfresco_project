@@ -6,6 +6,7 @@ LogicECM.module.Documents = LogicECM.module.Documents|| {};
 LogicECM.module.Documents.Reports = LogicECM.module.Documents.Reports || {};
 
 (function() {
+    var doubleClickLock = false;
 
     LogicECM.module.Documents.Reports.openReport = function (actionUrl, params) {
         var newWindow = window.open(Alfresco.constants.URL_PAGECONTEXT + "lecm/arm/blank", "report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no,resizable=yes");
@@ -32,6 +33,11 @@ LogicECM.module.Documents.Reports = LogicECM.module.Documents.Reports || {};
     };
 
         LogicECM.module.Documents.Reports.reportLinkClicked = function(element, param) {
+            if (doubleClickLock) {
+                return;
+            }
+            doubleClickLock = true;
+
             var reportCode = param.reportCode;
             var documentRef = param.nodeRef;
 
@@ -59,6 +65,7 @@ LogicECM.module.Documents.Reports = LogicECM.module.Documents.Reports || {};
                         p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
                     }
                 }
+                doubleClickLock = false;
             };
 
             var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "/lecm/components/form/report";
