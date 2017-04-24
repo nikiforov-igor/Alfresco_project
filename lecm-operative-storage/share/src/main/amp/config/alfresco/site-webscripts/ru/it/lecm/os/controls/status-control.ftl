@@ -1,4 +1,5 @@
-<div class="set-bordered-panel actions-panel">
+<#assign containerId = fieldHtmlId + "-container"/>
+<div id="${containerId}" class="set-bordered-panel actions-panel hidden">
 	<div class="set-bordered-panel-heading">Доступные действия</div>
 	<div class="set-bordered-panel-body">
 		<div class="control status editmode">
@@ -35,9 +36,11 @@
 					"onActionEdit"
 				]
 			});
-
-			control.prepare();
-			control.updateArchiveCheckBox();
+			if (control.grid) {
+                control.prepare();
+                control.updateArchiveCheckBox();
+                Dom.removeClass("${containerId}", "hidden");
+            }
 		}
 
 		YAHOO.util.Event.onContentReady("${fieldHtmlId}-actions-container", init);

@@ -461,6 +461,12 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 				itemProps.remove(RoutesModel.PROP_STAGE_ITEM_COMPLETE_DATE);
 				itemProps.remove(RoutesModel.PROP_STAGE_ITEM_USERNAME);
 				itemProps.remove(RoutesModel.PROP_STAGE_ITEM_COMMENT);
+				List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(itemNode);
+				if (childAssociationRefs != null && childAssociationRefs.size() != 0) {
+					for (ChildAssociationRef childAssociationRef : childAssociationRefs) {
+						nodeService.removeChildAssociation(childAssociationRef);
+					}
+				}
 				nodeService.setProperties(itemNode, itemProps);
 			}
 		}

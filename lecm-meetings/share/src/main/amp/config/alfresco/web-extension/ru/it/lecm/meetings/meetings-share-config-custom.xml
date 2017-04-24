@@ -584,9 +584,6 @@
 					</field>
 
 					<field id="lecm-events:repeatable" set="createEventSet">
-						<constraint-handlers>
-							<constraint type="INVALID" validation-handler="LogicECM.module.Events.changeRepeatableValidation" event="change"/>
-						</constraint-handlers>
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
 							<control-param name="fireMandatoryByChange">true</control-param>
                             <control-param name="hideFieldsIfNotSelect">lecm-events:repeatable-start-period,lecm-events:repeatable-end-period,lecm-events:repeatable-rule</control-param>
