@@ -10,7 +10,7 @@
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
         <property name="cm:title"><![CDATA[]]></property>
         <property name="lecm-group-actions:script"><![CDATA[var draftRootFolder = protocolService.getDraftRoot();
-if (draftRootFolder != null) {
+if (draftRootFolder) {
   var props = [];
   props['lecm-document:title'] = document.properties["lecm-events:title"];
   props['lecm-eds-document:summaryContent'] = document.properties["lecm-events:description"];
@@ -19,7 +19,7 @@ if (draftRootFolder != null) {
   documentConnection.createConnection(document, protocol, "onBasis", true, true);
 
   var holdingMembersAssoc = document.assocs["lecm-meetings:holding-members-assoc"];
-  if (holdingMembersAssoc != null) {
+  if (holdingMembersAssoc) {
     for (var i = 0; i < holdingMembersAssoc.length; i++) {
       protocol.createAssociation(holdingMembersAssoc[i], "lecm-protocol:signers-assoc");
       protocol.createAssociation(holdingMembersAssoc[i], "lecm-protocol:attended-assoc");
@@ -27,28 +27,28 @@ if (draftRootFolder != null) {
   }
 
   var chairmanAssoc = document.assocs["lecm-meetings:chairman-assoc"];
-  if (chairmanAssoc != null) {
+  if (chairmanAssoc) {
     for (var i = 0; i < chairmanAssoc.length; i++) {
       protocol.createAssociation(chairmanAssoc[i], "lecm-protocol:meeting-chairman-assoc");
     }
   }
 
   var secretaryAssoc = document.assocs["lecm-meetings:secretary-assoc"];
-  if (secretaryAssoc != null) {
+  if (secretaryAssoc) {
     for (var i = 0; i < secretaryAssoc.length; i++) {
       protocol.createAssociation(secretaryAssoc[i], "lecm-protocol:secretary-assoc");
     }
   }
 
   var subjectAssoc = document.assocs["lecm-events:subject-assoc"];
-  if (subjectAssoc != null) {
+  if (subjectAssoc) {
     for (var i = 0; i < subjectAssoc.length; i++) {
       protocol.createAssociation(subjectAssoc[i], "lecm-document:subject-assoc");
     }
   }
 
   var holdingItems = meetings.getMeetingHoldingItems(document.nodeRef.toString());
-  if (holdingItems != null && holdingItems.length > 0) {
+  if (holdingItems && holdingItems.length) {
     var pointsRootFolder = businessPlatform.getUserTemp();
 
     for (var i = 0; i < holdingItems.length; i++) {
@@ -62,7 +62,7 @@ if (draftRootFolder != null) {
       var createdPoint = pointsRootFolder.createNode(null, "lecm-protocol-ts:point", properties);
 
       var reporterAssoc = item.assocs["lecm-meetings-ts:holding-reporter-assoc"];
-      if (reporterAssoc != null && reporterAssoc.length == 1) {
+      if (reporterAssoc && reporterAssoc.length == 1) {
         createdPoint.createAssociation(reporterAssoc[0], "lecm-protocol-ts:reporter-assoc");
       }
 
