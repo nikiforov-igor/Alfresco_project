@@ -23,10 +23,9 @@ LogicECM.module = LogicECM.module || {};
 		Event = YAHOO.util.Event;
 
 
-	LogicECM.module.SelectDocumentCategory = function (fieldHtmlId) {
+	LogicECM.module.SelectDocumentCategory = function (fieldHtmlId, updateOnEvent) {
 		LogicECM.module.SelectDocumentCategory.superclass.constructor.call(this, "LogicECM.module.SelectDocumentCategory", fieldHtmlId, [ "container", "datasource"]);
-
-		Bubbling.on("changeAttachToDocument", this.onChangeAttachToDocument, this);
+		Bubbling.on(updateOnEvent, this.onChangeAttach, this);
 		return this;
 	};
 
@@ -36,7 +35,9 @@ LogicECM.module = LogicECM.module || {};
 				mandatory: false,
 				notSelectedOptionShow: false,
 				selectedValue: null,
-				documentNodeRef: null
+				documentNodeRef: null,
+				documentType: null,
+				changerKind: null
 			},
 
 			selectItem: null,
@@ -45,7 +46,8 @@ LogicECM.module = LogicECM.module || {};
 				this.selectItem = Dom.get(this.id);
 				Event.on(this.id, "change", this.onSelectChange, this, true);
 
-				if (this.options.documentNodeRef) {
+				if ((this.options.documentNodeRef && this.options.changerKind == "node") ||
+					(this.options.documentType && this.options.changerKind == "type")) {
 					this.loadCategories();
 				}
 			},
@@ -56,14 +58,19 @@ LogicECM.module = LogicECM.module || {};
 				}
 			},
 
-			onChangeAttachToDocument: function (layer, args) {
+			onChangeAttach: function (layer, args) {
 				this.clearSelect();
-				if (args[1] && args[1].selectedItems) {
-					var keys = Object.keys(args[1].selectedItems);
-					if (keys.length == 1) {
-						this.options.documentNodeRef = keys[0];
-						this.loadCategories();
+				if (args[1]) {
+					if (this.options.changerKind == "node") {
+						var keys = Object.keys(args[1].selectedItems);
+						if (keys.length == 1) {
+							this.options.documentNodeRef = keys[0];
+						}
+					} else if (this.options.changerKind == "type") {
+						this.options.documentType = args[1].selectedItem;
 					}
+					this.loadCategories();
+
 				}
 			},
 
@@ -72,13 +79,20 @@ LogicECM.module = LogicECM.module || {};
 				if (items && items.length) {
 					for (i = 0; i < items.length; i++) {
 						item = items[i];
-						if (!item.isReadOnly) {
+						if (this.options.changerKind == "node") {
+							if (!item.isReadOnly) {
+								opt = document.createElement('option');
+								opt.innerHTML = item.name;
+								opt.value = item.name;
+								if (item.nodeRef == this.options.selectedValue) {
+									opt.selected = true;
+								}
+								this.selectItem.appendChild(opt);
+							}
+						} else if (this.options.changerKind == "type") {
 							opt = document.createElement('option');
 							opt.innerHTML = item.name;
 							opt.value = item.name;
-							if (item.nodeRef == this.options.selectedValue) {
-								opt.selected = true;
-							}
 							this.selectItem.appendChild(opt);
 						}
 					}
@@ -100,19 +114,29 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			loadCategories: function () {
-				if (this.options.documentNodeRef) {
-					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/attachments/api/categories?documentNodeRef=" + encodeURIComponent(this.options.documentNodeRef);
-					var me = this;
-					var callback = {
-						success:function (oResponse) {
-							var oResults = eval("(" + oResponse.responseText + ")");
-							if (oResults != null && oResults.categories != null) {
-								me.populateSelect(oResults.categories);
-							}
-						},
-						failureMessage: "message.failure",
-						timeout:10000
-					};
+				var sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/attachments/api/categories?{itemKind}={itemValue}";
+				var me = this;
+				var callback = {
+					success:function (oResponse) {
+						var oResults = eval("(" + oResponse.responseText + ")");
+						if (oResults != null && oResults.categories != null) {
+							me.populateSelect(oResults.categories);
+						}
+					},
+					failureMessage: "message.failure",
+					timeout:10000
+				};
+				if (this.options.documentNodeRef && this.options.changerKind == "node"){
+					sUrl = YAHOO.lang.substitute(sUrl, {
+						itemKind: "documentNodeRef",
+						itemValue: encodeURIComponent(this.options.documentNodeRef)
+					});
+					YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+				} else if (this.options.documentType && this.options.changerKind == "type") {
+					sUrl = YAHOO.lang.substitute(sUrl, {
+						itemKind: "documentType",
+						itemValue: encodeURIComponent(this.options.documentType)
+					});
 					YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 				}
 			}

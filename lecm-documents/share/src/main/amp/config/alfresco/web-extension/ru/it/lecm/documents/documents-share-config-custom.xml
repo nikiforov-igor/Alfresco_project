@@ -1071,6 +1071,94 @@
 		</forms>
 	</config>
 
+    <config evaluator="node-type" condition="lecm-doc-dic-type:document-type-settings">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-doc-dic-type:document-type"/>
+                    <show id="lecm-doc-dic-type:attachment-category"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-doc-dic-type:document-type">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscript">lecm/search-queries/types</control-param>
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="changeItemFireAction">changeAttachToDocumentType</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-doc-dic-type:attachment-category">
+                        <control template="/ru/it/lecm/documents/controls/select-document-category-control.ftl">
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"></control-param>
+                            <control-param name="changerKind">type</control-param>
+                            <control-param name="updateOnEvent">changeAttachToDocumentType</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-doc-dic-type:document-type-settings">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-doc-dic-type:document-type"/>
+                    <show id="lecm-doc-dic-type:attachment-category"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-doc-dic-type:document-type">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscript">lecm/search-queries/types</control-param>
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="changeItemFireAction">changeAttachToDocumentType</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-doc-dic-type:attachment-category">
+                        <control template="/ru/it/lecm/documents/controls/select-document-category-control.ftl">
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"></control-param>
+                            <control-param name="changerKind">type</control-param>
+                            <control-param name="updateOnEvent">changeAttachToDocumentType</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="lecm-doc-dic-type:document-type"/>
+                    <show id="lecm-doc-dic-type:attachment-category"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-doc-dic-type:document-type">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscript">lecm/search-queries/types</control-param>
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                            <control-param name="changeItemFireAction">changeAttachToDocumentType</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-doc-dic-type:attachment-category">
+                        <control template="/ru/it/lecm/documents/controls/select-document-category-control.ftl">
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"></control-param>
+                            <control-param name="changerKind">type</control-param>
+                            <control-param name="updateOnEvent">changeAttachToDocumentType</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-doc-dic-type:document-type"/>
+                    <show id="lecm-doc-dic-type:attachment-category"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
 	<config evaluator="aspect" condition="lecm-document-aspects:parent-document">
 		<forms>
 			<form>

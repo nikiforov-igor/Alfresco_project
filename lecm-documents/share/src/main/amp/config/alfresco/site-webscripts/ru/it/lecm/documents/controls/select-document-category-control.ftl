@@ -23,6 +23,14 @@
 	<#assign notSelectedOptionShow = false>
 </#if>
 
+<#assign changerKind = "node"/>
+<#if field.control.params.changerKind?? && field.control.params.changerKind == "type">
+    <#assign changerKind = field.control.params.changerKind?string/>
+</#if>
+<#assign updateOnEvent = "changeAttachToDocument"/>
+<#if field.control.params.updateOnEvent??>
+	<#assign updateOnEvent = field.control.params.updateOnEvent?string/>
+</#if>
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <script type="text/javascript">//<![CDATA[
@@ -34,7 +42,7 @@
 	};
 
 	function createControl() {
-		new LogicECM.module.SelectDocumentCategory("${fieldHtmlId}").setOptions(
+		new LogicECM.module.SelectDocumentCategory("${fieldHtmlId}", "${updateOnEvent}").setOptions(
 				{
 				<#if field.mandatory??>
 					mandatory: ${field.mandatory?string},
@@ -42,8 +50,9 @@
 					mandatory: ${field.endpointMandatory?string},
 				</#if>
 					notSelectedOptionShow: ${notSelectedOptionShow?string},
-					documentNodeRef: "${documentNodeRef}",
-                    selectedValue: "${fieldValue}"
+                    selectedValue: "${fieldValue}",
+                    changerKind: "${changerKind}",
+                    documentNodeRef: "${documentNodeRef}"
 				}).setMessages(${messages});
 	};
 
