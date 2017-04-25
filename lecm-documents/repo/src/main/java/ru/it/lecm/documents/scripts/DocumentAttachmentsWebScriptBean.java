@@ -289,23 +289,23 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
     }
 
     /**
-     * Получение категории вложений для загрузки по ШК
+     * Получение категории вложений по типу документа из справочника настроек типов документов
      * @param document документ
      * @return название категории
      */
-    public String getAttachmentByBarCodeCategoryName(ScriptNode document) {
+    public String getCategoryNameFromDocTypeSettings(ScriptNode document) {
 		ParameterCheck.mandatory("document", document);
-		return documentAttachmentsService.getAttachmentByBarCodeCategoryName(document.getNodeRef());
+		return documentAttachmentsService.getCategoryNameFromDocTypeSettings(document.getNodeRef());
 	}
 
     /**
-     * Получение категории вложений для загрузки по ШК
+     * Получение категории вложений по типу документа из справочника настроек типов документов
      * @param documentType Тип документа
      * @return название категории
      */
-	public String getAttachmentByBarCodeCategoryName(String documentType) {
+	public String getCategoryNameFromDocTypeSettings(String documentType) {
 		ParameterCheck.mandatory("documentType", documentType);
 		QName type = QName.createQName(documentType, serviceRegistry.getNamespaceService());
-		return documentAttachmentsService.getAttachmentByBarCodeCategoryName(type);
+		return documentAttachmentsService.getCategoryNameFromDocTypeSettings(type);
 	}
 }

@@ -62,18 +62,18 @@ public interface DocumentAttachmentsService {
 	NodeRef getCategory(final String category, final NodeRef documentRef);
 
     /**
-     * Получение категории вложений для загрузки по ШК
+     * Получение категории вложений по типу документа из справочника настроек типов документов
      * @param documentTypeQName Тип документа
      * @return название категории
      */
-	String getAttachmentByBarCodeCategoryName(final QName documentTypeQName);
+	String getCategoryNameFromDocTypeSettings(final QName documentTypeQName);
 
     /**
-     * Получение категории вложений для загрузки по ШК
+     * Получение категории вложений по типу документа из справочника настроек типов документов
      * @param documentRef документ
      * @return название категории
      */
-	String getAttachmentByBarCodeCategoryName(final NodeRef documentRef);
+	String getCategoryNameFromDocTypeSettings(final NodeRef documentRef);
 
 
 	/**

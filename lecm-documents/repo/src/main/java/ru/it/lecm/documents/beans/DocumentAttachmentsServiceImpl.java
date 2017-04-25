@@ -227,17 +227,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	}
 
 	@Override
-	public String getAttachmentByBarCodeCategoryName(final QName documentTypeQName) {
-		String categoryName = null;
-		List<String> categories = getCategories(documentTypeQName);
-		if (categories != null && categories.size() > 0) {
-			String categoryRawName = categories.get(0);
-			if (categoryRawName.contains("|")) {
-				categoryName = categoryRawName.substring(0, categoryRawName.indexOf('|'));
-			} else {
-				categoryName = categoryRawName;
-			}
-		}
+	public String getCategoryNameFromDocTypeSettings(final QName documentTypeQName) {
 		NodeRef documentTypeDictionary = dictionaryBean.getDictionaryByName(DocumentService.DOCUMENT_TYPE_SETTINGS_DICTIONARY_NAME);
 		if (documentTypeDictionary != null) {
 			List<NodeRef> settings = dictionaryBean.getChildren(documentTypeDictionary);
@@ -248,19 +238,28 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 					if (Objects.equals(itemType, documentTypeQName)) {
 						String itemCategoryName = (String) nodeService.getProperty(item, DocumentService.PROP_TYPE_SETTINGS_ATTACHMENT_BY_BARCODE_CATEGORY);
 						if (itemCategoryName != null && !"".equals(itemCategoryName)) {
-							categoryName = itemCategoryName;
-							break;
+							return itemCategoryName;
 						}
 					}
 				}
 			}
 		}
+        String categoryName = null;
+        List<String> categories = getCategories(documentTypeQName);
+        if (categories != null && categories.size() > 0) {
+            String categoryRawName = categories.get(0);
+            if (categoryRawName.contains("|")) {
+                categoryName = categoryRawName.substring(0, categoryRawName.indexOf('|'));
+            } else {
+                categoryName = categoryRawName;
+            }
+        }
 		return categoryName;
 	}
 
 	@Override
-	public String getAttachmentByBarCodeCategoryName(NodeRef documentRef) {
-		return getAttachmentByBarCodeCategoryName(nodeService.getType(documentRef));
+	public String getCategoryNameFromDocTypeSettings(NodeRef documentRef) {
+		return getCategoryNameFromDocTypeSettings(nodeService.getType(documentRef));
 	}
 
 	public NodeRef getDocumentByCategory(NodeRef categoryRef) {
