@@ -106,6 +106,7 @@ public interface EventsService {
 	NodeRef getEventLocation(NodeRef event);
 
 	List<NodeRef> getEventMembers(NodeRef event);
+	List<NodeRef> getEventMembers(NodeRef event, boolean useAssocsFromConfig);
 
 	List<NodeRef> getEventInvitedMembers(NodeRef event);
 
@@ -126,6 +127,8 @@ public interface EventsService {
 	boolean checkMemberAvailable(NodeRef member, Date fromDate, Date toDate, boolean allDay);
 
 	boolean checkMemberAvailable(NodeRef member, NodeRef ignoreNode, Date fromDate, Date toDate, boolean allDay);
+
+	boolean checkMemberAvailable(NodeRef member, NodeRef ignoreNode, Date fromDate, Date toDate, boolean allDay, boolean useAssocsFromConfig);
 
 	List<NodeRef> getResourceResponsible(NodeRef resource);
 

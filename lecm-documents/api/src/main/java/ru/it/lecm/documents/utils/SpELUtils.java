@@ -4,11 +4,11 @@ import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import ru.it.lecm.base.utils.HtmlUtils;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.lang.reflect.Method;
@@ -94,7 +94,7 @@ public final class SpELUtils implements ApplicationContextAware {
 
     @SpELTemplateFunction
     public static String wrapTitle(String text, String title) {
-        return "<span class=\"wrapper-title\" title=\"" + StringEscapeUtils.escapeHtml(title) + "\">" + text + "</span>";
+        return HtmlUtils.wrapTitle(text, title);
     }
 
     /**

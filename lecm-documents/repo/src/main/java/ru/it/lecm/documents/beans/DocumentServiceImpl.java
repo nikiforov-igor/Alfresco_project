@@ -362,12 +362,14 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
 
     @Override
     public List<NodeRef> getMembers(QName docType) {
+        List<NodeRef> result = new ArrayList<>();
         NodeRef membersUnit = documentMembersService.getMembersUnit(docType);
-        List<NodeRef> allMembers = findNodesByAssociationRef(membersUnit, DocumentMembersService.ASSOC_UNIT_EMPLOYEE, null, ASSOCIATION_TYPE.TARGET);
-        List<NodeRef> result = new ArrayList<NodeRef>();
-        for (NodeRef allMember : allMembers) {
-            if (!isArchive(allMember)) {
-                result.add(allMember);
+        if (membersUnit != null) {
+            List<NodeRef> allMembers = findNodesByAssociationRef(membersUnit, DocumentMembersService.ASSOC_UNIT_EMPLOYEE, null, ASSOCIATION_TYPE.TARGET);
+            for (NodeRef allMember : allMembers) {
+                if (!isArchive(allMember)) {
+                    result.add(allMember);
+                }
             }
         }
         return result;

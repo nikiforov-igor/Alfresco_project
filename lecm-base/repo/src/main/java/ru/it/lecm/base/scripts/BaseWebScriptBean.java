@@ -387,7 +387,7 @@ public class BaseWebScriptBean extends BaseWebScript {
 
     private String encodeGlobalPropertyValue(String value) {
         Charset isoCharset = Charset.forName("ISO-8859-1");
-        if (isoCharset.newEncoder().canEncode(value)) {
+        if (value != null && isoCharset.newEncoder().canEncode(value)) {
             try {
                 byte[] byteText = value.getBytes(isoCharset);
                 return new String(byteText , "UTF-8");

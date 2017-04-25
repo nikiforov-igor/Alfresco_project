@@ -111,12 +111,14 @@ public class ContractorsBean extends BaseBean implements Contractors {
     public String formatContractorName(final String originalName) {
         //1. удалить спец символы
         String updatedValue = delNoDigOrLet(originalName);
-        //2. удалить все коды из справочника ОПФ
+        //2. привести к единому регистру
+        updatedValue = updatedValue.toUpperCase();
+        //3. удалить все коды из справочника ОПФ
         NodeRef dicOPF = dictionaryService.getDictionaryByName(OPF_DIC_NAME);
         if (dicOPF != null) {
             updatedValue = delDicValuesFromString(updatedValue, dicOPF);
         }
-        return updatedValue;
+        return updatedValue.trim();
     }
 
     @Override

@@ -23,10 +23,11 @@
     width: 158px !important;
 }
 #price .price-control .price-currency {
-    width: 330px !important;
+    width: 180px !important;
 }
 #price .price-control .price-currency .label-div {
     display: inline !important;
+    width: auto;
 }
 #propIndexTableRow {
     width: 34% !important;

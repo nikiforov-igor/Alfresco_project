@@ -151,6 +151,7 @@
                             var workflowRole = task.getVariableLocal('registrarDynamicRole');
                             var workflowRoleName = workflowRole ? workflowRole : 'LECM_REGISTRAR_DYN';
                             lecmPermission.grantDynamicRole(document, employee, workflowRoleName, 'LECM_BASIC_PG_Employee');
+                            lecmPermission.grantDynamicRole(document, employee, 'RESERVATION_PERFORMER_DYN', 'LECM_BASIC_PG_Reader');
 						]]></activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -223,8 +224,8 @@
 							}
 							lecmPermission.pushAuthentication();
                             lecmPermission.setRunAsUserSystem();
-                            document.save();
-                            lecmPermission.popAuthentication();
+							document.save();
+							lecmPermission.popAuthentication();
 
 							/* Уведомление при окончании запроса на резервирование рег.номера: */
                             notifications.sendNotification({
@@ -235,6 +236,7 @@
 
                             execution.setVariable('taskDecision', decision);
   							lecmPermission.revokeDynamicRole(document, employee, 'LECM_REGISTRAR_DYN');
+  							lecmPermission.revokeDynamicRole(document, employee, 'RESERVATION_PERFORMER_DYN');
   							documentMembers.addMemberWithoutCheckPermission(document, employee, 'LECM_BASIC_PG_Reader', true);
 						]]></activiti:string>
                     </activiti:field>

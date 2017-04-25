@@ -55,6 +55,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	private DocumentTableService documentTableService;
 	private SearchQueryProcessor organizationQueryProcessor;
 	private DocumentConnectionService documentConnectionService;
+	private NamespaceService namespaceService;
 
 	private EventsNotificationsService eventsNotificationsService;
 
@@ -68,6 +69,10 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	
 	public void setEventsNotificationsService(EventsNotificationsService eventsNotificationsService) {
 		this.eventsNotificationsService = eventsNotificationsService;
+	}
+
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
 	}
 
 	@Override
@@ -130,7 +135,25 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	@Override
 	public List<NodeRef> getEventMembers(NodeRef event) {
-		return findNodesByAssociationRef(event, ASSOC_EVENT_TEMP_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
+		return getEventMembers(event, false);
+	}
+
+	@Override
+	public List<NodeRef> getEventMembers(NodeRef event, boolean useAssocsFromConfig) {
+		List<String> assocsToGetMembers = getPropsForFilterShowInCalendar();
+		if (useAssocsFromConfig && !assocsToGetMembers.isEmpty()) {
+			Set<NodeRef> members = new HashSet<>();
+			for (String assocToGetMembers : assocsToGetMembers) {
+				QName assocToGetQName = QName.createQName(assocToGetMembers, namespaceService);
+				List<NodeRef> membersFromAssoc = findNodesByAssociationRef(event, assocToGetQName, null, ASSOCIATION_TYPE.TARGET);
+				if (membersFromAssoc != null) {
+					members.addAll(findNodesByAssociationRef(event, assocToGetQName, null, ASSOCIATION_TYPE.TARGET));
+				}
+			}
+			return new ArrayList<>(members);
+		} else {
+			return findNodesByAssociationRef(event, ASSOC_EVENT_TEMP_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
+		}
 	}
 
 	@Override
@@ -474,6 +497,11 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	@Override
 	public boolean checkMemberAvailable(NodeRef member, NodeRef ignoreNode, Date fromDate, Date toDate, boolean allDay) {
+		return checkMemberAvailable(member, ignoreNode, fromDate, toDate, allDay, false);
+	}
+
+	@Override
+	public boolean checkMemberAvailable(NodeRef member, NodeRef ignoreNode, Date fromDate, Date toDate, boolean allDay, boolean useAssocsFromConfig) {
 		List<Date> employeeWorkindDays = workCalendarService.getEmployeeWorkindDays(member, fromDate, toDate);
 		if (employeeWorkindDays.isEmpty()) {
 			return false;
@@ -483,12 +511,30 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 				toDate = toFullDate(toDate, DAY_END);
 			}
 
-			String additionalFilter = " AND @lecm\\-events\\:temp\\-members\\-assoc\\-ref:\"*" + member.toString() + "*\"";
+			StringBuilder additionalFilter = new StringBuilder();
+			List<String> assocsToGetMembers = getPropsForFilterShowInCalendar();
+			if (!useAssocsFromConfig || assocsToGetMembers.isEmpty()) {
+				assocsToGetMembers = new ArrayList<>();
+				assocsToGetMembers.add("lecm-events:temp-members-assoc");
+			}
+			additionalFilter.append(" AND (");
+			for (String assocToGetMember : assocsToGetMembers) {
+				additionalFilter.append("@")
+						.append(assocToGetMember.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-"))
+						.append("\\-ref:\"*")
+						.append(member.toString())
+						.append("*\" OR ");
+			}
+			if (additionalFilter.length() > 0) {
+				additionalFilter.delete(additionalFilter.length() - 4, additionalFilter.length());
+			}
+			additionalFilter.append(")");
+
 			if (ignoreNode != null) {
-				additionalFilter += " AND NOT ID:\"" + ignoreNode.toString() + "\"";
+				additionalFilter.append(" AND NOT ID:\"").append(ignoreNode.toString()).append("\"");
 			}
 
-			List<NodeRef> events = getEvents(fromDate, toDate, additionalFilter, false, null, false);
+			List<NodeRef> events = getEvents(fromDate, toDate, additionalFilter.toString(), false, null, false);
 
 			return events == null || events.isEmpty();
 		}

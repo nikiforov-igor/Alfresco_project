@@ -2,12 +2,12 @@ package ru.it.lecm.notifications.template;
 
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.service.ServiceRegistry;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import ru.it.lecm.base.utils.HtmlUtils;
 
 import java.lang.reflect.Method;
 import java.text.DateFormat;
@@ -92,9 +92,9 @@ public final class Utils {
 
 	@NotificationsTemplateFunction
 	public static String wrapTitle(String text, String title) {
-		return  "<span class=\"wrapper-title\" title=\"" + StringEscapeUtils.escapeHtml(title) + "\">" + text + "</span>";
+		return HtmlUtils.wrapTitle(text, title);
 	}
-	
+
 	private Utils() {
 	}
 }

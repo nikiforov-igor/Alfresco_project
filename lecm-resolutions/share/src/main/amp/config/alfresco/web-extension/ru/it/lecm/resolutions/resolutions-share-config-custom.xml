@@ -21,6 +21,7 @@
                     <show id="lecm-base-dummy-aspects:script9" force="true"/>
 
                     <show id="lecm-document-aspects:is-on-control"/>
+                    <show id="lecm-resolutions:approved-outside-system"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
@@ -70,6 +71,7 @@
                             </control-param>
                         </control>
                     </field>
+                    <field id="lecm-resolutions:approved-outside-system" set="start-left"/>
                     <field id="lecm-document:subject-assoc" set="start-left"/>
                     <field id="lecm-resolutions:author-assoc" set="start-left">
                         <control>
@@ -222,7 +224,9 @@
                         <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
                     <field id="lecm-resolutions:base-assoc" set="end">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl">
+                            <control-param name="valueSetFireAction">resolutionCreateFormScriptLoaded</control-param>
+                        </control>
                     </field>
                     <field id="lecm-resolutions:base-document-assoc" set="end">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
@@ -272,6 +276,7 @@
             <form id="statemachine-editable-fields">
                 <field-visibility>
                     <show id="lecm-document-aspects:is-on-control"/>
+                    <show id="lecm-resolutions:approved-outside-system"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
@@ -394,6 +399,7 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="lecm-resolutions:approved-outside-system"/>
                     <show id="lecm-resolutions:base-document-assoc"/>
                     <show id="lecm-resolutions:base-assoc"/>
 
@@ -431,6 +437,7 @@
                             <control-param name="scriptLoadedFireAction">resolutionViewFormScriptLoaded</control-param>
                         </control>
                     </field>
+                    <field id="lecm-resolutions:approved-outside-system" set="common"/>
                     <field id="lecm-resolutions:base-document-assoc" read-only="true" set="common">
                         <control>
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
@@ -534,6 +541,7 @@
                     <show id="lecm-resolutions:base-document-assoc"/>
 
                     <show id="lecm-document-aspects:is-on-control"/>
+                    <show id="lecm-resolutions:approved-outside-system"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-resolutions:author-assoc"/>
                     <show id="lecm-resolutions:controller-assoc"/>
@@ -576,6 +584,7 @@
                             <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                         </control>
                     </field>
+                    <field id="lecm-resolutions:approved-outside-system" set="start"/>
                     <field id="lecm-document:subject-assoc" set="start-left"/>
                     <field id="lecm-resolutions:author-assoc" set="start-left"/>
                     <field id="lecm-resolutions:controller-assoc" set="start-left">

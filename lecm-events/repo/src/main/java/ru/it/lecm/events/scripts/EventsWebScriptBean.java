@@ -271,11 +271,15 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public Scriptable getEventMembers(String event) {
+        return getEventMembers(event, false);
+    }
+
+    public Scriptable getEventMembers(String event, boolean useAssocsFromConfigs) {
         ParameterCheck.mandatory("event", event);
 
         NodeRef eventRef = new NodeRef(event);
         if (this.nodeService.exists(eventRef)) {
-            List<NodeRef> results = eventService.getEventMembers(eventRef);
+            List<NodeRef> results = eventService.getEventMembers(eventRef, useAssocsFromConfigs);
             if (results != null) {
                 return createScriptable(results);
             }
@@ -309,6 +313,10 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public boolean checkMemberAvailable(String member, String ignoreNode, String fromDate, String toDate, boolean allDay) {
+        return checkMemberAvailable(member, ignoreNode, fromDate, toDate, allDay, false);
+    }
+
+    public boolean checkMemberAvailable(String member, String ignoreNode, String fromDate, String toDate, boolean allDay, boolean useAssocsfromConfig) {
         ParameterCheck.mandatory("member", member);
         ParameterCheck.mandatory("fromDate", fromDate);
         ParameterCheck.mandatory("toDate", toDate);
@@ -321,7 +329,7 @@ public class EventsWebScriptBean extends BaseWebScript {
                 ignoreNodeRef = new NodeRef(ignoreNode);
             }
 
-            return eventService.checkMemberAvailable(memberRef, ignoreNodeRef, ISO8601DateFormat.parse(fromDate), ISO8601DateFormat.parse(toDate), allDay);
+            return eventService.checkMemberAvailable(memberRef, ignoreNodeRef, ISO8601DateFormat.parse(fromDate), ISO8601DateFormat.parse(toDate), allDay, useAssocsfromConfig);
         }
 
         return false;
@@ -353,7 +361,11 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public Scriptable getEventMembers(ScriptNode event) {
-        return createScriptable(eventService.getEventMembers(event.getNodeRef()));
+        return getEventMembers(event, false);
+    }
+
+    public Scriptable getEventMembers(ScriptNode event, boolean useAssocsFromConfigs) {
+        return createScriptable(eventService.getEventMembers(event.getNodeRef(), useAssocsFromConfigs));
     }
 
     public Scriptable getEventInvitedMembers(ScriptNode event) {
@@ -463,8 +475,7 @@ public class EventsWebScriptBean extends BaseWebScript {
         			nodeService.setProperty(memberRow, EventsService.PROP_EVENT_MEMBERS_STATUS, "CONFIRMED");
         		}
         		
-                List<NodeRef> repeatableEvents = new ArrayList<>();
-                repeatableEvents = eventService.getAllRepeatedEvents(docNodeRef);
+                List<NodeRef> repeatableEvents = eventService.getAllRepeatedEvents(docNodeRef);
         		if (repeatableEvents != null) {
         			for (int i = 0; i < repeatableEvents.size(); i++) {
         				memberRow = eventService.getMemberTableRow(repeatableEvents.get(i), currentEmployee);
@@ -476,7 +487,7 @@ public class EventsWebScriptBean extends BaseWebScript {
         		        		
         		NodeRef initiator = new NodeRef(nodeService.getProperty(docNodeRef, EventsService.PROP_EVENT_INITIATOR).toString());
         		
-        		if (currentEmployee != null && initiator != null) {			
+        		if (currentEmployee != null) {
         			String author = "WebScript";
         			
         			List<NodeRef> recipients = new ArrayList<NodeRef>();
@@ -487,17 +498,15 @@ public class EventsWebScriptBean extends BaseWebScript {
         			Map<String, Object> templateConfig = new HashMap<String, Object>();
         			templateConfig.put("mainObject", docNodeRef);
         			templateConfig.put("eventExecutor", currentEmployee);
-        			
-        			boolean dontCheckAccessToObject = false;
-        			
-        			notificationsService.sendNotification(author, initiator, recipients, templateCode, templateConfig, dontCheckAccessToObject);
+
+        			notificationsService.sendNotification(author, currentEmployee, recipients, templateCode, templateConfig, false);
         		}
                 return true;
             }
         };
         AuthenticationUtil.runAsSystem(memberAccept);
 	}
-	
+
 	public String getPropsForFilterShowInCalendar() {
 	    List<String> propsForFilterShowInCalendar = eventService.getPropsForFilterShowInCalendar();
 	    if (propsForFilterShowInCalendar != null && propsForFilterShowInCalendar.size() > 0) {

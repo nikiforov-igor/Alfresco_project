@@ -180,38 +180,37 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		},
 
 		renderExtFormTemplate: function (form, isClearSearch, loadEvent) {
-			if (isClearSearch == undefined) {
+			if (!isClearSearch) {
 				isClearSearch = false;
 			}
 			// update current form state
 			this.currentForm = form;
 
-			if (this.currentForm != null) {
+			if (this.currentForm) {
 				var formDiv = Dom.get(this.searchFormId); // элемент в который будет отрисовываться форма
 				form.htmlid = this.searchFormId + "-" + form.type.split(":").join("_");
 
 				// load the form component for the appropriate type
-				var formUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "/components/form?itemKind=type&itemId={itemId}&formId={formId}&mode=edit&showSubmitButton=false&showCancelButton=false",
-					{
-						itemId: form.type,
-						formId: form.id
-					});
-				var formData =
-				{
-					htmlid: form.htmlid
+				var formData = {
+					htmlid: form.htmlid,
+					itemKind: "type",
+					itemId: form.type,
+					formId: form.id,
+					mode: "edit",
+					showSubmitButton: false,
+					showCancelButton: false,
+					showCaption: false
 				};
 				Alfresco.util.Ajax.request(
 					{
-						url: formUrl,
+						url: Alfresco.constants.URL_SERVICECONTEXT + "/components/form",
 						dataObj: formData,
 						successCallback: {
 							fn: function (response) {
 								formDiv.innerHTML = response.serverResponse.responseText;
-								if (this.searchDialog != null) {
-									if (isClearSearch) {
-										if (loadEvent) {
-											this.getEvents();
-										}
+								if (this.searchDialog) {
+									if (isClearSearch && loadEvent) {
+										this.getEvents();
 									} else {
 										this.searchDialog.show();
 									}
@@ -219,7 +218,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 							},
 							scope: this
 						},
-						failureMessage: "Could not load form component '" + formUrl + "'.",
+						failureMessage: "Could not load form component",
 						scope: this,
 						execScripts: true
 					});

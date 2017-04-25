@@ -280,7 +280,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -543,7 +543,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -846,7 +846,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -890,7 +890,7 @@
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -1215,7 +1215,7 @@
                                     </item>
                                     <item name="cm:dab9e21a-45ed-4a3c-8a03-4541f768cc52" type="lecm-arm:field">
                                         <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-                                        <property name="lecm-arm:order"><![CDATA[0]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[2]]></property>
                                         <property name="lecm-arm:field-name"><![CDATA[lecm-errands:number]]></property>
                                         <property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
                                         <property name="cm:name">
@@ -1360,10 +1360,10 @@
                                             <![CDATA[e935d005-581a-4c32-90d8-f86b866258f5]]></property>
                                         <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
-                                        <property name="lecm-arm:order"><![CDATA[2]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[1]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -1375,7 +1375,7 @@
                                             <![CDATA[a98a9042-1614-4194-804e-c06b25989338]]></property>
                                         <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
-                                        <property name="lecm-arm:order"><![CDATA[1]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
                                         <property name="lecm-arm:field-name">
@@ -1505,7 +1505,7 @@
                                         <property name="lecm-arm:order"><![CDATA[1]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -1524,6 +1524,16 @@
                                         <property name="lecm-arm:field-marker-icon">
                                             <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
                                     </item>
+                                    <item name="cm:9716f936-3143-4d5f-87dc-8700edc2a907" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title"><![CDATA[Заголовок (поруч.)]]></property>
+                                        <property name="cm:name"><![CDATA[9716f936-3143-4d5f-87dc-8700edc2a907]]></property>
+                                        <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
+                                        <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[5]]></property>
+                                        <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
+                                        <property name="lecm-arm:field-name"><![CDATA[lecm-errands:title]]></property>
+                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                    </item>
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
@@ -1540,6 +1550,8 @@
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Избранное/467ab9fd-5906-4cac-a304-321b9128db3d"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Избранное/39e2315f-16ea-46ca-b5ee-783cb566d7c6"/>
+                                    <assoc type="lecm-arm:fields-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Избранное/9716f936-3143-4d5f-87dc-8700edc2a907"/>
                                 </assocs>
                             </item>
                             <item name="cm:Последние просмотренные" type="lecm-arm:html-node">
@@ -1867,7 +1879,7 @@
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -1882,7 +1894,7 @@
                                         <property name="lecm-arm:order"><![CDATA[9]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -2068,7 +2080,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -2282,7 +2294,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -2527,7 +2539,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[1]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -3082,7 +3094,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -3503,7 +3515,7 @@
                                         <property name="lecm-arm:order"><![CDATA[1]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -3728,7 +3740,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -3907,7 +3919,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -4020,7 +4032,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -4119,7 +4131,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -4298,7 +4310,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -4473,7 +4485,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -5266,7 +5278,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -5807,7 +5819,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[1]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -6289,7 +6301,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -6387,7 +6399,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -6536,7 +6548,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -6707,7 +6719,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -6857,7 +6869,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -6920,7 +6932,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -6966,7 +6978,7 @@
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -7096,7 +7108,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -7865,7 +7877,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-marker-html">
-                                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                                 <property name="lecm-arm:field-name">
                                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                                 <property name="lecm-arm:field-format-string">
@@ -9047,7 +9059,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-marker-html">
-                                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                                 <property name="lecm-arm:field-name">
                                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                                 <property name="lecm-arm:field-format-string">
@@ -10229,7 +10241,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-marker-html">
-                                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                                 <property name="lecm-arm:field-name">
                                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                                 <property name="lecm-arm:field-format-string">
@@ -11411,7 +11423,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-marker-html">
-                                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                                 <property name="lecm-arm:field-name">
                                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                                 <property name="lecm-arm:field-format-string">
@@ -12593,7 +12605,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-marker-html">
-                                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                                 <property name="lecm-arm:field-name">
                                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                                 <property name="lecm-arm:field-format-string">
@@ -13205,7 +13217,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -13373,7 +13385,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -13631,7 +13643,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-marker-html">
-                                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                                 <property name="lecm-arm:field-name">
                                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                                 <property name="lecm-arm:field-format-string">
@@ -13851,7 +13863,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-marker-html">
-                                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                                 <property name="lecm-arm:field-name">
                                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                                 <property name="lecm-arm:field-format-string">
@@ -13952,7 +13964,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-marker-html">
-                                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                                 <property name="lecm-arm:field-name">
                                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                                 <property name="lecm-arm:field-format-string">
@@ -14426,7 +14438,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-marker-html">
-                                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                                 <property name="lecm-arm:field-name">
                                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                                 <property name="lecm-arm:field-format-string">
@@ -14747,7 +14759,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[1]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -14956,7 +14968,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[1]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -15170,7 +15182,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[1]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -15394,7 +15406,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[1]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -16149,7 +16161,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -16210,7 +16222,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -16693,7 +16705,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-marker-html">
-                                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                                 <property name="lecm-arm:field-name">
                                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                                 <property name="lecm-arm:field-format-string">
@@ -17213,7 +17225,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-marker-html">
-                                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                                 <property name="lecm-arm:field-name">
                                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                                 <property name="lecm-arm:field-format-string">
@@ -18071,7 +18083,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-marker-html">
-                                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                                 <property name="lecm-arm:field-name">
                                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                                 <property name="lecm-arm:field-format-string">
@@ -18881,7 +18893,7 @@
                                                                 <property name="lecm-arm:field-is-marker">
                                                                     <![CDATA[true]]></property>
                                                                 <property name="lecm-arm:field-marker-html">
-                                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                                 <property name="lecm-arm:field-name">
                                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                                 <property name="lecm-arm:field-format-string">
@@ -19439,7 +19451,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -19737,7 +19749,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -19927,7 +19939,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -20577,7 +20589,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -21017,7 +21029,7 @@
                                                         <property name="lecm-arm:order"><![CDATA[1]]></property>
                                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                         <property name="lecm-arm:field-marker-html">
-                                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -21350,7 +21362,7 @@
                                         <property name="lecm-arm:order"><![CDATA[7]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -21491,7 +21503,7 @@
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -21672,7 +21684,7 @@
                                         <property name="lecm-arm:order"><![CDATA[1]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -21957,7 +21969,7 @@
                                         <property name="lecm-arm:order"><![CDATA[1]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -22146,7 +22158,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[1]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -22655,7 +22667,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[1]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -23131,7 +23143,7 @@
                                         <property name="lecm-arm:order"><![CDATA[1]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -23198,8 +23210,7 @@
                                             <item name="cm:a0fffaaa-cc9f-45f9-a369-e4996cb57379" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[2]]></property>
-                                                <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-document:regnum]]></property>
+                                                <property name="lecm-arm:field-name"><![CDATA[lecm-document:regnum]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[89978622-f3e6-4ea7-a8c5-5902237d58b5]]></property>
@@ -23217,24 +23228,12 @@
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                                 <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                             </item>
-                                            <item name="cm:caa8649d-ab87-4177-8631-5d3ab3839518" type="lecm-arm:field">
-                                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[8]]></property>
-                                                <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-document-aspects:is-on-control]]></property>
-                                                <property name="lecm-arm:field-title"><![CDATA[На контроле]]></property>
-                                                <property name="cm:name">
-                                                    <![CDATA[1bc2a2a1-dec9-4d0e-a52f-25c3ac49fe03]]></property>
-                                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
-                                            </item>
                                             <item name="cm:34d38bcc-a1fe-416a-bece-ccce449902a4" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[5]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-eds-document:execution-date]]></property>
-                                                <property name="lecm-arm:field-title">
-                                                    <![CDATA[Срок исполнения]]></property>
+                                                <property name="lecm-arm:field-title"><![CDATA[Срок исполнения]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[9bc8b055-37a9-4527-8054-027eafe75876]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -23243,8 +23242,7 @@
                                             <item name="cm:ee55b018-f95d-46d3-84c1-99c419989e0a" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[4]]></property>
-                                                <property name="lecm-arm:field-name">
-                                                    <![CDATA[lecm-document:title]]></property>
+                                                <property name="lecm-arm:field-name"><![CDATA[lecm-document:title]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Заголовок]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[56b42422-cbc9-4620-9ef6-f0acca7f1a52]]></property>
@@ -23315,7 +23313,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[1]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -23327,8 +23325,6 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Входящие/89978622-f3e6-4ea7-a8c5-5902237d58b5"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Входящие/08ccffe0-cefe-4880-b02d-418911943165"/>
-                                            <assoc type="lecm-arm:fields-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Входящие/1bc2a2a1-dec9-4d0e-a52f-25c3ac49fe03"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Входящие/9bc8b055-37a9-4527-8054-027eafe75876"/>
                                             <assoc type="lecm-arm:fields-assoc"
@@ -23665,7 +23661,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[1]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -24167,7 +24163,7 @@
                                         <property name="lecm-arm:order"><![CDATA[1]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -24401,7 +24397,7 @@
                                         <property name="lecm-arm:order"><![CDATA[1]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -24443,7 +24439,7 @@
                                 <property name="lecm-arm:order"><![CDATA[1]]></property>
                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                 <property name="lecm-arm:field-marker-html">
-                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                 <property name="lecm-arm:field-name">
                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -25802,7 +25798,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -25846,7 +25842,7 @@
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -26298,7 +26294,7 @@
                                         <property name="lecm-arm:order"><![CDATA[2]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -26663,7 +26659,7 @@
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -26677,7 +26673,7 @@
                                         <property name="lecm-arm:order"><![CDATA[9]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -26863,7 +26859,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -27077,7 +27073,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -27322,7 +27318,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[1]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -27877,7 +27873,7 @@
                                                 <property name="lecm-arm:order"><![CDATA[0]]></property>
                                                 <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:field-marker-html">
-                                                    <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -28298,7 +28294,7 @@
                                         <property name="lecm-arm:order"><![CDATA[1]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -28344,7 +28340,7 @@
                             <item name="cm:ОРД" type="lecm-arm:node">
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[(@lecm\-ord\:controller\-assoc\-ref:"#current-user" OR @lecm\-ord\:items\-assoc\-controller\-assoc\-ref:"#current-user") AND (@lecm\-statemachine\:status:'Зарегистрирован' OR @lecm\-statemachine\:status:'На исполнении')]]></property>
+                                    <![CDATA[(@lecm\-ord\:controller\-assoc\-ref:"#current-user" OR @lecm\-ord\:items\-assoc\-controller\-assoc\-ref:"*#current-user*") AND (@lecm\-statemachine\:status:'Зарегистрирован' OR @lecm\-statemachine\:status:'На исполнении')]]></property>
                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
@@ -28368,6 +28364,10 @@
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:types"><![CDATA[lecm-ord:document]]></property>
+                                        <assocs>
+                                            <assoc type="lecm-arm:filters-assoc"
+                                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Тип контроля"/>
+                                        </assocs>
                                     </item>
                                     <item name="cm:На исполнении" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
@@ -28493,7 +28493,7 @@
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -28705,7 +28705,7 @@
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -28954,7 +28954,7 @@
                                         <property name="lecm-arm:order"><![CDATA[1]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-marker-html">
-                                            <![CDATA[<B style="color:#FF0000">К</B>]]></property>
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-document-aspects:is-on-control]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>

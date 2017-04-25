@@ -117,7 +117,7 @@
                             <control-param name="slaveCascading">true</control-param>
                             <control-param name="dependentFieldName">lecm-eds-globset:arm-for-dashlet-assoc</control-param>
                             <control-param name="dependentFieldArgKey">armRef</control-param>
-                            <control-param name="webScriptUrl">lecm/arm/root-nodes</control-param>
+                            <control-param name="webScriptUrl">lecm/arm/root-nodes/forDashlet</control-param>
                             <control-param name="defaultLoadData">false</control-param>
                         </control>
                     </field>
@@ -165,7 +165,7 @@
                             <control-param name="slaveCascading">true</control-param>
                             <control-param name="dependentFieldName">lecm-eds-globset:arm-for-dashlet-assoc</control-param>
                             <control-param name="dependentFieldArgKey">armRef</control-param>
-                            <control-param name="webScriptUrl">lecm/arm/root-nodes</control-param>
+                            <control-param name="webScriptUrl">lecm/arm/root-nodes/forDashlet</control-param>
                             <control-param name="defaultLoadData">false</control-param>
                         </control>
                     </field>
