@@ -192,7 +192,7 @@ public class UserActionsServiceImpl implements UserActionsService {
                                 if (count == null) {
                                     count = 0L;
                                 }
-                                Map<String, Object> resultState = getResultSet(documentRef, state.getConditionAccess().getConditions());
+                                Map<String, Object> resultState = preparePropMapWithConditions(documentRef, state.getConditionAccess().getConditions());
                                 resultState.put("type", "trans");
                                 resultState.put("actionId", state.getActionId());
                                 resultState.put("label", state.getLabel());
@@ -223,7 +223,7 @@ public class UserActionsServiceImpl implements UserActionsService {
                                 Map<String, String> variables = stateMachineService.getInputVariablesMap(statemachineId, entity.getVariables().getInput());
                                 variables.put("assoc_packageItems", documentRef.toString());
 
-                                Map<String, Object> workflow = getResultSet(documentRef, entity.getConditionAccess().getConditions());
+                                Map<String, Object> workflow = preparePropMapWithConditions(documentRef, entity.getConditionAccess().getConditions());
                                 if (!Boolean.valueOf(workflow.get("hideAction").toString())) {
                                     Long count = counts.get(entity.getId());
                                     if (count == null) {
@@ -300,7 +300,7 @@ public class UserActionsServiceImpl implements UserActionsService {
         return result;
     }
 
-    private Map<String, Object> getResultSet(NodeRef document, List<Conditions.Condition> conditions) {
+    private Map<String, Object> preparePropMapWithConditions(NodeRef document, List<Conditions.Condition> conditions) {
         HashMap<String, Object> resultState = new HashMap<>();
 
         List<Conditions.Condition> blocked = new ArrayList<>();
