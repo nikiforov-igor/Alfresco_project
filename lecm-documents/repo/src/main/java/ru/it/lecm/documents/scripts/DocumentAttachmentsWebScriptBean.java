@@ -287,4 +287,25 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
         ParameterCheck.mandatory("document", document);
 	    documentAttachmentsService.unlockAttachmentsAndClearLinks(document.getNodeRef());
     }
+
+    /**
+     * Получение категории вложений для загрузки по ШК
+     * @param document документ
+     * @return название категории
+     */
+    public String getAttachmentByBarCodeCategoryName(ScriptNode document) {
+		ParameterCheck.mandatory("document", document);
+		return documentAttachmentsService.getAttachmentByBarCodeCategoryName(document.getNodeRef());
+	}
+
+    /**
+     * Получение категории вложений для загрузки по ШК
+     * @param documentType Тип документа
+     * @return название категории
+     */
+	public String getAttachmentByBarCodeCategoryName(String documentType) {
+		ParameterCheck.mandatory("documentType", documentType);
+		QName type = QName.createQName(documentType, serviceRegistry.getNamespaceService());
+		return documentAttachmentsService.getAttachmentByBarCodeCategoryName(type);
+	}
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model name="lecm-doc-dic-type:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+<model name="lecm-doc-type-settings-dic:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
     <description>Logic ECM type settings dictionary model</description>
     <author>Logic ECM</author>
     <version>1.0</version>
@@ -8,30 +8,30 @@
         <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
     </imports>
     <namespaces>
-        <namespace uri="http://www.it.ru/logicECM/document/dictionaries/typeSettings/1.0" prefix="lecm-doc-dic-type"/>
+        <namespace uri="http://www.it.ru/logicECM/document/dictionaries/typeSettings/1.0" prefix="lecm-doc-type-settings-dic"/>
     </namespaces>
 
     <types>
-        <type name="lecm-doc-dic-type:document-type-settings">
-            <title>Logic Ecm Dictionary Document Type Settings</title>
+        <type name="lecm-doc-type-settings-dic:document-type-settings">
+            <title>Logic Ecm Document Type Settings</title>
             <parent>lecm-dic:plane_dictionary_values</parent>
             <properties>
-                <property name="lecm-doc-dic-type:document-type">
+                <property name="lecm-doc-type-settings-dic:document-type">
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
-                <property name="lecm-doc-dic-type:attachment-category">
+                <property name="lecm-doc-type-settings-dic:attachment-by-barcode-category">
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
             </properties>

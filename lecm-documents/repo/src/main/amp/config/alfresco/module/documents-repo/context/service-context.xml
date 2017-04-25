@@ -332,6 +332,7 @@
         <property name="messageService" ref="messageService"/>
 		<property name="lecmMessageService" ref="lecmMessageService"/>
         <property name="lockService" ref="lockService"/>
+        <property name="dictionaryBean" ref="serviceDictionary"/>
     </bean>
 
     <bean id="documentAttachmentsScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentAttachmentsWebScriptBean"

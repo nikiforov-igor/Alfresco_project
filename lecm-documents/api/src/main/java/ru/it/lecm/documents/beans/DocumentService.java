@@ -21,6 +21,9 @@ public interface DocumentService {
     public static final String DOCUMENT_ASPECTS_NAMESPACE_URI = "http://www.it.ru/lecm/document/aspects/1.0";
     public static final String DOCUMENT_SUBJECTS_NAMESPACE_URI = "http://www.it.ru/logicECM/document/dictionaries/1.0";
     public static final String DOCUMENT_DELIVERY_METHOD_NAMESPACE_URI = "http://www.it.ru/logicECM/document/dictionaries/deliveryMethod/1.0";
+    public static final String DOCUMENT_TYPE_SETTINGS_NAMESPACE_URI = "http://www.it.ru/logicECM/document/dictionaries/typeSettings/1.0";
+
+    public static final String DOCUMENT_TYPE_SETTINGS_DICTIONARY_NAME = "Настройки типов документов";
 
     public static final QName TYPE_BASE_DOCUMENT = QName.createQName(DOCUMENT_NAMESPACE_URI, "base");
 
@@ -108,6 +111,8 @@ public interface DocumentService {
 
 	public static final QName ASPECT_WITHOUT_ATTACHMENTS = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "without-attachments");
 
+    public static final QName PROP_TYPE_SETTINGS_TYPE = QName.createQName(DocumentService.DOCUMENT_TYPE_SETTINGS_NAMESPACE_URI,"document-type");
+    public static final QName PROP_TYPE_SETTINGS_ATTACHMENT_BY_BARCODE_CATEGORY = QName.createQName(DocumentService.DOCUMENT_TYPE_SETTINGS_NAMESPACE_URI,"attachment-by-barcode-category");
     /**
      * Метод для получения рейтинга документа
      * documentNodeRef - document nodeRef

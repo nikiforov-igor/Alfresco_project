@@ -28,23 +28,7 @@ while (!attached && (10 > attempts++)) {
             if (node) {
                 /*нашли ноду по ID*/
                 if (node.isSubType('lecm-document:base')) {
-                    var categoryName;
-                    var settingsDictionary = dictionary.getDictionaryByName("Настройки типов документов");
-                    var currentDocSettings;
-                    if (settingsDictionary) {
-                        var settings = dictionary.getChildren(settingsDictionary.nodeRef);
-                        currentDocSettings = settings.filter(function (item) {
-                            return node.typeShort == item.properties["lecm-doc-dic-type:document-type"];
-                        });
-                    }
-                    if (currentDocSettings && currentDocSettings.length) {
-                        categoryName = currentDocSettings[0].properties["lecm-doc-dic-type:attachment-category"];
-                    } else {
-                        var categories = documentAttachments.getCategoriesForType(node.typeShort);
-                        if (categories && categories.length) {
-                            categoryName = categories[0];
-                        }
-                    }
+                    var categoryName = documentAttachments.getAttachmentByBarCodeCategoryName(node);
                     if (categoryName) {
                         /*получаем категорию "categoryName"*/
                         var category = documentAttachments.getCategoryByName(categoryName, node);

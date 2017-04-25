@@ -114,7 +114,6 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			loadCategories: function () {
-				var sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/attachments/api/categories?{itemKind}={itemValue}";
 				var me = this;
 				var callback = {
 					success:function (oResponse) {
@@ -127,16 +126,10 @@ LogicECM.module = LogicECM.module || {};
 					timeout:10000
 				};
 				if (this.options.documentNodeRef && this.options.changerKind == "node"){
-					sUrl = YAHOO.lang.substitute(sUrl, {
-						itemKind: "documentNodeRef",
-						itemValue: encodeURIComponent(this.options.documentNodeRef)
-					});
+					sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/attachments/api/categories?documentNodeRef=" + this.options.documentNodeRef;
 					YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 				} else if (this.options.documentType && this.options.changerKind == "type") {
-					sUrl = YAHOO.lang.substitute(sUrl, {
-						itemKind: "documentType",
-						itemValue: encodeURIComponent(this.options.documentType)
-					});
+					sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/attachments/api/categoriesByType?documentType=" + this.options.documentType;
 					YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 				}
 			}
