@@ -3543,7 +3543,29 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
-
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>e855f320-54ab-4a46-bfb8-cd89f5156d27</name>
+                                        <nodeRef>workspace://SpacesStore/e855f320-54ab-4a46-bfb8-cd89f5156d27</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer_Lite]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESERVATION_PERFORMER_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -4648,6 +4670,29 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>LECM_APPROVER_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>e855f320-54ab-4a46-bfb8-cd89f5156d27</name>
+                                        <nodeRef>workspace://SpacesStore/e855f320-54ab-4a46-bfb8-cd89f5156d27</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer_Lite]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESERVATION_PERFORMER_DYN</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -5997,6 +6042,29 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>e855f320-54ab-4a46-bfb8-cd89f5156d27</name>
+                                        <nodeRef>workspace://SpacesStore/e855f320-54ab-4a46-bfb8-cd89f5156d27</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer_Lite]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESERVATION_PERFORMER_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -6846,6 +6914,29 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>e855f320-54ab-4a46-bfb8-cd89f5156d27</name>
+                                        <nodeRef>workspace://SpacesStore/e855f320-54ab-4a46-bfb8-cd89f5156d27</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer_Lite]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESERVATION_PERFORMER_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -7652,6 +7743,29 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>LECM_APPROVER_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>e855f320-54ab-4a46-bfb8-cd89f5156d27</name>
+                                        <nodeRef>workspace://SpacesStore/e855f320-54ab-4a46-bfb8-cd89f5156d27</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer_Lite]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESERVATION_PERFORMER_DYN</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -8585,6 +8699,29 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>e855f320-54ab-4a46-bfb8-cd89f5156d27</name>
+                                        <nodeRef>workspace://SpacesStore/e855f320-54ab-4a46-bfb8-cd89f5156d27</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer_Lite]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESERVATION_PERFORMER_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -9407,6 +9544,29 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>LECM_APPROVER_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>002ddf28-f1b0-4f79-8269-816029dde3c9</name>
+                                        <nodeRef>workspace://SpacesStore/002ddf28-f1b0-4f79-8269-816029dde3c9</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESERVATION_PERFORMER_DYN</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -10314,6 +10474,29 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>LECM_APPROVER_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>002ddf28-f1b0-4f79-8269-816029dde3c9</name>
+                                        <nodeRef>workspace://SpacesStore/002ddf28-f1b0-4f79-8269-816029dde3c9</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESERVATION_PERFORMER_DYN</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
