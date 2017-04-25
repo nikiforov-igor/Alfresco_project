@@ -11216,6 +11216,29 @@ businessJournal.log(nd.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]></
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>002ddf28-f1b0-4f79-8269-816029dde3c9</name>
+                                        <nodeRef>workspace://SpacesStore/002ddf28-f1b0-4f79-8269-816029dde3c9</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_None]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <business-role/>
+                                            <permissionTypeAspect/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>RESERVATION_PERFORMER_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
