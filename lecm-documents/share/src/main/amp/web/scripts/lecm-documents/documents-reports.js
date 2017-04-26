@@ -6,6 +6,7 @@ LogicECM.module.Documents = LogicECM.module.Documents|| {};
 LogicECM.module.Documents.Reports = LogicECM.module.Documents.Reports || {};
 
 (function() {
+    var doubleClickLock = false;
 
     LogicECM.module.Documents.Reports.openReport = function (actionUrl, params) {
         var newWindow = window.open(Alfresco.constants.URL_PAGECONTEXT + "lecm/arm/blank", "report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no,resizable=yes");
@@ -32,32 +33,43 @@ LogicECM.module.Documents.Reports = LogicECM.module.Documents.Reports || {};
     };
 
         LogicECM.module.Documents.Reports.reportLinkClicked = function(element, param) {
+            if (doubleClickLock) {
+                return;
+            }
+            doubleClickLock = true;
+
             var reportCode = param.reportCode;
             var documentRef = param.nodeRef;
 
             var actionUrl = null;
             var doBeforeDialogShow = function (p_form, p_dialog) {
-                var defaultMsg = Alfresco.component.Base.prototype.msg("documents.report." + reportCode + ".title");
-                if (defaultMsg == "documents.report." + reportCode + ".title"){
-                    defaultMsg = Alfresco.component.Base.prototype.msg("document.report.default.title");
-                }
-                Alfresco.util.populateHTML(
-                    [ p_dialog.id + "-form-container_h", defaultMsg ]
-                );
-
-                var formElement = Dom.get(p_form.formId);
-                if (formElement) {
-                    actionUrl = formElement.action;
-                    if (actionUrl && actionUrl.indexOf("autoSubmit") > 0) {
-                        var data = {};
-                        if (documentRef) { // добавляем к параметрам ID - если задано
-                            data["ID"] = documentRef;
-                        }
-                        p_dialog.dialog.subscribe('show', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-                        LogicECM.module.Documents.Reports.openReport(actionUrl, data);
-                    } else {
-                        p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                try {
+                    var defaultMsg = Alfresco.component.Base.prototype.msg("documents.report." + reportCode + ".title");
+                    if (defaultMsg == "documents.report." + reportCode + ".title"){
+                        defaultMsg = Alfresco.component.Base.prototype.msg("document.report.default.title");
                     }
+                    Alfresco.util.populateHTML(
+                        [ p_dialog.id + "-form-container_h", defaultMsg ]
+                    );
+
+                    var formElement = Dom.get(p_form.formId);
+                    if (formElement) {
+                        actionUrl = formElement.action;
+                        if (actionUrl && actionUrl.indexOf("autoSubmit") > 0) {
+                            var data = {};
+                            if (documentRef) { // добавляем к параметрам ID - если задано
+                                data["ID"] = documentRef;
+                            }
+                            p_dialog.dialog.subscribe('show', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                            LogicECM.module.Documents.Reports.openReport(actionUrl, data);
+                        } else {
+                            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                        }
+                    }
+                } catch (e) {
+                    Alfresco.logger.error("Error on load report form: ", e);
+                } finally {
+                    doubleClickLock = false;
                 }
             };
 

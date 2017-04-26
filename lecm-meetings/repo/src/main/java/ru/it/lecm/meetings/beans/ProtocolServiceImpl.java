@@ -8,6 +8,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentEventService;
@@ -200,9 +201,12 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                 }
                 //тематика поручения
                 List<AssociationRef> subjectAssocs = nodeService.getTargetAssocs(protocol, DocumentService.ASSOC_SUBJECT);
-                if (subjectAssocs.size() > 0) {
-                    NodeRef subject = subjectAssocs.get(0).getTargetRef();
-                    associations.put("lecm-document:subject-assoc", subject.toString());
+                if (!subjectAssocs.isEmpty()) {
+                    List<String> subjects = new ArrayList<>();
+                    for (AssociationRef subjectAssoc : subjectAssocs) {
+                        subjects.add(subjectAssoc.getTargetRef().toString());
+                    }
+                    associations.put("lecm-document:subject-assoc", StringUtils.join(subjects, ","));
                 }
 
                 NodeRef errand = documentService.createDocument("lecm-errands:document", properties, associations);

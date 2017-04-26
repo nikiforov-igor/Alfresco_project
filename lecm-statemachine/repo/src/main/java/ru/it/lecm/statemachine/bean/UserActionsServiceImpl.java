@@ -89,8 +89,8 @@ public class UserActionsServiceImpl implements UserActionsService {
 
     @Override
     public HashMap<String, Object> getActions(final NodeRef nodeRef) {
-        HashMap<String, Object> result = new HashMap<String, Object>();
-        ArrayList<HashMap<String, Object>> actionsList = new ArrayList<HashMap<String, Object>>();
+        HashMap<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> actionsList = new ArrayList<>();
         NodeService nodeService = serviceRegistry.getNodeService();
         final WorkflowService workflowService = serviceRegistry.getWorkflowService();
         final String currentUserName = authService.getCurrentUserName();
@@ -185,19 +185,6 @@ public class UserActionsServiceImpl implements UserActionsService {
                             FinishStateWithTransitionAction finishWithTransitionAction = (FinishStateWithTransitionAction) action;
                             List<FinishStateWithTransitionAction.NextState> states = finishWithTransitionAction.getStates();
                             for (FinishStateWithTransitionAction.NextState state : states) {
-                                ArrayList<String> messages = new ArrayList<String>();
-                                HashSet<String> fields = new HashSet<String>();
-                                boolean hideAction = false;
-                                boolean doesNotBlock = true;
-                                for (Conditions.Condition condition : state.getConditionAccess().getConditions()) {
-                                    if (!documentService.execExpression(documentRef, condition.getExpression())) {
-                                        messages.add(condition.getErrorMessage());
-                                        fields.addAll(condition.getFields());
-                                        hideAction = hideAction || condition.isHideAction();
-                                        doesNotBlock = doesNotBlock && condition.isDoesNotBlock();
-                                    }
-                                }
-
                                 Map<String, String> variables = stateMachineService.getInputVariablesMap(statemachineId, state.getVariables().getInput());
                                 variables.put("assoc_packageItems", documentRef.toString());
 
@@ -205,20 +192,15 @@ public class UserActionsServiceImpl implements UserActionsService {
                                 if (count == null) {
                                     count = 0L;
                                 }
-
-                                HashMap<String, Object> resultState = new HashMap<String, Object>();
+                                Map<String, Object> resultState = preparePropMapWithConditions(documentRef, state.getConditionAccess().getConditions());
                                 resultState.put("type", "trans");
                                 resultState.put("actionId", state.getActionId());
                                 resultState.put("label", state.getLabel());
                                 resultState.put("workflowId", state.getWorkflowId());
-                                resultState.put("errors", messages);
-                                resultState.put("doesNotBlock", doesNotBlock);
                                 resultState.put("doNotAskForConfirmation", state.isDoNotAskForConfirmation());
-                                resultState.put("fields", fields);
                                 resultState.put("count", count);
                                 resultState.put("variables", variables);
                                 resultState.put("isForm", state.isForm());
-                                resultState.put("hideAction", hideAction);
                                 if (state.isForm()) {
                                     resultState.put("documentType", state.getFormType());
                                     resultState.put("createUrl", documentService.getCreateUrl(QName.createQName(state.getFormType(), serviceRegistry.getNamespaceService())));
@@ -238,35 +220,19 @@ public class UserActionsServiceImpl implements UserActionsService {
                             UserWorkflow userWorkflow = (UserWorkflow) action;
                             List<UserWorkflow.UserWorkflowEntity> entities = userWorkflow.getUserWorkflows();
                             for (UserWorkflow.UserWorkflowEntity entity : entities) {
-                                ArrayList<String> messages = new ArrayList<String>();
-                                HashSet<String> fields = new HashSet<String>();
-                                boolean hideAction = false;
-                                boolean doesNotBlock = true;
-                                for (Conditions.Condition condition : entity.getConditionAccess().getConditions()) {
-                                    if (!documentService.execExpression(documentRef, condition.getExpression())) {
-                                        messages.add(condition.getErrorMessage());
-                                        fields.addAll(condition.getFields());
-                                        hideAction = hideAction || condition.isHideAction();
-                                        doesNotBlock = doesNotBlock && condition.isDoesNotBlock();
-                                    }
-                                }
-
                                 Map<String, String> variables = stateMachineService.getInputVariablesMap(statemachineId, entity.getVariables().getInput());
                                 variables.put("assoc_packageItems", documentRef.toString());
 
-                                if (!hideAction) {
+                                Map<String, Object> workflow = preparePropMapWithConditions(documentRef, entity.getConditionAccess().getConditions());
+                                if (!Boolean.valueOf(workflow.get("hideAction").toString())) {
                                     Long count = counts.get(entity.getId());
                                     if (count == null) {
                                         count = 0L;
                                     }
-                                    HashMap<String, Object> workflow = new HashMap<String, Object>();
                                     workflow.put("type", "user");
                                     workflow.put("actionId", entity.getId());
                                     workflow.put("label", entity.getLabel());
                                     workflow.put("workflowId", entity.getWorkflowId());
-                                    workflow.put("errors", messages);
-                                    workflow.put("doesNotBlock", doesNotBlock);
-                                    workflow.put("fields", fields);
                                     workflow.put("count", count);
                                     workflow.put("variables", variables);
                                     workflow.put("isForm", false);
@@ -334,6 +300,42 @@ public class UserActionsServiceImpl implements UserActionsService {
         return result;
     }
 
+    private Map<String, Object> preparePropMapWithConditions(NodeRef document, List<Conditions.Condition> conditions) {
+        HashMap<String, Object> resultState = new HashMap<>();
+
+        List<Conditions.Condition> blocked = new ArrayList<>();
+        List<Conditions.Condition> warnings = new ArrayList<>();
+
+        for (Conditions.Condition condition : conditions) {
+            if (!documentService.execExpression(document, condition.getExpression())) {
+                if (condition.isDoesNotBlock()) {
+                    warnings.add(condition);
+                } else {
+                    blocked.add(condition);
+                }
+            }
+        }
+
+        List<Conditions.Condition> resultedConditions = blocked.isEmpty() ? warnings : blocked;
+
+        resultState.put("doesNotBlock", blocked.isEmpty());
+
+        List<String> messages = new ArrayList<>();
+        Set<String> fields = new HashSet<>();
+        boolean hideAction = false;
+
+        for (Conditions.Condition condition : resultedConditions) {
+            messages.add(condition.getErrorMessage());
+            fields.addAll(condition.getFields());
+            hideAction = hideAction || condition.isHideAction();
+        }
+
+        resultState.put("hideAction", hideAction);
+        resultState.put("errors", messages);
+        resultState.put("fields", fields);
+
+        return resultState;
+    }
 
     private Map<String, String> processingVariables(NodeRef document, NodeRef action, String statemachineId, boolean hasStatemachine) {
         NodeService nodeService = serviceRegistry.getNodeService();
@@ -367,7 +369,7 @@ public class UserActionsServiceImpl implements UserActionsService {
         return counts;
     }
 
-    private void sort(ArrayList<HashMap<String, Object>> unsorted) {
+    private void sort(List<Map<String, Object>> unsorted) {
         class ElementComparator<T extends Map> implements Comparator<T> {
             @Override
             public int compare(T o1, T o2) {
@@ -376,7 +378,7 @@ public class UserActionsServiceImpl implements UserActionsService {
                 return count2.compareTo(count1);
             }
         }
-        Collections.sort(unsorted, new ElementComparator<HashMap>());
+        Collections.sort(unsorted, new ElementComparator<>());
     }
 
     private NodeRef getDestinationFolder(String path) {
