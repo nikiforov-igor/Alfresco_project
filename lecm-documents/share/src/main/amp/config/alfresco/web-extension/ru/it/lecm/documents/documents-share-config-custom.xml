@@ -685,10 +685,11 @@
                     </field>
                     <field id="lecm-connect:connected-document-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
+                            <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
 	                        <control-param name="changeItemsFireAction">changeConnectedDocument</control-param>
+	                        <control-param name="additionalFilter">NOT @lecm\-statemachine\-aspects\:is\-draft:true</control-param>
                         </control>
                     </field>
                     <field id="lecm-connect:connection-type-assoc">
@@ -711,10 +712,11 @@
                 <appearance>
                     <field id="lecm-connect:connected-document-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
+                            <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="changeItemsFireAction">changeConnectedDocument</control-param>
+                            <control-param name="additionalFilter">NOT @lecm\-statemachine\-aspects\:is\-draft:true</control-param>
                         </control>
                     </field>
                     <field id="lecm-connect:connection-type-assoc">
@@ -747,10 +749,11 @@
                 <appearance>
                     <field id="lecm-connect:connected-document-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
+                            <control-param name="rootLocation">/app:company_home</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="changeItemsFireAction">changeConnectedDocument</control-param>
+                            <control-param name="additionalFilter">NOT @lecm\-statemachine\-aspects\:is\-draft:true</control-param>
                         </control>
                     </field>
                     <field id="lecm-connect:connection-type-assoc">
