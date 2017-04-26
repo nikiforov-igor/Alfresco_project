@@ -28,6 +28,7 @@ while (!attached && (10 > attempts++)) {
             if (node) {
                 /*нашли ноду по ID*/
                 if (node.isSubType('lecm-document:base')) {
+                    documentAttachments.getCategories(node.nodeRef.toString());
                     var categoryName = documentAttachments.getDefaultUploadCategoryName(node);
                     if (categoryName) {
                         /*получаем категорию "categoryName"*/
