@@ -2126,7 +2126,7 @@
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[armNode.count() > 0]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                        <property name="lecm-arm:order"><![CDATA[10]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[60]]></property>
                                         <property name="lecm-arm:types"><![CDATA[lecm-resolutions:document]]></property>
                                         <items>
                                             <item name="cm:db3c83c9-1725-472a-bc10-961a68b02057" type="lecm-arm:field">
