@@ -20,6 +20,12 @@
                 <property name="lecm-busjournal:objectType-class">lecm-document-stamp:stamp</property>
                 <property name="lecm-busjournal:objectType-template">{lecm-document-stamp:title}</property>
             </item>
+            <item name="cm:Настройки типов документов" type="lecm-busjournal:objectType">
+                <property name="cm:name">Настройки типов документов</property>
+                <property name="lecm-busjournal:objectType-code">LECM_DOCTYPE_SETTINGS</property>
+                <property name="lecm-busjournal:objectType-class">lecm-doc-type-settings-dic:document-type-settings</property>
+                <property name="lecm-busjournal:objectType-template">{lecm-doc-type-settings-dic:document-type}</property>
+            </item>
         </items>
     </item>
 </items>

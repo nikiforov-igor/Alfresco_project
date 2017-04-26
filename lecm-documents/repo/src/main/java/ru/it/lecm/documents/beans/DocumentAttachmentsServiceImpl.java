@@ -29,6 +29,7 @@ import ru.it.lecm.base.beans.LecmMessageService;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
@@ -51,8 +52,13 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	private MessageService messageService;
 	private LecmMessageService lecmMessageService;
     private LockService lockService;
+	private DictionaryBean dictionaryBean;
 
-    private List<AttachmentUnlockListener> unlockListeners = new ArrayList<>();
+	public void setDictionaryBean(DictionaryBean dictionaryBean) {
+		this.dictionaryBean = dictionaryBean;
+	}
+
+	private List<AttachmentUnlockListener> unlockListeners = new ArrayList<>();
 
 	public void setDictionaryService(DictionaryService dictionaryService) {
 		this.dictionaryService = dictionaryService;
@@ -218,6 +224,42 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 			return result;
 		}
 		return null;
+	}
+
+	@Override
+	public String getDefaultUploadCategoryName(final QName documentTypeQName) {
+		NodeRef documentTypeDictionary = dictionaryBean.getDictionaryByName(DocumentService.DOCUMENT_TYPE_SETTINGS_DICTIONARY_NAME);
+		if (documentTypeDictionary != null) {
+			List<NodeRef> settings = dictionaryBean.getChildren(documentTypeDictionary);
+			if (settings != null && settings.size() > 0) {
+				for (NodeRef item : settings) {
+					String itemTypeString = (String) nodeService.getProperty(item, DocumentService.PROP_TYPE_SETTINGS_TYPE);
+					QName itemType = QName.createQName(itemTypeString, serviceRegistry.getNamespaceService());
+					if (Objects.equals(itemType, documentTypeQName)) {
+						String itemCategoryName = (String) nodeService.getProperty(item, DocumentService.PROP_TYPE_SETTINGS_DEFAULT_UPLOAD_ATTACHMENT_CATEGORY);
+						if (itemCategoryName != null && !"".equals(itemCategoryName)) {
+							return itemCategoryName;
+						}
+					}
+				}
+			}
+		}
+        String categoryName = null;
+        List<String> categories = getCategories(documentTypeQName);
+        if (categories != null && categories.size() > 0) {
+            String categoryRawName = categories.get(0);
+            if (categoryRawName.contains("|")) {
+                categoryName = categoryRawName.substring(0, categoryRawName.indexOf('|'));
+            } else {
+                categoryName = categoryRawName;
+            }
+        }
+		return categoryName;
+	}
+
+	@Override
+	public String getDefaultUploadCategoryName(NodeRef documentRef) {
+		return getDefaultUploadCategoryName(nodeService.getType(documentRef));
 	}
 
 	public NodeRef getDocumentByCategory(NodeRef categoryRef) {
