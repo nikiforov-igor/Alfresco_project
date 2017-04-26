@@ -1076,7 +1076,7 @@
             <form>
                 <field-visibility>
                     <show id="lecm-doc-type-settings-dic:document-type"/>
-                    <show id="lecm-doc-type-settings-dic:attachment-by-barcode-category"/>
+                    <show id="lecm-doc-type-settings-dic:default-upload-attachment-category"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-doc-type-settings-dic:document-type">
@@ -1086,7 +1086,7 @@
                             <control-param name="changeItemFireAction">changeAttachToDocumentType</control-param>
                         </control>
                     </field>
-                    <field id="lecm-doc-type-settings-dic:attachment-by-barcode-category">
+                    <field id="lecm-doc-type-settings-dic:default-upload-attachment-category">
                         <control template="/ru/it/lecm/documents/controls/select-document-category-control.ftl">
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"></control-param>
@@ -1104,7 +1104,7 @@
             <form>
                 <field-visibility>
                     <show id="lecm-doc-type-settings-dic:document-type"/>
-                    <show id="lecm-doc-type-settings-dic:attachment-by-barcode-category"/>
+                    <show id="lecm-doc-type-settings-dic:default-upload-attachment-category"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-doc-type-settings-dic:document-type">
@@ -1114,7 +1114,7 @@
                             <control-param name="changeItemFireAction">changeAttachToDocumentType</control-param>
                         </control>
                     </field>
-                    <field id="lecm-doc-type-settings-dic:attachment-by-barcode-category">
+                    <field id="lecm-doc-type-settings-dic:default-upload-attachment-category">
                         <control template="/ru/it/lecm/documents/controls/select-document-category-control.ftl">
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"></control-param>
@@ -1127,7 +1127,7 @@
             <form id="search">
                 <field-visibility>
                     <show id="lecm-doc-type-settings-dic:document-type"/>
-                    <show id="lecm-doc-type-settings-dic:attachment-by-barcode-category"/>
+                    <show id="lecm-doc-type-settings-dic:default-upload-attachment-category"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-doc-type-settings-dic:document-type">
@@ -1137,7 +1137,7 @@
                             <control-param name="changeItemFireAction">changeAttachToDocumentType</control-param>
                         </control>
                     </field>
-                    <field id="lecm-doc-type-settings-dic:attachment-by-barcode-category">
+                    <field id="lecm-doc-type-settings-dic:default-upload-attachment-category">
                         <control template="/ru/it/lecm/documents/controls/select-document-category-control.ftl">
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"></control-param>
@@ -1150,7 +1150,7 @@
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-doc-type-settings-dic:document-type"/>
-                    <show id="lecm-doc-type-settings-dic:attachment-by-barcode-category"/>
+                    <show id="lecm-doc-type-settings-dic:default-upload-attachment-category"/>
                 </field-visibility>
             </form>
         </forms>

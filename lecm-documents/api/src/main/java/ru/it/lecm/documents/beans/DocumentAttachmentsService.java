@@ -66,14 +66,14 @@ public interface DocumentAttachmentsService {
      * @param documentTypeQName Тип документа
      * @return название категории
      */
-	String getCategoryNameFromDocTypeSettings(final QName documentTypeQName);
+	String getDefaultUploadCategoryName(final QName documentTypeQName);
 
     /**
      * Получение категории вложений по типу документа из справочника настроек типов документов
      * @param documentRef документ
      * @return название категории
      */
-	String getCategoryNameFromDocTypeSettings(final NodeRef documentRef);
+	String getDefaultUploadCategoryName(final NodeRef documentRef);
 
 
 	/**

@@ -25,7 +25,7 @@
                         <tokenised>false</tokenised>
                     </index>
                 </property>
-                <property name="lecm-doc-type-settings-dic:attachment-by-barcode-category">
+                <property name="lecm-doc-type-settings-dic:default-upload-attachment-category">
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                     <index enabled="true">

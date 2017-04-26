@@ -227,7 +227,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	}
 
 	@Override
-	public String getCategoryNameFromDocTypeSettings(final QName documentTypeQName) {
+	public String getDefaultUploadCategoryName(final QName documentTypeQName) {
 		NodeRef documentTypeDictionary = dictionaryBean.getDictionaryByName(DocumentService.DOCUMENT_TYPE_SETTINGS_DICTIONARY_NAME);
 		if (documentTypeDictionary != null) {
 			List<NodeRef> settings = dictionaryBean.getChildren(documentTypeDictionary);
@@ -236,7 +236,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 					String itemTypeString = (String) nodeService.getProperty(item, DocumentService.PROP_TYPE_SETTINGS_TYPE);
 					QName itemType = QName.createQName(itemTypeString, serviceRegistry.getNamespaceService());
 					if (Objects.equals(itemType, documentTypeQName)) {
-						String itemCategoryName = (String) nodeService.getProperty(item, DocumentService.PROP_TYPE_SETTINGS_ATTACHMENT_BY_BARCODE_CATEGORY);
+						String itemCategoryName = (String) nodeService.getProperty(item, DocumentService.PROP_TYPE_SETTINGS_DEFAULT_UPLOAD_ATTACHMENT_CATEGORY);
 						if (itemCategoryName != null && !"".equals(itemCategoryName)) {
 							return itemCategoryName;
 						}
@@ -258,8 +258,8 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	}
 
 	@Override
-	public String getCategoryNameFromDocTypeSettings(NodeRef documentRef) {
-		return getCategoryNameFromDocTypeSettings(nodeService.getType(documentRef));
+	public String getDefaultUploadCategoryName(NodeRef documentRef) {
+		return getDefaultUploadCategoryName(nodeService.getType(documentRef));
 	}
 
 	public NodeRef getDocumentByCategory(NodeRef categoryRef) {

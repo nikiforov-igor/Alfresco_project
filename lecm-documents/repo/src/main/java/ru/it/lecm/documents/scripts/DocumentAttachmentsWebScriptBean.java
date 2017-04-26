@@ -293,9 +293,9 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
      * @param document документ
      * @return название категории
      */
-    public String getCategoryNameFromDocTypeSettings(ScriptNode document) {
+    public String getDefaultUploadCategoryName(ScriptNode document) {
 		ParameterCheck.mandatory("document", document);
-		return documentAttachmentsService.getCategoryNameFromDocTypeSettings(document.getNodeRef());
+		return documentAttachmentsService.getDefaultUploadCategoryName(document.getNodeRef());
 	}
 
     /**
@@ -303,9 +303,9 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
      * @param documentType Тип документа
      * @return название категории
      */
-	public String getCategoryNameFromDocTypeSettings(String documentType) {
+	public String getDefaultUploadCategoryName(String documentType) {
 		ParameterCheck.mandatory("documentType", documentType);
 		QName type = QName.createQName(documentType, serviceRegistry.getNamespaceService());
-		return documentAttachmentsService.getCategoryNameFromDocTypeSettings(type);
+		return documentAttachmentsService.getDefaultUploadCategoryName(type);
 	}
 }
