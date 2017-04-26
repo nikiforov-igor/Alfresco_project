@@ -596,7 +596,7 @@ LogicECM.module = LogicECM.module || {};
                     if (item.selectedName && item.selectedName != "") {
                         itemName = item.selectedName;
                     }
-	                if (this.options.itemType == "lecm-orgstr:employee") {
+	                if (this.options.itemType == "lecm-orgstr:employee" && this.options.showAssocViewForm) {
 		                el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(item.nodeRef, itemName), this.getRemoveButtonHTML(item));
 	                } else {
                         if (this.options.showAssocViewForm) {
@@ -652,7 +652,7 @@ LogicECM.module = LogicECM.module || {};
 
                 var num = 0;
                 for (var i in this.selectedItems) {
-                    if (this.options.itemType == "lecm-orgstr:employee") {
+                    if (this.options.itemType == "lecm-orgstr:employee" && this.options.showAssocViewForm) {
                         el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, this.selectedItems[i].name));
                     } else {
                         if (this.options.showAssocViewForm) {

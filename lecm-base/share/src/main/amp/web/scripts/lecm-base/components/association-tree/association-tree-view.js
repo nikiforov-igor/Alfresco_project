@@ -1401,7 +1401,7 @@ LogicECM.module = LogicECM.module || {};
                     return;
                 }
 
-                if (oRecord.getData("type") == "lecm-orgstr:employee") {
+                if (oRecord.getData("type") == "lecm-orgstr:employee" && scope.options.showAssocViewForm) {
                     template += '<h3 class="item-name">' + Util.getControlEmployeeView(oRecord.getData("nodeRef"),"{name}", true) + '</h3>';
                 } else {
                     if (scope.options.showAssocViewForm) {
@@ -1698,7 +1698,7 @@ LogicECM.module = LogicECM.module || {};
 	                    }
 	                }
 
-		            if (this.options.itemType == "lecm-orgstr:employee") {
+		            if (this.options.itemType == "lecm-orgstr:employee" && this.options.showAssocViewForm) {
                         var elementName = this.getEmployeeAbsenceMarkeredHTML(items[i].nodeRef, displayName, true);
                         Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(items[i]));
 		            } else {
@@ -1711,25 +1711,23 @@ LogicECM.module = LogicECM.module || {};
         },
 
 		updateAddedSelectedItem: function(item) {
-			var fieldId = this.options.pickerId + "-selected-elements";
-			var num = Object.keys(this.selectedItems).length + 1;
-			if (this.options.plane || !this.options.showSelectedItemsPath) {
-				var displayName = item.selectedName;
-			} else
-            if (this.options.pathNameSubstituteString) {
+            var fieldId = this.options.pickerId + "-selected-elements";
+            var num = Object.keys(this.selectedItems).length + 1;
+            if (this.options.plane || !this.options.showSelectedItemsPath) {
+                var displayName = item.selectedName;
+            } else if (this.options.pathNameSubstituteString) {
                 displayName = item.path.substring(1, item.path.length) + item.selectedName;
-            } else
-            {
-				displayName = item.displayPath + "/" + item.selectedName;
-				if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
-					var rootNodeDisplayName = this.rootNode.data.displayPath + "/" + this.rootNode.label + "/";
-					if (rootNodeDisplayName !== "") {
-						displayName = displayName.replace(rootNodeDisplayName, "");
-					}
-				}
-			}
+            } else {
+                displayName = item.displayPath + "/" + item.selectedName;
+                if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
+                    var rootNodeDisplayName = this.rootNode.data.displayPath + "/" + this.rootNode.label + "/";
+                    if (rootNodeDisplayName !== "") {
+                        displayName = displayName.replace(rootNodeDisplayName, "");
+                    }
+                }
+            }
 
-			if (this.options.itemType == "lecm-orgstr:employee") {
+			if (this.options.itemType == "lecm-orgstr:employee" && this.options.showAssocViewForm) {
                 var elementName = this.getEmployeeAbsenceMarkeredHTML(item.nodeRef, displayName, true);
                 Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(item));
 			} else {
@@ -1815,13 +1813,13 @@ LogicECM.module = LogicECM.module || {};
 	                }
 
 		            if(this.options.disabled) {
-			            if (this.options.itemType == "lecm-orgstr:employee") {
+			            if (this.options.itemType == "lecm-orgstr:employee" && this.options.showAssocViewForm) {
 				            el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, displayName));
 			            } else {
 				            el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]));
 			            }
 		            } else {
-			            if (this.options.itemType == "lecm-orgstr:employee") {
+			            if (this.options.itemType == "lecm-orgstr:employee" && this.options.showAssocViewForm) {
                             var elementName = this.getEmployeeAbsenceMarkeredHTML(this.selectedItems[i].nodeRef, displayName, null);
                             el.innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
 			            } else {
