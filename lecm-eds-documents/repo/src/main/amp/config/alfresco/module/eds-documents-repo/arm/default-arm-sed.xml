@@ -258,9 +258,10 @@
                                                 <property name="cm:name">
                                                     <![CDATA[ac977bf8-e5e4-4a3d-a978-06eb52a860f3]]></property>
                                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                                <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
                                             </item>
                                             <item name="cm:26eddffb-133d-4c17-89a7-fb852b203c26" type="lecm-arm:field">
+                                                <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                                 <property name="lecm-arm:order"><![CDATA[5]]></property>
                                                 <property name="lecm-arm:field-name">
