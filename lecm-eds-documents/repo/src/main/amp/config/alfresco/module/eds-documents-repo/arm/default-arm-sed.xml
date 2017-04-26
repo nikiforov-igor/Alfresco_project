@@ -433,6 +433,8 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Поручения/54e2ce86-05a8-48f0-b131-1c470af8cb0e"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Поручения/f92265ba-741e-4e16-bbb7-b4991ce4d6e1"/>
+                                            <assoc type="lecm-arm:fields-assoc"
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Поручения/a8cca498-b7f9-4f0b-9cbe-833044dd0c6f"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:10c4aefb-8df7-4012-8d53-030bc5473acf" type="lecm-arm:field">
@@ -621,6 +623,10 @@
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/c38c6a5d-ab32-4754-8407-87db8e6cc753"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/7db12059-6330-427c-ad01-beaa3decd6ab"/>
+                                    <assoc type="lecm-arm:fields-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/2bbf7aa7-30dd-49be-b566-ac34097cda55"/>
+                                    <assoc type="lecm-arm:fields-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/ba3e8334-02c6-44ae-9a06-31f3c416e729"/>
                                 </assocs>
                             </item>
                             <item name="cm:Документы в работе" type="lecm-arm:node">
