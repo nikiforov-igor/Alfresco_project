@@ -401,6 +401,21 @@
                                                 <property name="lecm-arm:field-marker-icon">
                                                     <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
                                             </item>
+                                            <item name="cm:608e968e-dec4-4e1e-a341-8d1e099113a7" type="lecm-arm:field">
+                                                <property name="lecm-arm:field-title"><![CDATA[На контроле]]></property>
+                                                <property name="cm:name">
+                                                    <![CDATA[a8cca498-b7f9-4f0b-9cbe-833044dd0c6f]]></property>
+                                                <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                                <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[5]]></property>
+                                                <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
+                                                <property name="lecm-arm:field-marker-html">
+                                                    <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
+                                                <property name="lecm-arm:field-name">
+                                                    <![CDATA[lecm-document-aspects:is-on-control]]></property>
+                                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                                <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
+                                            </item>
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:filters-assoc"
@@ -419,6 +434,8 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Поручения/54e2ce86-05a8-48f0-b131-1c470af8cb0e"/>
                                             <assoc type="lecm-arm:fields-assoc"
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Поручения/f92265ba-741e-4e16-bbb7-b4991ce4d6e1"/>
+                                            <assoc type="lecm-arm:fields-assoc"
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Поручения/a8cca498-b7f9-4f0b-9cbe-833044dd0c6f"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:10c4aefb-8df7-4012-8d53-030bc5473acf" type="lecm-arm:field">
@@ -477,6 +494,33 @@
                                         <property name="cm:name"><![CDATA[7db12059-6330-427c-ad01-beaa3decd6ab]]></property>
                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                         <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                    </item>
+                                    <item name="cm:af4f4986-e28a-4c8a-bea6-bfa7a7a65779" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title"><![CDATA[Важное]]></property>
+                                        <property name="cm:name"><![CDATA[2bbf7aa7-30dd-49be-b566-ac34097cda55]]></property>
+                                        <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[0]]></property>
+                                        <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:field-marker-html"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-name"><![CDATA[lecm-errands:is-important]]></property>
+                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-marker-icon">
+                                            <![CDATA[/images/lecm-documents/exclamation_16.png]]></property>
+                                    </item>
+                                    <item name="cm:ed4acf76-3e54-4d58-afdf-3e45f4652514" type="lecm-arm:field">
+                                        <property name="lecm-arm:field-title"><![CDATA[На контроле]]></property>
+                                        <property name="cm:name"><![CDATA[ba3e8334-02c6-44ae-9a06-31f3c416e729]]></property>
+                                        <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[3]]></property>
+                                        <property name="lecm-arm:field-is-marker"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:field-marker-html">
+                                            <![CDATA[<B style="color:#FF0000" title="На контроле">К</B>]]></property>
+                                        <property name="lecm-arm:field-name">
+                                            <![CDATA[lecm-document-aspects:is-on-control]]></property>
+                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-marker-icon"><![CDATA[]]></property>
                                     </item>
                                     <item name="cm:Резолюции" type="lecm-arm:node">
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
@@ -580,6 +624,10 @@
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/c38c6a5d-ab32-4754-8407-87db8e6cc753"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/7db12059-6330-427c-ad01-beaa3decd6ab"/>
+                                    <assoc type="lecm-arm:fields-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/2bbf7aa7-30dd-49be-b566-ac34097cda55"/>
+                                    <assoc type="lecm-arm:fields-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/ba3e8334-02c6-44ae-9a06-31f3c416e729"/>
                                 </assocs>
                             </item>
                             <item name="cm:Документы в работе" type="lecm-arm:node">
