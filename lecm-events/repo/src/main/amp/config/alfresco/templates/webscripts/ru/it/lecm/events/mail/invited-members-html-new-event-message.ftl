@@ -13,7 +13,7 @@
 	<p>Уважаемые коллеги!</p>
 	</#if>
 	<br>
-	<p>Компания ${organization!""} приглашает вас на ${typeText} ${title!""}, которое состоится ${date!""} по адресу ${location!""}.</p>
+	<p>Компания ${organization!""} приглашает Вас на ${typeText} ${title!""}, которое состоится ${date!""} по адресу ${location!""}.</p>
 	<p>${description!""}</p>
 	<p>${initiator!""}</p>
 </body>

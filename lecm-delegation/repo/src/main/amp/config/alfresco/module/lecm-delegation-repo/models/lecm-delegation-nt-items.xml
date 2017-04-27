@@ -10,7 +10,7 @@
             <item name="cm:DELEGATION_DELEGATE_TASKS" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[DELEGATION_DELEGATE_TASKS]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[От пользователя {#mainObject.wrapAsLink(#mainObject.attribute("lecm-orgstr:employee-short-name"))} вам делегировано {#tasksCount} задач. Распределить на других исполнителей можно по {#formatLink(#url, "ссылке")}]]></property>
+                    <![CDATA[От пользователя {#mainObject.wrapAsLink(#mainObject.attribute("lecm-orgstr:employee-short-name"))} Вам делегировано {#tasksCount} задач. Распределить на других исполнителей можно по {#formatLink(#url, "ссылке")}]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Делегирование. Делигировано задач]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>

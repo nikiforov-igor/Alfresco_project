@@ -21,7 +21,7 @@
             </item>
             <item name="cm:ORD_APPROACHING_DEADLINE" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Напоминание: вам необходимо что-то сделать с незакрытыми пунктами документа {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:ext-present-string}"))}, срок исполнения {#mainObject.attribute("lecm-eds-document:execution-date") != null ? #formatDate("dd.MM.yyyy", #mainObject.attribute("lecm-eds-document:execution-date")): "не указан"}]]></property>
+                    <![CDATA[Напоминание: Вам необходимо что-то сделать с незакрытыми пунктами документа {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:ext-present-string}"))}, срок исполнения {#mainObject.attribute("lecm-eds-document:execution-date") != null ? #formatDate("dd.MM.yyyy", #mainObject.attribute("lecm-eds-document:execution-date")): "не указан"}]]></property>
                 <property name="cm:name"><![CDATA[ORD_APPROACHING_DEADLINE]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[ОРД. Приближается срок исполнения]]></property>
