@@ -6950,7 +6950,7 @@
                                                         <property name="cm:name">
                                                             <![CDATA[f59d2e40-982a-4410-bf3b-e51ffc700eeb]]></property>
                                                         <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                                        <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                                        <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
                                                     </item>
                                                     <item name="cm:fbeda5e1-cdf7-4d9a-aa32-5707bf6beb4c" type="lecm-arm:field">
                                                         <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
