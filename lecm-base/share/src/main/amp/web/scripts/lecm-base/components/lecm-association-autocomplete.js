@@ -596,15 +596,16 @@ LogicECM.module = LogicECM.module || {};
                     if (item.selectedName && item.selectedName != "") {
                         itemName = item.selectedName;
                     }
-	                if (this.options.itemType == "lecm-orgstr:employee") {
-		                el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(item.nodeRef, itemName), this.getRemoveButtonHTML(item));
-	                } else {
-                        if (this.options.showAssocViewForm) {
-                            el.innerHTML += Util.getCroppedItem(Util.getControlValueView(item.nodeRef, itemName, itemName), this.getRemoveButtonHTML(item));
+                    if (this.options.showAssocViewForm) {
+                        if (this.options.itemType == "lecm-orgstr:employee") {
+                            el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(item.nodeRef, itemName), this.getRemoveButtonHTML(item));
                         } else {
-                            el.innerHTML += Util.getCroppedItem(Util.getControlDefaultView(itemName), this.getRemoveButtonHTML(item));
+                            el.innerHTML += Util.getCroppedItem(Util.getControlValueView(item.nodeRef, itemName, itemName), this.getRemoveButtonHTML(item));
                         }
-	                }
+                    } else {
+                        el.innerHTML += Util.getCroppedItem(Util.getControlDefaultView(itemName), this.getRemoveButtonHTML(item));
+                    }
+
                     YAHOO.util.Event.onAvailable("ac-" + this.controlId + item.nodeRef, this.attachRemoveItemClickListener, item, this);
                 }
             },
@@ -652,14 +653,14 @@ LogicECM.module = LogicECM.module || {};
 
                 var num = 0;
                 for (var i in this.selectedItems) {
-                    if (this.options.itemType == "lecm-orgstr:employee") {
-                        el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, this.selectedItems[i].name));
-                    } else {
-                        if (this.options.showAssocViewForm) {
-                            el.innerHTML += Util.getCroppedItem(Util.getControlValueView(this.selectedItems[i].nodeRef, this.selectedItems[i].name, this.selectedItems[i].name));
+                    if (this.options.showAssocViewForm) {
+                        if (this.options.itemType == "lecm-orgstr:employee") {
+                            el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, this.selectedItems[i].name));
                         } else {
-                            el.innerHTML += Util.getCroppedItem(Util.getControlDefaultView(this.selectedItems[i].name));
+                            el.innerHTML += Util.getCroppedItem(Util.getControlValueView(this.selectedItems[i].nodeRef, this.selectedItems[i].name, this.selectedItems[i].name));
                         }
+                    } else {
+                        el.innerHTML += Util.getCroppedItem(Util.getControlDefaultView(this.selectedItems[i].name));
                     }
                 }
             },
