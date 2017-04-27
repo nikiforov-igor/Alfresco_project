@@ -237,8 +237,10 @@
                 <field-visibility>
                     <show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
                     <show id="lecm-statemachine:status" force="true"/>                                                  <!-- Статус -->
-                    <show id="lecm-document:regnum"/>                                                                   <!-- Номер -->
-                    <show id="lecm-document:doc-date"/>											<!-- Дата регистрации & Регистрационный номер -->
+                    <show id="lecm-document-aspects:reg-data-number"/>                                                  <!-- Рег. номер -->
+                    <show id="lecm-document-aspects:reg-data-date"/>                                                    <!-- Дата регистрации -->
+                    <show id="lecm-document-aspects:reg-project-data-number"/>                                          <!-- Номер проекта -->
+                    <show id="lecm-document-aspects:reg-project-data-date"/>                                            <!-- Дата регистрации проекта -->
                     <show id="lecm-document:title"/>																	<!-- Заголовок -->
                     <show id="lecm-document:author-assoc"/>
                     <show id="lecm-eds-document:executor-assoc"/>                                                       <!-- Исполнитель -->
@@ -264,8 +266,12 @@
                             <control-param name="nameSuffix">-multiText</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:regnum" set="nd-document-search-common-set"/>
-                    <field id="lecm-document:doc-date" set="nd-document-search-common-set" >
+                    <field id="lecm-document-aspects:reg-data-number" set="nd-document-search-common-set" label-id="label.number"/>
+                    <field id="lecm-document-aspects:reg-data-date" set="nd-document-search-common-set" label-id="label.simple.date">
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                    </field>
+                    <field id="lecm-document-aspects:reg-project-data-number" set="nd-document-search-common-set"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" set="nd-document-search-common-set" label-id="label.project.date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
                     <field id="lecm-document:title" set="nd-document-search-common-set">
