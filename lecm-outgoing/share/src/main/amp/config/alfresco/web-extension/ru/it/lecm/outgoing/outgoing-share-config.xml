@@ -976,11 +976,11 @@
 							<control-param name="nameSuffix">-multiText</control-param>
 						</control>
 					</field>
-					<field id="lecm-document-aspects:reg-data-number" label-id="label.outgoing.number"/>
-					<field id="lecm-document-aspects:reg-data-date" label-id="label.outgoing.date">
+					<field id="lecm-document-aspects:reg-data-number" label-id="label.number"/>
+					<field id="lecm-document-aspects:reg-data-date" label-id="label.simple.date">
 						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
 					</field>
-					<field id="lecm-document-aspects:reg-project-data-date" label-id="label.outgoing.project.date">
+					<field id="lecm-document-aspects:reg-project-data-date" label-id="label.project.date">
 						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
 					</field>
                     <field id="lecm-document:title">
