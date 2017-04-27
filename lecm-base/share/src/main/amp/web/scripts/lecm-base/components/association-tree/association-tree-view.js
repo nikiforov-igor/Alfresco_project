@@ -1400,17 +1400,15 @@ LogicECM.module = LogicECM.module || {};
                     elCell.innerHTML = '<a href="javascript:void(0);" title="' + msg + '" class="create-new-row create-new-item-' + scope.eventGroup + '" >' + msg + '</a>';
                     return;
                 }
-
-                if (oRecord.getData("type") == "lecm-orgstr:employee" && scope.options.showAssocViewForm) {
-                    template += '<h3 class="item-name">' + Util.getControlEmployeeView(oRecord.getData("nodeRef"),"{name}", true) + '</h3>';
-                } else {
-                    if (scope.options.showAssocViewForm) {
-                        template += '<h3 class="item-name">' + Util.getControlValueView(oRecord.getData("nodeRef"), "{name}", "{name}") + '</h3>';
+                if (scope.options.showAssocViewForm) {
+                    if (oRecord.getData("type") == "lecm-orgstr:employee") {
+                        template += '<h3 class="item-name">' + Util.getControlEmployeeView(oRecord.getData("nodeRef"),"{name}", true) + '</h3>';
                     } else {
-                        template += '<h3 class="item-name">{name}</h3>';
+                        template += '<h3 class="item-name">' + Util.getControlValueView(oRecord.getData("nodeRef"), "{name}", "{name}") + '</h3>';
                     }
+                } else {
+                    template += '<h3 class="item-name">{name}</h3>';
                 }
-
                 if (!scope.options.compactMode)
                 {
                     template += '<div class="description">{description}</div>';
@@ -1697,11 +1695,14 @@ LogicECM.module = LogicECM.module || {};
 	                        }
 	                    }
 	                }
-
-		            if (this.options.itemType == "lecm-orgstr:employee" && this.options.showAssocViewForm) {
-                        var elementName = this.getEmployeeAbsenceMarkeredHTML(items[i].nodeRef, displayName, true);
-                        Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(items[i]));
-		            } else {
+                    if (this.options.showAssocViewForm) {
+                        if (this.options.itemType == "lecm-orgstr:employee") {
+                            var elementName = this.getEmployeeAbsenceMarkeredHTML(items[i].nodeRef, displayName, true);
+                            Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(items[i]));
+                        } else {
+                            Dom.get(fieldId).innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, items[i]), this.getRemoveButtonHTML(items[i]));
+                        }
+                    } else {
 			            Dom.get(fieldId).innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, items[i]), this.getRemoveButtonHTML(items[i]));
 		            }
 
@@ -1726,11 +1727,14 @@ LogicECM.module = LogicECM.module || {};
                     }
                 }
             }
-
-			if (this.options.itemType == "lecm-orgstr:employee" && this.options.showAssocViewForm) {
-                var elementName = this.getEmployeeAbsenceMarkeredHTML(item.nodeRef, displayName, true);
-                Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(item));
-			} else {
+            if (this.options.showAssocViewForm) {
+                if (this.options.itemType == "lecm-orgstr:employee") {
+                    var elementName = this.getEmployeeAbsenceMarkeredHTML(item.nodeRef, displayName, true);
+                    Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(item));
+                } else {
+                    Dom.get(fieldId).innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, item), this.getRemoveButtonHTML(item));
+                }
+            } else {
 				Dom.get(fieldId).innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, item), this.getRemoveButtonHTML(item));
 			}
 
@@ -1813,19 +1817,26 @@ LogicECM.module = LogicECM.module || {};
 	                }
 
 		            if(this.options.disabled) {
-			            if (this.options.itemType == "lecm-orgstr:employee" && this.options.showAssocViewForm) {
-				            el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, displayName));
-			            } else {
-				            el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]));
-			            }
+		                if (this.options.showAssocViewForm) {
+                            if (this.options.itemType == "lecm-orgstr:employee") {
+                                el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, displayName));
+                            } else {
+                                el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]));
+                            }
+                        } else {
+                            el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]));
+                        }
 		            } else {
-			            if (this.options.itemType == "lecm-orgstr:employee" && this.options.showAssocViewForm) {
-                            var elementName = this.getEmployeeAbsenceMarkeredHTML(this.selectedItems[i].nodeRef, displayName, null);
-                            el.innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
-			            } else {
-				            el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]), this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
-			            }
-
+                        if (this.options.showAssocViewForm) {
+                            if (this.options.itemType == "lecm-orgstr:employee") {
+                                var elementName = this.getEmployeeAbsenceMarkeredHTML(this.selectedItems[i].nodeRef, displayName, null);
+                                el.innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+                            } else {
+                                el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]), this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+                            }
+                        } else {
+                            el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]), this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+                        }
 			            YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
 		            }
 	            }
