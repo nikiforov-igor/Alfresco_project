@@ -6033,7 +6033,7 @@
                                                     <item name="cm:3afd6cf0-8875-4f1e-ba4b-3fb711d9abe6"
                                                           type="lecm-arm:statuses-child-rule">
                                                         <property name="lecm-arm:selected-statuses">
-                                                            <![CDATA[На согласовании,Согласован,На доработке,На подписании,Подписан,На регистрации,Зарегистрирован,На исполнении,На хранении]]></property>
+                                                    <![CDATA[На согласовании,Согласован,На доработке,На регистрации,Зарегистрирован,На исполнении,На хранении]]></property>
                                                         <property name="cm:name">
                                                             <![CDATA[3afd6cf0-8875-4f1e-ba4b-3fb711d9abe6]]></property>
                                                         <property name="lecm-arm:statuses-rule"><![CDATA[SELECTED]]></property>
