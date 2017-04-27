@@ -318,8 +318,10 @@
             <form id="search">
                 <field-visibility>
                     <show id="lecm-eds-document:document-type-assoc"/>                                                  <!-- Вид документа -->
-                    <show id="lecm-document:regnum"/>                                                                   <!-- Номер -->
-                    <show id="lecm-document:doc-date"/>                                                                 <!-- Дата регистрации -->
+                    <show id="lecm-document-aspects:reg-data-number"/>                                                  <!-- Рег. номер -->
+                    <show id="lecm-document-aspects:reg-data-date"/>                                                    <!-- Дата регистрации -->
+                    <show id="lecm-document-aspects:reg-project-data-number"/>                                          <!-- Номер проекта -->
+                    <show id="lecm-document-aspects:reg-project-data-date"/>                                            <!-- Дата регистрации проекта -->
                     <show id="lecm-eds-document:executor-assoc"/>                                                       <!-- Исполнитель -->
                     <show id="lecm-document:author-assoc"/>                                                             <!-- Составитель -->
                     <show id="lecmSignAspects:signerEmployeeAssoc"/>                                                    <!-- Подписанты -->
@@ -341,10 +343,12 @@
                             <control-param name="endpointMany">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:doc-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl">
-                            <control-param name="forceEditable">true</control-param>
-                        </control>
+                    <field id="lecm-document-aspects:reg-data-number" label-id="label.ord.number"/>
+                    <field id="lecm-document-aspects:reg-data-date" label-id="label.ord.date">
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                    </field>
+                    <field id="lecm-document-aspects:reg-project-data-date" label-id="label.ord.project.date">
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
                     <field id="lecm-eds-document:executor-assoc">
                         <control>

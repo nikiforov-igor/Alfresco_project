@@ -949,8 +949,10 @@
 				<field-visibility>
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
 					<show id="lecm-statemachine:status" force="true"/>
-					<show id="lecm-document:regnum"/>																	<!-- Номер проекта -->
-					<show id="lecm-document:doc-date"/>																	<!-- Дата регистрации & Регистрационный номер -->
+					<show id="lecm-document-aspects:reg-data-number"/>                                                  <!-- Рег. номер -->
+					<show id="lecm-document-aspects:reg-data-date"/>                                                    <!-- Дата регистрации -->
+					<show id="lecm-document-aspects:reg-project-data-number"/>                                          <!-- Номер проекта -->
+					<show id="lecm-document-aspects:reg-project-data-date"/>                                            <!-- Дата регистрации проекта -->
 					<show id="lecm-document:title"/>																	<!-- Заголовок -->
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
 					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
@@ -974,7 +976,11 @@
 							<control-param name="nameSuffix">-multiText</control-param>
 						</control>
 					</field>
-					<field id="lecm-document:doc-date">
+					<field id="lecm-document-aspects:reg-data-number" label-id="label.outgoing.number"/>
+					<field id="lecm-document-aspects:reg-data-date" label-id="label.outgoing.date">
+						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+					</field>
+					<field id="lecm-document-aspects:reg-project-data-date" label-id="label.outgoing.project.date">
 						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
 					</field>
                     <field id="lecm-document:title">
