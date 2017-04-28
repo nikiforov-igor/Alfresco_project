@@ -109,6 +109,9 @@
                                     </item>
                                     <item name="cm:619c2719-b8c0-47bb-83ce-b7b1b0fb860d" type="lecm-arm:field">
                                         <property name="lecm-arm:order"><![CDATA[8]]></property>
+                                        <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
+                                        <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
+                                        <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-errands:coexecutors-assoc]]></property>
                                         <property name="lecm-arm:field-title"><![CDATA[Соисполнители]]></property>
@@ -15334,6 +15337,12 @@
                                                             <item name="cm:2a2cd753-6062-4b51-bdda-0d182c04b888"
                                                                   type="lecm-arm:field">
                                                                 <property name="lecm-arm:order"><![CDATA[12]]></property>
+                                                                <property name="lecm-arm:field-by-default">
+                                                                    <![CDATA[false]]></property>
+                                                                <property name="lecm-arm:field-sortable">
+                                                                    <![CDATA[false]]></property>
+                                                                <property name="lecm-arm:field-is-marker">
+                                                                    <![CDATA[false]]></property>
                                                                 <property name="lecm-arm:field-name">
                                                                     <![CDATA[lecm-errands:coexecutors-assoc]]></property>
                                                                 <property name="lecm-arm:field-title">
@@ -15594,6 +15603,9 @@
                                                     </item>
                                                     <item name="cm:df113142-2a1f-44a3-8be8-ca04ef437f9d" type="lecm-arm:field">
                                                         <property name="lecm-arm:order"><![CDATA[12]]></property>
+                                                        <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
+                                                        <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
+                                                        <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-errands:coexecutors-assoc]]></property>
                                                         <property name="lecm-arm:field-title">
@@ -16005,6 +16017,9 @@
                                                     </item>
                                                     <item name="cm:18ef57c9-8271-41cf-8778-d9b3dcb7d01b" type="lecm-arm:field">
                                                         <property name="lecm-arm:order"><![CDATA[12]]></property>
+                                                        <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
+                                                        <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
+                                                        <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-errands:coexecutors-assoc]]></property>
                                                         <property name="lecm-arm:field-title">
@@ -16244,6 +16259,9 @@
                                                     </item>
                                                     <item name="cm:c3becebc-6e12-457c-b3c8-2cb40047511f" type="lecm-arm:field">
                                                         <property name="lecm-arm:order"><![CDATA[12]]></property>
+                                                        <property name="lecm-arm:field-by-default"><![CDATA[false]]></property>
+                                                        <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
+                                                        <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
                                                         <property name="lecm-arm:field-name">
                                                             <![CDATA[lecm-errands:coexecutors-assoc]]></property>
                                                         <property name="lecm-arm:field-title">
