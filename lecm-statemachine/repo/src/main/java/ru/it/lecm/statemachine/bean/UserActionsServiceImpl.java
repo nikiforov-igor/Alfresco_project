@@ -2,16 +2,13 @@ package ru.it.lecm.statemachine.bean;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
-import org.alfresco.service.cmr.workflow.WorkflowPath;
-import org.alfresco.service.cmr.workflow.WorkflowService;
-import org.alfresco.service.cmr.workflow.WorkflowTask;
+import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.actions.bean.GroupActionsService;
@@ -90,13 +87,13 @@ public class UserActionsServiceImpl implements UserActionsService {
     @Override
     public HashMap<String, Object> getActions(final NodeRef nodeRef) {
         HashMap<String, Object> result = new HashMap<>();
-        List<Map<String, Object>> actionsList = new ArrayList<>();
+        final List<Map<String, Object>> actionsList = new ArrayList<>();
         NodeService nodeService = serviceRegistry.getNodeService();
         final WorkflowService workflowService = serviceRegistry.getWorkflowService();
         final String currentUserName = authService.getCurrentUserName();
 
         Map<String, Long> counts = getActionsCounts(nodeRef);
-        List<WorkflowTask> activeTasks = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<List<WorkflowTask>>() {
+        final List<WorkflowTask> activeTasks = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<List<WorkflowTask>>() {
             @Override
             public List<WorkflowTask> doWork() throws Exception {
                 return stateMachineService.getDocumentTasks(nodeRef, true);
@@ -106,57 +103,72 @@ public class UserActionsServiceImpl implements UserActionsService {
         boolean hasExecutionPermission = stateMachineService.isFinal(nodeRef) || (lecmPermissionService.hasPermission("_lecmPerm_ActionExec", nodeRef, currentUserName)
                 || (lecmPermissionService.hasPermission("LECM_BASIC_PG_Initiator", nodeRef, currentUserName) && stateMachineService.isDraft(nodeRef)));
 
-        List<WorkflowTask> userTasks = stateMachineService.getAssignedAndPooledTasks(currentUserName);
-        for (WorkflowTask activeTask : activeTasks) {
-            for (WorkflowTask userTask : userTasks) {
-                if (activeTask.getId().equals(userTask.getId())) {
-                    HashMap<String, Object> taskStruct = new HashMap<String, Object>();
-                    taskStruct.put("type", "task");
-                    taskStruct.put("actionId", userTask.getId());
-                    taskStruct.put("label", userTask.getTitle());
-                    taskStruct.put("count", Long.MAX_VALUE);
-                    taskStruct.put("isForm", false);
-                    Serializable dueDate = userTask.getProperties().get(PROP_DUE_DATE);
-                    taskStruct.put("dueDate", dueDate == null ? null : dateFormat.format((Date) dueDate));
-                    Serializable chiefLogin = userTask.getProperties().get(StatemachineModel.PROP_CHIEF_LOGIN);
-                    if (chiefLogin != null && !chiefLogin.equals(currentUserName)) {
-                        taskStruct.put("chiefLogin", chiefLogin.toString());
-                        NodeRef chief = orgstructureService.getEmployeeByPerson(chiefLogin.toString());
-                        if (chief != null) {
-                            String shortName = (String) nodeService.getProperty(chief, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-                            taskStruct.put("chiefShortName", shortName);
-                        }
 
+        for (WorkflowTask activeTask : activeTasks) {
+            WorkflowTaskQuery query = new WorkflowTaskQuery();
+            query.setTaskState(WorkflowTaskState.IN_PROGRESS);
+            query.setLimit(1);
+            query.setActorId(currentUserName);
+            query.setTaskId(activeTask.getId());
+            List<WorkflowTask> userTasks = workflowService.queryTasks(query, true);
+            if (userTasks.size() > 0) {
+                WorkflowTask userTask = userTasks.get(0);
+                HashMap<String, Object> taskStruct = new HashMap<>();
+                taskStruct.put("type", "task");
+                taskStruct.put("actionId", userTask.getId());
+                taskStruct.put("label", userTask.getTitle());
+                taskStruct.put("count", Long.MAX_VALUE);
+                taskStruct.put("isForm", false);
+                Serializable dueDate = userTask.getProperties().get(PROP_DUE_DATE);
+                taskStruct.put("dueDate", dueDate == null ? null : dateFormat.format((Date) dueDate));
+                Serializable chiefLogin = userTask.getProperties().get(StatemachineModel.PROP_CHIEF_LOGIN);
+                if (chiefLogin != null && !chiefLogin.equals(currentUserName)) {
+                    taskStruct.put("chiefLogin", chiefLogin.toString());
+                    NodeRef chief = orgstructureService.getEmployeeByPerson(chiefLogin.toString());
+                    if (chief != null) {
+                        String shortName = (String) nodeService.getProperty(chief, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+                        taskStruct.put("chiefShortName", shortName);
                     }
 
-                    actionsList.add(taskStruct);
                 }
+
+                actionsList.add(taskStruct);
             }
         }
 
         NodeRef currentEmployee = orgstructureService.getEmployeeByPerson(currentUserName);
         List<NodeRef> chiefNodeRefList = secretaryService.getChiefs(currentEmployee);
         for (NodeRef chiefNodeRef : chiefNodeRefList) {
-            String chiefLogin = orgstructureService.getEmployeeLogin(chiefNodeRef);
-            String chiefShortName = (String) nodeService.getProperty(chiefNodeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-            List<WorkflowTask> chiefTasks = stateMachineService.getAssignedAndPooledTasks(chiefLogin, true);
-            for (WorkflowTask activeTask : activeTasks) {
-                for (WorkflowTask chiefTask : chiefTasks) {
-                    if (activeTask.getId().equals(chiefTask.getId())) {
-                        HashMap<String, Object> taskStruct = new HashMap<String, Object>();
-                        taskStruct.put("type", "chief_task");
-                        taskStruct.put("actionId", chiefTask.getId());
-                        taskStruct.put("label", chiefTask.getTitle());
-                        taskStruct.put("chiefLogin", chiefLogin);
-                        taskStruct.put("chiefShortName", chiefShortName);
-                        taskStruct.put("count", Long.MAX_VALUE);
-                        taskStruct.put("isForm", false);
-                        Serializable dueDate = chiefTask.getProperties().get(PROP_DUE_DATE);
-                        taskStruct.put("dueDate", dueDate == null ? null : dateFormat.format((Date) dueDate));
-                        actionsList.add(taskStruct);
+            final String chiefLogin = orgstructureService.getEmployeeLogin(chiefNodeRef);
+            final String chiefShortName = (String) nodeService.getProperty(chiefNodeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+            AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>() {
+                @Override
+                public Object doWork() throws Exception {
+                    for (WorkflowTask activeTask : activeTasks) {
+                        WorkflowTaskQuery query = new WorkflowTaskQuery();
+                        query.setTaskState(WorkflowTaskState.IN_PROGRESS);
+                        query.setLimit(1);
+                        query.setActorId(chiefLogin);
+                        query.setTaskId(activeTask.getId());
+                        List<WorkflowTask> chiefTasks = workflowService.queryTasks(query, true);
+                        if (chiefTasks.size() > 0) {
+                            WorkflowTask chiefTask = chiefTasks.get(0);
+                            HashMap<String, Object> taskStruct = new HashMap<>();
+                            taskStruct.put("type", "chief_task");
+                            taskStruct.put("actionId", chiefTask.getId());
+                            taskStruct.put("label", chiefTask.getTitle());
+                            taskStruct.put("chiefLogin", chiefLogin);
+                            taskStruct.put("chiefShortName", chiefShortName);
+                            taskStruct.put("count", Long.MAX_VALUE);
+                            taskStruct.put("isForm", false);
+                            Serializable dueDate = chiefTask.getProperties().get(PROP_DUE_DATE);
+                            taskStruct.put("dueDate", dueDate == null ? null : dateFormat.format((Date) dueDate));
+                            actionsList.add(taskStruct);
+                        }
                     }
+                    return null;
                 }
-            }
+            }, chiefLogin);
         }
 
         String statemachineId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATEMACHINE_ID);
@@ -258,7 +270,7 @@ public class UserActionsServiceImpl implements UserActionsService {
         if (groupActions != null) {
             boolean hasStatemachine = stateMachineService.hasActiveStatemachine(nodeRef);
             for (NodeRef action : groupActions) {
-                HashMap<String, Object> actionStruct = new HashMap<String, Object>();
+                HashMap<String, Object> actionStruct = new HashMap<>();
                 actionStruct.put("type", "group");
                 actionStruct.put("actionId", nodeService.getProperty(action, ContentModel.PROP_NAME));
                 Object title = nodeService.getProperty(action, ContentModel.PROP_TITLE);
@@ -362,7 +374,7 @@ public class UserActionsServiceImpl implements UserActionsService {
         String shortTypeName = type.toPrefixString(serviceRegistry.getNamespaceService());
 
         NodeRef employee = orgstructureService.getCurrentEmployee();
-        Map<String, Long> counts = new HashMap<String, Long>();
+        Map<String, Long> counts = new HashMap<>();
         if (employee != null) {
             counts = frequencyAnalysisService.getFrequenciesCountsByDocType(employee, shortTypeName);
         }
@@ -403,7 +415,7 @@ public class UserActionsServiceImpl implements UserActionsService {
 
     private NodeRef createFolder(final NodeRef parent, final String name) {
         final NodeService nodeService = serviceRegistry.getNodeService();
-        final HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
+        final HashMap<QName, Serializable> props = new HashMap<>(1, 1.0f);
         props.put(ContentModel.PROP_NAME, name);
 //        ChildAssociationRef childAssocRef = serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef>() {
 //            @Override
