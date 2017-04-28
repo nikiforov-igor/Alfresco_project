@@ -20388,7 +20388,7 @@
                                             <![CDATA[@lecm\-statemachine\-aspects\:is\-final:true AND NOT @lecm\-statemachine\:status:'Удален' AND NOT @lecm\-statemachine\:status:'Действует']]></property>
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="cm:name"><![CDATA[Работа завершена]]></property>
-                                        <property name="lecm-arm:search-type"><![CDATA[lecm-document:base]]></property>
+                                        <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[50]]></property>
@@ -22434,7 +22434,7 @@
                                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                         <property name="cm:name"><![CDATA[Тематики]]></property>
-                                        <property name="lecm-arm:search-type"><![CDATA[lecm-document:base]]></property>
+                                        <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:order"><![CDATA[0]]></property>
