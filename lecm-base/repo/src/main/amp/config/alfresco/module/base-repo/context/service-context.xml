@@ -576,7 +576,7 @@
           parent="webscript"
           p:lockService-ref="lockService"/>
 
-	<bean id="webscript.ru.it.lecm.types.types.list.get" class="ru.it.lecm.base.scripts.GetRegisteredTypes" parent="webscript.dictionary">
+	<bean id="webscript.ru.it.lecm.types.types.list.get" class="ru.it.lecm.base.scripts.GetRegisteredTypes" init-method="init" parent="webscript.dictionary">
 		<property name="dictionaryService" ref="dictionaryService" />
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
