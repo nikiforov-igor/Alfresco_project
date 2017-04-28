@@ -5,6 +5,48 @@
             <item name="cm:Вид исходящего" type="lecm-doc-dic-dt:typeDictionary">
                 <property name="cm:name">Вид исходящего</property>
                 <property name="lecm-dic:valueContainsType">lecm-outgoing-dic:documentType</property>
+                <items>
+                    <item name="cm:Письмо" type="lecm-outgoing-dic:documentType">
+                        <property name="cm:name"><![CDATA[Письмо]]></property>
+                        <property name="lecm-doc-dic-dt:documentType-code">01</property>
+                    </item>
+                    <item name="cm:Сопроводительное письмо" type="lecm-outgoing-dic:documentType">
+                        <property name="cm:name"><![CDATA[Сопроводительное письмо]]></property>
+                        <property name="lecm-doc-dic-dt:documentType-code">02</property>
+                    </item>
+                    <item name="cm:Информационное письмо" type="lecm-outgoing-dic:documentType">
+                        <property name="cm:name"><![CDATA[Информационное письмо]]></property>
+                        <property name="lecm-doc-dic-dt:documentType-code">03</property>
+                    </item>
+                    <item name="cm:Извещение" type="lecm-outgoing-dic:documentType">
+                        <property name="cm:name"><![CDATA[Извещение]]></property>
+                        <property name="lecm-doc-dic-dt:documentType-code">04</property>
+                    </item>
+                    <item name="cm:Заявление" type="lecm-outgoing-dic:documentType">
+                        <property name="cm:name"><![CDATA[Заявление]]></property>
+                        <property name="lecm-doc-dic-dt:documentType-code">05</property>
+                    </item>
+                    <item name="cm:Обращение" type="lecm-outgoing-dic:documentType">
+                        <property name="cm:name"><![CDATA[Обращение]]></property>
+                        <property name="lecm-doc-dic-dt:documentType-code">06</property>
+                    </item>
+                    <item name="cm:Уведомление" type="lecm-outgoing-dic:documentType">
+                        <property name="cm:name"><![CDATA[Уведомление]]></property>
+                        <property name="lecm-doc-dic-dt:documentType-code">07</property>
+                    </item>
+                    <item name="cm:Заключение" type="lecm-outgoing-dic:documentType">
+                        <property name="cm:name"><![CDATA[Заключение]]></property>
+                        <property name="lecm-doc-dic-dt:documentType-code">08</property>
+                    </item>
+                    <item name="cm:Запрос" type="lecm-outgoing-dic:documentType">
+                        <property name="cm:name"><![CDATA[Запрос]]></property>
+                        <property name="lecm-doc-dic-dt:documentType-code">09</property>
+                    </item>
+                    <item name="cm:Ответ" type="lecm-outgoing-dic:documentType">
+                        <property name="cm:name"><![CDATA[Ответ]]></property>
+                        <property name="lecm-doc-dic-dt:documentType-code">10</property>
+                    </item>
+                </items>
             </item>
         </items>
     </item>
