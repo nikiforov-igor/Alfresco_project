@@ -24,3 +24,8 @@
     float: left;
     width: calc(100% - 190px);
 }
+
+.errands-limitation-date-set {
+    padding-left: 4px;
+    width: 100%;
+}
