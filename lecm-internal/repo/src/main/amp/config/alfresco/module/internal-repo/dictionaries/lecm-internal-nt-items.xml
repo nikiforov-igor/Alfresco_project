@@ -9,7 +9,7 @@
         <items>
             <item name="cm:INTERNAL_DIRECT" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#sender.wrapAsLink(#sender.getFormatted("{lecm-orgstr:employee-short-name}"))}   направил вам документ  {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:ext-present-string}"))}.]]></property>
+                    <![CDATA[{#sender.wrapAsLink(#sender.getFormatted("{lecm-orgstr:employee-short-name}"))}   направил Вам документ  {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:ext-present-string}"))}.]]></property>
                 <property name="cm:name"><![CDATA[INTERNAL_DIRECT]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Внутренний. Направить документ]]></property>
@@ -21,7 +21,7 @@
             </item>
             <item name="cm:INTERNAL_ACCEPT" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#sender.wrapAsLink(#sender.getFormatted("{lecm-orgstr:employee-short-name}"))}    принял к сведению направленный вами документ   {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:title}"))}.]]></property>
+                    <![CDATA[{#sender.wrapAsLink(#sender.getFormatted("{lecm-orgstr:employee-short-name}"))}    принял к сведению направленный Вами документ   {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:title}"))}.]]></property>
                 <property name="cm:name"><![CDATA[INTERNAL_ACCEPT]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Внутренний. Принять к сведению]]></property>
@@ -33,7 +33,7 @@
             </item>
             <item name="cm:INTERNAL_ANSWER" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#sender.wrapAsLink(#sender.attribute("lecm-orgstr:employee-short-name"))} ответил с комментарием на ваш документ {#mainObject.attribute("lecm-internal:doc-type-assoc-text-content") != null ? #mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-internal:doc-type-assoc-text-content}: {lecm-document:title}")) : #mainObject.wrapAsLink(#mainObject.attribute("lecm-document:title"))}.]]></property>
+                    <![CDATA[{#sender.wrapAsLink(#sender.attribute("lecm-orgstr:employee-short-name"))} ответил с комментарием на Ваш документ {#mainObject.attribute("lecm-internal:doc-type-assoc-text-content") != null ? #mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-internal:doc-type-assoc-text-content}: {lecm-document:title}")) : #mainObject.wrapAsLink(#mainObject.attribute("lecm-document:title"))}.]]></property>
                 <property name="cm:name"><![CDATA[INTERNAL_ANSWER]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Внутренний. Ответить]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>

@@ -9,7 +9,7 @@
 Уважаемые коллеги!
 </#if>
 
-${initiator!""} приглашает вас на ${typeText} ${title!""}.
+${initiator!""} приглашает Вас на ${typeText} ${title!""}.
 
 Время проведения: <#if allDay>${fromDate?date?string("dd.MM.yyyy")}<#else>с ${fromDate?datetime?string("dd.MM.yyyy HH:mm")} по ${toDate?datetime?string("dd.MM.yyyy HH:mm (z)")}</#if>
 Место проведения: ${location!""}

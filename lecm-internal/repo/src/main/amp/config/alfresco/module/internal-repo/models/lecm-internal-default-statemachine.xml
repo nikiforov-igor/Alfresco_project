@@ -9431,7 +9431,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[У вас нет прав!]]></value>
+                                                                                    <![CDATA[У Вас нет прав!]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>

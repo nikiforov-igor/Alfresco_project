@@ -69,7 +69,7 @@
             <item name="cm:EVENTS.RESPONSIBLE_FOR_RESOURCES" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[EVENTS.RESPONSIBLE_FOR_RESOURCES]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Запланированное {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} требует привлечения ресурсов за которые вы ответственны. Начало {#formatDate("dd.MM.yyyy в HH:mm", #mainObject.attribute("lecm-events:from-date"))}]]></property>
+                    <![CDATA[Запланированное {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} требует привлечения ресурсов за которые Вы ответственны. Начало {#formatDate("dd.MM.yyyy в HH:mm", #mainObject.attribute("lecm-events:from-date"))}]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Мероприятия. Требует привлечения ресурсов]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
