@@ -5,7 +5,7 @@
         <property name="lecm-rpeditor:reportQuery"><![CDATA[TYPE:"lecm-resolutions:document"]]></property>
         <property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
         <property name="cm:name"><![CDATA[Состояние исполнения резолюций]]></property>
-        <property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
+        <property name="lecm-rpeditor:runAsSystem"><![CDATA[false]]></property>
         <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
         <property name="lecm-rpeditor:reportQuerySort">
             <![CDATA[base_doc_noderef|DESC,base_doc_execute_date|ASC,execute_date|ASC]]></property>
