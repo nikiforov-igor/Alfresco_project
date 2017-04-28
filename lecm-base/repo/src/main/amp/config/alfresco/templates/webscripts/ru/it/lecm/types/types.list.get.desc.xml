@@ -9,6 +9,6 @@
     </description>
     <url>/lecm/api/{classname}/subclasses?recur={recursive}&amp;withPrim={withPrimitives}&amp;exclNsp={namespaces}&amp;primFirst={primFirst}</url>
     <format default="json"/>
-    <authentication>none</authentication>
+    <authentication>user</authentication>
     <transaction allow="readonly">required</transaction>
 </webscript>

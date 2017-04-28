@@ -62,11 +62,9 @@
 
 <script type="text/javascript">//<![CDATA[
 (function () {
-    function init() {
-        LogicECM.module.Base.Util.loadScripts([
-            'scripts/lecm-forms-editor/lecm-form-field-component.js'
-        ], createControl);
-    }
+    LogicECM.module.Base.Util.loadScripts([
+        'scripts/lecm-forms-editor/lecm-form-field-component.js'
+    ], createControl);
 
     function createControl() {
         var control = new LogicECM.module.FormsEditor.FieldComponent("${fieldHtmlId}").setMessages(${messages});
@@ -88,7 +86,5 @@
 		</#if>
         });
     }
-
-    YAHOO.util.Event.onDOMReady(init);
 })();
 //]]></script>

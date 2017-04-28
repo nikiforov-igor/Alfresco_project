@@ -79,6 +79,10 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 			this.targetType = type;
 			Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.URL_SERVICECONTEXT + "/lecm/forms/getConfig?action=getControlsById&typeId=" + encodeURIComponent(type),
+				dataObj: {
+					action: "getControlsById",
+					typeId: type
+				},
 				successCallback: {
 					fn: function (response) {
 						var oResults = response.json;
