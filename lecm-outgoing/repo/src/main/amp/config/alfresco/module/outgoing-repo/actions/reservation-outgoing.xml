@@ -7,7 +7,7 @@
         <property name="lecm-group-actions:type"><![CDATA[[lecm-outgoing:document]]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="lecm-group-actions:expression">
-            <![CDATA[(doc.attr("lecm-document-aspects:reg-data-is-registered") == null or doc.attr("lecm-document-aspects:reg-data-is-registered") == false) and (@reservationWorkflowService.isReservationRunning(doc.getNodeRef()) == null OR !@reservationWorkflowService.isReservationRunning(doc.getNodeRef())) and (doc.attr("lecm-reservation-aspects:isReserved") == null or doc.attr("lecm-reservation-aspects:isReserved") == false) and doc.attr("lecm-statemachine:status") != "Черновик" and doc.attr("lecm-statemachine:status") != "Удален"]]></property>
+            <![CDATA[(doc.attr("lecm-document-aspects:reg-data-is-registered") == null or doc.attr("lecm-document-aspects:reg-data-is-registered") == false) and !@reservationWorkflowService.isReservationRunning(doc.getNodeRef()) and (doc.attr("lecm-reservation-aspects:isReserved") == null or doc.attr("lecm-reservation-aspects:isReserved") == false) and doc.attr("lecm-statemachine:status") != "Черновик" and doc.attr("lecm-statemachine:status") != "Удален"]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="lecm-group-actions:availableForReader"><![CDATA[false]]></property>
         <property name="lecm-group-actions:workflow"><![CDATA[activiti$regnumReservationExecution]]></property>
