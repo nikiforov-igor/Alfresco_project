@@ -207,8 +207,7 @@ public class ReservationWorkflowServiceImpl extends WorkflowServiceAbstract impl
 	public boolean isReservationRunning(NodeRef document) {
 		ParameterCheck.mandatory("document", document);
 		if (nodeService.exists(document)) {
-			Boolean isReservationRunning = (Boolean) nodeService.getProperty(document, PROP_IS_RESERVATION_RUNNING);
-			return isReservationRunning != null ? isReservationRunning : false;
+			return Boolean.valueOf((Boolean) nodeService.getProperty(document, PROP_IS_RESERVATION_RUNNING));
 		}
 		return false;
 	}
