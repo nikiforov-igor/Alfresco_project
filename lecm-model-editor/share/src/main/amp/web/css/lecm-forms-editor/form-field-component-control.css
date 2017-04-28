@@ -6,3 +6,6 @@
 .selectone .params-table-values {
     margin: 2px;
 }
+.form-container .selectone .formFieldControlParams {
+    width: 97%;
+}

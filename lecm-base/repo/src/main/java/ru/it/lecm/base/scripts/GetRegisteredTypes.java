@@ -30,30 +30,40 @@ public class GetRegisteredTypes extends DictionaryWebServiceBase {
     private static final String PAR_PRIMITIVES_FIRST = "primFirst";
     private static final String PAR_EXCLUDE_NAMESPACES = "exclNsp";
 
-    protected enum AlfrescoPrimitiveTypes {
-        d_text,
-        d_mltext,
-        d_int,
-        d_float,
-        d_long,
-        d_boolean,
-        d_date,
-        d_datetime,
-        d_double,
-        d_content,
-        d_any,
-        d_qname,
-        d_noderef,
-        d_category,
-        d_locale;
+    private static final List<JSONObject> PRIMITIVES_LIST = new ArrayList<>();
 
-        public String getLabel(MessageLookup messageLookup) {
-            String key = "lecm.primitive.type.label." + this.name();
-            String message = messageLookup.getMessage(key, I18NUtil.getLocale());
-            return message == null ? this.name() : message;
-        }
-        public String getType() {
-            return this.name().replace("_", ":");
+    public final void init() {
+        addPrimitiveValue("d:text");
+        addPrimitiveValue("d:mltext");
+        addPrimitiveValue("d:int");
+        addPrimitiveValue("d:float");
+        addPrimitiveValue("d:long");
+        addPrimitiveValue("d:boolean");
+        addPrimitiveValue("d:date");
+        addPrimitiveValue("d:datetime");
+        addPrimitiveValue("d:double");
+        addPrimitiveValue("d:content");
+        addPrimitiveValue("d:any");
+        addPrimitiveValue("d:qname");
+        addPrimitiveValue("d:noderef");
+        addPrimitiveValue("d:category");
+        addPrimitiveValue("d:locale");
+    }
+
+    private static String getLabel(MessageLookup messageLookup, String name) {
+        String key = "lecm.primitive.type.label." + name;
+        String message = messageLookup.getMessage(key, I18NUtil.getLocale());
+        return message == null ? name : message;
+    }
+
+    private void addPrimitiveValue(String type) {
+        try {
+            JSONObject primitiveType = new JSONObject();
+            primitiveType.put("name", getLabel(dictionaryservice, type.replace(":", "_")) + " - " + type);
+            primitiveType.put("value", type);
+            PRIMITIVES_LIST.add(primitiveType);
+        } catch (JSONException e) {
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -74,7 +84,6 @@ public class GetRegisteredTypes extends DictionaryWebServiceBase {
         final List<JSONObject> resultSet = new ArrayList<>();
 
         final List<JSONObject> typesSet = new ArrayList<>();
-        final List<JSONObject> primitivesSet = new ArrayList<>();
 
         String className = req.getServiceMatch().getTemplateVars().get(PAR_CLASS_NAME);
         String excludeNamespaces = req.getParameter(PAR_EXCLUDE_NAMESPACES);
@@ -89,23 +98,7 @@ public class GetRegisteredTypes extends DictionaryWebServiceBase {
         if (withPrimitivesValue != null) {
             withPrimitives = Boolean.valueOf(withPrimitivesValue);
         }
-        boolean primitivesFirst = false;
-        String primitivesFirstValue = req.getParameter(PAR_PRIMITIVES_FIRST);
-        if (primitivesFirstValue != null) {
-            primitivesFirst = Boolean.valueOf(primitivesFirstValue);
-        }
-        if (withPrimitives) {
-            for (AlfrescoPrimitiveTypes alfType : AlfrescoPrimitiveTypes.values()) {
-                try {
-                    JSONObject primitiveType = new JSONObject();
-                    primitiveType.put("name", alfType.getLabel(dictionaryservice) + " - " + alfType.getType());
-                    primitiveType.put("value", alfType.getType());
-                    primitivesSet.add(primitiveType);
-                } catch (JSONException e) {
-                    logger.error(e.getMessage(), e);
-                }
-            }
-        }
+        boolean primitivesFirst = Boolean.valueOf(req.getParameter(PAR_PRIMITIVES_FIRST));
         //validate the className
         if (isValidClassname(className)) {
             QName classQName = QName.createQName(getFullNamespaceURI(className));
@@ -131,12 +124,16 @@ public class GetRegisteredTypes extends DictionaryWebServiceBase {
         }
 
         if (primitivesFirst) {
-            Collections.sort(primitivesSet, JSON_BY_NAME_COMPARATOR);
-            resultSet.addAll(primitivesSet);
+            if (withPrimitives) {
+                Collections.sort(PRIMITIVES_LIST, JSON_BY_NAME_COMPARATOR);
+                resultSet.addAll(PRIMITIVES_LIST);
+            }
             Collections.sort(typesSet, JSON_BY_NAME_COMPARATOR);
             resultSet.addAll(typesSet);
         } else {
-            resultSet.addAll(primitivesSet);
+            if (withPrimitives) {
+                resultSet.addAll(PRIMITIVES_LIST);
+            }
             resultSet.addAll(typesSet);
             Collections.sort(resultSet, JSON_BY_NAME_COMPARATOR);
         }
