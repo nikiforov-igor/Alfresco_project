@@ -1,5 +1,9 @@
 <#include "/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 <#assign params = field.control.params>
+<#assign doNotCheckAccess = true/>
+<#if params.doNotCheckAccess?? && params.doNotCheckAccess == "false">
+    <#assign doNotCheckAccess = false/>
+</#if>
 <script type="text/javascript">//<![CDATA[
 (function () {
     LogicECM.CurrentModules = LogicECM.CurrentModules || {};
@@ -54,7 +58,8 @@
                 </#if>
                     employeesType: "${params.employeesType!"lecm-orgstr:employee"}",
                     representativesType: "${params.representativesType!"lecm-representative:representative-type"}",
-					fieldHtmlId: "${fieldHtmlId}"
+					fieldHtmlId: "${fieldHtmlId}",
+                    doNotCheckAccess: ${doNotCheckAccess?string}
                 });
     }
 

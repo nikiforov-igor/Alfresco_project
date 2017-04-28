@@ -68,7 +68,8 @@ LogicECM.module = LogicECM.module || {};
             fieldHtmlId: "",
             showAssocViewForm: false,
             markers: null,
-	        defaultValueUseOnce: false
+	        defaultValueUseOnce: false,
+            doNotCheckAccess: false
         },
 
         onReady: function SelectRepresentativeForContractor_onReady() {
@@ -102,7 +103,8 @@ LogicECM.module = LogicECM.module || {};
                         selectedValueNodeRef: "",
                         lazyLoading: false,
                         disabled: false,
-                        showAssocViewForm: scope.options.showAssocViewForm
+                        showAssocViewForm: scope.options.showAssocViewForm,
+                        doNotCheckAccess: scope.options.doNotCheckAccess
                     };
 
                     treeConf = {
@@ -121,42 +123,51 @@ LogicECM.module = LogicECM.module || {};
                         selectedValue: null,
                         initialized: false,
                         lazyLoading: false,
-                        disabled: false
-                    }
-                } else {
-                    autocompleteConf = {
-                        startLocation: scope.options.employeesLocation,
-                        itemType: scope.options.employeesType,
-                        childrenDataSource: YAHOO.lang.substitute(scope.options.employeesByOrgDS, {
-                            organization: selectedContractor != null ? new Alfresco.util.NodeRef(selectedContractor).uri : ""
-                        }),
-                        defaultValueDataSource: scope.options.employeesDefaultValueDS != null ? YAHOO.lang.substitute(scope.options.employeesDefaultValueDS, {
-                            organization: selectedContractor
-                        }) : null,
-                        nameSubstituteString: scope.options.employeesNameSubstitute,
-                        lazyLoading: false,
                         disabled: false,
-                        showAssocViewForm: scope.options.showAssocViewForm
-                    };
+                        doNotCheckAccess: scope.options.doNotCheckAccess
+                    }
+                    scope._updateControls(selectedContractor, resetValue, autocompleteConf, treeConf);
+                } else {
+                    scope.isCurrentUserFromSelectedOrgUnit(selectedContractor, updateControls);
+                    function updateControls(showAssocViewForm) {
+                        autocompleteConf = {
+                            startLocation: scope.options.employeesLocation,
+                            itemType: scope.options.employeesType,
+                            childrenDataSource: YAHOO.lang.substitute(scope.options.employeesByOrgDS, {
+                                organization: selectedContractor != null ? new Alfresco.util.NodeRef(selectedContractor).uri : ""
+                            }),
+                            defaultValueDataSource: scope.options.employeesDefaultValueDS != null ? YAHOO.lang.substitute(scope.options.employeesDefaultValueDS, {
+                                organization: selectedContractor
+                            }) : null,
+                            nameSubstituteString: scope.options.employeesNameSubstitute,
+                            lazyLoading: false,
+                            disabled: false,
+                            showAssocViewForm: showAssocViewForm,
+                            doNotCheckAccess: scope.options.doNotCheckAccess,
+                            additionalFilter: '@lecm\-orgstr\-aspects\:linked\-organization\-assoc\-ref:"' + selectedContractor + '\"'
+                        };
 
-                    treeConf = {
-                        rootLocation: scope.options.employeesLocation,
-                        itemType: scope.options.employeesType,
-                        childrenDataSource: YAHOO.lang.substitute(scope.options.employeesByOrgDS, {
-                            organization: selectedContractor != null ? new Alfresco.util.NodeRef(selectedContractor).uri : ""
-                        }),
-                        defaultValueDataSource: scope.options.employeesDefaultValueDS != null ? YAHOO.lang.substitute(scope.options.employeesDefaultValueDS, {
-                            organization: selectedContractor
-                        }) : null,
-	                    defaultValueUseOnce: scope.options.defaultValueUseOnce,
-                        nameSubstituteString: scope.options.employeesNameSubstitute,
-                        initialized: false,
-                        lazyLoading: false,
-                        disabled: false
+                        treeConf = {
+                            showAssocViewForm: showAssocViewForm,
+                            rootLocation: scope.options.employeesLocation,
+                            itemType: scope.options.employeesType,
+                            childrenDataSource: YAHOO.lang.substitute(scope.options.employeesByOrgDS, {
+                                organization: selectedContractor != null ? new Alfresco.util.NodeRef(selectedContractor).uri : ""
+                            }),
+                            defaultValueDataSource: scope.options.employeesDefaultValueDS != null ? YAHOO.lang.substitute(scope.options.employeesDefaultValueDS, {
+                                organization: selectedContractor
+                            }) : null,
+                            defaultValueUseOnce: scope.options.defaultValueUseOnce,
+                            nameSubstituteString: scope.options.employeesNameSubstitute,
+                            initialized: false,
+                            lazyLoading: false,
+                            disabled: false,
+                            doNotCheckAccess: scope.options.doNotCheckAccess,
+                            additionalFilter: '@lecm\-orgstr\-aspects\:linked\-organization\-assoc\-ref:"' + selectedContractor + '\"'
+                        }
+                        scope._updateControls(selectedContractor, resetValue, autocompleteConf, treeConf);
                     }
                 }
-
-                scope._updateControls(selectedContractor, resetValue, autocompleteConf, treeConf);
             };
 
             var resetValue = false,
@@ -186,9 +197,54 @@ LogicECM.module = LogicECM.module || {};
             }
             if (!this.options.disabled) {
                 initDatatasources(this, selectedContractor, marker);
+            } else {
+                if (marker != 'contractor') {
+                    var treeControl = LogicECM.CurrentModules[this.options.treeViewJsName];
+                    if (treeControl) {
+                        this.isCurrentUserFromSelectedOrgUnit(selectedContractor, function(showAssocViewForm){
+                            treeControl.options.showAssocViewForm = showAssocViewForm;
+                            treeControl.updateFormFields();
+                        });
+                    }
+                }
             }
         },
-
+        isCurrentUserFromSelectedOrgUnit: function(selectedContractor, callback){
+            Alfresco.util.Ajax.jsonGet({
+                url: Alfresco.constants.PROXY_URI + '/lecm/orgstructure/api/getCurrentEmployee',
+                successCallback: {
+                    scope: this,
+                    fn: function (response) {
+                        if(response.json){
+                            var currentEmployeeRef = response.json.nodeRef;
+                            Alfresco.util.Ajax.jsonRequest(
+                                {
+                                    url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                                    method: "POST",
+                                    dataObj: {
+                                        nodeRef: currentEmployeeRef,
+                                        substituteString: "{lecm-orgstr-aspects:linked-organization-assoc-ref}"
+                                    },
+                                    successCallback: {
+                                        scope: this,
+                                        fn: function (response) {
+                                            var isSameOrg = false;
+                                            if (response && response.json.formatString) {
+                                                 isSameOrg = selectedContractor && selectedContractor == response.json.formatString
+                                            }
+                                            if (callback && typeof callback == "function") {
+                                                callback.call(this, isSameOrg);
+                                            }
+                                            return isSameOrg;
+                                        }
+                                    }
+                                });
+                        }
+                    }
+                },
+                failureMessage: Alfresco.util.message('message.failure')
+            });
+        },
         _updateControlsOnDeferred: function() {
             var control = LogicECM.CurrentModules[this.options.autoCompleteJsName];
             var treeControl = LogicECM.CurrentModules[this.options.treeViewJsName];

@@ -22,7 +22,7 @@
             <item name="cm:MEETINGS_RESPONSIBLE_FOR_RESOURCES" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[MEETINGS_RESPONSIBLE_FOR_RESOURCES]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Запланированное совещание {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} требует привлечения ресурсов за которые вы ответственны. Начало {#formatDate("dd.MM.yyyy в HH:mm", #mainObject.attribute("lecm-events:from-date"))}]]></property>
+                    <![CDATA[Запланированное совещание {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} требует привлечения ресурсов за которые Вы ответственны. Начало {#formatDate("dd.MM.yyyy в HH:mm", #mainObject.attribute("lecm-events:from-date"))}]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Требует привлечения ресурсов]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -33,7 +33,7 @@
             </item>
             <item name="cm:PROTOCOL_REWORK" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Проект документа {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc/cm:name} №{~REGNUM|Не присвоено}"))} направлен вам на доработку]]></property>
+                    <![CDATA[Проект документа {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc/cm:name} №{~REGNUM|Не присвоено}"))} направлен Вам на доработку]]></property>
                 <property name="cm:name"><![CDATA[PROTOCOL_REWORK]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Протокол. Отправлен на доработку]]></property>
@@ -70,7 +70,7 @@
             <item name="cm:MEETINGS_INVITE_TO_SITE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[MEETINGS_INVITE_TO_SITE]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} пригласил вас на сайт <a href="{#url}">{#mainObject.attribute("cm:title")}</a>]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} пригласил Вас на сайт <a href="{#url}">{#mainObject.attribute("cm:title")}</a>]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Приглашение на сайт]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>

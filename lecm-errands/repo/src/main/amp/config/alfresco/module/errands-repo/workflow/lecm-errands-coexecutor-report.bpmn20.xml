@@ -39,7 +39,7 @@
 	                                }
 
 	                                var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]);
-	                                notificationText +=  " направил вам отчет об исполнении по поручению ";
+	                                notificationText +=  " направил Вам отчет об исполнении по поручению ";
 	                                notificationText += documentScript.wrapperDocumentLink(document, "{lecm-document:present-string}");
 
 	                                var recipients = [];
