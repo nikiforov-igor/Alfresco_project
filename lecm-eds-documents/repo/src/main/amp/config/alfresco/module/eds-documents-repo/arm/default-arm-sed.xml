@@ -26103,10 +26103,10 @@
                                         <items>
                                             <item name="cm:9c57bca2-2524-4688-976b-0943ac2011ba"
                                                   type="lecm-arm:statuses-child-rule">
-                                                <property name="lecm-arm:selected-statuses"><![CDATA[На хранении,Удален,Черновик]]></property>
+                                                <property name="lecm-arm:selected-statuses"><![CDATA[Проект,На согласовании,Согласован,На доработке,На регистрации,Зарегистрирован,На исполнении]]></property>
                                                 <property name="cm:name">
                                                     <![CDATA[9c57bca2-2524-4688-976b-0943ac2011ba]]></property>
-                                                <property name="lecm-arm:statuses-rule"><![CDATA[EXCEPT_SELECTED]]></property>
+                                                <property name="lecm-arm:statuses-rule"><![CDATA[SELECTED]]></property>
                                             </item>
                                         </items>
                                         <assocs>
