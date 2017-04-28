@@ -7,6 +7,7 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.ParameterCheck;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -200,6 +201,15 @@ public class ReservationWorkflowServiceImpl extends WorkflowServiceAbstract impl
 		notification.setDescription(notificationMessage);
 		notification.setObjectRef(docInfo.getDocumentRef());
 		return notification;
+	}
+
+	@Override
+	public boolean isReservationRunning(NodeRef document) {
+		ParameterCheck.mandatory("document", document);
+		if (nodeService.exists(document)) {
+			return Boolean.valueOf((Boolean) nodeService.getProperty(document, PROP_IS_RESERVATION_RUNNING));
+		}
+		return false;
 	}
 
 	protected void actualizeReservationTask(NodeRef assignee, DelegateTask task) {

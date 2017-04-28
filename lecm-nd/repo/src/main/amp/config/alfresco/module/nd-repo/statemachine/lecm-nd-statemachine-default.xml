@@ -8480,7 +8480,7 @@ businessJournal.log(nd.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]></
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[doc.attr("lecm-reservation-aspects:isReservationRunning") != true]]></value>
+                                                                                    <![CDATA[@reservationWorkflowService.isReservationRunning(doc.getNodeRef()) != true]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
