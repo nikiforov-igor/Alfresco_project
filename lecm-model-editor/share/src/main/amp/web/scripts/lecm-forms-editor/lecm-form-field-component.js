@@ -145,9 +145,11 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 				if (tableParams && hiddenParams) {
 					tableParams.innerHTML = "";
 					hiddenParams.innerHTML = "";
+					var parentElement = tableParams.parentElement.parentElement;
 
 					var conf = this.config[select.selectedIndex -1];
 					if (conf && conf.params) {
+						Dom.removeClass(parentElement, "hidden");
 						for (var i = 0; i < conf.params.length; i++) {
 							var param = conf.params[i];
 							if (param.visible){
@@ -171,6 +173,8 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 								hiddenParams.innerHTML += "<input type='hidden' id='" + param.id + "' value='" + param.value + "' class='formFieldControlParams'>";
 							}
 						}
+					} else {
+						Dom.addClass(parentElement, "hidden");
 					}
 				}
 			}

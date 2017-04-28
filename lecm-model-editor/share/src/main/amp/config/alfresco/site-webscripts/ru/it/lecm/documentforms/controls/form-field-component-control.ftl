@@ -53,8 +53,12 @@
                     <option>${msg("label.control.default")}</option>
                 </select>
             </div>
-            <table class="formFieldControlParamsTable"><tbody id="${fieldHtmlId}-params"></tbody></table>
-            <div id="${fieldHtmlId}-hidden-params"></div>
+            <div class="params-table-values hidden">
+                <table class="formFieldControlParamsTable">
+                    <tbody id="${fieldHtmlId}-params"></tbody>
+                </table>
+                <div id="${fieldHtmlId}-hidden-params"></div>
+            </div>
         </div>
     </div>
 </#if>
@@ -62,8 +66,10 @@
 
 <script type="text/javascript">//<![CDATA[
 (function () {
-    LogicECM.module.Base.Util.loadScripts([
+    LogicECM.module.Base.Util.loadResources([
         'scripts/lecm-forms-editor/lecm-form-field-component.js'
+    ], [
+        'css/lecm-forms-editor/form-field-component-control.css'
     ], createControl);
 
     function createControl() {
