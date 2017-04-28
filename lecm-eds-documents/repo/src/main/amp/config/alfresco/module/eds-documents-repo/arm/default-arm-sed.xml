@@ -25930,8 +25930,9 @@
                                         <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[1]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
-                                        <property name="lecm-arm:field-name"><![CDATA[lecm-events:from-date]]></property>
-                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-name"><![CDATA[lecm-events_from-date]]></property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[{lecm-events:from-date?dd.MM.yyyy HH:mm}]]></property>
                                     </item>
                                     <item name="cm:36c061e5-9f59-46fa-a6ec-e1d5daee8ba1" type="lecm-arm:field">
                                         <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
@@ -25971,8 +25972,9 @@
                                         <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order"><![CDATA[6]]></property>
                                         <property name="lecm-arm:field-is-marker"><![CDATA[false]]></property>
-                                        <property name="lecm-arm:field-name"><![CDATA[lecm-events:to-date]]></property>
-                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-name"><![CDATA[lecm-events_to-date]]></property>
+                                        <property name="lecm-arm:field-format-string">
+                                            <![CDATA[{lecm-events:to-date?dd.MM.yyyy HH:mm}]]></property>
                                     </item>
                                     <item name="cm:58b38324-e93b-47ef-9e2b-2d500bb4dbd8" type="lecm-arm:field">
                                         <property name="lecm-arm:field-title"><![CDATA[Секретарь]]></property>
