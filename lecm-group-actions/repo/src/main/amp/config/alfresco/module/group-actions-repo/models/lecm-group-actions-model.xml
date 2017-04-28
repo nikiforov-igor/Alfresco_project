@@ -134,6 +134,10 @@
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>
+                <property name="lecm-group-actions:field-control">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
             </properties>
 		</type>
 	</types>

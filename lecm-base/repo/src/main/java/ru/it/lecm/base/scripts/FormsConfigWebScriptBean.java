@@ -48,12 +48,14 @@ public class FormsConfigWebScriptBean extends DeclarativeWebScript{
 	}
 
 	private List<String> getParents(QName name) {
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		TypeDefinition typeDef = dictionaryService.getType(name);
-		QName parent = typeDef.getParentName();
-		if(parent != null){
-			result.add(parent.toPrefixString());
-			result.addAll(getParents(parent));
+		if (typeDef != null) {
+			QName parent = typeDef.getParentName();
+			if(parent != null){
+				result.add(parent.toPrefixString());
+				result.addAll(getParents(parent));
+			}
 		}
 		return result;
 	}
