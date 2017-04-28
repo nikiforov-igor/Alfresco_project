@@ -5,6 +5,12 @@
             <item name="cm:Вид протокола" type="lecm-doc-dic-dt:typeDictionary">
                 <property name="cm:name">Вид протокола</property>
                 <property name="lecm-dic:valueContainsType">lecm-meetings-dic:protocolDocumentType</property>
+                <items>
+                    <item name="cm:Протокол совещания" type="lecm-meetings-dic:protocolDocumentType">
+                        <property name="cm:name">Протокол совещания</property>
+                        <property name="lecm-doc-dic-dt:documentType-code">01</property>
+                    </item>
+                </items>
             </item>
         </items>
     </item>
