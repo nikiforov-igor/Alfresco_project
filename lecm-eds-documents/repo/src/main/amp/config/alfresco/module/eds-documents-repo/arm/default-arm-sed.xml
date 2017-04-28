@@ -1987,7 +1987,7 @@
                                 <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                 <property name="cm:name"><![CDATA[Все созданные мной]]></property>
-                                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:search-type"><![CDATA[lecm-eds-document:base]]></property>
                                 <property name="lecm-arm:expression"><![CDATA[]]></property>
                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                 <property name="lecm-arm:order"><![CDATA[10]]></property>
