@@ -6540,7 +6540,7 @@
                                             </item>
                                             <item name="cm:9add62d9-e2f4-4378-824b-90d5f7730fdb" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[3]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[8]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-resolutions:base-document-assoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Документ-основание]]></property>
@@ -6551,7 +6551,7 @@
                                             </item>
                                             <item name="cm:205e4da4-2d48-4d4c-ac5f-e707005543f4" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[4]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[9]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-document:author-assoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Создатель]]></property>
@@ -6562,7 +6562,7 @@
                                             </item>
                                             <item name="cm:61aa9da0-1574-47fa-8697-72e349eca8b7" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[5]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[3]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-resolutions:author-assoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Автор]]></property>
@@ -6573,7 +6573,7 @@
                                             </item>
                                             <item name="cm:f04d13c9-f69f-4934-b48d-e9d289b08ea1" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[6]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[4]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-resolutions:controller-assoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Контролер]]></property>
@@ -6584,7 +6584,7 @@
                                             </item>
                                             <item name="cm:16f4807e-d727-4ede-89de-66c10c914cec" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[7]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[6]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-resolutions:limitation-date]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Исполнить к]]></property>
@@ -7249,7 +7249,7 @@
                                             </item>
                                             <item name="cm:e874a36b-889a-478d-8c7b-6e90708f65e3" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[8]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[7]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-statemachine:status]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Статус]]></property>
@@ -7260,7 +7260,7 @@
                                             </item>
                                             <item name="cm:d30878ed-3b79-42ba-b719-536c2260a3ba" type="lecm-arm:field">
                                                 <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
-                                                <property name="lecm-arm:order"><![CDATA[9]]></property>
+                                                <property name="lecm-arm:order"><![CDATA[5]]></property>
                                                 <property name="lecm-arm:field-name">
                                                     <![CDATA[lecm-errands-aspect:errands-executors-assoc]]></property>
                                                 <property name="lecm-arm:field-title"><![CDATA[Исполнитель]]></property>
