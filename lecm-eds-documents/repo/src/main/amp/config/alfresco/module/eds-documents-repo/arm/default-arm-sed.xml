@@ -5863,7 +5863,7 @@
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                        <property name="lecm-arm:order"><![CDATA[60]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[80]]></property>
                                         <property name="lecm-arm:types"><![CDATA[lecm-errands:document]]></property>
                                         <items>
                                             <item name="cm:Статусы" type="lecm-arm:node">
@@ -6339,7 +6339,7 @@
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                        <property name="lecm-arm:order"><![CDATA[70]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[60]]></property>
                                         <property name="lecm-arm:types"><![CDATA[lecm-protocol:document]]></property>
                                         <items>
                                             <item name="cm:Статусы" type="lecm-arm:node">
@@ -6541,7 +6541,7 @@
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
                                         <property name="lecm-arm:expression"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                        <property name="lecm-arm:order"><![CDATA[55]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[70]]></property>
                                         <property name="lecm-arm:types"><![CDATA[lecm-resolutions:document]]></property>
                                         <items>
                                             <item name="cm:0844aeda-2765-4425-ae41-ad81d0b5763e" type="lecm-arm:field">
