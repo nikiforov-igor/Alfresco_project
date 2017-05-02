@@ -78,24 +78,76 @@
 				<param id="showCreateNewButton" localName="Показывать кнопку создания"/>
 				<param id="startLocation" localName="Корневая папка" mandatory="true" description="Путь к папке, относительно которой получать элементы справочника"/>
 				<param id="nameSubstituteString" localName="Шаблон имени элемента"/>
-				<param id="additionalFilter" localName="Дополнительный фильтр"/>
+				<param id="additionalFilter" localName="Дополнительный фильтр (FTS query)"/>
 				<param id="notSelectedOptionShow" localName="Показывать пустой элемент" description="Если true, то по умолчанию показывается элемент без значения ассоциации."/>
 				<param id="notSelectedOptionLabel" localName="Название  для пустого элемента" description="Название для элемента без значения ассоциации"/>
+				<param id="mandatory" localName="Обязательность заполнения поля">false</param>
+				<param id="forceEditable" localName="Включить принудительное редактирование">false</param>
+				<param id="endpointType" localName="Тип выбираемых элементов"/>
+				<param id="maxSearchResults" localName="Максимальное число выводимых элементов">1000</param>
+				<param id="sortProp" localName="Свойство для сортировки значений">cm:name</param>
+				<param id="changeItemsFireAction" localName="Событие, вызываемое при смене значения"/>
+				<param id="defaultValueDataSource" localName="Скрипт для получения значения по умолчанию"/>
 			</control>
 			<control id="approval-list-datagrid-control" template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl" localName="Согласование"/>
 			<control id="date" template="/ru/it/lecm/base-share/components/controls/date.ftl" localName="Дата/время">
 				<param id="showTime" localName="Показывать время" description="true - показывать; false - не показывать"/>
 				<param id="minLimitCurrentDate" localName="Не позволять выбирать дату меньше текущей" description="true - нельзя выбирать дату в прошлом; false - можно выбирать любую дату"/>
+				<param id="minLimitArg" localName="Минимальная дата, доступная для выбора"/>
+				<param id="maxLimitCurrentDate" localName="Не позволять выбирать дату больше текущей" description="true - нельзя выбирать дату в будущем; false - можно выбирать любую дату"/>
+				<param id="maxLimitArg" localName="Максимальная дата, доступная для выбора"/>
+				<param id="forceEditable" localName="Включить принудительное редактирование">false</param>
+				<param id="hideDateFormat" localName="Скрывать подсказку с форматом">true</param>
+				<param id="dateFormatString" localName="Формат выводимой даты"/>
+				<param id="defaultValue" localName="Значение по умолчанию" description="В формате 'yyyy-MM-dd' или код 'now'"/>
+				<param id="defaultScriptURL" localName="Скрипт для получения значения по умолчанию"/>
+				<param id="changeFireAction" localName="Событие, вызываемое при смене значения"/>
 			</control>
-			<control id="lecm-checkbox-control" template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl" localName="Галочка"/>
+			<control id="lecm-checkbox-control" template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl" localName="Флажок">
+				<param id="defaultValue" localName="Значение по умолчанию"/>
+				<param id="fireMandatoryByChange" localName="Вызывать ли событие"/>
+				<param id="forceEditable" localName="Включить принудительное редактирование">false</param>
+				<param id="defaultValueDataSource" localName="Скрипт для получения значения по умолчанию"/>
+				<param id="disabledFieldsIfSelect" localName="Список полей для блокировки, если флажок отмечен"/>
+				<param id="hideFieldsIfSelect" localName="Список полей для скрытия, если флажок отмечен"/>
+				<param id="disabledFieldsIfNotSelect" localName="Список полей для блокировки, если флажок не отмечен"/>
+				<param id="hideFieldsIfNotSelect" localName="Список полей для скрытия, если флажок не отмечен"/>
+				<param id="changeFireAction" localName="Событие, вызываемое при смене значения"/>
+				<param id="styleClass" localName="Список дополнительных стилей"/>
+				<param id="style" localName="CSS стиль"/>
+				<param id="attentionMessageKey" localName="Ключ предупреждающего сообщения, выводимого после изменения значения"/>
+			</control>
 			<control id="richtext" template="/ru/it/lecm/base-share/components/controls/richtext.ftl" localName="Многострочное текстовое поле с форматированием">
 				<param id="rows" localName="Количество строк">2</param>
 				<param id="columns" localName="Количество столбцов">60</param>
+				<param id="styleClass" localName="Список дополнительных стилей"/>
+				<param id="forceEditable" localName="Включить принудительное редактирование">false</param>
+				<param id="style" localName="CSS стиль"/>
 			</control>
-			<control id="textfield" template="/ru/it/lecm/base-share/components/controls/textfield.ftl" localName="Однострочное текстовое поле"/>
+			<control id="textfield" template="/ru/it/lecm/base-share/components/controls/textfield.ftl" localName="Однострочное текстовое поле">
+				<param id="hideValue" localName="Скрывать значение">false</param>
+				<param id="nameSuffix" localName="Суффикс имени поля"/>
+				<param id="mandatory" localName="Обязательность заполнения">false</param>
+				<param id="defaultValue" localName="Значение по умолчанию"/>
+				<param id="styleClass" localName="Список дополнительных стилей"/>
+				<param id="forceEditable" localName="Включить принудительное редактирование">false</param>
+				<param id="activateLinks" localName="Разрешить ссылки в значении"/>
+				<param id="containerStyleClass" localName="Список дополнительных стилей контейнера"/>
+				<param id="maxLength" localName="Максимальная длина поля"/>
+				<param id="isUniqueValue" localName="Включить проверку уникальности">false</param>
+				<param id="validationFn" localName="Функция проверки уникальности"/>
+				<param id="checkInArchive" localName="Проверять уникальность в архиве">false</param>
+				<param id="validationMessageId" localName="Сообщение при валидации">LogicECM.constraints.isUnique.message</param>
+				<param id="validationType" localName="Тип валидации">keyup</param>
+			</control>
 			<control id="textarea" template="/ru/it/lecm/base-share/components/controls/textarea.ftl" localName="Многострочное текстовое поле">
 				<param id="rows" localName="Количество строк">2</param>
 				<param id="columns" localName="Количество столбцов">60</param>
+				<param id="defaultValue" localName="Значение по умолчанию"/>
+				<param id="styleClass" localName="Список дополнительных стилей"/>
+				<param id="forceEditable" localName="Включить принудительное редактирование">false</param>
+				<param id="style" localName="CSS стиль"/>
+				<param id="containerStyleClass" localName="Список дополнительных стилей контейнера"/>
 			</control>
 			<control id="selectone" template="/ru/it/lecm/base-share/components/controls/selectone.ftl" localName="Выпадающий список для выбора значения">
 				<param id="options" localName="Перечень значений для выбора" description="Значения для выбора задаются в формате значение1|заголовок1,значение2|заголовок2 и тд."/>
@@ -105,6 +157,94 @@
 			</control>
 			<control id="right-part-dashlet" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Дашлет в правой области">
 				<param id="uri" localName="Адрес веб-скрипта" mandatory="true"/>
+			</control>
+			<control id="hidden-association-control" template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl" localName="Скрытый контрол для хранения значения ассоциации">
+				<param id="isValueSetFireEvent" localName="Вызывать ли событие после установка значения">true</param>
+				<param id="valueSetFireAction" localName="Событие, вызываемое при установке значения">afterSetItems</param>
+				<param id="contextProperty" localName="Откуда получать значение" description="Значения можно получить под именем 'contextProperty' из args,context.properties"/>
+			</control>
+			<control id="association-control" template="/ru/it/lecm/base-share/components/controls/association-control.ftl" localName="Выбор ассоциации">
+				<param id="rootLocation" localName="Корневая папка" mandatory="true" description="Путь к папке, относительно которой получать элементы"/>
+				<param id="plane" localName="Выводить в виде плоского списка" description="Если true - плоский список, иначе - дерево с выбором элементов">false</param>
+				<param id="showPath" localName="Показывать путь у выбранных элементов">true</param>
+				<param id="showAutocomplete" localName="Включить автодополнение">true</param>
+				<param id="showCreateNewLink" localName="Показывать ссылку создания">false</param>
+				<param id="showCreateNewButton" localName="Показывать кнопку создания">false</param>
+				<param id="showParentNodeInTreeView" localName="Показывать корневой узел в дереве">true</param>
+				<param id="showSearch" localName="Показывать поле поиска">false</param>
+				<param id="checkType" localName="Проверять тип доступных для выбора элементов">true</param>
+				<param id="showAssocViewForm" localName="Показывать ссылку на окно с просмотром данных">false</param>
+				<param id="endpointMany" localName="Разрешить множественный выбор" description="Работает, если позволяют настройки для поля в модели данных"/>
+				<param id="additionalFilter" localName="Дополнительный фильтр (FTS query)"/>
+				<param id="allowedNodesScript" localName="Скрипт, для получения списка разрешенных для выбора значений"/>
+				<param id="childrenDataSource" localName="Скрипт для получения списка значений"/>
+				<param id="pickerItemsScript" localName="Скрипт для предзагрузки значений"/>
+				<param id="treeBranchesDatasource" localName="Скрипт для построения дерева"/>
+				<param id="forceEditable" localName="Включить принудительное редактирование">false</param>
+				<param id="nameSubstituteString" localName="Шаблон имени элемента"/>
+				<param id="selectedItemsNameSubstituteString" localName="Шаблон имени выбранных элементов"/>
+				<param id="treeNodeSubstituteString" localName="Шаблон имени элемента дерева"/>
+				<param id="treeNodeTitleSubstituteString" localName="Шаблон имени заголовка элемента дерева"/>
+				<param id="sortProp" localName="Свойство для сортировки значений"/>
+				<param id="treeSortProp" localName="Свойство для сортировки значений в дереве"/>
+				<param id="treeItemType" localName="Тип элементов для отображения в дереве"/>
+				<param id="changeItemsFireAction" localName="Событие, вызываемое при смене значения"/>
+				<param id="treeIgnoreNodesScript" localName="Скрипт, для исключения элементов из дерева"/>
+				<param id="defaultValueDataSource" localName="Скрипт для получения значения по умолчанию"/>
+				<param id="useStrictFilterByOrg" localName="Включить строгое соответствие по организации">false</param>
+				<param id="doNotCheckAccess" localName="Отключить фильтр по организации">false</param>
+				<param id="endpointType" localName="Тип выбираемых элементов"/>
+				<param id="useObjectDescription" localName="Использовать при выводе описание объектов из справочника Типы объектов"/>
+				<param id="employeeAbsenceMarker" localName="Отмечать отсутствие" description="при выборе сотрудника в контроле отображать, доступен ли он в данный момент и если недоступен, то показывать его автоответ"/>
+			</control>
+			<control id="hidden" template="/ru/it/lecm/base-share/components/controls/hidden.ftl" localName="Скрытый контрол для хранения значения">
+				<param id="selectedItemsFormArgs" localName="Название поля, из которого нужно предзаполнить значение"/>
+				<param id="contextProperty" localName="Откуда получать значение" description="Значения можно получить под именем 'contextProperty' из args,context.properties"/>
+			</control>
+			<control id="number" template="/ru/it/lecm/base-share/components/controls/number.ftl" localName="Текстовое поле для вывода числа">
+				<param id="defaultValue" localName="Значение по умолчанию"/>
+				<param id="forceEditable" localName="Включить принудительное редактирование">false</param>
+				<param id="styleClass" localName="Список дополнительных стилей"/>
+				<param id="style" localName="CSS стиль"/>
+				<param id="maxLength" localName="Максимальная длина поля"/>
+			</control>
+			<control id="load-script-control" template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl" localName="Контрол для загрузки скриптов">
+				<param id="scripts" localName="Список скриптов для загрузки"/>
+				<param id="scriptLoadedFireAction" localName="Событие, вызываемое после подгрузки скриптов"/>
+			</control>
+			<control id="association-search-control-with-dialog" template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl" localName="Контрол для выбора ассоциации с поиском">
+				<param id="endpointMany" localName="Разрешить множественный выбор" description="Работает, если позволяют настройки для поля в модели данных"/>
+				<param id="selectedItemsFormArgs" localName="Название поля, из которого нужно предзаполнить значение"/>
+				<param id="sortSelected" localName="Включить сортировку выбранных значений">false</param>
+				<param id="forceEditable" localName="Включить принудительное редактирование">false</param>
+				<param id="rootLocation" localName="Корневая папка" description="Путь к папке, относительно которой получать элементы"/>
+				<param id="sortProp" localName="Свойство для сортировки значений">cm:name</param>
+				<param id="nameSubstituteString" localName="Шаблон имени элемента"/>
+				<param id="selectedItemsNameSubstituteString" localName="Шаблон имени выбранных элементов"/>
+				<param id="changeItemsFireAction" localName="Событие, вызываемое при смене значения"/>
+				<param id="defaultValueDataSource" localName="Скрипт для получения значения по умолчанию"/>
+				<param id="viewUrl" localName="URL для открытия формы просмотра"/>
+				<param id="additionalFilter" localName="Дополнительный фильтр (FTS query)"/>
+				<param id="useStrictFilterByOrg" localName="Включить строгое соответствие по организации">false</param>
+				<param id="doNotCheckAccess" localName="Отключить фильтр по организации">false</param>
+				<param id="itemType" localName="Тип выбираемых элементов"/>
+			</control>
+			<control id="association-search-control-with-dialog" template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl" localName="Загрузка файла">
+				<param id="showAttsLabel" localName="Показать подпись">true</param>
+				<param id="suppressRefreshEvent" localName="Заглушить обновление формы после загрузки">false</param>
+				<param id="showAttsList" localName="Показать список загруженных файлов">true</param>
+			</control>
+			<control id="association-autocomplete-text-control" template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl" localName="Выбор ассоциаций с возможностью ручного ввода">
+				<param id="startLocation" localName="Корневая папка" mandatory="true" description="Путь к папке, относительно которой получать элементы справочника"/>
+				<param id="itemType" localName="Тип выбираемых элементов"/>
+				<param id="nameSubstituteString" localName="Шаблон имени элемента"/>
+				<param id="showCreateNewLink" localName="Показывать ссылку создания"/>
+				<param id="additionalFilter" localName="Дополнительный фильтр (FTS query)"/>
+				<param id="defaultValueDataSource" localName="Скрипт для получения значения по умолчанию"/>
+				<param id="childrenDataSource" localName="Скрипт для получения списка значений"/>
+				<param id="selectedItemsNameSubstituteString" localName="Шаблон имени выбранных элементов"/>
+				<param id="sortProp" localName="Свойство для сортировки значений">cm:name</param>
+				<param id="maxSearchResults" localName="Максимальное число выводимых элементов">10</param>
 			</control>
 		</controls-templates>
 	</config>

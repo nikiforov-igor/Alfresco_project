@@ -8,6 +8,7 @@
 		<property name="configs">
 			<list>
 				<value>classpath:alfresco/web-extension/ru/it/lecm/contracts/contracts-share-config-custom.xml</value>
+				<value>classpath:alfresco/web-extension/ru/it/lecm/contracts/controls.xml</value>
 			</list>
 		</property>
 	</bean>

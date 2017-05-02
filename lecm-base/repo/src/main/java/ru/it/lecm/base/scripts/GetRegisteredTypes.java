@@ -48,6 +48,10 @@ public class GetRegisteredTypes extends DictionaryWebServiceBase {
         addPrimitiveValue("d:noderef");
         addPrimitiveValue("d:category");
         addPrimitiveValue("d:locale");
+        addPrimitiveValue("TEMPLATES");
+        addPrimitiveValue("fake");
+/*        addPrimitiveValue("date-range");
+        addPrimitiveValue("number-range");*/
     }
 
     private static String getLabel(MessageLookup messageLookup, String name) {

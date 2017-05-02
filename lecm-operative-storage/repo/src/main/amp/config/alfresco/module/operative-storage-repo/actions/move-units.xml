@@ -47,22 +47,26 @@
 })();]]>
         </property>
         <items>
-			<item name="cm:folder" type="lecm-group-actions:form-field">
-				<property name="cm:name"><![CDATA[Раздел]]></property>
-				<property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
-				<property name="lecm-group-actions:field-id"><![CDATA[folder]]></property>
-				<property name="lecm-group-actions:field-is-mandatory"><![CDATA[true]]></property>
-				<property name="lecm-group-actions:field-type"><![CDATA[lecm-os:base_copy_action]]></property>
-				<property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
-			</item>
-			<item name="cm:Script" type="lecm-group-actions:form-field">
-				<property name="cm:name"><![CDATA[Script]]></property>
-				<property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
-				<property name="lecm-group-actions:field-id"><![CDATA[Script]]></property>
-				<property name="lecm-group-actions:field-is-mandatory"><![CDATA[false]]></property>
-				<property name="lecm-group-actions:field-type"><![CDATA[lecm-os:copy-unit-validate-script]]></property>
-				<property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
-			</item>
+            <item name="cm:folder" type="lecm-group-actions:form-field">
+                <property name="lecm-group-actions:field-control">
+                    <![CDATA[{"template":"/ru/it/lecm/base-share/components/controls/association-control.ftl","displayName":"Выбор раздела (годового и управления)","id":"lecm-os:nomenclature-unit-section-and-year-control","params":[{"name":"plane","value":"false"},{"name":"endpointType","value":"lecm-dic:hierarchical_dictionary_values"},{"name":"showSelectedItemsPath","value":"false"},{"name":"showCreateNewLink","value":"false"},{"name":"sortProp","value":"cm:title"},{"name":"treeItemType","value":"lecm-dic:hierarchical_dictionary_values"},{"name":"nameSubstituteString","value":"{cm:title} {lecm-os:nomenclature-year-section-year}"},{"name":"treeNodeSubstituteString","value":"{cm:title} {lecm-os:nomenclature-year-section-year}"},{"name":"showCreateNewButton","value":"false"},{"name":"childrenDataSource","value":"lecm/os/nomenclature/datasource/avaliableUnits"},{"name":"showSearch","value":"false"},{"name":"additionalFilter","value":"{{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND NOT @lecm\\\\-os\\\\:nomenclature\\\\-unit\\\\-section\\\\-status:\\\"CLOSED\\\" OR NOT @lecm\\\\-os\\\\:nomenclature\\\\-year\\\\-section\\\\-status:\\\"CLOSED\\\""},{"name":"changeItemsFireAction","value":"osUnitCopyItemChanged"},{"name":"rootLocation","value":"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел"},{"name":"treeBranchesDatasource","value":"lecm/nomenclature/tree/notClosed"}]}]]></property>
+                <property name="lecm-group-actions:field-is-mandatory"><![CDATA[true]]></property>
+                <property name="lecm-group-actions:field-type"><![CDATA[lecm-os:nomenclature-unit-section]]></property>
+                <property name="cm:name"><![CDATA[Раздел]]></property>
+                <property name="lecm-group-actions:field-id"><![CDATA[folder]]></property>
+                <property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
+                <property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
+            </item>
+            <item name="cm:Script" type="lecm-group-actions:form-field">
+                <property name="lecm-group-actions:field-control">
+                    <![CDATA[{"template":"/ru/it/lecm/base-share/components/controls/load-script-control.ftl","displayName":"Контрол для загрузки скриптов","id":"fake-load-script-control","params":[{"name":"scriptLoadedFireAction","value":"scriptLoaded"},{"name":"scripts","value":"scripts/lecm-os/nomenclature/copy-unit-validation.js"}]}]]></property>
+                <property name="lecm-group-actions:field-is-mandatory"><![CDATA[false]]></property>
+                <property name="lecm-group-actions:field-type"><![CDATA[fake]]></property>
+                <property name="cm:name"><![CDATA[Script]]></property>
+                <property name="lecm-group-actions:field-id"><![CDATA[Script]]></property>
+                <property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
+                <property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
+            </item>
 		</items>
     </item>
 </items>

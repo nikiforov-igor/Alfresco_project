@@ -17,12 +17,14 @@
 })();]]></property>
         <items>
             <item name="cm:Причина" type="lecm-group-actions:form-field">
-                <property name="cm:name"><![CDATA[Причина]]></property>
-                <property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
-                <property name="lecm-group-actions:field-id"><![CDATA[reason]]></property>
+                <property name="lecm-group-actions:field-control">
+                    <![CDATA[{"template":"/ru/it/lecm/base-share/components/controls/textarea.ftl","displayName":"Многострочное текстовое поле","id":"d:text-textarea","params":[{"name":"containerStyleClass","value":""},{"name":"columns","value":"60"},{"name":"defaultValue","value":""},{"name":"forceEditable","value":"false"},{"name":"style","value":""},{"name":"rows","value":"7"},{"name":"styleClass","value":""}]}]]></property>
                 <property name="lecm-group-actions:field-is-mandatory"><![CDATA[false]]></property>
-                <property name="lecm-group-actions:field-type"><![CDATA[approvalReason]]></property>
+                <property name="lecm-group-actions:field-type"><![CDATA[d:text]]></property>
+                <property name="cm:name"><![CDATA[Причина]]></property>
+                <property name="lecm-group-actions:field-id"><![CDATA[reason]]></property>
                 <property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
+                <property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
             </item>
         </items>
     </item>

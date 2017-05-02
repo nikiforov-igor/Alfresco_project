@@ -20,27 +20,27 @@
 					<param id="showCreateNewLink" localName="Показывать ссылку создания нового" mandatory="false" visible="true">false</param>
 					<param id="showCreateNewButton" localName="Показывать кнопку создания нового" mandatory="false" visible="true">false</param>
 					<param id="showSelectedItemsPath" localName="Показывать путь выбранного элемента" mandatory="false" visible="true">false</param>
-					<param id="treeItemType" localName="Тип элементов в дереве" mandatory="false" visible="true"></param>
+					<param id="treeItemType" localName="Тип элементов в дереве" mandatory="false" visible="true"/>
 				</control>
 
 				<control id="cm:object-assoc-auto-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор ассоциаций с автодополнением">
-					<param id="startLocation" localName="Начальная директория" mandatory="false" visible="true"></param>
-					<param id="nameSubstituteString" localName="Шаблон имени" mandatory="false" visible="true"></param>
-					<param id="showCreateNewLink" localName="Показывать ссылку создания нового" mandatory="false" visible="true"></param>
-					<param id="showCreateNewButton" localName="Показывать кнопку создания нового" mandatory="false" visible="true"></param>
+					<param id="startLocation" localName="Начальная директория" mandatory="false" visible="true"/>
+					<param id="nameSubstituteString" localName="Шаблон имени" mandatory="false" visible="true"/>
+					<param id="showCreateNewLink" localName="Показывать ссылку создания нового" mandatory="false" visible="true"/>
+					<param id="showCreateNewButton" localName="Показывать кнопку создания нового" mandatory="false" visible="true"/>
 				</control>
 
 				<control id="cm:object-assoc-search-controls" template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl" localName="Контрол поиска">
-					<param id="rootLocation" visible="true" localName="Начальная директория"></param>
-					<param id="nameSubstituteString" visible="true" localName="Шаблон имени"></param>
-					<param id="selectedItemsNameSubstituteString" visible="true" localName="Шаблон выбраных элементов"></param>
-					<param id="changeItemsFireAction" visible="true" localName="Событие при изменении элемента"></param>
+					<param id="rootLocation" visible="true" localName="Начальная директория"/>
+					<param id="nameSubstituteString" visible="true" localName="Шаблон имени"/>
+					<param id="selectedItemsNameSubstituteString" visible="true" localName="Шаблон выбраных элементов"/>
+					<param id="changeItemsFireAction" visible="true" localName="Событие при изменении элемента"/>
 				</control>
 				<control id="cm:object-assoc-select-one-control" template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl" localName="Выбор ассоциаций из выпадающего списка">
-					<param id="startLocation" localName="Начальная директория" mandatory="true" visible="true"></param>
-					<param id="nameSubstituteString" localName="Шаблон имени" mandatory="false" visible="true"></param>
-					<param id="showCreateNewButton" localName="Показывать кнопку создания нового" mandatory="false" visible="true"></param>
-					<param id="notSelectedOptionShow" localName="Допускать пустой выбор" mandatory="false" visible="true"></param>
+					<param id="startLocation" localName="Начальная директория" mandatory="true" visible="true"/>
+					<param id="nameSubstituteString" localName="Шаблон имени" mandatory="false" visible="true"/>
+					<param id="showCreateNewButton" localName="Показывать кнопку создания нового" mandatory="false" visible="true"/>
+					<param id="notSelectedOptionShow" localName="Допускать пустой выбор" mandatory="false" visible="true"/>
 					<param id="notSelectedOptionLabel" localName="Надпись для пустого выбора" mandatory="false" visible="true"/>
 				</control>
 			</field-type>
@@ -48,48 +48,92 @@
 			<field-type id="cm:content" localName="Вложения">
 				<control id="uploader-with-preview-control" template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl" localName="Загрузчик файлов">
 					<param id="uploadDirectoryPath" localName="Директория загрузки" mandatory="true" visible="true">{usertemp}</param>
-					<param id="directoryName" localName="Название директории" mandatory="true" visible="true"></param>
+					<param id="directoryName" localName="Название директории" mandatory="true" visible="true"/>
 				</control>
 			</field-type>
 
 			<field-type id="d:text" localName="Текст">
-				<control id="cm:assoc-auto-text-control" template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl" localName="Выбор ассоциаций с автодополнением (текстовое поле)">
-					<param id="startLocation" visible="true" localName="Начальная директория"></param>
-					<param id="itemType" visible="true" localName="Тип"></param>
-					<param id="nameSubstituteString" visible="true" localName="Шаблон имени"></param>
-					<param id="notSelectedOptionShow" visible="true" localName="Показывать опицю 'Не выбрано'"></param>
-					<param id="notSelectedOptionLabel" visible="true" localName="Заголовок опции 'Не выбрано'"></param>
-					<param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания нового"></param>
-					<param id="showCreateNewButton" visible="true" localName="Показывать кнопку создания нового"></param>
+				<control id="d:text-textarea" template="/ru/it/lecm/base-share/components/controls/textarea.ftl" localName="Многострочное текстовое поле">
+					<param id="rows" visible="true" localName="Количество строк">2</param>
+					<param id="columns" visible="true" localName="Количество столбцов">60</param>
+					<param id="defaultValue" visible="true" localName="Значение по умолчанию"/>
+					<param id="styleClass" visible="true" localName="Список дополнительных стилей"/>
+					<param id="forceEditable" visible="true" localName="Включить принудительное редактирование">false</param>
+					<param id="style" visible="true" localName="CSS стиль"/>
+					<param id="containerStyleClass" visible="true" localName="Список дополнительных стилей контейнера"/>
+				</control>
+				<control id="d:text-richtext" template="/ru/it/lecm/base-share/components/controls/richtext.ftl" localName="Многострочное текстовое поле с форматированием">
+					<param id="rows" visible="true" localName="Количество строк">2</param>
+					<param id="columns" visible="true" localName="Количество столбцов">60</param>
+					<param id="styleClass" visible="true" localName="Список дополнительных стилей"/>
+					<param id="forceEditable" visible="true" localName="Включить принудительное редактирование">false</param>
+					<param id="style" visible="true" localName="CSS стиль"/>
+				</control>
+				<control id="cm:assoc-auto-text-control" template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl" localName="Выбор ассоциаций с возможностью ручного ввода">
+					<param id="startLocation" visible="true" localName="Корневая папка" mandatory="true" description="Путь к папке, относительно которой получать элементы справочника"/>
+					<param id="itemType" visible="true" localName="Тип выбираемых элементов"/>
+					<param id="nameSubstituteString" visible="true" localName="Шаблон имени элемента"/>
+					<param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания"/>
+					<param id="additionalFilter" visible="true" localName="Дополнительный фильтр (FTS query)"/>
+					<param id="defaultValueDataSource" visible="true" localName="Скрипт для получения значения по умолчанию"/>
+					<param id="childrenDataSource" visible="true" localName="Скрипт для получения списка значений"/>
+					<param id="selectedItemsNameSubstituteString" visible="true" localName="Шаблон имени выбранных элементов"/>
+					<param id="sortProp" visible="true" localName="Свойство для сортировки значений">cm:name</param>
+					<param id="maxSearchResults" visible="true" localName="Максимальное число выводимых элементов">10</param>
 				</control>
 			</field-type>
-
-			<field-type id="datetime" localName="Дата и время">
-				<control id="datetime-control" template="/ru/it/lecm/base-share/components/controls/date.ftl" localName="Выбор даты и времени">
-					<param id="showTime" localName="Показывать время" mandatory="false" visible="true">true</param>
+			<field-type id="d:date" localName="Дата и время">
+				<control id="date-control" template="/ru/it/lecm/base-share/components/controls/date.ftl" localName="Дата/время">
+					<param id="showTime" visible="false" localName="Показывать время" description="true - показывать; false - не показывать">false</param>
+					<param id="minLimitCurrentDate" visible="true" localName="Не позволять выбирать дату меньше текущей" description="true - нельзя выбирать дату в прошлом; false - можно выбирать любую дату"/>
+					<param id="minLimitArg" visible="true" localName="Минимальная дата, доступная для выбора"/>
+					<param id="maxLimitCurrentDate" localName="Не позволять выбирать дату больше текущей" description="true - нельзя выбирать дату в будущем; false - можно выбирать любую дату"/>
+					<param id="maxLimitArg" visible="true" localName="Максимальная дата, доступная для выбора"/>
+					<param id="forceEditable" visible="true" localName="Включить принудительное редактирование">false</param>
+					<param id="hideDateFormat" visible="false" localName="Скрывать подсказку с форматом">true</param>
+					<param id="dateFormatString" visible="true" localName="Формат выводимой даты"/>
+					<param id="defaultValue" visible="true" localName="Значение по умолчанию" description="В формате 'yyyy-MM-dd' или код 'now'"/>
+					<param id="defaultScriptURL" visible="true" localName="Скрипт для получения значения по умолчанию"/>
+					<param id="changeFireAction" visible="true" localName="Событие, вызываемое при смене значения"/>
+				</control>
+			</field-type>
+			<field-type id="d:datetime" localName="Дата и время">
+				<control id="datetime-control" template="/ru/it/lecm/base-share/components/controls/date.ftl" localName="Дата/время">
+					<param id="showTime" visible="false" localName="Показывать время" description="true - показывать; false - не показывать">true</param>
+					<param id="minLimitCurrentDate" visible="true" localName="Не позволять выбирать дату меньше текущей" description="true - нельзя выбирать дату в прошлом; false - можно выбирать любую дату"/>
+					<param id="minLimitArg" visible="true" localName="Минимальная дата, доступная для выбора"/>
+					<param id="maxLimitCurrentDate" visible="true" localName="Не позволять выбирать дату больше текущей" description="true - нельзя выбирать дату в будущем; false - можно выбирать любую дату"/>
+					<param id="maxLimitArg" visible="true" localName="Максимальная дата, доступная для выбора"/>
+					<param id="forceEditable" visible="true" localName="Включить принудительное редактирование">false</param>
+					<param id="hideDateFormat" visible="false" localName="Скрывать подсказку с форматом">true</param>
+					<param id="dateFormatString" visible="true" localName="Формат выводимой даты"/>
+					<param id="defaultValue" visible="true" localName="Значение по умолчанию" description="В формате 'yyyy-MM-dd' или код 'now'"/>
+					<param id="defaultScriptURL" visible="true" localName="Скрипт для получения значения по умолчанию"/>
+					<param id="changeFireAction" visible="true" localName="Событие, вызываемое при смене значения"/>
 				</control>
 			</field-type>
 
 			<field-type id="date-range" localName="Временной промежуток">
-				<control id="date-range-default-control" template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl" localName="Выбор промежутка времени"></control>
+				<control id="date-range-default-control" template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl" localName="Выбор промежутка времени"/>
 			</field-type>
+
 			<field-type id="int-range" localName="Числовой промежуток (int)">
-				<control id="int-range-default-control" template="/org/alfresco/components/form/controls/numberrange.ftl" localName="Выбор числового промежутка (int)"></control>
+				<control id="int-range-default-control" template="/ru/it/lecm/base-share/components/controls/numberrange.ftl" localName="Выбор числового промежутка (int)"/>
 			</field-type>
 
 			<field-type id="float-range" localName="Числовой промежуток (float)">
-				<control id="float-range-default-control" template="/org/alfresco/components/form/controls/numberrange.ftl" localName="Выбор числового промежутка (float)"></control>
+				<control id="float-range-default-control" template="/ru/it/lecm/base-share/components/controls/numberrange.ftl" localName="Выбор числового промежутка (float)"/>
 			</field-type>
 
 			<field-type id="double-range" localName="Числовой промежуток (double)">
-				<control id="double-range-default-control" template="/org/alfresco/components/form/controls/numberrange.ftl" localName="Выбор числового промежутка (double)"></control>
+				<control id="double-range-default-control" template="/ru/it/lecm/base-share/components/controls/numberrange.ftl" localName="Выбор числового промежутка (double)"/>
 			</field-type>
 
 			<field-type id="long-range" localName="Числовой промежуток (long)">
-				<control id="long-range-default-control" template="/org/alfresco/components/form/controls/numberrange.ftl" localName="Выбор числового промежутка (long)"></control>
+				<control id="long-range-default-control" template="/ru/it/lecm/base-share/components/controls/numberrange.ftl" localName="Выбор числового промежутка (long)"/>
 			</field-type>
 
-			<field-type id="lecm-orgstr:organization-unit" localName="Дата и время">
+			<field-type id="lecm-orgstr:organization-unit" localName="Подразделение">
 				<control id="lecm-orgstr:organization-unit-default-control" template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl" localName="Выбор орг. единицы">
 					<param id="rootLocation" localName="" mandatory="false" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</param>
 					<param id="nameSubstituteString" localName="" mandatory="false" visible="false">{lecm-orgstr:element-short-name}</param>
@@ -100,10 +144,20 @@
 					<param id="showCreateNewButton" localName="Показывать кнопку создания нового" mandatory="false" visible="true">false</param>
 					<param id="showSelectedItemsPath" localName="" mandatory="false" visible="false">false</param>
 				</control>
+				<control id="lecm-orgstr:organization-unit-association-control" template="/ru/it/lecm/base-share/components/controls/association-control.ftl" localName="Выбор орг. единицы (association-control)">
+					<param id="rootLocation" localName="" mandatory="false" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</param>
+					<param id="plane" visible="true" localName="Выводить в виде плоского списка" description="Если true - плоский список, иначе - дерево с выбором элементов">false</param>
+					<param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания">false</param>
+					<param id="showCreateNewButton" visible="true" localName="Показывать кнопку создания">false</param>
+					<param id="showSearch" visible="true" localName="Показывать поле поиска">true</param>
+					<param id="showPath" visible="true" localName="Показывать путь у выбранных элементов">true</param>
+					<param id="showAutocomplete" visible="true" localName="Включить автодополнение">true</param>
+					<param id="endpointType" visible="false" localName="Тип выбираемых элементов">lecm-orgstr:organization-unit</param>
+				</control>
 			</field-type>
 
 			<field-type id="lecm-orgstr:staff-list" localName="Позиции">
-				<control id="lecm-orgstr:staff-list-default-control" template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl" localName="Выбор даты и времени">
+				<control id="lecm-orgstr:staff-list-default-control" template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl" localName="Выбор штатной позиции">
 					<param id="rootLocation" localName="" mandatory="false" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</param>
 					<param id="nameSubstituteString" localName="" mandatory="false" visible="false">{lecm-orgstr:element-member-position-assoc/cm:name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</param>
 					<param id="selectedItemsNameSubstituteString" localName="" mandatory="false" visible="false">{lecm-orgstr:element-member-position-assoc/cm:name} {../lecm-orgstr:element-short-name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</param>
@@ -182,8 +236,8 @@
 			</field-type>
 
 			<field-type id="lecm-doc-dic:subjects" localName="Тематика справочника">
-				<control id="lecm-doc-dic:subjects-default-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор тематики справочника">
-					<param id="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</param>
+				<control id="lecm-doc-dic:subjects-default-control" template="/ru/it/lecm/base-share/components/controls/association-control.ftl" localName="Выбор тематики справочника">
+					<param id="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</param>
 					<param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания нового">false</param>
 					<param id="showCreateNewButton" visible="true" localName="Показывать кнопку создания нового">false</param>
 					<param id="nameSubstituteString">{cm:name}</param>
@@ -197,16 +251,6 @@
 					<param id="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</param>
 					<param id="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</param>
 					<param id="changeItemsFireAction">changeConnectedDocument</param>
-				</control>
-			</field-type>
-
-			<field-type id="lecm-currency:currency" localName="Валюты">
-				<control id="lecm-currency:currency-default-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор валюты">
-					<param id="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</param>
-					<param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания нового">false</param>
-					<param id="showCreateNewButton" visible="true" localName="Показывать кнопку создания нового">false</param>
-					<param id="nameSubstituteString">{cm:name}</param>
-					<param id="itemType">lecm-currency:currency</param>
 				</control>
 			</field-type>
 
@@ -244,6 +288,15 @@
 					<param id="showCreateNewButton" localName="Показывать кнопку создания нового" mandatory="false" visible="true">false</param>
 					<param id="notSelectedOptionShow" localName="Допускать пустой выбор" mandatory="false" visible="true">false</param>
 					<param id="notSelectedOptionLabel" localName="Надпись для пустого выбора" mandatory="false" visible="true"/>
+				</control>
+				<control id="lecm-orgstr:employee-association-control" template="/ru/it/lecm/base-share/components/controls/association-control.ftl" localName="Сотрудник, выбор ассоциации">
+					<param id="rootLocation" localName="" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</param>
+					<param id="nameSubstituteString" localName="Шаблон имени элемента" visible="true">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</param>
+					<param id="useStrictFilterByOrg" localName="Включить строгое соответствие по организации">true</param>
+					<param id="additionalFilter" localName="Дополнительный фильтр (FTS query)">{{EMPLOYEE_HAS_LOGIN}}</param>
+					<param id="childrenDataSource" localName="Скрипт для получения списка значений">lecm/forms/picker</param>
+					<param id="plane" localName="Плоский" visible="false">true</param>
+					<param id="endpointType" localName="Тип" visible="false">lecm-orgstr:employee</param>
 				</control>
 			</field-type>
 
@@ -292,6 +345,10 @@
 				<control id="comments-control" template="/ru/it/lecm/documents/controls/right-part-dashlet-control.ftl" localName="Комментарии">
 					<param id="uri" localName="Адрес веб-скрипта" mandatory="true" visible="true">/lecm/components/document/comments</param>
                     <param id="activityType" mandatory="false" visible="false">document</param>
+				</control>
+				<control id="fake-load-script-control" template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl" localName="Контрол для загрузки скриптов">
+					<param id="scripts" localName="Список скриптов для загрузки"/>
+					<param id="scriptLoadedFireAction" localName="Событие, вызываемое после подгрузки скриптов">scriptLoaded</param>
 				</control>
 			</field-type>
 		</field-types>
